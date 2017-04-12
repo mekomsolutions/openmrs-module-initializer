@@ -32,6 +32,7 @@ import org.openmrs.module.addresshierarchy.AddressHierarchyConstants;
 import org.openmrs.module.addresshierarchy.AddressHierarchyEntry;
 import org.openmrs.module.addresshierarchy.AddressHierarchyLevel;
 import org.openmrs.module.addresshierarchy.config.AddressConfigurationLoader;
+import org.openmrs.module.addresshierarchy.config.ConfigLoaderUtil;
 import org.openmrs.module.addresshierarchy.service.AddressHierarchyService;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -53,13 +54,17 @@ public class AddressHierarchyMessagesLoadingTest extends BaseModuleContextSensit
 		            new GlobalProperty(AddressHierarchyConstants.GLOBAL_PROP_INITIALIZE_ADDRESS_HIERARCHY_CACHE_ON_STARTUP,
 		                    "false"));
 		
-		String path = getClass().getClassLoader().getResource(APP_DATA_TEST_DIRECTORY).getPath();
-		OpenmrsConstants.APPLICATION_DATA_DIRECTORY = path;
+		String path = getClass().getClassLoader().getResource(APP_DATA_TEST_DIRECTORY).getPath() + File.separator;
+		OpenmrsConstants.APPLICATION_DATA_DIRECTORY = path; // The 1.10 way
 		Properties prop = new Properties();
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
 		Context.setRuntimeProperties(prop);
 		
-		AddressConfigurationLoader.deleteChecksum();
+		// Enabling i18n suppory on Address Hierarchy
+		Context.getAdministrationService().saveGlobalProperty(
+		    new GlobalProperty(AddressHierarchyConstants.GLOBAL_PROP_I18N_SUPPORT, "true"));
+		
+		ConfigLoaderUtil.deleteChecksums(AddressConfigurationLoader.getSubdirConfigPath());
 		AddressConfigurationLoader.loadAddressConfiguration();
 	}
 	
@@ -70,11 +75,12 @@ public class AddressHierarchyMessagesLoadingTest extends BaseModuleContextSensit
 		AddressHierarchyService ahs = Context.getService(AddressHierarchyService.class);
 		InitializerService inits = Context.getService(InitializerService.class);
 		
-		StringBuilder pathBuilder = new StringBuilder();
-		pathBuilder.append(inits.getAddressHierarchyConfigPath()).append(File.separator).append("addresshierarchy.csv");
-		LineNumberReader lnr = new LineNumberReader(new FileReader(new File(pathBuilder.toString())));
+		String csvFilePath = new StringBuilder(inits.getAddressHierarchyConfigPath()).append(File.separator)
+		        .append("addresshierarchy.csv").toString();
+		LineNumberReader lnr = new LineNumberReader(new FileReader(new File(csvFilePath)));
 		lnr.skip(Long.MAX_VALUE);
 		int csvLineCount = lnr.getLineNumber() + 1;
+		lnr.close();
 		Assert.assertTrue(csvLineCount < ahs.getAddressHierarchyEntryCount()); // there should be more entries than the number of lines in CSV import
 		
 		// Working in km_KH
