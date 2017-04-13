@@ -316,6 +316,9 @@ public class CustomMessageSource extends AbstractMessageSource implements Mutabl
 		});
 		
 		final Map<File, Locale> messageProperties = new LinkedHashMap<File, Locale>();
+		if (propFiles == null) {
+			return messageProperties;
+		}
 		
 		for (File file : propFiles) {
 			// Now reading the locale info out of the base name
