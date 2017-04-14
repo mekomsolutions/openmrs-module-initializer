@@ -18,9 +18,20 @@ import org.openmrs.api.OpenmrsService;
 public interface InitializerService extends OpenmrsService {
 	
 	/**
+	 * @return The path to the configuration folder (with NO trailing forward slash), eg.
+	 *         "/opt/openmrs/configuration"
+	 */
+	String getConfigPath();
+	
+	/**
 	 * @return The path to the 'addreshierarchy' configuration folder (with NO trailing forward
 	 *         slash), eg. "/opt/openmrs/configuration/addresshierarchy"
 	 */
 	String getAddressHierarchyConfigPath();
 	
+	/**
+	 * @return The path to the 'globalproperties' configuration folder (with NO trailing forward
+	 *         slash), eg. "/opt/openmrs/configuration/globalproperties"
+	 */
+	String getGlobalPropertiesConfigPath();
 }

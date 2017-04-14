@@ -22,8 +22,21 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	public String getAddressHierarchyConfigPath() {
+	@Override
+	public String getConfigPath() {
 		return new StringBuilder().append(OpenmrsUtil.getApplicationDataDirectory())
-		        .append(InitializerConstants.CONFIG_PATH).append(File.separator).append("addresshierarchy").toString();
+		        .append(InitializerConstants.CONFIG_PATH).toString();
+	}
+	
+	@Override
+	public String getAddressHierarchyConfigPath() {
+		return new StringBuilder().append(getConfigPath()).append(File.separator).append(InitializerConstants.DOMAIN_ADDR)
+		        .toString();
+	}
+	
+	@Override
+	public String getGlobalPropertiesConfigPath() {
+		return new StringBuilder().append(getConfigPath()).append(File.separator).append(InitializerConstants.DOMAIN_GP)
+		        .toString();
 	}
 }

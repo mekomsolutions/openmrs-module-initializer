@@ -20,4 +20,12 @@ public class InitializerConstants {
 	 * 
 	 */
 	public static final String CONFIG_PATH = "configuration";
+	
+	/*
+	 * Domains
+	 * The lower-cased suffixes should be used as packages suffixes, example: 'org.openmrs.module.initializer.api.gp' 
+	 */
+	public static final String DOMAIN_ADDR = "addresshierarchy";
+	
+	public static final String DOMAIN_GP = "globalproperties";
 }

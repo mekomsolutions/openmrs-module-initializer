@@ -55,6 +55,4 @@
         </property>
     </bean>
 
-    <bean id="addressHierarchyImportUtil" class="org.openmrs.module.addresshierarchy.util.AddressHierarchyImportUtil"/>
-
 </beans>

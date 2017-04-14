@@ -1,0 +1,12 @@
+<config>
+  <globalProperties>
+    <globalProperty>
+      <property>addresshierarchy.i18nSupport</property>
+      <value>true</value>
+    </globalProperty>
+    <globalProperty>
+      <property>locale.allowed.list</property>
+      <value>en, km_KH</value>
+    </globalProperty>
+  </globalProperties>
+</config>

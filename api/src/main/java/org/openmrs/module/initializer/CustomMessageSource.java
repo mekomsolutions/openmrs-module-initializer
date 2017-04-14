@@ -137,9 +137,9 @@ public class CustomMessageSource extends AbstractMessageSource implements Mutabl
 	 */
 	public synchronized void refreshCache() {
 		
-		final InitializerService initService = Context.getService(InitializerService.class);
+		final InitializerService iniz = Context.getService(InitializerService.class);
 		
-		Map<File, Locale> messageProperties = getMessageProperties(initService.getAddressHierarchyConfigPath());
+		Map<File, Locale> messageProperties = getMessageProperties(iniz.getAddressHierarchyConfigPath());
 		
 		cache = new HashMap<Locale, PresentationMessageMap>();
 		for (Map.Entry<File, Locale> entry : messageProperties.entrySet()) {

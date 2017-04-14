@@ -29,7 +29,7 @@ public class CustomMessageSourceTest {
 		StringBuilder pathBuilder = new StringBuilder();
 		pathBuilder.append(getClass().getClassLoader().getResource(APP_DATA_TEST_DIRECTORY).getPath())
 		        .append(File.separator).append(InitializerConstants.CONFIG_PATH).append(File.separator)
-		        .append("addresshierarchy");
+		        .append(InitializerConstants.DOMAIN_ADDR);
 		dirPath = pathBuilder.toString();
 	}
 	
