@@ -37,18 +37,17 @@ import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.messagesource.MutableMessageSource;
 import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.messagesource.PresentationMessageMap;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.AbstractMessageSource;
-import org.springframework.stereotype.Component;
 
 /**
  * Registers the custom message source service
@@ -58,16 +57,16 @@ import org.springframework.stereotype.Component;
  *      /api-tests/src/test/java/org/openmrs/module/reporting/test/CustomMessageSource.java
  * @see https://talk.openmrs.org/t/address-hierarchy-support-for-i18n/10415/19?u=mksd
  */
-@Component
-public class CustomMessageSource extends AbstractMessageSource implements MutableMessageSource, ApplicationContextAware {
+public class InitializerMessageSource extends AbstractMessageSource implements MutableMessageSource, ApplicationContextAware {
 	
-	protected static final Log log = LogFactory.getLog(CustomMessageSource.class);
+	protected static final Log log = LogFactory.getLog(InitializerMessageSource.class);
 	
 	private Map<Locale, PresentationMessageMap> cache = null;
 	
 	private boolean showMessageCode = false;
 	
-	public static final String GLOBAL_PROPERTY_SHOW_MESSAGE_CODES = "custommessage.showMessageCodes";
+	@Autowired
+	protected InitializerService iniz;
 	
 	/**
 	 * @see ApplicationContextAware#setApplicationContext(ApplicationContext)
@@ -137,7 +136,9 @@ public class CustomMessageSource extends AbstractMessageSource implements Mutabl
 	 */
 	public synchronized void refreshCache() {
 		
-		final InitializerService iniz = Context.getService(InitializerService.class);
+		setUseCodeAsDefaultMessage(true);
+		
+		//		final InitializerService iniz = Context.getService(InitializerService.class);
 		
 		Map<File, Locale> messageProperties = getMessageProperties(iniz.getAddressHierarchyConfigPath());
 		

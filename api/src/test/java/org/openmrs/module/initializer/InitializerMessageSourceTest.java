@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.test.Verifies;
 
-public class CustomMessageSourceTest {
+public class InitializerMessageSourceTest {
 	
 	private static String APP_DATA_TEST_DIRECTORY = "testAppDataDir";
 	
@@ -37,7 +37,7 @@ public class CustomMessageSourceTest {
 	@Verifies(value = "should save messages files as keys and create appropriate as values", method = "getMessageProperties(String dirPath)")
 	public void getMessageProperties_shouldScanMessagesFiles() {
 		
-		Map<File, Locale> propertiesMap = CustomMessageSource.getMessageProperties(dirPath);
+		Map<File, Locale> propertiesMap = InitializerMessageSource.getMessageProperties(dirPath);
 		
 		File propFile;
 		Locale locale;

@@ -6,11 +6,9 @@
 	<id>${project.parent.artifactId}</id>
 	<name>${project.parent.name}</name>
 	<version>${project.parent.version}</version>
-	<package>org.openmrs.module.initializer</package>
-	<author>dimitri</author>
-	<description>
-			${project.parent.description}
-	</description>
+	<package>${project.parent.groupId}.${project.parent.artifactId}</package>
+	<author>${project.parent.organization.name}</author>
+	<description>${project.parent.description}</description>
 
 	<activator>org.openmrs.module.initializer.InitializerActivator</activator>
 	
