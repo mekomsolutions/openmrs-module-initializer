@@ -13,7 +13,7 @@
 	<description>API project for Initializer</description>
 
 	<properties>
-		<addresshierarchyVersion>2.10-SNAPSHOT</addresshierarchyVersion>
+		<addresshierarchyVersion>2.11.0-SNAPSHOT</addresshierarchyVersion>
 	</properties>
 
 	<dependencies>
