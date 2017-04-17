@@ -1,5 +1,10 @@
 package org.openmrs.module.initializer.api;
 
+import java.io.InputStream;
+
+import org.openmrs.GlobalProperty;
+import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
@@ -7,13 +12,13 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 /**
  * Use this serializer instead of a bare {@link XStream} if you want to ignore unmapped fields.
  */
-public class BaseSerializer extends XStream {
+public class InitializerSerializer extends XStream {
 	
-	public BaseSerializer() {
+	public InitializerSerializer() {
 		super();
 	}
 	
-	public BaseSerializer(HierarchicalStreamDriver hierarchicalStreamDriver) {
+	public InitializerSerializer(HierarchicalStreamDriver hierarchicalStreamDriver) {
 		super(hierarchicalStreamDriver);
 	}
 	
@@ -32,5 +37,17 @@ public class BaseSerializer extends XStream {
 				}
 			}
 		};
+	}
+	
+	public static XStream getGlobalPropertiesConfigSerializer() {
+		final XStream xstream = new InitializerSerializer();
+		xstream.alias("config", GlobalPropertiesConfig.class);
+		xstream.alias("globalProperty", GlobalProperty.class);
+		xstream.aliasField("value", GlobalProperty.class, "propertyValue");
+		return xstream;
+	}
+	
+	public static GlobalPropertiesConfig getGlobalPropertiesConfig(InputStream is) {
+		return (GlobalPropertiesConfig) getGlobalPropertiesConfigSerializer().fromXML(is);
 	}
 }

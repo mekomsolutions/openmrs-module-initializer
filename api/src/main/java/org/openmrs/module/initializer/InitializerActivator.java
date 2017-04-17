@@ -12,6 +12,8 @@ package org.openmrs.module.initializer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.BaseModuleActivator;
+import org.openmrs.module.initializer.api.InitializerService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -20,10 +22,16 @@ public class InitializerActivator extends BaseModuleActivator {
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
+	@Autowired
+	protected InitializerService iniz;
+	
 	/**
 	 * @see #started()
 	 */
 	public void started() {
+		
+		iniz.loadGlobalProperties();
+		
 		log.info("Started " + InitializerConstants.MODULE_NAME);
 	}
 	

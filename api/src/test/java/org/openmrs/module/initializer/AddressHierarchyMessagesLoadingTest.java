@@ -16,11 +16,8 @@ import java.io.LineNumberReader;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,21 +29,20 @@ import org.openmrs.module.addresshierarchy.AddressHierarchyConstants;
 import org.openmrs.module.addresshierarchy.AddressHierarchyEntry;
 import org.openmrs.module.addresshierarchy.AddressHierarchyLevel;
 import org.openmrs.module.addresshierarchy.config.AddressConfigurationLoader;
-import org.openmrs.module.addresshierarchy.config.ConfigLoaderUtil;
 import org.openmrs.module.addresshierarchy.service.AddressHierarchyService;
 import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
-import org.openmrs.util.OpenmrsConstants;
 
-public class AddressHierarchyMessagesLoadingTest extends BaseModuleContextSensitiveTest {
+public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContextSensitiveTest {
 	
-	protected static final Log log = LogFactory.getLog(AddressHierarchyMessagesLoadingTest.class);
-	
-	private static String APP_DATA_TEST_DIRECTORY = "testAppDataDir";
+	@Override
+	protected String getDomain() {
+		return InitializerConstants.DOMAIN_ADDR;
+	}
 	
 	@Before
 	public void setup() {
+		super.setup();
 		
 		// Diabling AH full caching otherwise loading takes too long
 		Context.getAdministrationService()
@@ -54,28 +50,22 @@ public class AddressHierarchyMessagesLoadingTest extends BaseModuleContextSensit
 		            new GlobalProperty(AddressHierarchyConstants.GLOBAL_PROP_INITIALIZE_ADDRESS_HIERARCHY_CACHE_ON_STARTUP,
 		                    "false"));
 		
-		String path = getClass().getClassLoader().getResource(APP_DATA_TEST_DIRECTORY).getPath() + File.separator;
-		OpenmrsConstants.APPLICATION_DATA_DIRECTORY = path; // The 1.10 way
-		Properties prop = new Properties();
-		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
-		Context.setRuntimeProperties(prop);
-		
-		// Enabling i18n suppory on Address Hierarchy
+		// Enabling i18n support on Address Hierarchy
 		Context.getAdministrationService().saveGlobalProperty(
 		    new GlobalProperty(AddressHierarchyConstants.GLOBAL_PROP_I18N_SUPPORT, "true"));
-		
-		ConfigLoaderUtil.deleteChecksums(AddressConfigurationLoader.getSubdirConfigPath());
-		AddressConfigurationLoader.loadAddressConfiguration();
 	}
 	
 	@Test
 	@Verifies(value = "should load i18n messages specific to the address hierarchy configuration", method = "refreshCache()")
 	public void refreshCache_shouldLoadAddressHierarchyMessages() throws IOException {
 		
-		AddressHierarchyService ahs = Context.getService(AddressHierarchyService.class);
-		InitializerService inits = Context.getService(InitializerService.class);
+		// Replay
+		AddressConfigurationLoader.loadAddressConfiguration();
 		
-		String csvFilePath = new StringBuilder(inits.getAddressHierarchyConfigPath()).append(File.separator)
+		AddressHierarchyService ahs = Context.getService(AddressHierarchyService.class);
+		InitializerService iniz = Context.getService(InitializerService.class);
+		
+		String csvFilePath = new StringBuilder(iniz.getAddressHierarchyConfigPath()).append(File.separator)
 		        .append("addresshierarchy.csv").toString();
 		LineNumberReader lnr = new LineNumberReader(new FileReader(new File(csvFilePath)));
 		lnr.skip(Long.MAX_VALUE);

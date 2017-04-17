@@ -34,4 +34,9 @@ public interface InitializerService extends OpenmrsService {
 	 *         slash), eg. "/opt/openmrs/configuration/globalproperties"
 	 */
 	String getGlobalPropertiesConfigPath();
+	
+	/**
+	 * Loads the global properties from their domain config. dir and saves them.
+	 */
+	void loadGlobalProperties();
 }

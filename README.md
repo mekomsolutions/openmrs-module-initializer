@@ -12,10 +12,39 @@ The configuration folder is subdivided into 'domain specific' subfolders:
 ```
   configuration/
     \_ addresshierarchy/
+    \_ globalproperties/
     \_ ...
 ```  
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain.
 Please see below for details about each supported domain:
+
+#### 'globalproperties' subfolder
+The **globalproperties** subfolder contains XML configuration files that specify which global properties to override. Note that existing global properties will be overridden and missing ones will be created.
+This is a possible example of how the configuration subfolder may look like:
+```
+  globalproperties/
+    \_ gp_core.xml
+    \_ gp_coreapps.xml
+    \_ ...
+```
+There can be as many XML files as desired. One may be enough in most cases, but providing multiples files is also a possibility if the implementation requires to manage them by modules, areas or categories. Beware that the behaviour will be undefined iif a global property is overridden in several places. 
+
+###### Global properties XML configuration file example:
+```xml
+<config>
+  <globalProperties>
+    <globalProperty>
+      <property>addresshierarchy.i18nSupport</property>
+      <value>true</value>
+    </globalProperty>
+    <globalProperty>
+      <property>locale.allowed.list</property>
+      <value>en, km_KH</value>
+    </globalProperty>
+  </globalProperties>
+</config>
+```
+The above XML configuration will set **addresshierarchy.i18nSupport** to `true` and **locale.allowed.list** to `"en, km_KH"`.
 
 #### 'addresshierarchy' subfolder
 The **addresshierarchy** subfolder contains all the address hierarchy metadata. This is a possible example of its content:
@@ -40,7 +69,7 @@ mvn clean install
 * Core 1.11.8
 
 ### Quick facts
-Initializer enables to achieve the OpenMRS equivalent of Bahmni Config. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata.
+Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's implementation.
 
 ### Get in touch
 Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversation and ping us with the mentions starting with @mks.. in your message.
@@ -52,3 +81,4 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 #### Version 1.0
 ##### New features
 * Loads i18n messages files from **configuration/addresshierarchy**.
+* Overrides global properties provided through XML configuration files in **configuration/globalproperties**.

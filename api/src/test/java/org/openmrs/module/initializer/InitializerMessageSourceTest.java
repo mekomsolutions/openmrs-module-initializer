@@ -20,14 +20,14 @@ import org.openmrs.test.Verifies;
 
 public class InitializerMessageSourceTest {
 	
-	private static String APP_DATA_TEST_DIRECTORY = "testAppDataDir";
-	
 	private String dirPath = "";
 	
 	@Before
 	public void setup() {
 		StringBuilder pathBuilder = new StringBuilder();
-		pathBuilder.append(getClass().getClassLoader().getResource(APP_DATA_TEST_DIRECTORY).getPath())
+		pathBuilder
+		        .append(
+		            getClass().getClassLoader().getResource(DomainBaseModuleContextSensitiveTest.appDataTestDir).getPath())
 		        .append(File.separator).append(InitializerConstants.CONFIG_PATH).append(File.separator)
 		        .append(InitializerConstants.DOMAIN_ADDR);
 		dirPath = pathBuilder.toString();
