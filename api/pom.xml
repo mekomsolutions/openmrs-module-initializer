@@ -14,6 +14,7 @@
 
 	<properties>
 		<addresshierarchyVersion>2.11.0-SNAPSHOT</addresshierarchyVersion>
+		<metadatasharingVersion>1.2.2</metadatasharingVersion>
 	</properties>
 
 	<dependencies>
@@ -37,6 +38,14 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>metadatasharing-api</artifactId>
+			<version>${metadatasharingVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>addresshierarchy-api</artifactId>

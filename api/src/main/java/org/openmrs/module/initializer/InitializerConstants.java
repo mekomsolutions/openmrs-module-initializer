@@ -28,4 +28,6 @@ public class InitializerConstants {
 	public static final String DOMAIN_ADDR = "addresshierarchy";
 	
 	public static final String DOMAIN_GP = "globalproperties";
+	
+	public static final String DOMAIN_MDS = "metadatasharing";
 }

@@ -11,9 +11,11 @@ package org.openmrs.module.initializer.api.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.GlobalProperty;
@@ -24,6 +26,10 @@ import org.openmrs.module.initializer.api.ConfigLoaderUtil;
 import org.openmrs.module.initializer.api.InitializerSerializer;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
+import org.openmrs.module.metadatasharing.ImportConfig;
+import org.openmrs.module.metadatasharing.ImportType;
+import org.openmrs.module.metadatasharing.MetadataSharing;
+import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 import org.openmrs.util.OpenmrsUtil;
 
 public class InitializerServiceImpl extends BaseOpenmrsService implements InitializerService {
@@ -61,17 +67,67 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 			if (checksum.isEmpty()) {
 				continue;
 			}
+			
 			GlobalPropertiesConfig config = new GlobalPropertiesConfig();
+			InputStream is = null;
 			try {
-				config = InitializerSerializer.getGlobalPropertiesConfig(new FileInputStream(file));
+				is = new FileInputStream(file);
+				config = InitializerSerializer.getGlobalPropertiesConfig(is);
 				globalProperties.addAll(config.getGlobalProperties());
 				util.writeChecksum(fileRelPath, checksum); // the updated config. file is marked as processed
+				log.info("The global properties config. file has been processed: " + fileRelPath);
 			}
 			catch (Exception e) {
 				log.error("Could not load the global properties from file: " + file.getPath());
 			}
+			finally {
+				IOUtils.closeQuietly(is);
+			}
 		}
 		
+		log.info("Saving the global properties.");
 		Context.getAdministrationService().saveGlobalProperties(globalProperties);
+	}
+	
+	@Override
+	public String getMetadataSharingConfigPath() {
+		return new StringBuilder().append(getConfigPath()).append(File.separator).append(InitializerConstants.DOMAIN_MDS)
+		        .toString();
+	}
+	
+	@Override
+	public void importMetadataSharingPackages() {
+		
+		final ConfigLoaderUtil util = new ConfigLoaderUtil(getMetadataSharingConfigPath()); // a config. loader util for the target dir
+		
+		final PackageImporter importer = MetadataSharing.getInstance().newPackageImporter();
+		ImportConfig importConfig = new ImportConfig();
+		importConfig.setPossibleMatch(ImportType.PREFER_THEIRS);
+		importConfig.setExactMatch(ImportType.PREFER_THEIRS);
+		importer.setImportConfig(importConfig);
+		for (File file : util.getFiles("zip")) { // processing all the zip files inside the domain
+		
+			String fileRelPath = util.getRelativePath(file.getPath());
+			String checksum = util.getChecksumIfChanged(fileRelPath);
+			if (checksum.isEmpty()) {
+				continue;
+			}
+			
+			InputStream is = null;
+			try {
+				is = new FileInputStream(file);
+				importer.loadSerializedPackageStream(is);
+				is.close();
+				importer.importPackage();
+				util.writeChecksum(fileRelPath, checksum); // the updated config. file is marked as processed
+				log.info("The following MDS package was succesfully imported: " + fileRelPath);
+			}
+			catch (Exception e) {
+				log.error("The MDS package could not be imported: " + file.getPath(), e);
+			}
+			finally {
+				IOUtils.closeQuietly(is);
+			}
+		}
 	}
 }

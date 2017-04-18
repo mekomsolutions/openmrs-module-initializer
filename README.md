@@ -13,10 +13,23 @@ The configuration folder is subdivided into 'domain specific' subfolders:
   configuration/
     \_ addresshierarchy/
     \_ globalproperties/
+    \_ metadatasharing/
     \_ ...
 ```  
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain.
 Please see below for details about each supported domain:
+
+#### 'addresshierarchy' subfolder
+The **addresshierarchy** subfolder contains all the address hierarchy metadata. This is a possible example of its content:
+```
+  addresshierarchy/
+    \_ addressConfiguration.xml
+    \_ addresshierarchy.csv
+    \_ addresshierarchy_en.properties
+    \_ addresshierarchy_km_KH.properties
+```
+This is a mixed scenario since the Address Hierarchy module's activator itself can handle most of the provided configuration and metadata: **addressConfiguration.xml** (the actual configuration file) and **addresshierarchy.csv** (the CSV import file containing all address hierarchy geographies.)
+The Initializer module will take care of loading the address hierarchy entries translations for use cases where the Address Hierarchy module must support i18n.
 
 #### 'globalproperties' subfolder
 The **globalproperties** subfolder contains XML configuration files that specify which global properties to override. Note that existing global properties will be overridden and missing ones will be created.
@@ -46,17 +59,17 @@ There can be as many XML files as desired. One may be enough in most cases, but 
 ```
 The above XML configuration will set **addresshierarchy.i18nSupport** to `true` and **locale.allowed.list** to `"en, km_KH"`.
 
-#### 'addresshierarchy' subfolder
-The **addresshierarchy** subfolder contains all the address hierarchy metadata. This is a possible example of its content:
+#### 'metadatasharing' subfolder
+The **metadatasharing** subfolder contains all the Metadata Sharing (MDS) packages as .zip files to be imported. This is a possible example of its content:
 ```
-  addresshierarchy/
-    \_ addressConfiguration.xml
-    \_ addresshierarchy.csv
-    \_ addresshierarchy_en.properties
-    \_ addresshierarchy_km_KH.properties
+  metadatasharing/
+    \_ PatientIdentifierType.zip
+    \_ PersonAttributeType.zip
+    \_ ...
 ```
-This is a mixed scenario since the Address Hierarchy module's activator itself can handle most of the provided configuration and metadata: **addressConfiguration.xml** (the actual configuration file) and **addresshierarchy.csv** (the CSV import file containing all address hierarchy geographies.)
-The Initializer module will take care of loading the address hierarchy entries translations for use cases where the Address Hierarchy module must support i18n.
+There can be as many MDS packages as desired. Providing multiples .zip files allows to split the metadata to be imported by areas, categories or any other segmentation that the implementors deem relevant.
+<br/>They will all be imported following the 'prefer theirs' rule, meaning that the the metadata shipped with the packages is considered being the master metadata. Existing objects will be overwritten, missing objects will be created... etc.
+<br/>MDS packages are a convenient way to bring in metadata, especially while other methods have not yet been implemented. However when otherwise possible, other ways should be preferred.
 
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:
@@ -82,3 +95,4 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 ##### New features
 * Loads i18n messages files from **configuration/addresshierarchy**.
 * Overrides global properties provided through XML configuration files in **configuration/globalproperties**.
+* Imports MDS packages provided as .zip files in **configuration/metadatasharing**.

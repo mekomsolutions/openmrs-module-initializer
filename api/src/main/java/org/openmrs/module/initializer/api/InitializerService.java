@@ -39,4 +39,15 @@ public interface InitializerService extends OpenmrsService {
 	 * Loads the global properties from their domain config. dir and saves them.
 	 */
 	void loadGlobalProperties();
+	
+	/**
+	 * @return The path to the 'metadatasharing' configuration folder (with NO trailing forward
+	 *         slash), eg. "/opt/openmrs/configuration/metadatasharing"
+	 */
+	String getMetadataSharingConfigPath();
+	
+	/**
+	 * Import the metadata sharing packages from their domain config. dir.
+	 */
+	void importMetadataSharingPackages();
 }
