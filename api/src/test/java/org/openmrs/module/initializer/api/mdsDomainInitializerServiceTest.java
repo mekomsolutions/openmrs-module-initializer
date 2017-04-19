@@ -32,10 +32,14 @@ public class mdsDomainInitializerServiceTest extends DomainBaseModuleContextSens
 	}
 	
 	@Test
-	@Verifies(value = "should import all valid MDS packages", method = "importMetadataSharingPackages()")
+	@Verifies(value = "should import all valid MDS packages 'preferring theirs'", method = "importMetadataSharingPackages()")
 	public void importMetadataSharingPackages_shouldImportMDSPackages() {
 		
 		// Replay
+		PersonAttributeType personAttType = null;
+		personAttType = Context.getPersonService().getPersonAttributeTypeByUuid("b3b6d540-a32e-44c7-91b3-292d97667518");
+		Assert.assertEquals("Race", personAttType.getName());
+		
 		getService().importMetadataSharingPackages();
 		
 		// Verif
@@ -43,8 +47,7 @@ public class mdsDomainInitializerServiceTest extends DomainBaseModuleContextSens
 		    "0d2ac572-8de3-46c8-9976-1f78899c599f");
 		Assert.assertEquals("National ID card number", patientIdType.getName());
 		
-		PersonAttributeType personAttType = null;
-		personAttType = Context.getPersonService().getPersonAttributeTypeByUuid("18dbfce3-6515-4511-9cc1-c262948e841e");
+		personAttType = Context.getPersonService().getPersonAttributeTypeByUuid("b3b6d540-a32e-44c7-91b3-292d97667518");
 		Assert.assertEquals("Email address", personAttType.getName());
 		Assert.assertFalse(personAttType.isRetired());
 		personAttType = Context.getPersonService().getPersonAttributeTypeByUuid("c1f4a004-3f10-11e4-adec-0800271c1b75");

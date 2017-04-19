@@ -26,6 +26,12 @@
 	<aware_of_modules>
 		<aware_of_module>org.openmrs.module.legacyui</aware_of_module>
 	</aware_of_modules>
+
+	<require_modules>
+		<require_module version="${metadatasharingVersion}">
+			org.openmrs.module.metadatasharing
+		</require_module>
+	</require_modules>
 	
 	<!-- AOP
 	<advice>

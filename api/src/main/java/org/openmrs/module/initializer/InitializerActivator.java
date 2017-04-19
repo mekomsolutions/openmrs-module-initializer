@@ -11,6 +11,7 @@ package org.openmrs.module.initializer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,12 @@ public class InitializerActivator extends BaseModuleActivator {
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
-	@Autowired
-	protected InitializerService iniz;
-	
 	/**
 	 * @see #started()
 	 */
 	public void started() {
+		
+		InitializerService iniz = Context.getRegisteredComponent("initializer.InitializerService", InitializerService.class);
 		
 		iniz.loadGlobalProperties();
 		iniz.importMetadataSharingPackages();

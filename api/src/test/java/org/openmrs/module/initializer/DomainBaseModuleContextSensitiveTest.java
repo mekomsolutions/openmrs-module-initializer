@@ -12,6 +12,8 @@ package org.openmrs.module.initializer;
 import java.io.File;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.ConfigLoaderUtil;
@@ -25,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * directory.
  */
 public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleContextSensitiveTest {
+	
+	protected final Log log = LogFactory.getLog(getClass());
 	
 	public static final String appDataTestDir = "testAppDataDir";
 	
