@@ -5,9 +5,13 @@
 
 <hibernate-configuration>
     <session-factory>
+        <!-- AH -->
         <mapping resource="AddressHierarchyLevel.hbm.xml"/>
         <mapping resource="AddressHierarchyEntry.hbm.xml"/>
+        <!-- MDS -->
         <mapping resource="ImportedItem.hbm.xml"/>
         <mapping resource="ImportedPackage.hbm.xml"/>
+        <!-- Idgen -->
+        <mapping resource="IdentifierSource.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

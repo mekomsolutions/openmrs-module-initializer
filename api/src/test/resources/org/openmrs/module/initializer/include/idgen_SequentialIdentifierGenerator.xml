@@ -1,0 +1,11 @@
+<sequentialIdentifierGenerator>
+  <name>Test sequential source name</name>
+  <description>Test sequential source description</description>
+  <identifierType>
+    <name>PATIENTIDENTIFIERTYPE_1_OPENMRS_ID</name>
+  </identifierType>
+  <firstIdentifierBase>001000</firstIdentifierBase>
+  <minLength>7</minLength>
+  <maxLength>7</maxLength>
+  <baseCharacterSet>0123456789</baseCharacterSet>
+</sequentialIdentifierGenerator>

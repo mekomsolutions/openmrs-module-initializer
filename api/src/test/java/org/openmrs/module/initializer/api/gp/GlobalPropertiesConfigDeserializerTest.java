@@ -7,11 +7,11 @@ import org.openmrs.test.Verifies;
 
 import com.thoughtworks.xstream.XStreamException;
 
-public class GlobalPropertiesConfigTest {
+public class GlobalPropertiesConfigDeserializerTest {
 	
 	@Test
-	@Verifies(value = "should", method = "fromXML(InputStream input)")
-	public void shouldDeserializeRegularConfig() {
+	@Verifies(value = "should deserialize config", method = "fromXML(InputStream input)")
+	public void shouldDeserializeConfig() {
 		
 		GlobalPropertiesConfig config = InitializerSerializer.getGlobalPropertiesConfig(getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/gp.xml"));
@@ -23,7 +23,7 @@ public class GlobalPropertiesConfigTest {
 	}
 	
 	@Test
-	@Verifies(value = "should", method = "fromXML(InputStream input)")
+	@Verifies(value = "should deserialize config with unmapped fields", method = "fromXML(InputStream input)")
 	public void shouldDeserializeConfigWithUnmappedFields() {
 		
 		GlobalPropertiesConfig config = InitializerSerializer.getGlobalPropertiesConfig(getClass().getClassLoader()
@@ -36,7 +36,7 @@ public class GlobalPropertiesConfigTest {
 	}
 	
 	@Test(expected = XStreamException.class)
-	@Verifies(value = "should", method = "fromXML(InputStream input)")
+	@Verifies(value = "should throw XStream exception on invalid config", method = "fromXML(InputStream input)")
 	public void shouldThrowException() {
 		
 		InitializerSerializer.getGlobalPropertiesConfig(getClass().getClassLoader().getResourceAsStream(

@@ -3,10 +3,20 @@ package org.openmrs.module.initializer.api;
 import java.io.InputStream;
 
 import org.openmrs.GlobalProperty;
+import org.openmrs.PatientIdentifierType;
+import org.openmrs.module.idgen.IdentifierSource;
+import org.openmrs.module.idgen.SequentialIdentifierGenerator;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
+import org.openmrs.module.initializer.api.idgen.IdgenConfig;
+import org.openmrs.module.initializer.api.idgen.InitializerIdentifierSource;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
+import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
@@ -39,15 +49,60 @@ public class InitializerSerializer extends XStream {
 		};
 	}
 	
+	/**
+	 * @return Deserializer for {@link GlobalPropertiesConfig}
+	 */
 	public static XStream getGlobalPropertiesConfigSerializer() {
-		final XStream xstream = new InitializerSerializer();
-		xstream.alias("config", GlobalPropertiesConfig.class);
-		xstream.alias("globalProperty", GlobalProperty.class);
-		xstream.aliasField("value", GlobalProperty.class, "propertyValue");
-		return xstream;
+		final XStream xs = new InitializerSerializer();
+		xs.alias("config", GlobalPropertiesConfig.class);
+		xs.alias("globalProperty", GlobalProperty.class);
+		xs.aliasField("value", GlobalProperty.class, "propertyValue");
+		return xs;
 	}
 	
 	public static GlobalPropertiesConfig getGlobalPropertiesConfig(InputStream is) {
 		return (GlobalPropertiesConfig) getGlobalPropertiesConfigSerializer().fromXML(is);
+	}
+	
+	/**
+	 * XStream converter that ensures that missing <retired/> tags lead to retired set to false on
+	 * children instances of {@link IdentifierSource}.
+	 */
+	public static class IdentifierSourceConverter extends ReflectionConverter {
+		
+		public IdentifierSourceConverter(Mapper mapper, ReflectionProvider reflectionProvider) {
+			super(mapper, reflectionProvider);
+		}
+		
+		@Override
+		public boolean canConvert(Class type) {
+			return IdentifierSource.class.isAssignableFrom(type);
+		}
+		
+		@Override
+		public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+			IdentifierSource src = (IdentifierSource) super.unmarshal(reader, context);
+			if (src.isRetired() == null) {
+				src.setRetired(false);
+			}
+			return src;
+		}
+	}
+	
+	/**
+	 * @return Deserializer for extensions of {@link IdgenConfig}
+	 */
+	public static XStream getIdgenConfigSerializer() {
+		final XStream xs = new InitializerSerializer();
+		xs.registerConverter(new IdentifierSourceConverter(xs.getMapper(), xs.getReflectionProvider()));
+		xs.alias("config", IdgenConfig.class);
+		xs.alias("identifierSource", InitializerIdentifierSource.class);
+		xs.alias("sequentialIdentifierGenerator", SequentialIdentifierGenerator.class);
+		xs.alias("identifierType", PatientIdentifierType.class);
+		return xs;
+	}
+	
+	public static IdgenConfig getIdgenConfig(InputStream is) {
+		return (IdgenConfig) getIdgenConfigSerializer().fromXML(is);
 	}
 }

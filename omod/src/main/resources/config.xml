@@ -28,6 +28,9 @@
 	</aware_of_modules>
 
 	<require_modules>
+		<require_module version="${idgenVersion}">
+			org.openmrs.module.idgen
+		</require_module>
 		<require_module version="${metadatasharingVersion}">
 			org.openmrs.module.metadatasharing
 		</require_module>

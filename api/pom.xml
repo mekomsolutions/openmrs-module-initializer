@@ -14,6 +14,7 @@
 
 	<properties>
 		<addresshierarchyVersion>2.11.0-SNAPSHOT</addresshierarchyVersion>
+		<idgenVersion>4.3</idgenVersion>
 		<metadatasharingVersion>1.2.2</metadatasharingVersion>
 	</properties>
 
@@ -39,6 +40,12 @@
 			</exclusions>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>idgen-api</artifactId>
+			<version>${idgenVersion}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>metadatasharing-api</artifactId>

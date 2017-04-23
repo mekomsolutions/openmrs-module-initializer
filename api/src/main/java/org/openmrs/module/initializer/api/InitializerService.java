@@ -41,6 +41,17 @@ public interface InitializerService extends OpenmrsService {
 	void loadGlobalProperties();
 	
 	/**
+	 * @return The path to the 'idgen' configuration folder (with NO trailing forward slash), eg.
+	 *         "/opt/openmrs/configuration/idgen"
+	 */
+	String getIdgenConfigPath();
+	
+	/**
+	 * Configure the idgen related instances (identifier sources... etc).
+	 */
+	void configureIdgen();
+	
+	/**
 	 * @return The path to the 'metadatasharing' configuration folder (with NO trailing forward
 	 *         slash), eg. "/opt/openmrs/configuration/metadatasharing"
 	 */

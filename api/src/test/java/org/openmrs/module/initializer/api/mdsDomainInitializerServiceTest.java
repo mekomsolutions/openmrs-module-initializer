@@ -10,7 +10,6 @@
 package org.openmrs.module.initializer.api;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonAttributeType;
@@ -24,11 +23,6 @@ public class mdsDomainInitializerServiceTest extends DomainBaseModuleContextSens
 	@Override
 	protected String getDomain() {
 		return InitializerConstants.DOMAIN_MDS;
-	}
-	
-	@Before
-	public void setup() {
-		super.setup();
 	}
 	
 	@Test

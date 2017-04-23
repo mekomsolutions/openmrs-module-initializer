@@ -42,8 +42,6 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 	
 	@Before
 	public void setup() {
-		super.setup();
-		
 		// Diabling AH full caching otherwise loading takes too long
 		Context.getAdministrationService()
 		        .saveGlobalProperty(

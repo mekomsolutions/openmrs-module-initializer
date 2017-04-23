@@ -25,11 +25,6 @@ public class gpDomainInitializerServiceTest extends DomainBaseModuleContextSensi
 		return InitializerConstants.DOMAIN_GP;
 	}
 	
-	@Before
-	public void setup() {
-		super.setup();
-	}
-	
 	@Test
 	@Verifies(value = "should load all global properties as configured in the XML files", method = "loadGlobalProperties()")
 	public void loadGlobalProperties_shouldLoadGlobalProperties() {

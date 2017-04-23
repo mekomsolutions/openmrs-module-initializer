@@ -16,16 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.GlobalProperty;
+import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.idgen.IdentifierSource;
+import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.ConfigLoaderUtil;
 import org.openmrs.module.initializer.api.InitializerSerializer;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
+import org.openmrs.module.initializer.api.idgen.IdgenConfig;
 import org.openmrs.module.metadatasharing.ImportConfig;
 import org.openmrs.module.metadatasharing.ImportType;
 import org.openmrs.module.metadatasharing.MetadataSharing;
@@ -87,6 +92,95 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		
 		log.info("Saving the global properties.");
 		Context.getAdministrationService().saveGlobalProperties(globalProperties);
+	}
+	
+	@Override
+	public String getIdgenConfigPath() {
+		return new StringBuilder().append(getConfigPath()).append(File.separator).append(InitializerConstants.DOMAIN_IDGEN)
+		        .toString();
+	}
+	
+	/*
+	 * Replaces the deserialized indentifier type instance with a complete instance fetched from database
+	 */
+	protected IdentifierSource setPatientIdentifierType(IdentifierSource idSource) {
+		
+		PatientIdentifierType idType = idSource.getIdentifierType();
+		
+		if (idType == null || StringUtils.isEmpty(idType.getName())) {
+			log.error("The identifier type name is empty for an identifier source specified in the configuration XML.");
+			log.error("Here are the identifier source name and uuid: name='" + idSource.getName() + "', uuid="
+			        + idSource.getUuid());
+			return idSource;
+		}
+		
+		idType = Context.getPatientService().getPatientIdentifierTypeByName(idType.getName());
+		
+		if (idType == null || idType.getId() == null) {
+			log.error("An identifier source is pointing to a patient identifier type that could not be fetched.");
+			log.error("Here are the identifier source name and uuid: name='" + idSource.getName() + "', uuid="
+			        + idSource.getUuid());
+			return idSource;
+		}
+		
+		idSource.setIdentifierType(idType);
+		return idSource;
+	}
+	
+	/*
+	 * Edits identifier sources with provided uuids.
+	 * Create identifier sources with no provided uuids.
+	 */
+	protected void processIdentifierSource(IdentifierSource src) {
+		
+		IdentifierSourceService idgenService = Context.getService(IdentifierSourceService.class);
+		
+		String uuid = src.getUuid();
+		if (uuid != null) { // marked for editing/modification (else for creation)
+			IdentifierSource oldSrc = idgenService.getIdentifierSourceByUuid(uuid);
+			if (oldSrc == null) {
+				log.warn("The identifier source '" + uuid + "' is configured for modifications but does not exist.");
+				return;
+			}
+			Boolean retired = src.isRetired();
+			src = oldSrc;
+			src.setRetired(retired);
+		}
+		
+		idgenService.saveIdentifierSource(setPatientIdentifierType(src));
+	}
+	
+	@Override
+	public void configureIdgen() {
+		
+		final ConfigLoaderUtil util = new ConfigLoaderUtil(getIdgenConfigPath()); // a config. loader util for the target dir
+		
+		for (File file : util.getFiles("xml")) { // processing all the XML files inside the domain
+		
+			String fileRelPath = util.getRelativePath(file.getPath());
+			String checksum = util.getChecksumIfChanged(fileRelPath);
+			if (checksum.isEmpty()) {
+				continue;
+			}
+			
+			IdgenConfig config = new IdgenConfig();
+			InputStream is = null;
+			try {
+				is = new FileInputStream(file);
+				config = InitializerSerializer.getIdgenConfig(is);
+				for (IdentifierSource src : config.getIdentifierSources()) {
+					processIdentifierSource(src);
+				}
+				util.writeChecksum(fileRelPath, checksum);
+				log.info("The following Idgen config file was succesfully processed: " + fileRelPath);
+			}
+			catch (Exception e) {
+				log.error("Could not load the Idgen config from file: " + file.getPath());
+			}
+			finally {
+				IOUtils.closeQuietly(is);
+			}
+		}
 	}
 	
 	@Override

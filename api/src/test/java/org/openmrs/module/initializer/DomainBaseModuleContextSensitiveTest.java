@@ -51,7 +51,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	}
 	
 	@Before
-	public void setup() {
+	public void setupAppDataDir() {
 		
 		String path = getClass().getClassLoader().getResource(appDataTestDir).getPath() + File.separator;
 		
