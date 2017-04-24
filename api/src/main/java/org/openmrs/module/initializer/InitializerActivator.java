@@ -27,7 +27,7 @@ public class InitializerActivator extends BaseModuleActivator {
 	 */
 	public void started() {
 		
-		InitializerService iniz = Context.getRegisteredComponent("initializer.InitializerService", InitializerService.class);
+		InitializerService iniz = Context.getService(InitializerService.class);
 		
 		iniz.loadGlobalProperties();
 		iniz.configureIdgen();
