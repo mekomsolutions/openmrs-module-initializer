@@ -10,6 +10,7 @@
 package org.openmrs.module.initializer.api;
 
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.initializer.InitializerMessageSource;
 
 /**
  * The main service of this module, which is exposed for other modules. See
@@ -21,19 +22,20 @@ public interface InitializerService extends OpenmrsService {
 	 * @return The path to the configuration folder (with NO trailing forward slash), eg.
 	 *         "/opt/openmrs/configuration"
 	 */
-	String getConfigPath();
+	String getConfigDirPath();
 	
 	/**
-	 * @return The path to the 'addreshierarchy' configuration folder (with NO trailing forward
-	 *         slash), eg. "/opt/openmrs/configuration/addresshierarchy"
+	 * @return The path to the checksum folder (with NO trailing forward slash), eg.
+	 *         "/opt/openmrs/configuration_checksums"
+	 */
+	String getChecksumsDirPath();
+	
+	/**
+	 * @return The path to the configuration domain folder for Address Hierarchy (with NO trailing
+	 *         forward slash), eg. "/opt/openmrs/configuration/addresshierarchy"
+	 * @see {@link InitializerMessageSource#getMessageProperties(String)}
 	 */
 	String getAddressHierarchyConfigPath();
-	
-	/**
-	 * @return The path to the 'globalproperties' configuration folder (with NO trailing forward
-	 *         slash), eg. "/opt/openmrs/configuration/globalproperties"
-	 */
-	String getGlobalPropertiesConfigPath();
 	
 	/**
 	 * Loads the global properties from their domain config. dir and saves them.
@@ -41,21 +43,9 @@ public interface InitializerService extends OpenmrsService {
 	void loadGlobalProperties();
 	
 	/**
-	 * @return The path to the 'idgen' configuration folder (with NO trailing forward slash), eg.
-	 *         "/opt/openmrs/configuration/idgen"
-	 */
-	String getIdgenConfigPath();
-	
-	/**
 	 * Configure the idgen related instances (identifier sources... etc).
 	 */
 	void configureIdgen();
-	
-	/**
-	 * @return The path to the 'metadatasharing' configuration folder (with NO trailing forward
-	 *         slash), eg. "/opt/openmrs/configuration/metadatasharing"
-	 */
-	String getMetadataSharingConfigPath();
 	
 	/**
 	 * Import the metadata sharing packages from their domain config. dir.

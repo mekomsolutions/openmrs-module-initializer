@@ -28,7 +28,7 @@ public class InitializerMessageSourceTest {
 		pathBuilder
 		        .append(
 		            getClass().getClassLoader().getResource(DomainBaseModuleContextSensitiveTest.appDataTestDir).getPath())
-		        .append(File.separator).append(InitializerConstants.CONFIG_PATH).append(File.separator)
+		        .append(File.separator).append(InitializerConstants.DIR_NAME_CONFIG).append(File.separator)
 		        .append(InitializerConstants.DOMAIN_ADDR);
 		dirPath = pathBuilder.toString();
 	}

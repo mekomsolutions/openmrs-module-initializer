@@ -19,7 +19,9 @@ public class InitializerConstants {
 	/*
 	 * 
 	 */
-	public static final String CONFIG_PATH = "configuration";
+	public static final String DIR_NAME_CONFIG = "configuration";
+	
+	public static final String DIR_NAME_CHECKSUM = "configuration_checksums";
 	
 	/*
 	 * Domains

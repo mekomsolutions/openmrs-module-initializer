@@ -16,7 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.initializer.api.ConfigLoaderUtil;
+import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
@@ -44,12 +44,6 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	 */
 	abstract protected String getDomain();
 	
-	private String getDomainDirPath() {
-		String path = getClass().getClassLoader().getResource(appDataTestDir).getPath();
-		return new StringBuilder(path).append(File.separator).append(InitializerConstants.CONFIG_PATH)
-		        .append(File.separator).append(getDomain()).toString();
-	}
-	
 	@Before
 	public void setupAppDataDir() {
 		
@@ -60,6 +54,6 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
 		Context.setRuntimeProperties(prop);
 		
-		ConfigLoaderUtil.deleteChecksums(getDomainDirPath());
+		ConfigDirUtil.deleteChecksums(iniz.getChecksumsDirPath(), true);
 	}
 }

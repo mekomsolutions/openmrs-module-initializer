@@ -26,7 +26,7 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.idgen.IdentifierSource;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.InitializerConstants;
-import org.openmrs.module.initializer.api.ConfigLoaderUtil;
+import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerSerializer;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
@@ -42,33 +42,34 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	@Override
-	public String getConfigPath() {
+	public String getConfigDirPath() {
 		return new StringBuilder().append(OpenmrsUtil.getApplicationDataDirectory())
-		        .append(InitializerConstants.CONFIG_PATH).toString();
+		        .append(InitializerConstants.DIR_NAME_CONFIG).toString();
+	}
+	
+	@Override
+	public String getChecksumsDirPath() {
+		return new StringBuilder().append(OpenmrsUtil.getApplicationDataDirectory())
+		        .append(InitializerConstants.DIR_NAME_CHECKSUM).toString();
 	}
 	
 	@Override
 	public String getAddressHierarchyConfigPath() {
-		return new StringBuilder().append(getConfigPath()).append(File.separator).append(InitializerConstants.DOMAIN_ADDR)
-		        .toString();
-	}
-	
-	@Override
-	public String getGlobalPropertiesConfigPath() {
-		return new StringBuilder().append(getConfigPath()).append(File.separator).append(InitializerConstants.DOMAIN_GP)
-		        .toString();
+		return new StringBuilder().append(getConfigDirPath()).append(File.separator)
+		        .append(InitializerConstants.DOMAIN_ADDR).toString();
 	}
 	
 	@Override
 	public void loadGlobalProperties() {
 		
-		final ConfigLoaderUtil util = new ConfigLoaderUtil(getGlobalPropertiesConfigPath()); // a config. loader util for the target dir
+		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(),
+		        InitializerConstants.DOMAIN_GP);
 		
 		final List<GlobalProperty> globalProperties = new ArrayList<GlobalProperty>();
 		for (File file : util.getFiles("xml")) { // processing all the XML files inside the domain
 		
-			String fileRelPath = util.getRelativePath(file.getPath());
-			String checksum = util.getChecksumIfChanged(fileRelPath);
+			String fileName = util.getFileName(file.getPath());
+			String checksum = util.getChecksumIfChanged(fileName);
 			if (checksum.isEmpty()) {
 				continue;
 			}
@@ -79,11 +80,11 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 				is = new FileInputStream(file);
 				config = InitializerSerializer.getGlobalPropertiesConfig(is);
 				globalProperties.addAll(config.getGlobalProperties());
-				util.writeChecksum(fileRelPath, checksum); // the updated config. file is marked as processed
-				log.info("The global properties config. file has been processed: " + fileRelPath);
+				util.writeChecksum(fileName, checksum); // the updated config. file is marked as processed
+				log.info("The global properties config. file has been processed: " + fileName);
 			}
 			catch (Exception e) {
-				log.error("Could not load the global properties from file: " + file.getPath());
+				log.error("Could not load the global properties from file: " + file.getPath(), e);
 			}
 			finally {
 				IOUtils.closeQuietly(is);
@@ -92,12 +93,6 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		
 		log.info("Saving the global properties.");
 		Context.getAdministrationService().saveGlobalProperties(globalProperties);
-	}
-	
-	@Override
-	public String getIdgenConfigPath() {
-		return new StringBuilder().append(getConfigPath()).append(File.separator).append(InitializerConstants.DOMAIN_IDGEN)
-		        .toString();
 	}
 	
 	/*
@@ -153,12 +148,13 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public void configureIdgen() {
 		
-		final ConfigLoaderUtil util = new ConfigLoaderUtil(getIdgenConfigPath()); // a config. loader util for the target dir
+		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(),
+		        InitializerConstants.DOMAIN_IDGEN);
 		
 		for (File file : util.getFiles("xml")) { // processing all the XML files inside the domain
 		
-			String fileRelPath = util.getRelativePath(file.getPath());
-			String checksum = util.getChecksumIfChanged(fileRelPath);
+			String fileName = util.getFileName(file.getPath());
+			String checksum = util.getChecksumIfChanged(fileName);
 			if (checksum.isEmpty()) {
 				continue;
 			}
@@ -171,11 +167,11 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 				for (IdentifierSource src : config.getIdentifierSources()) {
 					processIdentifierSource(src);
 				}
-				util.writeChecksum(fileRelPath, checksum);
-				log.info("The following Idgen config file was succesfully processed: " + fileRelPath);
+				util.writeChecksum(fileName, checksum);
+				log.info("The following Idgen config file was succesfully processed: " + fileName);
 			}
 			catch (Exception e) {
-				log.error("Could not load the Idgen config from file: " + file.getPath());
+				log.error("Could not load the Idgen config from file: " + file.getPath(), e);
 			}
 			finally {
 				IOUtils.closeQuietly(is);
@@ -184,15 +180,10 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	}
 	
 	@Override
-	public String getMetadataSharingConfigPath() {
-		return new StringBuilder().append(getConfigPath()).append(File.separator).append(InitializerConstants.DOMAIN_MDS)
-		        .toString();
-	}
-	
-	@Override
 	public void importMetadataSharingPackages() {
 		
-		final ConfigLoaderUtil util = new ConfigLoaderUtil(getMetadataSharingConfigPath()); // a config. loader util for the target dir
+		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(),
+		        InitializerConstants.DOMAIN_MDS);
 		
 		final PackageImporter importer = MetadataSharing.getInstance().newPackageImporter();
 		ImportConfig importConfig = new ImportConfig();
@@ -201,8 +192,8 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		importer.setImportConfig(importConfig);
 		for (File file : util.getFiles("zip")) { // processing all the zip files inside the domain
 		
-			String fileRelPath = util.getRelativePath(file.getPath());
-			String checksum = util.getChecksumIfChanged(fileRelPath);
+			String fileName = util.getFileName(file.getPath());
+			String checksum = util.getChecksumIfChanged(fileName);
 			if (checksum.isEmpty()) {
 				continue;
 			}
@@ -213,8 +204,8 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 				importer.loadSerializedPackageStream(is);
 				is.close();
 				importer.importPackage();
-				util.writeChecksum(fileRelPath, checksum); // the updated config. file is marked as processed
-				log.info("The following MDS package was succesfully imported: " + fileRelPath);
+				util.writeChecksum(fileName, checksum); // the updated config. file is marked as processed
+				log.info("The following MDS package was succesfully imported: " + fileName);
 			}
 			catch (Exception e) {
 				log.error("The MDS package could not be imported: " + file.getPath(), e);
