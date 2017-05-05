@@ -1,0 +1,12 @@
+Uuid,Fully specified name:en,Fully specified name:km_KH,Short name:en,Short name:km_KH,Description:en,Description:km_KH,Data class,Data type,_version:base,_order:1000
+,CAMBODIA_Nationality,កម្ពុជា_សញ្ជាតិ,Nationality,សញ្ជាតិ,Nationality,សញ្ជាតិ,Question,Coded,,
+db2f4d80-3171-11e7-93ae-92361f002671,CAMBODIA_Khmer,កម្ពុជា_ខ្មែរ,Khmer,ខ្មែរ,Khmer,ខ្មែរ,Misc,Text,,
+,,កម្ពុជា_ចាម,Cham,ចាម,Cham,ចាម,Misc,Text,,
+,,កម្ពុជា_កួយ,,កួយ,Kuy,កួយ,Misc,Text,,
+db2f4fc4-3171-11e7-93ae-92361f002671,CAMBODIA_Phnong,កម្ពុជា_ព្នង,Phnong,ព្នង,,,Misc,Text,,
+,CAMBODIA_Kavet,,,,,,Misc,Text,,
+db2f5104-3171-11e7-93ae-92361f002671,CAMBODIA_Jarai,កម្ពុជា_ចារ៉ាយ,Jarai,ចារ៉ាយ,Jarai,ចារ៉ាយ,Misc,,,
+,CAMBODIA_Krung,កម្ពុជា_គ្រឹង,Krung,គ្រឹង,Krung,គ្រឹង,,Text,,
+db2f5460-3171-11e7-93ae-92361f002671,,,Prov,ព្រៅ,Prov,ព្រៅ,Misc,Text,,
+foobar,CAMBODIA_Lao,កម្ពុជា_ឡាវ,Lao,ឡាវ,Lao,ឡាវ,Misc,Text,,
+00b29984-3183-11e7-93ae-92361f002671,,,,,Por,ព័រ,Misc,Text,,

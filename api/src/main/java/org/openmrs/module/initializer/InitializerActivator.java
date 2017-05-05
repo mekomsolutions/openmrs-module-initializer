@@ -31,6 +31,7 @@ public class InitializerActivator extends BaseModuleActivator {
 		
 		iniz.importMetadataSharingPackages();
 		iniz.loadGlobalProperties();
+		iniz.loadConcepts();
 		iniz.configureIdgen();
 		
 		log.info("Started " + InitializerConstants.MODULE_NAME);

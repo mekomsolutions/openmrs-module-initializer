@@ -10,7 +10,6 @@
 package org.openmrs.module.initializer.api;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;

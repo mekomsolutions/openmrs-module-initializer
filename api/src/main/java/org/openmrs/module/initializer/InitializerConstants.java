@@ -29,9 +29,18 @@ public class InitializerConstants {
 	 */
 	public static final String DOMAIN_ADDR = "addresshierarchy";
 	
+	public static final String DOMAIN_C = "concepts";
+	
 	public static final String DOMAIN_IDGEN = "idgen";
 	
 	public static final String DOMAIN_GP = "globalproperties";
 	
 	public static final String DOMAIN_MDS = "metadatasharing";
+	
+	/*
+	 * CSV line processors versions
+	 */
+	public static final String VERSION_BASE = "base";
+	
+	public static final String VERSION_CHILDREN = "children"; // concepts with 'answers' and 'members'
 }

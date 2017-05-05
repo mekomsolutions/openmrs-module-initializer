@@ -1,25 +1,28 @@
 # OpenMRS Initializer module
 The Initializer module is an API-only module that processes the content of the **configuration** folder when it is found inside OpenMRS' application data directory:
-```
+<pre>
   .
    \_ modules/
    \_ openmrs.war
    \_ openmrs-runtime.properties
    \_ ...
-   \_ configuration/
-```
+   \_ <b>configuration/</b>
+</pre>
 The configuration folder is subdivided into 'domain specific' subfolders:
 ```
   configuration/
     \_ addresshierarchy/
+    \_ concepts/
+    \_ idgen/
     \_ globalproperties/
     \_ metadatasharing/
-    \_ ...
 ```  
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain.
 Please see below for details about each supported domain:
 
-#### 'addresshierarchy' subfolder
+---
+
+#### Domain 'addresshierarchy'
 The **addresshierarchy** subfolder contains all the address hierarchy metadata. This is a possible example of its content:
 ```
   addresshierarchy/
@@ -29,9 +32,52 @@ The **addresshierarchy** subfolder contains all the address hierarchy metadata. 
     \_ addresshierarchy_km_KH.properties
 ```
 This is a mixed scenario since the Address Hierarchy module's activator itself can handle most of the provided configuration and metadata: **addressConfiguration.xml** (the actual configuration file) and **addresshierarchy.csv** (the CSV import file containing all address hierarchy geographies.)
+
 The Initializer module will take care of loading the address hierarchy entries translations for use cases where the Address Hierarchy module must support i18n.
 
-#### 'idgen' subfolder
+---
+
+#### Domain 'concepts'
+The **concept** subfolder contains CSV import files for saving concepts in bulk. This is a possible example of its content:
+```
+  concepts/
+    \_ diagnoses.csv
+    \_ findings.csv
+    \_ misc.csv
+    \_ ...
+```
+The way those CSV files are processed is controlled by a reserved part of the CSV file header line that holds metadata about the CSV file itself. Here is an example of a header line:
+
+| <sub>Uuid</sub> | <sub>Fully specified name:en</sub> | <sub>Short name:en</sub> | <sub>Description:en</sub> | ... | <sub>_version:base</sub> | <sub>_order:1000</sub> |
+| - | - | - | - | - | - | - |
+
+Some headers start with an underscore such as `_version:base`, indicating that they are metadata headers. The values in the columns under those headers are never read by the CSV parser.
+<br/>Let's review some important headers.
+
+##### Header `Uuid`
+If the value under this header is missing, the concept will be created with a newly generated UUID.
+If the value under this header is provided, the initializer will attempt to retrieve any existing concept that may already exist with this UUID. And if the concept already exists, it will be modified and resaved according to the CSV line. If the concept doesn't exist, then a new concept will be created with the UUID specified on the CSV line.
+
+##### Headers `Fully specified name`, `Short name` and `Description`
+Those are locale specific headers, they are never used as such because they always need to indicate the locale for the values in their column.
+For a column to contain short names in English (locale 'en') name the header `Short name:en`. The same logic applies for the other locale specific headers.
+
+##### Header `_version:*`
+###### Version `_version:base`
+This guides the CSV parser to use the _base_ line processor. Here is an example of valid base concepts definitions:
+
+| <sub>Uuid</sub>  | <sub>Fully specified name:en</sub> | <sub>Short name:en</sub> | <sub>Description:en</sub> | <sub>Data class</sub>  | <sub>Data type</sub> |
+| - | - | - | - | - | - |
+| | <sub>Nationality</sub> | <sub>Nat.</sub> | <sub>The status of belonging to a particular nation.</sub> | <sub>Question</sub> | <sub>Text</sub> |
+| <sub>db2f4fc4-...</sub>| <sub>Language</sub> | <sub>Lang.</sub> | <sub>The method of human communication.</sub> | <sub>Question</sub> | <sub>Text</sub> |
+
+##### Header `_order:*`
+This metadata header specifies the order of loading of the CSV file. In many cases the creation of concepts relies on the existence of other concepts, and this is the use case that is covered by this metadata header. For example `_order:1000` indicates that all CSV files with an order smaller than 1,000 will be processed _before_ this file.
+<br/> If the order metadata cannot be parsed or is missing, then the file will be processed _after_ all the ordered CSV files. However if several CSV files have no order defined, then the loading order between them is undefined. 
+
+---
+
+#### Domain 'idgen'
 The **idgen** subfolder contains XML configuration files that help modify and create identifier sources. It should be possible in most cases to configure them via a single XML configuration file, however there can be as many XML files as desired.
 This is a possible example of how the configuration subfolder may look like:
 ```
@@ -68,7 +114,9 @@ The XML configuration allows to either modify exisiting identifier sources or to
 ```
 The above XML configuration will retire the identifier sources whose UUIDs are `c1d8a345-3f10-11e4-adec-0800271c1b75` and `c1d90956-3f10-11e4-adec-0800271c1b75` ; and will create a new `SequentialIdentifierGenerator` with the specified properties. When creating a new identifier source, pay special attention to the way it is linked to its `PatientIdentifierType`. This is done through the _name_ of the patient identifier type (that must be unique in OpenMRS.)
 
-#### 'globalproperties' subfolder
+---
+
+#### Domain 'globalproperties'
 The **globalproperties** subfolder contains XML configuration files that specify which global properties to override. Note that existing global properties will be overridden and missing ones will be created.
 This is a possible example of how the configuration subfolder may look like:
 ```
@@ -96,7 +144,9 @@ There can be as many XML files as desired. One may be enough in most cases, but 
 ```
 The above XML configuration will set **addresshierarchy.i18nSupport** to `true` and **locale.allowed.list** to `"en, km_KH"`.
 
-#### 'metadatasharing' subfolder
+---
+
+#### Domain 'metadatasharing'
 The **metadatasharing** subfolder contains all the Metadata Sharing (MDS) packages as .zip files to be imported. This is a possible example of its content:
 ```
   metadatasharing/
@@ -131,6 +181,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 #### Version 1.0
 ##### New features
 * Loads i18n messages files from **configuration/addresshierarchy**.
+* Bulk creation and saving of concepts provided through CSV files in  **configuration/concepts**.
 * Overrides global properties provided through XML configuration files in **configuration/globalproperties**.
 * Modifies (retire) or create identifier sources as specified in  **configuration/idgen**.
 * Imports MDS packages provided as .zip files in **configuration/metadatasharing**.
