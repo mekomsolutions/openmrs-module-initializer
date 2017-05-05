@@ -19,6 +19,7 @@ import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -340,7 +341,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		InputStream is = null;
 		try {
 			is = new FileInputStream(propFile);
-			ret.load(new InputStreamReader(is, "UTF-8"));
+			ret.load(new InputStreamReader(is, StandardCharsets.UTF_8));
 		}
 		catch (Exception e) {
 			log.error("There was an error while attempting to read properties file at : " + propFile.getPath(), e);
