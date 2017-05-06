@@ -69,7 +69,21 @@ This guides the CSV parser to use the _base_ line processor. Here is an example 
 | <sub>Uuid</sub>  | <sub>Fully specified name:en</sub> | <sub>Short name:en</sub> | <sub>Description:en</sub> | <sub>Data class</sub>  | <sub>Data type</sub> |
 | - | - | - | - | - | - |
 | | <sub>Nationality</sub> | <sub>Nat.</sub> | <sub>The status of belonging to a particular nation.</sub> | <sub>Question</sub> | <sub>Text</sub> |
-| <sub>db2f4fc4-...</sub>| <sub>Language</sub> | <sub>Lang.</sub> | <sub>The method of human communication.</sub> | <sub>Question</sub> | <sub>Text</sub> |
+| <sub>db2f4fc4-..</sub>| <sub>Language</sub> | <sub>Lang.</sub> | <sub>The method of human communication.</sub> | <sub>Question</sub> | <sub>Text</sub> |
+###### Version `_version:nested`
+This guides the CSV parser to use the _nested_ line processor which adds new columns to the base line processor to specify list of concept answers or list of concept members.
+
+Here is an example of the additional columns that are processed:
+
+| ... | <sub>Answers</sub> | <sub>Members</sub> | ... |
+| - | - | - | - |
+| ... | <sub>CONCEPT_NAME; source:134; db2f4fc4-..</sub> | | ... |
+| ... | | <sub>CONCEPT_NAME; source:134; db2f4fc4-..</sub> | ... |
+
+As the example suggests, it is possible to provide lists of concepts identifiers to fill the values of the columns 'answers' or 'members' under the form of concept names (eg. "CONCEPT_NAME"), concept mappings (eg. "source:134") and concept UUIDs (eg. "db2f4fc4-.."). The concepts that could not be fetched through their provided identifier will be skipped and will not be added to the list of nested concepts for this concept CSV line.
+<br/> Finally concept CSV lines that provide a list of set members are automatically considered to be concept _sets_.
+
+**NOTE** In the current implementation the listing order of the concepts in the CSV file does matter since unexisting concepts will be skipped when parsing nested lists. It is recommended to take this into account and to insert CSV lines for concepts with nested lists low enough in the CSV file.
 
 ##### Header `_order:*`
 This metadata header specifies the order of loading of the CSV file. In many cases the creation of concepts relies on the existence of other concepts, and this is the use case that is covered by this metadata header. For example `_order:1000` indicates that all CSV files with an order smaller than 1,000 will be processed _before_ this file.

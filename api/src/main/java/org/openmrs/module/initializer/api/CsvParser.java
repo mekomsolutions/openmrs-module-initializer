@@ -8,25 +8,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.api.APIException;
+import org.openmrs.api.OpenmrsService;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineProcessor<T>> {
+public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsService, P extends BaseLineProcessor<T, S>> {
 	
 	protected static final Log log = LogFactory.getLog(CsvParser.class);
 	
 	protected CSVReader reader;
+	
+	protected S service;
 	
 	protected List<P> lineProcessors = new ArrayList<P>();
 	
 	// The current line
 	protected String[] line = new String[0];
 	
-	public CsvParser(InputStream is) throws IOException {
+	public CsvParser(InputStream is, S service) throws IOException {
+		this.service = service;
 		this.reader = new CSVReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 		
 		String[] headerLine = reader.readNext();
@@ -50,7 +56,30 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	 * The implementation should be delegated
 	 * to the line processor in the subclass 
 	 */
-	abstract protected T fromCsvLine(String[] line);
+	protected T fromCsvLine(String[] line) {
+		
+		if (CollectionUtils.isEmpty(getLineProcessors())) {
+			log.warn("No line processors have been set, you should either overload '"
+			        + getClass().getEnclosingMethod().getName() + "' directly or provide lines processors to this class: "
+			        + getClass().getCanonicalName());
+			return null;
+		}
+		
+		P firstProcessor = getLineProcessors().get(0);
+		
+		T instance = firstProcessor.getByUuid(line); // any line processor is fine to fetch by uuid
+		if (instance == null) {
+			throw new APIException(
+			        "An instance that could not be fetched by UUID was not provided as an empty object for further filling. Check the implementation of this line processor: "
+			                + firstProcessor.getClass().getCanonicalName());
+		}
+		
+		// Applying the lines processors in order
+		for (P processor : getLineProcessors()) {
+			instance = processor.fill(instance, line);
+		}
+		return instance;
+	}
 	
 	/*
 	 * The actual saving should be implemented in this method.
@@ -60,6 +89,8 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	/*
 	 * Parsers must set their line processor implementation
 	 * based on the version indicated in the CSV metadata headers.
+	 * 
+	 * You should add the line processors in the order that you want them to follow.
 	 */
 	abstract protected void setLineProcessors(String version, String[] headerLine);
 	

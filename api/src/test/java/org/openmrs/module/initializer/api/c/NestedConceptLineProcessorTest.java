@@ -21,7 +21,7 @@ import org.openmrs.api.ConceptService;
 /*
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
  */
-public class ConceptWithChildrenLineProcessorTest {
+public class NestedConceptLineProcessorTest {
 	
 	private ConceptService cs = mock(ConceptService.class);
 	
@@ -54,8 +54,8 @@ public class ConceptWithChildrenLineProcessorTest {
 		String[] line = { "cambodia:123; cambodia:456", null };
 		
 		// Replay
-		ConceptWithChildrenLineProcessor p = new ConceptWithChildrenLineProcessor(headerLine, cs);
-		Concept c = p.getConcept(null, line, cs);
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
+		Concept c = p.fill(new Concept(), line);
 		
 		// Verif
 		Assert.assertFalse(c.getSet());
@@ -77,8 +77,8 @@ public class ConceptWithChildrenLineProcessorTest {
 		String[] line = { null, "cambodia:123; cambodia:456" };
 		
 		// Replay
-		ConceptWithChildrenLineProcessor p = new ConceptWithChildrenLineProcessor(headerLine, cs);
-		Concept c = p.getConcept(null, line, cs);
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
+		Concept c = p.fill(new Concept(), line);
 		
 		// Verif
 		Assert.assertTrue(c.getSet());
@@ -100,8 +100,8 @@ public class ConceptWithChildrenLineProcessorTest {
 		String[] line = { null, null };
 		
 		// Replay
-		ConceptWithChildrenLineProcessor p = new ConceptWithChildrenLineProcessor(headerLine, cs);
-		Concept c = p.getConcept(null, line, cs);
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
+		Concept c = p.fill(new Concept(), line);
 		
 		// Verif
 		Assert.assertFalse(c.getSet());
@@ -117,8 +117,8 @@ public class ConceptWithChildrenLineProcessorTest {
 		String[] line = { null };
 		
 		// Replay
-		ConceptWithChildrenLineProcessor p = new ConceptWithChildrenLineProcessor(headerLine, cs);
-		Concept c = p.getConcept(null, line, cs);
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
+		p.fill(new Concept(), line);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -129,7 +129,7 @@ public class ConceptWithChildrenLineProcessorTest {
 		String[] line = { null };
 		
 		// Replay
-		ConceptWithChildrenLineProcessor p = new ConceptWithChildrenLineProcessor(headerLine, cs);
-		Concept c = p.getConcept(null, line, cs);
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
+		p.fill(new Concept(), line);
 	}
 }

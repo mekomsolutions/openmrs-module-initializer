@@ -13,11 +13,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.api.OpenmrsService;
 
 /**
  * Base class to any CSV line processor.
  */
-public class BaseLineProcessor<T extends BaseOpenmrsObject> {
+abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends OpenmrsService> {
 	
 	protected final static Log log = LogFactory.getLog(BaseLineProcessor.class);
 	
@@ -25,15 +26,17 @@ public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
 	public static String LIST_SEPARATOR = ";";
 	
-	public static String LOCALE_SEPARATOR = ":"; // for header line processing
+	public static String LOCALE_SEPARATOR = ":"; // for header only
 	
-	public static String METADATA_PREFIX = "_"; // for header line processing
+	public static String METADATA_PREFIX = "_"; // for header only
 	
-	public static String VERSION_LHS = METADATA_PREFIX + "version:"; // for header line processing
+	public static String VERSION_LHS = METADATA_PREFIX + "version:"; // for header only
 	
-	public static String ORDER_LHS = METADATA_PREFIX + "order:"; // for header line processing
+	public static String ORDER_LHS = METADATA_PREFIX + "order:"; // for header only
 	
-	public static String FIELD_VALUE_UNDEFINED = "__value__undefined__";
+	public static String UNDEFINED_METADATA_VALUE = "__metadata__value__undefined__"; // for header only
+	
+	protected S service;
 	
 	protected String[] headerLine;
 	
@@ -41,6 +44,24 @@ public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
 	protected Map<String, LocalizedHeader> l10nHeadersMap = new HashMap<String, LocalizedHeader>();
 	
+	/*
+	 * This is where to provide how to fetch T instances by uuid.
+	 * It should also be there that new T(..) is invoked.
+	 */
+	abstract protected T getByUuid(String[] line) throws IllegalArgumentException;
+	
+	/*
+	 * This implements how to fill T instances from any CSV line, ignoring the processing of the uuid.
+	 * This method can assume that the provided instance is never null as this is being taken care of upstream.
+	 */
+	abstract protected T fill(T instance, String[] line) throws IllegalArgumentException;
+	
+	/**
+	 * @param headerLine The CSV file header line
+	 * @param line A line of the CSV file
+	 * @return The UUID
+	 * @throws IllegalArgumentException
+	 */
 	public static String getUuid(String[] headerLine, String[] line) throws IllegalArgumentException {
 		String str = line[getColumn(headerLine, HEADER_UUID)];
 		if (!StringUtils.isEmpty(str)) {
@@ -55,7 +76,7 @@ public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
 	/*
 	 * This is basically a map between a localized header and its found locales.
-	 * From |Name:en|Name:km_KH| this would be map between 'name' and [en, km_KH].
+	 * From |Name:en|Name:km_KH| this would be a map between 'name' and [en, km_KH].
 	 */
 	protected static class LocalizedHeader {
 		
@@ -132,7 +153,8 @@ public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	/**
 	 * @param headerLine The header line the processor will refer to.
 	 */
-	public BaseLineProcessor(String[] headerLine) {
+	public BaseLineProcessor(String[] headerLine, S service) {
+		this.service = service;
 		this.headerLine = headerLine;
 		this.indexMap = createIndexMap(headerLine);
 		this.l10nHeadersMap = getLocalizedHeadersMap(headerLine);
@@ -192,7 +214,7 @@ public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 			throw new IllegalArgumentException("The CSV header line cannot be null.");
 		}
 		
-		String value = FIELD_VALUE_UNDEFINED;
+		String value = UNDEFINED_METADATA_VALUE;
 		int count = 0;
 		for (String header : headerLine) {
 			if (StringUtils.isEmpty(header)) {

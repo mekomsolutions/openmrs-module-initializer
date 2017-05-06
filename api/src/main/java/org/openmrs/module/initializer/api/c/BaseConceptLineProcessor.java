@@ -15,7 +15,7 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
  * This is the first level line processor for concepts. It allows to parse and save concepts with
  * the minimal set of required fields.
  */
-public class BaseConceptLineProcessor extends BaseLineProcessor<Concept> {
+public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
 	
 	protected static String HEADER_NAME = "name";
 	
@@ -29,26 +29,27 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept> {
 	
 	protected static String HEADER_DATATYPE = "data type";
 	
-	protected ConceptService cs;
-	
 	public BaseConceptLineProcessor(String[] headerLine, ConceptService cs) {
-		super(headerLine);
-		this.cs = cs;
+		super(headerLine, cs);
 	}
 	
-	/*
-	 * This is the minimum set of members to allow for saving a concept
-	 */
-	protected Concept getConcept(Concept concept, String[] line, ConceptService cs) throws IllegalArgumentException {
-		
+	@Override
+	protected Concept getByUuid(String[] line) throws IllegalArgumentException {
 		String uuid = getUuid(line);
-		concept = cs.getConceptByUuid(uuid);
+		Concept concept = service.getConceptByUuid(uuid);
 		if (concept == null) {
 			concept = new Concept();
 			if (!StringUtils.isEmpty(uuid)) {
 				concept.setUuid(uuid);
 			}
 		}
+		return concept;
+	}
+	
+	/*
+	 * This is the base concept implementation.
+	 */
+	protected Concept fill(Concept concept, String[] line) throws IllegalArgumentException {
 		
 		LocalizedHeader lh = null;
 		
@@ -84,12 +85,12 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept> {
 		
 		// Concept data class
 		String conceptClassName = line[getColumn(HEADER_CLASS)];
-		ConceptClass conceptClass = cs.getConceptClassByName(conceptClassName);
+		ConceptClass conceptClass = service.getConceptClassByName(conceptClassName);
 		concept.setConceptClass(conceptClass);
 		
 		// Concept data type
 		String conceptTypeName = line[getColumn(HEADER_DATATYPE)];
-		ConceptDatatype conceptDatatype = cs.getConceptDatatypeByName(conceptTypeName);
+		ConceptDatatype conceptDatatype = service.getConceptDatatypeByName(conceptTypeName);
 		concept.setDatatype(conceptDatatype);
 		
 		return concept;

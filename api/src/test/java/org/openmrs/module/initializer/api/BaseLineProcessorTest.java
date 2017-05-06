@@ -34,12 +34,12 @@ public class BaseLineProcessorTest {
 		
 		// the empty header line
 		String[] hl2 = new String[0];
-		Assert.assertEquals(BaseLineProcessor.FIELD_VALUE_UNDEFINED, BaseLineProcessor.getVersion(hl2));
+		Assert.assertEquals(BaseLineProcessor.UNDEFINED_METADATA_VALUE, BaseLineProcessor.getVersion(hl2));
 		
 		// the header line with no version
 		Set<String> hl3 = new HashSet<String>(hl1);
 		hl3.remove(version);
-		Assert.assertEquals(BaseLineProcessor.FIELD_VALUE_UNDEFINED,
+		Assert.assertEquals(BaseLineProcessor.UNDEFINED_METADATA_VALUE,
 		    BaseLineProcessor.getVersion(hl3.toArray(new String[hl3.size()])));
 	}
 	
