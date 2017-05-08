@@ -71,7 +71,7 @@ This guides the CSV parser to use the _base_ line processor. Here is an example 
 | | <sub>Nationality</sub> | <sub>Nat.</sub> | <sub>The status of belonging to a particular nation.</sub> | <sub>Question</sub> | <sub>Text</sub> |
 | <sub>db2f4fc4-..</sub>| <sub>Language</sub> | <sub>Lang.</sub> | <sub>The method of human communication.</sub> | <sub>Question</sub> | <sub>Text</sub> |
 ###### Version `_version:nested`
-This guides the CSV parser to use the _nested_ line processor which adds new columns to the base line processor to specify list of concept answers or list of concept members.
+This guides the CSV parser to use the _nested_ line processor that adds new columns to the base line processor to specify lists of concept answers or lists of concept members.
 
 Here is an example of the additional columns that are processed:
 
@@ -80,10 +80,23 @@ Here is an example of the additional columns that are processed:
 | ... | <sub>CONCEPT_NAME; source:134; db2f4fc4-..</sub> | | ... |
 | ... | | <sub>CONCEPT_NAME; source:134; db2f4fc4-..</sub> | ... |
 
-As the example suggests, it is possible to provide lists of concepts identifiers to fill the values of the columns 'answers' or 'members' under the form of concept names (eg. "CONCEPT_NAME"), concept mappings (eg. "source:134") and concept UUIDs (eg. "db2f4fc4-.."). The concepts that could not be fetched through their provided identifier will be skipped and will not be added to the list of nested concepts for this concept CSV line.
+As the example suggests, it is possible to provide lists of concepts identifiers to fill the values of the columns 'answers' or 'members' under the form of concept names (eg. "CONCEPT_NAME"), concept mappings (eg. "source:134") and concept UUIDs (eg. "db2f4fc4-.."). The concepts that could not be fetched through their provided identifier will fail the creation of the concept from the CSV line altogether, and the parser will jump to the next CSV line.
 <br/> Finally concept CSV lines that provide a list of set members are automatically considered to be concept _sets_.
 
-**NOTE** In the current implementation the listing order of the concepts in the CSV file does matter since unexisting concepts will be skipped when parsing nested lists. It is recommended to take this into account and to insert CSV lines for concepts with nested lists low enough in the CSV file.
+**NOTE** In the current implementation the listing order of the concepts in the CSV file does matter since unexisting concepts will fail the CSV line processing. It is recommended to take this into account and to insert CSV lines for concepts with nested lists low enough in the CSV file so that all nested concepts are found when the CSV line is being processed.
+
+###### Version `_version:mappings`
+This guides the CSV parser to use the _mappings_ line processor that adds the column 'same as mappings' to the base line processor to specify lists of concept mappings following the format `source:code` (eg. "CIEL:1234").
+
+Here is an example of the additional columns that are processed:
+
+| ... | <sub>Same as concept mappings</sub> | ... |
+| - | - | - |
+| ... | <sub>ICD-10-WHO:T45.9; CIEL:122226; Cambodia:115</sub> | ... |
+
+###### Version `_version:nested_mappings`
+
+This version adds both the nested _and_ the mappings line processors to the base line processor.
 
 ##### Header `_order:*`
 This metadata header specifies the order of loading of the CSV file. In many cases the creation of concepts relies on the existence of other concepts, and this is the use case that is covered by this metadata header. For example `_order:1000` indicates that all CSV files with an order smaller than 1,000 will be processed _before_ this file.

@@ -8,6 +8,7 @@ target
 .java-version
 *.releaseBackup
 release.properties
+README.html
 
 # Package Files #
 *.jar
