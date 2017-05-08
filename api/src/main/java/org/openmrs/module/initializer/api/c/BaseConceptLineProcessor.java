@@ -33,19 +33,6 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, Concept
 		super(headerLine, cs);
 	}
 	
-	@Override
-	protected Concept getByUuid(String[] line) throws IllegalArgumentException {
-		String uuid = getUuid(line);
-		Concept concept = service.getConceptByUuid(uuid);
-		if (concept == null) {
-			concept = new Concept();
-			if (!StringUtils.isEmpty(uuid)) {
-				concept.setUuid(uuid);
-			}
-		}
-		return concept;
-	}
-	
 	/*
 	 * This is the base concept implementation.
 	 */

@@ -45,12 +45,6 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	protected Map<String, LocalizedHeader> l10nHeadersMap = new HashMap<String, LocalizedHeader>();
 	
 	/*
-	 * This is where to provide how to fetch T instances by uuid.
-	 * It should also be there that new T(..) is invoked.
-	 */
-	abstract protected T getByUuid(String[] line) throws IllegalArgumentException;
-	
-	/*
 	 * This implements how to fill T instances from any CSV line, ignoring the processing of the uuid.
 	 * This method can assume that the provided instance is never null as this is being taken care of upstream.
 	 */

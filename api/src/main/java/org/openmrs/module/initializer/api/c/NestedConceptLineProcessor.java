@@ -9,7 +9,7 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 
-public class NestedConceptLineProcessor extends BaseConceptLineProcessor {
+public class NestedConceptLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
 	
 	protected static String HEADER_ANSWERS = "answers";
 	
@@ -61,9 +61,9 @@ public class NestedConceptLineProcessor extends BaseConceptLineProcessor {
 	 * @param conceptList Eg.: ["cambodia:123"; "a92bf372-2fca-11e7-93ae-92361f002671";
 	 *            "CONCEPT_FULLY_SPECIFIED_NAME"]
 	 * @param cs
-	 * @return The list of {@link Concept} that have been found.
+	 * @return The list of {@link Concept} that have been found, null if any error(s).
 	 */
-	protected static List<Concept> parseConceptList(String conceptList, ConceptService cs) {
+	protected static List<Concept> parseConceptList(String conceptList, ConceptService cs) throws IllegalArgumentException {
 		List<Concept> concepts = new ArrayList<Concept>();
 		
 		String[] parts = conceptList.split(BaseLineProcessor.LIST_SEPARATOR);
@@ -74,16 +74,17 @@ public class NestedConceptLineProcessor extends BaseConceptLineProcessor {
 			if (child != null) {
 				concepts.add(child);
 			} else {
-				log.error("The concept identified by '" + id
-				        + "' could not be found in database, it was skipped as a nested concept as specified in: ["
-				        + conceptList + "].");
+				throw new IllegalArgumentException(
+				        "The concept identified by '"
+				                + id
+				                + "' could not be found in database. The concept with the following nested list of concepts was not created/updated: ["
+				                + conceptList + "].");
 			}
 		}
 		
 		return concepts;
 	}
 	
-	@Override
 	protected Concept fill(Concept concept, String[] line) throws IllegalArgumentException {
 		
 		String childrenStr;

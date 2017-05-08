@@ -17,7 +17,7 @@ public class BaseLineProcessorTest {
 	@Test
 	public void getVersion_shouldReturnTheVersionRhs() {
 		
-		String version = BaseLineProcessor.VERSION_LHS + InitializerConstants.VERSION_BASE;
+		String version = BaseLineProcessor.VERSION_LHS + InitializerConstants.VERSION_C_BASE;
 		
 		Set<String> hl1 = new HashSet<String>();
 		hl1.add("Name");
@@ -29,7 +29,7 @@ public class BaseLineProcessorTest {
 		hl1.add("Mapping");
 		
 		// a regular header line
-		Assert.assertEquals(InitializerConstants.VERSION_BASE,
+		Assert.assertEquals(InitializerConstants.VERSION_C_BASE,
 		    BaseLineProcessor.getVersion(hl1.toArray(new String[hl1.size()])));
 		
 		// the empty header line
@@ -70,7 +70,7 @@ public class BaseLineProcessorTest {
 	@Test
 	public void createIndexMap_shouldMapHeaderNames() {
 		
-		String version = BaseLineProcessor.VERSION_LHS + InitializerConstants.VERSION_BASE;
+		String version = BaseLineProcessor.VERSION_LHS + InitializerConstants.VERSION_C_BASE;
 		
 		List<String> hl1 = new ArrayList<String>();
 		hl1.add("Name");
@@ -110,7 +110,7 @@ public class BaseLineProcessorTest {
 	@Test
 	public void getLocalizedHeaders_shouldListLocalizedHeaders() {
 		
-		String version = BaseLineProcessor.VERSION_LHS + InitializerConstants.VERSION_BASE;
+		String version = BaseLineProcessor.VERSION_LHS + InitializerConstants.VERSION_C_BASE;
 		
 		List<String> hl1 = new ArrayList<String>();
 		hl1.add("Name:en");

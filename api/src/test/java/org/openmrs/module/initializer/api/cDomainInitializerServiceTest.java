@@ -20,6 +20,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
+import org.openmrs.ConceptMap;
+import org.openmrs.ConceptSource;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -38,6 +40,15 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 	@Before
 	public void setup() {
 		cs = Context.getConceptService();
+		
+		ConceptSource source = null;
+		source = new ConceptSource();
+		source.setName("Cambodia");
+		source = cs.saveConceptSource(source);
+		
+		source = new ConceptSource();
+		source.setName("CIEL");
+		source = cs.saveConceptSource(source);
 	}
 	
 	@Test
@@ -56,7 +67,7 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 		{
 			// Verif by name
 			Context.setLocale(localeEn);
-			c = cs.getConceptByName("CAMBODIA_Nationality");
+			c = cs.getConceptByName("Cambodia_Nationality");
 			Assert.assertNotNull(c);
 			Assert.assertEquals("Nationality", c.getDescription().toString());
 			Assert.assertEquals("Question", c.getConceptClass().getName());
@@ -91,7 +102,7 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 			
 			// Verif just one name is enough
 			Context.setLocale(localeEn);
-			c = cs.getConceptByName("CAMBODIA_Kavet");
+			c = cs.getConceptByName("Cambodia_Kavet");
 			Assert.assertNotNull(c);
 			Assert.assertEquals(1, c.getNames().size());
 			Assert.assertEquals(0, c.getShortNames().size());
@@ -102,9 +113,9 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 			// Failed ones
 			Context.setLocale(localeEn);
 			Assert.assertNull(cs.getConceptByUuid("db2f5104-3171-11e7-93ae-92361f002671"));
-			Assert.assertNull(cs.getConceptByName("CAMBODIA_Krung"));
+			Assert.assertNull(cs.getConceptByName("Cambodia_Krung"));
 			Assert.assertNull(cs.getConceptByName("db2f5460-3171-11e7-93ae-92361f002671"));
-			Assert.assertNull(cs.getConceptByName("CAMBODIA_Lao"));
+			Assert.assertNull(cs.getConceptByName("Cambodia_Lao"));
 			Assert.assertNull(cs.getConceptByUuid("00b29984-3183-11e7-93ae-92361f002671"));
 		}
 		
@@ -135,20 +146,28 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 				Assert.assertTrue(nestedUuids.contains(nested.getUuid()));
 			}
 			
-			// Verif mix
-			c = cs.getConceptByName("Mix nested concepts");
+			// Verif not saved with missing answer(s) or member(s)
+			Assert.assertNull(cs.getConceptByName("Unexisting concept answer"));
+			Assert.assertNull(cs.getConceptByName("Unexisting set member"));
+		}
+		
+		// Verif. 'mappings' CSV loading
+		{
+			// Verif mappings are added
+			c = cs.getConceptByUuid("2c4da504-33d4-11e7-a919-92ebcb67fe33");
 			Assert.assertNotNull(c);
-			Assert.assertTrue(c.isSet());
-			Assert.assertFalse(CollectionUtils.isEmpty(c.getSetMembers()));
-			Assert.assertEquals(2, c.getSetMembers().size());
-			for (Concept nested : c.getSetMembers()) {
-				Assert.assertTrue(nestedUuids.contains(nested.getUuid()));
+			Assert.assertEquals(2, c.getConceptMappings().size());
+			Set<String> names = new HashSet<String>();
+			for (ConceptMap m : c.getConceptMappings()) {
+				String source = m.getConceptReferenceTerm().getConceptSource().getName();
+				String code = m.getConceptReferenceTerm().getCode();
+				names.add(source + ":" + code);
 			}
-			Assert.assertFalse(CollectionUtils.isEmpty(c.getAnswers()));
-			Assert.assertEquals(2, c.getAnswers().size());
-			for (ConceptAnswer nested : c.getAnswers()) {
-				Assert.assertTrue(nestedUuids.contains(nested.getAnswerConcept().getUuid()));
-			}
+			Assert.assertTrue(names.contains("Cambodia:1234"));
+			Assert.assertTrue(names.contains("CIEL:159392"));
+			
+			// Verif not saved with missing mapping(s)
+			Assert.assertNull(cs.getConceptByName("Unexisting mapping"));
 		}
 	}
 }

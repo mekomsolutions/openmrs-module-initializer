@@ -40,7 +40,11 @@ public class InitializerConstants {
 	/*
 	 * CSV line processors versions
 	 */
-	public static final String VERSION_BASE = "base"; // every concept CSV is at least following this version
+	public static final String VERSION_C_BASE = "base"; // 'base' only
 	
-	public static final String VERSION_NESTED = "nested"; // concepts with nested 'answers' and 'members'
+	public static final String VERSION_C_NESTED = "nested"; // 'base' + 'nested'
+	
+	public static final String VERSION_C_MAPPINGS = "mappings"; // 'base' + 'mappings'
+	
+	public static final String VERSION_C_NESTED_MAPPINGS = "nested_mappings"; // 'base' + 'nested' + 'mappings'
 }

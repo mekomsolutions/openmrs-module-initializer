@@ -87,14 +87,14 @@ public class ConceptsCsvParserTest {
 		Assert.assertEquals(10, concepts.size());
 		Concept c = null;
 		c = concepts.get(0);
-		Assert.assertEquals("CAMBODIA_Nationality", c.getFullySpecifiedName(localeEn).getName());
+		Assert.assertEquals("Cambodia_Nationality", c.getFullySpecifiedName(localeEn).getName());
 		Assert.assertEquals("Coded", c.getDatatype().getName());
 		Assert.assertEquals("Question", c.getConceptClass().getName());
 		Assert.assertEquals("កម្ពុជា_សញ្ជាតិ", c.getFullySpecifiedName(localeKm).getName());
 		
 		c = concepts.get(4);
 		Assert.assertEquals("db2f4fc4-3171-11e7-93ae-92361f002671", c.getUuid());
-		Assert.assertEquals("CAMBODIA_Phnong", c.getFullySpecifiedName(localeEn).getName());
+		Assert.assertEquals("Cambodia_Phnong", c.getFullySpecifiedName(localeEn).getName());
 		Assert.assertEquals("Text", c.getDatatype().getName());
 		Assert.assertEquals("Misc", c.getConceptClass().getName());
 		Assert.assertEquals("ព្នង", c.getShortestName(localeKm, true).getName());

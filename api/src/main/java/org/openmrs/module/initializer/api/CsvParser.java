@@ -28,6 +28,9 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	
 	protected List<P> lineProcessors = new ArrayList<P>();
 	
+	// The header line
+	protected String[] headerLine = new String[0];
+	
 	// The current line
 	protected String[] line = new String[0];
 	
@@ -35,7 +38,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		this.service = service;
 		this.reader = new CSVReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 		
-		String[] headerLine = reader.readNext();
+		headerLine = reader.readNext();
 		String version = P.getVersion(headerLine);
 		setLineProcessors(version, headerLine);
 	}
@@ -56,7 +59,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	 * The implementation should be delegated
 	 * to the line processor in the subclass 
 	 */
-	protected T fromCsvLine(String[] line) {
+	protected T createInstance(String[] line) throws APIException {
 		
 		if (CollectionUtils.isEmpty(getLineProcessors())) {
 			log.warn("No line processors have been set, you should either overload '"
@@ -67,7 +70,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		
 		P firstProcessor = getLineProcessors().get(0);
 		
-		T instance = firstProcessor.getByUuid(line); // any line processor is fine to fetch by uuid
+		T instance = getByUuid(line);
 		if (instance == null) {
 			throw new APIException(
 			        "An instance that could not be fetched by UUID was not provided as an empty object for further filling. Check the implementation of this line processor: "
@@ -87,6 +90,12 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	abstract protected T save(T instance);
 	
 	/*
+	 * This is where to provide how to fetch T instances by uuid.
+	 * It should also be there that new T(..) is invoked.
+	 */
+	abstract protected T getByUuid(String[] line);
+	
+	/*
 	 * Parsers must set their line processor implementation
 	 * based on the version indicated in the CSV metadata headers.
 	 * 
@@ -103,9 +112,9 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	}
 	
 	/*
-	 * Fills the OpenMRS instance from the next CSV line.
+	 * Fetches the next CSV line
 	 */
-	protected T fetchNext() throws Exception {
+	protected String[] fetchNextLine() throws Exception {
 		
 		line = reader.readNext();
 		if (line == null) {
@@ -120,7 +129,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 			line[col] = StringUtils.isNotEmpty(val) ? val : null;
 		}
 		
-		return fromCsvLine(line); // that's the actual method that must be overloaded
+		return line;
 	}
 	
 	protected void close() throws IOException {
@@ -136,13 +145,14 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		
 		List<T> instances = new ArrayList<T>();
 		
-		T instance = null;
+		String[] line = null;
 		do {
 			try {
-				instance = fetchNext();
+				line = fetchNextLine();
+				T instance = createInstance(line);
 				if (instance != null) {
 					instance = save(instance);
-					if (instance != null && instance.getId() != null) {
+					if (instance.getId() != null) {
 						instances.add(instance);
 					}
 				}
@@ -152,7 +162,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 				    "An OpenMRS object could not be constructed or saved from the following CSV line: "
 				            + Arrays.toString(line), e);
 			}
-		} while (instance != null);
+		} while (line != null);
 		
 		return instances;
 	}
