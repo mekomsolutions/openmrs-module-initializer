@@ -68,13 +68,14 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 			return null;
 		}
 		
-		P firstProcessor = getLineProcessors().get(0);
-		
 		T instance = getByUuid(line);
 		if (instance == null) {
 			throw new APIException(
-			        "An instance that could not be fetched by UUID was not provided as an empty object for further filling. Check the implementation of this line processor: "
-			                + firstProcessor.getClass().getCanonicalName());
+			        "An instance that could not be fetched by UUID was not provided as an empty object either. Check the implementation of this parser: "
+			                + getClass().getSuperclass().getCanonicalName());
+		}
+		if (voidOrRetire(instance)) {
+			return instance;
 		}
 		
 		// Applying the lines processors in order
@@ -90,10 +91,17 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	abstract protected T save(T instance);
 	
 	/*
-	 * This is where to provide how to fetch T instances by uuid.
+	 * This is where to implement how to fetch T instances by uuid.
+	 * This is also where the voided/retired flag should be parsed and set.
+	 * 
 	 * It should also be there that new T(..) is invoked.
 	 */
 	abstract protected T getByUuid(String[] line);
+	
+	/*
+	 * Says if the CSV line is marked for voiding or retiring.
+	 */
+	abstract protected boolean voidOrRetire(T instance);
 	
 	/*
 	 * Parsers must set their line processor implementation

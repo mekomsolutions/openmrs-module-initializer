@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -23,6 +24,8 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	protected final static Log log = LogFactory.getLog(BaseLineProcessor.class);
 	
 	protected static String HEADER_UUID = "uuid";
+	
+	protected static String HEADER_VOID_RETIRE = "void/retire";
 	
 	public static String LIST_SEPARATOR = ";";
 	
@@ -66,6 +69,15 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	
 	protected String getUuid(String[] line) throws IllegalArgumentException {
 		return getUuid(headerLine, line);
+	}
+	
+	public static boolean getVoidOrRetire(String[] headerLine, String[] line) throws IllegalArgumentException {
+		String str = line[getColumn(headerLine, HEADER_VOID_RETIRE)];
+		return BooleanUtils.toBoolean(str);
+	}
+	
+	protected boolean getVoidOrRetire(String[] line) throws IllegalArgumentException {
+		return getVoidOrRetire(headerLine, line);
 	}
 	
 	/*

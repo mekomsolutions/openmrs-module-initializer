@@ -50,6 +50,14 @@ public class ConceptsCsvParser extends CsvParser<Concept, ConceptService, BaseLi
 				concept.setUuid(uuid);
 			}
 		}
+		
+		concept.setRetired(BaseLineProcessor.getVoidOrRetire(headerLine, line));
+		
 		return concept;
+	}
+	
+	@Override
+	protected boolean voidOrRetire(Concept instance) {
+		return instance.isRetired();
 	}
 }

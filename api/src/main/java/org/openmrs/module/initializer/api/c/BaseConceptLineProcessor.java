@@ -10,6 +10,7 @@ import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.springframework.util.CollectionUtils;
 
 /**
  * This is the first level line processor for concepts. It allows to parse and save concepts with
@@ -40,6 +41,11 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, Concept
 		
 		LocalizedHeader lh = null;
 		
+		// Clearing existing names
+		for (ConceptName cn : concept.getNames()) {
+			concept.removeName(cn);
+		}
+		
 		// Fully specified names
 		lh = getLocalizedHeader(HEADER_FSNAME);
 		for (Locale locale : lh.getLocales()) {
@@ -61,6 +67,9 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, Concept
 		}
 		
 		// Descriptions
+		if (!CollectionUtils.isEmpty(concept.getDescriptions())) {
+			concept.getDescriptions().clear();
+		}
 		lh = getLocalizedHeader(HEADER_DESC);
 		for (Locale locale : lh.getLocales()) {
 			String desc = line[getColumn(lh.getI18nHeader(locale))];

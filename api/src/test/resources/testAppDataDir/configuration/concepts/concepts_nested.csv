@@ -1,7 +1,8 @@
-Uuid,Answers,Members,Fully specified name:en,Short name:en,Description:en,Data class,Data type,_version:nested,_order:2000
-8bc5043c-3221-11e7-93ae-92361f002671,,,Kingdom of Cambodia,,,Misc,Text,,
-8bc506bc-3221-11e7-93ae-92361f002671,,,United States of America,,,Misc,Text,,
-8bc50946-3221-11e7-93ae-92361f002671,Kingdom of Cambodia; 8bc506bc-3221-11e7-93ae-92361f002671,,Country name,,,Question,Coded,,
-c84c3f88-3221-11e7-93ae-92361f002671,,8bc5043c-3221-11e7-93ae-92361f002671; United States of America,All country names,,,Misc,Text,,
-,Kingdom of Cambodia; 8bc506bc-3221-11e7-93ae-92361f002671; Lao PDR,,Unexisting concept answer,,,Misc,Text,,
-,,8bc5043c-3221-11e7-93ae-92361f002671; United States of America; mysource:1234,Unexisting set member,,,Misc,Text,,
+Uuid,Void/Retire,Answers,Members,Fully specified name:en,Short name:en,Description:en,Data class,Data type,_version:nested,_order:2000
+8bc5043c-3221-11e7-93ae-92361f002671,,,,Kingdom of Cambodia,,,Misc,Text,,
+8bc506bc-3221-11e7-93ae-92361f002671,,,,United States of America,,,Misc,Text,,
+8bc50946-3221-11e7-93ae-92361f002671,,Kingdom of Cambodia; 8bc506bc-3221-11e7-93ae-92361f002671,,Country name,,,Question,Coded,,
+c84c3f88-3221-11e7-93ae-92361f002671,,,8bc5043c-3221-11e7-93ae-92361f002671; United States of America,All country names,,,Misc,Text,,
+,,Kingdom of Cambodia; 8bc506bc-3221-11e7-93ae-92361f002671; Lao PDR,,Unexisting concept answer,,,Misc,Text,,
+,,,8bc5043c-3221-11e7-93ae-92361f002671; United States of America; mysource:1234,Unexisting set member,,,Misc,Text,,
+d803e973-1010-4415-8659-c011dec707c0,,,,CONCEPT_REMOVE_MEMBERS,,,Misc,Text,,

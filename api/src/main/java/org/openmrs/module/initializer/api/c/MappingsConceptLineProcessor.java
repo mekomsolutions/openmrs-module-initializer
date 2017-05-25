@@ -3,6 +3,7 @@ package org.openmrs.module.initializer.api.c;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
@@ -76,6 +77,9 @@ public class MappingsConceptLineProcessor extends BaseLineProcessor<Concept, Con
 	
 	protected Concept fill(Concept concept, String[] line) throws IllegalArgumentException {
 		
+		if (!CollectionUtils.isEmpty(concept.getConceptMappings())) {
+			concept.getConceptMappings().clear();
+		}
 		String mappingsStr;
 		mappingsStr = line[getColumn(HEADER_MAPPINGS_SAMEAS)];
 		if (!StringUtils.isEmpty(mappingsStr)) {

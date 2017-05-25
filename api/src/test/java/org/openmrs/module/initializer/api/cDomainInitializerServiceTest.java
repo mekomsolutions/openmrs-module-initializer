@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptMap;
+import org.openmrs.ConceptName;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
@@ -49,6 +50,50 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 		source = new ConceptSource();
 		source.setName("CIEL");
 		source = cs.saveConceptSource(source);
+		
+		// A concept to be retired via CSV
+		{
+			Concept c = new Concept();
+			c.setUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
+			c.setFullySpecifiedName(new ConceptName("CONCEPT_RETIRE", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Misc"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			cs.saveConcept(c);
+		}
+		
+		// A concept to be edited via CSV
+		{
+			Concept c = new Concept();
+			c.setUuid("276c5861-cd46-429f-9665-e067ddeca8e3");
+			c.setFullySpecifiedName(new ConceptName("CONCEPT_EDIT_SHORTNAME", Locale.ENGLISH));
+			c.setShortName(new ConceptName("Old short name", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Misc"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			cs.saveConcept(c);
+		}
+		
+		// A concept with members to be removed via CSV
+		{
+			Concept cm1 = new Concept();
+			cm1.setFullySpecifiedName(new ConceptName("member_1", Locale.ENGLISH));
+			cm1.setConceptClass(cs.getConceptClassByName("Misc"));
+			cm1.setDatatype(cs.getConceptDatatypeByName("Text"));
+			cm1 = cs.saveConcept(cm1);
+			Concept cm2 = new Concept();
+			cm2.setFullySpecifiedName(new ConceptName("member_2", Locale.ENGLISH));
+			cm2.setConceptClass(cs.getConceptClassByName("Misc"));
+			cm2.setDatatype(cs.getConceptDatatypeByName("Text"));
+			cm2 = cs.saveConcept(cm2);
+			
+			Concept c = new Concept();
+			c.setUuid("d803e973-1010-4415-8659-c011dec707c0");
+			c.setFullySpecifiedName(new ConceptName("CONCEPT_REMOVE_MEMBERS", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Misc"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			c.addSetMember(cm1);
+			c.addSetMember(cm2);
+			c = cs.saveConcept(c);
+		}
 	}
 	
 	@Test
@@ -59,6 +104,13 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 		Concept c = null;
 		Locale localeEn = Locale.ENGLISH;
 		Locale localeKm = new Locale("km", "KH");
+		{
+			c = cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0");
+			Assert.assertEquals(2, c.getSetMembers().size());
+			Assert.assertTrue(c.isSet());
+			c = cs.getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
+			Assert.assertFalse(c.isRetired());
+		}
 		
 		// Replay
 		getService().loadConcepts();
@@ -117,6 +169,15 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 			Assert.assertNull(cs.getConceptByName("db2f5460-3171-11e7-93ae-92361f002671"));
 			Assert.assertNull(cs.getConceptByName("Cambodia_Lao"));
 			Assert.assertNull(cs.getConceptByUuid("00b29984-3183-11e7-93ae-92361f002671"));
+			
+			// Retired one
+			c = cs.getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
+			Assert.assertTrue(c.isRetired());
+			
+			// Edited one
+			Context.setLocale(localeEn);
+			c = cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3");
+			Assert.assertEquals("New short name", c.getShortNameInLocale(localeEn).getName());
 		}
 		
 		Context.setLocale(localeEn);
@@ -149,6 +210,11 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 			// Verif not saved with missing answer(s) or member(s)
 			Assert.assertNull(cs.getConceptByName("Unexisting concept answer"));
 			Assert.assertNull(cs.getConceptByName("Unexisting set member"));
+			
+			// Verif modified
+			c = cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0");
+			Assert.assertTrue(CollectionUtils.isEmpty(c.getSetMembers()));
+			Assert.assertFalse(c.isSet());
 		}
 		
 		// Verif. 'mappings' CSV loading

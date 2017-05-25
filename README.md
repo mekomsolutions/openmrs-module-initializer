@@ -48,8 +48,8 @@ The **concept** subfolder contains CSV import files for saving concepts in bulk.
 ```
 The way those CSV files are processed is controlled by a reserved part of the CSV file header line that holds metadata about the CSV file itself. Here is an example of a header line:
 
-| <sub>Uuid</sub> | <sub>Fully specified name:en</sub> | <sub>Short name:en</sub> | <sub>Description:en</sub> | ... | <sub>_version:base</sub> | <sub>_order:1000</sub> |
-| - | - | - | - | - | - | - |
+| <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Fully specified name:en</sub> | <sub>Short name:en</sub> | <sub>Description:en</sub> | ... | <sub>_version:base</sub> | <sub>_order:1000</sub> |
+| - | - | - | - | - | - | - | - |
 
 Some headers start with an underscore such as `_version:base`, indicating that they are metadata headers. The values in the columns under those headers are never read by the CSV parser.
 <br/>Let's review some important headers.
@@ -57,6 +57,10 @@ Some headers start with an underscore such as `_version:base`, indicating that t
 ##### Header `Uuid`
 If the value under this header is missing, the concept will be created with a newly generated UUID.
 If the value under this header is provided, the initializer will attempt to retrieve any existing concept that may already exist with this UUID. And if the concept already exists, it will be modified and resaved according to the CSV line. If the concept doesn't exist, then a new concept will be created with the UUID specified on the CSV line.
+
+##### Header `Void/Retire`
+Set this **true** to indicate that the concept with the provided UUID should be retired.
+<br/>When `Void/Retire` is set to true, the parsing of the remaining of the CSV line is interrupted since the only objective is to retire the concept. And to this end, only the UUID and the retire flag are needed.
 
 ##### Headers `Fully specified name`, `Short name` and `Description`
 Those are locale specific headers, they are never used as such because they always need to indicate the locale for the values in their column.
