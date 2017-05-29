@@ -11,10 +11,8 @@ package org.openmrs.module.initializer.api.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -31,8 +29,6 @@ import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerSerializer;
 import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.module.initializer.api.OrderableCsvFile;
-import org.openmrs.module.initializer.api.c.ConceptsCsvParser;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
 import org.openmrs.module.initializer.api.idgen.IdgenConfig;
 import org.openmrs.module.metadatasharing.ImportConfig;
@@ -65,40 +61,12 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	@Override
 	public void loadConcepts() {
-		
-		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(),
-		        InitializerConstants.DOMAIN_C);
-		
-		// Selecting the files that havent' been checksum'd yet
-		List<OrderableCsvFile> files = new ArrayList<OrderableCsvFile>();
-		for (File file : util.getFiles("csv")) {
-			String fileName = util.getFileName(file.getPath());
-			String checksum = util.getChecksumIfChanged(fileName);
-			if (!checksum.isEmpty()) {
-				files.add(new OrderableCsvFile(file, checksum));
-			}
-		}
-		
-		Collections.sort(files); // sorting based on the CSV order metadata
-		
-		// parsing the CSV files
-		for (OrderableCsvFile file : files) {
-			InputStream is = null;
-			try {
-				is = new FileInputStream(file.getFile());
-				
-				new ConceptsCsvParser(is, Context.getConceptService()).saveAll();
-				
-				util.writeChecksum(file.getFile().getName(), file.getChecksum());
-				log.info("The following concepts config file was succesfully processed: " + file.getFile().getName());
-			}
-			catch (IOException e) {
-				log.error("Could not parse the concepts from config file: " + file.getFile().getPath(), e);
-			}
-			finally {
-				IOUtils.closeQuietly(is);
-			}
-		}
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_C);
+	}
+	
+	@Override
+	public void loadPersonAttributeTypes() {
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_PAT);
 	}
 	
 	@Override

@@ -1,0 +1,4 @@
+Uuid,Void/Retire,Name,Description,Format,Foreign uuid,Searchable,Edit privilege,_order:1000
+,,PAT_with_concept,,org.openmrs.Concept,5825d19a-bafe-4348-b1ce-2ea03bfc1a10,,Edit:PAT,
+9eca4f4e-707f-4bb8-8289-2f9b6e93803c,,PAT_RENAME_NEW_NAME,,java.lang.String,,,,
+bd1adb89-ba65-40ad-8eb9-21751281432f,,PAT_CHANGE_FOREIGNKEY,,org.openmrs.Concept,5825d19a-bafe-4348-b1ce-2ea03bfc1a10,yes,,

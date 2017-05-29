@@ -47,7 +47,7 @@ public class NestedConceptLineProcessorTest {
 	}
 	
 	@Test
-	public void getConcept_shouldParseAnswers() {
+	public void fill_shouldParseAnswers() {
 		
 		// Setup
 		String[] headerLine = { "Answers", "Members" };
@@ -70,7 +70,7 @@ public class NestedConceptLineProcessorTest {
 	}
 	
 	@Test
-	public void getConcept_shouldParseSetMembers() {
+	public void fill_shouldParseSetMembers() {
 		
 		// Setup
 		String[] headerLine = { "Answers", "Members" };
@@ -93,7 +93,7 @@ public class NestedConceptLineProcessorTest {
 	}
 	
 	@Test
-	public void getConcept_shouldHandleNoChildren() {
+	public void fill_shouldHandleNoChildren() {
 		
 		// Setup
 		String[] headerLine = { "Answers", "Members" };
@@ -110,7 +110,7 @@ public class NestedConceptLineProcessorTest {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void getConcept_shouldFailIfNoAnswersColumns() {
+	public void fill_shouldFailIfNoAnswersColumns() {
 		
 		// Setup
 		String[] headerLine = { "Members" };
@@ -122,7 +122,7 @@ public class NestedConceptLineProcessorTest {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void getConcept_shouldFailIfNoMembersColumns() {
+	public void fill_shouldFailIfNoMembersColumns() {
 		
 		// Setup
 		String[] headerLine = { "Answers" };

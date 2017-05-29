@@ -37,6 +37,8 @@ public class InitializerConstants {
 	
 	public static final String DOMAIN_MDS = "metadatasharing";
 	
+	public static final String DOMAIN_PAT = "personattributetypes";
+	
 	/*
 	 * CSV line processors versions
 	 */

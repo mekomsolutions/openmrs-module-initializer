@@ -18,13 +18,9 @@ import org.springframework.util.CollectionUtils;
  */
 public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
 	
-	protected static String HEADER_NAME = "name";
-	
 	protected static String HEADER_SHORTNAME = "short name";
 	
 	protected static String HEADER_FSNAME = "fully specified name";
-	
-	protected static String HEADER_DESC = "description";
 	
 	protected static String HEADER_CLASS = "data class";
 	

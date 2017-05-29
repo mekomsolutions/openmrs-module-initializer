@@ -4,14 +4,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -368,6 +371,42 @@ public class ConfigDirUtil {
 		if (checksumFiles != null) {
 			for (File file : checksumFiles) {
 				file.delete();
+			}
+		}
+	}
+	
+	public static void loadCsvFiles(String configDirPath, String checksumDirPath, String domain) {
+		
+		final ConfigDirUtil util = new ConfigDirUtil(configDirPath, checksumDirPath, domain);
+		
+		// Selecting the files that havent' been checksum'd yet
+		List<OrderableCsvFile> files = new ArrayList<OrderableCsvFile>();
+		for (File file : util.getFiles("csv")) {
+			String fileName = util.getFileName(file.getPath());
+			String checksum = util.getChecksumIfChanged(fileName);
+			if (!checksum.isEmpty()) {
+				files.add(new OrderableCsvFile(file, checksum));
+			}
+		}
+		
+		Collections.sort(files); // sorting based on the CSV order metadata
+		
+		// parsing the CSV files
+		for (OrderableCsvFile file : files) {
+			InputStream is = null;
+			try {
+				is = new FileInputStream(file.getFile());
+				
+				CsvParserFactory.create(is, domain).saveAll();
+				
+				util.writeChecksum(file.getFile().getName(), file.getChecksum());
+				log.info("The following '" + domain + "' config file was succesfully processed: " + file.getFile().getName());
+			}
+			catch (IOException e) {
+				log.error("Could not parse the '" + domain + "' config file: " + file.getFile().getPath(), e);
+			}
+			finally {
+				IOUtils.closeQuietly(is);
 			}
 		}
 	}

@@ -13,9 +13,10 @@ The configuration folder is subdivided into 'domain specific' subfolders:
   configuration/
     \_ addresshierarchy/
     \_ concepts/
-    \_ idgen/
     \_ globalproperties/
-    \_ metadatasharing/
+    \_ idgen/
+    \_ metadatasharing/ 
+    \_ personattributetypes/
 ```  
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain.
 Please see below for details about each supported domain:
@@ -38,7 +39,7 @@ The Initializer module will take care of loading the address hierarchy entries t
 ---
 
 #### Domain 'concepts'
-The **concept** subfolder contains CSV import files for saving concepts in bulk. This is a possible example of its content:
+The **concepts** subfolder contains CSV import files for saving concepts in bulk. This is a possible example of its content:
 ```
   concepts/
     \_ diagnoses.csv
@@ -108,6 +109,36 @@ This metadata header specifies the order of loading of the CSV file. In many cas
 
 ---
 
+#### Domain 'globalproperties'
+The **globalproperties** subfolder contains XML configuration files that specify which global properties to override. Note that existing global properties will be overridden and missing ones will be created.
+This is a possible example of how the configuration subfolder may look like:
+```
+  globalproperties/
+    \_ gp_core.xml
+    \_ gp_coreapps.xml
+    \_ ...
+```
+There can be as many XML files as desired. One may be enough in most cases, but providing multiples files is also a possibility if the implementation requires to manage them by modules, areas or categories. Beware that the behaviour will be undefined iif a global property is overridden in several places. 
+
+###### Global properties XML configuration file example:
+```xml
+<config>
+  <globalProperties>
+    <globalProperty>
+      <property>addresshierarchy.i18nSupport</property>
+      <value>true</value>
+    </globalProperty>
+    <globalProperty>
+      <property>locale.allowed.list</property>
+      <value>en, km_KH</value>
+    </globalProperty>
+  </globalProperties>
+</config>
+```
+The above XML configuration will set **addresshierarchy.i18nSupport** to `true` and **locale.allowed.list** to `"en, km_KH"`.
+
+---
+
 #### Domain 'idgen'
 The **idgen** subfolder contains XML configuration files that help modify and create identifier sources. It should be possible in most cases to configure them via a single XML configuration file, however there can be as many XML files as desired.
 This is a possible example of how the configuration subfolder may look like:
@@ -147,33 +178,41 @@ The above XML configuration will retire the identifier sources whose UUIDs are `
 
 ---
 
-#### Domain 'globalproperties'
-The **globalproperties** subfolder contains XML configuration files that specify which global properties to override. Note that existing global properties will be overridden and missing ones will be created.
-This is a possible example of how the configuration subfolder may look like:
+#### Domain 'personattributetypes'
+The **personattributetypes** subfolder contains CSV import files for saving person attribute types in bulk. This is a possible example of its content:
 ```
-  globalproperties/
-    \_ gp_core.xml
-    \_ gp_coreapps.xml
+  personattributetypes/
+    \_ registration_pat.csv
     \_ ...
 ```
-There can be as many XML files as desired. One may be enough in most cases, but providing multiples files is also a possibility if the implementation requires to manage them by modules, areas or categories. Beware that the behaviour will be undefined iif a global property is overridden in several places. 
+There is currently only one format for the person attribute type CSV line, here are the possible headers:
 
-###### Global properties XML configuration file example:
-```xml
-<config>
-  <globalProperties>
-    <globalProperty>
-      <property>addresshierarchy.i18nSupport</property>
-      <value>true</value>
-    </globalProperty>
-    <globalProperty>
-      <property>locale.allowed.list</property>
-      <value>en, km_KH</value>
-    </globalProperty>
-  </globalProperties>
-</config>
-```
-The above XML configuration will set **addresshierarchy.i18nSupport** to `true` and **locale.allowed.list** to `"en, km_KH"`.
+| <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Name</sub> | <sub>Description</sub> | <sub>Format</sub> | <sub>Foreign uuid</sub> | <sub>Searchable</sub> | <sub>_order:1000</sub> |
+| - | - | - | - | - | - | - | - |
+
+Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
+<br/>Let's review some important headers.
+
+##### Header `Uuid`
+If the value under this header is missing, the person attribute type will be created with a newly generated UUID.
+If the value under this header is provided, the initializer will attempt to retrieve any existing person attribute type that may already exist with this UUID. And if the person attribute type already exists, it will be modified and resaved according to the CSV line. Finally if the person attribute type doesn't exist, then a new person attribute type will be created with the UUID specified on the CSV line.
+
+##### Header `Void/Retire`
+Set this **true** to indicate that the person attribute type with the provided UUID should be retired.
+<br/>When `Void/Retire` is set to true, the parsing of the remaining of the CSV line is interrupted since the only objective is to retire the person attribute type. And to this end, only the UUID and the retire flag are needed.
+
+##### Header `Name`
+The only mandatory column outside of `Uuid` and `Void/Retire`.
+
+##### Header `Format`
+Here are the possible values for this column: `org.openmrs.util.AttributableDate`, `org.openmrs.User`, `org.openmrs.Provider`, `org.openmrs.ProgramWorkflow`, `org.openmrs.Person`, `org.openmrs.Patient`, `org.openmrs.Location`, `org.openmrs.Encounter`, `org.openmrs.Drug`, `org.openmrs.Concept`, `java.lang.String`, `java.lang.Integer`, `java.lang.Float`, `java.lang.Character`, `java.lang.Boolean`.
+
+##### Header `Foreign uuid`
+When the header `Format` refers to an OpenMRS class (such as `org.openmrs.Concept`) for example, `Foreign uuid` should point to the UUID of an existing instance of that class. 
+
+##### Header `_order:*`
+This metadata header specifies the order of loading of the CSV file. In many cases the creation of concepts relies on the existence of other concepts, and this is the use case that is covered by this metadata header. For example `_order:1000` indicates that all CSV files with an order smaller than 1,000 will be processed _before_ this file.
+<br/> If the order metadata cannot be parsed or is missing, then the file will be processed _after_ all the ordered CSV files. However if several CSV files have no order defined, then the loading order between them is undefined. 
 
 ---
 
@@ -215,4 +254,5 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and saving of concepts provided through CSV files in  **configuration/concepts**.
 * Overrides global properties provided through XML configuration files in **configuration/globalproperties**.
 * Modifies (retire) or create identifier sources as specified in  **configuration/idgen**.
+* Bulk creation and saving of person attribute types provided through CSV files in  **configuration/personattributetypes**.
 * Imports MDS packages provided as .zip files in **configuration/metadatasharing**.

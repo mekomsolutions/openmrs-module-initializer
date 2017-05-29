@@ -27,6 +27,10 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	
 	protected static String HEADER_VOID_RETIRE = "void/retire";
 	
+	protected static String HEADER_NAME = "name";
+	
+	protected static String HEADER_DESC = "description";
+	
 	public static String LIST_SEPARATOR = ";";
 	
 	public static String LOCALE_SEPARATOR = ":"; // for header only

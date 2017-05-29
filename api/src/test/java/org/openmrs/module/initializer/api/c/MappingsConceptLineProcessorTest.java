@@ -63,7 +63,7 @@ public class MappingsConceptLineProcessorTest {
 	}
 	
 	@Test
-	public void getConcept_shouldParseSameAsMappings() {
+	public void fill_shouldParseSameAsMappings() {
 		
 		// Setup
 		String[] headerLine = { "Same as mappings" };
@@ -87,7 +87,7 @@ public class MappingsConceptLineProcessorTest {
 	}
 	
 	@Test
-	public void getConcept_shouldHandleNoSameAsMappings() {
+	public void fill_shouldHandleNoSameAsMappings() {
 		
 		// Setup
 		String[] headerLine = { "Same as mappings" };

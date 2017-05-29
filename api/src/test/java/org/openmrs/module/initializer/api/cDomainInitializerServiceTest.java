@@ -97,7 +97,7 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 	}
 	
 	@Test
-	@Verifies(value = "should load and save concepts from CSV files according to their versions", method = "loadConcepts()")
+	@Verifies(value = "should load and save concepts from CSV files according to the version", method = "loadConcepts()")
 	public void loadConcepts_shouldProcessCsvAccordingToVersion() {
 		
 		// Setup

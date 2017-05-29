@@ -38,12 +38,17 @@ public interface InitializerService extends OpenmrsService {
 	String getAddressHierarchyConfigPath();
 	
 	/**
-	 * Loads the concepts from their domain config. dir and saves them.
+	 * Loads the concepts from their domain config. dir, and saves them.
 	 */
 	void loadConcepts();
 	
 	/**
-	 * Loads the global properties from their domain config. dir and saves them.
+	 * Loads the person attribute types from their domain config. dir, and saves them.
+	 */
+	void loadPersonAttributeTypes();
+	
+	/**
+	 * Loads the global properties from their domain config. dir, and saves them.
 	 */
 	void loadGlobalProperties();
 	
