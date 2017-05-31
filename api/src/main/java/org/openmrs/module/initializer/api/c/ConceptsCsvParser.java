@@ -6,7 +6,6 @@ import java.io.InputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
 
@@ -18,25 +17,10 @@ public class ConceptsCsvParser extends CsvParser<Concept, ConceptService, BaseLi
 	
 	@Override
 	protected void setLineProcessors(String version, String[] headerLine) {
-		
-		addLineProcessor(new BaseConceptLineProcessor(headerLine, service)); // at min. the 'base' parsing
-		
-		if (InitializerConstants.VERSION_C_NESTED.equals(version)) {
-			addLineProcessor(new NestedConceptLineProcessor(headerLine, service));
-		}
-		
-		if (InitializerConstants.VERSION_C_MAPPINGS.equals(version)) {
-			addLineProcessor(new MappingsConceptLineProcessor(headerLine, service));
-		}
-		
-		if (InitializerConstants.VERSION_C_NUMERICS.equals(version)) {
-			addLineProcessor(new ConceptNumericLineProcessor(headerLine, service));
-		}
-		
-		if (InitializerConstants.VERSION_C_NESTED_MAPPINGS.equals(version)) {
-			addLineProcessor(new MappingsConceptLineProcessor(headerLine, service));
-			addLineProcessor(new NestedConceptLineProcessor(headerLine, service));
-		}
+		addLineProcessor(new ConceptNumericLineProcessor(headerLine, service));
+		addLineProcessor(new BaseConceptLineProcessor(headerLine, service));
+		addLineProcessor(new NestedConceptLineProcessor(headerLine, service));
+		addLineProcessor(new MappingsConceptLineProcessor(headerLine, service));
 	}
 	
 	@Override
@@ -45,7 +29,7 @@ public class ConceptsCsvParser extends CsvParser<Concept, ConceptService, BaseLi
 	}
 	
 	@Override
-	protected Concept getByUuid(String[] line) throws IllegalArgumentException {
+	protected Concept bootstrap(String[] line) throws IllegalArgumentException {
 		String uuid = BaseLineProcessor.getUuid(headerLine, line);
 		Concept concept = service.getConceptByUuid(uuid);
 		if (concept == null) {

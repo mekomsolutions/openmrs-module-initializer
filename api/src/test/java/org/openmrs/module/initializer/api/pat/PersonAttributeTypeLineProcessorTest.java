@@ -12,6 +12,7 @@ import org.mockito.stubbing.Answer;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Privilege;
 import org.openmrs.api.PersonService;
+import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypeLineProcessor.Helper;
 
 /*
@@ -48,7 +49,7 @@ public class PersonAttributeTypeLineProcessorTest {
 		
 		// Replay
 		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(headerLine, ps, helper);
-		PersonAttributeType pat = p.fill(new PersonAttributeType(), line);
+		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(p, line));
 		
 		// Verif
 		Assert.assertEquals("PAT name", pat.getName());
@@ -68,22 +69,25 @@ public class PersonAttributeTypeLineProcessorTest {
 		
 		// Replay
 		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(headerLine, ps, helper);
-		PersonAttributeType pat = p.fill(new PersonAttributeType(), line);
+		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(p, line));
 		
 		// Verif
 		Assert.assertEquals("PAT name", pat.getName());
 		Assert.assertEquals("java.lang.String", pat.getFormat());
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void fill_shouldFailIfNameOrFormatMissing() {
+	public void fill_shouldHandleMissingHeaders() {
 		
 		// Setup
-		String[] headerLine = { "column" };
-		String[] line = { null };
+		String[] headerLine = {};
+		String[] line = {};
 		
 		// Replay
 		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(headerLine, ps);
-		p.fill(new PersonAttributeType(), line);
+		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(p, line));
+		
+		// Verif
+		Assert.assertNull(pat.getName());
+		Assert.assertNull(pat.getFormat());
 	}
 }

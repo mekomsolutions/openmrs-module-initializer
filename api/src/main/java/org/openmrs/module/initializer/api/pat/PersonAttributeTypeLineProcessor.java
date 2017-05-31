@@ -12,6 +12,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.openmrs.module.initializer.api.CsvLine;
 
 public class PersonAttributeTypeLineProcessor extends BaseLineProcessor<PersonAttributeType, PersonService> {
 	
@@ -67,21 +68,13 @@ public class PersonAttributeTypeLineProcessor extends BaseLineProcessor<PersonAt
 	}
 	
 	@Override
-	protected PersonAttributeType fill(PersonAttributeType pat, String[] line) throws IllegalArgumentException {
+	protected PersonAttributeType fill(PersonAttributeType pat, CsvLine line) throws IllegalArgumentException {
 		
-		pat.setName(line[getColumn(HEADER_NAME)]);
+		pat.setName(line.get(HEADER_NAME));
+		pat.setDescription(line.get(HEADER_DESC));
+		pat.setSearchable(BooleanUtils.toBoolean(line.get(HEADER_SEARCHABLE)));
 		
-		try {
-			pat.setDescription(line[getColumn(HEADER_DESC)]);
-		}
-		catch (IllegalArgumentException e) {}
-		
-		try {
-			pat.setSearchable(BooleanUtils.toBoolean(line[getColumn(HEADER_SEARCHABLE)]));
-		}
-		catch (IllegalArgumentException e) {}
-		
-		String formatClass = line[getColumn(HEADER_FORMAT)];
+		String formatClass = line.get(HEADER_FORMAT);
 		if (!StringUtils.isEmpty(formatClass)) {
 			try {
 				Class.forName(formatClass);
@@ -93,21 +86,13 @@ public class PersonAttributeTypeLineProcessor extends BaseLineProcessor<PersonAt
 			pat.setFormat(formatClass);
 		}
 		
-		String foreignUuid = "";
-		try {
-			foreignUuid = line[getColumn(HEADER_FOREIGN_UUID)];
-		}
-		catch (IllegalArgumentException e) {}
+		String foreignUuid = line.get(HEADER_FOREIGN_UUID);
 		if (!StringUtils.isEmpty(foreignUuid)) {
 			foreignUuid = UUID.fromString(foreignUuid).toString();
 			pat.setForeignKey(helper.getForeignKey(formatClass, foreignUuid));
 		}
 		
-		String editPrivilege = "";
-		try {
-			editPrivilege = line[getColumn(HEADER_EDITPRIVILEGE)];
-		}
-		catch (IllegalArgumentException e) {}
+		String editPrivilege = line.get(HEADER_EDITPRIVILEGE);
 		if (!StringUtils.isEmpty(editPrivilege)) {
 			pat.setEditPrivilege(helper.getPrivilege(editPrivilege));
 		}

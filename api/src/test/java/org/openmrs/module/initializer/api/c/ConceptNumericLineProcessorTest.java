@@ -13,6 +13,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptNumeric;
 import org.openmrs.api.ConceptService;
+import org.openmrs.module.initializer.api.CsvLine;
 
 /*
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
@@ -41,13 +42,13 @@ public class ConceptNumericLineProcessorTest {
 	public void fill_shouldParseConceptNumeric() {
 		
 		// Setup
-		String[] headerLine = { "Absolute low", "Critical low", "Normal low", "Normal high", "Critical high",
+		String[] headerLine = { "Data type", "Absolute low", "Critical low", "Normal low", "Normal high", "Critical high",
 		        "Absolute high", "Units", "Allow decimals", "Display precision" };
-		String[] line = { "-100.5", "-85.7", "-50.3", "45.1", "78", "98.8", "foo", "yes", "1" };
+		String[] line = { "Numeric", "-100.5", "-85.7", "-50.3", "45.1", "78", "98.8", "foo", "yes", "1" };
 		
 		// Replay
 		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(headerLine, cs);
-		ConceptNumeric cn = (ConceptNumeric) p.fill(new Concept(), line);
+		ConceptNumeric cn = (ConceptNumeric) p.fill(new Concept(), new CsvLine(p, line));
 		
 		// Verif
 		Assert.assertEquals(ConceptNumericLineProcessor.DATATYPE_NUMERIC, cn.getDatatype().getName());
@@ -63,7 +64,7 @@ public class ConceptNumericLineProcessorTest {
 	}
 	
 	@Test
-	public void fill_shouldParseWithNoArgs() {
+	public void fill_shouldHandleMissingHeaders() {
 		
 		// Setup
 		String[] headerLine = {};
@@ -71,20 +72,21 @@ public class ConceptNumericLineProcessorTest {
 		
 		// Replay
 		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(headerLine, cs);
-		ConceptNumeric cn = (ConceptNumeric) p.fill(new Concept(), line);
+		Concept c = p.fill(new Concept(), new CsvLine(p, line));
 		
-		Assert.assertEquals(ConceptNumericLineProcessor.DATATYPE_NUMERIC, cn.getDatatype().getName());
+		// Verif
+		Assert.assertFalse(c instanceof ConceptNumeric);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NumberFormatException.class)
 	public void fill_shouldFailWhenCannotParse() {
 		
 		// Setup
-		String[] headerLine = { "Absolute low" };
-		String[] line = { "-100.5a" };
+		String[] headerLine = { "Data type", "Absolute low" };
+		String[] line = { "Numeric", "-100.5a" };
 		
 		// Replay
 		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(headerLine, cs);
-		p.fill(new Concept(), line);
+		p.fill(new Concept(), new CsvLine(p, line));
 	}
 }

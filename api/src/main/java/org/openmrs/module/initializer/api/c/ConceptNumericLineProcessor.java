@@ -4,6 +4,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptNumeric;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.openmrs.module.initializer.api.CsvLine;
 
 public class ConceptNumericLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
 	
@@ -32,78 +33,27 @@ public class ConceptNumericLineProcessor extends BaseLineProcessor<Concept, Conc
 	}
 	
 	@Override
-	protected Concept fill(Concept instance, String[] line) throws IllegalArgumentException {
+	protected Concept fill(Concept instance, CsvLine line) throws IllegalArgumentException {
+		
+		if (!DATATYPE_NUMERIC.equals(line.get(BaseConceptLineProcessor.HEADER_DATATYPE))) {
+			return instance;
+		}
 		
 		ConceptNumeric cn = new ConceptNumeric(instance);
 		if (instance.getId() != null) {
 			cn = service.getConceptNumeric(instance.getId());
-			// We need to re-run the base as the above would have overwritten it.
-			cn = (ConceptNumeric) (new BaseConceptLineProcessor(headerLine, service).fill(cn, line));
 		}
 		cn.setDatatype(service.getConceptDatatypeByName(DATATYPE_NUMERIC));
 		
-		String val = null;
-		try {
-			val = line[getColumn(HEADER_AH)];
-		}
-		catch (IllegalArgumentException e) {}
-		cn.setHiAbsolute(parseDouble(val));
-		
-		val = null;
-		try {
-			val = line[getColumn(HEADER_CH)];
-		}
-		catch (IllegalArgumentException e) {}
-		cn.setHiCritical(parseDouble(val));
-		
-		val = null;
-		try {
-			val = line[getColumn(HEADER_NH)];
-		}
-		catch (IllegalArgumentException e) {}
-		cn.setHiNormal(parseDouble(val));
-		
-		val = null;
-		try {
-			val = line[getColumn(HEADER_AL)];
-		}
-		catch (IllegalArgumentException e) {}
-		cn.setLowAbsolute(parseDouble(val));
-		
-		val = null;
-		try {
-			val = line[getColumn(HEADER_CL)];
-		}
-		catch (IllegalArgumentException e) {}
-		cn.setLowCritical(parseDouble(val));
-		
-		val = null;
-		try {
-			val = line[getColumn(HEADER_NL)];
-		}
-		catch (IllegalArgumentException e) {}
-		cn.setLowNormal(parseDouble(val));
-		
-		val = null;
-		try {
-			val = line[getColumn(HEADER_ALLOWDECIMALS)];
-		}
-		catch (IllegalArgumentException e) {}
-		cn.setAllowDecimal(parseBool(val));
-		
-		val = null;
-		try {
-			val = line[getColumn(HEADER_UNITS)];
-		}
-		catch (IllegalArgumentException e) {}
-		cn.setUnits(val);
-		
-		val = null;
-		try {
-			val = line[getColumn(HEADER_PRECISION)];
-		}
-		catch (IllegalArgumentException e) {}
-		cn.setDisplayPrecision(parseInt(val));
+		cn.setHiAbsolute(line.getDouble(HEADER_AH));
+		cn.setHiCritical(line.getDouble(HEADER_CH));
+		cn.setHiNormal(line.getDouble(HEADER_NH));
+		cn.setLowAbsolute(line.getDouble(HEADER_AL));
+		cn.setLowCritical(line.getDouble(HEADER_CL));
+		cn.setLowNormal(line.getDouble(HEADER_NL));
+		cn.setAllowDecimal(line.getBool(HEADER_ALLOWDECIMALS));
+		cn.setUnits(line.get(HEADER_UNITS));
+		cn.setDisplayPrecision(line.getInt(HEADER_PRECISION));
 		
 		return cn;
 	}

@@ -12,6 +12,7 @@ import org.openmrs.ConceptReferenceTerm;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.openmrs.module.initializer.api.CsvLine;
 
 public class MappingsConceptLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
 	
@@ -75,13 +76,12 @@ public class MappingsConceptLineProcessor extends BaseLineProcessor<Concept, Con
 		return conceptMappings;
 	}
 	
-	protected Concept fill(Concept concept, String[] line) throws IllegalArgumentException {
+	protected Concept fill(Concept concept, CsvLine line) throws IllegalArgumentException {
 		
 		if (!CollectionUtils.isEmpty(concept.getConceptMappings())) {
 			concept.getConceptMappings().clear();
 		}
-		String mappingsStr;
-		mappingsStr = line[getColumn(HEADER_MAPPINGS_SAMEAS)];
+		String mappingsStr = line.get(HEADER_MAPPINGS_SAMEAS);
 		if (!StringUtils.isEmpty(mappingsStr)) {
 			ConceptMapType mapType = service.getConceptMapTypeByUuid(ConceptMapType.SAME_AS_MAP_TYPE_UUID);
 			for (ConceptMap mapping : parseMappingList(mappingsStr, mapType, service)) {

@@ -8,6 +8,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.util.CollectionUtils;
 
 public class NestedConceptLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
@@ -86,13 +87,13 @@ public class NestedConceptLineProcessor extends BaseLineProcessor<Concept, Conce
 		return concepts;
 	}
 	
-	protected Concept fill(Concept concept, String[] line) throws IllegalArgumentException {
+	protected Concept fill(Concept concept, CsvLine line) throws IllegalArgumentException {
 		
 		if (!CollectionUtils.isEmpty(concept.getAnswers())) {
 			concept.getAnswers().clear();
 		}
 		String childrenStr;
-		childrenStr = line[getColumn(HEADER_ANSWERS)];
+		childrenStr = line.get(HEADER_ANSWERS);
 		if (!StringUtils.isEmpty(childrenStr)) {
 			for (Concept child : parseConceptList(childrenStr, service)) {
 				concept.addAnswer(new ConceptAnswer(child));
@@ -103,7 +104,7 @@ public class NestedConceptLineProcessor extends BaseLineProcessor<Concept, Conce
 			concept.getConceptSets().clear();
 			concept.setSet(false);
 		}
-		childrenStr = line[getColumn(HEADER_MEMBERS)];
+		childrenStr = line.get(HEADER_MEMBERS);
 		if (!StringUtils.isEmpty(childrenStr)) {
 			for (Concept child : parseConceptList(childrenStr, service)) {
 				concept.addSetMember(child);

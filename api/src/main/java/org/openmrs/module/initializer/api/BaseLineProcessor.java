@@ -55,7 +55,7 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	 * This implements how to fill T instances from any CSV line, ignoring the processing of the uuid.
 	 * This method can assume that the provided instance is never null as this is being taken care of upstream.
 	 */
-	abstract protected T fill(T instance, String[] line) throws IllegalArgumentException;
+	abstract protected T fill(T instance, CsvLine line) throws IllegalArgumentException;
 	
 	/**
 	 * @param headerLine The CSV file header line
@@ -75,8 +75,13 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 		return getUuid(headerLine, line);
 	}
 	
-	public static boolean getVoidOrRetire(String[] headerLine, String[] line) throws IllegalArgumentException {
-		String str = line[getColumn(headerLine, HEADER_VOID_RETIRE)];
+	public static boolean getVoidOrRetire(String[] headerLine, String[] line) {
+		String str = Boolean.FALSE.toString();
+		try {
+			str = line[getColumn(headerLine, HEADER_VOID_RETIRE)];
+		}
+		catch (IllegalArgumentException e) {}
+		
 		return BooleanUtils.toBoolean(str);
 	}
 	
@@ -155,8 +160,7 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 		if (l10nHeadersMap.containsKey(header.trim().toLowerCase())) {
 			return l10nHeadersMap.get(header.trim().toLowerCase());
 		} else {
-			throw new IllegalArgumentException("The CSV header line does not contain the requested localized header '"
-			        + header + "': " + Arrays.toString(headerLine));
+			return new LocalizedHeader("");
 		}
 	}
 	
@@ -272,47 +276,5 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 			    e);
 		}
 		return order;
-	}
-	
-	/**
-	 * Wrapper of {@link Double#parseDouble(String)}.
-	 * 
-	 * @see Double#parseDouble(String)
-	 * @return null if null or empty input string.
-	 */
-	public static Double parseDouble(String str) throws NumberFormatException {
-		if (StringUtils.isEmpty(str)) {
-			return null;
-		} else {
-			return Double.parseDouble(str);
-		}
-	}
-	
-	/**
-	 * Wrapper of {@link Integer#parseInt(String)}.
-	 * 
-	 * @see Integer#parseInt(String)
-	 * @return null if null or empty input string.
-	 */
-	public static Integer parseInt(String str) throws NumberFormatException {
-		if (StringUtils.isEmpty(str)) {
-			return null;
-		} else {
-			return Integer.parseInt(str);
-		}
-	}
-	
-	/**
-	 * Wrapper of {@link BooleanUtils#toBoolean(String)}.
-	 * 
-	 * @see BooleanUtils#toBoolean(String)
-	 * @return null if null or empty input string.
-	 */
-	public static Boolean parseBool(String str) {
-		if (StringUtils.isEmpty(str)) {
-			return null;
-		} else {
-			return BooleanUtils.toBoolean(str);
-		}
 	}
 }

@@ -17,6 +17,7 @@ import org.mockito.stubbing.Answer;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.api.ConceptService;
+import org.openmrs.module.initializer.api.CsvLine;
 
 /*
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
@@ -55,7 +56,7 @@ public class NestedConceptLineProcessorTest {
 		
 		// Replay
 		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
-		Concept c = p.fill(new Concept(), line);
+		Concept c = p.fill(new Concept(), new CsvLine(p, line));
 		
 		// Verif
 		Assert.assertFalse(c.getSet());
@@ -78,7 +79,7 @@ public class NestedConceptLineProcessorTest {
 		
 		// Replay
 		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
-		Concept c = p.fill(new Concept(), line);
+		Concept c = p.fill(new Concept(), new CsvLine(p, line));
 		
 		// Verif
 		Assert.assertTrue(c.getSet());
@@ -101,7 +102,7 @@ public class NestedConceptLineProcessorTest {
 		
 		// Replay
 		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
-		Concept c = p.fill(new Concept(), line);
+		Concept c = p.fill(new Concept(), new CsvLine(p, line));
 		
 		// Verif
 		Assert.assertFalse(c.getSet());
@@ -109,27 +110,16 @@ public class NestedConceptLineProcessorTest {
 		Assert.assertEquals(0, c.getAnswers().size());
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void fill_shouldFailIfNoAnswersColumns() {
+	public void fill_shouldHandleMissingHeaders() {
 		
 		// Setup
-		String[] headerLine = { "Members" };
-		String[] line = { null };
+		String[] headerLine = {};
+		String[] line = {};
 		
 		// Replay
 		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
-		p.fill(new Concept(), line);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void fill_shouldFailIfNoMembersColumns() {
-		
-		// Setup
-		String[] headerLine = { "Answers" };
-		String[] line = { null };
-		
-		// Replay
-		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
-		p.fill(new Concept(), line);
+		Concept c = p.fill(new Concept(), new CsvLine(p, line));
+		Assert.assertNull(c.getAnswers());
+		Assert.assertNull(c.getSetMembers());
 	}
 }

@@ -21,7 +21,7 @@ public class PersonAttributeTypesCsvParser extends CsvParser<PersonAttributeType
 	}
 	
 	@Override
-	protected PersonAttributeType getByUuid(String[] line) {
+	protected PersonAttributeType bootstrap(String[] line) {
 		String uuid = BaseLineProcessor.getUuid(headerLine, line);
 		PersonAttributeType pat = service.getPersonAttributeTypeByUuid(uuid);
 		
