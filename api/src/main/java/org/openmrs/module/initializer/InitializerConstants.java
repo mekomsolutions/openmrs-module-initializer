@@ -48,5 +48,7 @@ public class InitializerConstants {
 	
 	public static final String VERSION_C_MAPPINGS = "mappings"; // 'base' + 'mappings'
 	
+	public static final String VERSION_C_NUMERICS = "numerics"; // 'base' + 'numerics'
+	
 	public static final String VERSION_C_NESTED_MAPPINGS = "nested_mappings"; // 'base' + 'nested' + 'mappings'
 }

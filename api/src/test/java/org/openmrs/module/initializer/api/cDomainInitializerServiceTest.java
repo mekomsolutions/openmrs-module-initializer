@@ -22,6 +22,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptNumeric;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
@@ -93,6 +94,18 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 			c.addSetMember(cm1);
 			c.addSetMember(cm2);
 			c = cs.saveConcept(c);
+		}
+		
+		// A concept numeric to be edited
+		{
+			ConceptNumeric cn = new ConceptNumeric();
+			cn.setUuid("4280217a-eb93-4e2f-9684-28bed4690e7b");
+			cn.setFullySpecifiedName(new ConceptName("CN_2_EDIT", Locale.ENGLISH));
+			cn.setConceptClass(cs.getConceptClassByName("Misc"));
+			cn.setDatatype(cs.getConceptDatatypeByName("Numeric"));
+			cn.setLowNormal(44.8);
+			cn.setHiNormal(55.2);
+			cs.saveConcept(cn);
 		}
 	}
 	
@@ -234,6 +247,35 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 			
 			// Verif not saved with missing mapping(s)
 			Assert.assertNull(cs.getConceptByName("Unexisting mapping"));
+		}
+		
+		// Verif. 'numerics' CSV loading
+		{
+			ConceptNumeric cn = null;
+			
+			// A valid concept numeric
+			c = cs.getConceptByName("CN_1");
+			Assert.assertNotNull(c);
+			cn = cs.getConceptNumeric(c.getId());
+			Assert.assertNotNull(cn);
+			Assert.assertEquals(0, cn.getLowAbsolute().compareTo(-100.5));
+			Assert.assertEquals(0, cn.getLowCritical().compareTo(-85.7));
+			Assert.assertEquals(0, cn.getLowNormal().compareTo(-50.3));
+			Assert.assertEquals(0, cn.getHiNormal().compareTo(45.1));
+			Assert.assertEquals(0, cn.getHiCritical().compareTo(78.0));
+			Assert.assertEquals(0, cn.getHiAbsolute().compareTo(98.8));
+			Assert.assertEquals("foo", cn.getUnits());
+			Assert.assertTrue(cn.getAllowDecimal());
+			Assert.assertEquals(1, cn.getDisplayPrecision().intValue());
+			
+			// This concept should have updated boundaries
+			cn = cs.getConceptNumericByUuid("4280217a-eb93-4e2f-9684-28bed4690e7b");
+			Assert.assertNotNull(cn);
+			Assert.assertEquals(0, cn.getLowNormal().compareTo(45.7));
+			Assert.assertEquals(0, cn.getHiNormal().compareTo(55.6));
+			
+			// Concept with misformatted boundaries should not have been created
+			Assert.assertNull(cs.getConceptByName("CN_3_ERROR"));
 		}
 	}
 }

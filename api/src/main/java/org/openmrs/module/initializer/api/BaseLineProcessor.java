@@ -273,4 +273,46 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 		}
 		return order;
 	}
+	
+	/**
+	 * Wrapper of {@link Double#parseDouble(String)}.
+	 * 
+	 * @see Double#parseDouble(String)
+	 * @return null if null or empty input string.
+	 */
+	public static Double parseDouble(String str) throws NumberFormatException {
+		if (StringUtils.isEmpty(str)) {
+			return null;
+		} else {
+			return Double.parseDouble(str);
+		}
+	}
+	
+	/**
+	 * Wrapper of {@link Integer#parseInt(String)}.
+	 * 
+	 * @see Integer#parseInt(String)
+	 * @return null if null or empty input string.
+	 */
+	public static Integer parseInt(String str) throws NumberFormatException {
+		if (StringUtils.isEmpty(str)) {
+			return null;
+		} else {
+			return Integer.parseInt(str);
+		}
+	}
+	
+	/**
+	 * Wrapper of {@link BooleanUtils#toBoolean(String)}.
+	 * 
+	 * @see BooleanUtils#toBoolean(String)
+	 * @return null if null or empty input string.
+	 */
+	public static Boolean parseBool(String str) {
+		if (StringUtils.isEmpty(str)) {
+			return null;
+		} else {
+			return BooleanUtils.toBoolean(str);
+		}
+	}
 }

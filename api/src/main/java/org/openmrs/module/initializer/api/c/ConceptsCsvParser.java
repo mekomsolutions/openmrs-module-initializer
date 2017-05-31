@@ -29,6 +29,10 @@ public class ConceptsCsvParser extends CsvParser<Concept, ConceptService, BaseLi
 			addLineProcessor(new MappingsConceptLineProcessor(headerLine, service));
 		}
 		
+		if (InitializerConstants.VERSION_C_NUMERICS.equals(version)) {
+			addLineProcessor(new ConceptNumericLineProcessor(headerLine, service));
+		}
+		
 		if (InitializerConstants.VERSION_C_NESTED_MAPPINGS.equals(version)) {
 			addLineProcessor(new MappingsConceptLineProcessor(headerLine, service));
 			addLineProcessor(new NestedConceptLineProcessor(headerLine, service));

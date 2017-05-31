@@ -121,8 +121,8 @@ public class ConfigDirUtil {
 	 * 
 	 * @param domainDirPath The absolute path to the domain directory, eg.
 	 *            "../configuration/addresshierarchy"
-	 * @param checksumDirPath The absolute path to the checksum domain directory, eg.
-	 *            "../configuration_checksums/addresshierarchy"
+	 * @param checksumDirPath The absolute path to the checksum directory, eg.
+	 *            "../configuration_checksums"
 	 * @param configFileName The config file name, eg. "config.xml"
 	 * @return An empty string if the checksum hasn't changed, the new checksum otherwise.
 	 */
@@ -200,8 +200,8 @@ public class ConfigDirUtil {
 	}
 	
 	/**
-	 * @param checksumDirPath The absolute path to the domain checksum directory, eg.
-	 *            "../configuration_checksums/addresshierarchy"
+	 * @param checksumDirPath The absolute path to the checksum directory, eg.
+	 *            "../configuration_checksums"
 	 * @param configFileName The config file name, eg. "config.xml"
 	 * @return The checksum of the config file that was last successfully loaded.
 	 */
@@ -270,8 +270,8 @@ public class ConfigDirUtil {
 	/**
 	 * Writes the the checksum of a config file into the corresponding .checksum file.
 	 * 
-	 * @param checksumDirPath The absolute path to the domain directory, eg.
-	 *            "../configuration/addresshierarchy"
+	 * @param checksumDirPath The absolute path to the checksum directory, eg.
+	 *            "../configuration_checksums"
 	 * @param configFileName The config file name, eg. "config.xml"
 	 * @param checksum The checksum hash of the config file.
 	 */
@@ -301,8 +301,8 @@ public class ConfigDirUtil {
 	/**
 	 * Deletes the checksum file of a config. file.
 	 * 
-	 * @param checksumDirPath The absolute path to the domain directory, eg.
-	 *            "../configuration/addresshierarchy"
+	 * @param checksumDirPath The absolute path to the checksum directory, eg.
+	 *            "../configuration_checksums"
 	 * @param configFileName The config file name, eg. "config.xml"
 	 */
 	protected static void deleteChecksum(String checksumDirPath, String checksumFileName) {
@@ -375,6 +375,14 @@ public class ConfigDirUtil {
 		}
 	}
 	
+	/**
+	 * Loads in order the CSV files inside a given domain.
+	 * 
+	 * @param configDirPath The absolute path to the config directory, eg. "../configuration"
+	 * @param checksumDirPath The absolute path to the checksum directory, eg.
+	 *            "../configuration_checksums"
+	 * @param domain The domain subfolder, eg. "concepts", "personattributetypes", ...
+	 */
 	public static void loadCsvFiles(String configDirPath, String checksumDirPath, String domain) {
 		
 		final ConfigDirUtil util = new ConfigDirUtil(configDirPath, checksumDirPath, domain);

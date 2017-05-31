@@ -1,0 +1,4 @@
+Uuid,Void/Retire,Fully specified name:en,Fully specified name:km_KH,Short name:en,Short name:km_KH,Description:en,Description:km_KH,Data class,Absolute low,Critical low,Normal low,Normal high,Critical high,Absolute high,Units,Allow decimals,Display precision,_version:numerics,_order:4000
+,,CN_1,,,,,,Misc,-100.5,-85.7,-50.3,45.1,78,98.8,foo,yes,1,,
+4280217a-eb93-4e2f-9684-28bed4690e7b,,CN_2_EDIT,,,,,,Misc,,,45.7,55.6,,,,,,,
+,,CN_3_ERROR,,,,,,Misc,,,,55.8a,,,,,,,

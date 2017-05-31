@@ -1,5 +1,6 @@
 package org.openmrs.module.initializer.api.c;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
@@ -81,7 +82,14 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, Concept
 		concept.setConceptClass(conceptClass);
 		
 		// Concept data type
-		String conceptTypeName = line[getColumn(HEADER_DATATYPE)];
+		String conceptTypeName = "N/A";
+		try {
+			conceptTypeName = line[getColumn(HEADER_DATATYPE)];
+		}
+		catch (IllegalArgumentException e) {
+			log.warn("No header '" + HEADER_DATATYPE
+			        + "' was found, the data type was defaulted to 'N/A' when processing line: " + Arrays.toString(line));
+		}
 		ConceptDatatype conceptDatatype = service.getConceptDatatypeByName(conceptTypeName);
 		concept.setDatatype(conceptDatatype);
 		
