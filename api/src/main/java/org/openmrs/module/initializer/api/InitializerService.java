@@ -10,7 +10,6 @@
 package org.openmrs.module.initializer.api;
 
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.initializer.InitializerMessageSource;
 
 /**
  * The main service of this module, which is exposed for other modules. See
@@ -29,13 +28,6 @@ public interface InitializerService extends OpenmrsService {
 	 *         "/opt/openmrs/configuration_checksums"
 	 */
 	String getChecksumsDirPath();
-	
-	/**
-	 * @return The path to the configuration domain folder for Address Hierarchy (with NO trailing
-	 *         forward slash), eg. "/opt/openmrs/configuration/addresshierarchy"
-	 * @see {@link InitializerMessageSource#getMessageProperties(String)}
-	 */
-	String getAddressHierarchyConfigPath();
 	
 	/**
 	 * Loads the concepts from their domain config. dir, and saves them.

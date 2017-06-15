@@ -55,6 +55,19 @@ public class ConfigDirUtil {
 		this.checksumDirPath = new StringBuilder(checksumDirPath).append(File.separator).append(domain).toString();
 	}
 	
+	public String getDomainDirPath() {
+		return domainDirPath;
+	}
+	
+	public String getChecksumDirPath() {
+		return checksumDirPath;
+	}
+	
+	@Override
+	public String toString() {
+		return domainDirPath;
+	}
+	
 	/*
 	 * To filter files of a certain extension only.
 	 * @param extension The file extension to filter for.

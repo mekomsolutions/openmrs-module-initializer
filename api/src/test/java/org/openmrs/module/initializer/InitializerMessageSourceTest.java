@@ -37,21 +37,23 @@ public class InitializerMessageSourceTest {
 	@Verifies(value = "should save messages files as keys and create appropriate as values", method = "getMessageProperties(String dirPath)")
 	public void getMessageProperties_shouldScanMessagesFiles() {
 		
-		Map<File, Locale> propertiesMap = InitializerMessageSource.getMessageProperties(dirPath);
+		InitializerMessageSource src = new InitializerMessageSource();
+		src.addMessageProperties(dirPath);
 		
 		File propFile;
 		Locale locale;
 		
 		propFile = new File((new StringBuilder(dirPath)).append(File.separator).append("addresshierarchy_en.properties")
 		        .toString());
-		Assert.assertTrue(propertiesMap.containsKey(propFile));
-		locale = propertiesMap.get(propFile);
+		Map<File, Locale> msgPropMap = src.getMessagePropertiesMap();
+		Assert.assertTrue(msgPropMap.containsKey(propFile));
+		locale = msgPropMap.get(propFile);
 		Assert.assertEquals(new Locale("en"), locale);
 		
 		propFile = new File((new StringBuilder(dirPath)).append(File.separator).append("addresshierarchy_km_KH.properties")
 		        .toString());
-		Assert.assertTrue(propertiesMap.containsKey(propFile));
-		locale = propertiesMap.get(propFile);
+		Assert.assertTrue(msgPropMap.containsKey(propFile));
+		locale = msgPropMap.get(propFile);
 		Assert.assertEquals(new Locale("km", "KH"), locale);
 	}
 }

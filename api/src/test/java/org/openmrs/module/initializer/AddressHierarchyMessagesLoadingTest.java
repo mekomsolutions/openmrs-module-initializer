@@ -18,22 +18,35 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.GlobalProperty;
 import org.openmrs.PersonAddress;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.ModuleConstants;
+import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.ModuleUtil;
 import org.openmrs.module.addresshierarchy.AddressField;
 import org.openmrs.module.addresshierarchy.AddressHierarchyConstants;
 import org.openmrs.module.addresshierarchy.AddressHierarchyEntry;
 import org.openmrs.module.addresshierarchy.AddressHierarchyLevel;
 import org.openmrs.module.addresshierarchy.config.AddressConfigurationLoader;
 import org.openmrs.module.addresshierarchy.service.AddressHierarchyService;
+import org.openmrs.module.exti18n.ExtI18nConstants;
+import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.Verifies;
+import org.openmrs.util.OpenmrsConstants;
 
 public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContextSensitiveTest {
+	
+	protected static final String MODULES_TO_LOAD = "org/openmrs/module/addresshierarchy/include/"
+	        + ExtI18nConstants.MODULE_ARTIFACT_ID + ".omod";
+	
+	private InitializerMessageSource inizSrc;
 	
 	@Override
 	protected String getDomain() {
@@ -42,15 +55,29 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 	
 	@Before
 	public void setup() {
-		// Diabling AH full caching otherwise loading takes too long
+		// Disabling AH full caching otherwise loading takes too long
 		Context.getAdministrationService()
 		        .saveGlobalProperty(
 		            new GlobalProperty(AddressHierarchyConstants.GLOBAL_PROP_INITIALIZE_ADDRESS_HIERARCHY_CACHE_ON_STARTUP,
 		                    "false"));
 		
-		// Enabling i18n support on Address Hierarchy
 		Context.getAdministrationService().saveGlobalProperty(
-		    new GlobalProperty(AddressHierarchyConstants.GLOBAL_PROP_I18N_SUPPORT, "true"));
+		    new GlobalProperty(OpenmrsConstants.GLOBAL_PROPERTY_LOCALE_ALLOWED_LIST, "en, km_KH"));
+		
+		Context.getAdministrationService().saveGlobalProperty(
+		    new GlobalProperty(ExtI18nConstants.GLOBAL_PROP_REV_I18N_SUPPORT, "true"));
+		runtimeProperties.setProperty(ModuleConstants.RUNTIMEPROPERTY_MODULE_LIST_TO_LOAD, MODULES_TO_LOAD);
+		ModuleUtil.startup(runtimeProperties);
+		Assert.assertTrue(ModuleFactory.isModuleStarted(AddressHierarchyConstants.MODULE_EXTI18N_ARTIFACT_ID));
+		
+		inizSrc = (InitializerMessageSource) Context.getMessageSourceService().getActiveMessageSource();
+	}
+	
+	@After
+	public void tearDown() {
+		Context.getAdministrationService().saveGlobalProperty(
+		    new GlobalProperty(ExtI18nConstants.GLOBAL_PROP_REV_I18N_SUPPORT, "false"));
+		ModuleFactory.stopModule(ModuleFactory.getModuleById(AddressHierarchyConstants.MODULE_EXTI18N_ARTIFACT_ID));
 	}
 	
 	@Test
@@ -58,14 +85,16 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 	public void refreshCache_shouldLoadAddressHierarchyMessages() throws IOException {
 		
 		// Replay
+		inizSrc.refreshCache();
 		AddressConfigurationLoader.loadAddressConfiguration();
 		
 		AddressHierarchyService ahs = Context.getService(AddressHierarchyService.class);
+		ahs.initI18nCache();
 		InitializerService iniz = Context.getService(InitializerService.class);
 		
-		String csvFilePath = new StringBuilder(iniz.getAddressHierarchyConfigPath()).append(File.separator)
-		        .append("addresshierarchy.csv").toString();
-		LineNumberReader lnr = new LineNumberReader(new FileReader(new File(csvFilePath)));
+		File csvFile = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
+		        InitializerConstants.DOMAIN_ADDR)).getConfigFile("addresshierarchy.csv");
+		LineNumberReader lnr = new LineNumberReader(new FileReader(csvFile));
 		lnr.skip(Long.MAX_VALUE);
 		int csvLineCount = lnr.getLineNumber() + 1;
 		lnr.close();
@@ -81,6 +110,7 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 		// Looking for possible villages based on an address provided in km_KH
 		AddressHierarchyLevel villageLevel = ahs.getAddressHierarchyLevelByAddressField(AddressField.CITY_VILLAGE);
 		List<AddressHierarchyEntry> villageEntries = ahs.getPossibleAddressHierarchyEntries(address, villageLevel);
+		Assert.assertFalse(CollectionUtils.isEmpty(villageEntries));
 		
 		// Verifying that possible villages are provided as i18n message codes
 		final Set<String> expectedVillageNames = new HashSet<String>(); // filled by looking at the test CSV

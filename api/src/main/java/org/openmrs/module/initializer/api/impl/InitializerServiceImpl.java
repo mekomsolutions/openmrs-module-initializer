@@ -54,12 +54,6 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	}
 	
 	@Override
-	public String getAddressHierarchyConfigPath() {
-		return new StringBuilder().append(getConfigDirPath()).append(File.separator)
-		        .append(InitializerConstants.DOMAIN_ADDR).toString();
-	}
-	
-	@Override
 	public void loadConcepts() {
 		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_C);
 	}

@@ -32,6 +32,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.LocaleUtils;
@@ -42,6 +43,7 @@ import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.messagesource.MutableMessageSource;
 import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.messagesource.PresentationMessageMap;
+import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,12 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	
 	@Autowired
 	protected InitializerService iniz;
+	
+	protected Map<File, Locale> messagePropertiesMap;
+	
+	public Map<File, Locale> getMessagePropertiesMap() {
+		return messagePropertiesMap;
+	}
 	
 	/**
 	 * @see ApplicationContextAware#setApplicationContext(ApplicationContext)
@@ -137,14 +145,20 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 */
 	public synchronized void refreshCache() {
 		
+		cache = new HashMap<Locale, PresentationMessageMap>();
 		setUseCodeAsDefaultMessage(true);
 		
-		//		final InitializerService iniz = Context.getService(InitializerService.class);
+		ConfigDirUtil ahDir = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
+		        InitializerConstants.DOMAIN_ADDR));
+		addMessageProperties(ahDir.getDomainDirPath());
+		ConfigDirUtil msgDir = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
+		        InitializerConstants.DOMAIN_MSGPROP));
+		addMessageProperties(msgDir.getDomainDirPath());
 		
-		Map<File, Locale> messageProperties = getMessageProperties(iniz.getAddressHierarchyConfigPath());
-		
-		cache = new HashMap<Locale, PresentationMessageMap>();
-		for (Map.Entry<File, Locale> entry : messageProperties.entrySet()) {
+		if (MapUtils.isEmpty(messagePropertiesMap)) {
+			return;
+		}
+		for (Map.Entry<File, Locale> entry : messagePropertiesMap.entrySet()) {
 			
 			PresentationMessageMap pmm = new PresentationMessageMap(entry.getValue());
 			Properties messages = loadPropertiesFromFile(entry.getKey());
@@ -155,6 +169,47 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 				pmm.put(code, new PresentationMessage(code, entry.getValue(), message, null));
 			}
 			cache.put(entry.getValue(), pmm);
+		}
+	}
+	
+	/**
+	 * Scans a directory for possible message properties files and adds it to the internal map.
+	 * 
+	 * @param dirPath The directory to scan.
+	 */
+	public void addMessageProperties(String dirPath) {
+		
+		final File[] propFiles = new File(dirPath).listFiles(new FilenameFilter() {
+			
+			@Override
+			public boolean accept(File dir, String name) {
+				String ext = FilenameUtils.getExtension(name);
+				if (StringUtils.isEmpty(ext)) { // to be safe, ext can only be null if name is null
+					return false;
+				}
+				if (ext.equals("properties")) {
+					return true; // filtering only "*.properties" files
+				}
+				return false;
+			}
+		});
+		
+		if (propFiles != null) {
+			if (MapUtils.isEmpty(messagePropertiesMap)) {
+				messagePropertiesMap = new LinkedHashMap<File, Locale>();
+			}
+			for (File file : propFiles) {
+				// Now reading the locale info out of the base name
+				String baseName = FilenameUtils.getBaseName(file.getName()); // "messages_en_GB"
+				String localeStr = baseName.substring(baseName.indexOf("_") + 1); // "en_GB"
+				try {
+					messagePropertiesMap.put(file, LocaleUtils.toLocale(localeStr));
+				}
+				catch (IllegalArgumentException e) {
+					log.error(
+					    "The locale could not be implied from the message properties file provided: " + file.getPath(), e);
+				}
+			}
 		}
 	}
 	
@@ -292,48 +347,6 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 */
 	public MutableMessageSource getMutableParentSource() {
 		return (MutableMessageSource) getParentMessageSource();
-	}
-	
-	/**
-	 * Scans a directory for possible "messages.properties" files.
-	 * 
-	 * @param dirPath The directory to scan.
-	 * @return A map indexed by properties {@link File} instances, to the {@link Locale} instances.
-	 */
-	public static Map<File, Locale> getMessageProperties(String dirPath) {
-		
-		final File[] propFiles = new File(dirPath).listFiles(new FilenameFilter() {
-			
-			@Override
-			public boolean accept(File dir, String name) {
-				String ext = FilenameUtils.getExtension(name);
-				if (StringUtils.isEmpty(ext)) { // to be safe, ext can only be null if name is null
-					return false;
-				}
-				if (ext.equals("properties")) {
-					return true; // filtering only "*.properties" files
-				}
-				return false;
-			}
-		});
-		
-		final Map<File, Locale> messageProperties = new LinkedHashMap<File, Locale>();
-		if (propFiles == null) {
-			return messageProperties;
-		}
-		
-		for (File file : propFiles) {
-			// Now reading the locale info out of the base name
-			String baseName = FilenameUtils.getBaseName(file.getName()); // "messages_en_GB"
-			String localeStr = baseName.substring(baseName.indexOf("_") + 1); // "en_GB"
-			try {
-				messageProperties.put(file, LocaleUtils.toLocale(localeStr));
-			}
-			catch (IllegalArgumentException e) {
-				log.error("The locale could not be inferred from the i18n messages file provided: " + file.getPath(), e);
-			}
-		}
-		return messageProperties;
 	}
 	
 	public static Properties loadPropertiesFromFile(File propFile) {

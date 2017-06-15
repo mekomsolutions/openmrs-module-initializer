@@ -8,13 +8,14 @@ The Initializer module is an API-only module that processes the content of the *
    \_ ...
    \_ <b>configuration/</b>
 </pre>
-The configuration folder is subdivided into 'domain specific' subfolders:
+The configuration folder is subdivided into _domain_ subfolders:
 ```
   configuration/
     \_ addresshierarchy/
     \_ concepts/
     \_ globalproperties/
     \_ idgen/
+    \_ messageproperties/
     \_ metadatasharing/ 
     \_ personattributetypes/
 ```  
@@ -47,7 +48,7 @@ This metadata header specifies the order of loading of the CSV file _within the 
 <br/> If the order metadata cannot be parsed or is missing, then the file will be processed _after_ all the ordered CSV files of the domain. However if several CSV files have no order defined, then the loading order between them is undefined.
 
 ### Supported domains and loading order
-This is the list of supported domain respective of their loading order:
+This is the list of supported domains in respect to their loading order:
 1. Metadatasharing packages (ZIP files)
 1. Global properties (XML files)
 1. Concepts (CSV files)
@@ -55,21 +56,6 @@ This is the list of supported domain respective of their loading order:
 1. Identifier sources (XML files)
 
 Let's review each domain in details below:
-
----
-
-#### Domain 'addresshierarchy'
-The **addresshierarchy** subfolder contains all the address hierarchy metadata. This is a possible example of its content:
-```
-  addresshierarchy/
-    \_ addressConfiguration.xml
-    \_ addresshierarchy.csv
-    \_ addresshierarchy_en.properties
-    \_ addresshierarchy_km_KH.properties
-```
-This is a mixed scenario since the Address Hierarchy module's activator itself can handle most of the provided configuration and metadata: **addressConfiguration.xml** (the actual configuration file) and **addresshierarchy.csv** (the CSV import file containing all address hierarchy geographies.)
-
-The Initializer module will take care of loading the address hierarchy entries translations for use cases where the Address Hierarchy module must support i18n.
 
 ---
 
@@ -253,6 +239,36 @@ There can be as many MDS packages as desired. Providing multiples .zip files all
 <br/>They will all be imported following the 'prefer theirs' rule, meaning that the the metadata shipped with the packages is considered being the master metadata. Existing objects will be overwritten, missing objects will be created... etc.
 <br/>MDS packages are a convenient way to bring in metadata, especially while other methods have not yet been implemented. However when otherwise possible, other ways should be preferred.
 
+---
+
+#### Domain 'messageproperties'
+The **messageproperties** subfolder allows to drop in message properties files for I18N support. This is a possible example of its content:
+```
+  messageproperties/
+    \_ metadata_en.properties
+    \_ metadata_km_KH.properties
+    \_ ...
+```
+There can be as many message properties internationalization files as needed.
+This domain is different from the others since nothing from its configuration is persisted in database, everything happens in the runtime memory upon starting the Initializer.
+
+---
+
+#### Domain 'addresshierarchy'
+The **addresshierarchy** subfolder contains all the address hierarchy metadata. This is a possible example of its content:
+```
+  addresshierarchy/
+    \_ addressConfiguration.xml
+    \_ addresshierarchy.csv
+    \_ addresshierarchy_en.properties
+    \_ addresshierarchy_km_KH.properties
+```
+This is a mixed scenario since the Address Hierarchy module's activator itself can handle most of the provided configuration and metadata: **addressConfiguration.xml** (the actual configuration file) and **addresshierarchy.csv** (the CSV import file containing all address hierarchy geographies.)
+
+The Initializer module will take care of loading the address hierarchy entries translations for use cases where the Address Hierarchy module must support i18n.
+
+---
+
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:
 ```
@@ -264,7 +280,7 @@ mvn clean install
 * Core 1.11.8
 
 ### Quick facts
-Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's implementation.
+Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementation.
 
 ### Get in touch
 Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversation and ping us with the mentions starting with @mks.. in your message.
@@ -275,7 +291,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 
 #### Version 1.0
 ##### New features
-* Loads i18n messages files from **configuration/addresshierarchy**.
+* Loads i18n messages files from **configuration/addresshierarchy** and **configuration/messageproperties**.
 * Bulk creation and saving of concepts provided through CSV files in  **configuration/concepts**.<br/>This covers: basic concepts, concepts with nested members or answers and concepts with multiple mappings.
 * Overrides global properties provided through XML configuration files in **configuration/globalproperties**.
 * Modifies (retire) or create identifier sources as specified in  **configuration/idgen**.
