@@ -29,7 +29,7 @@ public class InitializerMessageSourceTest {
 		        .append(
 		            getClass().getClassLoader().getResource(DomainBaseModuleContextSensitiveTest.appDataTestDir).getPath())
 		        .append(File.separator).append(InitializerConstants.DIR_NAME_CONFIG).append(File.separator)
-		        .append(InitializerConstants.DOMAIN_ADDR);
+		        .append(InitializerConstants.DOMAIN_MSGPROP);
 		dirPath = pathBuilder.toString();
 	}
 	
@@ -43,17 +43,15 @@ public class InitializerMessageSourceTest {
 		File propFile;
 		Locale locale;
 		
-		propFile = new File((new StringBuilder(dirPath)).append(File.separator).append("addresshierarchy_en.properties")
-		        .toString());
+		propFile = new File((new StringBuilder(dirPath)).append(File.separator).append("metadata_en.properties").toString());
 		Map<File, Locale> msgPropMap = src.getMessagePropertiesMap();
 		Assert.assertTrue(msgPropMap.containsKey(propFile));
 		locale = msgPropMap.get(propFile);
 		Assert.assertEquals(new Locale("en"), locale);
 		
-		propFile = new File((new StringBuilder(dirPath)).append(File.separator).append("addresshierarchy_km_KH.properties")
-		        .toString());
+		propFile = new File((new StringBuilder(dirPath)).append(File.separator).append("metadata_fr.properties").toString());
 		Assert.assertTrue(msgPropMap.containsKey(propFile));
 		locale = msgPropMap.get(propFile);
-		Assert.assertEquals(new Locale("km", "KH"), locale);
+		Assert.assertEquals(new Locale("fr"), locale);
 	}
 }

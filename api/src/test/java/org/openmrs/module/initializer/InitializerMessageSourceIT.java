@@ -52,5 +52,7 @@ public class InitializerMessageSourceIT extends DomainBaseModuleContextSensitive
 		Assert.assertEquals("Health center", ms.getMessage("metadata.healthcenter"));
 		Assert.assertEquals("This is the description of a health centre.",
 		    ms.getMessage("metadata.healthcenter.description"));
+		
+		Assert.assertEquals("Kingdom of Cambodia", ms.getMessage("addresshierarchy.cambodia"));
 	}
 }

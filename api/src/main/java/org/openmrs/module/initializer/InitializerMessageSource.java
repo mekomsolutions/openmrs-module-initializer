@@ -160,15 +160,19 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		}
 		for (Map.Entry<File, Locale> entry : messagePropertiesMap.entrySet()) {
 			
-			PresentationMessageMap pmm = new PresentationMessageMap(entry.getValue());
+			Locale locale = entry.getValue();
+			PresentationMessageMap pmm = new PresentationMessageMap(locale);
+			if (cache.containsKey(locale)) {
+				pmm = cache.get(locale);
+			}
 			Properties messages = loadPropertiesFromFile(entry.getKey());
 			for (String code : messages.stringPropertyNames()) {
 				String message = messages.getProperty(code);
 				message = message.replace("{{", "'{{'");
 				message = message.replace("}}", "'}}'");
-				pmm.put(code, new PresentationMessage(code, entry.getValue(), message, null));
+				pmm.put(code, new PresentationMessage(code, locale, message, null));
 			}
-			cache.put(entry.getValue(), pmm);
+			cache.put(locale, pmm);
 		}
 	}
 	
