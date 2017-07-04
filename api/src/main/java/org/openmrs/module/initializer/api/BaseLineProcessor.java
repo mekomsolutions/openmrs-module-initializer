@@ -267,6 +267,9 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	 */
 	public static Integer getOrder(String[] headerLine) throws IllegalArgumentException {
 		String str = getMetadataValue(headerLine, ORDER_LHS);
+		if (UNDEFINED_METADATA_VALUE.equals(str)) { // no order means last in line
+			return Integer.MAX_VALUE;
+		}
 		Integer order = null;
 		try {
 			order = Integer.parseInt(str);

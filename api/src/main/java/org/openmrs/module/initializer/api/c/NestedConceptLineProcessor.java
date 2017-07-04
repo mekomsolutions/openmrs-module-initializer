@@ -28,6 +28,9 @@ public class NestedConceptLineProcessor extends BaseLineProcessor<Concept, Conce
 	 */
 	public static Concept getConceptByMapping(String mapping, ConceptService cs) {
 		Concept concept = null;
+		if (StringUtils.isEmpty(mapping)) {
+			return concept;
+		}
 		String[] parts = mapping.split(":");
 		if (parts.length == 2) {
 			concept = cs.getConceptByMapping(parts[1].trim(), parts[0].trim());
@@ -45,10 +48,10 @@ public class NestedConceptLineProcessor extends BaseLineProcessor<Concept, Conce
 	public static Concept fetchConcept(String id, ConceptService cs) {
 		Concept concept = null;
 		if (concept == null) {
-			concept = cs.getConceptByName(id);
+			concept = cs.getConceptByUuid(id);
 		}
 		if (concept == null) {
-			concept = cs.getConceptByUuid(id);
+			concept = cs.getConceptByName(id);
 		}
 		if (concept == null) {
 			concept = getConceptByMapping(id, cs);

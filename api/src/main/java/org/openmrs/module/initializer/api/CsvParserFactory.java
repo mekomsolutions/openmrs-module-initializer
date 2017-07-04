@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.c.ConceptsCsvParser;
+import org.openmrs.module.initializer.api.drugs.DrugsCsvParser;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesCsvParser;
 
 /**
@@ -18,6 +19,10 @@ public class CsvParserFactory {
 		
 		if (InitializerConstants.DOMAIN_C.equals(domain)) {
 			return new ConceptsCsvParser(is, Context.getConceptService());
+		}
+		
+		if (InitializerConstants.DOMAIN_DRUGS.equals(domain)) {
+			return new DrugsCsvParser(is, Context.getConceptService());
 		}
 		
 		if (InitializerConstants.DOMAIN_PAT.equals(domain)) {

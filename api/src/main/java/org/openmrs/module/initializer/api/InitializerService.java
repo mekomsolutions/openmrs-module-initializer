@@ -35,6 +35,11 @@ public interface InitializerService extends OpenmrsService {
 	void loadConcepts();
 	
 	/**
+	 * Loads the drugs from their domain config. dir, and saves them.
+	 */
+	void loadDrugs();
+	
+	/**
 	 * Loads the person attribute types from their domain config. dir, and saves them.
 	 */
 	void loadPersonAttributeTypes();

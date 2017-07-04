@@ -61,6 +61,10 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	 */
 	protected T createInstance(String[] line) throws APIException {
 		
+		if (line == null) {
+			return null;
+		}
+		
 		if (CollectionUtils.isEmpty(getLineProcessors())) {
 			log.warn("No line processors have been set, you should either overload '"
 			        + getClass().getEnclosingMethod().getName() + "' directly or provide lines processors to this class: "

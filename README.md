@@ -13,6 +13,7 @@ The configuration folder is subdivided into _domain_ subfolders:
   configuration/
     \_ addresshierarchy/
     \_ concepts/
+    \_ drugs/
     \_ globalproperties/
     \_ idgen/
     \_ messageproperties/
@@ -54,6 +55,7 @@ This is the list of supported domains in respect to their loading order:
 1. Concepts (CSV files)
 1. Person attribute types (CSV files)
 1. Identifier sources (XML files)
+1. Drugs (CSV files)
 
 Let's review each domain in details below:
 
@@ -254,6 +256,44 @@ This domain is different from the others since nothing from its configuration is
 
 ---
 
+#### Domain 'drugs'
+The **drugs** subfolder contains CSV import files for saving drugs in bulk. This is a possible example of its content:
+```
+  drugs/
+    \_ drugs.csv
+    \_ ...
+```
+Here is an example of a drug header line:
+
+| <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Name</sub> | <sub>Description</sub> | <sub>Concept Drug</sub> | ... | <sub>_version:1</sub> | <sub>_order:1000</sub> |
+| - | - | - | - | - | - | - | - |
+
+Let's review some important headers.
+###### Header `Name`
+###### Header `Description`
+###### Header `Concept Drug`
+The value under this header links to the concept representing the drug. The concept can either be provided by
+
+* Name, eg. `"Cetirizine"` ;
+* Concept mapping, eg. `"WHO:R06AE07"` ;
+* UUID, eg. `"2bcf7212-d218-4572-8893-25c4b5b71934"`.
+
+###### Header `Concept Dosage Form`
+The value under this header links to the concept representing the dosage form. The same way as for the concept drug its value can be provided as a concept name, concept mapping or UUID.
+
+###### Header `Strength`
+Eg. `"10ml"`, `"500mg"` ... etc.
+
+Here is an example of valid basic CSV line to defining a drug:
+
+| <sub>Uuid</sub>  | <sub>Name</sub> | <sub>Concept Drug</sub> | <sub>Concept Dosage Form</sub> | <sub>Strength</sub> |
+| - | - | - | - | - |
+| | <sub>Cetirizine 10mg Tablet</sub> | <sub>Cetirizine</sub> | <sub>Tablet</sub> | <sub>10mg</sub> |
+
+In this example both `"Cetirizine"` and `"Tablet"` are assumed to be names of existing concepts.
+
+---
+
 #### Domain 'addresshierarchy'
 The **addresshierarchy** subfolder contains all the address hierarchy metadata. This is a possible example of its content:
 ```
@@ -293,6 +333,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 ##### New features
 * Loads i18n messages files from **configuration/addresshierarchy** and **configuration/messageproperties**.
 * Bulk creation and saving of concepts provided through CSV files in  **configuration/concepts**.<br/>This covers: basic concepts, concepts with nested members or answers and concepts with multiple mappings.
+* Bulk creation and saving of drugs provided through CSV files in  **configuration/drugs**.
 * Overrides global properties provided through XML configuration files in **configuration/globalproperties**.
 * Modifies (retire) or create identifier sources as specified in  **configuration/idgen**.
 * Bulk creation and saving of person attribute types provided through CSV files in  **configuration/personattributetypes**.
