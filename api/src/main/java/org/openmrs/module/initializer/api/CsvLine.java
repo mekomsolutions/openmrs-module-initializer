@@ -43,6 +43,10 @@ public class CsvLine {
 		return val;
 	}
 	
+	public String getString(String header) {
+		return getString(header, null);
+	}
+	
 	public Double getDouble(String header) throws NumberFormatException {
 		String val = get(header);
 		if (StringUtils.isEmpty(val)) {

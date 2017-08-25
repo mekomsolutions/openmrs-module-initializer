@@ -1,0 +1,4 @@
+Uuid,Fully specified name:en,Data class,Data type,Complex data handler,_version:1,_order:5000
+,CC_1,Misc,Complex,ImageHandler,,
+b0b15817-79d6-4c33-b7e9-bfa079d46f5f,CC_2_EDIT,Misc,Complex,BinaryDataHandler,,
+,CC_3_ERROR,Misc,Complex,,,

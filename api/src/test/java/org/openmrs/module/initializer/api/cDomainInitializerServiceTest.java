@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
+import org.openmrs.ConceptComplex;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNumeric;
@@ -106,6 +107,17 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 			cn.setLowNormal(44.8);
 			cn.setHiNormal(55.2);
 			cs.saveConcept(cn);
+		}
+		
+		// A concept complex to be edited
+		{
+			ConceptComplex cc = new ConceptComplex();
+			cc.setUuid("b0b15817-79d6-4c33-b7e9-bfa079d46f5f");
+			cc.setFullySpecifiedName(new ConceptName("CC_2_EDIT", Locale.ENGLISH));
+			cc.setConceptClass(cs.getConceptClassByName("Misc"));
+			cc.setDatatype(cs.getConceptDatatypeByName("Complex"));
+			cc.setHandler("TextHandler");
+			cs.saveConcept(cc);
 		}
 	}
 	
@@ -275,6 +287,29 @@ public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensit
 			Assert.assertEquals(0, cn.getHiNormal().compareTo(55.6));
 			
 			// Concept with misformatted boundaries should not have been created
+			Assert.assertNull(cs.getConceptByName("CN_3_ERROR"));
+		}
+		
+		// Verif. 'concepts complex' CSV loading
+		{
+			ConceptComplex cc = null;
+			
+			// A valid concept numeric
+			c = cs.getConceptByName("CC_1");
+			Assert.assertNotNull(c);
+			cc = cs.getConceptComplex(c.getId());
+			Assert.assertNotNull(cc);
+			Assert.assertEquals("ImageHandler", cc.getHandler());
+			
+			// This concept should have updated boundaries
+			c = cs.getConceptByUuid("b0b15817-79d6-4c33-b7e9-bfa079d46f5f");
+			Assert.assertNotNull(c);
+			Assert.assertNotNull(c.getConceptId());
+			cc = cs.getConceptComplex(c.getId());
+			Assert.assertNotNull(cc);
+			Assert.assertEquals("BinaryDataHandler", cc.getHandler());
+			
+			// Concept with missing complex data handler should not have been created
 			Assert.assertNull(cs.getConceptByName("CN_3_ERROR"));
 		}
 	}

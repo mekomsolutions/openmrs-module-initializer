@@ -119,7 +119,7 @@ Here is an example of the 'mappings' columns:
 | - | - | - |
 | ... | <sub>ICD-10-WHO:T45.9; CIEL:122226; Cambodia:115</sub> | ... |
 
-Below are the headers specific to concept numerics:
+Below are the headers specific to concepts numeric:
 ###### Header `Absolute low`
 ###### Header `Critical low`
 ###### Header `Normal low`
@@ -131,6 +131,13 @@ Below are the headers specific to concept numerics:
 ###### Header `Display precision`
 
 **NOTE** The concept will be considered as a candidate to be a concept numeric if and only if its data type is set to `Numeric`.
+
+Below are the headers specific to concepts complex:
+###### Header `Complex data handler`
+This should be the class name of a valid complex data handler class at runtime. Eg. `ImageHandler`, `BinaryDataHandler`, ... etc.
+See [here](https://github.com/openmrs/openmrs-core/tree/95641959f3a15ba5ae1a23d694114b9dbc466f12/api/src/main/java/org/openmrs/obs/handler) for the list of handlers shipped with Core 2.x.
+
+**NOTE** The concept will be considered as a candidate to be a concept complex if and only if its data type is set to `Complex`.
 
 ---
 

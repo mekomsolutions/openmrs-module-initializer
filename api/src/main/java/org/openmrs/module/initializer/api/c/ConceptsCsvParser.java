@@ -18,6 +18,7 @@ public class ConceptsCsvParser extends CsvParser<Concept, ConceptService, BaseLi
 	@Override
 	protected void setLineProcessors(String version, String[] headerLine) {
 		addLineProcessor(new ConceptNumericLineProcessor(headerLine, service));
+		addLineProcessor(new ConceptComplexLineProcessor(headerLine, service));
 		addLineProcessor(new BaseConceptLineProcessor(headerLine, service));
 		addLineProcessor(new NestedConceptLineProcessor(headerLine, service));
 		addLineProcessor(new MappingsConceptLineProcessor(headerLine, service));
