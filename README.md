@@ -16,6 +16,7 @@ The configuration folder is subdivided into _domain_ subfolders:
     \_ drugs/
     \_ globalproperties/
     \_ idgen/
+    \_ jsonkeyvalues/
     \_ messageproperties/
     \_ metadatasharing/ 
     \_ personattributetypes/
@@ -210,6 +211,34 @@ The above XML configuration will retire the identifier sources whose UUIDs are `
 
 ---
 
+#### Domain 'jsonkeyvalues'
+The **jsonkeyvalues** subfolder contains JSON configuration files that help provide custom configurations at runtime. Those JSON files are simple key values pairs, very much like global properties but that won't be persisted. This is how this domain may look like:
+```
+  jsonkeyvalues/
+    \_ config.json
+```
+We envision its typical use as providing _identifiers_ of objects that are needed to configure other objects. For instance a report definition may depend on a certain concept, and although the report definition itself may never change, the concept used in the report definition may be different from an implementation to another.
+
+###### JSON key-values configuration file example:
+```json
+{
+  "main.report.diagnose.concept.uuid": "4421da0d-42d0-410d-8ffd-47ec6f155d8f",
+  "main.report.chiefcomplaint.concept.fsn": "CHIEF COMPLAINT",
+  "main.report.finding.concept.mapping": "Cambodia:123"
+}
+```
+The above configuration illustrates that a report (referred to as "main report") needs to know about three concepts: one defining the diagnoses, one defining the chief complaints and one defining the findings. And a JSON key-values config file can be used to expose those concepts to our distribution at runtime. For example:
+```java
+InitializerService is = Context.getService(InitializerService.class);
+Concept conceptDiagnoses = is.getConceptFromKey("main.report.diagnose.concept.uuid");
+Concept conceptChiefComplaint = is.getConceptFromKey("main.report.chiefcomplaint.concept.fsn");
+Concept conceptFinding = is.getConceptFromKey("main.report.findings.concept.mapping");
+...
+```
+`Concept` instances can be fetched by UUID, names or concept mappings.
+
+---
+
 #### Domain 'personattributetypes'
 The **personattributetypes** subfolder contains CSV import files for saving person attribute types in bulk. This is a possible example of its content:
 ```
@@ -336,12 +365,13 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 
 ### Releases notes
 
-#### Version 1.0
+#### Version 1.0.1
 ##### New features
 * Loads i18n messages files from **configuration/addresshierarchy** and **configuration/messageproperties**.
 * Bulk creation and saving of concepts provided through CSV files in  **configuration/concepts**.<br/>This covers: basic concepts, concepts with nested members or answers and concepts with multiple mappings.
 * Bulk creation and saving of drugs provided through CSV files in  **configuration/drugs**.
 * Overrides global properties provided through XML configuration files in **configuration/globalproperties**.
 * Modifies (retire) or create identifier sources as specified in  **configuration/idgen**.
+* Exposes runtime key-values configuration parameters through JSON files in **configuration/jsonkeyvalues**.
 * Bulk creation and saving of person attribute types provided through CSV files in  **configuration/personattributetypes**.
 * Imports MDS packages provided as .zip files in **configuration/metadatasharing**.
