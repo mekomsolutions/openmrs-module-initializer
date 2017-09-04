@@ -29,6 +29,7 @@ public class InitializerActivator extends BaseModuleActivator {
 		
 		InitializerService iniz = Context.getService(InitializerService.class);
 		
+		iniz.loadJsonKeyValues();
 		iniz.importMetadataSharingPackages();
 		iniz.loadGlobalProperties();
 		iniz.loadConcepts();

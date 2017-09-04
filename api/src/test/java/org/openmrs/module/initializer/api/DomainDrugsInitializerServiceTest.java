@@ -23,7 +23,7 @@ import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.test.Verifies;
 
-public class drugsDomainInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
+public class DomainDrugsInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
 	private ConceptService cs;
 	

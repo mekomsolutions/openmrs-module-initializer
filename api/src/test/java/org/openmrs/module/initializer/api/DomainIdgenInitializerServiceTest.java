@@ -26,7 +26,7 @@ import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.test.Verifies;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class idgenDomainInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
+public class DomainIdgenInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private IdentifierSourceService idgenService;

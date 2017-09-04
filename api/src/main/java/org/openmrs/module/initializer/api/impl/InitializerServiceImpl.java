@@ -13,12 +13,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.openmrs.Concept;
 import org.openmrs.GlobalProperty;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.context.Context;
@@ -40,6 +44,8 @@ import org.openmrs.util.OpenmrsUtil;
 public class InitializerServiceImpl extends BaseOpenmrsService implements InitializerService {
 	
 	protected final Log log = LogFactory.getLog(getClass());
+	
+	protected Map<String, String> keyValueCache = new HashMap<String, String>();
 	
 	@Override
 	public String getConfigDirPath() {
@@ -105,7 +111,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	}
 	
 	/*
-	 * Replaces the deserialized indentifier type instance with a complete instance fetched from database
+	 * Replaces the deserialized identifier type instance with a complete instance fetched from database
 	 */
 	protected IdentifierSource setPatientIdentifierType(IdentifierSource idSource) {
 		
@@ -223,5 +229,57 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 				IOUtils.closeQuietly(is);
 			}
 		}
+	}
+	
+	protected void addKeyValues(InputStream is) throws Exception {
+		keyValueCache.putAll((new ObjectMapper()).readValue(is, Map.class));
+	}
+	
+	@Override
+	public void loadJsonKeyValues() {
+		
+		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(),
+		        InitializerConstants.DOMAIN_JKV);
+		
+		for (File file : util.getFiles("json")) { // processing all the JSON files inside the domain
+		
+			String fileName = util.getFileName(file.getPath());
+			
+			InputStream is = null;
+			try {
+				is = new FileInputStream(file);
+				addKeyValues(is);
+				is.close();
+				log.info("The following JSON key-value was succesfully imported: " + fileName);
+			}
+			catch (Exception e) {
+				log.error("The JSON key-value package could not be imported: " + file.getPath(), e);
+			}
+			finally {
+				IOUtils.closeQuietly(is);
+			}
+		}
+	}
+	
+	@Override
+	public String getValueFromKey(String key) {
+		return keyValueCache.get(key);
+	}
+	
+	@Override
+	public Concept getConceptFromKey(String key, Concept defaultConcept) {
+		String val = getValueFromKey(key);
+		Concept concept = Utils.fetchConcept(val, Context.getConceptService());
+		if (concept != null) {
+			return concept;
+		}
+		else {
+			return defaultConcept;
+		}
+	}
+	
+	@Override
+	public Concept getConceptFromKey(String key) {
+		return getConceptFromKey(key, null);
 	}
 }

@@ -12,13 +12,6 @@
 	<name>Initializer API</name>
 	<description>API project for Initializer</description>
 
-	<properties>
-		<addresshierarchyVersion>2.11.0-SNAPSHOT</addresshierarchyVersion>
-		<idgenVersion>4.3</idgenVersion>
-		<metadatasharingVersion>1.2.2</metadatasharingVersion>
-		<exti18nVersion>1.0-SNAPSHOT</exti18nVersion>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.openmrs.web</groupId>

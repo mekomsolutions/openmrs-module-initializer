@@ -68,7 +68,7 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 		    new GlobalProperty(ExtI18nConstants.GLOBAL_PROP_REV_I18N_SUPPORT, "true"));
 		runtimeProperties.setProperty(ModuleConstants.RUNTIMEPROPERTY_MODULE_LIST_TO_LOAD, MODULES_TO_LOAD);
 		ModuleUtil.startup(runtimeProperties);
-		Assert.assertTrue(ModuleFactory.isModuleStarted(AddressHierarchyConstants.MODULE_EXTI18N_ARTIFACT_ID));
+		Assert.assertTrue(ModuleFactory.isModuleStarted(ExtI18nConstants.MODULE_ARTIFACT_ID));
 		
 		inizSrc = (InitializerMessageSource) Context.getMessageSourceService().getActiveMessageSource();
 	}
@@ -77,7 +77,7 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 	public void tearDown() {
 		Context.getAdministrationService().saveGlobalProperty(
 		    new GlobalProperty(ExtI18nConstants.GLOBAL_PROP_REV_I18N_SUPPORT, "false"));
-		ModuleFactory.stopModule(ModuleFactory.getModuleById(AddressHierarchyConstants.MODULE_EXTI18N_ARTIFACT_ID));
+		ModuleFactory.stopModule(ModuleFactory.getModuleById(ExtI18nConstants.MODULE_ARTIFACT_ID));
 	}
 	
 	@Test

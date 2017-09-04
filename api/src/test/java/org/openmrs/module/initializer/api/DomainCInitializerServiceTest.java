@@ -31,7 +31,7 @@ import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.test.Verifies;
 
-public class cDomainInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
+public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
 	private ConceptService cs;
 	

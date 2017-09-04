@@ -17,7 +17,7 @@ import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.test.Verifies;
 
-public class gpDomainInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
+public class DomainGPInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Override
 	protected String getDomain() {

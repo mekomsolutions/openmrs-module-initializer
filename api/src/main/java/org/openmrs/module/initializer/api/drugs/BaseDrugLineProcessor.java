@@ -5,7 +5,7 @@ import org.openmrs.Drug;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.c.NestedConceptLineProcessor;
+import org.openmrs.module.initializer.api.impl.Utils;
 
 /**
  * This is the first level line processor for concepts. It allows to parse and save concepts with
@@ -33,10 +33,10 @@ public class BaseDrugLineProcessor extends BaseLineProcessor<Drug, ConceptServic
 		drug.setDescription(line.getString(HEADER_DESC, ""));
 		drug.setStrength(line.getString(HEADER_STRENGTH, ""));
 		
-		Concept conceptDrug = NestedConceptLineProcessor.fetchConcept(line.get(HEADER_CONCEPT_DRUG), service);
+		Concept conceptDrug = Utils.fetchConcept(line.get(HEADER_CONCEPT_DRUG), service);
 		drug.setConcept(conceptDrug);
 		
-		Concept conceptDosageForm = NestedConceptLineProcessor.fetchConcept(line.get(HEADER_DOSAGE_FORM), service);
+		Concept conceptDosageForm = Utils.fetchConcept(line.get(HEADER_DOSAGE_FORM), service);
 		drug.setDosageForm(conceptDosageForm);
 		
 		return drug;

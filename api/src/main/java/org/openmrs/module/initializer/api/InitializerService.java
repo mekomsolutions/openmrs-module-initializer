@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.initializer.api;
 
+import org.openmrs.Concept;
 import org.openmrs.api.OpenmrsService;
 
 /**
@@ -58,4 +59,24 @@ public interface InitializerService extends OpenmrsService {
 	 * Import the metadata sharing packages from their domain config. dir.
 	 */
 	void importMetadataSharingPackages();
+	
+	/**
+	 * Loads the key-values into the cache from the JSON files.
+	 */
+	void loadJsonKeyValues();
+	
+	/**
+	 * Fetches a value from the JSON key-value configuration.
+	 */
+	String getValueFromKey(String key);
+	
+	/**
+	 * Guesses a concept from the JSON key-value configuration.
+	 */
+	Concept getConceptFromKey(String key, Concept defaultConcept);
+	
+	/**
+	 * Guesses a concept from the JSON key-value configuration.
+	 */
+	Concept getConceptFromKey(String key);
 }

@@ -9,6 +9,7 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.impl.Utils;
 import org.springframework.util.CollectionUtils;
 
 public class NestedConceptLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
@@ -19,44 +20,6 @@ public class NestedConceptLineProcessor extends BaseLineProcessor<Concept, Conce
 	
 	public NestedConceptLineProcessor(String[] headerLine, ConceptService cs) {
 		super(headerLine, cs);
-	}
-	
-	/**
-	 * @param mapping The concept mapping, eg. "cambodia:123"
-	 * @param cs
-	 * @return The {@link Concept} instance if found, null otherwise.
-	 */
-	public static Concept getConceptByMapping(String mapping, ConceptService cs) {
-		Concept concept = null;
-		if (StringUtils.isEmpty(mapping)) {
-			return concept;
-		}
-		String[] parts = mapping.split(":");
-		if (parts.length == 2) {
-			concept = cs.getConceptByMapping(parts[1].trim(), parts[0].trim());
-		}
-		return concept;
-	}
-	
-	/**
-	 * Fetches a concept trying various routes for its "id".
-	 * 
-	 * @param id The concept mapping ("cambodia:123"), concept name or concept UUID.
-	 * @param cs
-	 * @return The {@link Concept} instance if found, null otherwise.
-	 */
-	public static Concept fetchConcept(String id, ConceptService cs) {
-		Concept concept = null;
-		if (concept == null) {
-			concept = cs.getConceptByUuid(id);
-		}
-		if (concept == null) {
-			concept = cs.getConceptByName(id);
-		}
-		if (concept == null) {
-			concept = getConceptByMapping(id, cs);
-		}
-		return concept;
 	}
 	
 	/**
@@ -75,7 +38,7 @@ public class NestedConceptLineProcessor extends BaseLineProcessor<Concept, Conce
 		
 		for (String id : parts) {
 			id = id.trim();
-			Concept child = fetchConcept(id, cs);
+			Concept child = Utils.fetchConcept(id, cs);
 			if (child != null) {
 				concepts.add(child);
 			} else {
