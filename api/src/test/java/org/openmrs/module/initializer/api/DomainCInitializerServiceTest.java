@@ -30,9 +30,13 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.test.Verifies;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
+	@Autowired
+	@Qualifier("conceptService")
 	private ConceptService cs;
 	
 	@Override
@@ -42,7 +46,6 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 	
 	@Before
 	public void setup() {
-		cs = Context.getConceptService();
 		
 		ConceptSource source = null;
 		source = new ConceptSource();

@@ -24,9 +24,13 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.test.Verifies;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public class DomainPATInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
+	@Autowired
+	@Qualifier("personService")
 	private PersonService ps;
 	
 	private int conceptForeignKey = 0;
@@ -39,7 +43,6 @@ public class DomainPATInitializerServiceTest extends DomainBaseModuleContextSens
 	@Before
 	public void setup() {
 		
-		ps = Context.getPersonService();
 		ConceptService cs = Context.getConceptService();
 		
 		// Creating a privilege

@@ -21,15 +21,20 @@ import org.openmrs.ConceptSource;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.PersonService;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.impl.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public class DomainJKVInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
+	@Autowired
+	@Qualifier("conceptService")
 	private ConceptService cs;
 	
+	@Autowired
+	@Qualifier("personService")
 	private PersonService ps;
 	
 	@Override
@@ -39,8 +44,6 @@ public class DomainJKVInitializerServiceTest extends DomainBaseModuleContextSens
 	
 	@Before
 	public void setup() {
-		cs = Context.getConceptService();
-		
 		ConceptSource source = new ConceptSource();
 		source.setName("Cambodia");
 		source = cs.saveConceptSource(source);
@@ -59,8 +62,6 @@ public class DomainJKVInitializerServiceTest extends DomainBaseModuleContextSens
 			}
 			cs.saveConcept(c);
 		}
-		
-		ps = Context.getPersonService();
 		
 		// A person attr. type to be fetched via JKV
 		{

@@ -18,13 +18,16 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.Drug;
 import org.openmrs.api.ConceptService;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.test.Verifies;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public class DomainDrugsInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
+	@Autowired
+	@Qualifier("conceptService")
 	private ConceptService cs;
 	
 	@Override
@@ -34,9 +37,6 @@ public class DomainDrugsInitializerServiceTest extends DomainBaseModuleContextSe
 	
 	@Before
 	public void setup() {
-		
-		cs = Context.getConceptService();
-		ConceptService cs = Context.getConceptService();
 		
 		// A concept to be used as 'dosage form'
 		{
