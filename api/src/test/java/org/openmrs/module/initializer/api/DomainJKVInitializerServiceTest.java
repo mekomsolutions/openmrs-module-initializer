@@ -18,7 +18,9 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptSource;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
@@ -27,6 +29,8 @@ import org.openmrs.module.initializer.api.impl.Utils;
 public class DomainJKVInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
 	private ConceptService cs;
+	
+	private PersonService ps;
 	
 	@Override
 	protected String getDomain() {
@@ -50,10 +54,21 @@ public class DomainJKVInitializerServiceTest extends DomainBaseModuleContextSens
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			{
 				ConceptMapType mapType = cs.getConceptMapTypeByUuid(ConceptMapType.SAME_AS_MAP_TYPE_UUID);
-				Utils.MappingWrapper mappingWrapper = new Utils.MappingWrapper("Cambodia:123", mapType, cs);
+				Utils.ConceptMappingWrapper mappingWrapper = new Utils.ConceptMappingWrapper("Cambodia:123", mapType, cs);
 				c.addConceptMapping(mappingWrapper.getConceptMapping());
 			}
 			cs.saveConcept(c);
+		}
+		
+		ps = Context.getPersonService();
+		
+		// A person attr. type to be fetched via JKV
+		{
+			PersonAttributeType pat = new PersonAttributeType();
+			pat.setUuid("9eca4f4e-707f-4bb8-8289-2f9b6e93803c");
+			pat.setName("PAT_FOR_FETCHING");
+			pat.setFormat("java.lang.String");
+			ps.savePersonAttributeType(pat);
 		}
 	}
 	
@@ -71,5 +86,19 @@ public class DomainJKVInitializerServiceTest extends DomainBaseModuleContextSens
 		
 		Assert.assertNull(getService().getConceptFromKey("__invalid_json_key__"));
 		Assert.assertEquals(c1, getService().getConceptFromKey("__invalid_json_key__", c1));
+	}
+	
+	@Test
+	public void loadJsonKeyValues_shouldFetchPATFromAllPossibleKeys() {
+		// Replay
+		getService().loadJsonKeyValues();
+		
+		PersonAttributeType pat1 = getService().getPersonAttributeTypeFromKey("impl.purpose.pat.uuid");
+		Assert.assertNotNull(pat1);
+		PersonAttributeType pat2 = getService().getPersonAttributeTypeFromKey("impl.purpose.pat.name");
+		Assert.assertEquals(pat1, pat2);
+		
+		Assert.assertNull(getService().getPersonAttributeTypeFromKey("__invalid_json_key__"));
+		Assert.assertEquals(pat1, getService().getPersonAttributeTypeFromKey("__invalid_json_key__", pat1));
 	}
 }

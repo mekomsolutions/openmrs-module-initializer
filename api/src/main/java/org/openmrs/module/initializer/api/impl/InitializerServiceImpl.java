@@ -25,6 +25,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Concept;
 import org.openmrs.GlobalProperty;
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.idgen.IdentifierSource;
@@ -250,10 +251,10 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 				is = new FileInputStream(file);
 				addKeyValues(is);
 				is.close();
-				log.info("The following JSON key-value was succesfully imported: " + fileName);
+				log.info("The following JSON key-value file was succesfully imported: " + fileName);
 			}
 			catch (Exception e) {
-				log.error("The JSON key-value package could not be imported: " + file.getPath(), e);
+				log.error("The JSON key-value file could not be imported: " + file.getPath(), e);
 			}
 			finally {
 				IOUtils.closeQuietly(is);
@@ -267,19 +268,40 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	}
 	
 	@Override
-	public Concept getConceptFromKey(String key, Concept defaultConcept) {
+	public Concept getConceptFromKey(String key, Concept defaultInstance) {
 		String val = getValueFromKey(key);
-		Concept concept = Utils.fetchConcept(val, Context.getConceptService());
-		if (concept != null) {
-			return concept;
+		if (StringUtils.isEmpty(val)) {
+			return defaultInstance;
 		}
-		else {
-			return defaultConcept;
+		Concept instance = Utils.fetchConcept(val, Context.getConceptService());
+		if (instance != null) {
+			return instance;
+		} else {
+			return defaultInstance;
 		}
 	}
 	
 	@Override
 	public Concept getConceptFromKey(String key) {
 		return getConceptFromKey(key, null);
+	}
+	
+	@Override
+	public PersonAttributeType getPersonAttributeTypeFromKey(String key, PersonAttributeType defaultInstance) {
+		String val = getValueFromKey(key);
+		if (StringUtils.isEmpty(val)) {
+			return defaultInstance;
+		}
+		PersonAttributeType instance = Utils.fetchPersonAttributeType(val, Context.getPersonService());
+		if (instance != null) {
+			return instance;
+		} else {
+			return defaultInstance;
+		}
+	}
+	
+	@Override
+	public PersonAttributeType getPersonAttributeTypeFromKey(String key) {
+		return getPersonAttributeTypeFromKey(key, null);
 	}
 }

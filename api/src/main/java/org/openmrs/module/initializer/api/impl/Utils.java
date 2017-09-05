@@ -6,14 +6,16 @@ import org.openmrs.ConceptMap;
 import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptReferenceTerm;
 import org.openmrs.ConceptSource;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.PersonService;
 
 public class Utils {
 	
 	/**
 	 * Helps build a {@link ConceptMap} out the usual string inputs.
 	 */
-	public static class MappingWrapper {
+	public static class ConceptMappingWrapper {
 		
 		private ConceptSource source;
 		
@@ -21,7 +23,7 @@ public class Utils {
 		
 		private ConceptMapType mapType;
 		
-		public MappingWrapper(String mappingStr, ConceptMapType mapType, ConceptService cs) {
+		public ConceptMappingWrapper(String mappingStr, ConceptMapType mapType, ConceptService cs) {
 			String[] parts = mappingStr.split(":");
 			if (parts.length == 2) {
 				source = cs.getConceptSourceByName(parts[0].trim());
@@ -42,39 +44,57 @@ public class Utils {
 	
 	/**
 	 * @param mapping The concept mapping, eg. "cambodia:123"
-	 * @param cs
+	 * @param service
 	 * @return The {@link Concept} instance if found, null otherwise.
 	 */
-	public static Concept getConceptByMapping(String mapping, ConceptService cs) {
-		Concept concept = null;
+	public static Concept getConceptByMapping(String mapping, ConceptService service) {
+		Concept instance = null;
 		if (StringUtils.isEmpty(mapping)) {
-			return concept;
+			return instance;
 		}
 		String[] parts = mapping.split(":");
 		if (parts.length == 2) {
-			concept = cs.getConceptByMapping(parts[1].trim(), parts[0].trim());
+			instance = service.getConceptByMapping(parts[1].trim(), parts[0].trim());
 		}
-		return concept;
+		return instance;
 	}
 	
 	/**
 	 * Fetches a concept trying various routes for its "id".
 	 * 
 	 * @param id The concept mapping ("cambodia:123"), concept name or concept UUID.
-	 * @param cs
+	 * @param service
 	 * @return The {@link Concept} instance if found, null otherwise.
 	 */
-	public static Concept fetchConcept(String id, ConceptService cs) {
-		Concept concept = null;
-		if (concept == null) {
-			concept = cs.getConceptByUuid(id);
+	public static Concept fetchConcept(String id, ConceptService service) {
+		Concept instance = null;
+		if (instance == null) {
+			instance = service.getConceptByUuid(id);
 		}
-		if (concept == null) {
-			concept = cs.getConceptByName(id);
+		if (instance == null) {
+			instance = service.getConceptByName(id);
 		}
-		if (concept == null) {
-			concept = getConceptByMapping(id, cs);
+		if (instance == null) {
+			instance = getConceptByMapping(id, service);
 		}
-		return concept;
+		return instance;
+	}
+	
+	/**
+	 * Fetches a person attribute type trying various routes for its "id".
+	 * 
+	 * @param id The person attribute type name or UUID.
+	 * @param service
+	 * @return The {@link PersonAttributeType} instance if found, null otherwise.
+	 */
+	public static PersonAttributeType fetchPersonAttributeType(String id, PersonService service) {
+		PersonAttributeType instance = null;
+		if (instance == null) {
+			instance = service.getPersonAttributeTypeByUuid(id);
+		}
+		if (instance == null) {
+			instance = service.getPersonAttributeTypeByName(id);
+		}
+		return instance;
 	}
 }

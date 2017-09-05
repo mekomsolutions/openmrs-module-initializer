@@ -10,6 +10,7 @@
 package org.openmrs.module.initializer.api;
 
 import org.openmrs.Concept;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.api.OpenmrsService;
 
 /**
@@ -73,10 +74,20 @@ public interface InitializerService extends OpenmrsService {
 	/**
 	 * Guesses a concept from the JSON key-value configuration.
 	 */
-	Concept getConceptFromKey(String key, Concept defaultConcept);
+	Concept getConceptFromKey(String key, Concept defaultInstance);
 	
 	/**
 	 * Guesses a concept from the JSON key-value configuration.
 	 */
 	Concept getConceptFromKey(String key);
+	
+	/**
+	 * Guesses a person attribute type from the JSON key-value configuration.
+	 */
+	PersonAttributeType getPersonAttributeTypeFromKey(String key, PersonAttributeType defaultInstance);
+	
+	/**
+	 * Guesses a person attribute type from the JSON key-value configuration.
+	 */
+	PersonAttributeType getPersonAttributeTypeFromKey(String key);
 }

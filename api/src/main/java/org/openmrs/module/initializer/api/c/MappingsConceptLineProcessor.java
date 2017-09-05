@@ -30,7 +30,7 @@ public class MappingsConceptLineProcessor extends BaseLineProcessor<Concept, Con
 		
 		for (String mappingStr : parts) {
 			mappingStr = mappingStr.trim();
-			Utils.MappingWrapper mappingWrapper = new Utils.MappingWrapper(mappingStr, mapType, cs);
+			Utils.ConceptMappingWrapper mappingWrapper = new Utils.ConceptMappingWrapper(mappingStr, mapType, cs);
 			if (mappingWrapper.isValid()) {
 				conceptMappings.add(mappingWrapper.getConceptMapping());
 			} else {
