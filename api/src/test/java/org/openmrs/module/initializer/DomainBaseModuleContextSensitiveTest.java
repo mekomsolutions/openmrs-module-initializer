@@ -50,6 +50,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		String path = getClass().getClassLoader().getResource(appDataTestDir).getPath() + File.separator;
 		
 		OpenmrsConstants.APPLICATION_DATA_DIRECTORY = path; // The 1.10 way
+		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
 		Properties prop = new Properties();
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
 		Context.setRuntimeProperties(prop);

@@ -90,4 +90,14 @@ public interface InitializerService extends OpenmrsService {
 	 * Guesses a person attribute type from the JSON key-value configuration.
 	 */
 	PersonAttributeType getPersonAttributeTypeFromKey(String key);
+	
+	/**
+	 * Guesses a boolean from the JSON key-value configuration.
+	 */
+	Boolean getBooleanFromKey(String key, Boolean defaultInstance);
+	
+	/**
+	 * Guesses a boolean from the JSON key-value configuration.
+	 */
+	Boolean getBooleanFromKey(String key);
 }

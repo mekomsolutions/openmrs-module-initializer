@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -303,5 +304,24 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public PersonAttributeType getPersonAttributeTypeFromKey(String key) {
 		return getPersonAttributeTypeFromKey(key, null);
+	}
+	
+	@Override
+	public Boolean getBooleanFromKey(String key, Boolean defaultInstance) {
+		String val = getValueFromKey(key);
+		if (StringUtils.isEmpty(val)) {
+			return defaultInstance;
+		}
+		try {
+			return BooleanUtils.toBoolean(val, "1", "0");
+		}
+		catch (IllegalArgumentException e) {
+			return BooleanUtils.toBooleanObject(val);
+		}
+	}
+	
+	@Override
+	public Boolean getBooleanFromKey(String key) {
+		return getBooleanFromKey(key, null);
 	}
 }

@@ -26,4 +26,29 @@ public class InitializerServiceImplTest {
 		
 		Assert.assertEquals("value12", iniz.getValueFromKey("key1"));
 	}
+	
+	@Test
+	public void getBooleanFromKey_shouldHandleAllCases() {
+		
+		final String KEY = "key.to.bool.value";
+		InitializerServiceImpl iniz = new InitializerServiceImpl();
+		
+		iniz.keyValueCache.put(KEY, "true");
+		Assert.assertTrue(iniz.getBooleanFromKey(KEY));
+		iniz.keyValueCache.put(KEY, "false");
+		Assert.assertFalse(iniz.getBooleanFromKey(KEY));
+		
+		iniz.keyValueCache.put(KEY, "yes");
+		Assert.assertTrue(iniz.getBooleanFromKey(KEY));
+		iniz.keyValueCache.put(KEY, "no");
+		Assert.assertFalse(iniz.getBooleanFromKey(KEY));
+		
+		iniz.keyValueCache.put(KEY, "1");
+		Assert.assertTrue(iniz.getBooleanFromKey(KEY));
+		iniz.keyValueCache.put(KEY, "0");
+		Assert.assertFalse(iniz.getBooleanFromKey(KEY));
+		
+		iniz.keyValueCache.put(KEY, "foo");
+		Assert.assertNull(iniz.getBooleanFromKey(KEY));
+	}
 }

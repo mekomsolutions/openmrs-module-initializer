@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.LocaleUtils;
@@ -65,8 +64,12 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	 */
 	public static String getUuid(String[] headerLine, String[] line) throws IllegalArgumentException {
 		String str = line[getColumn(headerLine, HEADER_UUID)];
+		// TODO Reinstate the below check when MRSCMNS-59 is implemented
 		if (!StringUtils.isEmpty(str)) {
-			str = UUID.fromString(str).toString();
+			if (str.length() != 36) {
+				throw new IllegalArgumentException("'" + str + "' does not have the 36 characters length of a UUID.");
+			}
+			//str = UUID.fromString(str).toString();
 		}
 		return str;
 	}
