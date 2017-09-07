@@ -3,10 +3,9 @@ package org.openmrs.module.initializer.api.c;
 import org.openmrs.Concept;
 import org.openmrs.ConceptComplex;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 
-public class ConceptComplexLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
+public class ConceptComplexLineProcessor extends BaseConceptLineProcessor {
 	
 	protected static String DATATYPE_COMPLEX = "Complex";
 	

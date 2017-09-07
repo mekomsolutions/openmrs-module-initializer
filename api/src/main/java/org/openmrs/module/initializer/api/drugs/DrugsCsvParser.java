@@ -3,7 +3,6 @@ package org.openmrs.module.initializer.api.drugs;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Drug;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
@@ -23,22 +22,6 @@ public class DrugsCsvParser extends CsvParser<Drug, ConceptService, BaseLineProc
 	@Override
 	protected Drug save(Drug instance) {
 		return service.saveDrug(instance);
-	}
-	
-	@Override
-	protected Drug bootstrap(String[] line) throws IllegalArgumentException {
-		String uuid = BaseLineProcessor.getUuid(headerLine, line);
-		Drug drug = service.getDrugByUuid(uuid);
-		if (drug == null) {
-			drug = new Drug();
-			if (!StringUtils.isEmpty(uuid)) {
-				drug.setUuid(uuid);
-			}
-		}
-		
-		drug.setRetired(BaseLineProcessor.getVoidOrRetire(headerLine, line));
-		
-		return drug;
 	}
 	
 	@Override

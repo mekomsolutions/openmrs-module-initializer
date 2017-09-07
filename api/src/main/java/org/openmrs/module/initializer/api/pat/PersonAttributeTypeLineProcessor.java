@@ -68,6 +68,23 @@ public class PersonAttributeTypeLineProcessor extends BaseLineProcessor<PersonAt
 	}
 	
 	@Override
+	protected PersonAttributeType bootstrap(CsvLine line) throws IllegalArgumentException {
+		String uuid = getUuid(line.asLine());
+		PersonAttributeType pat = service.getPersonAttributeTypeByUuid(uuid);
+		
+		if (pat == null) {
+			pat = new PersonAttributeType();
+			if (!StringUtils.isEmpty(uuid)) {
+				pat.setUuid(uuid);
+			}
+		}
+		
+		pat.setRetired(getVoidOrRetire(line.asLine()));
+		
+		return pat;
+	}
+	
+	@Override
 	protected PersonAttributeType fill(PersonAttributeType pat, CsvLine line) throws IllegalArgumentException {
 		
 		pat.setName(line.get(HEADER_NAME));

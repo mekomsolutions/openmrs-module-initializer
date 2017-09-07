@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,17 +64,19 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 			return null;
 		}
 		
-		if (CollectionUtils.isEmpty(getLineProcessors())) {
+		// Boostrapping
+		P bootstraper = getAnyLineProcessor();
+		if (bootstraper == null) { // no processors available
 			log.warn("No line processors have been set, you should either overload '"
 			        + getClass().getEnclosingMethod().getName() + "' directly or provide lines processors to this class: "
 			        + getClass().getCanonicalName());
 			return null;
 		}
 		
-		T instance = bootstrap(line);
+		T instance = bootstraper.bootstrap(new CsvLine(bootstraper, line));
 		if (instance == null) {
 			throw new APIException(
-			        "An instance that could not be fetched by UUID was not provided as an empty object either. Check the implementation of this parser: "
+			        "An instance that could not be bootstrapped was not provided as an empty object either. Check the implementation of this parser: "
 			                + getClass().getSuperclass().getCanonicalName());
 		}
 		if (voidOrRetire(instance)) {
@@ -93,16 +94,6 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	 * The actual saving should be implemented in this method.
 	 */
 	abstract protected T save(T instance);
-	
-	/*
-	 * This is the first method that produces a (non null) instance of T
-	 * 
-	 * This method should attempt to fetch an instance by UUID.
-	 * If no existing instance is found, it should create an empty T instance.
-	 * This is also where the voided/retired flag should be parsed and set.
-	 * 
-	 */
-	abstract protected T bootstrap(String[] line);
 	
 	/*
 	 * Says if the CSV line is marked for voiding or retiring.
@@ -123,6 +114,13 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	
 	protected List<P> getLineProcessors() {
 		return this.lineProcessors;
+	}
+	
+	/*
+	 * Returns null if there are no processors set.
+	 */
+	protected P getAnyLineProcessor() {
+		return getLineProcessors().iterator().next();
 	}
 	
 	/*

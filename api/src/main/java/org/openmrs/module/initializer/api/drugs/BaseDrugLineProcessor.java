@@ -1,5 +1,6 @@
 package org.openmrs.module.initializer.api.drugs;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Drug;
 import org.openmrs.api.ConceptService;
@@ -21,6 +22,22 @@ public class BaseDrugLineProcessor extends BaseLineProcessor<Drug, ConceptServic
 	
 	public BaseDrugLineProcessor(String[] headerLine, ConceptService cs) {
 		super(headerLine, cs);
+	}
+	
+	@Override
+	protected Drug bootstrap(CsvLine line) throws IllegalArgumentException {
+		String uuid = getUuid(line.asLine());
+		Drug drug = service.getDrugByUuid(uuid);
+		if (drug == null) {
+			drug = new Drug();
+			if (!StringUtils.isEmpty(uuid)) {
+				drug.setUuid(uuid);
+			}
+		}
+		
+		drug.setRetired(getVoidOrRetire(line.asLine()));
+		
+		return drug;
 	}
 	
 	protected Drug fill(Drug drug, CsvLine line) throws IllegalArgumentException {

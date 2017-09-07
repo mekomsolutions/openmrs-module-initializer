@@ -13,7 +13,7 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.impl.Utils;
 
-public class MappingsConceptLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
+public class MappingsConceptLineProcessor extends BaseConceptLineProcessor {
 	
 	protected static String HEADER_MAPPINGS_SAMEAS = "same as mappings";
 	

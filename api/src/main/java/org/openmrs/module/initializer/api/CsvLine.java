@@ -18,6 +18,10 @@ public class CsvLine {
 		this.processor = processor;
 	}
 	
+	public String[] asLine() {
+		return line;
+	}
+	
 	public String get(String header, boolean canThrowException) throws IllegalArgumentException {
 		String val = null;
 		try {

@@ -50,6 +50,8 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	
 	protected Map<String, LocalizedHeader> l10nHeadersMap = new HashMap<String, LocalizedHeader>();
 	
+	abstract protected T bootstrap(CsvLine line) throws IllegalArgumentException;
+	
 	/*
 	 * This implements how to fill T instances from any CSV line, ignoring the processing of the uuid.
 	 * This method can assume that the provided instance is never null as this is being taken care of upstream.
@@ -64,11 +66,15 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	 */
 	public static String getUuid(String[] headerLine, String[] line) throws IllegalArgumentException {
 		String str = line[getColumn(headerLine, HEADER_UUID)];
-		// TODO Reinstate the below check when MRSCMNS-59 is implemented
+		// TODO Reuse UUID.fromString(str) when MRSCMNS-59 is implemented
 		if (!StringUtils.isEmpty(str)) {
-			if (str.length() != 36) {
-				throw new IllegalArgumentException("'" + str + "' does not have the 36 characters length of a UUID.");
+			boolean validUuid = str.length() == 36 || "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAA".equals(str)
+			        || "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA".equals(str);
+			if (!validUuid) {
+				throw new IllegalArgumentException("'" + str
+				        + "' did not pass the soft check for being a valid OpenMRS UUID.");
 			}
+			
 			//str = UUID.fromString(str).toString();
 		}
 		return str;

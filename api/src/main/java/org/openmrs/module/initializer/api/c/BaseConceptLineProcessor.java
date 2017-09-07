@@ -31,6 +31,22 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, Concept
 		super(headerLine, cs);
 	}
 	
+	@Override
+	protected Concept bootstrap(CsvLine line) throws IllegalArgumentException {
+		String uuid = getUuid(line.asLine());
+		Concept concept = service.getConceptByUuid(uuid);
+		if (concept == null) {
+			concept = new Concept();
+			if (!StringUtils.isEmpty(uuid)) {
+				concept.setUuid(uuid);
+			}
+		}
+		
+		concept.setRetired(getVoidOrRetire(line.asLine()));
+		
+		return concept;
+	}
+	
 	/*
 	 * This is the base concept implementation.
 	 */

@@ -3,10 +3,9 @@ package org.openmrs.module.initializer.api.c;
 import org.openmrs.Concept;
 import org.openmrs.ConceptNumeric;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 
-public class ConceptNumericLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
+public class ConceptNumericLineProcessor extends BaseConceptLineProcessor {
 	
 	protected static String DATATYPE_NUMERIC = "Numeric";
 	

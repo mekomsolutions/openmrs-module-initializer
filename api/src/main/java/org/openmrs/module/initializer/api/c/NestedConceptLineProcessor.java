@@ -12,7 +12,7 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.impl.Utils;
 import org.springframework.util.CollectionUtils;
 
-public class NestedConceptLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
+public class NestedConceptLineProcessor extends BaseConceptLineProcessor {
 	
 	protected static String HEADER_ANSWERS = "answers";
 	
