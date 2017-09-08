@@ -29,7 +29,7 @@ public class ConceptsCsvParser extends CsvParser<Concept, ConceptService, BaseLi
 	}
 	
 	@Override
-	protected boolean voidOrRetire(Concept instance) {
+	protected boolean isVoidedOrRetired(Concept instance) {
 		return instance.isRetired();
 	}
 }

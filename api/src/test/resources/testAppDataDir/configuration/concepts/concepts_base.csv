@@ -12,3 +12,5 @@ foobar,,Cambodia_Lao,កម្ពុជា_ឡាវ,Lao,ឡាវ,Lao,ឡាវ
 00b29984-3183-11e7-93ae-92361f002671,,,,,,Por,ព័រ,Misc,Text,,
 276c5861-cd46-429f-9665-e067ddeca8e3,,CONCEPT_EDIT_SHORTNAME,,New short name,,,,Misc,Text,,
 4421da0d-42d0-410d-8ffd-47ec6f155d8f,TRUE,CONCEPT_RETIRE,,,,,,Misc,Text,,
+,,CONCEPT_FETCH_BY_FSN,,New short name,,,,Misc,Text,,
+,,,គំនិត_ដោយ_FSN,,ឈ្មោះខ្លីថ្មី,,,Misc,Text,,

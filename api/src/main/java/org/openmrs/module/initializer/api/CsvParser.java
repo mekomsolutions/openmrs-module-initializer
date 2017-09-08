@@ -65,21 +65,21 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		}
 		
 		// Boostrapping
-		P bootstraper = getAnyLineProcessor();
-		if (bootstraper == null) { // no processors available
+		P bootstrapper = getAnyLineProcessor();
+		if (bootstrapper == null) { // no processors available
 			log.warn("No line processors have been set, you should either overload '"
 			        + getClass().getEnclosingMethod().getName() + "' directly or provide lines processors to this class: "
 			        + getClass().getCanonicalName());
 			return null;
 		}
 		
-		T instance = bootstraper.bootstrap(new CsvLine(bootstraper, line));
+		T instance = bootstrapper.bootstrap(new CsvLine(bootstrapper, line));
 		if (instance == null) {
 			throw new APIException(
 			        "An instance that could not be bootstrapped was not provided as an empty object either. Check the implementation of this parser: "
 			                + getClass().getSuperclass().getCanonicalName());
 		}
-		if (voidOrRetire(instance)) {
+		if (isVoidedOrRetired(instance)) {
 			return instance;
 		}
 		
@@ -98,7 +98,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	/*
 	 * Says if the CSV line is marked for voiding or retiring.
 	 */
-	abstract protected boolean voidOrRetire(T instance);
+	abstract protected boolean isVoidedOrRetired(T instance);
 	
 	/*
 	 * Parsers must set their line processor implementation

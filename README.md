@@ -28,6 +28,7 @@ There are a number of conventions that apply to CSV files across all domains suc
 
 ###### Header `Uuid` (mandatory)
 * If the value under this header is missing the OpenMRS instance will be created with a new random UUID.
+<br/>_However if the domain supports secondary identifiers, those will be used to fetch the instance if the UUID is missing._
 * If the value under this header is provided the initializer will attempt to retrieve the OpenMRS instance that may already exist with this UUID.
   * If the OpenMRS instance already exists it will be modified and saved again according to the CSV line.
   * If the OpenMRS instance doesn't exist yet it will be created with the UUID specified on the CSV line.
@@ -83,6 +84,7 @@ Those are locale specific headers, they are never used as such because they alwa
 <br/>For example for a column to contain short names in English (locale 'en') simply name the header `Short name:en`. The same logic applies for the other locale specific headers.
 
 ###### Header `Fully specified name` (localized)
+The fully specified name is a secondary identifier for the concepts domain, it will be used to attempt fetching the concept if no UUID is provided.
 ###### Header `Short name` (localized)
 ###### Header `Description` (localized)
 ###### Header `Data class`
@@ -226,7 +228,8 @@ We envision its typical use as providing _identifiers_ of objects that are neede
   "main.report.chiefcomplaint.concept.fsn": "CHIEF COMPLAINT",
   "main.report.finding.concept.mapping": "Cambodia:123",
   "main.report.fathername.pat.uuid": "9eca4f4e-707f-4bb8-8289-2f9b6e93803c",
-  "main.report.mothername.pat.name": "Mother name"
+  "main.report.mothername.pat.name": "Mother name",
+  "main.report.active": "true"
 }
 ```
 The above configuration illustrates that a report (referred to as "main report") needs to know about three concepts: one defining the diagnoses, one defining the chief complaints and one defining the findings. And a JSON key-values config file can be used to expose those concepts to our distribution at runtime. For example:
@@ -237,6 +240,7 @@ Concept conceptChiefComplaint = is.getConceptFromKey("main.report.chiefcomplaint
 Concept conceptFinding = is.getConceptFromKey("main.report.findings.concept.mapping");
 PersonAttributeType patFatherName = is.getPersonAttributeTypeFromKey("main.report.fathername.pat.uuid");
 PersonAttributeType patMotherName = is.getPersonAttributeTypeFromKey("main.report.mothername.pat.name");
+Boolean isActive = is.getBooleanFromKey("main.report.active");
 ...
 ```
 `Concept` instances can be fetched by UUID, names or concept mappings.
@@ -373,10 +377,10 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 #### Version 1.0.1
 ##### New features
 * Loads i18n messages files from **configuration/addresshierarchy** and **configuration/messageproperties**.
-* Bulk creation and saving of concepts provided through CSV files in  **configuration/concepts**.<br/>This covers: basic concepts, concepts with nested members or answers and concepts with multiple mappings.
-* Bulk creation and saving of drugs provided through CSV files in  **configuration/drugs**.
+* Bulk creation and edition of concepts provided through CSV files in  **configuration/concepts**.<br/>This covers: basic concepts, concepts with nested members or answers and concepts with multiple mappings.
+* Bulk creation and edition of drugs provided through CSV files in  **configuration/drugs**.
 * Overrides global properties provided through XML configuration files in **configuration/globalproperties**.
 * Modifies (retire) or create identifier sources as specified in  **configuration/idgen**.
 * Exposes runtime key-values configuration parameters through JSON files in **configuration/jsonkeyvalues**.
-* Bulk creation and saving of person attribute types provided through CSV files in  **configuration/personattributetypes**.
+* Bulk creation and edition of person attribute types provided through CSV files in  **configuration/personattributetypes**.
 * Imports MDS packages provided as .zip files in **configuration/metadatasharing**.

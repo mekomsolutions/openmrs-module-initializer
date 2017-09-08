@@ -19,7 +19,7 @@ public class PersonAttributeTypesCsvParser extends CsvParser<PersonAttributeType
 	}
 	
 	@Override
-	protected boolean voidOrRetire(PersonAttributeType instance) {
+	protected boolean isVoidedOrRetired(PersonAttributeType instance) {
 		return instance.isRetired();
 	}
 	

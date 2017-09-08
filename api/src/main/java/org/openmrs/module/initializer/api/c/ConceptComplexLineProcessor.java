@@ -23,7 +23,7 @@ public class ConceptComplexLineProcessor extends BaseConceptLineProcessor {
 		}
 		
 		ConceptComplex cc = new ConceptComplex(instance);
-		if (instance.getId() != null) {
+		if (instance.getId() != null) { // below overrides any other processors work, so this one should be called first
 			cc = service.getConceptComplex(instance.getId());
 		}
 		cc.setDatatype(service.getConceptDatatypeByName(DATATYPE_COMPLEX));

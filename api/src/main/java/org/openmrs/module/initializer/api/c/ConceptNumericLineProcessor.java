@@ -39,7 +39,7 @@ public class ConceptNumericLineProcessor extends BaseConceptLineProcessor {
 		}
 		
 		ConceptNumeric cn = new ConceptNumeric(instance);
-		if (instance.getId() != null) {
+		if (instance.getId() != null) { // below overrides any other processors work, so this one should be called first
 			cn = service.getConceptNumeric(instance.getId());
 		}
 		cn.setDatatype(service.getConceptDatatypeByName(DATATYPE_NUMERIC));

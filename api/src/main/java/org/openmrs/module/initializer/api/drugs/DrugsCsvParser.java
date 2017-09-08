@@ -25,7 +25,7 @@ public class DrugsCsvParser extends CsvParser<Drug, ConceptService, BaseLineProc
 	}
 	
 	@Override
-	protected boolean voidOrRetire(Drug instance) {
+	protected boolean isVoidedOrRetired(Drug instance) {
 		return instance.isRetired();
 	}
 }

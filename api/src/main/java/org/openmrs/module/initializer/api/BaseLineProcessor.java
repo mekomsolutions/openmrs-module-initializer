@@ -112,10 +112,21 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 			this.header = header;
 		}
 		
+		/**
+		 * Localizes a header name. Eg 'Name:en' becomes 'Name'.
+		 * 
+		 * @return The localized header name.
+		 */
 		public String getHeader() {
 			return header;
 		}
 		
+		/**
+		 * |Name:en|Name:km_KH| would return 'Name:en' for the locale 'en'.
+		 * 
+		 * @param locale The locale for which the full header name is wanted.
+		 * @return The internationalized header name, if available.
+		 */
 		public String getI18nHeader(Locale locale) {
 			String i18nHeader = getHeader() + LOCALE_SEPARATOR + locale.toString();
 			if (locales.contains(locale)) {

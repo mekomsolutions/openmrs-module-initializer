@@ -84,7 +84,7 @@ public class ConceptsCsvParserTest {
 		List<Concept> concepts = new ConceptsCsvParser(is, cs).saveAll();
 		
 		// verif
-		Assert.assertEquals(12, concepts.size());
+		Assert.assertEquals(14, concepts.size());
 		Concept c = null;
 		c = concepts.get(0);
 		Assert.assertEquals("Cambodia_Nationality", c.getFullySpecifiedName(localeEn).getName());

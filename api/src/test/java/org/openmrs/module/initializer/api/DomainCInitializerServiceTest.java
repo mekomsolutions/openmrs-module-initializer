@@ -44,6 +44,10 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 		return InitializerConstants.DOMAIN_C;
 	}
 	
+	private Locale localeEn = Locale.ENGLISH;
+	
+	private Locale localeKm = new Locale("km", "KH");
+	
 	@Before
 	public void setup() {
 		
@@ -60,7 +64,7 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 		{
 			Concept c = new Concept();
 			c.setUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
-			c.setFullySpecifiedName(new ConceptName("CONCEPT_RETIRE", Locale.ENGLISH));
+			c.setFullySpecifiedName(new ConceptName("CONCEPT_RETIRE", localeEn));
 			c.setConceptClass(cs.getConceptClassByName("Misc"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			cs.saveConcept(c);
@@ -70,7 +74,7 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 		{
 			Concept c = new Concept();
 			c.setUuid("276c5861-cd46-429f-9665-e067ddeca8e3");
-			c.setFullySpecifiedName(new ConceptName("CONCEPT_EDIT_SHORTNAME", Locale.ENGLISH));
+			c.setFullySpecifiedName(new ConceptName("CONCEPT_EDIT_SHORTNAME", localeEn));
 			c.setShortName(new ConceptName("Old short name", Locale.ENGLISH));
 			c.setConceptClass(cs.getConceptClassByName("Misc"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
@@ -80,19 +84,19 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 		// A concept with members to be removed via CSV
 		{
 			Concept cm1 = new Concept();
-			cm1.setFullySpecifiedName(new ConceptName("member_1", Locale.ENGLISH));
+			cm1.setFullySpecifiedName(new ConceptName("member_1", localeEn));
 			cm1.setConceptClass(cs.getConceptClassByName("Misc"));
 			cm1.setDatatype(cs.getConceptDatatypeByName("Text"));
 			cm1 = cs.saveConcept(cm1);
 			Concept cm2 = new Concept();
-			cm2.setFullySpecifiedName(new ConceptName("member_2", Locale.ENGLISH));
+			cm2.setFullySpecifiedName(new ConceptName("member_2", localeEn));
 			cm2.setConceptClass(cs.getConceptClassByName("Misc"));
 			cm2.setDatatype(cs.getConceptDatatypeByName("Text"));
 			cm2 = cs.saveConcept(cm2);
 			
 			Concept c = new Concept();
 			c.setUuid("d803e973-1010-4415-8659-c011dec707c0");
-			c.setFullySpecifiedName(new ConceptName("CONCEPT_REMOVE_MEMBERS", Locale.ENGLISH));
+			c.setFullySpecifiedName(new ConceptName("CONCEPT_REMOVE_MEMBERS", localeEn));
 			c.setConceptClass(cs.getConceptClassByName("Misc"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c.addSetMember(cm1);
@@ -104,7 +108,7 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 		{
 			ConceptNumeric cn = new ConceptNumeric();
 			cn.setUuid("4280217a-eb93-4e2f-9684-28bed4690e7b");
-			cn.setFullySpecifiedName(new ConceptName("CN_2_EDIT", Locale.ENGLISH));
+			cn.setFullySpecifiedName(new ConceptName("CN_2_EDIT", localeEn));
 			cn.setConceptClass(cs.getConceptClassByName("Misc"));
 			cn.setDatatype(cs.getConceptDatatypeByName("Numeric"));
 			cn.setLowNormal(44.8);
@@ -116,11 +120,30 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 		{
 			ConceptComplex cc = new ConceptComplex();
 			cc.setUuid("b0b15817-79d6-4c33-b7e9-bfa079d46f5f");
-			cc.setFullySpecifiedName(new ConceptName("CC_2_EDIT", Locale.ENGLISH));
+			cc.setFullySpecifiedName(new ConceptName("CC_2_EDIT", localeEn));
 			cc.setConceptClass(cs.getConceptClassByName("Misc"));
 			cc.setDatatype(cs.getConceptDatatypeByName("Complex"));
 			cc.setHandler("TextHandler");
 			cs.saveConcept(cc);
+		}
+		
+		// Concepts to be fetched and edited by FSN
+		{
+			Concept c = new Concept();
+			c.setFullySpecifiedName(new ConceptName("CONCEPT_FETCH_BY_FSN", localeEn));
+			c.setShortName(new ConceptName("Old short name", localeEn));
+			c.setConceptClass(cs.getConceptClassByName("Misc"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			cs.saveConcept(c);
+		}
+		{
+			Concept c = new Concept();
+			c.setFullySpecifiedName(new ConceptName("គំនិត_ដោយ_FSN", localeKm));
+			//			c.setShortName(new ConceptName("ឈ្មោះខ្លីចាស់",  localeKm));
+			c.setShortName(new ConceptName("old km short name", localeKm));
+			c.setConceptClass(cs.getConceptClassByName("Misc"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			cs.saveConcept(c);
 		}
 	}
 	
@@ -130,8 +153,6 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 		
 		// Setup
 		Concept c = null;
-		Locale localeEn = Locale.ENGLISH;
-		Locale localeKm = new Locale("km", "KH");
 		{
 			c = cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0");
 			Assert.assertEquals(2, c.getSetMembers().size());
@@ -314,6 +335,22 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 			
 			// Concept with missing complex data handler should not have been created
 			Assert.assertNull(cs.getConceptByName("CN_3_ERROR"));
+		}
+		
+		// Verif. fetching and editing by FSN
+		Context.setLocale(localeEn);
+		{
+			// Verif mappings are added
+			c = cs.getConceptByName("CONCEPT_FETCH_BY_FSN");
+			Assert.assertNotNull(c);
+			Assert.assertEquals("New short name", c.getShortNameInLocale(localeEn).toString());
+		}
+		Context.setLocale(localeKm);
+		{
+			// Verif mappings are added
+			c = cs.getConceptByName("គំនិត_ដោយ_FSN");
+			Assert.assertNotNull(c);
+			Assert.assertEquals("ឈ្មោះខ្លីថ្មី", c.getShortNameInLocale(localeKm).toString());
 		}
 	}
 }

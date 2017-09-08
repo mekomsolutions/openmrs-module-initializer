@@ -9,6 +9,7 @@ import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.util.CollectionUtils;
@@ -35,6 +36,23 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, Concept
 	protected Concept bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = getUuid(line.asLine());
 		Concept concept = service.getConceptByUuid(uuid);
+		
+		if (StringUtils.isEmpty(uuid) && concept == null) {
+			Locale currentLocale = Context.getLocale();
+			LocalizedHeader lh = getLocalizedHeader(HEADER_FSNAME);
+			for (Locale nameLocale : lh.getLocales()) {
+				String name = line.get(lh.getI18nHeader(nameLocale));
+				if (!StringUtils.isEmpty(name)) {
+					Context.setLocale(nameLocale);
+					concept = service.getConceptByName(name);
+					if (concept != null) {
+						break;
+					}
+				}
+			}
+			Context.setLocale(currentLocale);
+		}
+		
 		if (concept == null) {
 			concept = new Concept();
 			if (!StringUtils.isEmpty(uuid)) {
