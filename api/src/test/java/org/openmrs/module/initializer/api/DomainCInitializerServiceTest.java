@@ -29,6 +29,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.api.impl.Utils;
 import org.openmrs.test.Verifies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -79,6 +80,18 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 			c.setConceptClass(cs.getConceptClassByName("Misc"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			cs.saveConcept(c);
+		}
+		
+		// A concept with a mapping to be retired via CSV
+		{
+			Assert.assertNull(cs.getConceptByMapping("foo12bar", "Cambodia"));
+			Concept c = new Concept();
+			c.setFullySpecifiedName(new ConceptName("CONCEPT_WITH_MAPPING_TO_RETIRE", localeEn));
+			c.setConceptClass(cs.getConceptClassByName("Misc"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			c.addConceptMapping((new Utils.ConceptMappingWrapper("Cambodia:foo12bar", cs)).getConceptMapping());
+			cs.saveConcept(c);
+			Assert.assertNotNull(cs.getConceptByMapping("foo12bar", "Cambodia"));
 		}
 		
 		// A concept with members to be removed via CSV
@@ -283,6 +296,11 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 			
 			// Verif not saved with missing mapping(s)
 			Assert.assertNull(cs.getConceptByName("Unexisting mapping"));
+			
+			// Verif the mapping used with a now retired concept is the mapping of a new concept
+			c = cs.getConceptByMapping("foo12bar", "Cambodia");
+			Assert.assertNotNull(c);
+			Assert.assertEquals("NEW_CONCEPT_REUSING_MAPPING", c.getFullySpecifiedName(localeEn).getName());
 		}
 		
 		// Verif. 'numerics' CSV loading

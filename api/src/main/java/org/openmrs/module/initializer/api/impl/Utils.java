@@ -17,6 +17,8 @@ public class Utils {
 	 */
 	public static class ConceptMappingWrapper {
 		
+		private ConceptService cs;
+		
 		private ConceptSource source;
 		
 		private String code;
@@ -24,6 +26,7 @@ public class Utils {
 		private ConceptMapType mapType;
 		
 		public ConceptMappingWrapper(String mappingStr, ConceptMapType mapType, ConceptService cs) {
+			this.cs = cs;
 			String[] parts = mappingStr.split(":");
 			if (parts.length == 2) {
 				source = cs.getConceptSourceByName(parts[0].trim());
@@ -32,8 +35,15 @@ public class Utils {
 			this.mapType = mapType;
 		}
 		
+		public ConceptMappingWrapper(String mappingStr, ConceptService cs) {
+			this(mappingStr, cs.getConceptMapTypeByUuid(ConceptMapType.SAME_AS_MAP_TYPE_UUID), cs);
+		}
+		
 		public ConceptMap getConceptMapping() {
-			ConceptReferenceTerm refTerm = new ConceptReferenceTerm(source, code, "");
+			ConceptReferenceTerm refTerm = cs.getConceptReferenceTermByCode(code, source);
+			if (refTerm == null) {
+				refTerm = new ConceptReferenceTerm(source, code, "");
+			}
 			return new ConceptMap(refTerm, mapType);
 		}
 		
