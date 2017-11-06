@@ -22,6 +22,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openmrs.GlobalProperty;
 import org.openmrs.PersonAddress;
@@ -41,6 +42,7 @@ import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.Verifies;
 import org.openmrs.util.OpenmrsConstants;
 
+@Ignore
 public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContextSensitiveTest {
 	
 	protected static final String MODULES_TO_LOAD = "org/openmrs/module/addresshierarchy/include/"

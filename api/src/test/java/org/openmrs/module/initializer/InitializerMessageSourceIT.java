@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.test.Verifies;
 
 public class InitializerMessageSourceIT extends DomainBaseModuleContextSensitiveTest {
 	
@@ -33,7 +32,6 @@ public class InitializerMessageSourceIT extends DomainBaseModuleContextSensitive
 	}
 	
 	@Test
-	@Verifies(value = "should load i18n messages from the message properties domain.", method = "refreshCache()")
 	public void refreshCache_shouldLoadMessageProperties() {
 		
 		// Setup

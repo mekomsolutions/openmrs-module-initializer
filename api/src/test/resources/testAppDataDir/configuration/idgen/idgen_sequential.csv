@@ -1,0 +1,5 @@
+Uuid,Void/Retire,Identifier type,Name,Description,Prefix,Suffix,First identifier base,Min length,Max length,Base character set,_version:1,_order:6000
+1af1422c-8c65-438d-9770-cbb723821bc8,,PATIENTIDENTIFIERTYPE_1_OPENMRS_ID,Test sequential source #1,Test sequential source description #1,,,001000,7,7,0123456789,,
+c1d8a345-3f10-11e4-adec-0800271c1b75,TRUE,,,,,,,,,,,
+c1d90956-3f10-11e4-adec-0800271c1b75,TRUE,,,,,,,,,,,
+ef35fb58-6618-411a-a331-bff960a29d40,,PATIENTIDENTIFIERTYPE_1_OPENMRS_ID,RENAMED Identifier Pool,RENAMED Identifier Pool description,,,,,,,,

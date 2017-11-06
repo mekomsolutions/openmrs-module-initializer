@@ -15,7 +15,7 @@
 	<!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
 	<!-- /Base Module Properties -->
 	
-	<require_version>1.11.8</require_version>
+	<require_version>${openMRSVersion}</require_version>
 	
 	<!-- Extensions -->
 	<extension>

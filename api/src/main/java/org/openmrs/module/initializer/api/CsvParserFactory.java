@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.openmrs.api.context.Context;
+import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.c.ConceptsCsvParser;
 import org.openmrs.module.initializer.api.drugs.DrugsCsvParser;
+import org.openmrs.module.initializer.api.idgen.IdentifierSourceCsvParser;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesCsvParser;
 
 /**
@@ -23,6 +25,10 @@ public class CsvParserFactory {
 		
 		if (InitializerConstants.DOMAIN_DRUGS.equals(domain)) {
 			return new DrugsCsvParser(is, Context.getConceptService());
+		}
+		
+		if (InitializerConstants.DOMAIN_IDGEN.equals(domain)) {
+			return new IdentifierSourceCsvParser(is, Context.getService(IdentifierSourceService.class));
 		}
 		
 		if (InitializerConstants.DOMAIN_PAT.equals(domain)) {

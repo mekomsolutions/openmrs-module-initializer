@@ -3,12 +3,8 @@ package org.openmrs.module.initializer.api;
 import java.io.InputStream;
 
 import org.openmrs.GlobalProperty;
-import org.openmrs.PatientIdentifierType;
 import org.openmrs.module.idgen.IdentifierSource;
-import org.openmrs.module.idgen.SequentialIdentifierGenerator;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
-import org.openmrs.module.initializer.api.idgen.IdgenConfig;
-import org.openmrs.module.initializer.api.idgen.InitializerIdentifierSource;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -87,22 +83,5 @@ public class InitializerSerializer extends XStream {
 			}
 			return src;
 		}
-	}
-	
-	/**
-	 * @return Deserializer for extensions of {@link IdgenConfig}
-	 */
-	public static XStream getIdgenConfigSerializer() {
-		final XStream xs = new InitializerSerializer();
-		xs.registerConverter(new IdentifierSourceConverter(xs.getMapper(), xs.getReflectionProvider()));
-		xs.alias("config", IdgenConfig.class);
-		xs.alias("identifierSource", InitializerIdentifierSource.class);
-		xs.alias("sequentialIdentifierGenerator", SequentialIdentifierGenerator.class);
-		xs.alias("identifierType", PatientIdentifierType.class);
-		return xs;
-	}
-	
-	public static IdgenConfig getIdgenConfig(InputStream is) {
-		return (IdgenConfig) getIdgenConfigSerializer().fromXML(is);
 	}
 }

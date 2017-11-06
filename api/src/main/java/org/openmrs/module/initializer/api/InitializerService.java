@@ -52,9 +52,9 @@ public interface InitializerService extends OpenmrsService {
 	void loadGlobalProperties();
 	
 	/**
-	 * Configure the idgen related instances (identifier sources... etc).
+	 * Loads the identifier sources from their domain config. dir, and saves them.
 	 */
-	void configureIdgen();
+	void loadIdentifierSources();
 	
 	/**
 	 * Import the metadata sharing packages from their domain config. dir.

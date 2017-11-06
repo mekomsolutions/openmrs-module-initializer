@@ -25,18 +25,14 @@ import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Concept;
 import org.openmrs.GlobalProperty;
-import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.idgen.IdentifierSource;
-import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerSerializer;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
-import org.openmrs.module.initializer.api.idgen.IdgenConfig;
 import org.openmrs.module.metadatasharing.ImportConfig;
 import org.openmrs.module.metadatasharing.ImportType;
 import org.openmrs.module.metadatasharing.MetadataSharing;
@@ -112,88 +108,9 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		Context.getAdministrationService().saveGlobalProperties(globalProperties);
 	}
 	
-	/*
-	 * Replaces the deserialized identifier type instance with a complete instance fetched from database
-	 */
-	protected IdentifierSource setPatientIdentifierType(IdentifierSource idSource) {
-		
-		PatientIdentifierType idType = idSource.getIdentifierType();
-		
-		if (idType == null || StringUtils.isEmpty(idType.getName())) {
-			log.error("The identifier type name is empty for an identifier source specified in the configuration XML.");
-			log.error("Here are the identifier source name and uuid: name='" + idSource.getName() + "', uuid="
-			        + idSource.getUuid());
-			return idSource;
-		}
-		
-		idType = Context.getPatientService().getPatientIdentifierTypeByName(idType.getName());
-		
-		if (idType == null || idType.getId() == null) {
-			log.error("An identifier source is pointing to a patient identifier type that could not be fetched.");
-			log.error("Here are the identifier source name and uuid: name='" + idSource.getName() + "', uuid="
-			        + idSource.getUuid());
-			return idSource;
-		}
-		
-		idSource.setIdentifierType(idType);
-		return idSource;
-	}
-	
-	/*
-	 * Edits identifier sources with provided uuids.
-	 * Create identifier sources with no provided uuids.
-	 */
-	protected void processIdentifierSource(IdentifierSource src) {
-		
-		IdentifierSourceService idgenService = Context.getService(IdentifierSourceService.class);
-		
-		String uuid = src.getUuid();
-		if (uuid != null) { // marked for editing/modification (else for creation)
-			IdentifierSource oldSrc = idgenService.getIdentifierSourceByUuid(uuid);
-			if (oldSrc == null) {
-				log.warn("The identifier source '" + uuid + "' is configured for modifications but does not exist.");
-				return;
-			}
-			Boolean retired = src.isRetired();
-			src = oldSrc;
-			src.setRetired(retired);
-		}
-		
-		idgenService.saveIdentifierSource(setPatientIdentifierType(src));
-	}
-	
 	@Override
-	public void configureIdgen() {
-		
-		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(),
-		        InitializerConstants.DOMAIN_IDGEN);
-		
-		for (File file : util.getFiles("xml")) { // processing all the XML files inside the domain
-		
-			String fileName = util.getFileName(file.getPath());
-			String checksum = util.getChecksumIfChanged(fileName);
-			if (checksum.isEmpty()) {
-				continue;
-			}
-			
-			IdgenConfig config = new IdgenConfig();
-			InputStream is = null;
-			try {
-				is = new FileInputStream(file);
-				config = InitializerSerializer.getIdgenConfig(is);
-				for (IdentifierSource src : config.getIdentifierSources()) {
-					processIdentifierSource(src);
-				}
-				util.writeChecksum(fileName, checksum);
-				log.info("The following Idgen config file was succesfully processed: " + fileName);
-			}
-			catch (Exception e) {
-				log.error("Could not load the Idgen config from: " + file.getPath(), e);
-			}
-			finally {
-				IOUtils.closeQuietly(is);
-			}
-		}
+	public void loadIdentifierSources() {
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_IDGEN);
 	}
 	
 	@Override

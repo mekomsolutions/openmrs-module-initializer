@@ -9,8 +9,6 @@
  */
 package org.openmrs.module.initializer.api;
 
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +21,6 @@ import org.openmrs.module.idgen.SequentialIdentifierGenerator;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
-import org.openmrs.test.Verifies;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DomainIdgenInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
@@ -40,49 +37,75 @@ public class DomainIdgenInitializerServiceTest extends DomainBaseModuleContextSe
 	public void setup() {
 		
 		PatientIdentifierType type = Context.getPatientService().getPatientIdentifierType(1);
-		
-		IdentifierPool src1 = new IdentifierPool();
-		src1.setName("Test identifier pool source");
-		src1.setUuid("c1d8a345-3f10-11e4-adec-0800271c1b75");
-		src1.setRetired(false);
-		src1.setIdentifierType(type);
-		idgenService.saveIdentifierSource(src1);
-		
-		RemoteIdentifierSource src2 = new RemoteIdentifierSource();
-		src2.setName("Test remote identifier source");
-		src2.setUuid("c1d90956-3f10-11e4-adec-0800271c1b75");
-		src2.setRetired(false);
-		src2.setIdentifierType(type);
-		src2.setUrl("http://example.com");
-		idgenService.saveIdentifierSource(src2);
-		
 		type = new PatientIdentifierType();
 		type.setName("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID");
 		Context.getPatientService().savePatientIdentifierType(type);
+		
+		{
+			IdentifierPool src = new IdentifierPool();
+			src.setName("Test identifier pool source");
+			src.setUuid("c1d8a345-3f10-11e4-adec-0800271c1b75");
+			src.setRetired(false);
+			src.setIdentifierType(type);
+			idgenService.saveIdentifierSource(src);
+		}
+		
+		{
+			RemoteIdentifierSource src = new RemoteIdentifierSource();
+			src.setName("Test remote identifier source");
+			src.setUuid("c1d90956-3f10-11e4-adec-0800271c1b75");
+			src.setRetired(false);
+			src.setIdentifierType(type);
+			src.setUrl("http://example.com");
+			idgenService.saveIdentifierSource(src);
+		}
+		
+		{
+			IdentifierPool src = new IdentifierPool();
+			src.setName("Test identifier pool source 2");
+			src.setUuid("ef35fb58-6618-411a-a331-bff960a29d40");
+			src.setRetired(false);
+			src.setIdentifierType(type);
+			idgenService.saveIdentifierSource(src);
+		}
 	}
 	
 	@Test
-	@Verifies(value = "should save modifications on exisiting identifier sources and create new identifier sources", method = "configureIdgen()")
-	public void configureIdgen_shouldModifyAndCreateIdentifierSources() {
+	public void loadIdentifierSources_shouldModifyAndCreateIdentifierSources() {
 		
 		// Replay
-		getService().configureIdgen();
+		getService().loadIdentifierSources();
 		
-		// Verif sources marked for modification
+		// Verif sources marked for retirement
 		Assert.assertTrue(idgenService.getIdentifierSourceByUuid("c1d8a345-3f10-11e4-adec-0800271c1b75").isRetired());
 		Assert.assertTrue(idgenService.getIdentifierSourceByUuid("c1d90956-3f10-11e4-adec-0800271c1b75").isRetired());
 		
 		// Verif the source marked for creation
-		List<IdentifierSource> sources = idgenService.getAllIdentifierSources(false);
-		Assert.assertEquals(1, sources.size());
-		SequentialIdentifierGenerator src = (SequentialIdentifierGenerator) sources.get(0);
+		{
+			IdentifierSource source = idgenService.getIdentifierSourceByUuid("1af1422c-8c65-438d-9770-cbb723821bc8");
+			Assert.assertNotNull(source);
+			Assert.assertTrue(source instanceof SequentialIdentifierGenerator);
+			SequentialIdentifierGenerator src = (SequentialIdentifierGenerator) source;
+			
+			Assert.assertEquals("Test sequential source #1", src.getName());
+			Assert.assertEquals("Test sequential source description #1", src.getDescription());
+			Assert.assertEquals("001000", src.getFirstIdentifierBase());
+			Assert.assertTrue(7 == src.getMinLength());
+			Assert.assertTrue(7 == src.getMaxLength());
+			Assert.assertEquals("0123456789", src.getBaseCharacterSet());
+			Assert.assertFalse(src.isRetired());
+		}
 		
-		Assert.assertEquals("Test sequential source name", src.getName());
-		Assert.assertEquals("Test sequential source description", src.getDescription());
-		Assert.assertEquals("001000", src.getFirstIdentifierBase());
-		Assert.assertTrue(7 == src.getMinLength());
-		Assert.assertTrue(7 == src.getMaxLength());
-		Assert.assertEquals("0123456789", src.getBaseCharacterSet());
-		Assert.assertFalse(src.isRetired()); // not <retired/> tag means retired=false
+		// Verif the source marked for edition
+		{
+			IdentifierSource source = idgenService.getIdentifierSourceByUuid("ef35fb58-6618-411a-a331-bff960a29d40");
+			Assert.assertNotNull(source);
+			Assert.assertTrue(source instanceof IdentifierPool);
+			IdentifierPool src = (IdentifierPool) source;
+			
+			Assert.assertEquals("RENAMED Identifier Pool", src.getName());
+			Assert.assertEquals("RENAMED Identifier Pool description", src.getDescription());
+			Assert.assertFalse(src.isRetired());
+		}
 	}
 }
