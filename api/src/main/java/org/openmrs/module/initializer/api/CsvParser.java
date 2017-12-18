@@ -55,8 +55,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	}
 	
 	/*
-	 * The implementation should be delegated
-	 * to the line processor in the subclass 
+	 * The implementation should be delegated to the line processor in the subclass
 	 */
 	protected T createInstance(String[] line) throws APIException {
 		
@@ -67,9 +66,9 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		// Boostrapping
 		P bootstrapper = getAnyLineProcessor();
 		if (bootstrapper == null) { // no processors available
-			log.warn("No line processors have been set, you should either overload '"
-			        + getClass().getEnclosingMethod().getName() + "' directly or provide lines processors to this class: "
-			        + getClass().getCanonicalName());
+			log.warn(
+			    "No line processors have been set, you should either overload '" + getClass().getEnclosingMethod().getName()
+			            + "' directly or provide lines processors to this class: " + getClass().getCanonicalName());
 			return null;
 		}
 		
@@ -101,8 +100,8 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	abstract protected boolean isVoidedOrRetired(T instance);
 	
 	/*
-	 * Parsers must set their line processor implementation
-	 * based on the version indicated in the CSV metadata headers.
+	 * Parsers must set their line processor implementation based on the version
+	 * indicated in the CSV metadata headers.
 	 * 
 	 * You should add the line processors in the order that you want them to follow.
 	 */
@@ -170,9 +169,9 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 				}
 			}
 			catch (Exception e) {
-				log.error(
-				    "An OpenMRS object could not be constructed or saved from the following CSV line: "
-				            + Arrays.toString(line), e);
+				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: "
+				        + Arrays.toString(line),
+				    e);
 			}
 		} while (line != null);
 		

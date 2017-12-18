@@ -13,8 +13,8 @@ public class InitializerServiceImplTest {
 		
 		InitializerServiceImpl iniz = new InitializerServiceImpl();
 		
-		InputStream is = getClass().getClassLoader().getResourceAsStream(
-		    "org/openmrs/module/initializer/include/jsonKeyValues.json");
+		InputStream is = getClass().getClassLoader()
+		        .getResourceAsStream("org/openmrs/module/initializer/include/jsonKeyValues.json");
 		iniz.addKeyValues(is);
 		
 		Assert.assertEquals("value1", iniz.getValueFromKey("key1"));

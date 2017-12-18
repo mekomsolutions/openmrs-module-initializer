@@ -80,7 +80,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		
 		final List<GlobalProperty> globalProperties = new ArrayList<GlobalProperty>();
 		for (File file : util.getFiles("xml")) { // processing all the XML files inside the domain
-		
+			
 			String fileName = util.getFileName(file.getPath());
 			String checksum = util.getChecksumIfChanged(fileName);
 			if (checksum.isEmpty()) {
@@ -125,7 +125,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		importConfig.setExactMatch(ImportType.PREFER_THEIRS);
 		importer.setImportConfig(importConfig);
 		for (File file : util.getFiles("zip")) { // processing all the zip files inside the domain
-		
+			
 			String fileName = util.getFileName(file.getPath());
 			String checksum = util.getChecksumIfChanged(fileName);
 			if (checksum.isEmpty()) {
@@ -161,7 +161,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		        InitializerConstants.DOMAIN_JKV);
 		
 		for (File file : util.getFiles("json")) { // processing all the JSON files inside the domain
-		
+			
 			String fileName = util.getFileName(file.getPath());
 			
 			InputStream is = null;

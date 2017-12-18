@@ -24,8 +24,8 @@ public class InitializerConstants {
 	public static final String DIR_NAME_CHECKSUM = "configuration_checksums";
 	
 	/*
-	 * Domains
-	 * The lower-cased suffixes should be used as packages suffixes, example: 'org.openmrs.module.initializer.api.gp' 
+	 * Domains The lower-cased suffixes should be used as packages suffixes,
+	 * example: 'org.openmrs.module.initializer.api.gp'
 	 */
 	public static final String DOMAIN_JKV = "jsonkeyvalues";
 	

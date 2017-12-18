@@ -13,8 +13,8 @@ public class GlobalPropertiesConfigDeserializerTest {
 	@Verifies(value = "should deserialize config", method = "fromXML(InputStream input)")
 	public void shouldDeserializeConfig() {
 		
-		GlobalPropertiesConfig config = InitializerSerializer.getGlobalPropertiesConfig(getClass().getClassLoader()
-		        .getResourceAsStream("org/openmrs/module/initializer/include/gp.xml"));
+		GlobalPropertiesConfig config = InitializerSerializer.getGlobalPropertiesConfig(
+		    getClass().getClassLoader().getResourceAsStream("org/openmrs/module/initializer/include/gp.xml"));
 		
 		Assert.assertEquals("addresshierarchy.i18nSupport", config.getGlobalProperties().get(0).getProperty());
 		Assert.assertEquals("true", (String) config.getGlobalProperties().get(0).getPropertyValue());
@@ -39,7 +39,7 @@ public class GlobalPropertiesConfigDeserializerTest {
 	@Verifies(value = "should throw XStream exception on invalid config", method = "fromXML(InputStream input)")
 	public void shouldThrowException() {
 		
-		InitializerSerializer.getGlobalPropertiesConfig(getClass().getClassLoader().getResourceAsStream(
-		    "org/openmrs/module/initializer/include/gp_error.xml"));
+		InitializerSerializer.getGlobalPropertiesConfig(
+		    getClass().getClassLoader().getResourceAsStream("org/openmrs/module/initializer/include/gp_error.xml"));
 	}
 }

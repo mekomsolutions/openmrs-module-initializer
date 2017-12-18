@@ -19,8 +19,8 @@ public class SequentialIdentifierGeneratorLineProcessor extends BaseIdentifierSo
 			return instance;
 		}
 		
-		((SequentialIdentifierGenerator) instance.getIdentifierSource()).setFirstIdentifierBase(line
-		        .get(HEADER_FIRST_ID_BASE));
+		((SequentialIdentifierGenerator) instance.getIdentifierSource())
+		        .setFirstIdentifierBase(line.get(HEADER_FIRST_ID_BASE));
 		((SequentialIdentifierGenerator) instance.getIdentifierSource()).setPrefix(line.getString(HEADER_PREFIX, ""));
 		((SequentialIdentifierGenerator) instance.getIdentifierSource()).setSuffix(line.getString(HEADER_SUFFIX, ""));
 		((SequentialIdentifierGenerator) instance.getIdentifierSource()).setMinLength(line.getInt(HEADER_MIN_LENGTH));

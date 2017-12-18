@@ -30,8 +30,8 @@ public class NestedConceptLineProcessorTest {
 	public void setup() {
 		
 		/*
-		 * fetching a concept by mapping returns a concept with the mapping as uuid
-		 * this allows to verifies that the correct children are indeed found in collections
+		 * fetching a concept by mapping returns a concept with the mapping as uuid this
+		 * allows to verifies that the correct children are indeed found in collections
 		 */
 		when(cs.getConceptByMapping(any(String.class), any(String.class))).thenAnswer(new Answer<Concept>() {
 			

@@ -97,8 +97,8 @@ public class PersonAttributeTypeLineProcessor extends BaseLineProcessor<PersonAt
 				Class.forName(formatClass);
 			}
 			catch (ClassNotFoundException e) {
-				throw new IllegalArgumentException(
-				        "'" + formatClass + "' does not represent a valid Java or OpenMRS class.", e);
+				throw new IllegalArgumentException("'" + formatClass + "' does not represent a valid Java or OpenMRS class.",
+				        e);
 			}
 			pat.setFormat(formatClass);
 		}

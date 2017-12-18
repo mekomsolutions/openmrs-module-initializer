@@ -33,14 +33,14 @@ public class ConfigDirUtil {
 	protected static Log log = LogFactory.getLog(ConfigDirUtil.class);
 	
 	/*
-	 * The absolute path to the configuration domain subdirectory.
-	 * Eg. "../configuration/addresshierarchy"
+	 * The absolute path to the configuration domain subdirectory. Eg.
+	 * "../configuration/addresshierarchy"
 	 */
 	protected String domainDirPath = "";
 	
 	/*
-	 * The absolute path to the configuration domain checksum subdirectory.
-	 * Eg. "../configuration_checksums/addresshierarchy"
+	 * The absolute path to the configuration domain checksum subdirectory. Eg.
+	 * "../configuration_checksums/addresshierarchy"
 	 */
 	protected String checksumDirPath = "";
 	
@@ -70,6 +70,7 @@ public class ConfigDirUtil {
 	
 	/*
 	 * To filter files of a certain extension only.
+	 * 
 	 * @param extension The file extension to filter for.
 	 */
 	protected static FilenameFilter getExtensionFilenameFilter(final String extension) {
@@ -129,8 +130,8 @@ public class ConfigDirUtil {
 	}
 	
 	/**
-	 * Returns the checksum of a config file if the file has been updated since the last checksum
-	 * was saved.
+	 * Returns the checksum of a config file if the file has been updated since the last checksum was
+	 * saved.
 	 * 
 	 * @param domainDirPath The absolute path to the domain directory, eg.
 	 *            "../configuration/addresshierarchy"
@@ -183,8 +184,7 @@ public class ConfigDirUtil {
 	 * Fetches the config. file from its relative path inside the configuration folder.
 	 * 
 	 * @param dirPath The absolute path to the containing directory, eg.
-	 *            "../configuration/addresshierarchy" or
-	 *            "../configuration_checksums/addresshierarchy"
+	 *            "../configuration/addresshierarchy" or "../configuration_checksums/addresshierarchy"
 	 * @param fileName The file name, eg. "config.xml" or "config.checksum"
 	 * @return The {@link File} instance.
 	 */
@@ -208,7 +208,7 @@ public class ConfigDirUtil {
 	 * @return The checksum file name, eg. "config.checksum"
 	 */
 	public static String toChecksumFileName(String configFileName) {
-		// addressConfiguration.xml -> addressConfiguration.checksum 
+		// addressConfiguration.xml -> addressConfiguration.checksum
 		return FilenameUtils.getBaseName(configFileName) + "." + CHECKSUM_FILE_EXT;
 	}
 	
@@ -421,7 +421,8 @@ public class ConfigDirUtil {
 				CsvParserFactory.create(is, domain).saveAll();
 				
 				util.writeChecksum(file.getFile().getName(), file.getChecksum());
-				log.info("The following '" + domain + "' config file was succesfully processed: " + file.getFile().getName());
+				log.info(
+				    "The following '" + domain + "' config file was succesfully processed: " + file.getFile().getName());
 			}
 			catch (IOException e) {
 				log.error("Could not parse the '" + domain + "' config file: " + file.getFile().getPath(), e);

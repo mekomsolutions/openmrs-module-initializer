@@ -37,8 +37,8 @@ public class DomainMDSInitializerServiceTest extends DomainBaseModuleContextSens
 		getService().importMetadataSharingPackages();
 		
 		// Verif
-		PatientIdentifierType patientIdType = Context.getPatientService().getPatientIdentifierTypeByUuid(
-		    "0d2ac572-8de3-46c8-9976-1f78899c599f");
+		PatientIdentifierType patientIdType = Context.getPatientService()
+		        .getPatientIdentifierTypeByUuid("0d2ac572-8de3-46c8-9976-1f78899c599f");
 		Assert.assertEquals("National ID card number", patientIdType.getName());
 		
 		personAttType = Context.getPersonService().getPersonAttributeTypeByUuid("b3b6d540-a32e-44c7-91b3-292d97667518");
@@ -48,9 +48,11 @@ public class DomainMDSInitializerServiceTest extends DomainBaseModuleContextSens
 		Assert.assertEquals("education", personAttType.getName());
 		Assert.assertTrue(personAttType.isRetired());
 		
-		//		RelationshipType relType = Context.getPersonService().getRelationshipTypeByUuid(
-		//		    "2a5f4ff4-a179-4b8a-aa4c-40f71956ebbc");
-		//		Assert.assertEquals("Provider supervisor to provider supervisee relationship", relType.getDescription());
-		//		Assert.assertTrue(relType.isRetired());
+		// RelationshipType relType =
+		// Context.getPersonService().getRelationshipTypeByUuid(
+		// "2a5f4ff4-a179-4b8a-aa4c-40f71956ebbc");
+		// Assert.assertEquals("Provider supervisor to provider supervisee
+		// relationship", relType.getDescription());
+		// Assert.assertTrue(relType.isRetired());
 	}
 }

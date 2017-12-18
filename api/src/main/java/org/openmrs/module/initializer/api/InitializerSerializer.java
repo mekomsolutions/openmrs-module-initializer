@@ -30,13 +30,13 @@ public class InitializerSerializer extends XStream {
 	
 	@Override
 	protected MapperWrapper wrapMapper(MapperWrapper next) {
-		return new MapperWrapper(
-		                         next) {
+		return new MapperWrapper(next) {
 			
 			@Override
 			public boolean shouldSerializeMember(Class definedIn, String fieldName) {
 				if (definedIn == Object.class) {
-					//This is not compatible with implicit collections where item name is not defined
+					// This is not compatible with implicit collections where item name is not
+					// defined
 					return false;
 				} else {
 					return super.shouldSerializeMember(definedIn, fieldName);

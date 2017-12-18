@@ -152,7 +152,7 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 		{
 			Concept c = new Concept();
 			c.setFullySpecifiedName(new ConceptName("គំនិត_ដោយ_FSN", localeKm));
-			//			c.setShortName(new ConceptName("ឈ្មោះខ្លីចាស់",  localeKm));
+			// c.setShortName(new ConceptName("ឈ្មោះខ្លីចាស់", localeKm));
 			c.setShortName(new ConceptName("old km short name", localeKm));
 			c.setConceptClass(cs.getConceptClassByName("Misc"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
@@ -246,8 +246,8 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 		
 		// Verif 'nested' CSV loading
 		{
-			Set<String> nestedUuids = new HashSet<String>(Arrays.asList(new String[] {
-			        "8bc5043c-3221-11e7-93ae-92361f002671", "8bc506bc-3221-11e7-93ae-92361f002671" }));
+			Set<String> nestedUuids = new HashSet<String>(Arrays.asList(
+			    new String[] { "8bc5043c-3221-11e7-93ae-92361f002671", "8bc506bc-3221-11e7-93ae-92361f002671" }));
 			
 			// Verif question
 			c = cs.getConceptByUuid("8bc50946-3221-11e7-93ae-92361f002671");
@@ -297,7 +297,8 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 			// Verif not saved with missing mapping(s)
 			Assert.assertNull(cs.getConceptByName("Unexisting mapping"));
 			
-			// Verif the mapping used with a now retired concept is the mapping of a new concept
+			// Verif the mapping used with a now retired concept is the mapping of a new
+			// concept
 			c = cs.getConceptByMapping("foo12bar", "Cambodia");
 			Assert.assertNotNull(c);
 			Assert.assertEquals("NEW_CONCEPT_REUSING_MAPPING", c.getFullySpecifiedName(localeEn).getName());

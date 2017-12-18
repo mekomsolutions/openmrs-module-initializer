@@ -42,11 +42,9 @@ public class NestedConceptLineProcessor extends BaseConceptLineProcessor {
 			if (child != null) {
 				concepts.add(child);
 			} else {
-				throw new IllegalArgumentException(
-				        "The concept identified by '"
-				                + id
-				                + "' could not be found in database. The concept with the following nested list of concepts was not created/updated: ["
-				                + conceptList + "].");
+				throw new IllegalArgumentException("The concept identified by '" + id
+				        + "' could not be found in database. The concept with the following nested list of concepts was not created/updated: ["
+				        + conceptList + "].");
 			}
 		}
 		

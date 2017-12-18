@@ -34,11 +34,9 @@ public class MappingsConceptLineProcessor extends BaseConceptLineProcessor {
 			if (mappingWrapper.isValid()) {
 				conceptMappings.add(mappingWrapper.getConceptMapping());
 			} else {
-				throw new IllegalArgumentException(
-				        "The concept mapping identified by '"
-				                + mappingStr
-				                + "' could not be created. Does the concept source actually exist in the database?. The concept defined with the following mappings was not created/updated: ["
-				                + conceptList + "].");
+				throw new IllegalArgumentException("The concept mapping identified by '" + mappingStr
+				        + "' could not be created. Does the concept source actually exist in the database?. The concept defined with the following mappings was not created/updated: ["
+				        + conceptList + "].");
 			}
 		}
 		

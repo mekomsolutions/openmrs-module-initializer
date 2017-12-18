@@ -77,8 +77,8 @@ public class ConceptsCsvParserTest {
 	@Test
 	public void saveAll_shouldParseBaseCsv() throws IOException {
 		// setup
-		InputStream is = getClass().getClassLoader().getResourceAsStream(
-		    "testAppDataDir/configuration/concepts/concepts_base.csv");
+		InputStream is = getClass().getClassLoader()
+		        .getResourceAsStream("testAppDataDir/configuration/concepts/concepts_base.csv");
 		
 		// replay
 		List<Concept> concepts = new ConceptsCsvParser(is, cs).saveAll();
@@ -111,16 +111,16 @@ public class ConceptsCsvParserTest {
 	public void saveAll_shouldFailOnMisformattedCsv() throws IOException {
 		InputStream is = null;
 		
-		is = getClass().getClassLoader().getResourceAsStream(
-		    "org/openmrs/module/initializer/include/csv/concepts_no_uuid.csv");
+		is = getClass().getClassLoader()
+		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_uuid.csv");
 		Assert.assertTrue(new ConceptsCsvParser(is, cs).saveAll().isEmpty());
 		
-		is = getClass().getClassLoader().getResourceAsStream(
-		    "org/openmrs/module/initializer/include/csv/concepts_no_fsn.csv");
+		is = getClass().getClassLoader()
+		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_fsn.csv");
 		Assert.assertTrue(new ConceptsCsvParser(is, cs).saveAll().isEmpty());
 		
-		is = getClass().getClassLoader().getResourceAsStream(
-		    "org/openmrs/module/initializer/include/csv/concepts_no_shortname.csv");
+		is = getClass().getClassLoader()
+		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_shortname.csv");
 		Assert.assertTrue(new ConceptsCsvParser(is, cs).saveAll().isEmpty());
 	}
 }

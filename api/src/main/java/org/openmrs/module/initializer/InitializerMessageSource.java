@@ -55,7 +55,7 @@ import org.springframework.context.support.AbstractMessageSource;
 /**
  * Registers the custom message source service
  * 
- * @see https 
+ * @see https
  *      ://github.com/openmrs/openmrs-module-reporting/blob/037c74949f0e01f5a5cb04c5467912654d808765
  *      /api-tests/src/test/java/org/openmrs/module/reporting/test/CustomMessageSource.java
  * @see https://talk.openmrs.org/t/address-hierarchy-support-for-i18n/10415/19?u=mksd
@@ -210,8 +210,8 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 					messagePropertiesMap.put(file, LocaleUtils.toLocale(localeStr));
 				}
 				catch (IllegalArgumentException e) {
-					log.error(
-					    "The locale could not be implied from the message properties file provided: " + file.getPath(), e);
+					log.error("The locale could not be implied from the message properties file provided: " + file.getPath(),
+					    e);
 				}
 			}
 		}
@@ -319,7 +319,9 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		PresentationMessage pm = getPresentation(code, locale); // Check exact match
 		if (pm == null) {
 			if (locale.getVariant() != null) {
-				pm = getPresentation(code, new Locale(locale.getLanguage(), locale.getCountry())); // Try to match language and country
+				pm = getPresentation(code, new Locale(locale.getLanguage(), locale.getCountry())); // Try to match
+				                                                                                   // language and
+				                                                                                   // country
 				if (pm == null) {
 					pm = getPresentation(code, new Locale(locale.getLanguage())); // Try to match language only
 				}
@@ -332,8 +334,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	}
 	
 	/**
-	 * For some reason, this is needed to get the default text option in message tags working
-	 * properly
+	 * For some reason, this is needed to get the default text option in message tags working properly
 	 * 
 	 * @see AbstractMessageSource#getMessageInternal(String, Object[], Locale)
 	 */

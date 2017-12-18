@@ -53,8 +53,9 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	abstract protected T bootstrap(CsvLine line) throws IllegalArgumentException;
 	
 	/*
-	 * This implements how to fill T instances from any CSV line, ignoring the processing of the uuid.
-	 * This method can assume that the provided instance is never null as this is being taken care of upstream.
+	 * This implements how to fill T instances from any CSV line, ignoring the
+	 * processing of the uuid. This method can assume that the provided instance is
+	 * never null as this is being taken care of upstream.
 	 */
 	abstract protected T fill(T instance, CsvLine line) throws IllegalArgumentException;
 	
@@ -71,11 +72,11 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 			boolean validUuid = str.length() == 36 || "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAA".equals(str)
 			        || "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA".equals(str);
 			if (!validUuid) {
-				throw new IllegalArgumentException("'" + str
-				        + "' did not pass the soft check for being a valid OpenMRS UUID.");
+				throw new IllegalArgumentException(
+				        "'" + str + "' did not pass the soft check for being a valid OpenMRS UUID.");
 			}
 			
-			//str = UUID.fromString(str).toString();
+			// str = UUID.fromString(str).toString();
 		}
 		return str;
 	}
@@ -106,7 +107,8 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 		
 		private String header; // the localized header name, so just 'Name'
 		
-		private Set<Locale> locales = new HashSet<Locale>(); // the entries locale-i18n name for each locale, eg: en-Name:en
+		private Set<Locale> locales = new HashSet<Locale>(); // the entries locale-i18n name for each locale, eg:
+		                                                     // en-Name:en
 		
 		public LocalizedHeader(String header) {
 			this.header = header;
@@ -132,8 +134,8 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 			if (locales.contains(locale)) {
 				return i18nHeader;
 			} else {
-				throw new IllegalArgumentException("The header requested was never decorated with the specified locale: '"
-				        + i18nHeader + "'");
+				throw new IllegalArgumentException(
+				        "The header requested was never decorated with the specified locale: '" + i18nHeader + "'");
 			}
 		}
 		
@@ -167,8 +169,8 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 				LocalizedHeader l10nHeader = l10nHeaderMap.get(header);
 				Locale locale = LocaleUtils.toLocale(parts[1]);
 				if (l10nHeader.getLocales().contains(locale)) {
-					throw new IllegalArgumentException("The CSV header line cannot contains twice the same header: '"
-					        + i18nHeader + "'");
+					throw new IllegalArgumentException(
+					        "The CSV header line cannot contains twice the same header: '" + i18nHeader + "'");
 				}
 				l10nHeader.getLocales().add(locale);
 			}
@@ -209,8 +211,8 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 		int col = 0;
 		for (String header : headerLine) {
 			if (indexMap.containsKey(header.trim().toLowerCase())) {
-				throw new IllegalArgumentException("The CSV header line cannot contains twice the same header: '" + header
-				        + "'");
+				throw new IllegalArgumentException(
+				        "The CSV header line cannot contains twice the same header: '" + header + "'");
 			}
 			indexMap.put(header.trim().toLowerCase(), col);
 			col++;
@@ -260,8 +262,8 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 			}
 		}
 		if (count > 1) {
-			throw new IllegalArgumentException("The CSV header line contains multiple fields '" + fieldLhs + "': "
-			        + headerLine.toString());
+			throw new IllegalArgumentException(
+			        "The CSV header line contains multiple fields '" + fieldLhs + "': " + headerLine.toString());
 		}
 		return value;
 	}
@@ -281,8 +283,8 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	 * Returns the CSV order from the header line
 	 * 
 	 * @param headerLine
-	 * @return The order, eg. "100" out of "_order:100", or null if the order could not be parsed as
-	 *         an int.
+	 * @return The order, eg. "100" out of "_order:100", or null if the order could not be parsed as an
+	 *         int.
 	 * @throws IllegalArgumentException
 	 */
 	public static Integer getOrder(String[] headerLine) throws IllegalArgumentException {

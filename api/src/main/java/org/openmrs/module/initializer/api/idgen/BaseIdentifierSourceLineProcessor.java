@@ -88,8 +88,8 @@ public class BaseIdentifierSourceLineProcessor extends BaseLineProcessor<IdgenSo
 			return IdentifierSourceType.REMOTE;
 		}
 		
-		throw new IllegalArgumentException("No identifier source type could be guessed from the CSV line: '"
-		        + line.toString() + "'.");
+		throw new IllegalArgumentException(
+		        "No identifier source type could be guessed from the CSV line: '" + line.toString() + "'.");
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class BaseIdentifierSourceLineProcessor extends BaseLineProcessor<IdgenSo
 	protected IdentifierSource newIdentifierSource(CsvLine line) throws IllegalArgumentException {
 		
 		switch (getIdentifierSourceType(line)) {
-		
+			
 			case POOL:
 				return new IdentifierPool();
 			case REMOTE:
@@ -123,8 +123,8 @@ public class BaseIdentifierSourceLineProcessor extends BaseLineProcessor<IdgenSo
 			case SEQUENTIAL:
 				return new SequentialIdentifierGenerator();
 			default:
-				throw new IllegalArgumentException("No identifier source type could be guessed from the CSV line: '"
-				        + line.toString() + "'.");
+				throw new IllegalArgumentException(
+				        "No identifier source type could be guessed from the CSV line: '" + line.toString() + "'.");
 				
 		}
 	}
