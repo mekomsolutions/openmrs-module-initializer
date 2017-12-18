@@ -45,6 +45,34 @@
 		<exti18nVersion>1.0.0</exti18nVersion>
 	</properties>
 
+	<build>
+    <plugins>
+      <plugin>
+        <groupId>net.revelc.code.formatter</groupId>
+        <artifactId>formatter-maven-plugin</artifactId>
+        <version>2.7.1</version>
+        <configuration>
+          <directories>
+            <directory>.</directory>
+          </directories>
+          <configFile>../OpenMRSFormatter.xml</configFile>
+          <includes>
+            <include>**/*.java</include>
+            <include>**/*.json</include>
+          </includes>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>format</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
 	<repositories>
 		<repository>
 			<id>openmrs-repo</id>
