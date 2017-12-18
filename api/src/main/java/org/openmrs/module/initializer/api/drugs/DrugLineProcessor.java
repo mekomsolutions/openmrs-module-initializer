@@ -12,7 +12,7 @@ import org.openmrs.module.initializer.api.impl.Utils;
  * This is the first level line processor for concepts. It allows to parse and save concepts with
  * the minimal set of required fields.
  */
-public class BaseDrugLineProcessor extends BaseLineProcessor<Drug, ConceptService> {
+public class DrugLineProcessor extends BaseLineProcessor<Drug, ConceptService> {
 	
 	protected static String HEADER_STRENGTH = "strength";
 	
@@ -20,7 +20,7 @@ public class BaseDrugLineProcessor extends BaseLineProcessor<Drug, ConceptServic
 	
 	protected static String HEADER_CONCEPT_DRUG = "concept drug";
 	
-	public BaseDrugLineProcessor(String[] headerLine, ConceptService cs) {
+	public DrugLineProcessor(String[] headerLine, ConceptService cs) {
 		super(headerLine, cs);
 	}
 	

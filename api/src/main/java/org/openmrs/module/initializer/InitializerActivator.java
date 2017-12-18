@@ -36,6 +36,7 @@ public class InitializerActivator extends BaseModuleActivator {
 		iniz.loadPersonAttributeTypes();
 		iniz.loadIdentifierSources();
 		iniz.loadDrugs();
+		iniz.loadOrderFrequencies();
 		
 		log.info("Started " + InitializerConstants.MODULE_NAME);
 	}

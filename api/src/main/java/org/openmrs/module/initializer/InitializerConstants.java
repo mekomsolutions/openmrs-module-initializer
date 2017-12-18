@@ -35,6 +35,8 @@ public class InitializerConstants {
 	
 	public static final String DOMAIN_DRUGS = "drugs";
 	
+	public static final String DOMAIN_FREQ = "orderfrequencies";
+	
 	public static final String DOMAIN_GP = "globalproperties";
 	
 	public static final String DOMAIN_IDGEN = "idgen";
@@ -44,17 +46,4 @@ public class InitializerConstants {
 	public static final String DOMAIN_MDS = "metadatasharing";
 	
 	public static final String DOMAIN_PAT = "personattributetypes";
-	
-	/*
-	 * CSV line processors versions
-	 */
-	public static final String VERSION_C_BASE = "base"; // 'base' only
-	
-	public static final String VERSION_C_NESTED = "nested"; // 'base' + 'nested'
-	
-	public static final String VERSION_C_MAPPINGS = "mappings"; // 'base' + 'mappings'
-	
-	public static final String VERSION_C_NUMERICS = "numerics"; // 'base' + 'numerics'
-	
-	public static final String VERSION_C_NESTED_MAPPINGS = "nested_mappings"; // 'base' + 'nested' + 'mappings'
 }

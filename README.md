@@ -37,14 +37,15 @@ We suggest to go through the following before looking at specific import domains
 * [Conventions for CSV files](readme/csv_conventions.md)
 
 This is the list of currently supported domains in respect to their loading order:
+1. [Message properties key-values (.properties files)](readme/messageproperties.md)
+1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
 1. [Metadatasharing packages (ZIP files)](readme/mds.md)
 1. [Global properties (XML files)](readme/globalproperties.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Person attribute types (CSV files)](readme/pat.md)
 1. [Identifier sources (CSV files)](readme/idgen.md)
 1. [Drugs (CSV files)](readme/drugs.md)
-1. [Message properties key-values (.properties files)](readme/messageproperties.md)
-1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
+1. [Order Frequencies(CSV files)](readme/freqs.md)
 
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:
@@ -76,3 +77,4 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Exposes runtime key-values configuration parameters through JSON files in **configuration/jsonkeyvalues**.
 * Bulk creation and edition of person attribute types provided through CSV files in  **configuration/personattributetypes**.
 * Imports MDS packages provided as .zip files in **configuration/metadatasharing**.
+* Bulk creation and edition of order frequencies provided through CSV files in  **configuration/orderfrequencies**.

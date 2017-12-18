@@ -16,7 +16,7 @@ public class DrugsCsvParser extends CsvParser<Drug, ConceptService, BaseLineProc
 	
 	@Override
 	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(new BaseDrugLineProcessor(headerLine, service));
+		addLineProcessor(new DrugLineProcessor(headerLine, service));
 	}
 	
 	@Override

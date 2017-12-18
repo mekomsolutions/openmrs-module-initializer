@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.BaseLineProcessor.LocalizedHeader;
 
 public class BaseLineProcessorTest {
@@ -17,7 +16,7 @@ public class BaseLineProcessorTest {
 	@Test
 	public void getVersion_shouldReturnTheVersionRhs() {
 		
-		String version = BaseLineProcessor.VERSION_LHS + InitializerConstants.VERSION_C_BASE;
+		String version = BaseLineProcessor.VERSION_LHS + "1";
 		
 		Set<String> hl1 = new HashSet<String>();
 		hl1.add("Name");
@@ -29,8 +28,7 @@ public class BaseLineProcessorTest {
 		hl1.add("Mapping");
 		
 		// a regular header line
-		Assert.assertEquals(InitializerConstants.VERSION_C_BASE,
-		    BaseLineProcessor.getVersion(hl1.toArray(new String[hl1.size()])));
+		Assert.assertEquals("1", BaseLineProcessor.getVersion(hl1.toArray(new String[hl1.size()])));
 		
 		// the empty header line
 		String[] hl2 = new String[0];
@@ -70,7 +68,7 @@ public class BaseLineProcessorTest {
 	@Test
 	public void createIndexMap_shouldMapHeaderNames() {
 		
-		String version = BaseLineProcessor.VERSION_LHS + InitializerConstants.VERSION_C_BASE;
+		String version = BaseLineProcessor.VERSION_LHS + "1";
 		
 		List<String> hl1 = new ArrayList<String>();
 		hl1.add("Name");
@@ -110,7 +108,7 @@ public class BaseLineProcessorTest {
 	@Test
 	public void getLocalizedHeaders_shouldListLocalizedHeaders() {
 		
-		String version = BaseLineProcessor.VERSION_LHS + InitializerConstants.VERSION_C_BASE;
+		String version = BaseLineProcessor.VERSION_LHS + "1";
 		
 		List<String> hl1 = new ArrayList<String>();
 		hl1.add("Name:en");
