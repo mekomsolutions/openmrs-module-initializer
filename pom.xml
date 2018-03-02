@@ -10,7 +10,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>initializer</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<packaging>pom</packaging>
 	<name>Initializer</name>
 	<description>The OpenMRS Initializer module is an API-only module that processes the content of the configuration folder when it is found inside OpenMRS' application data directory.</description>
@@ -38,7 +38,7 @@
 	</modules>
 
 	<properties>
-		<openMRSVersion>1.11.9-SNAPSHOT</openMRSVersion>
+		<openMRSVersion>1.11.9</openMRSVersion>
 		<addresshierarchyVersion>2.11.0</addresshierarchyVersion>
 		<idgenVersion>4.3</idgenVersion>
 		<metadatasharingVersion>1.2.2</metadatasharingVersion>
