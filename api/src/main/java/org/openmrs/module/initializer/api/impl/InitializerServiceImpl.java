@@ -11,8 +11,10 @@ package org.openmrs.module.initializer.api.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,9 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Concept;
 import org.openmrs.GlobalProperty;
@@ -43,7 +48,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	protected Map<String, String> keyValueCache = new HashMap<String, String>();
+	protected Map<String, Object> keyValueCache = new HashMap<String, Object>();
 	
 	@Override
 	public String getConfigDirPath() {
@@ -185,9 +190,49 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		}
 	}
 	
+	/*
+	 * Convenience method to serialize a JSON object that also handles the simple
+	 * string case.
+	 */
+	protected String asString(Object jsonObj) throws JsonGenerationException, JsonMappingException, IOException {
+		if (jsonObj == null) {
+			return "";
+		}
+		if (jsonObj instanceof String) {
+			return (String) jsonObj;
+		} else {
+			return (new ObjectMapper()).writeValueAsString(jsonObj);
+		}
+	}
+	
+	/*
+	 * Convenience method to read a list of string out of a JSON string.
+	 */
+	protected List<String> asStringList(String jsonString) throws JsonParseException, JsonMappingException, IOException {
+		List<Object> list = (new ObjectMapper()).readValue(jsonString, List.class);
+		
+		List<String> stringList = new ArrayList<String>();
+		for (Object o : list) {
+			stringList.add(asString(o));
+		}
+		return stringList;
+	}
+	
+	/*
+	 * An error is logged when the JSON value cannot be parsed. However this should
+	 * never happen since this error would have prevented the loading of the
+	 * key-value file in the first place.
+	 */
 	@Override
 	public String getValueFromKey(String key) {
-		return keyValueCache.get(key);
+		Object value = keyValueCache.get(key);
+		try {
+			return asString(value);
+		}
+		catch (Exception e) {
+			log.error(e);
+		}
+		return "";
 	}
 	
 	@Override
@@ -207,6 +252,23 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public Concept getConceptFromKey(String key) {
 		return getConceptFromKey(key, null);
+	}
+	
+	@Override
+	public List<Concept> getConceptsFromKey(String key) {
+		List<String> ids;
+		try {
+			ids = asStringList(getValueFromKey(key));
+		}
+		catch (Exception e) {
+			log.error("The JSON value for key '" + key + "' could not be parsed as a list of concept identifiers.", e);
+			return Collections.emptyList();
+		}
+		List<Concept> concepts = new ArrayList<Concept>();
+		for (String id : ids) {
+			concepts.add(Utils.fetchConcept(id, Context.getConceptService()));
+		}
+		return concepts;
 	}
 	
 	@Override

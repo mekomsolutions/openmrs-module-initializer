@@ -3,5 +3,15 @@
     "impl.purpose.concept.fsn" : "CONCEPT_FOR_FETCHING",
     "impl.purpose.concept.mapping" : "Cambodia:123",
     "impl.purpose.pat.uuid" : "9eca4f4e-707f-4bb8-8289-2f9b6e93803c",
-    "impl.purpose.pat.name" : "PAT_FOR_FETCHING"
+    "impl.purpose.pat.name" : "PAT_FOR_FETCHING",
+    "structured.json" : {
+        "foo" : "bar",
+        "fooz" : {
+            "baz" : "value"
+        }
+    },
+    "impl.purpose.concepts" : [
+        "0cbe2ed3-cd5f-4f46-9459-26127c9265ab",
+        "32d3611a-6699-4d52-823f-b4b788bac3e3"
+    ]
 }

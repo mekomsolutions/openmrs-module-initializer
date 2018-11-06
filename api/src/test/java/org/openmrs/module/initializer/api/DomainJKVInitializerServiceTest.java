@@ -9,6 +9,9 @@
  */
 package org.openmrs.module.initializer.api;
 
+import static org.hamcrest.CoreMatchers.is;
+
+import java.util.List;
 import java.util.Locale;
 
 import org.junit.Assert;
@@ -101,5 +104,28 @@ public class DomainJKVInitializerServiceTest extends DomainBaseModuleContextSens
 		
 		Assert.assertNull(getService().getPersonAttributeTypeFromKey("__invalid_json_key__"));
 		Assert.assertEquals(pat1, getService().getPersonAttributeTypeFromKey("__invalid_json_key__", pat1));
+	}
+	
+	@Test
+	public void loadJsonKeyValues_shouldLoadStructuredJsonValue() {
+		// Replay
+		getService().loadJsonKeyValues();
+		String json = getService().getValueFromKey("structured.json");
+		
+		// Verif
+		Assert.assertEquals("{\"foo\":\"bar\",\"fooz\":{\"baz\":\"value\"}}", json);
+	}
+	
+	@Test
+	public void loadJsonKeyValues_shouldLoadConceptList() {
+		// Replay
+		getService().loadJsonKeyValues();
+		List<Concept> concepts = getService().getConceptsFromKey("impl.purpose.concepts");
+		
+		// Verif
+		Assert.assertThat(concepts.size(), is(2));
+		for (Concept c : concepts) {
+			Assert.assertNotNull(c);
+		}
 	}
 }
