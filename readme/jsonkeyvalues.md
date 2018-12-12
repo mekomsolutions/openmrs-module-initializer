@@ -1,8 +1,8 @@
 ## Domain 'jsonkeyvalues'
 The **jsonkeyvalues** subfolder contains JSON configuration files that help provide custom configurations at runtime. Those JSON files are simple key values pairs, very much like global properties but that won't be persisted. This is how this domain may look like:
-```
-  jsonkeyvalues/
-    \_ config.json
+```bash
+jsonkeyvalues/
+  └── config.json
 ```
 We envision its typical use as providing _identifiers_ of objects that are needed to configure other objects. For instance a report definition may depend on a certain concept, and although the report definition itself may never change, the concept used in the report definition may be different from an implementation to another.
 

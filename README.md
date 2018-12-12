@@ -3,25 +3,26 @@
 The Initializer module is an API-only module that processes the content of the **configuration** folder when it is found inside OpenMRS' application data directory:
 
 <pre>
-  .
-   \_ modules/
-   \_ openmrs.war
-   \_ openmrs-runtime.properties
-   \_ ...
-   \_ <b>configuration/</b>
+.
+├── modules/
+├── openmrs.war
+├── openmrs-runtime.properties
+├── ...
+└── <b>configuration/</b>
 </pre>
 The configuration folder is subdivided into _domain_ subfolders:
-```
-  configuration/
-    \_ addresshierarchy/
-    \_ concepts/
-    \_ drugs/
-    \_ globalproperties/
-    \_ idgen/
-    \_ jsonkeyvalues/
-    \_ messageproperties/
-    \_ metadatasharing/ 
-    \_ personattributetypes/
+```bash
+configuration/
+  ├── addresshierarchy/
+  ├── concepts/
+  ├── drugs/
+  ├── globalproperties/
+  ├── idgen/
+  ├── jsonkeyvalues/
+  ├── locations/
+  ├── messageproperties/
+  ├── metadatasharing/ 
+  └── personattributetypes/
 ```  
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain. Although several file types are supported for providing metadata, CSV files are the preferred format and all domain should aim at being covered through parsing CSV files.
 
@@ -41,6 +42,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
 1. [Metadatasharing packages (ZIP files)](readme/mds.md)
 1. [Global properties (XML files)](readme/globalproperties.md)
+1. [Locations (CSV files)](readme/locations.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Person attribute types (CSV files)](readme/pat.md)
 1. [Identifier sources (CSV files)](readme/idgen.md)
@@ -49,16 +51,16 @@ This is the list of currently supported domains in respect to their loading orde
 
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:
-```
+```bash
 git clone https://github.com/mekomsolutions/openmrs-module-initializer/tree/master
 cd openmrs-module-initializer
 mvn clean install
 ```
 ##### Runtime requirements & compatibility
-* Core 1.11.8
+* Core 1.11.9
 
 ### Quick facts
-Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementation.
+Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.
 
 ### Get in touch
 Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversation and ping us with the mentions starting with @mks.. in your message.
@@ -67,8 +69,10 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 
 ### Releases notes
 
+#### Version 1.1.0
+* Bulk creation and edition of drugs provided through CSV files in  **configuration/locations**.
+
 #### Version 1.0.1
-##### New features
 * Loads i18n messages files from **configuration/addresshierarchy** and **configuration/messageproperties**.
 * Bulk creation and edition of concepts provided through CSV files in  **configuration/concepts**.<br/>This covers: basic concepts, concepts with nested members or answers and concepts with multiple mappings.
 * Bulk creation and edition of drugs provided through CSV files in  **configuration/drugs**.

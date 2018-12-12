@@ -1,9 +1,9 @@
 ## Domain 'personattributetypes'
 The **personattributetypes** subfolder contains CSV import files for saving person attribute types in bulk. This is a possible example of its content:
-```
-  personattributetypes/
-    \_ registration_pat.csv
-    \_ ...
+```bash
+personattributetypes/
+  ├── registration_pat.csv
+  └── ...
 ```
 There is currently only one format for the person attribute type CSV line, here are the possible headers:
 

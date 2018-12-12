@@ -6,8 +6,11 @@ import org.openmrs.ConceptMap;
 import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptReferenceTerm;
 import org.openmrs.ConceptSource;
+import org.openmrs.Location;
+import org.openmrs.LocationTag;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.LocationService;
 import org.openmrs.api.PersonService;
 
 public class Utils {
@@ -104,6 +107,42 @@ public class Utils {
 		}
 		if (instance == null) {
 			instance = service.getPersonAttributeTypeByName(id);
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a location trying various routes for its "id".
+	 * 
+	 * @param id The location name or UUID.
+	 * @param service
+	 * @return The {@link Location} instance if found, null otherwise.
+	 */
+	public static Location fetchLocation(String id, LocationService service) {
+		Location instance = null;
+		if (instance == null) {
+			instance = service.getLocationByUuid(id);
+		}
+		if (instance == null) {
+			instance = service.getLocation(id);
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a location tag trying various routes for its "id".
+	 * 
+	 * @param id The location tag name or UUID.
+	 * @param service
+	 * @return The {@link LocationTag} instance if found, null otherwise.
+	 */
+	public static LocationTag fetchLocationTag(String id, LocationService service) {
+		LocationTag instance = null;
+		if (instance == null) {
+			instance = service.getLocationTagByUuid(id);
+		}
+		if (instance == null) {
+			instance = service.getLocationTagByName(id);
 		}
 		return instance;
 	}

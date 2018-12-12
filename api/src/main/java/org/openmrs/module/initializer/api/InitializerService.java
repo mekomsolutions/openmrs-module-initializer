@@ -44,6 +44,11 @@ public interface InitializerService extends OpenmrsService {
 	void loadDrugs();
 	
 	/**
+	 * Loads the locations from their domain config. dir, and saves them.
+	 */
+	void loadLocations();
+	
+	/**
 	 * Loads the order frequencies from their domain config. dir, and saves them.
 	 */
 	void loadOrderFrequencies();

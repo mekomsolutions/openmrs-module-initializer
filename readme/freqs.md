@@ -2,9 +2,9 @@
 
 The **orderfrequencies** subfolder contains CSV configuration files that help modify and create order frequencies. It should be possible in most cases to configure them via a single CSV configuration file, however there can be as many CSV files as desired.
 This is a possible example of how the configuration subfolder may look like:
-```
-  orderfrequencies/
-    \_ freqs.csv
+```bash
+orderfrequencies/
+  └── freqs.csv
 ```
 The CSV configuration allows to either modify exisiting order frequencies or to create new order frequencies, here are the possible headers:
 

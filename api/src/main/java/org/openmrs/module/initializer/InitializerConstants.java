@@ -35,6 +35,8 @@ public class InitializerConstants {
 	
 	public static final String DOMAIN_DRUGS = "drugs";
 	
+	public static final String DOMAIN_LOC = "locations";
+	
 	public static final String DOMAIN_FREQ = "orderfrequencies";
 	
 	public static final String DOMAIN_GP = "globalproperties";

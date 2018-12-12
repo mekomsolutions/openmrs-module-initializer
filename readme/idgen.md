@@ -2,9 +2,9 @@
 
 The **idgen** subfolder contains CSV configuration files that help modify and create identifier sources. It should be possible in most cases to configure them via a single CSV configuration file, however there can be as many CSV files as desired.
 This is a possible example of how the configuration subfolder may look like:
-```
-  idgen/
-    \_ idgen.csv
+```bash
+idgen/
+  └── idgen.csv
 ```
 The CSV configuration allows to either modify exisiting identifier sources or to create new identifier sources, here are the possible headers:
 

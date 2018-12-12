@@ -1,9 +1,9 @@
 ## Domain 'drugs'
 The **drugs** subfolder contains CSV import files for saving drugs in bulk. This is a possible example of its content:
-```
+```bash
 drugs/
-\_ drugs.csv
-\_ ...
+├── drugs.csv
+└── ...
 ```
 Here is an example of a drug header line:
 

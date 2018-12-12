@@ -32,6 +32,7 @@ public class InitializerActivator extends BaseModuleActivator {
 		iniz.loadJsonKeyValues();
 		iniz.importMetadataSharingPackages();
 		iniz.loadGlobalProperties();
+		iniz.loadLocations();
 		iniz.loadConcepts();
 		iniz.loadPersonAttributeTypes();
 		iniz.loadIdentifierSources();

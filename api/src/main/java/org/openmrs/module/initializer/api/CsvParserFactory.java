@@ -10,6 +10,7 @@ import org.openmrs.module.initializer.api.c.ConceptsCsvParser;
 import org.openmrs.module.initializer.api.drugs.DrugsCsvParser;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesCsvParser;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourceCsvParser;
+import org.openmrs.module.initializer.api.loc.LocationsCsvParser;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesCsvParser;
 
 /**
@@ -38,6 +39,10 @@ public class CsvParserFactory {
 		
 		if (InitializerConstants.DOMAIN_PAT.equals(domain)) {
 			return new PersonAttributeTypesCsvParser(is, Context.getPersonService());
+		}
+		
+		if (InitializerConstants.DOMAIN_LOC.equals(domain)) {
+			return new LocationsCsvParser(is, Context.getLocationService());
 		}
 		
 		throw new IllegalArgumentException(

@@ -1,11 +1,11 @@
 ## Domain 'concepts'
 The **concepts** subfolder contains CSV import files for saving concepts in bulk. This is a possible example of its content:
-```
-  concepts/
-    \_ diagnoses.csv
-    \_ findings.csv
-    \_ misc.csv
-    \_ ...
+```bash
+concepts/
+  ├── diagnoses.csv
+  ├── findings.csv
+  ├── misc.csv
+  └──  ...
 ```
 The way those CSV files are processed is controlled by a reserved part of the CSV file header line that holds metadata about the CSV file itself. Here is an example of a header line:
 
