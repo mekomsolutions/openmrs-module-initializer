@@ -43,12 +43,22 @@ public class DomainLocInitializerServiceTest extends DomainBaseModuleContextSens
 		
 		LocationTag tag = ls.saveLocationTag(new LocationTag("Facility Location", ""));
 		
-		Location loc = new Location();
-		loc.setUuid("a03e395c-b881-49b7-b6fc-983f6bddc7fc");
-		loc.setName("Acme Clinic");
-		loc.setTags(new HashSet<LocationTag>(Arrays.asList(tag)));
-		
-		ls.saveLocation(loc);
+		// location to edit
+		{
+			Location loc = new Location();
+			loc.setUuid("a03e395c-b881-49b7-b6fc-983f6bddc7fc");
+			loc.setName("Acme Clinic");
+			loc.setTags(new HashSet<LocationTag>(Arrays.asList(tag)));
+			ls.saveLocation(loc);
+		}
+		// location to retire
+		{
+			Location loc = new Location();
+			loc.setUuid("cbaaaab4-d960-4ae9-9b6a-8983fbd947b6");
+			loc.setName("Legacy Location");
+			loc.setDescription("Legacy location that must be retired");
+			ls.saveLocation(loc);
+		}
 	}
 	
 	@Test
@@ -91,6 +101,11 @@ public class DomainLocInitializerServiceTest extends DomainBaseModuleContextSens
 			Assert.assertThat(tags, notNullValue());
 			Assert.assertThat(tags.size(), is(1));
 			Assert.assertThat(tags.contains(ls.getLocationTagByName("Login Location")), is(true));
+		}
+		// Verif retire
+		{
+			Location loc = ls.getLocationByUuid("cbaaaab4-d960-4ae9-9b6a-8983fbd947b6");
+			Assert.assertThat(loc.isRetired(), is(true));
 		}
 	}
 }

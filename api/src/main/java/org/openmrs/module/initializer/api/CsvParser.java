@@ -11,13 +11,20 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.BaseOpenmrsData;
+import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.initializer.InitializerConstants;
 
 import au.com.bytecode.opencsv.CSVReader;
 
 public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsService, P extends BaseLineProcessor<T, S>> {
+	
+	protected static final String DEFAULT_RETIRE_REASON = "Retired by module " + InitializerConstants.MODULE_NAME;
+	
+	protected static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
 	
 	protected static final Log log = LogFactory.getLog(CsvParser.class);
 	
@@ -79,6 +86,12 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 			                + getClass().getSuperclass().getCanonicalName());
 		}
 		if (isVoidedOrRetired(instance)) {
+			if (instance instanceof BaseOpenmrsMetadata) {
+				((BaseOpenmrsMetadata) instance).setRetireReason(DEFAULT_RETIRE_REASON);
+			}
+			if (instance instanceof BaseOpenmrsData) {
+				((BaseOpenmrsData) instance).setVoidReason(DEFAULT_VOID_REASON);
+			}
 			return instance;
 		}
 		
