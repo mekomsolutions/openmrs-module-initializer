@@ -42,7 +42,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
 1. [Metadatasharing packages (ZIP files)](readme/mds.md)
 1. [Global properties (XML files)](readme/globalproperties.md)
-1. [Locations (CSV files)](readme/locations.md)
+1. [Locations (CSV files)](readme/loc.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Person attribute types (CSV files)](readme/pat.md)
 1. [Identifier sources (CSV files)](readme/idgen.md)
