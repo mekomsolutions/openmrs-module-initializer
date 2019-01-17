@@ -86,39 +86,38 @@ public class PatientLineProcessor extends BaseLineProcessor<Patient, PatientServ
 			}
 			pt.addIdentifier(pi);
 		}
-
+		
 		{
-            String[] nameLists = {line.get(HEADER_NAME_GIVEN), line.get(HEADER_NAME_MIDDLE),line.get(HEADER_NAME_FAMILY) };
-            String[][] names = new String[3][];  // String [name field] [name index]
-            List<Integer> lengths = new ArrayList<Integer>();
-            for (int i = 0; i < nameLists.length; i++) {
-                log.warn("nameLists");
-                log.warn(nameLists);
-                if (nameLists[i] != null) {
-                    names[i] = nameLists[i].split(",");
-                    lengths.add(names[i].length);
-                }
-            }
-            int length;
-            if (new HashSet<Integer>(lengths).size() > 1) {
-                length = Collections.min(lengths);
-                log.warn("Name array length mismatch. Please make sure that all non-empty name fields have the same " +
-                        "number of comma-delimited elements. Padding the end of the shorter arrays with null. " +
-                        "On line\n" + line);
-            } else {
-                length = lengths.get(0);
-            }
-
-            for (int i = 0; i < length; i++) {
-				PersonName name = new PersonName(
-						safeGet(names, 0, i), safeGet(names, 1, i), safeGet(names, 2, i));
+			String[] nameLists = { line.get(HEADER_NAME_GIVEN), line.get(HEADER_NAME_MIDDLE), line.get(HEADER_NAME_FAMILY) };
+			String[][] names = new String[3][]; // String [name field] [name index]
+			List<Integer> lengths = new ArrayList<Integer>();
+			for (int i = 0; i < nameLists.length; i++) {
+				log.warn("nameLists");
+				log.warn(nameLists);
+				if (nameLists[i] != null) {
+					names[i] = nameLists[i].split(",");
+					lengths.add(names[i].length);
+				}
+			}
+			int length;
+			if (new HashSet<Integer>(lengths).size() > 1) {
+				length = Collections.min(lengths);
+				log.warn("Name array length mismatch. Please make sure that all non-empty name fields have the same "
+				        + "number of comma-delimited elements. Padding the end of the shorter arrays with null. "
+				        + "On line\n" + line);
+			} else {
+				length = lengths.get(0);
+			}
+			
+			for (int i = 0; i < length; i++) {
+				PersonName name = new PersonName(safeGet(names, 0, i), safeGet(names, 1, i), safeGet(names, 2, i));
 				if (i == 0) {
 					name.setPreferred(true);
 				}
 				pt.addName(name);
 			}
 		}
-
+		
 		pt.setGender(line.get(HEADER_GENDER));
 		
 		String birthdateString = line.get(HEADER_BIRTHDATE);
@@ -146,7 +145,8 @@ public class PatientLineProcessor extends BaseLineProcessor<Patient, PatientServ
 			}
 		} else if (pt.getDateCreated() == null) {
 			pt.setDateCreated(new Date());
-		} // if there's no dateCreated provided by the CSV and the pt already has one, do nothing
+		} // if there's no dateCreated provided by the CSV and the pt already has one, do
+		  // nothing
 		
 		String addressesString = line.get(HEADER_ADDRESSES);
 		if (addressesString != null && !addressesString.trim().isEmpty()) {
@@ -190,7 +190,7 @@ public class PatientLineProcessor extends BaseLineProcessor<Patient, PatientServ
 		}
 		
 	}
-
+	
 	private static <T> T safeGet(T[][] array, int index1, int index2) {
 		if (array != null && array.length > index1 && array[index1] != null && array[index1].length > index2) {
 			return array[index1][index2];
@@ -198,12 +198,12 @@ public class PatientLineProcessor extends BaseLineProcessor<Patient, PatientServ
 			return null;
 		}
 	}
-
+	
 	private static <T> T safeGet(T[] array, int index) {
-	    if (array != null && array.length > index) {
-	        return array[index];
+		if (array != null && array.length > index) {
+			return array[index];
 		} else {
-	    	return null;
+			return null;
 		}
 	}
 }

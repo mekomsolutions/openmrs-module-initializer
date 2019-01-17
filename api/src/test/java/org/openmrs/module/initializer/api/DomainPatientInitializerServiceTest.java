@@ -96,8 +96,8 @@ public class DomainPatientInitializerServiceTest extends DomainBaseModuleContext
 			Assert.assertEquals("Xanadu", pt.getPatientIdentifier(pit).getLocation().getName());
 			Set<PersonName> names = pt.getNames();
 			for (PersonName name : names) {
-			    if (name.isPreferred()) {
-			        Assert.assertEquals("Pippin", name.getGivenName());
+				if (name.isPreferred()) {
+					Assert.assertEquals("Pippin", name.getGivenName());
 					Assert.assertNull(name.getMiddleName());
 					Assert.assertEquals("-", name.getFamilyName());
 				} else {
