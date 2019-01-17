@@ -54,6 +54,11 @@ public interface InitializerService extends OpenmrsService {
 	void loadOrderFrequencies();
 	
 	/**
+	 * Loads the patients from their domain config. dir, and saves them.
+	 */
+	void loadPatients();
+	
+	/**
 	 * Loads the person attribute types from their domain config. dir, and saves them.
 	 */
 	void loadPersonAttributeTypes();

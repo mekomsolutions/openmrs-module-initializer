@@ -83,6 +83,11 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	}
 	
 	@Override
+	public void loadPatients() {
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_P);
+	}
+	
+	@Override
 	public void loadPersonAttributeTypes() {
 		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_PAT);
 	}

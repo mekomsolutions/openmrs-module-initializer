@@ -11,6 +11,7 @@ import org.openmrs.module.initializer.api.drugs.DrugsCsvParser;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesCsvParser;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourceCsvParser;
 import org.openmrs.module.initializer.api.loc.LocationsCsvParser;
+import org.openmrs.module.initializer.api.patients.PatientsCsvParser;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesCsvParser;
 
 /**
@@ -37,12 +38,16 @@ public class CsvParserFactory {
 			return new IdentifierSourceCsvParser(is, Context.getService(IdentifierSourceService.class));
 		}
 		
-		if (InitializerConstants.DOMAIN_PAT.equals(domain)) {
-			return new PersonAttributeTypesCsvParser(is, Context.getPersonService());
-		}
-		
 		if (InitializerConstants.DOMAIN_LOC.equals(domain)) {
 			return new LocationsCsvParser(is, Context.getLocationService());
+		}
+		
+		if (InitializerConstants.DOMAIN_P.equals(domain)) {
+			return new PatientsCsvParser(is, Context.getPatientService());
+		}
+		
+		if (InitializerConstants.DOMAIN_PAT.equals(domain)) {
+			return new PersonAttributeTypesCsvParser(is, Context.getPersonService());
 		}
 		
 		throw new IllegalArgumentException(
