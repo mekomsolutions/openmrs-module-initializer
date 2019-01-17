@@ -55,6 +55,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
 		Context.setRuntimeProperties(prop);
 		
-		ConfigDirUtil.deleteChecksums(iniz.getChecksumsDirPath(), true);
+		ConfigDirUtil.deleteChecksums(iniz.getConfigChecksumsDirPath(), true);
+		ConfigDirUtil.deleteChecksums(iniz.getDataChecksumsDirPath(), true);
 	}
 }

@@ -57,45 +57,52 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	}
 	
 	@Override
-	public String getChecksumsDirPath() {
+	public String getConfigChecksumsDirPath() {
 		return new StringBuilder().append(OpenmrsUtil.getApplicationDataDirectory())
-		        .append(InitializerConstants.DIR_NAME_CHECKSUM).toString();
+		        .append(InitializerConstants.DIR_NAME_CONFIG_CHECKSUM).toString();
+	}
+	
+	@Override
+	public String getDataDirPath() {
+		return new StringBuilder().append(OpenmrsUtil.getApplicationDataDirectory())
+		        .append(InitializerConstants.DIR_NAME_DATA).toString();
+	}
+	
+	@Override
+	public String getDataChecksumsDirPath() {
+		return new StringBuilder().append(OpenmrsUtil.getApplicationDataDirectory())
+		        .append(InitializerConstants.DIR_NAME_DATA_CHECKSUM).toString();
 	}
 	
 	@Override
 	public void loadConcepts() {
-		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_C);
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getConfigChecksumsDirPath(), InitializerConstants.DOMAIN_C);
 	}
 	
 	@Override
 	public void loadDrugs() {
-		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_DRUGS);
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getConfigChecksumsDirPath(), InitializerConstants.DOMAIN_DRUGS);
 	}
 	
 	@Override
 	public void loadLocations() {
-		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_LOC);
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getConfigChecksumsDirPath(), InitializerConstants.DOMAIN_LOC);
 	}
 	
 	@Override
 	public void loadOrderFrequencies() {
-		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_FREQ);
-	}
-	
-	@Override
-	public void loadPatients() {
-		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_P);
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getConfigChecksumsDirPath(), InitializerConstants.DOMAIN_FREQ);
 	}
 	
 	@Override
 	public void loadPersonAttributeTypes() {
-		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_PAT);
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getConfigChecksumsDirPath(), InitializerConstants.DOMAIN_PAT);
 	}
 	
 	@Override
 	public void loadGlobalProperties() {
 		
-		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(),
+		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getConfigChecksumsDirPath(),
 		        InitializerConstants.DOMAIN_GP);
 		
 		final List<GlobalProperty> globalProperties = new ArrayList<GlobalProperty>();
@@ -130,13 +137,13 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	@Override
 	public void loadIdentifierSources() {
-		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_IDGEN);
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getConfigChecksumsDirPath(), InitializerConstants.DOMAIN_IDGEN);
 	}
 	
 	@Override
 	public void importMetadataSharingPackages() {
 		
-		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(),
+		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getConfigChecksumsDirPath(),
 		        InitializerConstants.DOMAIN_MDS);
 		
 		final PackageImporter importer = MetadataSharing.getInstance().newPackageImporter();
@@ -177,7 +184,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public void loadJsonKeyValues() {
 		
-		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(),
+		final ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getConfigChecksumsDirPath(),
 		        InitializerConstants.DOMAIN_JKV);
 		
 		for (File file : util.getFiles("json")) { // processing all the JSON files inside the domain
@@ -198,6 +205,15 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 				IOUtils.closeQuietly(is);
 			}
 		}
+	}
+	
+	/*
+	 * Data Loaders
+	 */
+	
+	@Override
+	public void loadPatients() {
+		ConfigDirUtil.loadCsvFiles(getDataDirPath(), getDataChecksumsDirPath(), InitializerConstants.DOMAIN_P);
 	}
 	
 	/*

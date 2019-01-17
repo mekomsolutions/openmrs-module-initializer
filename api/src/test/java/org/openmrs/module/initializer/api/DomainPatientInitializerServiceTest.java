@@ -46,11 +46,6 @@ public class DomainPatientInitializerServiceTest extends DomainBaseModuleContext
 	
 	@Before
 	public void setup() {
-		log.warn("Found existing patients!");
-		for (Patient pt : ps.getAllPatients()) {
-			log.warn(String.format("%s:%s\t%s %s", pt.getPatientIdentifier().getIdentifierType().getName(),
-			    pt.getPatientIdentifier().getIdentifier(), pt.getGivenName(), pt.getFamilyName()));
-		}
 		LocationService ls = Context.getLocationService();
 		PatientIdentifierType pit = ps.getPatientIdentifierTypeByName("Old Identification Number");
 		Location xanadu = ls.getLocation("Xanadu");

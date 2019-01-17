@@ -65,6 +65,7 @@ public class PatientLineProcessor extends BaseLineProcessor<Patient, PatientServ
 	
 	@Override
 	protected Patient fill(Patient pt, CsvLine line) throws IllegalArgumentException {
+		log.debug("Starting " + line);
 		LocationService locationService = Context.getService(LocationService.class);
 		String pisString = line.get(HEADER_PATIENT_IDENTIFIERS);
 		String[] pisArray = pisString.split(";");
@@ -162,6 +163,7 @@ public class PatientLineProcessor extends BaseLineProcessor<Patient, PatientServ
 			}
 		}
 		
+		log.debug("Finished " + line);
 		return pt;
 	}
 	

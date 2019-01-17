@@ -92,7 +92,7 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 		ahs.initI18nCache();
 		InitializerService iniz = Context.getService(InitializerService.class);
 		
-		File csvFile = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
+		File csvFile = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getConfigChecksumsDirPath(),
 		        InitializerConstants.DOMAIN_ADDR)).getConfigFile("addresshierarchy.csv");
 		LineNumberReader lnr = new LineNumberReader(new FileReader(csvFile));
 		lnr.skip(Long.MAX_VALUE);

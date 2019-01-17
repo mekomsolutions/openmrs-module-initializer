@@ -28,10 +28,22 @@ public interface InitializerService extends OpenmrsService {
 	String getConfigDirPath();
 	
 	/**
-	 * @return The path to the checksum folder (with NO trailing forward slash), eg.
+	 * @return The path to the configuration checksum folder (with NO trailing forward slash), eg.
 	 *         "/opt/openmrs/configuration_checksums"
 	 */
-	String getChecksumsDirPath();
+	String getConfigChecksumsDirPath();
+	
+	/**
+	 * @return The path to the import data folder (with NO trailing forward slash), eg.
+	 *         "/opt/openmrs/import_data"
+	 */
+	String getDataDirPath();
+	
+	/**
+	 * @return The path to the import data checksum folder (with NO trailing forward slash), eg.
+	 *         "/opt/openmrs/import_data_checksums"
+	 */
+	String getDataChecksumsDirPath();
 	
 	/**
 	 * Loads the concepts from their domain config. dir, and saves them.

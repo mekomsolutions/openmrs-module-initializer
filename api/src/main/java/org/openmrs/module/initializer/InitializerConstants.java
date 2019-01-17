@@ -21,9 +21,15 @@ public class InitializerConstants {
 	 */
 	public static final String DIR_NAME_CONFIG = "configuration";
 	
-	public static final String DIR_NAME_CHECKSUM = "configuration_checksums";
+	public static final String DIR_NAME_CONFIG_CHECKSUM = "configuration_checksums";
+	
+	public static final String DIR_NAME_DATA = "import_data";
+	
+	public static final String DIR_NAME_DATA_CHECKSUM = "import_data_checksums";
 	
 	/*
+	 * Metadata Domains
+	 *
 	 * Domains The lower-cased suffixes should be used as packages suffixes,
 	 * example: 'org.openmrs.module.initializer.api.gp'
 	 */
@@ -47,7 +53,10 @@ public class InitializerConstants {
 	
 	public static final String DOMAIN_MDS = "metadatasharing";
 	
-	public static final String DOMAIN_P = "patients";
-	
 	public static final String DOMAIN_PAT = "personattributetypes";
+	
+	/*
+	 * Import Data Domains
+	 */
+	public static final String DOMAIN_P = "patients";
 }

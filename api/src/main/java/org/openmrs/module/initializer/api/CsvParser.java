@@ -97,7 +97,9 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		
 		// Applying the lines processors in order
 		for (P processor : getLineProcessors()) {
-			instance = processor.fill(instance, new CsvLine(processor, line));
+			CsvLine csvLine = new CsvLine(processor, line);
+			log.debug("Running CsvLineProcessor.fill for line " + csvLine);
+			instance = processor.fill(instance, csvLine);
 		}
 		return instance;
 	}
