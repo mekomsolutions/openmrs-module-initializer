@@ -41,7 +41,7 @@ public class DomainPatientInitializerServiceTest extends DomainBaseModuleContext
 	
 	@Override
 	protected String getDomain() {
-		return InitializerConstants.DOMAIN_P;
+		return InitializerConstants.DOMAIN_PATIENTS;
 	}
 	
 	@Before

@@ -58,7 +58,7 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	 * never null as this is being taken care of upstream.
 	 */
 	abstract protected T fill(T instance, CsvLine line) throws IllegalArgumentException;
-	
+
 	/**
 	 * @param headerLine The CSV file header line
 	 * @param line A line of the CSV file

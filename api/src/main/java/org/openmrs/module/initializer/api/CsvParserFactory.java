@@ -13,6 +13,7 @@ import org.openmrs.module.initializer.api.idgen.IdentifierSourceCsvParser;
 import org.openmrs.module.initializer.api.loc.LocationsCsvParser;
 import org.openmrs.module.initializer.api.patients.PatientsCsvParser;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesCsvParser;
+import org.openmrs.module.initializer.api.persons.PersonCsvParser;
 
 /**
  * Use this class to create a CSV parser based on a domain.
@@ -21,7 +22,8 @@ public class CsvParserFactory {
 	
 	@SuppressWarnings("rawtypes")
 	public static CsvParser create(InputStream is, String domain) throws IOException, IllegalArgumentException {
-		
+
+		/* Configuration */
 		if (InitializerConstants.DOMAIN_C.equals(domain)) {
 			return new ConceptsCsvParser(is, Context.getConceptService());
 		}
@@ -42,14 +44,20 @@ public class CsvParserFactory {
 			return new LocationsCsvParser(is, Context.getLocationService());
 		}
 		
-		if (InitializerConstants.DOMAIN_P.equals(domain)) {
-			return new PatientsCsvParser(is, Context.getPatientService());
-		}
-		
 		if (InitializerConstants.DOMAIN_PAT.equals(domain)) {
 			return new PersonAttributeTypesCsvParser(is, Context.getPersonService());
 		}
-		
+
+		/* Import Data */
+		if (InitializerConstants.DOMAIN_PATIENTS.equals(domain)) {
+			return new PatientsCsvParser(is, Context.getPatientService());
+		}
+
+		if (InitializerConstants.DOMAIN_PERSONS.equals(domain)) {
+			return new PersonCsvParser(is, Context.getPersonService());
+		}
+
+
 		throw new IllegalArgumentException(
 		        "'" + domain + "' did not point to any identified CSV parser to process the input stream.");
 	}
