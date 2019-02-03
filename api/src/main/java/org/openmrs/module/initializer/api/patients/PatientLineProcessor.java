@@ -1,6 +1,8 @@
 package org.openmrs.module.initializer.api.patients;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
@@ -75,21 +77,14 @@ public class PatientLineProcessor extends BaseLineProcessor<Patient, PatientServ
 
 		String createdDateString = line.get(HEADER_PERSON_DATE_CREATED);
 		if (createdDateString != null && !createdDateString.trim().isEmpty()) {
-			SimpleDateFormat ISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-			try {
-				Date personDateCreated = ISO8601.parse(createdDateString);
-				pt.setDateCreated(personDateCreated);
-				pt.setPersonDateCreated(personDateCreated);
-			}
-			catch (ParseException err) {
-				log.warn("Failed to parse Date Created. Should be formatted like ISO 8601 with no colon in the timezone, "
-						+ "e.g. 2016-01-01T00:00:00+0100. On line\n" + line);
-			}
+			DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
+			Date date = parser.parseDateTime(createdDateString).toDate();
+            pt.setDateCreated(date);
+            pt.setPersonDateCreated(date);
 		} else if (pt.getDateCreated() == null) {
 			pt.setDateCreated(new Date());
 		} // if there's no dateCreated provided by the CSV and the pt already has one, do
 		// nothing
-
 
 		return pt;
 	}
