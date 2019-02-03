@@ -54,7 +54,7 @@ public class PatientLineProcessor extends BaseLineProcessor<Patient, PatientServ
 		PersonLineProcessor personLineProcessor = new PersonLineProcessor(personLine, null);
 		pt = (Patient) personLineProcessor.fill(pt, line);
 		LocationService locationService = Context.getService(LocationService.class);
-		String pisString = line.get(HEADER_PATIENT_IDENTIFIERS);
+		String pisString = line.get(HEADER_PATIENT_IDENTIFIERS, true);
 		String[] pisArray = pisString.split(";");
 		for (int i = 0; i < pisArray.length; i++) {
 			String piString = pisArray[i];
