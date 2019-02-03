@@ -14,8 +14,6 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.persons.PersonLineProcessor;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PatientLineProcessor extends BaseLineProcessor<Patient, PatientService> {
@@ -60,11 +58,10 @@ public class PatientLineProcessor extends BaseLineProcessor<Patient, PatientServ
 			String piString = pisArray[i];
 			String[] piParts = piString.split(":");
 			if (piParts.length < 3) {
-				log.warn(
-				    String.format("Ignoring invalid patient identifier entry '%s'. Patient identifiers should be formatted "
-				            + "like 'id_name:id:id_location;...'. On line %s",
-				        piString, line));
-				continue;
+				throw new IllegalArgumentException(
+				    String.format("Ignoring invalid patient identifier entry '%s'." +
+									"Patient identifiers should be formatted like 'id_name:id:id_location;...'.",
+				        piString));
 			}
 			PatientIdentifierType pit = service.getPatientIdentifierTypeByName(piParts[0]);
 			Location piLocation = locationService.getLocation(piParts[2]);

@@ -62,12 +62,13 @@ public class PersonLineProcessor extends BaseLineProcessor<Person, PersonService
 			String[][] names = new String[3][]; // String [name field] [name index]
 			List<Integer> lengths = new ArrayList<Integer>();
 			for (int i = 0; i < nameLists.length; i++) {
-				log.warn("nameLists");
-				log.warn(nameLists);
 				if (nameLists[i] != null) {
 					names[i] = nameLists[i].split(",");
 					lengths.add(names[i].length);
 				}
+			}
+			if (lengths.size() == 0) {
+				throw new IllegalArgumentException("Person must have at least one name.");
 			}
 			int length;
 			if (new HashSet<Integer>(lengths).size() > 1) {
@@ -98,7 +99,7 @@ public class PersonLineProcessor extends BaseLineProcessor<Person, PersonService
 				person.setBirthdate(birthdate);
 			}
 			catch (ParseException err) {
-				log.warn("Failed to parse Birthdate. Should be formatted y-m-d. On line\n" + line);
+				throw new IllegalArgumentException("Failed to parse Birthdate. Should be formatted y-m-d.");
 			}
 		}
 		
@@ -127,20 +128,25 @@ public class PersonLineProcessor extends BaseLineProcessor<Person, PersonService
 				method.invoke(target, value);
 			}
 			catch (IllegalArgumentException e) {
-				log.warn(String.format("Bad value %s for address field %s for line %s\n%s", value, addressField, line, e));
+				throw new IllegalArgumentException(String.format("Bad value %s for address field %s for line %s\n%s",
+						value, addressField, line, e));
 			}
 			catch (IllegalAccessException e) {
-				log.warn(String.format("Unable to set address field %s for line %s\n%s", addressField, line, e));
+				throw new RuntimeException(String.format("Unable to set address field %s for line %s\n%s",
+						addressField, line, e));
 			}
 			catch (InvocationTargetException e) {
-				log.warn(String.format("Unable to set address field %s for line %s\n%s", addressField, line, e));
+				throw new RuntimeException(String.format("Unable to set address field %s for line %s\n%s",
+						addressField, line, e));
 			}
 		}
 		catch (SecurityException e) {
-			log.warn(String.format("Unable to set address field %s for line %s\n%s", addressField, line, e));
+			throw new RuntimeException(String.format("Unable to set address field %s for line %s\n%s",
+					addressField, line, e));
 		}
 		catch (NoSuchMethodException e) {
-			log.warn(String.format("Invalid address field %s in line %s", addressField, line));
+			throw new IllegalArgumentException(String.format("Invalid address field %s in line %s\n%s",
+					addressField, line, e));
 		}
 		
 	}
