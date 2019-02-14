@@ -39,7 +39,7 @@ public class DomainPersonInitializerServiceTest extends DomainBaseModuleContextS
 	@Before
 	public void setup() {
 		LocationService ls = Context.getLocationService();
-
+		
 		// person to edit
 		{
 			Person person = new Person();

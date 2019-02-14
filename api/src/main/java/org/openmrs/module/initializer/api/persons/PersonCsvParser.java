@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class PersonCsvParser extends CsvParser<Person, PersonService, PersonLineProcessor> {
-
+	
 	public PersonCsvParser(InputStream is, PersonService ps) throws IOException {
 		super(is, ps);
 	}
@@ -20,7 +20,7 @@ public class PersonCsvParser extends CsvParser<Person, PersonService, PersonLine
 	
 	@Override
 	protected boolean isVoidedOrRetired(Person instance) {
-		return instance.getVoided();
+		return instance.getPersonVoided();
 	}
 	
 	@Override

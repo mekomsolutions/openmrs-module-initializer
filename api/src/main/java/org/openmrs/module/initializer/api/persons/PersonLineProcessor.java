@@ -5,6 +5,7 @@ import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonName;
 import org.openmrs.api.PersonService;
+import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 
@@ -20,19 +21,19 @@ import java.util.HashSet;
 import java.util.List;
 
 public class PersonLineProcessor extends BaseLineProcessor<Person, PersonService> {
-
+	
 	public static final String HEADER_NAME_GIVEN = "Given names";
-
+	
 	public static final String HEADER_NAME_MIDDLE = "Middle names";
-
+	
 	public static final String HEADER_NAME_FAMILY = "Family names";
-
+	
 	public static final String HEADER_GENDER = "Gender";
-
+	
 	public static final String HEADER_BIRTHDATE = "Birthdate";
-
+	
 	public static final String HEADER_ADDRESSES = "Addresses";
-
+	
 	public PersonLineProcessor(String[] headerLine, PersonService ps) {
 		super(headerLine, ps);
 	}
@@ -40,24 +41,26 @@ public class PersonLineProcessor extends BaseLineProcessor<Person, PersonService
 	@Override
 	protected Person bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = getUuid(line.asLine());
-		Person pt = service.getPersonByUuid(uuid);
+		Person p = service.getPersonByUuid(uuid);
 		
-		if (pt == null) {
-			pt = new Person();
+		if (p == null) {
+			p = new Person();
 			if (!StringUtils.isEmpty(uuid)) {
-				pt.setUuid(uuid);
+				p.setUuid(uuid);
 			}
 		}
 		
-		pt.setVoided(getVoidOrRetire(line.asLine()));
+		p.setVoided(getVoidOrRetire(line.asLine()));
+		p.setPersonVoided(getVoidOrRetire(line.asLine()));
+		p.setPersonVoidReason("Voided by module " + InitializerConstants.MODULE_NAME);
 		
-		return pt;
+		return p;
 	}
 	
 	@Override
 	public Person fill(Person person, CsvLine line) throws IllegalArgumentException {
-
-		{  // name
+		
+		{ // name
 			String[] nameLists = { line.get(HEADER_NAME_GIVEN), line.get(HEADER_NAME_MIDDLE), line.get(HEADER_NAME_FAMILY) };
 			String[][] names = new String[3][]; // String [name field] [name index]
 			List<Integer> lengths = new ArrayList<Integer>();
@@ -128,25 +131,25 @@ public class PersonLineProcessor extends BaseLineProcessor<Person, PersonService
 				method.invoke(target, value);
 			}
 			catch (IllegalArgumentException e) {
-				throw new IllegalArgumentException(String.format("Bad value %s for address field %s for line %s\n%s",
-						value, addressField, line, e));
+				throw new IllegalArgumentException(
+				        String.format("Bad value %s for address field %s for line %s\n%s", value, addressField, line, e));
 			}
 			catch (IllegalAccessException e) {
-				throw new RuntimeException(String.format("Unable to set address field %s for line %s\n%s",
-						addressField, line, e));
+				throw new RuntimeException(
+				        String.format("Unable to set address field %s for line %s\n%s", addressField, line, e));
 			}
 			catch (InvocationTargetException e) {
-				throw new RuntimeException(String.format("Unable to set address field %s for line %s\n%s",
-						addressField, line, e));
+				throw new RuntimeException(
+				        String.format("Unable to set address field %s for line %s\n%s", addressField, line, e));
 			}
 		}
 		catch (SecurityException e) {
-			throw new RuntimeException(String.format("Unable to set address field %s for line %s\n%s",
-					addressField, line, e));
+			throw new RuntimeException(
+			        String.format("Unable to set address field %s for line %s\n%s", addressField, line, e));
 		}
 		catch (NoSuchMethodException e) {
-			throw new IllegalArgumentException(String.format("Invalid address field %s in line %s\n%s",
-					addressField, line, e));
+			throw new IllegalArgumentException(
+			        String.format("Invalid address field %s in line %s\n%s", addressField, line, e));
 		}
 		
 	}
