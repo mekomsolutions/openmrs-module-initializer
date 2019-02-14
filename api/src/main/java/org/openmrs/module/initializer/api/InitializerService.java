@@ -64,7 +64,7 @@ public interface InitializerService extends OpenmrsService {
 	 * Loads the order frequencies from their domain config. dir, and saves them.
 	 */
 	void loadOrderFrequencies();
-
+	
 	/**
 	 * Loads the person attribute types from their domain config. dir, and saves them.
 	 */
@@ -89,17 +89,17 @@ public interface InitializerService extends OpenmrsService {
 	 * Loads the key-values into the cache from the JSON files.
 	 */
 	void loadJsonKeyValues();
-
+	
 	/**
 	 * Loads the patients from their domain config. dir, and saves them.
 	 */
 	void loadPatients();
-
+	
 	/**
 	 * Loads the persons from their domain config. dir, and saves them.
 	 */
 	void loadPersons();
-
+	
 	/**
 	 * Fetches a value from the JSON key-value configuration.
 	 */

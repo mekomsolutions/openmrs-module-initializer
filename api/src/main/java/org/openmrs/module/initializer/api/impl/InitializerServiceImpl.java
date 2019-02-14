@@ -215,12 +215,12 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	public void loadPatients() {
 		ConfigDirUtil.loadCsvFiles(getDataDirPath(), getDataChecksumsDirPath(), InitializerConstants.DOMAIN_PATIENTS);
 	}
-
+	
 	@Override
 	public void loadPersons() {
 		ConfigDirUtil.loadCsvFiles(getDataDirPath(), getDataChecksumsDirPath(), InitializerConstants.DOMAIN_PERSONS);
 	}
-
+	
 	/*
 	 * Convenience method to serialize a JSON object that also handles the simple
 	 * string case.
