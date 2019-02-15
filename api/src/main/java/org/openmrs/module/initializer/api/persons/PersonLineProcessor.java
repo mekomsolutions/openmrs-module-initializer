@@ -31,6 +31,8 @@ public class PersonLineProcessor extends BaseLineProcessor<Person, PersonService
 	public static final String HEADER_GENDER = "Gender";
 	
 	public static final String HEADER_BIRTHDATE = "Birthdate";
+
+	public static final String HEADER_BIRTHDATE_ESTIMATED = "Birthdate is estimated";
 	
 	public static final String HEADER_ADDRESSES = "Addresses";
 	
@@ -105,7 +107,12 @@ public class PersonLineProcessor extends BaseLineProcessor<Person, PersonService
 				throw new IllegalArgumentException("Failed to parse Birthdate. Should be formatted y-m-d.");
 			}
 		}
-		
+
+		Boolean birthdateIsEstimated = line.getBool(HEADER_BIRTHDATE_ESTIMATED);
+		if (birthdateIsEstimated != null) {
+			person.setBirthdateEstimated(birthdateIsEstimated);
+		}
+
 		String addressesString = line.get(HEADER_ADDRESSES);
 		if (addressesString != null && !addressesString.trim().isEmpty()) {
 			String[] addressesArray = addressesString.split(";");

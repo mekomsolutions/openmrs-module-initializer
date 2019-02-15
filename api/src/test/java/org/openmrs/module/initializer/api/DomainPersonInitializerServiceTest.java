@@ -84,6 +84,7 @@ public class DomainPersonInitializerServiceTest extends DomainBaseModuleContextS
 			Assert.assertEquals("M", pt.getGender());
 			Date birthdate = new GregorianCalendar(1980, Calendar.FEBRUARY, 1).getTime();
 			Assert.assertEquals(birthdate, pt.getBirthdate());
+			Assert.assertThat(pt.getBirthdateEstimated(), is(false));
 			Assert.assertEquals("The Shire", pt.getAddresses().iterator().next().getCityVillage());
 		}
 		// Verify creation of Meriadoc (Mary), who has no optional data
@@ -102,6 +103,7 @@ public class DomainPersonInitializerServiceTest extends DomainBaseModuleContextS
 			Person pt = ps.getPeople("Frodo", false).get(0);
 			Assert.assertEquals("Mad Dog", pt.getMiddleName());
 			Assert.assertEquals("The Shire", pt.getAddresses().iterator().next().getCityVillage());
+			Assert.assertThat(pt.getBirthdateEstimated(), is(true));
 		}
 		// Verif retire
 		{
