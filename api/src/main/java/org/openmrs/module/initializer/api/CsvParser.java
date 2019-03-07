@@ -18,7 +18,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.initializer.InitializerConstants;
 
-import au.com.bytecode.opencsv.CSVReader;
+import com.opencsv.CSVReader;
 
 public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsService, P extends BaseLineProcessor<T, S>> {
 	
