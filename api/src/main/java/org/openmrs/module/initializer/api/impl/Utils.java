@@ -2,8 +2,10 @@ package org.openmrs.module.initializer.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptMapType;
+import org.openmrs.ConceptName;
 import org.openmrs.ConceptReferenceTerm;
 import org.openmrs.ConceptSource;
 import org.openmrs.Location;
@@ -12,6 +14,9 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PersonService;
+import org.openmrs.api.context.Context;
+
+import java.util.Locale;
 
 public class Utils {
 	
@@ -91,6 +96,48 @@ public class Utils {
 			instance = getConceptByMapping(id, service);
 		}
 		return instance;
+	}
+	
+	/**
+	 * Guesses a 'best match' name for a given concept.
+	 * 
+	 * @param concept Concept Object.
+	 * @param locale
+	 * @return conceptName string if found, null otherwise.
+	 */
+	public static String getBestMatchName(Concept concept, Locale locale) {
+		ConceptName conceptName = null;
+		if (concept.getPreferredName(locale) != null) {
+			conceptName = concept.getPreferredName(locale);
+		} else if (concept.getFullySpecifiedName(locale) != null) {
+			conceptName = concept.getFullySpecifiedName(locale);
+		} else if (concept.getName(locale, true) != null) {
+			conceptName = concept.getName(locale, true);
+		} else if (concept.getName(locale) != null) {
+			conceptName = concept.getName(locale);
+		} else {
+			conceptName = concept.getName();
+		}
+		return conceptName.getName();
+	}
+	
+	/**
+	 * Guesses a 'best match' description for a given concept.
+	 * 
+	 * @param concept Concept Object.
+	 * @param locale
+	 * @return conceptDescription string if found, null otherwise.
+	 */
+	public static String getBestMatchDescription(Concept concept, Locale locale) {
+		String conceptDescription = null;
+		if (concept.getDescription(locale, true) != null) {
+			conceptDescription = concept.getDescription(locale, true).getDescription();
+		} else if (concept.getDescription(locale) != null) {
+			conceptDescription = concept.getDescription(locale).getDescription();
+		} else {
+			conceptDescription = getBestMatchName(concept, locale);
+		}
+		return conceptDescription;
 	}
 	
 	/**

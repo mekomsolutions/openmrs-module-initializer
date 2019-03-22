@@ -12,6 +12,7 @@ import org.openmrs.module.initializer.api.freq.OrderFrequenciesCsvParser;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourceCsvParser;
 import org.openmrs.module.initializer.api.loc.LocationsCsvParser;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesCsvParser;
+import org.openmrs.module.initializer.api.program.ProgramCsvParser;
 
 /**
  * Use this class to create a CSV parser based on a domain.
@@ -43,6 +44,10 @@ public class CsvParserFactory {
 		
 		if (InitializerConstants.DOMAIN_LOC.equals(domain)) {
 			return new LocationsCsvParser(is, Context.getLocationService());
+		}
+		
+		if (InitializerConstants.DOMAIN_PROG.equals(domain)) {
+			return new ProgramCsvParser(is, Context.getProgramWorkflowService());
 		}
 		
 		throw new IllegalArgumentException(

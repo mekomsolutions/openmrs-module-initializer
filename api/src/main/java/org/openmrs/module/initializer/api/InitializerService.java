@@ -79,6 +79,11 @@ public interface InitializerService extends OpenmrsService {
 	void loadJsonKeyValues();
 	
 	/**
+	 * Loads the programs from their domain config. dir, and saves them.
+	 */
+	void loadPrograms();
+	
+	/**
 	 * Fetches a value from the JSON key-value configuration.
 	 */
 	String getValueFromKey(String key);

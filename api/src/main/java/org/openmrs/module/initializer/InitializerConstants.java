@@ -48,4 +48,7 @@ public class InitializerConstants {
 	public static final String DOMAIN_MDS = "metadatasharing";
 	
 	public static final String DOMAIN_PAT = "personattributetypes";
+	
+	public static final String DOMAIN_PROG = "programs";
+	
 }
