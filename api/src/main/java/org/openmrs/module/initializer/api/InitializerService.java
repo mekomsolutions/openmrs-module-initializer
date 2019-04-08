@@ -84,6 +84,11 @@ public interface InitializerService extends OpenmrsService {
 	void loadPrograms();
 	
 	/**
+	 * Loads the programWorkflows from their domain config. dir, and saves them.
+	 */
+	void loadProgramWorkflows();
+	
+	/**
 	 * Fetches a value from the JSON key-value configuration.
 	 */
 	String getValueFromKey(String key);

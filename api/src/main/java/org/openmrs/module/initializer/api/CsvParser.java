@@ -65,7 +65,6 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	 * The implementation should be delegated to the line processor in the subclass
 	 */
 	protected T createInstance(String[] line) throws APIException {
-		
 		if (line == null) {
 			return null;
 		}
@@ -92,6 +91,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 			if (instance instanceof BaseOpenmrsData) {
 				((BaseOpenmrsData) instance).setVoidReason(DEFAULT_VOID_REASON);
 			}
+			instance = doVoidRetireActions(instance);
 			return instance;
 		}
 		
@@ -158,6 +158,13 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	
 	protected void close() throws IOException {
 		reader.close();
+	}
+	
+	/*
+	 * Action for void/retire instances.
+	 */
+	protected T doVoidRetireActions(T instance) {
+		return instance;
 	}
 	
 	/**

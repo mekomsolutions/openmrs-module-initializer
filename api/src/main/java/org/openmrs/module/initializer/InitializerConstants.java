@@ -51,4 +51,6 @@ public class InitializerConstants {
 	
 	public static final String DOMAIN_PROG = "programs";
 	
+	public static final String DOMAIN_PROG_WF = "programWorkflows";
+
 }

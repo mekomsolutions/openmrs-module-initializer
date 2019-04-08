@@ -2,7 +2,6 @@ package org.openmrs.module.initializer.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
-import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptName;
@@ -14,8 +13,6 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PersonService;
-import org.openmrs.api.context.Context;
-
 import java.util.Locale;
 
 public class Utils {
