@@ -88,6 +88,8 @@ public class DomainProgramWorkFlowsInitializerServiceTest extends DomainPrograms
 			Assert.assertNotNull(programWorkflow);
 			Assert.assertEquals(pws.getProgramByName("program11"), programWorkflow.getProgram());
 			Assert.assertEquals(cs.getConceptByName("concept1"), programWorkflow.getConcept());
+			Assert.assertEquals("concept1", programWorkflow.getName());
+			Assert.assertEquals("concept1", programWorkflow.getDescription());
 			Assert.assertEquals(false, programWorkflow.isRetired());
 			
 			Program program = pws.getProgramByName("program11");
