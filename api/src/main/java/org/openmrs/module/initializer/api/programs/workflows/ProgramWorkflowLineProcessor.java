@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.programworkflow;
+package org.openmrs.module.initializer.api.programs.workflows;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;

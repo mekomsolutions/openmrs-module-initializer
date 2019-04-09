@@ -1,13 +1,13 @@
-package org.openmrs.module.initializer.api.programworkflow;
+package org.openmrs.module.initializer.api.programs.workflows;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public class ProgramWorkflowCsvParser extends CsvParser<ProgramWorkflow, ProgramWorkflowService, BaseLineProcessor<ProgramWorkflow, ProgramWorkflowService>> {
 	
