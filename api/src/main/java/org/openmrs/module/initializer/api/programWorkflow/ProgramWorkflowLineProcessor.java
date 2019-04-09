@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.programWorkflow;
+package org.openmrs.module.initializer.api.programworkflow;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
@@ -14,7 +14,7 @@ public class ProgramWorkflowLineProcessor extends BaseLineProcessor<ProgramWorkf
 	
 	protected static String HEADER_PROGRAM = "program";
 	
-	protected static String HEADER_CONCEPT = "concept";
+	protected static String HEADER_WORKFLOW_CONCEPT = "workflow concept";
 	
 	/**
 	 * @param headerLine The header line the processor will refer to.
@@ -43,11 +43,13 @@ public class ProgramWorkflowLineProcessor extends BaseLineProcessor<ProgramWorkf
 	@Override
 	protected ProgramWorkflow fill(ProgramWorkflow programWorkflow, CsvLine line) throws IllegalArgumentException {
 		
-		String programWorkflowName = line.get(HEADER_NAME, true);
-		programWorkflow.setName(programWorkflowName);
-		
-		Concept programWorkflowConcept = Utils.fetchConcept(line.get(HEADER_CONCEPT), Context.getConceptService());
+		Concept programWorkflowConcept = Utils.fetchConcept(line.get(HEADER_WORKFLOW_CONCEPT), Context.getConceptService());
 		programWorkflow.setConcept(programWorkflowConcept);
+		
+		String programWorkflowName = Utils.getBestMatchName(programWorkflowConcept, Context.getLocale());
+		programWorkflow.setName(programWorkflowName);
+		String programWorkflowDescription = Utils.getBestMatchDescription(programWorkflowConcept, Context.getLocale());
+		programWorkflow.setDescription(programWorkflowDescription);
 		
 		Program program = service.getProgramByName(line.get(HEADER_PROGRAM, true));
 		programWorkflow.setProgram(program);

@@ -13,7 +13,7 @@ import org.openmrs.module.initializer.api.idgen.IdentifierSourceCsvParser;
 import org.openmrs.module.initializer.api.loc.LocationsCsvParser;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesCsvParser;
 import org.openmrs.module.initializer.api.program.ProgramCsvParser;
-import org.openmrs.module.initializer.api.programWorkflow.ProgramWorkflowCsvParser;
+import org.openmrs.module.initializer.api.programworkflow.ProgramWorkflowCsvParser;
 
 /**
  * Use this class to create a CSV parser based on a domain.

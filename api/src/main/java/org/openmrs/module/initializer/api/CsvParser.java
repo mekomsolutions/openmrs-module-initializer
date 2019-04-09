@@ -160,8 +160,8 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		reader.close();
 	}
 	
-	/*
-	 * Action for void/retire instances.
+	/**
+	 * This method provides a space to perform actions after setting an object as voided or retired.
 	 */
 	protected T doVoidRetireActions(T instance) {
 		return instance;

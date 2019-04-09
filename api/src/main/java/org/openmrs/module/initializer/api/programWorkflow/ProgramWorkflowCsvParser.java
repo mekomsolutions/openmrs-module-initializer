@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.programWorkflow;
+package org.openmrs.module.initializer.api.programworkflow;
 
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
@@ -27,16 +27,6 @@ public class ProgramWorkflowCsvParser extends CsvParser<ProgramWorkflow, Program
 	@Override
 	protected boolean isVoidedOrRetired(ProgramWorkflow instance) {
 		return instance.isRetired();
-	}
-	
-	@Override
-	protected ProgramWorkflow doVoidRetireActions(ProgramWorkflow instance) {
-		ProgramWorkflow programWorkflow = service.getWorkflowByUuid(instance.getUuid());
-		if (programWorkflow != null) {
-			Program program = instance.getProgram();
-			program.retireWorkflow(instance);
-		}
-		return programWorkflow;
 	}
 	
 	@Override

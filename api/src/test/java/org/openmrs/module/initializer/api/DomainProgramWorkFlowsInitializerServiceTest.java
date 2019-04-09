@@ -9,18 +9,14 @@ import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.ProgramWorkflowService;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConstants;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
-public class DomainProgramWorkFlowsInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
+public class DomainProgramWorkFlowsInitializerServiceTest extends DomainProgramsInitializerServiceTest {
 	
 	@Autowired
 	@Qualifier("conceptService")
@@ -38,21 +34,10 @@ public class DomainProgramWorkFlowsInitializerServiceTest extends DomainBaseModu
 	@Before
 	public void setup() {
 		
+		super.setup();
+		
 		// Concepts to be used for programs and programWorkflows
 		{
-			Concept programConcept = new Concept();
-			programConcept.setShortName(new ConceptName("programConcept", Locale.ENGLISH));
-			programConcept.setConceptClass(cs.getConceptClassByName("Program"));
-			programConcept.setDatatype(cs.getConceptDatatypeByName("Text"));
-			programConcept = cs.saveConcept(programConcept);
-			
-			Concept c = new Concept();
-			c.setShortName(new ConceptName("outcomesConceptTest", Locale.ENGLISH));
-			c.setConceptClass(cs.getConceptClassByName("ConvSet"));
-			c.setSet(false);
-			c.setDatatype(cs.getConceptDatatypeByName("N/A"));
-			c = cs.saveConcept(c);
-			
 			Concept programWorkflowConcept1 = new Concept();
 			programWorkflowConcept1.setShortName(new ConceptName("concept1", Locale.ENGLISH));
 			programWorkflowConcept1.setConceptClass(cs.getConceptClassByName("Program"));
@@ -64,16 +49,20 @@ public class DomainProgramWorkFlowsInitializerServiceTest extends DomainBaseModu
 			programWorkflowConcept2.setConceptClass(cs.getConceptClassByName("Program"));
 			programWorkflowConcept2.setDatatype(cs.getConceptDatatypeByName("Text"));
 			programWorkflowConcept2 = cs.saveConcept(programWorkflowConcept2);
-			
 		}
-		// A Program used for add ProgramWorkflows
+		// Programs used for add ProgramWorkflows
 		{
-			Program pro = new Program();
-			pro.setConcept(cs.getConceptByName("programConcept"));
-			pro.setOutcomesConcept(cs.getConceptByName("outcomesConceptTest1"));
-			pro.setName("program1");
-			pro.setDescription("Program Description");
-			pro = pws.saveProgram(pro);
+			Program program1 = new Program();
+			program1.setConcept(cs.getConceptByName("programConceptTest1"));
+			program1.setOutcomesConcept(cs.getConceptByName("outcomesConceptTest1"));
+			program1.setName("program11");
+			program1 = pws.saveProgram(program1);
+			
+			Program program2 = new Program();
+			program2.setConcept(cs.getConceptByName("programConceptTest2"));
+			program2.setOutcomesConcept(cs.getConceptByName("outcomesConceptTest2"));
+			program2.setName("program22");
+			program2 = pws.saveProgram(program2);
 		}
 		// A programWorkFlow to be edited
 		{
@@ -81,7 +70,7 @@ public class DomainProgramWorkFlowsInitializerServiceTest extends DomainBaseModu
 			programWorkflow.setConcept(cs.getConceptByName("concept2"));
 			programWorkflow.setUuid("2b98bc76-245c-11e1-9cf0-00248140a5ee");
 			
-			Program program = pws.getProgramByName("program1");
+			Program program = pws.getProgramByName("program11");
 			program.addWorkflow(programWorkflow);
 		}
 	}
@@ -93,18 +82,18 @@ public class DomainProgramWorkFlowsInitializerServiceTest extends DomainBaseModu
 		// Replay
 		getService().loadProgramWorkflows();
 		
-		// created programWorkflows
+		// A created programWorkflow
 		{
 			ProgramWorkflow programWorkflow = pws.getWorkflowByUuid("2b98bc76-245c-11e1-9cf0-00248140a5eb");
 			Assert.assertNotNull(programWorkflow);
-			Assert.assertEquals(pws.getProgramByName("program1"), programWorkflow.getProgram());
+			Assert.assertEquals(pws.getProgramByName("program11"), programWorkflow.getProgram());
 			Assert.assertEquals(cs.getConceptByName("concept1"), programWorkflow.getConcept());
 			Assert.assertEquals(false, programWorkflow.isRetired());
 			
-			Program program = pws.getProgramByName("program1");
+			Program program = pws.getProgramByName("program11");
 			Assert.assertEquals(programWorkflow, program.getWorkflow(programWorkflow.getId()));
-			
 		}
+		// A retired programWorkflow
 		{
 			ProgramWorkflow programWorkflow = pws.getWorkflowByUuid("2b98bc76-245c-11e1-9cf0-00248140a5ef");
 			Assert.assertNull(programWorkflow);
@@ -113,12 +102,8 @@ public class DomainProgramWorkFlowsInitializerServiceTest extends DomainBaseModu
 		{
 			ProgramWorkflow programWorkflow = pws.getWorkflowByUuid("2b98bc76-245c-11e1-9cf0-00248140a5ee");
 			Assert.assertNotNull(programWorkflow);
-			Assert.assertEquals(true, programWorkflow.isRetired());
-			
-			Program program = pws.getProgramByName("program1");
-			Assert.assertNotNull(program);
-			Assert.assertNull(program.getWorkflow(programWorkflow.getId()));
-			
+			Assert.assertEquals(pws.getProgramByName("program22"), programWorkflow.getProgram());
+			Assert.assertEquals(cs.getConceptByName("concept2"), programWorkflow.getConcept());
 		}
 	}
 }
