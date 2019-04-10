@@ -65,7 +65,6 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	 * The implementation should be delegated to the line processor in the subclass
 	 */
 	protected T createInstance(String[] line) throws APIException {
-		
 		if (line == null) {
 			return null;
 		}

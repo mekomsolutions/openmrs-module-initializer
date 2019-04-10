@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.program;
+package org.openmrs.module.initializer.api.programs;
 
 import org.openmrs.Program;
 import org.openmrs.api.ProgramWorkflowService;

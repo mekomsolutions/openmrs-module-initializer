@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.program;
+package org.openmrs.module.initializer.api.programs;
 
 import org.openmrs.Concept;
 import org.openmrs.Program;
@@ -8,8 +8,6 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.module.initializer.api.impl.Utils;
-
-import javax.rmi.CORBA.Util;
 
 public class ProgramLineProcessor extends BaseLineProcessor<Program, ProgramWorkflowService> {
 	
