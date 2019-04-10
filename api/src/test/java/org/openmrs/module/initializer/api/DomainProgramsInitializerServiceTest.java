@@ -22,11 +22,11 @@ public class DomainProgramsInitializerServiceTest extends DomainBaseModuleContex
 	
 	@Autowired
 	@Qualifier("conceptService")
-	private ConceptService cs;
+	protected ConceptService cs;
 	
 	@Autowired
 	@Qualifier("programWorkflowService")
-	private ProgramWorkflowService pws;
+	protected ProgramWorkflowService pws;
 	
 	@Override
 	protected String getDomain() {
@@ -36,98 +36,58 @@ public class DomainProgramsInitializerServiceTest extends DomainBaseModuleContex
 	@Before
 	public void setup() {
 		
-		// Concepts to be used as 'program concepts' ( with local preferred name )
+		// Concepts to be used as 'program concepts'
 		{
-			ConceptName conceptName1 = new ConceptName();
-			conceptName1.setName("Program11");
-			conceptName1.setLocalePreferred(true);
-			conceptName1.setLocale(Locale.ENGLISH);
+			Concept programConcept1 = new Concept();
+			programConcept1.setShortName(new ConceptName("programConceptTest1", Locale.ENGLISH));
+			programConcept1.setConceptClass(cs.getConceptClassByName("Program"));
+			programConcept1.setDatatype(cs.getConceptDatatypeByName("Text"));
+			programConcept1 = cs.saveConcept(programConcept1);
 			
-			ConceptName conceptName2 = new ConceptName();
-			conceptName2.setName("Program12");
-			conceptName2.setLocale(Locale.ENGLISH);
+			Concept programConcept2 = new Concept();
+			programConcept2.setShortName(new ConceptName("programConceptTest2", Locale.ENGLISH));
+			programConcept2.setConceptClass(cs.getConceptClassByName("Program"));
+			programConcept2.setDatatype(cs.getConceptDatatypeByName("Text"));
+			programConcept2 = cs.saveConcept(programConcept2);
 			
-			ConceptName conceptName3 = new ConceptName();
-			conceptName3.setName("Programm13");
-			conceptName3.setLocalePreferred(true);
-			conceptName3.setLocale(Locale.GERMAN);
-			
-			Set<ConceptName> conceptNames = new HashSet<ConceptName>();
-			conceptNames.add(conceptName1);
-			conceptNames.add(conceptName2);
-			conceptNames.add(conceptName3);
-			
-			Concept c = new Concept();
-			c.setNames(conceptNames);
-			c.setFullySpecifiedName(conceptName2);
-			c.setShortName(new ConceptName("programConceptTest1", Locale.ENGLISH));
-			c.setConceptClass(cs.getConceptClassByName("Program"));
-			c.setDatatype(cs.getConceptDatatypeByName("Text"));
-			c = cs.saveConcept(c);
-		}
-		// Concepts to be used as 'program concepts' ( with full specified name )
-		{
-			ConceptName conceptName1 = new ConceptName();
-			conceptName1.setName("Program21");
-			conceptName1.setLocale(Locale.ENGLISH);
-			
-			ConceptName conceptName2 = new ConceptName();
-			conceptName2.setName("Program22");
-			conceptName2.setLocale(Locale.ENGLISH);
-			
-			Set<ConceptName> conceptNames = new HashSet<ConceptName>();
-			conceptNames.add(conceptName1);
-			conceptNames.add(conceptName2);
-			
-			Concept c = new Concept();
-			c.setNames(conceptNames);
-			c.setShortName(new ConceptName("programConceptTest2", Locale.ENGLISH));
-			c.setFullySpecifiedName(conceptName2);
-			c.setConceptClass(cs.getConceptClassByName("Program"));
-			c.setDatatype(cs.getConceptDatatypeByName("Text"));
-			c = cs.saveConcept(c);
-		}
-		{
-			Concept c = new Concept();
-			c.setShortName(new ConceptName("programConceptTest3", Locale.ENGLISH));
-			c.setConceptClass(cs.getConceptClassByName("Program"));
-			c.setDatatype(cs.getConceptDatatypeByName("Text"));
-			c = cs.saveConcept(c);
+			Concept programConcept3 = new Concept();
+			programConcept3.setShortName(new ConceptName("programConceptTest3", Locale.ENGLISH));
+			programConcept3.setConceptClass(cs.getConceptClassByName("Program"));
+			programConcept3.setDatatype(cs.getConceptDatatypeByName("Text"));
+			programConcept3 = cs.saveConcept(programConcept3);
 		}
 		// Concepts to be used as 'outcomes concepts'
 		{
-			Concept c = new Concept();
-			c.setShortName(new ConceptName("outcomesConceptTest1", Locale.ENGLISH));
-			c.setConceptClass(cs.getConceptClassByName("ConvSet"));
-			c.setSet(false);
-			c.setDatatype(cs.getConceptDatatypeByName("N/A"));
-			c = cs.saveConcept(c);
-		}
-		{
-			Concept c = new Concept();
-			c.setShortName(new ConceptName("outcomesConceptTest2", Locale.ENGLISH));
-			c.setConceptClass(cs.getConceptClassByName("ConvSet"));
-			c.setSet(false);
-			c.setDatatype(cs.getConceptDatatypeByName("N/A"));
-			c = cs.saveConcept(c);
-		}
-		{
-			Concept c = new Concept();
-			c.setShortName(new ConceptName("outcomesConceptTest3", Locale.ENGLISH));
-			c.setConceptClass(cs.getConceptClassByName("ConvSet"));
-			c.setSet(false);
-			c.setDatatype(cs.getConceptDatatypeByName("N/A"));
-			c = cs.saveConcept(c);
+			Concept outcomeConcept1 = new Concept();
+			outcomeConcept1.setShortName(new ConceptName("outcomesConceptTest1", Locale.ENGLISH));
+			outcomeConcept1.setConceptClass(cs.getConceptClassByName("ConvSet"));
+			outcomeConcept1.setSet(false);
+			outcomeConcept1.setDatatype(cs.getConceptDatatypeByName("N/A"));
+			outcomeConcept1 = cs.saveConcept(outcomeConcept1);
+			
+			Concept outcomeConcept2 = new Concept();
+			outcomeConcept2.setShortName(new ConceptName("outcomesConceptTest2", Locale.ENGLISH));
+			outcomeConcept2.setConceptClass(cs.getConceptClassByName("ConvSet"));
+			outcomeConcept2.setSet(false);
+			outcomeConcept2.setDatatype(cs.getConceptDatatypeByName("N/A"));
+			outcomeConcept2 = cs.saveConcept(outcomeConcept2);
+			
+			Concept outcomeConcept3 = new Concept();
+			outcomeConcept3.setShortName(new ConceptName("outcomesConceptTest3", Locale.ENGLISH));
+			outcomeConcept3.setConceptClass(cs.getConceptClassByName("ConvSet"));
+			outcomeConcept3.setSet(false);
+			outcomeConcept3.setDatatype(cs.getConceptDatatypeByName("N/A"));
+			outcomeConcept3 = cs.saveConcept(outcomeConcept3);
 		}
 		// A program to be edited
 		{
-			Program pro = new Program();
-			pro.setUuid("5dc2a3b0-863c-4074-8f84-45762c3aa04c");
-			pro.setConcept(cs.getConceptByName("programConceptTest1"));
-			pro.setOutcomesConcept(cs.getConceptByName("outcomesConceptTest1"));
-			pro.setName("Test Program");
-			pro.setDescription("Program Description");
-			pro = pws.saveProgram(pro);
+			Program prog = new Program();
+			prog.setUuid("5dc2a3b0-863c-4074-8f84-45762c3aa04c");
+			prog.setConcept(cs.getConceptByName("programConceptTest1"));
+			prog.setOutcomesConcept(cs.getConceptByName("outcomesConceptTest1"));
+			prog.setName("Test Program");
+			prog.setDescription("Program Description");
+			prog = pws.saveProgram(prog);
 		}
 	}
 	
@@ -140,28 +100,28 @@ public class DomainProgramsInitializerServiceTest extends DomainBaseModuleContex
 		
 		// created programs
 		{
-			Program pro = pws.getProgramByName("Program11");
-			Assert.assertNotNull(pro);
-			Assert.assertEquals(cs.getConceptByName("programConceptTest1"), pro.getConcept());
-			Assert.assertEquals(cs.getConceptByName("outcomesConceptTest1"), pro.getOutcomesConcept());
-			Assert.assertEquals("Program11", pro.getDescription());
+			Program prog = pws.getProgramByName("programConceptTest1");
+			Assert.assertNotNull(prog);
+			Assert.assertEquals(cs.getConceptByName("programConceptTest1"), prog.getConcept());
+			Assert.assertEquals(cs.getConceptByName("outcomesConceptTest1"), prog.getOutcomesConcept());
+			Assert.assertEquals("programConceptTest1", prog.getDescription());
 			
 		}
 		{
-			Program pro = pws.getProgramByName("Program22");
-			Assert.assertNotNull(pro);
-			Assert.assertEquals(cs.getConceptByName("programConceptTest2"), pro.getConcept());
-			Assert.assertEquals(cs.getConceptByName("outcomesConceptTest2"), pro.getOutcomesConcept());
-			Assert.assertEquals("Program22", pro.getDescription());
+			Program prog = pws.getProgramByName("programConceptTest2");
+			Assert.assertNotNull(prog);
+			Assert.assertEquals(cs.getConceptByName("programConceptTest2"), prog.getConcept());
+			Assert.assertEquals(cs.getConceptByName("outcomesConceptTest2"), prog.getOutcomesConcept());
+			Assert.assertEquals("programConceptTest2", prog.getDescription());
 		}
 		// an edited program
 		{
-			Program pro = pws.getProgramByName("programConceptTest3");
-			Assert.assertNotNull(pro);
-			Assert.assertEquals(cs.getConceptByName("programConceptTest3"), pro.getConcept());
-			Assert.assertEquals(cs.getConceptByName("outcomesConceptTest3"), pro.getOutcomesConcept());
-			Assert.assertEquals("programConceptTest3", pro.getName());
-			Assert.assertEquals("programConceptTest3", pro.getDescription());
+			Program prog = pws.getProgramByName("programConceptTest3");
+			Assert.assertNotNull(prog);
+			Assert.assertEquals(cs.getConceptByName("programConceptTest3"), prog.getConcept());
+			Assert.assertEquals(cs.getConceptByName("outcomesConceptTest3"), prog.getOutcomesConcept());
+			Assert.assertEquals("programConceptTest3", prog.getName());
+			Assert.assertEquals("programConceptTest3", prog.getDescription());
 		}
 	}
 }

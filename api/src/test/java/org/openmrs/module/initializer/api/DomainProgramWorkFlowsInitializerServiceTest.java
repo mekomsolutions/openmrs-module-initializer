@@ -7,24 +7,12 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
-import org.openmrs.api.ConceptService;
-import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.test.Verifies;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Locale;
 
 public class DomainProgramWorkFlowsInitializerServiceTest extends DomainProgramsInitializerServiceTest {
-	
-	@Autowired
-	@Qualifier("conceptService")
-	private ConceptService cs;
-	
-	@Autowired
-	@Qualifier("programWorkflowService")
-	private ProgramWorkflowService pws;
 	
 	@Override
 	protected String getDomain() {
@@ -64,7 +52,7 @@ public class DomainProgramWorkFlowsInitializerServiceTest extends DomainPrograms
 			program2.setName("program22");
 			program2 = pws.saveProgram(program2);
 		}
-		// A programWorkFlow to be edited
+		// A existing workflow to be linked to another program
 		{
 			ProgramWorkflow programWorkflow = new ProgramWorkflow();
 			programWorkflow.setConcept(cs.getConceptByName("concept2"));

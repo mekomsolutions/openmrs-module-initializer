@@ -91,7 +91,6 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 			if (instance instanceof BaseOpenmrsData) {
 				((BaseOpenmrsData) instance).setVoidReason(DEFAULT_VOID_REASON);
 			}
-			instance = doVoidRetireActions(instance);
 			return instance;
 		}
 		
@@ -158,13 +157,6 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	
 	protected void close() throws IOException {
 		reader.close();
-	}
-	
-	/**
-	 * This method provides a space to perform actions after setting an object as voided or retired.
-	 */
-	protected T doVoidRetireActions(T instance) {
-		return instance;
 	}
 	
 	/**
