@@ -1,0 +1,4 @@
+Uuid,Void/Retire,ProgramWorkflow,State concept,Initial,Terminal
+cfa241f4-2700-102b-80cb-0017a47871b2,,2b98bc76-245c-11e1-9cf0-00248140a5eb,stateConcept1,,TRUE
+cfa244b0-2700-102b-80cb-0017a47871b2,,2b98bc76-245c-11e1-9cf0-00248140a5ee,stateConcept2,TRUE,
+cfa24690-2700-102b-80cb-0017a47871b2,TRUE,2b98bc76-245c-11e1-9cf0-00248140a5eb,stateConcept3,TRUE,TRUE

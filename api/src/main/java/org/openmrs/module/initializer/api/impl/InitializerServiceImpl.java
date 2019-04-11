@@ -96,6 +96,11 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	public void loadProgramWorkflows() {
 		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_PROG_WF);
 	}
+
+	@Override
+	public void loadProgramWorkflowStates() {
+		ConfigDirUtil.loadCsvFiles(getConfigDirPath(), getChecksumsDirPath(), InitializerConstants.DOMAIN_PROG_WF_ST);
+	}
 	
 	@Override
 	public void loadGlobalProperties() {

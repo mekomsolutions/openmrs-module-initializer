@@ -36,6 +36,7 @@ public class InitializerActivator extends BaseModuleActivator {
 		iniz.loadConcepts();
 		iniz.loadPrograms();
 		iniz.loadProgramWorkflows();
+		iniz.loadProgramWorkflowStates();
 		iniz.loadPersonAttributeTypes();
 		iniz.loadIdentifierSources();
 		iniz.loadDrugs();
