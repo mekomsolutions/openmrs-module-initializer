@@ -9,16 +9,14 @@
  */
 package org.openmrs.module.initializer.api;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.initializer.api.loaders.Loader;
 
-/**
- * The main service of this module, which is exposed for other modules. See
- * moduleApplicationContext.xml on how it is wired up.
- */
 public interface InitializerService extends OpenmrsService {
 	
 	/**
@@ -34,59 +32,24 @@ public interface InitializerService extends OpenmrsService {
 	String getChecksumsDirPath();
 	
 	/**
-	 * Loads the concepts from their domain config. dir, and saves them.
+	 * @return The list of ordered domain loaders.
 	 */
-	void loadConcepts();
+	List<Loader> getLoaders();
 	
 	/**
-	 * Loads the drugs from their domain config. dir, and saves them.
+	 * Add a single key value to the memory store.
+	 * 
+	 * @param key
+	 * @param value
 	 */
-	void loadDrugs();
+	void addKeyValue(String key, String value);
 	
 	/**
-	 * Loads the locations from their domain config. dir, and saves them.
+	 * Adds a key values file to the memory store.
+	 * 
+	 * @param is A JSON key-values file as input stream.
 	 */
-	void loadLocations();
-	
-	/**
-	 * Loads the order frequencies from their domain config. dir, and saves them.
-	 */
-	void loadOrderFrequencies();
-	
-	/**
-	 * Loads the person attribute types from their domain config. dir, and saves them.
-	 */
-	void loadPersonAttributeTypes();
-	
-	/**
-	 * Loads the global properties from their domain config. dir, and saves them.
-	 */
-	void loadGlobalProperties();
-	
-	/**
-	 * Loads the identifier sources from their domain config. dir, and saves them.
-	 */
-	void loadIdentifierSources();
-	
-	/**
-	 * Import the metadata sharing packages from their domain config. dir.
-	 */
-	void importMetadataSharingPackages();
-	
-	/**
-	 * Loads the key-values into the cache from the JSON files.
-	 */
-	void loadJsonKeyValues();
-	
-	/**
-	 * Loads the programs from their domain config. dir, and saves them.
-	 */
-	void loadPrograms();
-	
-	/**
-	 * Loads the programWorkflows from their domain config. dir, and saves them.
-	 */
-	void loadProgramWorkflows();
+	void addKeyValues(InputStream is) throws Exception;
 	
 	/**
 	 * Fetches a value from the JSON key-value configuration.

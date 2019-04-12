@@ -14,22 +14,19 @@ import org.junit.Test;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.InitializerConstants;
-import org.openmrs.test.Verifies;
+import org.openmrs.module.initializer.api.loaders.GlobalPropertiesLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class DomainGPInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
+public class GlobalPropertiesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
-	@Override
-	protected String getDomain() {
-		return InitializerConstants.DOMAIN_GP;
-	}
+	@Autowired
+	private GlobalPropertiesLoader loader;
 	
 	@Test
-	@Verifies(value = "should load all global properties as configured in the XML files", method = "loadGlobalProperties()")
 	public void loadGlobalProperties_shouldLoadGlobalProperties() {
 		
 		// Replay
-		getService().loadGlobalProperties();
+		loader.load();
 		
 		// Verif
 		Assert.assertEquals("GP one one", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
@@ -41,7 +38,6 @@ public class DomainGPInitializerServiceTest extends DomainBaseModuleContextSensi
 	}
 	
 	@Test
-	@Verifies(value = "should override existing global properties", method = "loadGlobalProperties()")
 	public void loadGlobalProperties_shouldOverrideGlobalProperties() {
 		
 		// Setup
@@ -49,14 +45,13 @@ public class DomainGPInitializerServiceTest extends DomainBaseModuleContextSensi
 		Assert.assertEquals("foobar", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
 		
 		// Replay
-		getService().loadGlobalProperties();
+		loader.load();
 		
 		// Verif
 		Assert.assertEquals("GP one one", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
 	}
 	
 	@Test
-	@Verifies(value = "should not affect other existing global properties", method = "loadGlobalProperties()")
 	public void loadGlobalProperties_shouldNotAffectOtherGlobalProperties() {
 		
 		// Setup
@@ -65,7 +60,7 @@ public class DomainGPInitializerServiceTest extends DomainBaseModuleContextSensi
 		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("gp.baz", "Baz"));
 		
 		// Replay
-		getService().loadGlobalProperties();
+		loader.load();
 		
 		// Verif
 		Assert.assertEquals("Foo", Context.getAdministrationService().getGlobalProperty("gp.foo"));

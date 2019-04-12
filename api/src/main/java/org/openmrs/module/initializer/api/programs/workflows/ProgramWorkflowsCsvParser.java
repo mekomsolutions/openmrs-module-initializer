@@ -9,9 +9,9 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
 
-public class ProgramWorkflowCsvParser extends CsvParser<ProgramWorkflow, ProgramWorkflowService, BaseLineProcessor<ProgramWorkflow, ProgramWorkflowService>> {
+public class ProgramWorkflowsCsvParser extends CsvParser<ProgramWorkflow, ProgramWorkflowService, BaseLineProcessor<ProgramWorkflow, ProgramWorkflowService>> {
 	
-	public ProgramWorkflowCsvParser(InputStream is, ProgramWorkflowService pws) throws IOException {
+	public ProgramWorkflowsCsvParser(InputStream is, ProgramWorkflowService pws) throws IOException {
 		super(is, pws);
 	}
 	

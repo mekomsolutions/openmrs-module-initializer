@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.impl;
+package org.openmrs.module.initializer.api;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -14,6 +14,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.initializer.api.Utils;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;

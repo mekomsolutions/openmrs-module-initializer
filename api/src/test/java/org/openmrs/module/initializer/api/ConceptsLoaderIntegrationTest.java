@@ -28,22 +28,18 @@ import org.openmrs.ConceptSource;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.InitializerConstants;
-import org.openmrs.module.initializer.api.impl.Utils;
-import org.openmrs.test.Verifies;
+import org.openmrs.module.initializer.api.loaders.ConceptsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
+public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService cs;
 	
-	@Override
-	protected String getDomain() {
-		return InitializerConstants.DOMAIN_C;
-	}
+	@Autowired
+	private ConceptsLoader loader;
 	
 	private Locale localeEn = Locale.ENGLISH;
 	
@@ -161,7 +157,6 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 	}
 	
 	@Test
-	@Verifies(value = "should load and save concepts from CSV files according to the version", method = "loadConcepts()")
 	public void loadConcepts_shouldProcessCsvAccordingToVersion() {
 		
 		// Setup
@@ -175,7 +170,7 @@ public class DomainCInitializerServiceTest extends DomainBaseModuleContextSensit
 		}
 		
 		// Replay
-		getService().loadConcepts();
+		loader.load();
 		
 		// Verif 'base' CSV loading
 		{

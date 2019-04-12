@@ -9,7 +9,7 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.impl.Utils;
+import org.openmrs.module.initializer.api.Utils;
 import org.springframework.util.CollectionUtils;
 
 public class NestedConceptLineProcessor extends BaseConceptLineProcessor {

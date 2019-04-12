@@ -1,5 +1,7 @@
 package org.openmrs.module.initializer.api;
 
+import java.util.Locale;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,17 +9,13 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
-import org.openmrs.module.initializer.InitializerConstants;
-import org.openmrs.test.Verifies;
+import org.openmrs.module.initializer.api.loaders.ProgramWorkflowsLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Locale;
-
-public class DomainProgramWorkFlowsInitializerServiceTest extends DomainProgramsInitializerServiceTest {
+public class ProgramWorkflowsLoaderIntegrationTest extends ProgramsLoaderIntegrationTest {
 	
-	@Override
-	protected String getDomain() {
-		return InitializerConstants.DOMAIN_PROG_WF;
-	}
+	@Autowired
+	private ProgramWorkflowsLoader loader;
 	
 	@Before
 	public void setup() {
@@ -64,11 +62,10 @@ public class DomainProgramWorkFlowsInitializerServiceTest extends DomainPrograms
 	}
 	
 	@Test
-	@Verifies(value = "should load and save programs from the CSV", method = "")
 	public void loadProgramWorkFlows_shouldLoadProgramWorkflowsAccordingToCsvFiles() {
 		
 		// Replay
-		getService().loadProgramWorkflows();
+		loader.load();
 		
 		// A created programWorkflow
 		{

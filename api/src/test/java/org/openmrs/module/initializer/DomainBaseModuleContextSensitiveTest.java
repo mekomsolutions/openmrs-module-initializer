@@ -16,6 +16,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.Module;
+import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -40,9 +42,15 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	}
 	
 	/*
-	 * Eg. "addresshierarchy", "globalproperties", ... etc
+	 * pre-Spring loading setup for all integration tests
+	 * 
+	 * We start all the conditional modules here.
 	 */
-	abstract protected String getDomain();
+	public DomainBaseModuleContextSensitiveTest() {
+		super();
+		ModuleFactory.getStartedModulesMap().put("idgen", new Module("", "idgen", "", "", "", "4.3"));
+		ModuleFactory.getStartedModulesMap().put("metadatasharing", new Module("", "metadatasharing", "", "", "", "1.2.2"));
+	}
 	
 	@Before
 	public void setupAppDataDir() {

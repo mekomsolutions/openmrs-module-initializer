@@ -7,9 +7,9 @@ import org.openmrs.module.initializer.api.CsvParser;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ProgramCsvParser extends CsvParser<Program, ProgramWorkflowService, ProgramLineProcessor> {
+public class ProgramsCsvParser extends CsvParser<Program, ProgramWorkflowService, ProgramLineProcessor> {
 	
-	public ProgramCsvParser(InputStream is, ProgramWorkflowService pws) throws IOException {
+	public ProgramsCsvParser(InputStream is, ProgramWorkflowService pws) throws IOException {
 		super(is, pws);
 	}
 	

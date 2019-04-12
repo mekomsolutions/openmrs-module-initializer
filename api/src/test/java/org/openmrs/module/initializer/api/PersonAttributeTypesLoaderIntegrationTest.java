@@ -22,12 +22,12 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.api.loaders.PersonAttributeTypesLoader;
 import org.openmrs.test.Verifies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class DomainPATInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
+public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("personService")
@@ -35,10 +35,8 @@ public class DomainPATInitializerServiceTest extends DomainBaseModuleContextSens
 	
 	private int conceptForeignKey = 0;
 	
-	@Override
-	protected String getDomain() {
-		return InitializerConstants.DOMAIN_PAT;
-	}
+	@Autowired
+	private PersonAttributeTypesLoader loader;
 	
 	@Before
 	public void setup() {
@@ -90,7 +88,7 @@ public class DomainPATInitializerServiceTest extends DomainBaseModuleContextSens
 	public void loadPersonAttributeTypes_shouldLoadAccordingToCsvFiles() {
 		
 		// Replay
-		getService().loadPersonAttributeTypes();
+		loader.load();
 		
 		// Verif foreign key
 		{

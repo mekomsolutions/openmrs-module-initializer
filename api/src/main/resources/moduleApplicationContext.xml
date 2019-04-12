@@ -33,7 +33,7 @@
             <ref bean="transactionManager" />
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.initializer.api.impl.InitializerServiceImpl">
+            <bean class="org.openmrs.module.initializer.api.InitializerServiceImpl">
             </bean>
         </property>
         <property name="preInterceptors">

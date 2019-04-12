@@ -1,6 +1,17 @@
-package org.openmrs.module.initializer.api.impl;
+package org.openmrs.module.initializer.api;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptMapType;
@@ -13,9 +24,10 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PersonService;
-import java.util.Locale;
 
 public class Utils {
+	
+	private static final Log log = LogFactory.getLog(Utils.class);
 	
 	/**
 	 * Helps build a {@link ConceptMap} out the usual string inputs.
@@ -189,5 +201,32 @@ public class Utils {
 			instance = service.getLocationTagByName(id);
 		}
 		return instance;
+	}
+	
+	/**
+	 * Convenience method to serialize a JSON object that also handles the simple string case.
+	 */
+	public static String asString(Object jsonObj) throws JsonGenerationException, JsonMappingException, IOException {
+		if (jsonObj == null) {
+			return "";
+		}
+		if (jsonObj instanceof String) {
+			return (String) jsonObj;
+		} else {
+			return (new ObjectMapper()).writeValueAsString(jsonObj);
+		}
+	}
+	
+	/**
+	 * Convenience method to read a list of string out of a JSON string.
+	 */
+	public static List<String> asStringList(String jsonString) throws JsonParseException, JsonMappingException, IOException {
+		List<Object> list = (new ObjectMapper()).readValue(jsonString, List.class);
+		
+		List<String> stringList = new ArrayList<String>();
+		for (Object o : list) {
+			stringList.add(asString(o));
+		}
+		return stringList;
 	}
 }

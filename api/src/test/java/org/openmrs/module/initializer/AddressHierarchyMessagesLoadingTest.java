@@ -50,11 +50,6 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 	
 	private InitializerMessageSource inizSrc;
 	
-	@Override
-	protected String getDomain() {
-		return InitializerConstants.DOMAIN_ADDR;
-	}
-	
 	@Before
 	public void setup() {
 		// Disabling AH full caching otherwise loading takes too long

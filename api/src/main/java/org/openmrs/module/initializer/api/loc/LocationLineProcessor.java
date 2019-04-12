@@ -9,7 +9,7 @@ import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.impl.Utils;
+import org.openmrs.module.initializer.api.Utils;
 
 public class LocationLineProcessor extends BaseLineProcessor<Location, LocationService> {
 	

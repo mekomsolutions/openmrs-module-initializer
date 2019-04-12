@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.impl;
+package org.openmrs.module.initializer.api;
 
 import java.io.InputStream;
 
@@ -33,22 +33,22 @@ public class InitializerServiceImplTest {
 		final String KEY = "key.to.bool.value";
 		InitializerServiceImpl iniz = new InitializerServiceImpl();
 		
-		iniz.keyValueCache.put(KEY, "true");
+		iniz.addKeyValue(KEY, "true");
 		Assert.assertTrue(iniz.getBooleanFromKey(KEY));
-		iniz.keyValueCache.put(KEY, "false");
+		iniz.addKeyValue(KEY, "false");
 		Assert.assertFalse(iniz.getBooleanFromKey(KEY));
 		
-		iniz.keyValueCache.put(KEY, "yes");
+		iniz.addKeyValue(KEY, "yes");
 		Assert.assertTrue(iniz.getBooleanFromKey(KEY));
-		iniz.keyValueCache.put(KEY, "no");
+		iniz.addKeyValue(KEY, "no");
 		Assert.assertFalse(iniz.getBooleanFromKey(KEY));
 		
-		iniz.keyValueCache.put(KEY, "1");
+		iniz.addKeyValue(KEY, "1");
 		Assert.assertTrue(iniz.getBooleanFromKey(KEY));
-		iniz.keyValueCache.put(KEY, "0");
+		iniz.addKeyValue(KEY, "0");
 		Assert.assertFalse(iniz.getBooleanFromKey(KEY));
 		
-		iniz.keyValueCache.put(KEY, "foo");
+		iniz.addKeyValue(KEY, "foo");
 		Assert.assertNull(iniz.getBooleanFromKey(KEY));
 	}
 }

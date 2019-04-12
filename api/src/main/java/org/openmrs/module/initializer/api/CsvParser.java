@@ -26,7 +26,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	
 	protected static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
 	
-	protected static final Log log = LogFactory.getLog(CsvParser.class);
+	protected final Log log = LogFactory.getLog(this.getClass());
 	
 	protected CSVReader reader;
 	

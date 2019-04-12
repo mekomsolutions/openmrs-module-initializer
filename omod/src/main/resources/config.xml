@@ -12,9 +12,6 @@
 
 	<activator>org.openmrs.module.initializer.InitializerActivator</activator>
 	
-	<!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
-	<!-- /Base Module Properties -->
-	
 	<require_version>${openMRSVersion}</require_version>
 	
 	<!-- Extensions -->
@@ -25,72 +22,13 @@
 
 	<aware_of_modules>
 		<aware_of_module>org.openmrs.module.legacyui</aware_of_module>
-	</aware_of_modules>
-
-	<require_modules>
-		<require_module version="${idgenVersion}">
+		<aware_of_module version="${idgenVersion}">
 			org.openmrs.module.idgen
-		</require_module>
-		<require_module version="${metadatasharingVersion}">
+		</aware_of_module>
+		<aware_of_module version="${metadatasharingVersion}">
 			org.openmrs.module.metadatasharing
-		</require_module>
-	</require_modules>
-	
-	<!-- AOP
-	<advice>
-		<point>org.openmrs.api.FormService</point>
-		<class>@MODULE_PACKAGE@.advice.DuplicateFormAdvisor</class>
-	</advice>
-	 /AOP -->
-	
-	
-	<!-- Required Privileges 
-	<privilege>
-		<name>Form Entry</name>
-		<description>Allows user to access Form Entry pages/functions</description>
-	</privilege>
-	 /Required Privileges -->
-
-
-	<!-- Required Global Properties 
-	<globalProperty>
-		<property>@MODULE_ID@.someProperty</property>
-		<defaultValue></defaultValue>
-		<description>
-			A description of the global property goes here.  The description
-			should explain enough for administrators to understand the purpose
-			and possible values for the global property.
-		</description>
-	</globalProperty>
-	/Required Global Properties -->
-	
-	<!--
-	<dwr>
-		<allow>
-			<create creator="new" javascript="DWRFormEntryService">
-				<param name="class" value="org.openmrs.module.@MODULE_ID@.web.DWRFormEntryService"/>
-				<include method="enterForm"/>
-			</create>
-		</allow>
-
-		<signatures>
-			<![CDATA[
-			import @MODULE_PACKAGE@.web.DWRFormEntryService;
-			DWRFormEntryService.enterForm(Integer patientId, Integer formId, boolean useEncounter, List<String> fields);
-			]]>
-		</signatures>	
-	</dwr>
-	-->
-	
-	<!-- Servlets -->
-	<!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> 
-	<servlet>
-		<servlet-name>formDownload</servlet-name>
-		<servlet-class>@MODULE_PACKAGE@.web.FormDownloadServlet</servlet-class>
-	</servlet>
-	-->
-	<!-- /Servlets -->
-	
+		</aware_of_module>
+	</aware_of_modules>
 	
 	<!-- Internationalization -->
 	<!-- All message codes should start with @MODULE_ID@.* -->
@@ -101,4 +39,3 @@
 	<!-- /Internationalization -->
 	
 </module>
-

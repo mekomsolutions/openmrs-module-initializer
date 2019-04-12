@@ -20,18 +20,16 @@ import org.openmrs.module.idgen.RemoteIdentifierSource;
 import org.openmrs.module.idgen.SequentialIdentifierGenerator;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.api.loaders.IdentifierSourcesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DomainIdgenInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
+public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private IdentifierSourceService idgenService;
 	
-	@Override
-	protected String getDomain() {
-		return InitializerConstants.DOMAIN_IDGEN;
-	}
+	@Autowired
+	private IdentifierSourcesLoader loader;
 	
 	@Before
 	public void setup() {
@@ -74,7 +72,7 @@ public class DomainIdgenInitializerServiceTest extends DomainBaseModuleContextSe
 	public void loadIdentifierSources_shouldModifyAndCreateIdentifierSources() {
 		
 		// Replay
-		getService().loadIdentifierSources();
+		loader.load();
 		
 		// Verif sources marked for retirement
 		Assert.assertTrue(idgenService.getIdentifierSourceByUuid("c1d8a345-3f10-11e4-adec-0800271c1b75").isRetired());

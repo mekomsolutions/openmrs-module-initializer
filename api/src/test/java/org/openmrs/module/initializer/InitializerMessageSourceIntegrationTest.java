@@ -17,14 +17,9 @@ import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 
-public class InitializerMessageSourceIT extends DomainBaseModuleContextSensitiveTest {
+public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	protected InitializerMessageSource inizSrc;
-	
-	@Override
-	protected String getDomain() {
-		return InitializerConstants.DOMAIN_MSGPROP;
-	}
 	
 	@Before
 	public void setup() {

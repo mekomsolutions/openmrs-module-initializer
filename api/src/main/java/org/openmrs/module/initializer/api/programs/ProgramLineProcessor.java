@@ -6,8 +6,8 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.Utils;
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.module.initializer.api.impl.Utils;
 
 public class ProgramLineProcessor extends BaseLineProcessor<Program, ProgramWorkflowService> {
 	

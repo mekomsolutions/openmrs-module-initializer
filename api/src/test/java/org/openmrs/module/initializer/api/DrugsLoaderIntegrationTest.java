@@ -19,21 +19,18 @@ import org.openmrs.ConceptName;
 import org.openmrs.Drug;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.InitializerConstants;
-import org.openmrs.test.Verifies;
+import org.openmrs.module.initializer.api.loaders.DrugsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class DomainDrugsInitializerServiceTest extends DomainBaseModuleContextSensitiveTest {
+public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService cs;
 	
-	@Override
-	protected String getDomain() {
-		return InitializerConstants.DOMAIN_DRUGS;
-	}
+	@Autowired
+	private DrugsLoader loader;
 	
 	@Before
 	public void setup() {
@@ -85,11 +82,10 @@ public class DomainDrugsInitializerServiceTest extends DomainBaseModuleContextSe
 	}
 	
 	@Test
-	@Verifies(value = "should load and save drugs from CSV files according to the version", method = "")
 	public void loadDrugs_shouldLoadDrugsAccordingToCsvFiles() {
 		
 		// Replay
-		getService().loadDrugs();
+		loader.load();
 		
 		// a vanilla drug
 		{

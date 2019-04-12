@@ -7,9 +7,9 @@ import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
 
-public class IdentifierSourceCsvParser extends CsvParser<IdgenSourceWrapper, IdentifierSourceService, BaseLineProcessor<IdgenSourceWrapper, IdentifierSourceService>> {
+public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, IdentifierSourceService, BaseLineProcessor<IdgenSourceWrapper, IdentifierSourceService>> {
 	
-	public IdentifierSourceCsvParser(InputStream is, IdentifierSourceService service) throws IOException {
+	public IdentifierSourcesCsvParser(InputStream is, IdentifierSourceService service) throws IOException {
 		super(is, service);
 	}
 	
