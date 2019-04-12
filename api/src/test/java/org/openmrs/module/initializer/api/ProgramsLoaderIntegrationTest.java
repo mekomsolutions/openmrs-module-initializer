@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.Program;
 import org.openmrs.api.ConceptService;
@@ -19,71 +20,89 @@ public class ProgramsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	
 	@Autowired
 	@Qualifier("conceptService")
-	protected ConceptService cs;
+	private ConceptService cs;
 	
 	@Autowired
 	@Qualifier("programWorkflowService")
-	protected ProgramWorkflowService pws;
+	private ProgramWorkflowService pws;
 	
 	@Autowired
 	private ProgramsLoader loader;
 	
-	@Before
-	public void setup() {
+	public static void setupPrograms(ConceptService cs, ProgramWorkflowService pws) {
 		
 		// Concepts to be used as 'program concepts'
 		{
-			Concept programConcept1 = new Concept();
-			programConcept1.setShortName(new ConceptName("programConceptTest1", Locale.ENGLISH));
-			programConcept1.setConceptClass(cs.getConceptClassByName("Program"));
-			programConcept1.setDatatype(cs.getConceptDatatypeByName("Text"));
-			programConcept1 = cs.saveConcept(programConcept1);
-			
-			Concept programConcept2 = new Concept();
-			programConcept2.setShortName(new ConceptName("programConceptTest2", Locale.ENGLISH));
-			programConcept2.setConceptClass(cs.getConceptClassByName("Program"));
-			programConcept2.setDatatype(cs.getConceptDatatypeByName("Text"));
-			programConcept2 = cs.saveConcept(programConcept2);
-			
-			Concept programConcept3 = new Concept();
-			programConcept3.setShortName(new ConceptName("programConceptTest3", Locale.ENGLISH));
-			programConcept3.setConceptClass(cs.getConceptClassByName("Program"));
-			programConcept3.setDatatype(cs.getConceptDatatypeByName("Text"));
-			programConcept3 = cs.saveConcept(programConcept3);
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("TB Program", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Program"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			c = cs.saveConcept(c);
+		}
+		{
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("AIDS Program", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Program"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			c = cs.saveConcept(c);
+		}
+		{
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("Oncology Program", Locale.ENGLISH));
+			c.addDescription(
+			    new ConceptDescription("A regular oncology program with traditional chimotherapy.", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Program"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			c = cs.saveConcept(c);
+		}
+		{
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("Intensive Oncology Program", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Program"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			c = cs.saveConcept(c);
 		}
 		// Concepts to be used as 'outcomes concepts'
 		{
-			Concept outcomeConcept1 = new Concept();
-			outcomeConcept1.setShortName(new ConceptName("outcomesConceptTest1", Locale.ENGLISH));
-			outcomeConcept1.setConceptClass(cs.getConceptClassByName("ConvSet"));
-			outcomeConcept1.setSet(false);
-			outcomeConcept1.setDatatype(cs.getConceptDatatypeByName("N/A"));
-			outcomeConcept1 = cs.saveConcept(outcomeConcept1);
-			
-			Concept outcomeConcept2 = new Concept();
-			outcomeConcept2.setShortName(new ConceptName("outcomesConceptTest2", Locale.ENGLISH));
-			outcomeConcept2.setConceptClass(cs.getConceptClassByName("ConvSet"));
-			outcomeConcept2.setSet(false);
-			outcomeConcept2.setDatatype(cs.getConceptDatatypeByName("N/A"));
-			outcomeConcept2 = cs.saveConcept(outcomeConcept2);
-			
-			Concept outcomeConcept3 = new Concept();
-			outcomeConcept3.setShortName(new ConceptName("outcomesConceptTest3", Locale.ENGLISH));
-			outcomeConcept3.setConceptClass(cs.getConceptClassByName("ConvSet"));
-			outcomeConcept3.setSet(false);
-			outcomeConcept3.setDatatype(cs.getConceptDatatypeByName("N/A"));
-			outcomeConcept3 = cs.saveConcept(outcomeConcept3);
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("TB Program Outcomes", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("ConvSet"));
+			c.setSet(false);
+			c.setDatatype(cs.getConceptDatatypeByName("N/A"));
+			c = cs.saveConcept(c);
 		}
+		{
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("AIDS Program Outcomes", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("ConvSet"));
+			c.setSet(false);
+			c.setDatatype(cs.getConceptDatatypeByName("N/A"));
+			c = cs.saveConcept(c);
+		}
+		{
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("Oncology Program Outcomes", Locale.ENGLISH));
+			c.setSet(false);
+			c.setDatatype(cs.getConceptDatatypeByName("N/A"));
+			c.setConceptClass(cs.getConceptClassByName("ConvSet"));
+			c = cs.saveConcept(c);
+		}
+		
 		// A program to be edited
 		{
 			Program prog = new Program();
 			prog.setUuid("5dc2a3b0-863c-4074-8f84-45762c3aa04c");
-			prog.setConcept(cs.getConceptByName("programConceptTest1"));
-			prog.setOutcomesConcept(cs.getConceptByName("outcomesConceptTest1"));
-			prog.setName("Test Program");
-			prog.setDescription("Program Description");
+			prog.setConcept(cs.getConceptByName("Intensive Oncology Program"));
+			prog.setOutcomesConcept(cs.getConceptByName("Oncology Program Outcomes"));
+			prog.setName("Intensive Oncology Program");
+			prog.setDescription("A special oncology program with stronger and even experimental treatments.");
 			prog = pws.saveProgram(prog);
 		}
+	}
+	
+	@Before
+	public void setup() {
+		setupPrograms(cs, pws);
 	}
 	
 	@Test
@@ -94,28 +113,29 @@ public class ProgramsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		
 		// created programs
 		{
-			Program prog = pws.getProgramByName("programConceptTest1");
+			Program prog = pws.getProgramByName("TB Program");
 			Assert.assertNotNull(prog);
-			Assert.assertEquals(cs.getConceptByName("programConceptTest1"), prog.getConcept());
-			Assert.assertEquals(cs.getConceptByName("outcomesConceptTest1"), prog.getOutcomesConcept());
-			Assert.assertEquals("programConceptTest1", prog.getDescription());
+			Assert.assertEquals(cs.getConceptByName("TB Program"), prog.getConcept());
+			Assert.assertEquals(cs.getConceptByName("TB Program Outcomes"), prog.getOutcomesConcept());
+			Assert.assertEquals("TB Program", prog.getDescription());
 			
 		}
 		{
-			Program prog = pws.getProgramByName("programConceptTest2");
+			Program prog = pws.getProgramByName("AIDS Program");
 			Assert.assertNotNull(prog);
-			Assert.assertEquals(cs.getConceptByName("programConceptTest2"), prog.getConcept());
-			Assert.assertEquals(cs.getConceptByName("outcomesConceptTest2"), prog.getOutcomesConcept());
-			Assert.assertEquals("programConceptTest2", prog.getDescription());
+			Assert.assertEquals(cs.getConceptByName("AIDS Program"), prog.getConcept());
+			Assert.assertEquals(cs.getConceptByName("AIDS Program Outcomes"), prog.getOutcomesConcept());
+			Assert.assertEquals("AIDS Program", prog.getDescription());
 		}
+		
 		// an edited program
 		{
-			Program prog = pws.getProgramByName("programConceptTest3");
+			Program prog = pws.getProgramByName("Oncology Program");
 			Assert.assertNotNull(prog);
-			Assert.assertEquals(cs.getConceptByName("programConceptTest3"), prog.getConcept());
-			Assert.assertEquals(cs.getConceptByName("outcomesConceptTest3"), prog.getOutcomesConcept());
-			Assert.assertEquals("programConceptTest3", prog.getName());
-			Assert.assertEquals("programConceptTest3", prog.getDescription());
+			Assert.assertEquals(cs.getConceptByName("Oncology Program"), prog.getConcept());
+			Assert.assertEquals(cs.getConceptByName("Oncology Program Outcomes"), prog.getOutcomesConcept());
+			Assert.assertEquals("Oncology Program", prog.getName());
+			Assert.assertEquals("A regular oncology program with traditional chimotherapy.", prog.getDescription());
 		}
 	}
 }

@@ -9,10 +9,26 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
+import org.openmrs.api.ConceptService;
+import org.openmrs.api.ProgramWorkflowService;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loaders.ProgramWorkflowsLoader;
+import org.openmrs.module.initializer.api.loaders.ProgramsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
-public class ProgramWorkflowsLoaderIntegrationTest extends ProgramsLoaderIntegrationTest {
+public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+	
+	@Autowired
+	@Qualifier("conceptService")
+	private ConceptService cs;
+	
+	@Autowired
+	@Qualifier("programWorkflowService")
+	private ProgramWorkflowService pws;
+	
+	@Autowired
+	private ProgramsLoader progLoader;
 	
 	@Autowired
 	private ProgramWorkflowsLoader loader;
@@ -20,44 +36,32 @@ public class ProgramWorkflowsLoaderIntegrationTest extends ProgramsLoaderIntegra
 	@Before
 	public void setup() {
 		
-		super.setup();
+		ProgramsLoaderIntegrationTest.setupPrograms(cs, pws);
+		progLoader.load();
 		
-		// Concepts to be used for programs and programWorkflows
 		{
-			Concept programWorkflowConcept1 = new Concept();
-			programWorkflowConcept1.setShortName(new ConceptName("concept1", Locale.ENGLISH));
-			programWorkflowConcept1.setConceptClass(cs.getConceptClassByName("Program"));
-			programWorkflowConcept1.setDatatype(cs.getConceptDatatypeByName("Text"));
-			programWorkflowConcept1 = cs.saveConcept(programWorkflowConcept1);
-			
-			Concept programWorkflowConcept2 = new Concept();
-			programWorkflowConcept2.setShortName(new ConceptName("concept2", Locale.ENGLISH));
-			programWorkflowConcept2.setConceptClass(cs.getConceptClassByName("Program"));
-			programWorkflowConcept2.setDatatype(cs.getConceptDatatypeByName("Text"));
-			programWorkflowConcept2 = cs.saveConcept(programWorkflowConcept2);
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("TB Treatment Status (workflow)", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Workflow"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			c = cs.saveConcept(c);
 		}
-		// Programs used for add ProgramWorkflows
+		
+		// a workflow to be added to another program
 		{
-			Program program1 = new Program();
-			program1.setConcept(cs.getConceptByName("programConceptTest1"));
-			program1.setOutcomesConcept(cs.getConceptByName("outcomesConceptTest1"));
-			program1.setName("program11");
-			program1 = pws.saveProgram(program1);
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("Standard Treatment Status (workflow)", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Workflow"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			c = cs.saveConcept(c);
 			
-			Program program2 = new Program();
-			program2.setConcept(cs.getConceptByName("programConceptTest2"));
-			program2.setOutcomesConcept(cs.getConceptByName("outcomesConceptTest2"));
-			program2.setName("program22");
-			program2 = pws.saveProgram(program2);
-		}
-		// A existing workflow to be linked to another program
-		{
-			ProgramWorkflow programWorkflow = new ProgramWorkflow();
-			programWorkflow.setConcept(cs.getConceptByName("concept2"));
-			programWorkflow.setUuid("2b98bc76-245c-11e1-9cf0-00248140a5ee");
+			ProgramWorkflow wf = new ProgramWorkflow();
+			wf.setConcept(c);
+			wf.setUuid("2b98bc76-245c-11e1-9cf0-00248140a5ee");
 			
-			Program program = pws.getProgramByName("program11");
-			program.addWorkflow(programWorkflow);
+			Program prog = pws.getProgramByName("AIDS Program");
+			prog.addWorkflow(wf);
+			pws.saveProgram(prog);
 		}
 	}
 	
@@ -67,30 +71,24 @@ public class ProgramWorkflowsLoaderIntegrationTest extends ProgramsLoaderIntegra
 		// Replay
 		loader.load();
 		
-		// A created programWorkflow
+		// created workflow
 		{
-			ProgramWorkflow programWorkflow = pws.getWorkflowByUuid("2b98bc76-245c-11e1-9cf0-00248140a5eb");
-			Assert.assertNotNull(programWorkflow);
-			Assert.assertEquals(pws.getProgramByName("program11"), programWorkflow.getProgram());
-			Assert.assertEquals(cs.getConceptByName("concept1"), programWorkflow.getConcept());
-			Assert.assertEquals("concept1", programWorkflow.getName());
-			Assert.assertEquals("concept1", programWorkflow.getDescription());
-			Assert.assertEquals(false, programWorkflow.isRetired());
-			
-			Program program = pws.getProgramByName("program11");
-			Assert.assertEquals(programWorkflow, program.getWorkflow(programWorkflow.getId()));
+			ProgramWorkflow wf = pws.getWorkflowByUuid("2b98bc76-245c-11e1-9cf0-00248140a5eb");
+			Assert.assertNotNull(wf);
+			Program prog = pws.getProgramByName("TB Program");
+			Assert.assertEquals(prog, wf.getProgram());
+			Assert.assertEquals(cs.getConceptByName("TB Treatment Status (workflow)"), wf.getConcept());
+			Assert.assertEquals("TB Treatment Status (workflow)", wf.getName());
+			Assert.assertEquals("TB Treatment Status (workflow)", wf.getDescription());
+			Assert.assertFalse(wf.isRetired());
+			Assert.assertEquals(wf, prog.getWorkflow(wf.getId()));
 		}
-		// A retired programWorkflow
+		
+		// workflow added to a second program
 		{
-			ProgramWorkflow programWorkflow = pws.getWorkflowByUuid("2b98bc76-245c-11e1-9cf0-00248140a5ef");
-			Assert.assertNull(programWorkflow);
-		}
-		// An edited programWorkflow
-		{
-			ProgramWorkflow programWorkflow = pws.getWorkflowByUuid("2b98bc76-245c-11e1-9cf0-00248140a5ee");
-			Assert.assertNotNull(programWorkflow);
-			Assert.assertEquals(pws.getProgramByName("program22"), programWorkflow.getProgram());
-			Assert.assertEquals(cs.getConceptByName("concept2"), programWorkflow.getConcept());
+			ProgramWorkflow wf = pws.getWorkflowByUuid("2b98bc76-245c-11e1-9cf0-00248140a5ee");
+			Assert.assertTrue(pws.getProgramByName("TB Program").getAllWorkflows().contains(wf));
+			Assert.assertTrue(pws.getProgramByName("AIDS Program").getAllWorkflows().contains(wf));
 		}
 	}
 }
