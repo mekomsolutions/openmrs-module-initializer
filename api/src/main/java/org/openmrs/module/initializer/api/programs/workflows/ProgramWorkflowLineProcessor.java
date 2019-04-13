@@ -27,33 +27,42 @@ public class ProgramWorkflowLineProcessor extends BaseLineProcessor<ProgramWorkf
 	@Override
 	protected ProgramWorkflow bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = getUuid(line.asLine());
-		ProgramWorkflow programWorkflow = service.getWorkflowByUuid(uuid);
-		if (programWorkflow == null) {
-			programWorkflow = new ProgramWorkflow();
+		ProgramWorkflow wf = service.getWorkflowByUuid(uuid);
+		if (wf == null) {
+			wf = new ProgramWorkflow();
 			if (!StringUtils.isEmpty(uuid)) {
-				programWorkflow.setUuid(uuid);
+				wf.setUuid(uuid);
 			}
 		}
 		
-		programWorkflow.setRetired(getVoidOrRetire(line.asLine()));
+		wf.setRetired(getVoidOrRetire(line.asLine()));
 		
-		return programWorkflow;
+		return wf;
 	}
 	
 	@Override
-	protected ProgramWorkflow fill(ProgramWorkflow programWorkflow, CsvLine line) throws IllegalArgumentException {
+	protected ProgramWorkflow fill(ProgramWorkflow wf, CsvLine line) throws IllegalArgumentException {
 		
-		Concept programWorkflowConcept = Utils.fetchConcept(line.get(HEADER_WORKFLOW_CONCEPT), Context.getConceptService());
-		programWorkflow.setConcept(programWorkflowConcept);
+		Concept c = Utils.fetchConcept(line.get(HEADER_WORKFLOW_CONCEPT), Context.getConceptService());
+		wf.setConcept(c);
 		
-		String programWorkflowName = Utils.getBestMatchName(programWorkflowConcept, Context.getLocale());
-		programWorkflow.setName(programWorkflowName);
-		String programWorkflowDescription = Utils.getBestMatchDescription(programWorkflowConcept, Context.getLocale());
-		programWorkflow.setDescription(programWorkflowDescription);
+		wf.setName(Utils.getBestMatchName(c, Context.getLocale()));
+		wf.setDescription(Utils.getBestMatchDescription(c, Context.getLocale()));
 		
-		Program program = service.getProgramByName(line.get(HEADER_PROGRAM, true));
-		programWorkflow.setProgram(program);
+		Program prog = Utils.fetchProgram(line.get(HEADER_PROGRAM, true), service, Context.getConceptService());
 		
-		return programWorkflow;
+		// workflows must be bound to a program
+		if (prog == null) {
+			throw new IllegalArgumentException("No program could be fetched from the CSV line: '" + line.toString() + "'.");
+		}
+		// workflows linked to a program can't be moved to another program
+		if (wf.getProgram() != null && !prog.equals(wf.getProgram())) {
+			throw new IllegalArgumentException(
+			        "A workflow ('" + wf.getName() + "') already linked to a program ('" + wf.getProgram().getName()
+			                + "') cannot be added to another program, CSV line: '" + line.toString() + "'.");
+		}
+		wf.setProgram(prog);
+		
+		return wf;
 	}
 }

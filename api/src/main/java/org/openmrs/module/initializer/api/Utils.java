@@ -21,9 +21,12 @@ import org.openmrs.ConceptSource;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.PersonAttributeType;
+import org.openmrs.Program;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PersonService;
+import org.openmrs.api.ProgramWorkflowService;
+import org.springframework.util.CollectionUtils;
 
 public class Utils {
 	
@@ -199,6 +202,30 @@ public class Utils {
 		}
 		if (instance == null) {
 			instance = service.getLocationTagByName(id);
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a program trying various routes for its "id".
+	 * 
+	 * @param id The program UUID, name or underlying concept identifier (name, UUID or 'same as'
+	 *            concept mapping).
+	 * @return The {@link Program} instance if found, null otherwiwse.
+	 */
+	public static Program fetchProgram(String id, ProgramWorkflowService pws, ConceptService cs) {
+		Program instance = pws.getProgramByName(id);
+		if (instance == null) {
+			instance = pws.getProgramByUuid(id);
+		}
+		if (instance == null) {
+			Concept c = Utils.fetchConcept(id, cs);
+			if (c != null) {
+				List<Program> progs = pws.getProgramsByConcept(c);
+				if (!CollectionUtils.isEmpty(progs) && progs.size() == 1) {
+					instance = progs.get(0);
+				}
+			}
 		}
 		return instance;
 	}
