@@ -9,28 +9,79 @@
  */
 package org.openmrs.module.initializer.api.loaders;
 
-import static org.hamcrest.Matchers.greaterThan;
-
-import java.util.List;
+import static org.hamcrest.Matchers.lessThan;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
+	@Autowired
+	private JsonKeyValuesLoader jkvLoader;
+	
+	@Autowired
+	private MdsLoader mdsLoader;
+	
+	@Autowired
+	private GlobalPropertiesLoader gpLoader;
+	
+	@Autowired
+	private LocationsLoader locationsLoader;
+	
+	@Autowired
+	private ConceptsLoader conceptsLoader;
+	
+	@Autowired
+	private ProgramsLoader programsLoader;
+	
+	@Autowired
+	private ProgramWorkflowsLoader workflowsLoader;
+	
+	@Autowired
+	private PersonAttributeTypesLoader patLoader;
+	
+	@Autowired
+	private IdentifierSourcesLoader idSourcesLoader;
+	
+	@Autowired
+	private DrugsLoader drugsLoader;
+	
+	@Autowired
+	private OrderFrequenciesLoader freqLoader;
+	
 	@Test
 	public void getLoaders_shouldBeUnivoquelyOrdered() {
 		
-		List<Loader> loaders = getService().getLoaders();
+		int count = 1;
 		
-		for (int i = 1; i < loaders.size(); i++) {
-			Assert.assertThat(loaders.get(i).getOrder(), greaterThan(loaders.get(i - 1).getOrder()));
-		}
+		Assert.assertThat(jkvLoader.getOrder(), lessThan(mdsLoader.getOrder()));
+		count++;
+		Assert.assertThat(mdsLoader.getOrder(), lessThan(gpLoader.getOrder()));
+		count++;
+		Assert.assertThat(gpLoader.getOrder(), lessThan(locationsLoader.getOrder()));
+		count++;
+		Assert.assertThat(locationsLoader.getOrder(), lessThan(conceptsLoader.getOrder()));
+		count++;
+		Assert.assertThat(conceptsLoader.getOrder(), lessThan(programsLoader.getOrder()));
+		count++;
+		Assert.assertThat(programsLoader.getOrder(), lessThan(workflowsLoader.getOrder()));
+		count++;
+		Assert.assertThat(workflowsLoader.getOrder(), lessThan(patLoader.getOrder()));
+		count++;
+		Assert.assertThat(patLoader.getOrder(), lessThan(idSourcesLoader.getOrder()));
+		count++;
+		Assert.assertThat(idSourcesLoader.getOrder(), lessThan(drugsLoader.getOrder()));
+		count++;
+		Assert.assertThat(drugsLoader.getOrder(), lessThan(freqLoader.getOrder()));
+		count++;
+		
+		Assert.assertEquals(getService().getLoaders().size(), count);
 		
 		// System.out.println("Here is the list of loaders in order:");
 		// for (Loader l : loaders) {
