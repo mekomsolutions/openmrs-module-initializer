@@ -25,7 +25,7 @@ public class PersonAttributeTypesLoader extends BaseCsvLoader {
 	
 	@Override
 	public Integer getOrder() {
-		return 8;
+		return 9;
 	}
 	
 	@SuppressWarnings("rawtypes")
