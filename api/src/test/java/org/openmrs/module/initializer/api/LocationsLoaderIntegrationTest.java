@@ -60,7 +60,7 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	}
 	
 	@Test
-	public void loadLocations_shouldLoadAccordingToCsvFiles() {
+	public void load_shouldLoadAccordingToCsvFiles() {
 		
 		// Replay
 		loader.load();

@@ -38,7 +38,7 @@ public class GlobalPropertiesLoaderIntegrationTest extends DomainBaseModuleConte
 	}
 	
 	@Test
-	public void loadGlobalProperties_shouldOverrideGlobalProperties() {
+	public void load_shouldOverrideGlobalProperties() {
 		
 		// Setup
 		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("gp.gp11", "foobar"));
@@ -52,7 +52,7 @@ public class GlobalPropertiesLoaderIntegrationTest extends DomainBaseModuleConte
 	}
 	
 	@Test
-	public void loadGlobalProperties_shouldNotAffectOtherGlobalProperties() {
+	public void load_shouldNotAffectOtherGlobalProperties() {
 		
 		// Setup
 		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("gp.foo", "Foo"));

@@ -16,7 +16,6 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loaders.MdsLoader;
-import org.openmrs.test.Verifies;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class MdsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
@@ -25,8 +24,7 @@ public class MdsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTe
 	private MdsLoader loader;
 	
 	@Test
-	@Verifies(value = "should import all valid MDS packages 'preferring theirs'", method = "importMetadataSharingPackages()")
-	public void importMetadataSharingPackages_shouldImportMDSPackages() {
+	public void load_shouldImportMDSPackages() {
 		
 		// Replay
 		PersonAttributeType personAttType = null;

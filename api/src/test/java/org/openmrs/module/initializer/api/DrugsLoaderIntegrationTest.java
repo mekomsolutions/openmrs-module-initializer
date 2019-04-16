@@ -82,7 +82,7 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 	}
 	
 	@Test
-	public void loadDrugs_shouldLoadDrugsAccordingToCsvFiles() {
+	public void load_shouldLoadDrugsAccordingToCsvFiles() {
 		
 		// Replay
 		loader.load();
