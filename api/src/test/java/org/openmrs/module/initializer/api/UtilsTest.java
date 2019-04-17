@@ -86,24 +86,36 @@ public class UtilsTest {
 	
 	@Test
 	public void fetchProgram_shouldReturnProgramFromGivenId() throws Exception {
-		
+
 		ConceptService cs = Context.getConceptService();
 		ProgramWorkflowService pws = Context.getProgramWorkflowService();
-		ProgramsLoaderIntegrationTest.setupPrograms(cs, pws);
-		
+
+		Concept c = new Concept();
+		c.setUuid("3ccc7158-26fe-102b-80cb-0017a47871b2");
+
 		Program prog = new Program();
 		prog.setUuid("eae98b4c-e195-403b-b34a-82d94103b2c0");
-		prog.setConcept(cs.getConceptByName("TB Program"));
-		prog.setOutcomesConcept(cs.getConceptByName("TB Program Outcomes"));
 		prog.setName("TB Program");
-		prog = pws.saveProgram(prog);
-		
+
+		Program prog2 = new Program();
+
+		when(pws.getProgramByName("TB Program")).thenReturn(prog);
+		when(pws.getProgramByUuid("eae98b4c-e195-403b-b34a-82d94103b2c0")).thenReturn(prog);
+		when(Utils.fetchConcept("3ccc7158-26fe-102b-80cb-0017a47871b2",cs)).thenReturn(c);
+		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(prog));
+
+		Assert.assertNotNull(prog);
 		// fetch program by it's name
 		Assert.assertEquals(prog, Utils.fetchProgram("TB Program", pws, cs));
 		// fetch program by it's UUID
 		Assert.assertEquals(prog, Utils.fetchProgram("eae98b4c-e195-403b-b34a-82d94103b2c0", pws, cs));
 		// fetch program by it's underlying concept UUID
 		Assert.assertEquals(prog, Utils.fetchProgram("3ccc7158-26fe-102b-80cb-0017a47871b2", pws, cs));
+
+		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(prog,prog2));
+
+		// null return when several programs are defined by the same concept.
+		Assert.assertNull(Utils.fetchProgram("3ccc7158-26fe-102b-80cb-0017a47871b2", pws, cs));
 		
 	}
 }

@@ -34,7 +34,6 @@ public class ProgramsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		// Concepts to be used as 'program concepts'
 		{
 			Concept c = new Concept();
-			c.setUuid("3ccc7158-26fe-102b-80cb-0017a47871b2");
 			c.setShortName(new ConceptName("TB Program", Locale.ENGLISH));
 			c.setConceptClass(cs.getConceptClassByName("Program"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
