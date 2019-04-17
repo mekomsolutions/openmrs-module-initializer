@@ -140,7 +140,7 @@ public class ProgramsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	}
 	
 	@Test
-	public void loadPrograms_shouldLoadProgramsAccordingToCsvFiles() {
+	public void load_shouldLoadProgramsAccordingToCsvFiles() {
 		
 		// Replay
 		loader.load();

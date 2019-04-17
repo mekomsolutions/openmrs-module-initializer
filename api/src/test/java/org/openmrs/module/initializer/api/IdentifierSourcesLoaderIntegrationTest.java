@@ -69,7 +69,7 @@ public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleCont
 	}
 	
 	@Test
-	public void loadIdentifierSources_shouldModifyAndCreateIdentifierSources() {
+	public void load_shouldModifyAndCreateIdentifierSources() {
 		
 		// Replay
 		loader.load();

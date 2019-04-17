@@ -22,6 +22,7 @@ import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Program;
+import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PersonService;
@@ -211,7 +212,7 @@ public class Utils {
 	 * 
 	 * @param id The program UUID, name or underlying concept identifier (name, UUID or 'same as'
 	 *            concept mapping).
-	 * @return The {@link Program} instance if found, null otherwiwse.
+	 * @return The {@link Program} instance if found, null otherwise.
 	 */
 	public static Program fetchProgram(String id, ProgramWorkflowService pws, ConceptService cs) {
 		Program instance = pws.getProgramByName(id);
@@ -224,6 +225,27 @@ public class Utils {
 				List<Program> progs = pws.getProgramsByConcept(c);
 				if (!CollectionUtils.isEmpty(progs) && progs.size() == 1) {
 					instance = progs.get(0);
+				}
+			}
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a programWorkflow trying various routes for its "id".
+	 * 
+	 * @param id The workflow UUID or underlying concept identifier (name, UUID or 'same as' concept
+	 *            mapping).
+	 * @return The {@link ProgramWorkflow} instance if found, null otherwise.
+	 */
+	public static ProgramWorkflow fetchProgramWorkflow(String id, ProgramWorkflowService pws, ConceptService cs) {
+		ProgramWorkflow instance = pws.getWorkflowByUuid(id);
+		if (instance == null) {
+			Concept c = Utils.fetchConcept(id, cs);
+			if (c != null) {
+				List<ProgramWorkflow> workflows = pws.getProgramWorkflowsByConcept(c);
+				if (!CollectionUtils.isEmpty(workflows) && workflows.size() == 1) {
+					instance = workflows.get(0);
 				}
 			}
 		}

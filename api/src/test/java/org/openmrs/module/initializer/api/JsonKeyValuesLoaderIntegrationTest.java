@@ -74,7 +74,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	}
 	
 	@Test
-	public void loadJsonKeyValues_shouldFetchConceptsFromAllPossibleKeys() {
+	public void load_shouldFetchConceptsFromAllPossibleKeys() {
 		// Replay
 		loader.load();
 		
@@ -90,7 +90,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	}
 	
 	@Test
-	public void loadJsonKeyValues_shouldFetchPATFromAllPossibleKeys() {
+	public void load_shouldFetchPATFromAllPossibleKeys() {
 		// Replay
 		loader.load();
 		
@@ -104,7 +104,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	}
 	
 	@Test
-	public void loadJsonKeyValues_shouldLoadStructuredJsonValue() {
+	public void load_shouldLoadStructuredJsonValue() {
 		// Replay
 		loader.load();
 		String json = getService().getValueFromKey("structured.json");
@@ -114,7 +114,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	}
 	
 	@Test
-	public void loadJsonKeyValues_shouldLoadConceptList() {
+	public void load_shouldLoadConceptList() {
 		// Replay
 		loader.load();
 		List<Concept> concepts = getService().getConceptsFromKey("impl.purpose.concepts");

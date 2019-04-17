@@ -12,9 +12,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.Program;
+import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.AdministrationService;
+import org.openmrs.api.ConceptService;
+import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.initializer.api.Utils;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -30,6 +33,12 @@ public class UtilsTest {
 		when(Context.getAdministrationService()).thenReturn(as);
 		when(as.getAllowedLocales()).thenReturn(Arrays.asList(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN));
 		when(Context.getLocale()).thenReturn(Locale.ENGLISH);
+		
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		when(Context.getProgramWorkflowService()).thenReturn(pws);
+		
+		ConceptService cs = mock(ConceptService.class);
+		when(Context.getConceptService()).thenReturn(cs);
 	}
 	
 	@Test
@@ -74,5 +83,68 @@ public class UtilsTest {
 		Assert.assertEquals(c.getPreferredName(Locale.ENGLISH).getName(), Utils.getBestMatchName(c, Locale.ENGLISH));
 		Assert.assertEquals("A preferred name in English", Utils.getBestMatchName(c, Locale.FRENCH));
 		Assert.assertEquals("A preferred name in English", Utils.getBestMatchName(c, Locale.GERMAN));
+	}
+	
+	@Test
+	public void fetchProgram_shouldReturnProgramFromAnyId() throws Exception {
+		ConceptService cs = mock(ConceptService.class);
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		
+		Concept c = new Concept();
+		c.setUuid("concept-uuid");
+		Program prog = new Program();
+		prog.setUuid("program-uuid");
+		prog.setName("Program Name");
+		
+		when(pws.getProgramByName("Program Name")).thenReturn(prog);
+		when(pws.getProgramByUuid("program-uuid")).thenReturn(prog);
+		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
+		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(prog));
+		
+		Assert.assertEquals(prog, Utils.fetchProgram("Program Name", pws, cs));
+		Assert.assertEquals(prog, Utils.fetchProgram("program-uuid", pws, cs));
+		Assert.assertEquals(prog, Utils.fetchProgram("concept-uuid", pws, cs));
+	}
+	
+	@Test
+	public void fetchProgram_shouldReturnNullWhenMultipleMatchesByConcept() {
+		ConceptService cs = mock(ConceptService.class);
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		
+		Concept c = new Concept();
+		c.setUuid("concept-uuid");
+		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(new Program(), new Program()));
+		
+		Assert.assertNull(Utils.fetchProgram("concept-uuid", pws, cs));
+	}
+	
+	@Test
+	public void fetchWorkflow_shouldReturnWorkflowFromAnyId() throws Exception {
+		ConceptService cs = mock(ConceptService.class);
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		
+		Concept c = new Concept();
+		c.setUuid("concept-uuid");
+		ProgramWorkflow wf = new ProgramWorkflow();
+		wf.setUuid("workflow-uuid");
+		
+		when(pws.getWorkflowByUuid("workflow-uuid")).thenReturn(wf);
+		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
+		when(pws.getProgramWorkflowsByConcept(c)).thenReturn(Arrays.asList(wf));
+		
+		Assert.assertEquals(wf, Utils.fetchProgramWorkflow("workflow-uuid", pws, cs));
+		Assert.assertEquals(wf, Utils.fetchProgramWorkflow("concept-uuid", pws, cs));
+	}
+	
+	@Test
+	public void fetchWorkflow_shouldReturnNullWhenMultipleMatchesByConcept() {
+		ConceptService cs = mock(ConceptService.class);
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		
+		Concept c = new Concept();
+		c.setUuid("concept-uuid");
+		when(pws.getProgramWorkflowsByConcept(c)).thenReturn(Arrays.asList(new ProgramWorkflow(), new ProgramWorkflow()));
+		
+		Assert.assertNull(Utils.fetchProgram("concept-uuid", pws, cs));
 	}
 }

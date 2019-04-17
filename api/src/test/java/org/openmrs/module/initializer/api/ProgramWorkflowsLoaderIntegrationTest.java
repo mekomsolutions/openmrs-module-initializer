@@ -33,11 +33,7 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleConte
 	@Autowired
 	private ProgramWorkflowsLoader loader;
 	
-	@Before
-	public void setup() {
-		
-		ProgramsLoaderIntegrationTest.setupPrograms(cs, pws);
-		progLoader.load();
+	public static void setupWorkflows(ConceptService cs, ProgramWorkflowService pws) {
 		
 		// a couple of concepts for defining workflows
 		{
@@ -112,16 +108,23 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleConte
 			prog.addWorkflow(wf);
 			pws.saveProgram(prog);
 		}
+	}
+	
+	@Before
+	public void setup() {
 		
+		ProgramsLoaderIntegrationTest.setupPrograms(cs, pws);
+		progLoader.load();
+		ProgramWorkflowsLoaderIntegrationTest.setupWorkflows(cs, pws);
 	}
 	
 	@Test
-	public void loadProgramWorkFlows_shouldLoadProgramWorkflowsAccordingToCsvFiles() {
+	public void load_shouldLoadProgramWorkflowsAccordingToCsvFiles() {
 		
 		// Replay
 		loader.load();
 		
-		// Verifs
+		// Verify
 		
 		// created workflow
 		{

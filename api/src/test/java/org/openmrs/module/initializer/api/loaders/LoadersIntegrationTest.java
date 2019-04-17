@@ -44,6 +44,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private ProgramWorkflowsLoader workflowsLoader;
 	
 	@Autowired
+	private ProgramWorkflowStatesLoader statesLoader;
+	
+	@Autowired
 	private PersonAttributeTypesLoader patLoader;
 	
 	@Autowired
@@ -72,7 +75,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		count++;
 		Assert.assertThat(programsLoader.getOrder(), lessThan(workflowsLoader.getOrder()));
 		count++;
-		Assert.assertThat(workflowsLoader.getOrder(), lessThan(patLoader.getOrder()));
+		Assert.assertThat(workflowsLoader.getOrder(), lessThan(statesLoader.getOrder()));
+		count++;
+		Assert.assertThat(statesLoader.getOrder(), lessThan(patLoader.getOrder()));
 		count++;
 		Assert.assertThat(patLoader.getOrder(), lessThan(idSourcesLoader.getOrder()));
 		count++;

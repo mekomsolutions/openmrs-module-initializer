@@ -1,0 +1,6 @@
+Uuid,Void/Retire,Workflow,State concept,Initial,Terminal
+cfa241f4-2700-102b-80cb-0017a47871b2,,TB Treatment Status (workflow),Active treatment (initial),true,
+cfa244b0-2700-102b-80cb-0017a47871b2,,1b42d0e8-20ad-4bd8-b05d-fbad80a3b665,Defaulted,,true
+88b717c0-f580-497a-8d2b-026b60dd6bfd,,TB Treatment Status (workflow),Deceased,true,true
+,,Standard Treatment Status (workflow),Transferred out,,
+cfa24690-2700-102b-80cb-0017a47871b2,true,Extended Discharge (workflow),Moribund,true,

@@ -91,7 +91,7 @@ public class OrderFrequenciesLoaderIntegrationTest extends DomainBaseModuleConte
 	}
 	
 	@Test
-	public void loadOrderFrequencies_shouldLoadOrderFrequenciesAccordingToCsvFiles() {
+	public void load_shouldLoadOrderFrequenciesAccordingToCsvFiles() {
 		
 		// Replay
 		loader.load();
