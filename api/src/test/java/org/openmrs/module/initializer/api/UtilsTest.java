@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.Program;
+import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.ProgramWorkflowService;
@@ -85,37 +86,65 @@ public class UtilsTest {
 	}
 	
 	@Test
-	public void fetchProgram_shouldReturnProgramFromGivenId() throws Exception {
-
-		ConceptService cs = Context.getConceptService();
-		ProgramWorkflowService pws = Context.getProgramWorkflowService();
-
-		Concept c = new Concept();
-		c.setUuid("3ccc7158-26fe-102b-80cb-0017a47871b2");
-
-		Program prog = new Program();
-		prog.setUuid("eae98b4c-e195-403b-b34a-82d94103b2c0");
-		prog.setName("TB Program");
-
-		Program prog2 = new Program();
-
-		when(pws.getProgramByName("TB Program")).thenReturn(prog);
-		when(pws.getProgramByUuid("eae98b4c-e195-403b-b34a-82d94103b2c0")).thenReturn(prog);
-		when(Utils.fetchConcept("3ccc7158-26fe-102b-80cb-0017a47871b2",cs)).thenReturn(c);
-		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(prog));
-
-		Assert.assertNotNull(prog);
-		// fetch program by it's name
-		Assert.assertEquals(prog, Utils.fetchProgram("TB Program", pws, cs));
-		// fetch program by it's UUID
-		Assert.assertEquals(prog, Utils.fetchProgram("eae98b4c-e195-403b-b34a-82d94103b2c0", pws, cs));
-		// fetch program by it's underlying concept UUID
-		Assert.assertEquals(prog, Utils.fetchProgram("3ccc7158-26fe-102b-80cb-0017a47871b2", pws, cs));
-
-		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(prog,prog2));
-
-		// null return when several programs are defined by the same concept.
-		Assert.assertNull(Utils.fetchProgram("3ccc7158-26fe-102b-80cb-0017a47871b2", pws, cs));
+	public void fetchProgram_shouldReturnProgramFromAnyId() throws Exception {
+		ConceptService cs = mock(ConceptService.class);
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
 		
+		Concept c = new Concept();
+		c.setUuid("concept-uuid");
+		Program prog = new Program();
+		prog.setUuid("program-uuid");
+		prog.setName("Program Name");
+		
+		when(pws.getProgramByName("Program Name")).thenReturn(prog);
+		when(pws.getProgramByUuid("program-uuid")).thenReturn(prog);
+		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
+		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(prog));
+		
+		Assert.assertEquals(prog, Utils.fetchProgram("Program Name", pws, cs));
+		Assert.assertEquals(prog, Utils.fetchProgram("program-uuid", pws, cs));
+		Assert.assertEquals(prog, Utils.fetchProgram("concept-uuid", pws, cs));
+	}
+	
+	@Test
+	public void fetchProgram_shouldReturnNullWhenMultipleMatchesByConcept() {
+		ConceptService cs = mock(ConceptService.class);
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		
+		Concept c = new Concept();
+		c.setUuid("concept-uuid");
+		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(new Program(), new Program()));
+		
+		Assert.assertNull(Utils.fetchProgram("concept-uuid", pws, cs));
+	}
+	
+	@Test
+	public void fetchWorkflow_shouldReturnWorkflowFromAnyId() throws Exception {
+		ConceptService cs = mock(ConceptService.class);
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		
+		Concept c = new Concept();
+		c.setUuid("concept-uuid");
+		ProgramWorkflow wf = new ProgramWorkflow();
+		wf.setUuid("workflow-uuid");
+		
+		when(pws.getWorkflowByUuid("workflow-uuid")).thenReturn(wf);
+		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
+		when(pws.getProgramWorkflowsByConcept(c)).thenReturn(Arrays.asList(wf));
+		
+		Assert.assertEquals(wf, Utils.fetchProgramWorkflow("workflow-uuid", pws, cs));
+		Assert.assertEquals(wf, Utils.fetchProgramWorkflow("concept-uuid", pws, cs));
+	}
+	
+	@Test
+	public void fetchWorkflow_shouldReturnNullWhenMultipleMatchesByConcept() {
+		ConceptService cs = mock(ConceptService.class);
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		
+		Concept c = new Concept();
+		c.setUuid("concept-uuid");
+		when(pws.getProgramWorkflowsByConcept(c)).thenReturn(Arrays.asList(new ProgramWorkflow(), new ProgramWorkflow()));
+		
+		Assert.assertNull(Utils.fetchProgram("concept-uuid", pws, cs));
 	}
 }
