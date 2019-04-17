@@ -157,7 +157,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	}
 	
 	@Test
-	public void loadConcepts_shouldProcessCsvAccordingToVersion() {
+	public void load_shouldProcessCsvAccordingToVersion() {
 		
 		// Setup
 		Concept c = null;

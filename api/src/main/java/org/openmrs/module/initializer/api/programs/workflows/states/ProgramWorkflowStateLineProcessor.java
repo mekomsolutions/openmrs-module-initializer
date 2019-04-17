@@ -13,9 +13,9 @@ import org.openmrs.module.initializer.api.Utils;
 
 public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<ProgramWorkflowState, ProgramWorkflowService> {
 	
-	protected static String HEADER_PROGRAM_WORKFLOW = "workflow";
+	protected static String HEADER_WORKFLOW = "workflow";
 	
-	protected static String HEADER_WORKFLOW_STATE_CONCEPT = "state concept";
+	protected static String HEADER_STATE_CONCEPT = "state concept";
 	
 	protected static String HEADER_INITIAL = "initial";
 	
@@ -48,28 +48,25 @@ public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<Program
 	@Override
 	protected ProgramWorkflowState fill(ProgramWorkflowState state, CsvLine line) throws IllegalArgumentException {
 		
-		Concept stateConcept = Utils.fetchConcept(line.get(HEADER_WORKFLOW_STATE_CONCEPT), Context.getConceptService());
-		state.setConcept(stateConcept);
+		Concept c = Utils.fetchConcept(line.get(HEADER_STATE_CONCEPT), Context.getConceptService());
+		state.setConcept(c);
 		
-		String stateName = Utils.getBestMatchName(stateConcept, Context.getLocale());
-		state.setName(stateName);
-		String stateDescription = Utils.getBestMatchDescription(stateConcept, Context.getLocale());
-		state.setDescription(stateDescription);
+		String name = Utils.getBestMatchName(c, Context.getLocale());
+		state.setName(name);
+		String desc = Utils.getBestMatchDescription(c, Context.getLocale());
+		state.setDescription(desc);
 		
-		String initial = line.get(HEADER_INITIAL, true);
-		state.setInitial(BooleanUtils.toBoolean(initial));
+		state.setInitial(BooleanUtils.toBoolean(line.get(HEADER_INITIAL, true)));
+		state.setTerminal(BooleanUtils.toBoolean(line.get(HEADER_TERMINAL, true)));
 		
-		String terminal = line.get(HEADER_TERMINAL, true);
-		state.setTerminal(BooleanUtils.toBoolean(terminal));
-		
-		ProgramWorkflow wf = Utils.fetchProgramWorkflow(line.get(HEADER_PROGRAM_WORKFLOW, true), service,
+		ProgramWorkflow wf = Utils.fetchProgramWorkflow(line.get(HEADER_WORKFLOW, true), service,
 		    Context.getConceptService());
 		
-		// state must be bound to a workflow
+		// states must be bound to a workflow
 		if (wf == null) {
 			throw new IllegalArgumentException("No workflow could be fetched from the CSV line: '" + line.toString() + "'.");
 		}
-		// state linked to a workflow can't be moved to another workflow
+		// states linked to a workflow can't be moved to another workflow
 		if (state.getProgramWorkflow() != null && !wf.equals(state.getProgramWorkflow())) {
 			throw new IllegalArgumentException("A State ('" + state.getName() + "') already linked to a workflow ('"
 			        + state.getProgramWorkflow().getName() + "') cannot be added to another workflow, CSV line: '"

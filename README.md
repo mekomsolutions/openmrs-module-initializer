@@ -24,7 +24,8 @@ configuration/
   ├── metadatasharing/ 
   ├── personattributetypes/ 
   ├── programs/ 
-  └── programworkflows/
+  ├── programworkflows/
+  └── programworkflowstates/
 ```  
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain. Although several file types are supported for providing metadata, CSV files are the preferred format and all domain should aim at being covered through parsing CSV files.
 
@@ -48,6 +49,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Programs (CSV files)](readme/prog.md)
 1. [Programs worklows (CSV files)](readme/prog.md)
+1. [Programs worklow states (CSV files)](readme/prog.md)
 1. [Person attribute types (CSV files)](readme/pat.md)
 1. [Identifier sources (CSV files)](readme/idgen.md)
 1. [Drugs (CSV files)](readme/drugs.md)
@@ -77,6 +79,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
 * Bulk creation and edition of programs provided through CSV files in  **configuration/programs**.
 * Bulk creation and edition of program workflows provided through CSV files in  **configuration/programworkflows**.
+* Bulk creation and edition of program workflow states provided through CSV files in  **configuration/programworkflowstates**.
 
 #### Version 1.1.0
 * Bulk creation and edition of drugs provided through CSV files in  **configuration/locations**.

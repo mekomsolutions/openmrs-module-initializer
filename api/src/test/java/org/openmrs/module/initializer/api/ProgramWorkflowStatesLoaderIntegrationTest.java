@@ -1,5 +1,7 @@
 package org.openmrs.module.initializer.api;
 
+import java.util.Locale;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,8 +18,6 @@ import org.openmrs.module.initializer.api.loaders.ProgramsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.Locale;
-
 public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
@@ -32,7 +32,7 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 	private ProgramsLoader progLoader;
 	
 	@Autowired
-	private ProgramWorkflowsLoader workflowsLoader;
+	private ProgramWorkflowsLoader wfLoader;
 	
 	@Autowired
 	private ProgramWorkflowStatesLoader loader;
@@ -43,26 +43,26 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 		ProgramsLoaderIntegrationTest.setupPrograms(cs, pws);
 		progLoader.load();
 		ProgramWorkflowsLoaderIntegrationTest.setupWorkflows(cs, pws);
-		workflowsLoader.load();
+		wfLoader.load();
 		
 		// a couple of concepts for defining states
 		{
 			Concept c = new Concept();
-			c.setShortName(new ConceptName("stateConcept1", Locale.ENGLISH));
+			c.setShortName(new ConceptName("Active treatment (initial)", Locale.ENGLISH));
 			c.setConceptClass(cs.getConceptClassByName("State"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c = cs.saveConcept(c);
 		}
 		{
 			Concept c = new Concept();
-			c.setShortName(new ConceptName("stateConcept2", Locale.ENGLISH));
+			c.setShortName(new ConceptName("Defaulted", Locale.ENGLISH));
 			c.setConceptClass(cs.getConceptClassByName("State"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c = cs.saveConcept(c);
 		}
 		{
 			Concept c = new Concept();
-			c.setShortName(new ConceptName("stateConcept4", Locale.ENGLISH));
+			c.setShortName(new ConceptName("Transferred out", Locale.ENGLISH));
 			c.setConceptClass(cs.getConceptClassByName("State"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c = cs.saveConcept(c);
@@ -71,7 +71,7 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 		// a state to attempt to be added to another workflow
 		{
 			Concept c = new Concept();
-			c.setShortName(new ConceptName("stateConcept3", Locale.ENGLISH));
+			c.setShortName(new ConceptName("Deceased", Locale.ENGLISH));
 			c.setConceptClass(cs.getConceptClassByName("State"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c = cs.saveConcept(c);
@@ -89,7 +89,7 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 		// a state to be retired
 		{
 			Concept c = new Concept();
-			c.setShortName(new ConceptName("stateConcept5", Locale.ENGLISH));
+			c.setShortName(new ConceptName("Moribund", Locale.ENGLISH));
 			c.setConceptClass(cs.getConceptClassByName("State"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c = cs.saveConcept(c);
@@ -107,7 +107,7 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 	}
 	
 	@Test
-	public void loadProgramWorkFlowStates_shouldLoadProgramWorkflowStatesAccordingToCsvFiles() {
+	public void load_shouldLoadProgramWorkflowStatesAccordingToCsvFiles() {
 		
 		// Replay
 		loader.load();
@@ -122,9 +122,9 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 			ProgramWorkflow wf = Utils.fetchProgramWorkflow("TB Treatment Status (workflow)", pws, cs);
 			Assert.assertEquals(wf, state.getProgramWorkflow());
 			
-			Assert.assertEquals(cs.getConceptByName("stateConcept1"), state.getConcept());
-			Assert.assertEquals("stateConcept1", state.getName());
-			Assert.assertEquals("stateConcept1", state.getDescription());
+			Assert.assertEquals(cs.getConceptByName("Active treatment (initial)"), state.getConcept());
+			Assert.assertEquals("Active treatment (initial)", state.getName());
+			Assert.assertEquals("Active treatment (initial)", state.getDescription());
 			Assert.assertFalse(state.isRetired());
 			Assert.assertTrue(state.getInitial());
 			Assert.assertFalse(state.getTerminal());
@@ -135,7 +135,7 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 		{
 			ProgramWorkflowState state = pws.getStateByUuid("cfa244b0-2700-102b-80cb-0017a47871b2");
 			Assert.assertNotNull(state);
-			Assert.assertEquals(cs.getConceptByName("stateConcept2"), state.getConcept());
+			Assert.assertEquals(cs.getConceptByName("Defaulted"), state.getConcept());
 			
 			ProgramWorkflow wf = Utils.fetchProgramWorkflow("Extended Discharge (workflow)", pws, cs);
 			Assert.assertEquals(wf, state.getProgramWorkflow());
@@ -153,7 +153,7 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 		// state created without UUID
 		{
 			ProgramWorkflow wf = Utils.fetchProgramWorkflow("Standard Treatment Status (workflow)", pws, cs);
-			ProgramWorkflowState state = wf.getState("stateConcept4");
+			ProgramWorkflowState state = wf.getState("Transferred out");
 			Assert.assertNotNull(state);
 		}
 		

@@ -119,7 +119,7 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleConte
 	}
 	
 	@Test
-	public void loadProgramWorkFlows_shouldLoadProgramWorkflowsAccordingToCsvFiles() {
+	public void load_shouldLoadProgramWorkflowsAccordingToCsvFiles() {
 		
 		// Replay
 		loader.load();

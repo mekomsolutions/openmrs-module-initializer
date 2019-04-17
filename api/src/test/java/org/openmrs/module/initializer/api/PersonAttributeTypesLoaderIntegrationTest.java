@@ -23,7 +23,6 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loaders.PersonAttributeTypesLoader;
-import org.openmrs.test.Verifies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -84,8 +83,7 @@ public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 	}
 	
 	@Test
-	@Verifies(value = "should load and save person attribute types from CSV files according to the version", method = "")
-	public void loadPersonAttributeTypes_shouldLoadAccordingToCsvFiles() {
+	public void load_shouldLoadAccordingToCsvFiles() {
 		
 		// Replay
 		loader.load();
