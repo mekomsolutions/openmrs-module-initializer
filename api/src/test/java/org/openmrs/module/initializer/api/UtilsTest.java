@@ -12,9 +12,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.Program;
 import org.openmrs.api.AdministrationService;
+import org.openmrs.api.ConceptService;
+import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.initializer.api.Utils;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -30,6 +32,12 @@ public class UtilsTest {
 		when(Context.getAdministrationService()).thenReturn(as);
 		when(as.getAllowedLocales()).thenReturn(Arrays.asList(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN));
 		when(Context.getLocale()).thenReturn(Locale.ENGLISH);
+		
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		when(Context.getProgramWorkflowService()).thenReturn(pws);
+		
+		ConceptService cs = mock(ConceptService.class);
+		when(Context.getConceptService()).thenReturn(cs);
 	}
 	
 	@Test
@@ -74,5 +82,28 @@ public class UtilsTest {
 		Assert.assertEquals(c.getPreferredName(Locale.ENGLISH).getName(), Utils.getBestMatchName(c, Locale.ENGLISH));
 		Assert.assertEquals("A preferred name in English", Utils.getBestMatchName(c, Locale.FRENCH));
 		Assert.assertEquals("A preferred name in English", Utils.getBestMatchName(c, Locale.GERMAN));
+	}
+	
+	@Test
+	public void fetchProgram_shouldReturnProgramFromGivenId() throws Exception {
+		
+		ConceptService cs = Context.getConceptService();
+		ProgramWorkflowService pws = Context.getProgramWorkflowService();
+		ProgramsLoaderIntegrationTest.setupPrograms(cs, pws);
+		
+		Program prog = new Program();
+		prog.setUuid("eae98b4c-e195-403b-b34a-82d94103b2c0");
+		prog.setConcept(cs.getConceptByName("TB Program"));
+		prog.setOutcomesConcept(cs.getConceptByName("TB Program Outcomes"));
+		prog.setName("TB Program");
+		prog = pws.saveProgram(prog);
+		
+		// fetch program by it's name
+		Assert.assertEquals(prog, Utils.fetchProgram("TB Program", pws, cs));
+		// fetch program by it's UUID
+		Assert.assertEquals(prog, Utils.fetchProgram("eae98b4c-e195-403b-b34a-82d94103b2c0", pws, cs));
+		// fetch program by it's underlying concept UUID
+		Assert.assertEquals(prog, Utils.fetchProgram("3ccc7158-26fe-102b-80cb-0017a47871b2", pws, cs));
+		
 	}
 }
