@@ -23,6 +23,7 @@ import org.openmrs.LocationTag;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PersonService;
@@ -246,6 +247,27 @@ public class Utils {
 				List<ProgramWorkflow> workflows = pws.getProgramWorkflowsByConcept(c);
 				if (!CollectionUtils.isEmpty(workflows) && workflows.size() == 1) {
 					instance = workflows.get(0);
+				}
+			}
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a programWorkflowState trying various routes for its "id".
+	 * 
+	 * @param id The state UUID or underlying concept identifier (name, UUID or 'same as' concept
+	 *            mapping).
+	 * @return The {@link ProgramWorkflowState} instance if found, null otherwise.
+	 */
+	public static ProgramWorkflowState fetchProgramWorkflowState(String id, ProgramWorkflowService pws, ConceptService cs) {
+		ProgramWorkflowState instance = pws.getStateByUuid(id);
+		if (instance == null) {
+			Concept c = Utils.fetchConcept(id, cs);
+			if (c != null) {
+				List<ProgramWorkflowState> states = pws.getProgramWorkflowStatesByConcept(c);
+				if (!CollectionUtils.isEmpty(states) && states.size() == 1) {
+					instance = states.get(0);
 				}
 			}
 		}

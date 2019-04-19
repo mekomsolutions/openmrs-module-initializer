@@ -26,7 +26,16 @@ public class ProgramLineProcessor extends BaseLineProcessor<Program, ProgramWork
 	@Override
 	protected Program bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = getUuid(line.asLine());
-		Program program = service.getProgramByUuid(uuid);
+		
+		String id = uuid;
+		if (id == null) {
+			id = line.get(HEADER_NAME);
+		}
+		if (id == null) {
+			id = line.get(HEADER_CONCEPT_PROGRAM);
+		}
+		
+		Program program = Utils.fetchProgram(id, service, Context.getConceptService());
 		if (program == null) {
 			program = new Program();
 			if (!StringUtils.isEmpty(uuid)) {

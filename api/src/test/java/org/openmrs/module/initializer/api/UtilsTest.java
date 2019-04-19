@@ -14,6 +14,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.ProgramWorkflowService;
@@ -145,6 +146,37 @@ public class UtilsTest {
 		c.setUuid("concept-uuid");
 		when(pws.getProgramWorkflowsByConcept(c)).thenReturn(Arrays.asList(new ProgramWorkflow(), new ProgramWorkflow()));
 		
-		Assert.assertNull(Utils.fetchProgram("concept-uuid", pws, cs));
+		Assert.assertNull(Utils.fetchProgramWorkflow("concept-uuid", pws, cs));
+	}
+	
+	@Test
+	public void fetchWorkflowState_shouldReturnWorkflowStateFromAnyId() throws Exception {
+		ConceptService cs = mock(ConceptService.class);
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		
+		Concept c = new Concept();
+		c.setUuid("concept-uuid");
+		ProgramWorkflowState state = new ProgramWorkflowState();
+		state.setUuid("state-uuid");
+		
+		when(pws.getStateByUuid("state-uuid")).thenReturn(state);
+		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
+		when(pws.getProgramWorkflowStatesByConcept(c)).thenReturn(Arrays.asList(state));
+		
+		Assert.assertEquals(state, Utils.fetchProgramWorkflowState("state-uuid", pws, cs));
+		Assert.assertEquals(state, Utils.fetchProgramWorkflowState("concept-uuid", pws, cs));
+	}
+	
+	@Test
+	public void fetchWorkflowState_shouldReturnNullWhenMultipleMatchesByConcept() {
+		ConceptService cs = mock(ConceptService.class);
+		ProgramWorkflowService pws = mock(ProgramWorkflowService.class);
+		
+		Concept c = new Concept();
+		c.setUuid("concept-uuid");
+		when(pws.getProgramWorkflowStatesByConcept(c))
+		        .thenReturn(Arrays.asList(new ProgramWorkflowState(), new ProgramWorkflowState()));
+		
+		Assert.assertNull(Utils.fetchProgramWorkflowState("concept-uuid", pws, cs));
 	}
 }
