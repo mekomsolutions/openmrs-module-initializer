@@ -25,7 +25,7 @@ public class ProgramWorkflowStatesLoader extends BaseCsvLoader {
 	
 	@Override
 	public Integer getOrder() {
-		return 8;
+		return 9;
 	}
 	
 	@SuppressWarnings("rawtypes")

@@ -25,7 +25,7 @@ public class OrderFrequenciesLoader extends BaseCsvLoader {
 	
 	@Override
 	public Integer getOrder() {
-		return 12;
+		return 13;
 	}
 	
 	@SuppressWarnings("rawtypes")

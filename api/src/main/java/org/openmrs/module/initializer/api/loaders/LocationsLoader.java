@@ -25,7 +25,7 @@ public class LocationsLoader extends BaseCsvLoader {
 	
 	@Override
 	public Integer getOrder() {
-		return 4;
+		return 5;
 	}
 	
 	@SuppressWarnings("rawtypes")

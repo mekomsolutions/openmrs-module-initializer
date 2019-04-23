@@ -1,0 +1,6 @@
+Uuid,Name,Description
+494e1213-360d-45ac-877d-515993444290,Add Cohort,Able to add a cohort to the system
+cf687ee2-2700-102b-80cb-0017a47871b2,Add Concept Proposal,
+cf68b952-2700-102b-80cb-0017a47871b2,Edit Concepts,Able to change attributes of existing terms
+cf690132-2700-102b-80cb-0017a47871b2,,Allows users to manage programs
+cf688144-2700-102b-80cb-0017a47871b2,,Able to add new terms to the concept dictionary

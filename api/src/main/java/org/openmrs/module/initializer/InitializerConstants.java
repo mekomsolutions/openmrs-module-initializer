@@ -55,4 +55,6 @@ public class InitializerConstants {
 	
 	public static final String DOMAIN_PROG_WF_ST = "programworkflowstates";
 	
+	public static final String DOMAIN_PRIV = "privileges";
+	
 }
