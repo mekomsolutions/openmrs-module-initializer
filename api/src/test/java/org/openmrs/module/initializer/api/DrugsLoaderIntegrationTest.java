@@ -65,7 +65,7 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c = cs.saveConcept(c);
 		}
-		// A drugs to be edited
+		// drugs to be edited
 		{
 			Concept c = new Concept();
 			c.setShortName(new ConceptName("Metronidazole (old)", Locale.ENGLISH));
@@ -88,7 +88,7 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			
 			Drug d = new Drug();
 			d.setUuid("42f010f8-26fe-102b-80cb-0017a47871b2");
-			d.setName("D4T 30");
+			d.setName("d4T 30");
 			d.setConcept(c);
 			d.setStrength("100mg");
 			d = cs.saveDrug(d);
@@ -124,11 +124,11 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Assert.assertEquals(cs.getConceptByName("Metronidazole (new)"), d.getConcept());
 			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
 		}
-		// an edited drug fetching from it's name
+		// an edited drug fetched by name
 		{
 			Drug d = cs.getDrugByUuid("42f010f8-26fe-102b-80cb-0017a47871b2");
 			Assert.assertNotNull(d);
-			Assert.assertEquals(cs.getConceptByName("D4T"), d.getConcept());
+			Assert.assertEquals(cs.getConceptByName("d4T"), d.getConcept());
 			Assert.assertEquals("30mg", d.getStrength());
 		}
 	}
