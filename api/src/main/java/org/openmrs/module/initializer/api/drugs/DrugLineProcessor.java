@@ -29,6 +29,9 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug, ConceptService> {
 		String uuid = getUuid(line.asLine());
 		Drug drug = service.getDrugByUuid(uuid);
 		if (drug == null) {
+			drug = service.getDrugByNameOrId(line.get(HEADER_NAME));
+		}
+		if (drug == null) {
 			drug = new Drug();
 			if (!StringUtils.isEmpty(uuid)) {
 				drug.setUuid(uuid);

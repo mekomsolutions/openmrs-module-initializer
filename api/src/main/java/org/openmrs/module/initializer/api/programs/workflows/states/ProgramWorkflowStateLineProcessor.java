@@ -32,7 +32,13 @@ public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<Program
 	@Override
 	protected ProgramWorkflowState bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = getUuid(line.asLine());
-		ProgramWorkflowState state = service.getStateByUuid(uuid);
+		
+		String id = uuid;
+		if (id == null) {
+			id = line.get(HEADER_STATE_CONCEPT);
+		}
+		
+		ProgramWorkflowState state = Utils.fetchProgramWorkflowState(id, service, Context.getConceptService());
 		if (state == null) {
 			state = new ProgramWorkflowState();
 			if (!StringUtils.isEmpty(uuid)) {

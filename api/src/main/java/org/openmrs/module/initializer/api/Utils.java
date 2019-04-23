@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -23,6 +21,7 @@ import org.openmrs.LocationTag;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PersonService;
@@ -30,8 +29,6 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.springframework.util.CollectionUtils;
 
 public class Utils {
-	
-	private static final Log log = LogFactory.getLog(Utils.class);
 	
 	/**
 	 * Helps build a {@link ConceptMap} out the usual string inputs.
@@ -232,7 +229,7 @@ public class Utils {
 	}
 	
 	/**
-	 * Fetches a programWorkflow trying various routes for its "id".
+	 * Fetches a program workflow trying various routes for its "id".
 	 * 
 	 * @param id The workflow UUID or underlying concept identifier (name, UUID or 'same as' concept
 	 *            mapping).
@@ -246,6 +243,27 @@ public class Utils {
 				List<ProgramWorkflow> workflows = pws.getProgramWorkflowsByConcept(c);
 				if (!CollectionUtils.isEmpty(workflows) && workflows.size() == 1) {
 					instance = workflows.get(0);
+				}
+			}
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a program workflow state trying various routes for its "id".
+	 * 
+	 * @param id The state UUID or underlying concept identifier (name, UUID or 'same as' concept
+	 *            mapping).
+	 * @return The {@link ProgramWorkflowState} instance if found, null otherwise.
+	 */
+	public static ProgramWorkflowState fetchProgramWorkflowState(String id, ProgramWorkflowService pws, ConceptService cs) {
+		ProgramWorkflowState instance = pws.getStateByUuid(id);
+		if (instance == null) {
+			Concept c = Utils.fetchConcept(id, cs);
+			if (c != null) {
+				List<ProgramWorkflowState> states = pws.getProgramWorkflowStatesByConcept(c);
+				if (!CollectionUtils.isEmpty(states) && states.size() == 1) {
+					instance = states.get(0);
 				}
 			}
 		}
