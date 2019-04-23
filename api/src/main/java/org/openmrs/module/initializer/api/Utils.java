@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -31,8 +29,6 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.springframework.util.CollectionUtils;
 
 public class Utils {
-	
-	private static final Log log = LogFactory.getLog(Utils.class);
 	
 	/**
 	 * Helps build a {@link ConceptMap} out the usual string inputs.
@@ -233,7 +229,7 @@ public class Utils {
 	}
 	
 	/**
-	 * Fetches a programWorkflow trying various routes for its "id".
+	 * Fetches a program workflow trying various routes for its "id".
 	 * 
 	 * @param id The workflow UUID or underlying concept identifier (name, UUID or 'same as' concept
 	 *            mapping).
@@ -254,7 +250,7 @@ public class Utils {
 	}
 	
 	/**
-	 * Fetches a programWorkflowState trying various routes for its "id".
+	 * Fetches a program workflow state trying various routes for its "id".
 	 * 
 	 * @param id The state UUID or underlying concept identifier (name, UUID or 'same as' concept
 	 *            mapping).
