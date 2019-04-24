@@ -176,9 +176,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 				T instance = createInstance(line);
 				if (instance != null) {
 					instance = save(instance);
-					if (instance instanceof Privilege && ((Privilege) instance).getPrivilege() != null) {
-						instances.add(instance);
-					} else if (instance.getId() != null) {
+					if (isSaved(instance)) {
 						instances.add(instance);
 					}
 				}
@@ -191,5 +189,12 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		} while (line != null);
 		
 		return instances;
+	}
+	
+	/**
+	 * Return true if instance is actually saved in database.
+	 */
+	protected boolean isSaved(T instance) {
+		return instance.getId() != null;
 	}
 }

@@ -27,4 +27,9 @@ public class PrivilegesCsvParser extends CsvParser<Privilege, UserService, org.o
 	protected void setLineProcessors(String version, String[] headerLine) {
 		addLineProcessor(new PrivilegeLineProcessor(headerLine, service));
 	}
+	
+	@Override
+	protected boolean isSaved(Privilege instance) {
+		return instance.getPrivilege() != null;
+	}
 }
