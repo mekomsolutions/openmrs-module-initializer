@@ -31,7 +31,6 @@ public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege, UserSer
 				privilege.setUuid(uuid);
 			}
 		}
-		privilege.setRetired(getVoidOrRetire(line.asLine()));
 		
 		return privilege;
 	}

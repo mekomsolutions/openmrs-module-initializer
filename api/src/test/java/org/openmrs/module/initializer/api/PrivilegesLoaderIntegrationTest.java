@@ -80,12 +80,12 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			Assert.assertEquals("Add People", priv.getName());
 			Assert.assertEquals("Able to add person objects", priv.getDescription());
 		}
-		// uncreated privilege
+		// CSV line without name should result in no privilege creation
 		{
 			Privilege priv = us.getPrivilegeByUuid("cf688144-2700-102b-80cb-0017a47871b2");
 			Assert.assertNull(priv);
 		}
-		// unedited privilege
+		// a privilege name cannot be edited
 		{
 			Privilege priv = us.getPrivilegeByUuid("cf687ee2-2700-102b-80cb-0017a47871b2");
 			Assert.assertNotNull(priv);
