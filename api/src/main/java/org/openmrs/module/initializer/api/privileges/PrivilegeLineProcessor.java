@@ -8,6 +8,8 @@ import org.openmrs.module.initializer.api.CsvLine;
 
 public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege, UserService> {
 	
+	protected static String HEADER_PRIVILEGE_NAME = "privilege name";
+	
 	public PrivilegeLineProcessor(String[] headerLine, UserService us) {
 		super(headerLine, us);
 	}
@@ -18,7 +20,7 @@ public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege, UserSer
 		Privilege privilege = service.getPrivilegeByUuid(uuid);
 		
 		if (privilege == null) {
-			String privilegeName = line.get(HEADER_NAME, true);
+			String privilegeName = line.get(HEADER_PRIVILEGE_NAME, true);
 			if (privilegeName != null) {
 				privilege = service.getPrivilege(privilegeName);
 			}
@@ -37,19 +39,14 @@ public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege, UserSer
 	@Override
 	protected Privilege fill(Privilege privilege, CsvLine line) throws IllegalArgumentException {
 		
-		String privilegeName = line.get(HEADER_NAME, true);
-		
+		String privilegeName = line.get(HEADER_PRIVILEGE_NAME, true);
 		if (privilegeName == null) {
-			if (privilege.getName() == null) {
-				throw new IllegalArgumentException(
-				        "A privilege must at least be provided a privilege name: '" + line.toString() + "'");
-			}
-			privilegeName = privilege.getName();
+			throw new IllegalArgumentException(
+			        "A privilege must at least be provided a privilege name: '" + line.toString() + "'");
 		}
 		if (privilege.getName() != null && !privilege.getName().equals(privilegeName)) {
 			throw new IllegalArgumentException("A privilege name cannot be edited: '" + line.toString() + "'");
 		}
-		
 		privilege.setName(privilegeName);
 		privilege.setPrivilege(privilegeName);
 		

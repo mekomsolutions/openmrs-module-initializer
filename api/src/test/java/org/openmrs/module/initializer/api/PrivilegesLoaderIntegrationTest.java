@@ -22,13 +22,6 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	@Before
 	public void setup() {
 		
-		// A privilege not to be edited
-		{
-			Privilege priv = new Privilege();
-			priv.setUuid("cf687ee2-2700-102b-80cb-0017a47871b2");
-			priv.setPrivilege("Add Test Privilege");
-			us.savePrivilege(priv);
-		}
 		// privileges to be edited (description)
 		{
 			Privilege priv = new Privilege();
@@ -39,9 +32,15 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		}
 		{
 			Privilege priv = new Privilege();
-			priv.setUuid("cf690132-2700-102b-80cb-0017a47871b2");
-			priv.setPrivilege("Manage Programs");
-			priv.setDescription("Core Privilege");
+			priv.setPrivilege("Add People");
+			priv.setDescription("Add People objects");
+			us.savePrivilege(priv);
+		}
+		// A privilege not to be edited
+		{
+			Privilege priv = new Privilege();
+			priv.setUuid("cf687ee2-2700-102b-80cb-0017a47871b2");
+			priv.setPrivilege("Add Test Privilege");
 			us.savePrivilege(priv);
 		}
 	}
@@ -52,7 +51,7 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		// Replay
 		loader.load();
 		
-		// created privilege
+		// created privileges
 		{
 			Privilege priv = us.getPrivilegeByUuid("494e1213-360d-45ac-877d-515993444290");
 			Assert.assertNotNull(priv);
@@ -61,12 +60,11 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			Assert.assertEquals("Able to add a cohort to the system", priv.getDescription());
 			
 		}
-		// unedited privilege
 		{
-			Privilege priv = us.getPrivilegeByUuid("cf687ee2-2700-102b-80cb-0017a47871b2");
+			Privilege priv = us.getPrivilege("Add Patient");
 			Assert.assertNotNull(priv);
-			Assert.assertEquals("Add Test Privilege", priv.getName());
-			Assert.assertEquals("Add Test Privilege", priv.getPrivilege());
+			Assert.assertEquals("Add Patient", priv.getName());
+			Assert.assertEquals("Able to add new patients to the system", priv.getDescription());
 		}
 		// edited privileges
 		{
@@ -77,11 +75,22 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			Assert.assertEquals("Able to change attributes of existing terms", priv.getDescription());
 		}
 		{
-			Privilege priv = us.getPrivilegeByUuid("cf690132-2700-102b-80cb-0017a47871b2");
+			Privilege priv = us.getPrivilege("Add People");
 			Assert.assertNotNull(priv);
-			Assert.assertEquals("Manage Programs", priv.getName());
-			Assert.assertEquals("Manage Programs", priv.getPrivilege());
-			Assert.assertEquals("Allows users to manage programs", priv.getDescription());
+			Assert.assertEquals("Add People", priv.getName());
+			Assert.assertEquals("Able to add person objects", priv.getDescription());
+		}
+		// uncreated privilege
+		{
+			Privilege priv = us.getPrivilegeByUuid("cf688144-2700-102b-80cb-0017a47871b2");
+			Assert.assertNull(priv);
+		}
+		// unedited privilege
+		{
+			Privilege priv = us.getPrivilegeByUuid("cf687ee2-2700-102b-80cb-0017a47871b2");
+			Assert.assertNotNull(priv);
+			Assert.assertEquals("Add Test Privilege", priv.getName());
+			Assert.assertEquals("Add Test Privilege", priv.getPrivilege());
 		}
 	}
 }
