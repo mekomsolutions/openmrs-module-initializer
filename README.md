@@ -23,6 +23,7 @@ configuration/
   ├── messageproperties/
   ├── metadatasharing/ 
   ├── personattributetypes/ 
+  ├── privileges/ 
   ├── programs/ 
   ├── programworkflows/
   └── programworkflowstates/
@@ -44,6 +45,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Message properties key-values (.properties files)](readme/messageproperties.md)
 1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
 1. [Metadatasharing packages (ZIP files)](readme/mds.md)
+1. [Privileges (CSV files)](readme/priv.md)
 1. [Global properties (XML files)](readme/globalproperties.md)
 1. [Locations (CSV files)](readme/loc.md)
 1. [Concepts (CSV files)](readme/concepts.md)
@@ -80,6 +82,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and edition of programs provided through CSV files in  **configuration/programs**.
 * Bulk creation and edition of program workflows provided through CSV files in  **configuration/programworkflows**.
 * Bulk creation and edition of program workflow states provided through CSV files in  **configuration/programworkflowstates**.
+* Bulk creation and edition of privileges provided through CSV files in  **configuration/privileges**.
 
 #### Version 1.1.0
 * Bulk creation and edition of drugs provided through CSV files in  **configuration/locations**.

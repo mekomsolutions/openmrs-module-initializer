@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.Privilege;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.initializer.InitializerConstants;
@@ -175,7 +176,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 				T instance = createInstance(line);
 				if (instance != null) {
 					instance = save(instance);
-					if (instance.getId() != null) {
+					if (isSaved(instance)) {
 						instances.add(instance);
 					}
 				}
@@ -188,5 +189,12 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		} while (line != null);
 		
 		return instances;
+	}
+	
+	/**
+	 * Return true if instance is actually saved in database.
+	 */
+	protected boolean isSaved(T instance) {
+		return instance.getId() != null;
 	}
 }

@@ -25,7 +25,7 @@ public class ProgramsLoader extends BaseCsvLoader {
 	
 	@Override
 	public Integer getOrder() {
-		return 6;
+		return 7;
 	}
 	
 	@SuppressWarnings("rawtypes")
