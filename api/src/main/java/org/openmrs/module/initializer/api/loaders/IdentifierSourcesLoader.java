@@ -23,7 +23,7 @@ public class IdentifierSourcesLoader extends BaseCsvLoader {
 	
 	@Override
 	public Integer getOrder() {
-		return 11;
+		return 12;
 	}
 	
 	@SuppressWarnings("rawtypes")

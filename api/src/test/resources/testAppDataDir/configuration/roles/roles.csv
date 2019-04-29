@@ -1,0 +1,3 @@
+Role name,Description,Inherited roles,Privileges
+Organizational: Doctor,Doctor role,Application: Records Allergies;Application: Uses Patient Summary,Add Allergies;Add Patient
+Organizational: Nurse,Nurse role,Application: Sees Appointment Schedule,Add Orders;Add Users

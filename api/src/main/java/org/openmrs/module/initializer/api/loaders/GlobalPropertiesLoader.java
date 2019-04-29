@@ -29,7 +29,7 @@ public class GlobalPropertiesLoader extends BaseLoader {
 	
 	@Override
 	public Integer getOrder() {
-		return 4;
+		return 5;
 	}
 	
 	@Override
