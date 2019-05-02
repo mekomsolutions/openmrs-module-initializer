@@ -13,5 +13,8 @@
         <mapping resource="ImportedPackage.hbm.xml"/>
         <!-- Idgen -->
         <mapping resource="IdentifierSource.hbm.xml"/>
+        <!-- MetadataMapping -->
+        <mapping resource="MetadataSource.hbm.xml"/>
+        <mapping resource="MetadataTermMapping.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

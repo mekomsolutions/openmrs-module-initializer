@@ -50,6 +50,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		super();
 		ModuleFactory.getStartedModulesMap().put("idgen", new Module("", "idgen", "", "", "", "4.3"));
 		ModuleFactory.getStartedModulesMap().put("metadatasharing", new Module("", "metadatasharing", "", "", "", "1.2.2"));
+		ModuleFactory.getStartedModulesMap().put("metadatamapping", new Module("", "metadatamapping", "", "", "", "1.3.4"));
 	}
 	
 	@Before

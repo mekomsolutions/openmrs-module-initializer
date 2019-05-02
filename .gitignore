@@ -17,6 +17,8 @@ README.html
 *.iml
 
 .settings/*
+api/bin
+omod/bin
 api/.classpath
 api/.project
 api/.settings/*
