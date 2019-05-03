@@ -1,13 +1,13 @@
 package org.openmrs.module.initializer.api.roles;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.openmrs.Privilege;
 import org.openmrs.Role;
 import org.openmrs.api.UserService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class RoleLineProcessor extends BaseLineProcessor<Role, UserService> {
 	
@@ -41,50 +41,41 @@ public class RoleLineProcessor extends BaseLineProcessor<Role, UserService> {
 		role.setRole(line.get(HEADER_ROLE_NAME, true));
 		role.setName(role.getRole());
 		role.setDescription(line.get(HEADER_DESC));
-		role.setInheritedRoles(parseRoleList(role, line.get(HEADER_INHERITED_ROLES), service));
-		role.setPrivileges(parsePrivilegesList(role, line.get(HEADER_PRIVILEGES), service));
+		role.setInheritedRoles(parseRoleList(line.get(HEADER_INHERITED_ROLES), service));
+		role.setPrivileges(parsePrivilegeList(line.get(HEADER_PRIVILEGES), service));
 		return role;
 	}
 	
-	// get roles list from input string
-	protected static Set<Role> parseRoleList(Role role, String roleList, UserService us) throws IllegalArgumentException {
+	protected static Set<Role> parseRoleList(String roleList, UserService us) throws IllegalArgumentException {
 		
-		Set<Role> roles = role.getInheritedRoles();
+		Set<Role> roles = new HashSet<Role>();
 		
-		if (roles == null) {
-			roles = new HashSet<Role>();
-		}
+		String[] parts = roleList.split(BaseLineProcessor.LIST_SEPARATOR);
 		
-		String[] roleStrings = roleList.split(BaseLineProcessor.LIST_SEPARATOR);
-		
-		for (String roleStr : roleStrings) {
-			roleStr = roleStr.trim();
-			Role rol = us.getRole(roleStr);
-			if (rol == null) {
-				throw new IllegalArgumentException("No Role could be fetched from '" + roleStr + "' string");
+		for (String id : parts) {
+			id = id.trim();
+			Role r = us.getRole(id);
+			if (r == null) {
+				throw new IllegalArgumentException("The role identified by '" + id + "' could not be found in database.");
 			}
-			roles.add(rol);
+			roles.add(r);
 		}
 		return roles;
 	}
 	
-	// get privileges list from input String
-	protected static Set<Privilege> parsePrivilegesList(Role role, String privilegeList, UserService us)
+	protected static Set<Privilege> parsePrivilegeList(String privilegeList, UserService us)
 	        throws IllegalArgumentException {
 		
-		Set<Privilege> privileges = role.getPrivileges();
+		Set<Privilege> privileges = new HashSet<Privilege>();
 		
-		if (privileges == null) {
-			privileges = new HashSet<Privilege>();
-		}
+		String[] parts = privilegeList.split(BaseLineProcessor.LIST_SEPARATOR);
 		
-		String[] privilegeStrings = privilegeList.split(BaseLineProcessor.LIST_SEPARATOR);
-		
-		for (String privStr : privilegeStrings) {
-			privStr = privStr.trim();
-			Privilege priv = us.getPrivilege(privStr);
+		for (String id : parts) {
+			id = id.trim();
+			Privilege priv = us.getPrivilege(id);
 			if (priv == null) {
-				throw new IllegalArgumentException("No Privilege could be fetched from '" + privStr + "' string");
+				throw new IllegalArgumentException(
+				        "The privilege identified by '" + id + "' could not be found in database.");
 			}
 			privileges.add(priv);
 		}
