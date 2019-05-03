@@ -107,13 +107,9 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 		// edited role
 		{
 			Set<Role> roles = new HashSet<Role>();
-			roles.add(us.getRole("Application: Records Allergies"));
-			roles.add(us.getRole("Application: Uses Patient Summary"));
 			roles.add(us.getRole("Application: Sees Appointment Schedule"));
 			
 			Set<Privilege> privileges = new HashSet<Privilege>();
-			privileges.add(us.getPrivilege("Add Allergies"));
-			privileges.add(us.getPrivilege("Add Patient"));
 			privileges.add(us.getPrivilege("Add Orders"));
 			privileges.add(us.getPrivilege("Add Users"));
 			
