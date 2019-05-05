@@ -1,3 +1,4 @@
-Privilege name,Description
-Add Patient,Able to add patients.
-Add People,Able to add people.
+Uuid,Privilege name,Description
+cf688db0-2700-102b-80cb-0017a47871b2,Add Patient,Able to add patients.
+,Add People,Able to add people.
+cf68a296-2700-102b-80cb-0017a47871b2,Add Users,Able to add users.
