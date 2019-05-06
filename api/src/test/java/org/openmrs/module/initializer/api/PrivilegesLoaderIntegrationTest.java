@@ -29,7 +29,7 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			priv.setDescription("Able to add folks.");
 			us.savePrivilege(priv);
 		}
-		// privilege to be deleted
+		// privilege to be changed it's Uuid.
 		{
 			Privilege priv = new Privilege();
 			priv.setPrivilege("Add Reports");
@@ -70,6 +70,11 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			Assert.assertEquals("cf68a296-2700-102b-80cb-0017a47871b2", priv.getUuid());
 			Assert.assertEquals(priv.getName(), priv.getPrivilege());
 			Assert.assertEquals("Able to add users.", priv.getDescription());
+		}
+		{
+			Privilege priv = us.getPrivilege("Add Reports");
+			Assert.assertNotNull(priv);
+			Assert.assertEquals("Able to add new reports.", priv.getDescription());
 		}
 	}
 }

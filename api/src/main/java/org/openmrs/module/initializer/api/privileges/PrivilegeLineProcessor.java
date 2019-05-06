@@ -16,12 +16,6 @@ public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege, UserSer
 	
 	@Override
 	protected Privilege bootstrap(CsvLine line) throws IllegalArgumentException {
-		String uuid = getUuid(line.asLine());
-		Privilege privilege = service.getPrivilegeByUuid(uuid);
-		
-		if (privilege != null) {
-			service.purgePrivilege(privilege);
-		}
 		
 		String privilegeName = line.get(HEADER_PRIVILEGE_NAME, true);
 		
@@ -30,10 +24,13 @@ public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege, UserSer
 			        "A privilege must at least be provided a privilege name: '" + line.toString() + "'");
 		}
 		
-		privilege = service.getPrivilege(privilegeName);
+		Privilege privilege = service.getPrivilege(privilegeName);
 		if (privilege == null) {
 			privilege = new Privilege();
 		}
+		
+		String uuid = getUuid(line.asLine());
+		
 		if (!StringUtils.isEmpty(uuid)) {
 			privilege.setUuid(uuid);
 		}
