@@ -26,7 +26,8 @@ configuration/
   ├── privileges/ 
   ├── programs/ 
   ├── programworkflows/
-  └── programworkflowstates/
+  ├── programworkflowstates/
+  └── roles/
 ```  
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain. Although several file types are supported for providing metadata, CSV files are the preferred format and all domain should aim at being covered through parsing CSV files.
 

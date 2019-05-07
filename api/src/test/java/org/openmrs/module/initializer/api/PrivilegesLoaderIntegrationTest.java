@@ -22,12 +22,26 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	@Before
 	public void setup() {
 		
-		// privilege to be edited
+		// privileges to be edited
 		{
-			Privilege priv = new Privilege();
-			priv.setPrivilege("Add People");
-			priv.setDescription("Able to add folks.");
-			us.savePrivilege(priv);
+			Privilege p = new Privilege();
+			p.setPrivilege("Add Apples");
+			p.setDescription("Able to add fruits.");
+			us.savePrivilege(p);
+		}
+		{
+			Privilege p = new Privilege();
+			p.setPrivilege("Add Reports");
+			p.setDescription("Able to add analytic reports.");
+			p.setUuid("cf68a296-2700-102b-80cb-0017a47871b2");
+			us.savePrivilege(p);
+		}
+		{
+			Privilege p = new Privilege();
+			p.setPrivilege("Add Hens");
+			p.setDescription("Able to add poultry.");
+			p.setUuid("36404041-c255-4c5b-9b47-0d757d2afa95");
+			us.savePrivilege(p);
 		}
 	}
 	
@@ -37,21 +51,37 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		// Replay
 		loader.load();
 		
-		// created privilege
+		// privilege created
 		{
-			Privilege priv = us.getPrivilege("Add Patient");
-			Assert.assertNotNull(priv);
-			Assert.assertEquals("Add Patient", priv.getName());
-			Assert.assertEquals(priv.getName(), priv.getPrivilege());
-			Assert.assertEquals("Able to add patients.", priv.getDescription());
+			Privilege p = us.getPrivilege("Add People");
+			Assert.assertNotNull(p);
+			Assert.assertEquals("Add People", p.getName());
+			Assert.assertEquals(p.getName(), p.getPrivilege());
+			Assert.assertEquals("Able to add people.", p.getDescription());
 		}
-		// edited privilege
+		// privilege description edited - using name as primary id
 		{
-			Privilege priv = us.getPrivilege("Add People");
-			Assert.assertNotNull(priv);
-			Assert.assertEquals("Add People", priv.getName());
-			Assert.assertEquals(priv.getName(), priv.getPrivilege());
-			Assert.assertEquals("Able to add people.", priv.getDescription());
+			Privilege p = us.getPrivilege("Add Apples");
+			Assert.assertNotNull(p);
+			Assert.assertEquals(p.getName(), p.getPrivilege());
+			Assert.assertEquals("Able to add apples.", p.getDescription());
+		}
+		// privilege names can't be changed
+		{
+			Privilege p = us.getPrivilegeByUuid("36404041-c255-4c5b-9b47-0d757d2afa95");
+			Assert.assertNotNull(p);
+			Assert.assertNotEquals("Add Chickens", p.getName());
+			Assert.assertEquals("Add Hens", p.getName());
+			Assert.assertEquals(p.getName(), p.getPrivilege());
+			Assert.assertEquals("Able to add poultry.", p.getDescription());
+		}
+		// privilege description edited - using UUID as primary id
+		{
+			Privilege p = us.getPrivilegeByUuid("cf68a296-2700-102b-80cb-0017a47871b2");
+			Assert.assertNotNull(p);
+			Assert.assertEquals("Add Reports", p.getName());
+			Assert.assertEquals(p.getName(), p.getPrivilege());
+			Assert.assertEquals("Able to add reports.", p.getDescription());
 		}
 	}
 }

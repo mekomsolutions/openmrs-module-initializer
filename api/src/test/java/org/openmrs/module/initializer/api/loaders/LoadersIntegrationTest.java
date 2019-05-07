@@ -61,6 +61,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	@Autowired
 	private PrivilegesLoader privilegesLoader;
 	
+	@Autowired
+	private RolesLoader rolesLoader;
+	
 	@Test
 	public void getLoaders_shouldBeUnivoquelyOrdered() {
 		
@@ -70,7 +73,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		count++;
 		Assert.assertThat(mdsLoader.getOrder(), lessThan(privilegesLoader.getOrder()));
 		count++;
-		Assert.assertThat(privilegesLoader.getOrder(), lessThan(gpLoader.getOrder()));
+		Assert.assertThat(privilegesLoader.getOrder(), lessThan(rolesLoader.getOrder()));
+		count++;
+		Assert.assertThat(rolesLoader.getOrder(), lessThan(gpLoader.getOrder()));
 		count++;
 		Assert.assertThat(gpLoader.getOrder(), lessThan(locationsLoader.getOrder()));
 		count++;

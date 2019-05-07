@@ -1,3 +1,5 @@
-Privilege name,Description
-Add Patient,Able to add patients.
-Add People,Able to add people.
+Uuid,Privilege name,Description
+,Add People,Able to add people.
+,Add Apples, Able to add apples.
+cf68a296-2700-102b-80cb-0017a47871b2,Add Reports,Able to add reports.
+36404041-c255-4c5b-9b47-0d757d2afa95,Add Chickens,Able to add poultry.

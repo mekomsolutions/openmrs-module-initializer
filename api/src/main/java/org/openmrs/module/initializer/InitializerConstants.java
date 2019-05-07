@@ -57,4 +57,6 @@ public class InitializerConstants {
 	
 	public static final String DOMAIN_PRIV = "privileges";
 	
+	public static final String DOMAIN_ROLE = "roles";
+	
 }
