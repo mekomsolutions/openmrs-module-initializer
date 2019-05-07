@@ -1,5 +1,8 @@
 package org.openmrs.module.initializer.api;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,9 +13,6 @@ import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loaders.RolesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -26,41 +26,16 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 	@Before
 	public void setup() {
 		
-		// Privileges to be used for assigning to roles.
-		{
-			Privilege priv1 = new Privilege();
-			priv1.setPrivilege("Add Allergies");
-			us.savePrivilege(priv1);
-			
-			Privilege priv2 = new Privilege();
-			priv2.setPrivilege("Add Patient");
-			us.savePrivilege(priv2);
-			
-			Privilege priv3 = new Privilege();
-			priv3.setPrivilege("Add Orders");
-			us.savePrivilege(priv3);
-			
-			Privilege priv4 = new Privilege();
-			priv4.setPrivilege("Add Users");
-			us.savePrivilege(priv4);
-		}
+		// A couple of privileges to use with roles
+		us.savePrivilege(new Privilege("Add Allergies"));
+		us.savePrivilege(new Privilege("Add Patient"));
+		us.savePrivilege(new Privilege("Add Orders"));
+		us.savePrivilege(new Privilege("Add Users"));
 		
-		// Roles to be used as parent roles.
-		{
-			Role role1 = new Role();
-			role1.setRole("Application: Records Allergies");
-			role1.setDescription("role 1");
-			us.saveRole(role1);
-			
-			Role role2 = new Role();
-			role2.setRole("Application: Uses Patient Summary");
-			role2.setDescription("role 2");
-			us.saveRole(role2);
-			
-			Role role3 = new Role();
-			role3.setRole("Application: Sees Appointment Schedule");
-			us.saveRole(role3);
-		}
+		// A couple of roles to be used as parent/inherited roles
+		us.saveRole(new Role("Application: Records Allergies"));
+		us.saveRole(new Role("Application: Uses Patient Summary"));
+		us.saveRole(new Role("Application: Sees Appointment Schedule"));
 		
 		// role to be edited
 		{
