@@ -8,7 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.annotation.OpenmrsProfile;
-import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.metadatasharing.ImportConfig;
 import org.openmrs.module.metadatasharing.ImportType;
@@ -18,17 +18,12 @@ import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 @OpenmrsProfile(modules = { "metadatasharing:*" })
 public class MdsLoader extends BaseLoader {
 	
+	@Override
+	protected Domain getDomain() {
+		return Domain.MDS;
+	}
+	
 	private final Log log = LogFactory.getLog(getClass());
-	
-	@Override
-	public String getDomain() {
-		return InitializerConstants.DOMAIN_MDS;
-	}
-	
-	@Override
-	public Integer getOrder() {
-		return 2;
-	}
 	
 	@Override
 	public void load() {

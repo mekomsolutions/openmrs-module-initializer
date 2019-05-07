@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
-import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesCsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 @OpenmrsProfile(modules = { "idgen:*" })
 public class IdentifierSourcesLoader extends BaseCsvLoader {
 	
+	@Override
+	protected Domain getDomain() {
+		return Domain.IDENTIFIER_SOURCES;
+	}
+	
 	@Autowired
 	private IdentifierSourceService service;
-	
-	@Override
-	public String getDomain() {
-		return InitializerConstants.DOMAIN_IDGEN;
-	}
-	
-	@Override
-	public Integer getOrder() {
-		return 12;
-	}
 	
 	@SuppressWarnings("rawtypes")
 	@Override

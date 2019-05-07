@@ -11,7 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerSerializer;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
@@ -20,17 +20,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class GlobalPropertiesLoader extends BaseLoader {
 	
+	@Override
+	protected Domain getDomain() {
+		return Domain.GLOBAL_PROPERTIES;
+	}
+	
 	private final Log log = LogFactory.getLog(getClass());
-	
-	@Override
-	public String getDomain() {
-		return InitializerConstants.DOMAIN_GP;
-	}
-	
-	@Override
-	public Integer getOrder() {
-		return 5;
-	}
 	
 	@Override
 	public void load() {

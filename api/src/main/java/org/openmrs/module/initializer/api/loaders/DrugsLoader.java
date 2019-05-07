@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.drugs.DrugsCsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +14,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class DrugsLoader extends BaseCsvLoader {
 	
+	@Override
+	protected Domain getDomain() {
+		return Domain.DRUGS;
+	}
+	
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService service;
-	
-	@Override
-	public String getDomain() {
-		return InitializerConstants.DOMAIN_DRUGS;
-	}
-	
-	@Override
-	public Integer getOrder() {
-		return 13;
-	}
 	
 	@SuppressWarnings("rawtypes")
 	@Override

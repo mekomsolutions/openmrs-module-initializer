@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.openmrs.api.OrderService;
-import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesCsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +14,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderFrequenciesLoader extends BaseCsvLoader {
 	
+	@Override
+	protected Domain getDomain() {
+		return Domain.ORDER_FREQUENCIES;
+	}
+	
 	@Autowired
 	@Qualifier("orderService")
 	private OrderService service;
-	
-	@Override
-	public String getDomain() {
-		return InitializerConstants.DOMAIN_FREQ;
-	}
-	
-	@Override
-	public Integer getOrder() {
-		return 14;
-	}
 	
 	@SuppressWarnings("rawtypes")
 	@Override

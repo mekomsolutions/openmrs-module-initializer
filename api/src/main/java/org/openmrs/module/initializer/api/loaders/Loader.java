@@ -14,7 +14,7 @@ public interface Loader extends Comparable<Loader> {
 	/**
 	 * @return The domain name for the domain covered by the loader.
 	 */
-	String getDomain();
+	String getDomainName();
 	
 	/**
 	 * @return The order of the loader.
