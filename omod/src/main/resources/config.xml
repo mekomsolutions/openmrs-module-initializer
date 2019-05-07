@@ -28,6 +28,9 @@
 		<aware_of_module version="${metadatasharingVersion}">
 			org.openmrs.module.metadatasharing
 		</aware_of_module>
+		<aware_of_module>
+			org.openmrs.module.referencemetadata
+		</aware_of_module>
 	</aware_of_modules>
 	
 	<!-- Internationalization -->
