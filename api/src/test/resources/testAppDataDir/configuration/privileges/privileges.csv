@@ -1,4 +1,5 @@
 Uuid,Privilege name,Description
-cf688db0-2700-102b-80cb-0017a47871b2,Add Patient,Able to add patients.
 ,Add People,Able to add people.
-cf68a296-2700-102b-80cb-0017a47871b2,Add Users,Able to add users.
+,Add Apples, Able to add apples.
+cf68a296-2700-102b-80cb-0017a47871b2,Add Reports,Able to add reports.
+36404041-c255-4c5b-9b47-0d757d2afa95,Add Chickens,Able to add poultry.

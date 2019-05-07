@@ -17,22 +17,25 @@ public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege, UserSer
 	@Override
 	protected Privilege bootstrap(CsvLine line) throws IllegalArgumentException {
 		
+		String uuid = getUuid(line.asLine());
 		String privilegeName = line.get(HEADER_PRIVILEGE_NAME, true);
 		
-		if (privilegeName == null) {
-			throw new IllegalArgumentException(
-			        "A privilege must at least be provided a privilege name: '" + line.toString() + "'");
+		Privilege privilege = service.getPrivilegeByUuid(uuid);
+		if (privilege != null && !privilege.getPrivilege().equals(privilegeName)) {
+			throw new IllegalArgumentException("A privilege name cannot be edited.");
 		}
 		
-		Privilege privilege = service.getPrivilege(privilegeName);
+		if (privilege == null) {
+			if (!StringUtils.isEmpty(privilegeName)) {
+				privilege = service.getPrivilege(privilegeName);
+			}
+		}
+		
 		if (privilege == null) {
 			privilege = new Privilege();
-		}
-		
-		String uuid = getUuid(line.asLine());
-		
-		if (!StringUtils.isEmpty(uuid)) {
-			privilege.setUuid(uuid);
+			if (!StringUtils.isEmpty(uuid)) {
+				privilege.setUuid(uuid);
+			}
 		}
 		
 		return privilege;
