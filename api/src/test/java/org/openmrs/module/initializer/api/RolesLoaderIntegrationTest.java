@@ -31,12 +31,23 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 		us.savePrivilege(new Privilege("Add Patient"));
 		us.savePrivilege(new Privilege("Add Orders"));
 		us.savePrivilege(new Privilege("Add Users"));
+		{
+			Privilege priv = new Privilege();
+			priv.setUuid("cf688946-2700-102b-80cb-0017a47871b2");
+			priv.setPrivilege("Add Forms");
+			us.savePrivilege(priv);
+		}
 		
 		// A couple of roles to be used as parent/inherited roles
 		us.saveRole(new Role("Application: Records Allergies"));
 		us.saveRole(new Role("Application: Uses Patient Summary"));
 		us.saveRole(new Role("Application: Sees Appointment Schedule"));
-		
+		{
+			Role role = new Role();
+			role.setUuid("d2fcc9fa-2700-102b-80cb-0017a47871b2");
+			role.setRole("Social Worker");
+			us.saveRole(role);
+		}
 		// role to be edited
 		{
 			Set<Role> roles = new HashSet<Role>();
@@ -71,6 +82,7 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Set<Privilege> privileges = new HashSet<Privilege>();
 			privileges.add(us.getPrivilege("Add Allergies"));
 			privileges.add(us.getPrivilege("Add Patient"));
+			privileges.add(us.getPrivilege("Add Forms"));
 			
 			Role role = us.getRole("Organizational: Doctor");
 			Assert.assertNotNull(role);
@@ -83,6 +95,7 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 		{
 			Set<Role> roles = new HashSet<Role>();
 			roles.add(us.getRole("Application: Sees Appointment Schedule"));
+			roles.add(us.getRole("Social Worker"));
 			
 			Set<Privilege> privileges = new HashSet<Privilege>();
 			privileges.add(us.getPrivilege("Add Orders"));

@@ -19,13 +19,16 @@ import org.openmrs.ConceptSource;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.PersonAttributeType;
+import org.openmrs.Privilege;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
+import org.openmrs.Role;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
+import org.openmrs.api.UserService;
 import org.springframework.util.CollectionUtils;
 
 public class Utils {
@@ -266,6 +269,34 @@ public class Utils {
 					instance = states.get(0);
 				}
 			}
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a role trying various routes for its "id".
+	 * 
+	 * @param id The role UUID or name
+	 * @return The {@link Role} instance if found, null otherwise.
+	 */
+	public static Role fetchRole(String id, UserService us) {
+		Role instance = us.getRole(id);
+		if (instance == null) {
+			instance = us.getRoleByUuid(id);
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a privilege trying various routes for its "id".
+	 * 
+	 * @param id The privilege UUID or name
+	 * @return The {@link Privilege} instance if found, null otherwise.
+	 */
+	public static Privilege fetchPrivilege(String id, UserService us) {
+		Privilege instance = us.getPrivilege(id);
+		if (instance == null) {
+			instance = us.getPrivilegeByUuid(id);
 		}
 		return instance;
 	}

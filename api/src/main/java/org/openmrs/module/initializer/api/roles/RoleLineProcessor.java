@@ -3,11 +3,13 @@ package org.openmrs.module.initializer.api.roles;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Privilege;
 import org.openmrs.Role;
 import org.openmrs.api.UserService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.Utils;
 
 public class RoleLineProcessor extends BaseLineProcessor<Role, UserService> {
 	
@@ -23,15 +25,25 @@ public class RoleLineProcessor extends BaseLineProcessor<Role, UserService> {
 	
 	@Override
 	protected Role bootstrap(CsvLine line) throws IllegalArgumentException {
+		String uuid = getUuid(line.asLine());
 		String roleName = line.get(HEADER_ROLE_NAME, true);
 		
-		if (roleName == null) {
-			throw new IllegalArgumentException("A role must at least be provided a role name: '" + line.toString() + "'");
+		Role role = service.getRoleByUuid(uuid);
+		if (role != null && !role.getRole().equals(roleName)) {
+			throw new IllegalArgumentException("A Role name cannot be edited.");
 		}
 		
-		Role role = service.getRole(roleName);
+		if (role == null) {
+			if (!StringUtils.isEmpty(roleName)) {
+				role = service.getRole(roleName);
+			}
+		}
+		
 		if (role == null) {
 			role = new Role();
+			if (!StringUtils.isEmpty(uuid)) {
+				role.setUuid(uuid);
+			}
 		}
 		return role;
 	}
@@ -54,7 +66,7 @@ public class RoleLineProcessor extends BaseLineProcessor<Role, UserService> {
 		
 		for (String id : parts) {
 			id = id.trim();
-			Role r = us.getRole(id);
+			Role r = Utils.fetchRole(id, us);
 			if (r == null) {
 				throw new IllegalArgumentException("The role identified by '" + id + "' could not be found in database.");
 			}
@@ -72,7 +84,7 @@ public class RoleLineProcessor extends BaseLineProcessor<Role, UserService> {
 		
 		for (String id : parts) {
 			id = id.trim();
-			Privilege priv = us.getPrivilege(id);
+			Privilege priv = Utils.fetchPrivilege(id, us);
 			if (priv == null) {
 				throw new IllegalArgumentException(
 				        "The privilege identified by '" + id + "' could not be found in database.");

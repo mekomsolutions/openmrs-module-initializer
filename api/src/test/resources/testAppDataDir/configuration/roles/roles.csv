@@ -1,3 +1,3 @@
-Role name,Description,Inherited roles,Privileges
-Organizational: Doctor,Doctor role,Application: Records Allergies; Application: Uses Patient Summary,Add Allergies; Add Patient
-Organizational: Nurse,Nurse role,Application: Sees Appointment Schedule,Add Orders; Add Users
+Uuid,Role name,Description,Inherited roles,Privileges
+d2fcb604-2700-102b-80cb-0017a47871b2,Organizational: Doctor,Doctor role,Application: Records Allergies; Application: Uses Patient Summary,Add Allergies; Add Patient; cf688946-2700-102b-80cb-0017a47871b2
+,Organizational: Nurse,Nurse role,Application: Sees Appointment Schedule; d2fcc9fa-2700-102b-80cb-0017a47871b2,Add Orders; Add Users
