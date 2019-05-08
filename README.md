@@ -21,6 +21,7 @@ configuration/
   ├── jsonkeyvalues/
   ├── locations/
   ├── messageproperties/
+  ├── metadatamappings/ 
   ├── metadatasharing/ 
   ├── personattributetypes/ 
   ├── privileges/ 
@@ -45,8 +46,10 @@ We suggest to go through the following before looking at specific import domains
 This is the list of currently supported domains in respect to their loading order:
 1. [Message properties key-values (.properties files)](readme/messageproperties.md)
 1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
-1. [Metadatasharing packages (ZIP files)](readme/mds.md)
+1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
+1. [Metadata Mappings (CSV files)](readme/mdm.md)
 1. [Privileges (CSV files)](readme/priv.md)
+1. [Roles (CSV files)](readme/roles.md)
 1. [Global properties (XML files)](readme/globalproperties.md)
 1. [Locations (CSV files)](readme/loc.md)
 1. [Concepts (CSV files)](readme/concepts.md)
@@ -84,6 +87,8 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and edition of program workflows provided through CSV files in  **configuration/programworkflows**.
 * Bulk creation and edition of program workflow states provided through CSV files in  **configuration/programworkflowstates**.
 * Bulk creation and edition of privileges provided through CSV files in  **configuration/privileges**.
+* Bulk creation and edition of roles provided through CSV files in  **configuration/roles**.
+* Bulk creation and edition of metadata terms mappings provided through CSV files in  **configuration/metadatamappings**.
 
 #### Version 1.1.0
 * Bulk creation and edition of drugs provided through CSV files in  **configuration/locations**.
