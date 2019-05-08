@@ -74,13 +74,13 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		Assert.assertThat(jkvLoader.getOrder(), lessThan(mdsLoader.getOrder()));
 		count++;
-		Assert.assertThat(mdsLoader.getOrder(), lessThan(privilegesLoader.getOrder()));
+		Assert.assertThat(mdsLoader.getOrder(), lessThan(mdmLoader.getOrder()));
+		count++;
+		Assert.assertThat(mdmLoader.getOrder(), lessThan(privilegesLoader.getOrder()));
 		count++;
 		Assert.assertThat(privilegesLoader.getOrder(), lessThan(rolesLoader.getOrder()));
 		count++;
-		Assert.assertThat(rolesLoader.getOrder(), lessThan(mdmLoader.getOrder()));
-		count++;
-		Assert.assertThat(mdmLoader.getOrder(), lessThan(gpLoader.getOrder()));
+		Assert.assertThat(rolesLoader.getOrder(), lessThan(gpLoader.getOrder()));
 		count++;
 		Assert.assertThat(gpLoader.getOrder(), lessThan(locationsLoader.getOrder()));
 		count++;

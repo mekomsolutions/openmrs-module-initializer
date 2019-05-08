@@ -5,7 +5,6 @@ import java.io.InputStream;
 
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.UserService;
-import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.metadata.MetadataTermMappingsCsvParser;
 import org.openmrs.module.initializer.api.metadata.MetadataMappingServiceWrapper;

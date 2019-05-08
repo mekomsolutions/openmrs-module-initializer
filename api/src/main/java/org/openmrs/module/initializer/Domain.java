@@ -4,9 +4,9 @@ public enum Domain {
 	
 	JSON_KEY_VALUES(1, "jsonkeyvalues"),
 	MDS(2, "metadatasharing"),
-	PRIVILEGES(3, "privileges"),
-	ROLES(4, "roles"),
-	METADATA_MAPPINGS(5, "metadatamappings"),
+	METADATA_MAPPINGS(3, "metadatamappings"),
+	PRIVILEGES(4, "privileges"),
+	ROLES(5, "roles"),
 	GLOBAL_PROPERTIES(6, "globalproperties"),
 	LOCATIONS(7, "locations"),
 	CONCEPTS(8, "concepts"),
