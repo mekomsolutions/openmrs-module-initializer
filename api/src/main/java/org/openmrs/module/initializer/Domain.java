@@ -4,18 +4,19 @@ public enum Domain {
 	
 	JSON_KEY_VALUES(1, "jsonkeyvalues"),
 	MDS(2, "metadatasharing"),
-	PRIVILEGES(3, "privileges"),
-	ROLES(4, "roles"),
-	GLOBAL_PROPERTIES(5, "globalproperties"),
-	LOCATIONS(6, "locations"),
-	CONCEPTS(7, "concepts"),
-	PROGRAMS(8, "programs"),
-	PROGRAM_WORKFLOWS(9, "programworkflows"),
-	PROGRAM_WORKFLOW_STATES(10, "programworkflowstates"),
-	PERSON_ATTRIBUTE_TYPES(11, "personattributetypes"),
-	IDENTIFIER_SOURCES(12, "idgen"),
-	DRUGS(13, "drugs"),
-	ORDER_FREQUENCIES(14, "orderfrequencies");
+	METADATA_MAPPINGS(3, "metadatamappings"),
+	PRIVILEGES(4, "privileges"),
+	ROLES(5, "roles"),
+	GLOBAL_PROPERTIES(6, "globalproperties"),
+	LOCATIONS(7, "locations"),
+	CONCEPTS(8, "concepts"),
+	PROGRAMS(9, "programs"),
+	PROGRAM_WORKFLOWS(10, "programworkflows"),
+	PROGRAM_WORKFLOW_STATES(11, "programworkflowstates"),
+	PERSON_ATTRIBUTE_TYPES(12, "personattributetypes"),
+	IDENTIFIER_SOURCES(13, "idgen"),
+	DRUGS(14, "drugs"),
+	ORDER_FREQUENCIES(15, "orderfrequencies");
 	
 	private final int order;
 	
