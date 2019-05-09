@@ -21,6 +21,7 @@ public class ProgramWorkflowsCsvParser extends CsvParser<ProgramWorkflow, Progra
 		if (program != null) {
 			program.addWorkflow(instance);
 		}
+		service.saveProgram(program);
 		return instance;
 	}
 	

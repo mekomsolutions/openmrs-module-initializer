@@ -1,5 +1,6 @@
 package org.openmrs.module.initializer.api.programs.workflows.states;
 
+import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.ProgramWorkflowService;
@@ -20,6 +21,8 @@ public class ProgramWorkflowStatesCsvParser extends CsvParser<ProgramWorkflowSta
 		if (programWorkflow != null) {
 			programWorkflow.addState(instance);
 		}
+		Program program = programWorkflow.getProgram();
+		service.saveProgram(program);
 		return instance;
 	}
 	
