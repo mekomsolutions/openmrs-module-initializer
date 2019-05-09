@@ -17,6 +17,7 @@ import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Privilege;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.InitializerConstants;
 
 import com.opencsv.CSVReader;
@@ -26,6 +27,8 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	protected static final String DEFAULT_RETIRE_REASON = "Retired by module " + InitializerConstants.MODULE_NAME;
 	
 	protected static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
+	
+	private static final int FLUSH_LIMIT = 500;
 	
 	protected final Log log = LogFactory.getLog(this.getClass());
 	
@@ -170,13 +173,20 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		List<T> instances = new ArrayList<T>();
 		
 		String[] line = null;
+		int saved = 0;
 		do {
+			if (saved > FLUSH_LIMIT) {
+				Context.flushSession();
+				Context.clearSession();
+				saved = 0;
+			}
 			try {
 				line = fetchNextLine();
 				T instance = createInstance(line);
 				if (instance != null) {
 					instance = save(instance);
 					if (isSaved(instance)) {
+						saved++;
 						instances.add(instance);
 					}
 				}
