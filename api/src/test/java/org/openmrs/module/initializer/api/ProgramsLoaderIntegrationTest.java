@@ -69,6 +69,13 @@ public class ProgramsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c = cs.saveConcept(c);
 		}
+		{
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("Hospital at Home Program", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Program"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			c = cs.saveConcept(c);
+		}
 		
 		// Concepts to be used as 'outcomes concepts'
 		{
@@ -95,6 +102,23 @@ public class ProgramsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			c.setConceptClass(cs.getConceptClassByName("ConvSet"));
 			c = cs.saveConcept(c);
 		}
+		{
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("Cure Chronic Obstructive Pulmonary Disease", Locale.ENGLISH));
+			c.setSet(false);
+			c.setDatatype(cs.getConceptDatatypeByName("N/A"));
+			c.setConceptClass(cs.getConceptClassByName("ConvSet"));
+			c = cs.saveConcept(c);
+		}
+		// A concept to be used to override "Cure Chronic Obstructive Pulmonary Disease" concept
+		{
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("Hospital at Home Program Outcomes", Locale.ENGLISH));
+			c.setSet(false);
+			c.setDatatype(cs.getConceptDatatypeByName("N/A"));
+			c.setConceptClass(cs.getConceptClassByName("ConvSet"));
+			c = cs.saveConcept(c);
+		}
 		
 		// A program to be edited
 		{
@@ -104,6 +128,16 @@ public class ProgramsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			prog.setOutcomesConcept(cs.getConceptByName("Oncology Program Outcomes"));
 			prog.setName("Intensive Oncology Program");
 			prog.setDescription("A special oncology program with stronger and even experimental treatments.");
+			prog = pws.saveProgram(prog);
+		}
+		
+		// A program to be edited or updated using concept name
+		{
+			Program prog = new Program();
+			prog.setConcept(cs.getConceptByName("Hospital at Home Program"));
+			prog.setOutcomesConcept(cs.getConceptByName("Cure Chronic Obstructive Pulmonary Disease"));
+			prog.setName("Hospital at Home Program");
+			prog.setDescription("Hospital-at-Home Program for Patients With Acute Exacerbations");
 			prog = pws.saveProgram(prog);
 		}
 		
@@ -178,6 +212,18 @@ public class ProgramsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertEquals("Oncology Program", prog.getName());
 			Assert.assertEquals("A regular oncology program with traditional chimotherapy.", prog.getDescription());
 		}
+		
+		/*
+		// an edited program using concept name
+		{
+			Program prog = pws.getProgramByName("Hospital at Home Program");
+			Assert.assertNotNull(prog);
+			Assert.assertEquals(cs.getConceptByName("Hospital at Home Program"), prog.getConcept());
+			Assert.assertEquals(cs.getConceptByName("Hospital at Home Program Outcomes"), prog.getOutcomesConcept());
+			Assert.assertEquals("Hospital at Home Program", prog.getName());
+			Assert.assertEquals("Hospital-at-Home Program", prog.getDescription());
+		}
+		*/
 		
 		// an retired program
 		{
