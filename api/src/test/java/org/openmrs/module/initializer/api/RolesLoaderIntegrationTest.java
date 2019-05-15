@@ -31,11 +31,23 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 		us.savePrivilege(new Privilege("Add Patient"));
 		us.savePrivilege(new Privilege("Add Orders"));
 		us.savePrivilege(new Privilege("Add Users"));
+		{
+			Privilege priv = new Privilege();
+			priv.setUuid("cf688946-2700-102b-80cb-0017a47871b2");
+			priv.setPrivilege("Add Forms");
+			us.savePrivilege(priv);
+		}
 		
 		// A couple of roles to be used as parent/inherited roles
 		us.saveRole(new Role("Application: Records Allergies"));
 		us.saveRole(new Role("Application: Uses Patient Summary"));
 		us.saveRole(new Role("Application: Sees Appointment Schedule"));
+		{
+			Role role = new Role();
+			role.setUuid("d2fcc9fa-2700-102b-80cb-0017a47871b2");
+			role.setRole("Social Worker");
+			us.saveRole(role);
+		}
 		
 		// role to be edited
 		{
@@ -64,6 +76,7 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 		
 		// created role
 		{
+			// setup
 			Set<Role> roles = new HashSet<Role>();
 			roles.add(us.getRole("Application: Records Allergies"));
 			roles.add(us.getRole("Application: Uses Patient Summary"));
@@ -71,24 +84,34 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Set<Privilege> privileges = new HashSet<Privilege>();
 			privileges.add(us.getPrivilege("Add Allergies"));
 			privileges.add(us.getPrivilege("Add Patient"));
+			privileges.add(us.getPrivilege("Add Forms"));
 			
-			Role role = us.getRole("Organizational: Doctor");
+			// replay
+			Role role = us.getRoleByUuid("d2fcb604-2700-102b-80cb-0017a47871b2");
+			
+			// verif
 			Assert.assertNotNull(role);
 			Assert.assertEquals("Organizational: Doctor", role.getName());
 			Assert.assertEquals("Doctor role", role.getDescription());
 			Assert.assertEquals(roles, role.getAllParentRoles());
 			Assert.assertEquals(privileges, role.getPrivileges());
 		}
+		
 		// edited role
 		{
+			// setup
 			Set<Role> roles = new HashSet<Role>();
 			roles.add(us.getRole("Application: Sees Appointment Schedule"));
+			roles.add(us.getRole("Social Worker")); // was provided by UUID in the CSV
 			
 			Set<Privilege> privileges = new HashSet<Privilege>();
 			privileges.add(us.getPrivilege("Add Orders"));
 			privileges.add(us.getPrivilege("Add Users"));
 			
+			// replay
 			Role role = us.getRole("Organizational: Nurse");
+			
+			// verif
 			Assert.assertNotNull(role);
 			Assert.assertEquals("Organizational: Nurse", role.getName());
 			Assert.assertEquals("Nurse role", role.getDescription());
