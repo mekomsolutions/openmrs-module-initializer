@@ -48,6 +48,7 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			role.setRole("Social Worker");
 			us.saveRole(role);
 		}
+		
 		// role to be edited
 		{
 			Set<Role> roles = new HashSet<Role>();
@@ -75,6 +76,7 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 		
 		// created role
 		{
+			// setup
 			Set<Role> roles = new HashSet<Role>();
 			roles.add(us.getRole("Application: Records Allergies"));
 			roles.add(us.getRole("Application: Uses Patient Summary"));
@@ -84,24 +86,32 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			privileges.add(us.getPrivilege("Add Patient"));
 			privileges.add(us.getPrivilege("Add Forms"));
 			
-			Role role = us.getRole("Organizational: Doctor");
+			// replay
+			Role role = us.getRoleByUuid("d2fcb604-2700-102b-80cb-0017a47871b2");
+			
+			// verif
 			Assert.assertNotNull(role);
 			Assert.assertEquals("Organizational: Doctor", role.getName());
 			Assert.assertEquals("Doctor role", role.getDescription());
 			Assert.assertEquals(roles, role.getAllParentRoles());
 			Assert.assertEquals(privileges, role.getPrivileges());
 		}
+		
 		// edited role
 		{
+			// setup
 			Set<Role> roles = new HashSet<Role>();
 			roles.add(us.getRole("Application: Sees Appointment Schedule"));
-			roles.add(us.getRole("Social Worker"));
+			roles.add(us.getRole("Social Worker")); // was provided by UUID in the CSV
 			
 			Set<Privilege> privileges = new HashSet<Privilege>();
 			privileges.add(us.getPrivilege("Add Orders"));
 			privileges.add(us.getPrivilege("Add Users"));
 			
+			// replay
 			Role role = us.getRole("Organizational: Nurse");
+			
+			// verif
 			Assert.assertNotNull(role);
 			Assert.assertEquals("Organizational: Nurse", role.getName());
 			Assert.assertEquals("Nurse role", role.getDescription());

@@ -30,7 +30,7 @@ public class RoleLineProcessor extends BaseLineProcessor<Role, UserService> {
 		
 		Role role = service.getRoleByUuid(uuid);
 		if (role != null && !role.getRole().equals(roleName)) {
-			throw new IllegalArgumentException("A Role name cannot be edited.");
+			throw new IllegalArgumentException("A role name cannot be edited.");
 		}
 		
 		if (role == null) {
