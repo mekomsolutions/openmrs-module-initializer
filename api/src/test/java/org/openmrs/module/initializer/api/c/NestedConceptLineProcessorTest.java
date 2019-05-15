@@ -18,6 +18,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.utils.ConceptListParser;
 
 /*
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
@@ -55,7 +56,7 @@ public class NestedConceptLineProcessorTest {
 		String[] line = { "cambodia:123; cambodia:456", null };
 		
 		// Replay
-		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs, new ConceptListParser(cs));
 		Concept c = p.fill(new Concept(), new CsvLine(p, line));
 		
 		// Verif
@@ -78,7 +79,7 @@ public class NestedConceptLineProcessorTest {
 		String[] line = { null, "cambodia:123; cambodia:456" };
 		
 		// Replay
-		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs, new ConceptListParser(cs));
 		Concept c = p.fill(new Concept(), new CsvLine(p, line));
 		
 		// Verif
@@ -101,7 +102,7 @@ public class NestedConceptLineProcessorTest {
 		String[] line = { null, null };
 		
 		// Replay
-		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs, new ConceptListParser(cs));
 		Concept c = p.fill(new Concept(), new CsvLine(p, line));
 		
 		// Verif
@@ -117,7 +118,7 @@ public class NestedConceptLineProcessorTest {
 		String[] line = {};
 		
 		// Replay
-		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs);
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(headerLine, cs, new ConceptListParser(cs));
 		Concept c = p.fill(new Concept(), new CsvLine(p, line));
 		Assert.assertNull(c.getAnswers());
 		Assert.assertNull(c.getSetMembers());

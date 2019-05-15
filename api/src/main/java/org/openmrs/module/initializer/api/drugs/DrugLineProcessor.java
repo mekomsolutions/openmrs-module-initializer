@@ -6,7 +6,7 @@ import org.openmrs.Drug;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.Utils;
+import org.openmrs.module.initializer.api.utils.Utils;
 
 /**
  * This is the first level line processor for concepts. It allows to parse and save concepts with

@@ -26,6 +26,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.PersonService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loaders.JsonKeyValuesLoader;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

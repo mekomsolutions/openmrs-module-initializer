@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api;
+package org.openmrs.module.initializer.api.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class Utils {
 			return new ConceptMap(refTerm, mapType);
 		}
 		
-		public boolean isValid() {
+		public boolean isSourceValid() {
 			return source != null;
 		}
 	}

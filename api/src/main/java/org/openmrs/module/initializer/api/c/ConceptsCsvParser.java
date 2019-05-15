@@ -7,6 +7,8 @@ import org.openmrs.Concept;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
+import org.openmrs.module.initializer.api.utils.ConceptListParser;
+import org.openmrs.module.initializer.api.utils.ConceptMapListParser;
 
 public class ConceptsCsvParser extends CsvParser<Concept, ConceptService, BaseLineProcessor<Concept, ConceptService>> {
 	
@@ -19,8 +21,8 @@ public class ConceptsCsvParser extends CsvParser<Concept, ConceptService, BaseLi
 		addLineProcessor(new ConceptNumericLineProcessor(headerLine, service));
 		addLineProcessor(new ConceptComplexLineProcessor(headerLine, service));
 		addLineProcessor(new BaseConceptLineProcessor(headerLine, service));
-		addLineProcessor(new NestedConceptLineProcessor(headerLine, service));
-		addLineProcessor(new MappingsConceptLineProcessor(headerLine, service));
+		addLineProcessor(new NestedConceptLineProcessor(headerLine, service, new ConceptListParser(service)));
+		addLineProcessor(new MappingsConceptLineProcessor(headerLine, service, new ConceptMapListParser(service)));
 	}
 	
 	@Override

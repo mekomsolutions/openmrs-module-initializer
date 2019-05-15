@@ -1,7 +1,6 @@
 package org.openmrs.module.initializer.api.loc;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Location;
@@ -9,7 +8,8 @@ import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.Utils;
+import org.openmrs.module.initializer.api.utils.LocationTagListParser;
+import org.openmrs.module.initializer.api.utils.Utils;
 
 public class LocationLineProcessor extends BaseLineProcessor<Location, LocationService> {
 	
@@ -39,27 +39,11 @@ public class LocationLineProcessor extends BaseLineProcessor<Location, LocationS
 	
 	protected static String HEADER_ADDRESS_6 = "address 6";
 	
-	public LocationLineProcessor(String[] headerLine, LocationService ls) {
-		super(headerLine, ls);
-	}
+	private LocationTagListParser listParser;
 	
-	protected static Set<LocationTag> parseLocationTagsList(String tagsList, LocationService ls)
-	        throws IllegalArgumentException {
-		Set<LocationTag> tags = new HashSet<LocationTag>();
-		
-		String[] parts = tagsList.split(BaseLineProcessor.LIST_SEPARATOR);
-		
-		for (String tagName : parts) {
-			tagName = tagName.trim();
-			LocationTag tag = ls.getLocationTagByName(tagName); // assuming location tag names only
-			if (tag == null) {
-				log.info("The location tag identified by '" + tagName + "' was not found in database. Creating it...");
-				tag = ls.saveLocationTag(new LocationTag(tagName, ""));
-			}
-			tags.add(tag);
-		}
-		
-		return tags;
+	public LocationLineProcessor(String[] headerLine, LocationService ls, LocationTagListParser listParser) {
+		super(headerLine, ls);
+		this.listParser = listParser;
 	}
 	
 	@Override
@@ -94,7 +78,7 @@ public class LocationLineProcessor extends BaseLineProcessor<Location, LocationS
 		loc.setTags(null);
 		String tags = line.getString(HEADER_TAGS, "");
 		if (!StringUtils.isEmpty(tags)) {
-			loc.setTags(parseLocationTagsList(tags, service));
+			loc.setTags(new HashSet<LocationTag>(listParser.parseList(tags)));
 		}
 		
 		loc.setCityVillage(line.get(HEADER_CITY_VILLAGE));

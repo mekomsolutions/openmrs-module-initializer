@@ -1,12 +1,13 @@
 package org.openmrs.module.initializer.api.roles;
 
-import org.openmrs.Privilege;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.openmrs.Role;
 import org.openmrs.api.UserService;
 import org.openmrs.module.initializer.api.CsvParser;
-
-import java.io.IOException;
-import java.io.InputStream;
+import org.openmrs.module.initializer.api.utils.PrivilegeListParser;
+import org.openmrs.module.initializer.api.utils.RoleListParser;
 
 public class RolesCsvParser extends CsvParser<Role, UserService, RoleLineProcessor> {
 	
@@ -26,7 +27,8 @@ public class RolesCsvParser extends CsvParser<Role, UserService, RoleLineProcess
 	
 	@Override
 	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(new RoleLineProcessor(headerLine, service));
+		addLineProcessor(
+		    new RoleLineProcessor(headerLine, service, new PrivilegeListParser(service), new RoleListParser(service)));
 	}
 	
 	@Override

@@ -9,7 +9,7 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.Utils;
+import org.openmrs.module.initializer.api.utils.Utils;
 
 public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<ProgramWorkflowState, ProgramWorkflowService> {
 	

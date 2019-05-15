@@ -5,7 +5,7 @@ import org.openmrs.module.metadatamapping.MetadataSource;
 import org.openmrs.module.metadatamapping.MetadataTermMapping;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.Utils;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 
 public class MetadataTermMappingsLineProcessor extends BaseLineProcessor<MetadataTermMapping, MetadataMappingServiceWrapper> {

@@ -27,6 +27,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.loaders.Loader;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 
 public class InitializerServiceImpl extends BaseOpenmrsService implements InitializerService {

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.initializer.api.CsvParser;
+import org.openmrs.module.initializer.api.utils.LocationTagListParser;
 
 public class LocationsCsvParser extends CsvParser<Location, LocationService, LocationLineProcessor> {
 	
@@ -25,6 +26,6 @@ public class LocationsCsvParser extends CsvParser<Location, LocationService, Loc
 	
 	@Override
 	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(new LocationLineProcessor(headerLine, service));
+		addLineProcessor(new LocationLineProcessor(headerLine, service, new LocationTagListParser(service)));
 	}
 }
