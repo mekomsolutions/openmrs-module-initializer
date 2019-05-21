@@ -10,17 +10,27 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
+import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderableCsvFile;
 
 /**
  * All CSV loaders should subclass the base CSV loader. This class takes care of loading and sorting
  * all CSV files configured through a {@link ConfigDirUtil} instance.
  */
-public abstract class BaseCsvLoader extends BaseLoader implements CsvLoader {
+@SuppressWarnings("rawtypes")
+public abstract class BaseCsvLoader<P extends CsvParser> extends BaseLoader implements CsvLoader/* <P> */ {
+	
+	protected P parser;
 	
 	@Override
 	public void load() {
 		loadCsvFiles(getDirUtil(), this);
+	}
+	
+	@Override
+	public CsvParser getParser(InputStream is) throws IOException {
+		parser.setInputStream(is);
+		return parser;
 	}
 	
 	public void loadCsvFiles(ConfigDirUtil dirUtil, CsvLoader csvLoader) {

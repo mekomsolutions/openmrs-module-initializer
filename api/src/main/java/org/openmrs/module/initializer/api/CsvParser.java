@@ -14,7 +14,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.BaseOpenmrsObject;
-import org.openmrs.Privilege;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.initializer.InitializerConstants;
@@ -41,8 +40,22 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	// The current line
 	protected String[] line = new String[0];
 	
+	public CsvParser() {
+		// for Spring only
+	}
+	
+	@Deprecated
+	/* this constructor should go when all is Spring'd */
 	public CsvParser(InputStream is, S service) throws IOException {
 		this.service = service;
+		this.reader = new CSVReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+		
+		headerLine = reader.readNext();
+		String version = P.getVersion(headerLine);
+		setLineProcessors(version, headerLine);
+	}
+	
+	public void setInputStream(InputStream is) throws IOException {
 		this.reader = new CSVReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 		
 		headerLine = reader.readNext();

@@ -8,12 +8,14 @@ import org.openmrs.module.initializer.api.CsvParser;
 /**
  * All CSV loaders should implement this interface, @see {@link BaseCsvLoader}
  */
-public interface CsvLoader extends Loader {
+@SuppressWarnings("rawtypes")
+public interface CsvLoader/* <P extends CsvParser> */extends Loader {
 	
 	/**
-	 * @return A parser built on the provided CSV file as input stream.
+	 * @return The domain parser built on the provided CSV file as input stream.
 	 */
-	@SuppressWarnings("rawtypes")
 	CsvParser getParser(InputStream is) throws IOException;
+	
+	// void setParser(P parser);
 	
 }

@@ -1,17 +1,19 @@
 package org.openmrs.module.initializer.api.loc;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.utils.LocationTagListParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LocationsCsvParser extends CsvParser<Location, LocationService, LocationLineProcessor> {
 	
-	public LocationsCsvParser(InputStream is, LocationService ps) throws IOException {
-		super(is, ps);
+	@Autowired
+	public LocationsCsvParser(@Qualifier("locationService") LocationService service) {
+		this.service = service;
 	}
 	
 	@Override
