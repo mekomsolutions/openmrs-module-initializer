@@ -1,31 +1,33 @@
 package org.openmrs.module.initializer.api.loc;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
+import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
-import org.openmrs.module.initializer.api.utils.LocationTagListParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class LocationsCsvParser extends CsvParser<Location, LocationService, LocationLineProcessor> {
+@Component
+public class LocationsCsvParser extends CsvParser<Location, BaseLineProcessor<Location>> {
 	
-	public LocationsCsvParser(InputStream is, LocationService ps) throws IOException {
-		super(is, ps);
+	private LocationService locationService;
+	
+	@Autowired
+	public LocationsCsvParser(@Qualifier("locationService") LocationService locationService,
+	    LocationLineProcessor processor) {
+		super(processor);
+		this.locationService = locationService;
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.LOCATIONS;
 	}
 	
 	@Override
 	protected Location save(Location instance) {
-		return service.saveLocation(instance);
-	}
-	
-	@Override
-	protected boolean isVoidedOrRetired(Location instance) {
-		return instance.isRetired();
-	}
-	
-	@Override
-	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(new LocationLineProcessor(headerLine, service, new LocationTagListParser(service)));
+		return locationService.saveLocation(instance);
 	}
 }

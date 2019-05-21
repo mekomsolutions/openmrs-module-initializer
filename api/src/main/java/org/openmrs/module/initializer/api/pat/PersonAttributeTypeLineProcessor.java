@@ -13,8 +13,12 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class PersonAttributeTypeLineProcessor extends BaseLineProcessor<PersonAttributeType, PersonService> {
+@Component
+public class PersonAttributeTypeLineProcessor extends BaseLineProcessor<PersonAttributeType> {
 	
 	protected static class Helper {
 		
@@ -58,19 +62,22 @@ public class PersonAttributeTypeLineProcessor extends BaseLineProcessor<PersonAt
 	
 	protected Helper helper;
 	
-	public PersonAttributeTypeLineProcessor(String[] headerLine, PersonService ps) {
-		this(headerLine, ps, new Helper());
+	private PersonService personService;
+	
+	@Autowired
+	public PersonAttributeTypeLineProcessor(@Qualifier("personService") PersonService personService) {
+		this.personService = personService;
+		this.helper = new Helper();
 	}
 	
-	public PersonAttributeTypeLineProcessor(String[] headerLine, PersonService ps, Helper mapper) {
-		super(headerLine, ps);
-		this.helper = mapper;
+	public void setHelper(Helper helper) {
+		this.helper = helper;
 	}
 	
 	@Override
 	protected PersonAttributeType bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = getUuid(line.asLine());
-		PersonAttributeType pat = service.getPersonAttributeTypeByUuid(uuid);
+		PersonAttributeType pat = personService.getPersonAttributeTypeByUuid(uuid);
 		
 		if (pat == null) {
 			pat = new PersonAttributeType();

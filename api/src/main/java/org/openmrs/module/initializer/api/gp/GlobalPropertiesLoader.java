@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.loaders;
+package org.openmrs.module.initializer.api.gp;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerSerializer;
-import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
+import org.openmrs.module.initializer.api.loaders.BaseLoader;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -47,7 +47,8 @@ public class ConceptNumericLineProcessorTest {
 		String[] line = { "Numeric", "-100.5", "-85.7", "-50.3", "45.1", "78", "98.8", "foo", "yes", "1" };
 		
 		// Replay
-		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(headerLine, cs);
+		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(cs);
+		p.setHeaderLine(headerLine);
 		ConceptNumeric cn = (ConceptNumeric) p.fill(new Concept(), new CsvLine(p, line));
 		
 		// Verif
@@ -71,7 +72,8 @@ public class ConceptNumericLineProcessorTest {
 		String[] line = {};
 		
 		// Replay
-		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(headerLine, cs);
+		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(cs);
+		p.setHeaderLine(headerLine);
 		Concept c = p.fill(new Concept(), new CsvLine(p, line));
 		
 		// Verif
@@ -86,7 +88,8 @@ public class ConceptNumericLineProcessorTest {
 		String[] line = { "Numeric", "-100.5a" };
 		
 		// Replay
-		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(headerLine, cs);
+		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(cs);
+		p.setHeaderLine(headerLine);
 		p.fill(new Concept(), new CsvLine(p, line));
 	}
 }

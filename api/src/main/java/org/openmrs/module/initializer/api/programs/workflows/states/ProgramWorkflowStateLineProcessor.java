@@ -5,13 +5,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
+import org.openmrs.api.ConceptService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<ProgramWorkflowState, ProgramWorkflowService> {
+@Component
+public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<ProgramWorkflowState> {
 	
 	protected static String HEADER_WORKFLOW = "workflow";
 	
@@ -21,12 +26,19 @@ public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<Program
 	
 	protected static String HEADER_TERMINAL = "terminal";
 	
+	private ProgramWorkflowService pwfService;
+	
+	private ConceptService conceptService;
+	
 	/**
 	 * @param headerLine The header line the processor will refer to.
 	 * @param service
 	 */
-	public ProgramWorkflowStateLineProcessor(String[] headerLine, ProgramWorkflowService service) {
-		super(headerLine, service);
+	@Autowired
+	public ProgramWorkflowStateLineProcessor(@Qualifier("programWorkflowService") ProgramWorkflowService pwService,
+	    @Qualifier("conceptService") ConceptService conceptService) {
+		this.pwfService = pwService;
+		this.conceptService = conceptService;
 	}
 	
 	@Override
@@ -38,7 +50,7 @@ public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<Program
 			id = line.get(HEADER_STATE_CONCEPT);
 		}
 		
-		ProgramWorkflowState state = Utils.fetchProgramWorkflowState(id, service, Context.getConceptService());
+		ProgramWorkflowState state = Utils.fetchProgramWorkflowState(id, pwfService, conceptService);
 		if (state == null) {
 			state = new ProgramWorkflowState();
 			if (!StringUtils.isEmpty(uuid)) {
@@ -46,15 +58,13 @@ public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<Program
 			}
 		}
 		
-		state.setRetired(getVoidOrRetire(line.asLine()));
-		
 		return state;
 	}
 	
 	@Override
 	protected ProgramWorkflowState fill(ProgramWorkflowState state, CsvLine line) throws IllegalArgumentException {
 		
-		Concept c = Utils.fetchConcept(line.get(HEADER_STATE_CONCEPT), Context.getConceptService());
+		Concept c = Utils.fetchConcept(line.get(HEADER_STATE_CONCEPT), conceptService);
 		state.setConcept(c);
 		
 		String name = Utils.getBestMatchName(c, Context.getLocale());
@@ -65,8 +75,7 @@ public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<Program
 		state.setInitial(BooleanUtils.toBoolean(line.get(HEADER_INITIAL, true)));
 		state.setTerminal(BooleanUtils.toBoolean(line.get(HEADER_TERMINAL, true)));
 		
-		ProgramWorkflow wf = Utils.fetchProgramWorkflow(line.get(HEADER_WORKFLOW, true), service,
-		    Context.getConceptService());
+		ProgramWorkflow wf = Utils.fetchProgramWorkflow(line.get(HEADER_WORKFLOW, true), pwfService, conceptService);
 		
 		// states must be bound to a workflow
 		if (wf == null) {

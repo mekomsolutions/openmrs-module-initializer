@@ -1,18 +1,30 @@
 package org.openmrs.module.initializer.api.programs.workflows;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.ProgramWorkflowService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class ProgramWorkflowsCsvParser extends CsvParser<ProgramWorkflow, ProgramWorkflowService, BaseLineProcessor<ProgramWorkflow, ProgramWorkflowService>> {
+@Component
+public class ProgramWorkflowsCsvParser extends CsvParser<ProgramWorkflow, BaseLineProcessor<ProgramWorkflow>> {
 	
-	public ProgramWorkflowsCsvParser(InputStream is, ProgramWorkflowService pws) throws IOException {
-		super(is, pws);
+	private ProgramWorkflowService pwfService;
+	
+	@Autowired
+	public ProgramWorkflowsCsvParser(@Qualifier("programWorkflowService") ProgramWorkflowService pwfService,
+	    ProgramWorkflowLineProcessor processor) {
+		super(processor);
+		this.pwfService = pwfService;
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.PROGRAM_WORKFLOWS;
 	}
 	
 	@Override
@@ -21,17 +33,7 @@ public class ProgramWorkflowsCsvParser extends CsvParser<ProgramWorkflow, Progra
 		if (program != null) {
 			program.addWorkflow(instance);
 		}
-		service.saveProgram(program);
+		pwfService.saveProgram(program);
 		return instance;
-	}
-	
-	@Override
-	protected boolean isVoidedOrRetired(ProgramWorkflow instance) {
-		return instance.isRetired();
-	}
-	
-	@Override
-	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(new ProgramWorkflowLineProcessor(headerLine, service));
 	}
 }

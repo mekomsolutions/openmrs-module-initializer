@@ -10,8 +10,12 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.PrivilegeListParser;
 import org.openmrs.module.initializer.api.utils.RoleListParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class RoleLineProcessor extends BaseLineProcessor<Role, UserService> {
+@Component
+public class RoleLineProcessor extends BaseLineProcessor<Role> {
 	
 	protected static String HEADER_ROLE_NAME = "role name";
 	
@@ -19,13 +23,16 @@ public class RoleLineProcessor extends BaseLineProcessor<Role, UserService> {
 	
 	protected static String HEADER_PRIVILEGES = "privileges";
 	
+	private UserService userService;
+	
 	private PrivilegeListParser pListParser;
 	
 	private RoleListParser rListParser;
 	
-	public RoleLineProcessor(String[] headerLine, UserService us, PrivilegeListParser privilegeListParser,
+	@Autowired
+	public RoleLineProcessor(@Qualifier("userService") UserService userService, PrivilegeListParser privilegeListParser,
 	    RoleListParser roleListParser) {
-		super(headerLine, us);
+		this.userService = userService;
 		this.pListParser = privilegeListParser;
 		this.rListParser = roleListParser;
 	}
@@ -35,14 +42,14 @@ public class RoleLineProcessor extends BaseLineProcessor<Role, UserService> {
 		String uuid = getUuid(line.asLine());
 		String roleName = line.get(HEADER_ROLE_NAME, true);
 		
-		Role role = service.getRoleByUuid(uuid);
+		Role role = userService.getRoleByUuid(uuid);
 		if (role != null && !role.getRole().equals(roleName)) {
 			throw new IllegalArgumentException("A role name cannot be edited.");
 		}
 		
 		if (role == null) {
 			if (!StringUtils.isEmpty(roleName)) {
-				role = service.getRole(roleName);
+				role = userService.getRole(roleName);
 			}
 		}
 		

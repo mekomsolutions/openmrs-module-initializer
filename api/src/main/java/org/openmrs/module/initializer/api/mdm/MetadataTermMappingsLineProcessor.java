@@ -1,14 +1,16 @@
-package org.openmrs.module.initializer.api.metadata;
+package org.openmrs.module.initializer.api.mdm;
 
-import org.openmrs.api.context.Context;
-import org.openmrs.module.metadatamapping.MetadataSource;
-import org.openmrs.module.metadatamapping.MetadataTermMapping;
+import org.apache.commons.lang3.StringUtils;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.utils.Utils;
-import org.apache.commons.lang3.StringUtils;
+import org.openmrs.module.metadatamapping.MetadataSource;
+import org.openmrs.module.metadatamapping.MetadataTermMapping;
+import org.openmrs.module.metadatamapping.api.MetadataMappingService;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class MetadataTermMappingsLineProcessor extends BaseLineProcessor<MetadataTermMapping, MetadataMappingServiceWrapper> {
+@OpenmrsProfile(modules = { "metadatamapping:*" })
+public class MetadataTermMappingsLineProcessor extends BaseLineProcessor<MetadataTermMapping> {
 	
 	protected static String MAPPING_SOURCE = "Mapping source";
 	
@@ -18,12 +20,15 @@ public class MetadataTermMappingsLineProcessor extends BaseLineProcessor<Metadat
 	
 	protected static String METADATA_UUID = "Metadata Uuid";
 	
+	private MetadataMappingService mdmService;
+	
 	/**
 	 * @param headerLine The header line the processor will refer to.
 	 * @param service
 	 */
-	public MetadataTermMappingsLineProcessor(String[] headerLine, MetadataMappingServiceWrapper service) {
-		super(headerLine, service);
+	@Autowired
+	public MetadataTermMappingsLineProcessor(MetadataMappingService mdmService) {
+		this.mdmService = mdmService;
 	}
 	
 	@Override
@@ -34,10 +39,10 @@ public class MetadataTermMappingsLineProcessor extends BaseLineProcessor<Metadat
 		
 		MetadataTermMapping mapping = null;
 		if (!StringUtils.isEmpty(uuid)) {
-			mapping = service.getMetadataTermMappingByUuid(uuid);
+			mapping = mdmService.getMetadataTermMappingByUuid(uuid);
 		}
 		if (mapping == null) {
-			mapping = service.getMetadataTermMapping(sourceName, mappingCode);
+			mapping = mdmService.getMetadataTermMapping(sourceName, mappingCode);
 		}
 		if (mapping == null) {
 			mapping = new MetadataTermMapping();
@@ -45,14 +50,13 @@ public class MetadataTermMappingsLineProcessor extends BaseLineProcessor<Metadat
 				mapping.setUuid(uuid);
 			}
 		}
-		mapping.setRetired(getVoidOrRetire(line.asLine()));
 		
 		return mapping;
 	}
 	
 	@Override
 	protected MetadataTermMapping fill(MetadataTermMapping mapping, CsvLine line) throws IllegalArgumentException {
-		MetadataSource source = service.getMetadataSourceByName(line.get(MAPPING_SOURCE, true));
+		MetadataSource source = mdmService.getMetadataSourceByName(line.get(MAPPING_SOURCE, true));
 		mapping.setMetadataSource(source);
 		mapping.setCode(line.get(MAPPING_CODE, true));
 		mapping.setMetadataUuid(line.get(METADATA_UUID, true));

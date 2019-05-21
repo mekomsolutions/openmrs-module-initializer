@@ -7,12 +7,16 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 /**
  * This is the first level line processor for concepts. It allows to parse and save concepts with
  * the minimal set of required fields.
  */
-public class DrugLineProcessor extends BaseLineProcessor<Drug, ConceptService> {
+@Component
+public class DrugLineProcessor extends BaseLineProcessor<Drug> {
 	
 	protected static String HEADER_STRENGTH = "strength";
 	
@@ -20,16 +24,19 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug, ConceptService> {
 	
 	protected static String HEADER_CONCEPT_DRUG = "concept drug";
 	
-	public DrugLineProcessor(String[] headerLine, ConceptService cs) {
-		super(headerLine, cs);
+	private ConceptService conceptService;
+	
+	@Autowired
+	public DrugLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
+		this.conceptService = conceptService;
 	}
 	
 	@Override
 	protected Drug bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = getUuid(line.asLine());
-		Drug drug = service.getDrugByUuid(uuid);
+		Drug drug = conceptService.getDrugByUuid(uuid);
 		if (drug == null) {
-			drug = service.getDrugByNameOrId(line.get(HEADER_NAME));
+			drug = conceptService.getDrugByNameOrId(line.get(HEADER_NAME));
 		}
 		if (drug == null) {
 			drug = new Drug();
@@ -37,8 +44,6 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug, ConceptService> {
 				drug.setUuid(uuid);
 			}
 		}
-		
-		drug.setRetired(getVoidOrRetire(line.asLine()));
 		
 		return drug;
 	}
@@ -53,10 +58,10 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug, ConceptService> {
 		drug.setDescription(line.getString(HEADER_DESC, ""));
 		drug.setStrength(line.getString(HEADER_STRENGTH, ""));
 		
-		Concept conceptDrug = Utils.fetchConcept(line.get(HEADER_CONCEPT_DRUG), service);
+		Concept conceptDrug = Utils.fetchConcept(line.get(HEADER_CONCEPT_DRUG), conceptService);
 		drug.setConcept(conceptDrug);
 		
-		Concept conceptDosageForm = Utils.fetchConcept(line.get(HEADER_DOSAGE_FORM), service);
+		Concept conceptDosageForm = Utils.fetchConcept(line.get(HEADER_DOSAGE_FORM), conceptService);
 		drug.setDosageForm(conceptDosageForm);
 		
 		return drug;

@@ -6,9 +6,13 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.ConceptListParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-public class NestedConceptLineProcessor extends BaseConceptLineProcessor {
+@Component("initializer.nestedConceptLineProcessor")
+public class NestedConceptLineProcessor extends ConceptLineProcessor {
 	
 	protected static String HEADER_ANSWERS = "answers";
 	
@@ -16,8 +20,10 @@ public class NestedConceptLineProcessor extends BaseConceptLineProcessor {
 	
 	protected ConceptListParser listParser;
 	
-	public NestedConceptLineProcessor(String[] headerLine, ConceptService cs, ConceptListParser listParser) {
-		super(headerLine, cs);
+	@Autowired
+	public NestedConceptLineProcessor(@Qualifier("conceptService") ConceptService conceptService,
+	    ConceptListParser listParser) {
+		super(conceptService);
 		this.listParser = listParser;
 	}
 	

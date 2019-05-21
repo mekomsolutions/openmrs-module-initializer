@@ -1,20 +1,17 @@
 package org.openmrs.module.initializer.api;
 
-import java.util.Locale;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.EncounterType;
 import org.openmrs.PatientIdentifierType;
-import org.openmrs.module.initializer.api.loaders.MetadataMappingsLoader;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.metadatamapping.api.MetadataMappingService;
+import org.openmrs.module.initializer.api.mdm.MetadataMappingsLoader;
 import org.openmrs.module.metadatamapping.MetadataSet;
 import org.openmrs.module.metadatamapping.MetadataSource;
 import org.openmrs.module.metadatamapping.MetadataTermMapping;
+import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 public class MetadataMappingsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -22,19 +19,18 @@ public class MetadataMappingsLoaderIntegrationTest extends DomainBaseModuleConte
 	private MetadataMappingService service;
 	
 	@Autowired
-	private MetadataMappingsLoader metadataMappingsLoader;
+	private MetadataMappingsLoader loader;
 	
 	private MetadataSource ms;
 	
 	@Before
-	public void setup() throws Exception {
-		// MetadataSource to use
-		{
-			ms = new MetadataSource();
-			ms.setName("org.openmrs.module.emrapi");
-			ms = service.saveMetadataSource(ms);
-		}
-		// MetadataTermMapping to edit using source and code
+	public void setup() {
+		
+		ms = new MetadataSource();
+		ms.setName("org.openmrs.module.emrapi");
+		ms = service.saveMetadataSource(ms);
+		
+		// Metadata term mapping to edit using source and code
 		{
 			MetadataTermMapping mtm = new MetadataTermMapping();
 			mtm.setUuid("21e24b36-f9e3-4b0e-986d-9899665597f7");
@@ -45,7 +41,7 @@ public class MetadataMappingsLoaderIntegrationTest extends DomainBaseModuleConte
 			mtm.setMappedObject(patientId);
 			service.saveMetadataTermMapping(mtm);
 		}
-		// MetadataTermMapping to edit using metadataUuid
+		// Metadata term mapping to edit using metadata UUID
 		{
 			MetadataTermMapping mtm = new MetadataTermMapping();
 			mtm.setUuid("dbfd899d-e9e1-4059-8992-73737c924f84");
@@ -56,7 +52,7 @@ public class MetadataMappingsLoaderIntegrationTest extends DomainBaseModuleConte
 			mtm.setMappedObject(encType);
 			service.saveMetadataTermMapping(mtm);
 		}
-		// MetadataTermMapping to retire
+		// Metadata term mapping to retire
 		{
 			MetadataTermMapping mtm = new MetadataTermMapping();
 			mtm.setUuid("5f84b986-232d-475b-aad2-2094306bd655");
@@ -71,11 +67,12 @@ public class MetadataMappingsLoaderIntegrationTest extends DomainBaseModuleConte
 	
 	@Test
 	public void load_shouldLoadMetadataTermMappingsFromCsvFiles() {
-		// Set up
+		
+		// Setup
 		MetadataTermMapping mtm;
 		
 		// Replay
-		metadataMappingsLoader.load();
+		loader.load();
 		
 		// Verify created
 		mtm = service.getMetadataTermMapping(ms, "emr.atFacilityVisitType");
@@ -103,11 +100,10 @@ public class MetadataMappingsLoaderIntegrationTest extends DomainBaseModuleConte
 		// Verify retired
 		mtm = service.getMetadataTermMappingByUuid("5f84b986-232d-475b-aad2-2094306bd655");
 		Assert.assertNotNull(mtm);
-		Assert.assertEquals(true, mtm.isRetired());
+		Assert.assertTrue(mtm.isRetired());
 		Assert.assertEquals("org.openmrs.module.emrapi", mtm.getMetadataSource().getName());
 		Assert.assertEquals("emr.extraPatientIdentifierTypes", mtm.getCode());
 		Assert.assertEquals("org.openmrs.module.metadatamapping.MetadataSet", mtm.getMetadataClass());
 		Assert.assertEquals("05a29f94-c0ed-11e2-94be-8c13b969e334", mtm.getMetadataUuid());
-		
 	}
 }

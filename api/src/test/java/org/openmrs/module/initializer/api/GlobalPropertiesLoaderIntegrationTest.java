@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.loaders.GlobalPropertiesLoader;
+import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class GlobalPropertiesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {

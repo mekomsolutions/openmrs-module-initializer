@@ -16,6 +16,19 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.api.c.ConceptsLoader;
+import org.openmrs.module.initializer.api.drugs.DrugsLoader;
+import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
+import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
+import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
+import org.openmrs.module.initializer.api.loc.LocationsLoader;
+import org.openmrs.module.initializer.api.mdm.MetadataMappingsLoader;
+import org.openmrs.module.initializer.api.pat.PersonAttributeTypesLoader;
+import org.openmrs.module.initializer.api.privileges.PrivilegesLoader;
+import org.openmrs.module.initializer.api.programs.ProgramsLoader;
+import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
+import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkflowStatesLoader;
+import org.openmrs.module.initializer.api.roles.RolesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest {

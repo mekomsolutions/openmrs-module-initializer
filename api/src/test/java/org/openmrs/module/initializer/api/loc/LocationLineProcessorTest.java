@@ -51,7 +51,8 @@ public class LocationLineProcessorTest {
 		String[] line = { "Login Location; Visit Location" };
 		
 		// Replay
-		LocationLineProcessor p = new LocationLineProcessor(headerLine, ls, new LocationTagListParser(ls));
+		LocationLineProcessor p = new LocationLineProcessor(ls, new LocationTagListParser(ls));
+		p.setHeaderLine(headerLine);
 		Location c = p.fill(new Location(), new CsvLine(p, line));
 		
 		// Verif

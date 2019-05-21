@@ -24,7 +24,8 @@ public class BaseConceptLineProcessorTest {
 		String[] line = {};
 		
 		// Replay
-		BaseConceptLineProcessor p = new BaseConceptLineProcessor(headerLine, cs);
+		ConceptLineProcessor p = new ConceptLineProcessor(cs);
+		p.setHeaderLine(headerLine);
 		Concept c = p.fill(new Concept(), new CsvLine(p, line));
 		
 		// Verif

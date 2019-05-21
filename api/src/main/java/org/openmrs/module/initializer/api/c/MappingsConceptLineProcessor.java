@@ -7,15 +7,21 @@ import org.openmrs.ConceptMap;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.ConceptMapListParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class MappingsConceptLineProcessor extends BaseConceptLineProcessor {
+@Component("initializer.mappingsConceptLineProcessor")
+public class MappingsConceptLineProcessor extends ConceptLineProcessor {
 	
 	protected static String HEADER_MAPPINGS_SAMEAS = "same as mappings";
 	
 	private ConceptMapListParser listParser;
 	
-	public MappingsConceptLineProcessor(String[] headerLine, ConceptService cs, ConceptMapListParser listParser) {
-		super(headerLine, cs);
+	@Autowired
+	public MappingsConceptLineProcessor(@Qualifier("conceptService") ConceptService conceptService,
+	    ConceptMapListParser listParser) {
+		super(conceptService);
 		this.listParser = listParser;
 	}
 	

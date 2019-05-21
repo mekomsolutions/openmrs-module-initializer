@@ -1,13 +1,13 @@
 package org.openmrs.module.initializer.api.idgen;
 
-import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.module.idgen.IdentifierSource;
 
 /**
  * This wrapper class is necessary because {@link IdentifierSource} does not extend
- * {@linkBaseOpenmrsObject}.
+ * {@link BaseOpenmrsMetadata}.
  */
-public class IdgenSourceWrapper extends BaseOpenmrsObject {
+public class IdgenSourceWrapper extends BaseOpenmrsMetadata {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -19,7 +19,7 @@ public class IdgenSourceWrapper extends BaseOpenmrsObject {
 	}
 	
 	public IdentifierSourceType getType() {
-		return BaseIdentifierSourceLineProcessor.getIdentifierSourceType(source);
+		return IdentifierSourceLineProcessor.getIdentifierSourceType(source);
 	}
 	
 	public IdentifierSource getIdentifierSource() {
@@ -39,4 +39,15 @@ public class IdgenSourceWrapper extends BaseOpenmrsObject {
 	public void setId(Integer id) {
 		source.setId(id);
 	}
+	
+	@Override
+	public void setRetired(Boolean retired) {
+		source.setRetired(retired);
+	}
+	
+	@Override
+	public Boolean isRetired() {
+		return source.isRetired();
+	}
+	
 }

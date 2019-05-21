@@ -16,7 +16,7 @@ import org.openmrs.module.initializer.api.CsvLine;
  * This is the first level line processor for identifier sources. It allows to parse and save
  * identifier sources with the minimal/common set of required fields.
  */
-public class BaseIdentifierSourceLineProcessor extends BaseLineProcessor<IdgenSourceWrapper, IdentifierSourceService> {
+public abstract class IdentifierSourceLineProcessor extends BaseLineProcessor<IdgenSourceWrapper> {
 	
 	protected static String HEADER_IDTYPE = "Identifier type";
 	
@@ -49,8 +49,10 @@ public class BaseIdentifierSourceLineProcessor extends BaseLineProcessor<IdgenSo
 	
 	protected static String HEADER_BASE_CHAR_SET = "base character set";
 	
-	public BaseIdentifierSourceLineProcessor(String[] headerLine, IdentifierSourceService is) {
-		super(headerLine, is);
+	protected IdentifierSourceService idgenService;
+	
+	public IdentifierSourceLineProcessor(IdentifierSourceService idgenService) {
+		this.idgenService = idgenService;
 	}
 	
 	/**
@@ -133,29 +135,15 @@ public class BaseIdentifierSourceLineProcessor extends BaseLineProcessor<IdgenSo
 	protected IdgenSourceWrapper bootstrap(CsvLine line) throws IllegalArgumentException {
 		
 		String uuid = getUuid(line.asLine());
-		IdentifierSource source = service.getIdentifierSourceByUuid(uuid);
+		IdentifierSource source = idgenService.getIdentifierSourceByUuid(uuid);
 		
 		if (source == null) {
 			source = newIdentifierSource(line);
 			if (!StringUtils.isEmpty(uuid)) {
 				source.setUuid(uuid);
 			}
-		} else {
-			source.setRetired(getVoidOrRetire(line.asLine()));
 		}
 		
 		return new IdgenSourceWrapper(source);
-	}
-	
-	/*
-	 * This is the base identifier source implementation.
-	 */
-	protected IdgenSourceWrapper fill(IdgenSourceWrapper instance, CsvLine line) throws IllegalArgumentException {
-		
-		instance.getIdentifierSource().setIdentifierType(getPatientIdentifierType(line.getString(HEADER_IDTYPE)));
-		instance.getIdentifierSource().setName(line.getString(HEADER_NAME));
-		instance.getIdentifierSource().setDescription(line.getString(HEADER_DESC));
-		
-		return instance;
 	}
 }

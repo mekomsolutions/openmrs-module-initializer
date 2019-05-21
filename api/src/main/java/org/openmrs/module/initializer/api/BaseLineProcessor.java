@@ -13,12 +13,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsObject;
-import org.openmrs.api.OpenmrsService;
 
 /**
  * Base class to any CSV line processor.
  */
-abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends OpenmrsService> {
+abstract public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
 	protected final static Log log = LogFactory.getLog(BaseLineProcessor.class);
 	
@@ -42,13 +41,15 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	
 	public static String UNDEFINED_METADATA_VALUE = "__metadata__value__undefined__"; // for header only
 	
-	protected S service;
-	
-	protected String[] headerLine;
+	protected String[] headerLine = new String[0];
 	
 	protected Map<String, Integer> indexMap = new HashMap<String, Integer>();
 	
 	protected Map<String, LocalizedHeader> l10nHeadersMap = new HashMap<String, LocalizedHeader>();
+	
+	protected BaseLineProcessor() {
+		// for Spring
+	}
 	
 	abstract protected T bootstrap(CsvLine line) throws IllegalArgumentException;
 	
@@ -85,7 +86,7 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 		return getUuid(headerLine, line);
 	}
 	
-	public static boolean getVoidOrRetire(String[] headerLine, String[] line) {
+	public static Boolean getVoidOrRetire(String[] headerLine, String[] line) {
 		String str = Boolean.FALSE.toString();
 		try {
 			str = line[getColumn(headerLine, HEADER_VOID_RETIRE)];
@@ -101,7 +102,8 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	
 	/*
 	 * This is basically a map between a localized header and its found locales.
-	 * From |Name:en|Name:km_KH| this would be a map between 'name' and [en, km_KH].
+	 * From such headers | Name:en | Name:km_KH | this would be a map between 'name'
+	 * and [en, km_KH].
 	 */
 	protected static class LocalizedHeader {
 		
@@ -145,10 +147,11 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	}
 	
 	/**
-	 * From a set of i18n headers, such as Name:en, Name:km_KH, Description:en, Description:km_KH it
-	 * returns a map with the localized name as keys, so here: 'Name' and 'Description' and
-	 * {@link LocalizedHeader} instances as values. Each {@link LocalizedHeader} carries the link
-	 * between a localized name and the possible locales that where found for that name.
+	 * From a set of i18n headers, such as 'Name:en', 'Name:km_KH', 'Description:en',
+	 * 'Description:km_KH' it returns a map with the localized name as keys, so here: 'Name' and
+	 * 'Description' and {@link LocalizedHeader} instances as values. Each {@link LocalizedHeader}
+	 * carries the link between a localized name and the possible locales that where found for that
+	 * name.
 	 * 
 	 * @param headerLine
 	 */
@@ -178,6 +181,9 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 		return l10nHeaderMap;
 	}
 	
+	/**
+	 * @see #getLocalizedHeadersMap(String[])
+	 */
 	public LocalizedHeader getLocalizedHeader(String header) {
 		if (l10nHeadersMap.containsKey(header.trim().toLowerCase())) {
 			return l10nHeadersMap.get(header.trim().toLowerCase());
@@ -187,13 +193,16 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject, S extends O
 	}
 	
 	/**
-	 * @param headerLine The header line the processor will refer to.
+	 * Sets the header line that this processor will operate on.
+	 * 
+	 * @param headerLine The header line as an array of strings.
+	 * @return The processor set to be worked with.
 	 */
-	public BaseLineProcessor(String[] headerLine, S service) {
-		this.service = service;
+	public final BaseLineProcessor<T> setHeaderLine(String[] headerLine) {
 		this.headerLine = headerLine;
 		this.indexMap = createIndexMap(headerLine);
 		this.l10nHeadersMap = getLocalizedHeadersMap(headerLine);
+		return this;
 	}
 	
 	/**

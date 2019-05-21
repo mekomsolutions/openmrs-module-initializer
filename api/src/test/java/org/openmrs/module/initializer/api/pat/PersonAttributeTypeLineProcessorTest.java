@@ -48,7 +48,9 @@ public class PersonAttributeTypeLineProcessorTest {
 		        "Edit Privilege" };
 		
 		// Replay
-		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(headerLine, ps, helper);
+		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(ps);
+		p.setHelper(helper);
+		p.setHeaderLine(headerLine);
 		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(p, line));
 		
 		// Verif
@@ -68,7 +70,9 @@ public class PersonAttributeTypeLineProcessorTest {
 		String[] line = { "PAT name", "java.lang.String" };
 		
 		// Replay
-		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(headerLine, ps, helper);
+		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(ps);
+		p.setHelper(helper);
+		p.setHeaderLine(headerLine);
 		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(p, line));
 		
 		// Verif
@@ -83,7 +87,9 @@ public class PersonAttributeTypeLineProcessorTest {
 		String[] line = {};
 		
 		// Replay
-		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(headerLine, ps);
+		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(ps);
+		p.setHelper(helper);
+		p.setHeaderLine(headerLine);
 		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(p, line));
 		
 		// Verif

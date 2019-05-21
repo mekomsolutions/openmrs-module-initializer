@@ -12,8 +12,8 @@ import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.loaders.ProgramWorkflowsLoader;
-import org.openmrs.module.initializer.api.loaders.ProgramsLoader;
+import org.openmrs.module.initializer.api.programs.ProgramsLoader;
+import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

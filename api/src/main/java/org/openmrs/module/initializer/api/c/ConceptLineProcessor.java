@@ -12,13 +12,17 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 /**
  * This is the first level line processor for concepts. It allows to parse and save concepts with
  * the minimal set of required fields.
  */
-public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, ConceptService> {
+@Component("initializer.conceptLineProcessor")
+public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	
 	protected static String HEADER_SHORTNAME = "short name";
 	
@@ -28,14 +32,17 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, Concept
 	
 	protected static String HEADER_DATATYPE = "data type";
 	
-	public BaseConceptLineProcessor(String[] headerLine, ConceptService cs) {
-		super(headerLine, cs);
+	protected ConceptService conceptService;
+	
+	@Autowired
+	public ConceptLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
+		this.conceptService = conceptService;
 	}
 	
 	@Override
 	protected Concept bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = getUuid(line.asLine());
-		Concept concept = service.getConceptByUuid(uuid);
+		Concept concept = conceptService.getConceptByUuid(uuid);
 		
 		if (StringUtils.isEmpty(uuid) && concept == null) {
 			Locale currentLocale = Context.getLocale();
@@ -44,7 +51,7 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, Concept
 				String name = line.get(lh.getI18nHeader(nameLocale));
 				if (!StringUtils.isEmpty(name)) {
 					Context.setLocale(nameLocale);
-					concept = service.getConceptByName(name);
+					concept = conceptService.getConceptByName(name);
 					if (concept != null) {
 						break;
 					}
@@ -59,8 +66,6 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, Concept
 				concept.setUuid(uuid);
 			}
 		}
-		
-		concept.setRetired(getVoidOrRetire(line.asLine()));
 		
 		return concept;
 	}
@@ -112,12 +117,12 @@ public class BaseConceptLineProcessor extends BaseLineProcessor<Concept, Concept
 		
 		// Concept data class
 		String conceptClassName = line.getString(HEADER_CLASS, "");
-		ConceptClass conceptClass = service.getConceptClassByName(conceptClassName);
+		ConceptClass conceptClass = conceptService.getConceptClassByName(conceptClassName);
 		concept.setConceptClass(conceptClass);
 		
 		// Concept data type
 		String conceptTypeName = line.getString(HEADER_DATATYPE, "");
-		ConceptDatatype conceptDatatype = service.getConceptDatatypeByName(conceptTypeName);
+		ConceptDatatype conceptDatatype = conceptService.getConceptDatatypeByName(conceptTypeName);
 		concept.setDatatype(conceptDatatype);
 		
 		return concept;

@@ -20,7 +20,7 @@ import org.openmrs.OrderFrequency;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.OrderService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.loaders.OrderFrequenciesLoader;
+import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

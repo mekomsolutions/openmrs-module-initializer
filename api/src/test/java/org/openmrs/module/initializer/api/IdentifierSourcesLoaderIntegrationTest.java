@@ -20,7 +20,7 @@ import org.openmrs.module.idgen.RemoteIdentifierSource;
 import org.openmrs.module.idgen.SequentialIdentifierGenerator;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.loaders.IdentifierSourcesLoader;
+import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {

@@ -1,31 +1,46 @@
 package org.openmrs.module.initializer.api.idgen;
 
-import java.io.IOException;
-import java.io.InputStream;
-
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, IdentifierSourceService, BaseLineProcessor<IdgenSourceWrapper, IdentifierSourceService>> {
+@OpenmrsProfile(modules = { "idgen:*" })
+public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, BaseLineProcessor<IdgenSourceWrapper>> {
 	
-	public IdentifierSourcesCsvParser(InputStream is, IdentifierSourceService service) throws IOException {
-		super(is, service);
+	private IdentifierSourceService idgenService;
+	
+	private CommonIdentifierSourceLineProcessor processor;
+	
+	private SequentialIdentifierGeneratorLineProcessor seqProcessor;
+	
+	@Autowired
+	public IdentifierSourcesCsvParser(IdentifierSourceService idgenService, CommonIdentifierSourceLineProcessor processor,
+	    SequentialIdentifierGeneratorLineProcessor seqProcessor) {
+		super();
+		
+		this.idgenService = idgenService;
+		
+		this.processor = processor;
+		this.seqProcessor = seqProcessor;
 	}
 	
 	@Override
-	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(new BaseIdentifierSourceLineProcessor(headerLine, service));
-		addLineProcessor(new SequentialIdentifierGeneratorLineProcessor(headerLine, service));
+	public Domain getDomain() {
+		return Domain.IDENTIFIER_SOURCES;
 	}
 	
 	@Override
 	protected IdgenSourceWrapper save(IdgenSourceWrapper instance) {
-		return new IdgenSourceWrapper(service.saveIdentifierSource(instance.getIdentifierSource()));
+		return new IdgenSourceWrapper(idgenService.saveIdentifierSource(instance.getIdentifierSource()));
 	}
 	
 	@Override
-	protected boolean isVoidedOrRetired(IdgenSourceWrapper instance) {
-		return instance.getIdentifierSource().isRetired();
+	protected void setLineProcessors(String version, String[] headerLine) {
+		lineProcessors.clear();
+		lineProcessors.add(processor.setHeaderLine(headerLine));
+		lineProcessors.add(seqProcessor.setHeaderLine(headerLine));
 	}
 }

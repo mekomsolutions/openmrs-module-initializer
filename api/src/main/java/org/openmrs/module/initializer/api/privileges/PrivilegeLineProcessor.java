@@ -5,13 +5,20 @@ import org.openmrs.Privilege;
 import org.openmrs.api.UserService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege, UserService> {
+@Component
+public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege> {
 	
 	protected static String HEADER_PRIVILEGE_NAME = "privilege name";
 	
-	public PrivilegeLineProcessor(String[] headerLine, UserService us) {
-		super(headerLine, us);
+	private UserService userService;
+	
+	@Autowired
+	public PrivilegeLineProcessor(@Qualifier("userService") UserService userService) {
+		this.userService = userService;
 	}
 	
 	@Override
@@ -20,14 +27,14 @@ public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege, UserSer
 		String uuid = getUuid(line.asLine());
 		String privilegeName = line.get(HEADER_PRIVILEGE_NAME, true);
 		
-		Privilege privilege = service.getPrivilegeByUuid(uuid);
+		Privilege privilege = userService.getPrivilegeByUuid(uuid);
 		if (privilege != null && !privilege.getPrivilege().equals(privilegeName)) {
 			throw new IllegalArgumentException("A privilege name cannot be edited.");
 		}
 		
 		if (privilege == null) {
 			if (!StringUtils.isEmpty(privilegeName)) {
-				privilege = service.getPrivilege(privilegeName);
+				privilege = userService.getPrivilege(privilegeName);
 			}
 		}
 		

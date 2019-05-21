@@ -4,8 +4,12 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptNumeric;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class ConceptNumericLineProcessor extends BaseConceptLineProcessor {
+@Component("initializer.conceptNumericLineProcessor")
+public class ConceptNumericLineProcessor extends ConceptLineProcessor {
 	
 	protected static String DATATYPE_NUMERIC = "Numeric";
 	
@@ -27,22 +31,23 @@ public class ConceptNumericLineProcessor extends BaseConceptLineProcessor {
 	
 	protected static String HEADER_PRECISION = "display precision";
 	
-	public ConceptNumericLineProcessor(String[] headerLine, ConceptService cs) {
-		super(headerLine, cs);
+	@Autowired
+	public ConceptNumericLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
+		super(conceptService);
 	}
 	
 	@Override
 	protected Concept fill(Concept instance, CsvLine line) throws IllegalArgumentException {
 		
-		if (!DATATYPE_NUMERIC.equals(line.get(BaseConceptLineProcessor.HEADER_DATATYPE))) {
+		if (!DATATYPE_NUMERIC.equals(line.get(ConceptLineProcessor.HEADER_DATATYPE))) {
 			return instance;
 		}
 		
 		ConceptNumeric cn = new ConceptNumeric(instance);
 		if (instance.getId() != null) { // below overrides any other processors work, so this one should be called first
-			cn = service.getConceptNumeric(instance.getId());
+			cn = conceptService.getConceptNumeric(instance.getId());
 		}
-		cn.setDatatype(service.getConceptDatatypeByName(DATATYPE_NUMERIC));
+		cn.setDatatype(conceptService.getConceptDatatypeByName(DATATYPE_NUMERIC));
 		
 		cn.setHiAbsolute(line.getDouble(HEADER_AH));
 		cn.setHiCritical(line.getDouble(HEADER_CH));

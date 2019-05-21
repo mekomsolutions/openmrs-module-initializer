@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.openmrs.Privilege;
 import org.openmrs.api.UserService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.loaders.PrivilegesLoader;
+import org.openmrs.module.initializer.api.privileges.PrivilegesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

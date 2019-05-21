@@ -10,8 +10,12 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.LocationTagListParser;
 import org.openmrs.module.initializer.api.utils.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class LocationLineProcessor extends BaseLineProcessor<Location, LocationService> {
+@Component
+public class LocationLineProcessor extends BaseLineProcessor<Location> {
 	
 	protected static String HEADER_PARENT = "parent";
 	
@@ -39,26 +43,29 @@ public class LocationLineProcessor extends BaseLineProcessor<Location, LocationS
 	
 	protected static String HEADER_ADDRESS_6 = "address 6";
 	
+	private LocationService locationService;
+	
 	private LocationTagListParser listParser;
 	
-	public LocationLineProcessor(String[] headerLine, LocationService ls, LocationTagListParser listParser) {
-		super(headerLine, ls);
+	@Autowired
+	public LocationLineProcessor(@Qualifier("locationService") LocationService locationService,
+	    LocationTagListParser listParser) {
+		this.locationService = locationService;
 		this.listParser = listParser;
 	}
 	
 	@Override
 	protected Location bootstrap(CsvLine line) throws IllegalArgumentException {
-		String uuid = getUuid(line.asLine());
-		Location loc = service.getLocationByUuid(uuid);
 		
+		String uuid = getUuid(line.asLine());
+		
+		Location loc = locationService.getLocationByUuid(uuid);
 		if (loc == null) {
 			loc = new Location();
 			if (!StringUtils.isEmpty(uuid)) {
 				loc.setUuid(uuid);
 			}
 		}
-		
-		loc.setRetired(getVoidOrRetire(line.asLine()));
 		
 		return loc;
 	}
@@ -72,7 +79,7 @@ public class LocationLineProcessor extends BaseLineProcessor<Location, LocationS
 		loc.setParentLocation(null);
 		String parentId = line.getString(HEADER_PARENT, "");
 		if (!StringUtils.isEmpty(parentId)) {
-			loc.setParentLocation(Utils.fetchLocation(parentId, service));
+			loc.setParentLocation(Utils.fetchLocation(parentId, locationService));
 		}
 		
 		loc.setTags(null);
