@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderableCsvFile;
@@ -25,6 +26,11 @@ public abstract class BaseCsvLoader<P extends CsvParser> extends BaseLoader impl
 	@Override
 	public void load() {
 		loadCsvFiles(getDirUtil(), this);
+	}
+	
+	@Override
+	protected Domain getDomain() {
+		return parser.getDomain();
 	}
 	
 	@Override

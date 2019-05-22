@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.openmrs.Role;
 import org.openmrs.api.UserService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.utils.PrivilegeListParser;
 import org.openmrs.module.initializer.api.utils.RoleListParser;
@@ -13,6 +14,11 @@ public class RolesCsvParser extends CsvParser<Role, UserService, RoleLineProcess
 	
 	public RolesCsvParser(InputStream is, UserService us) throws IOException {
 		super(is, us);
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.ROLES;
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.ProgramWorkflowService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
 
@@ -13,6 +14,11 @@ public class ProgramWorkflowsCsvParser extends CsvParser<ProgramWorkflow, Progra
 	
 	public ProgramWorkflowsCsvParser(InputStream is, ProgramWorkflowService pws) throws IOException {
 		super(is, pws);
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.PROGRAM_WORKFLOWS;
 	}
 	
 	@Override

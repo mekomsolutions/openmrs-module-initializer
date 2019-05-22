@@ -16,6 +16,7 @@ import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerConstants;
 
 import com.opencsv.CSVReader;
@@ -43,6 +44,11 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	public CsvParser() {
 		// for Spring only
 	}
+	
+	/**
+	 * @return The {@link Domain} covered by the parser.
+	 */
+	public abstract Domain getDomain();
 	
 	@Deprecated
 	/* this constructor should go when all is Spring'd */
@@ -109,7 +115,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 		}
 		
 		// Applying the lines processors in order
-		for (P processor : getLineProcessors()) {
+		for (P processor : lineProcessors) {
 			instance = processor.fill(instance, new CsvLine(processor, line));
 		}
 		return instance;
@@ -133,19 +139,16 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, S extends OpenmrsSe
 	 */
 	abstract protected void setLineProcessors(String version, String[] headerLine);
 	
+	@Deprecated
 	protected void addLineProcessor(P lineProcessor) {
 		lineProcessors.add(lineProcessor);
-	}
-	
-	protected List<P> getLineProcessors() {
-		return this.lineProcessors;
 	}
 	
 	/*
 	 * Returns null if there are no processors set.
 	 */
 	protected P getAnyLineProcessor() {
-		return getLineProcessors().iterator().next();
+		return lineProcessors.iterator().next();
 	}
 	
 	/*

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.openmrs.module.idgen.service.IdentifierSourceService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
 
@@ -11,6 +12,11 @@ public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, Id
 	
 	public IdentifierSourcesCsvParser(InputStream is, IdentifierSourceService service) throws IOException {
 		super(is, service);
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.IDENTIFIER_SOURCES;
 	}
 	
 	@Override

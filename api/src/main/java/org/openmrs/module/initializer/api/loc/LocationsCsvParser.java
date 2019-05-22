@@ -2,6 +2,7 @@ package org.openmrs.module.initializer.api.loc;
 
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.utils.LocationTagListParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,11 @@ public class LocationsCsvParser extends CsvParser<Location, LocationService, Loc
 	@Autowired
 	public LocationsCsvParser(@Qualifier("locationService") LocationService service) {
 		this.service = service;
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.LOCATIONS;
 	}
 	
 	@Override

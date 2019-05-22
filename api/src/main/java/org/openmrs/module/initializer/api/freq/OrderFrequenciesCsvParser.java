@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.openmrs.OrderFrequency;
 import org.openmrs.api.OrderService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
 
@@ -12,6 +13,11 @@ public class OrderFrequenciesCsvParser extends CsvParser<OrderFrequency, OrderSe
 	
 	public OrderFrequenciesCsvParser(InputStream is, OrderService service) throws IOException {
 		super(is, service);
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.ORDER_FREQUENCIES;
 	}
 	
 	@Override

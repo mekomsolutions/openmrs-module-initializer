@@ -1,16 +1,22 @@
 package org.openmrs.module.initializer.api.privileges;
 
-import org.openmrs.Privilege;
-import org.openmrs.api.UserService;
-import org.openmrs.module.initializer.api.CsvParser;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.openmrs.Privilege;
+import org.openmrs.api.UserService;
+import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.api.CsvParser;
 
 public class PrivilegesCsvParser extends CsvParser<Privilege, UserService, org.openmrs.module.initializer.api.privileges.PrivilegeLineProcessor> {
 	
 	public PrivilegesCsvParser(InputStream is, UserService us) throws IOException {
 		super(is, us);
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.PRIVILEGES;
 	}
 	
 	@Override

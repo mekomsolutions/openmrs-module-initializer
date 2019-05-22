@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.openmrs.Drug;
 import org.openmrs.api.ConceptService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
 
@@ -12,6 +13,11 @@ public class DrugsCsvParser extends CsvParser<Drug, ConceptService, BaseLineProc
 	
 	public DrugsCsvParser(InputStream is, ConceptService cs) throws IOException {
 		super(is, cs);
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.DRUGS;
 	}
 	
 	@Override
