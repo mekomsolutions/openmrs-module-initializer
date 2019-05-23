@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ProgramsLoader extends BaseCsvLoader<ProgramsCsvParser> {
 	
 	@Autowired
-	public void getParser(ProgramsCsvParser parser) {
+	public void setParser(ProgramsCsvParser parser) {
 		this.parser = parser;
 	}
 	
