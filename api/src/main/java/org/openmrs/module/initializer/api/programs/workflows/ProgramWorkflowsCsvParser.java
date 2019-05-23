@@ -1,19 +1,21 @@
 package org.openmrs.module.initializer.api.programs.workflows;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProgramWorkflowsCsvParser extends CsvParser<ProgramWorkflow, ProgramWorkflowService, BaseLineProcessor<ProgramWorkflow, ProgramWorkflowService>> {
 	
-	public ProgramWorkflowsCsvParser(InputStream is, ProgramWorkflowService pws) throws IOException {
-		super(is, pws);
+	@Autowired
+	public ProgramWorkflowsCsvParser(@Qualifier("programWorkflowService") ProgramWorkflowService service) {
+		this.service = service;
 	}
 	
 	@Override
@@ -38,6 +40,6 @@ public class ProgramWorkflowsCsvParser extends CsvParser<ProgramWorkflow, Progra
 	
 	@Override
 	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(new ProgramWorkflowLineProcessor(headerLine, service));
+		lineProcessors.add(new ProgramWorkflowLineProcessor(headerLine, service));
 	}
 }

@@ -1,21 +1,22 @@
 package org.openmrs.module.initializer.api.metadata;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.metadatamapping.MetadataTermMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MetadataTermMappingsCsvParser extends CsvParser<MetadataTermMapping, MetadataMappingServiceWrapper, MetadataTermMappingsLineProcessor> {
 	
-	public MetadataTermMappingsCsvParser(InputStream is, MetadataMappingServiceWrapper mdms) throws IOException {
-		super(is, mdms);
+	@Autowired
+	public MetadataTermMappingsCsvParser(MetadataMappingServiceWrapper service) {
+		this.service = service;
 	}
 	
 	@Override
 	public Domain getDomain() {
-		return Domain.MDS;
+		return Domain.METADATA_MAPPINGS;
 	}
 	
 	@Override
@@ -30,6 +31,6 @@ public class MetadataTermMappingsCsvParser extends CsvParser<MetadataTermMapping
 	
 	@Override
 	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(new MetadataTermMappingsLineProcessor(headerLine, service));
+		lineProcessors.add(new MetadataTermMappingsLineProcessor(headerLine, service));
 	}
 }

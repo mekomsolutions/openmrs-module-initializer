@@ -1,19 +1,21 @@
 package org.openmrs.module.initializer.api.roles;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.openmrs.Role;
 import org.openmrs.api.UserService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.utils.PrivilegeListParser;
 import org.openmrs.module.initializer.api.utils.RoleListParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RolesCsvParser extends CsvParser<Role, UserService, RoleLineProcessor> {
 	
-	public RolesCsvParser(InputStream is, UserService us) throws IOException {
-		super(is, us);
+	@Autowired
+	public RolesCsvParser(@Qualifier("userService") UserService service) {
+		this.service = service;
 	}
 	
 	@Override
@@ -33,7 +35,7 @@ public class RolesCsvParser extends CsvParser<Role, UserService, RoleLineProcess
 	
 	@Override
 	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(
+		lineProcessors.add(
 		    new RoleLineProcessor(headerLine, service, new PrivilegeListParser(service), new RoleListParser(service)));
 	}
 	

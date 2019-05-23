@@ -1,17 +1,18 @@
 package org.openmrs.module.initializer.api.idgen;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, IdentifierSourceService, BaseLineProcessor<IdgenSourceWrapper, IdentifierSourceService>> {
 	
-	public IdentifierSourcesCsvParser(InputStream is, IdentifierSourceService service) throws IOException {
-		super(is, service);
+	@Autowired
+	public IdentifierSourcesCsvParser(IdentifierSourceService service) {
+		this.service = service;
 	}
 	
 	@Override
@@ -21,8 +22,8 @@ public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, Id
 	
 	@Override
 	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(new BaseIdentifierSourceLineProcessor(headerLine, service));
-		addLineProcessor(new SequentialIdentifierGeneratorLineProcessor(headerLine, service));
+		lineProcessors.add(new BaseIdentifierSourceLineProcessor(headerLine, service));
+		lineProcessors.add(new SequentialIdentifierGeneratorLineProcessor(headerLine, service));
 	}
 	
 	@Override

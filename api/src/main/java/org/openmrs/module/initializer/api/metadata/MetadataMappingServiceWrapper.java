@@ -1,18 +1,22 @@
 package org.openmrs.module.initializer.api.metadata;
 
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.openmrs.module.metadatamapping.MetadataSource;
 import org.openmrs.module.metadatamapping.MetadataTermMapping;
+import org.openmrs.module.metadatamapping.api.MetadataMappingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * This wrapper class for {@link MetadataMappingService} since it does not extend
  * {@link OpenmrsService}.
  */
+@Component
 public class MetadataMappingServiceWrapper implements OpenmrsService {
 	
 	protected MetadataMappingService mdms;
 	
+	@Autowired
 	public MetadataMappingServiceWrapper(MetadataMappingService mdms) {
 		this.mdms = mdms;
 	}

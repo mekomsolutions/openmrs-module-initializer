@@ -1,17 +1,19 @@
 package org.openmrs.module.initializer.api.privileges;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.openmrs.Privilege;
 import org.openmrs.api.UserService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PrivilegesCsvParser extends CsvParser<Privilege, UserService, org.openmrs.module.initializer.api.privileges.PrivilegeLineProcessor> {
 	
-	public PrivilegesCsvParser(InputStream is, UserService us) throws IOException {
-		super(is, us);
+	@Autowired
+	public PrivilegesCsvParser(@Qualifier("userService") UserService service) {
+		this.service = service;
 	}
 	
 	@Override
@@ -31,7 +33,7 @@ public class PrivilegesCsvParser extends CsvParser<Privilege, UserService, org.o
 	
 	@Override
 	protected void setLineProcessors(String version, String[] headerLine) {
-		addLineProcessor(new PrivilegeLineProcessor(headerLine, service));
+		lineProcessors.add(new PrivilegeLineProcessor(headerLine, service));
 	}
 	
 	@Override
