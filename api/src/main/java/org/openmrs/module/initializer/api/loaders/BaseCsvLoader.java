@@ -9,7 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderableCsvFile;
@@ -17,9 +19,10 @@ import org.openmrs.module.initializer.api.OrderableCsvFile;
 /**
  * All CSV loaders should subclass the base CSV loader. This class takes care of loading and sorting
  * all CSV files configured through a {@link ConfigDirUtil} instance.
+ * 
+ * @param <T>
  */
-@SuppressWarnings("rawtypes")
-public abstract class BaseCsvLoader<P extends CsvParser> extends BaseLoader implements CsvLoader/* <P> */ {
+public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvParser<T, BaseLineProcessor<T>>> extends BaseLoader implements CsvLoader/* <P> */ {
 	
 	protected P parser;
 	
@@ -34,7 +37,7 @@ public abstract class BaseCsvLoader<P extends CsvParser> extends BaseLoader impl
 	}
 	
 	@Override
-	public CsvParser getParser(InputStream is) throws IOException {
+	public CsvParser<T, BaseLineProcessor<T>> getParser(InputStream is) throws IOException {
 		parser.setInputStream(is);
 		return parser;
 	}
@@ -57,9 +60,18 @@ public abstract class BaseCsvLoader<P extends CsvParser> extends BaseLoader impl
 		for (OrderableCsvFile file : files) {
 			InputStream is = null;
 			try {
-				is = new FileInputStream(file.getFile());
 				
-				csvLoader.getParser(is).saveAll();
+				is = new FileInputStream(file.getFile());
+				final CsvParser<T, BaseLineProcessor<T>> parser = csvLoader.getParser(is);
+				
+				List<T> failures = parser.saveAll();
+				
+				int count = 0;
+				while (count != failures.size()) {
+					log.info("Attempting to save again " + failures.size() + " previously failed entities...");
+					count = failures.size();
+					failures = parser.save(failures);
+				}
 				
 				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());
 				log.info("The following '" + dirUtil.getDomain() + "' config file was succesfully processed: "

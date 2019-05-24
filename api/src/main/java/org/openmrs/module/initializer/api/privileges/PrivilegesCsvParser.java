@@ -29,9 +29,4 @@ public class PrivilegesCsvParser extends CsvParser<Privilege, BaseLineProcessor<
 	protected Privilege save(Privilege instance) {
 		return userService.savePrivilege(instance);
 	}
-	
-	@Override
-	protected boolean isSaved(Privilege instance) {
-		return instance.getPrivilege() != null;
-	}
 }

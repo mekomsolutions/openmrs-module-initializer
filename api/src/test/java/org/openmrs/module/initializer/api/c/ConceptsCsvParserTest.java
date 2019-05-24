@@ -7,11 +7,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
-import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,10 +28,6 @@ import org.openmrs.module.initializer.api.utils.ConceptMapListParser;
 public class ConceptsCsvParserTest {
 	
 	private ConceptService cs = mock(ConceptService.class);
-	
-	final private Locale localeEn = Locale.ENGLISH;
-	
-	final private Locale localeKm = new Locale("km", "KH");
 	
 	@Before
 	public void setup() {
@@ -88,30 +81,11 @@ public class ConceptsCsvParserTest {
 		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
 		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
 		parser.setInputStream(is);
-		List<Concept> concepts = parser.saveAll();
+		List<Concept> conceptsFailures = parser.saveAll();
 		
 		// verif
-		Assert.assertEquals(14, concepts.size());
-		Concept c = null;
-		c = concepts.get(0);
-		Assert.assertEquals("Cambodia_Nationality", c.getFullySpecifiedName(localeEn).getName());
-		Assert.assertEquals("Coded", c.getDatatype().getName());
-		Assert.assertEquals("Question", c.getConceptClass().getName());
-		Assert.assertEquals("កម្ពុជា_សញ្ជាតិ", c.getFullySpecifiedName(localeKm).getName());
-		
-		c = concepts.get(4);
-		Assert.assertEquals("db2f4fc4-3171-11e7-93ae-92361f002671", c.getUuid());
-		Assert.assertEquals("Cambodia_Phnong", c.getFullySpecifiedName(localeEn).getName());
-		Assert.assertEquals("Text", c.getDatatype().getName());
-		Assert.assertEquals("Misc", c.getConceptClass().getName());
-		Assert.assertEquals("ព្នង", c.getShortestName(localeKm, true).getName());
-		
-		// the faulty uuid should not be in there
-		Set<String> uuids = new HashSet<String>();
-		for (Concept cpt : concepts) {
-			uuids.add(cpt.getUuid());
-		}
-		Assert.assertFalse(uuids.contains("foobar"));
+		Assert.assertEquals(1, conceptsFailures.size());
+		Assert.assertNull(conceptsFailures.get(0)); // the one instance could not even be bootstrapped
 	}
 	
 	@Test
@@ -125,16 +99,16 @@ public class ConceptsCsvParserTest {
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_uuid.csv");
 		parser.setInputStream(is);
-		Assert.assertTrue(parser.saveAll().isEmpty());
+		Assert.assertEquals(parser.saveAll().size(), 1);
 		
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_fsn.csv");
 		parser.setInputStream(is);
-		Assert.assertTrue(parser.saveAll().isEmpty());
+		Assert.assertEquals(parser.saveAll().size(), 1);
 		
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_shortname.csv");
 		parser.setInputStream(is);
-		Assert.assertTrue(parser.saveAll().isEmpty());
+		Assert.assertEquals(parser.saveAll().size(), 1);
 	}
 }

@@ -127,40 +127,66 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	/**
 	 * Main method to proceed to save all instances fetched through parsing the CSV data.
 	 * 
-	 * @return The list of saved OpenMRS objects instances.
+	 * @return The instances that could not be saved.
 	 */
 	public List<T> saveAll() {
 		
-		List<T> instances = new ArrayList<T>();
+		final List<T> failures = new ArrayList<T>();
 		
 		String[] line = null;
 		do {
+			T instance = null;
+			
 			try {
 				line = fetchNextLine();
-				T instance = createInstance(line);
+				instance = createInstance(line);
+				
 				if (instance != null) {
 					instance = save(instance);
-					if (isSaved(instance)) {
-						instances.add(instance);
-					}
 				}
 			}
 			catch (Exception e) {
-				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: "
+				failures.add(instance);
+				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: \n"
 				        + Arrays.toString(line),
 				    e);
 			}
 		} while (line != null);
 		
-		return instances;
+		return failures;
+	}
+	
+	/**
+	 * Saves a list of instances that have already been filled up.
+	 * 
+	 * @param instances The instances to save.
+	 * @return The instances that could not be saved.
+	 */
+	public List<T> save(List<T> instances) {
+		
+		final List<T> failures = new ArrayList<T>();
+		
+		for (T instance : instances) {
+			try {
+				if (instance != null) {
+					instance = save(instance);
+				}
+			}
+			catch (Exception e) {
+				failures.add(instance);
+				log.error("An OpenMRS object could not be saved from the following object: " + instance.toString(), e);
+			}
+		}
+		
+		return failures;
 	}
 	
 	/**
 	 * Return true if instance is actually saved in database.
 	 */
-	protected boolean isSaved(T instance) {
-		return instance.getId() != null;
-	}
+	// protected boolean isSaved(T instance) {
+	// return instance.getId() != null;
+	// }
 	
 	private T createInstance(String[] line) throws APIException {
 		if (line == null) {

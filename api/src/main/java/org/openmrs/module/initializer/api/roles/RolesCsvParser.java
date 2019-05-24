@@ -29,9 +29,4 @@ public class RolesCsvParser extends CsvParser<Role, BaseLineProcessor<Role>> {
 	protected Role save(Role instance) {
 		return userService.saveRole(instance);
 	}
-	
-	@Override
-	protected boolean isSaved(Role instance) {
-		return instance.getRole() != null;
-	}
 }
