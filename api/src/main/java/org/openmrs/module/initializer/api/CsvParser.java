@@ -14,6 +14,7 @@ import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Retireable;
 import org.openmrs.api.APIException;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.InitializerLogFactory;
@@ -125,44 +126,49 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	}
 	
 	/**
-	 * Saves all instances fetched and created through parsing the CSV data line by line.
-	 * 
-	 * @return The failed CSV lines.
+	 * @return The list of CSV lines.
 	 */
-	public List<String[]> saveAll() {
+	public List<String[]> getLines() {
 		
-		final List<String[]> failedLines = new ArrayList<String[]>();
+		final List<String[]> lines = new ArrayList<String[]>();
 		
 		String[] line = null;
 		do {
 			try {
 				line = fetchNextLine();
-				T instance = createInstance(line);
+				lines.add(line);
 			}
-			catch (Exception e) {
-				failedLines.add(line);
-				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: \n"
-				        + Arrays.toString(line),
+			catch (IOException e) {
+				lines.add(new String[0]);
+				log.error(
+				    "There was an I/O exception while simply reading one of the CSV lines. That line will produce an error when it will be processed by the parser.",
 				    e);
 			}
 		} while (line != null);
 		
-		return failedLines;
+		return lines;
 	}
 	
 	/**
 	 * Saves the instances created out of a list of CSV lines.
 	 * 
-	 * @param lines The CSV lines to save
+	 * @param lines The CSV lines to process
 	 * @return The failed CSV lines
 	 */
-	public List<String[]> save(List<String[]> lines) {
+	public List<String[]> process(List<String[]> lines) {
 		
 		final List<String[]> failedLines = new ArrayList<String[]>();
 		
+		int saved = 0;
 		for (String[] line : lines) {
 			try {
 				T instance = createInstance(line);
+				
+				saved++;
+				if (saved > 250) { // TODO make this configurable
+					Context.flushSession();
+					Context.clearSession();
+				}
 			}
 			catch (Exception e) {
 				failedLines.add(line);
@@ -228,7 +234,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	/*
 	 * Fetches the next CSV line
 	 */
-	protected String[] fetchNextLine() throws Exception {
+	protected String[] fetchNextLine() throws IOException {
 		
 		line = reader.readNext();
 		if (line == null) {

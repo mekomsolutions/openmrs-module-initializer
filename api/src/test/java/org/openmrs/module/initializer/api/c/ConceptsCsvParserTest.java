@@ -70,7 +70,7 @@ public class ConceptsCsvParserTest {
 	}
 	
 	@Test
-	public void saveAll_shouldParseBaseCsv() throws IOException {
+	public void process_shouldParseBaseCsv() throws IOException {
 		// setup
 		InputStream is = getClass().getClassLoader()
 		        .getResourceAsStream("testAppDataDir/configuration/concepts/concepts_base.csv");
@@ -81,14 +81,15 @@ public class ConceptsCsvParserTest {
 		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
 		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
 		parser.setInputStream(is);
-		List<String[]> conceptsFailures = parser.saveAll();
+		
+		List<String[]> lines = parser.process(parser.getLines());
 		
 		// verif
-		Assert.assertEquals(1, conceptsFailures.size());
+		Assert.assertEquals(1, lines.size());
 	}
 	
 	@Test
-	public void saveAll_shouldFailOnMisformattedCsv() throws IOException {
+	public void process_shouldFailOnMisformattedCsv() throws IOException {
 		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs),
 		        new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
 		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
@@ -98,16 +99,16 @@ public class ConceptsCsvParserTest {
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_uuid.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(parser.saveAll().size(), 1);
+		Assert.assertEquals(parser.process(parser.getLines()).size(), 1);
 		
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_fsn.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(parser.saveAll().size(), 1);
+		Assert.assertEquals(parser.process(parser.getLines()).size(), 1);
 		
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_shortname.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(parser.saveAll().size(), 1);
+		Assert.assertEquals(parser.process(parser.getLines()).size(), 1);
 	}
 }

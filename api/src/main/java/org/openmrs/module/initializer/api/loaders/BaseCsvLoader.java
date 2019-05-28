@@ -63,29 +63,31 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 			InputStream is = null;
 			try {
 				
+				// getting the lines
 				is = new FileInputStream(file.getFile());
 				final CsvParser<T, BaseLineProcessor<T>> parser = csvLoader.getParser(is);
+				List<String[]> lines = parser.getLines();
 				
-				List<String[]> failedLines = parser.saveAll();
-				
+				// processing while possible
 				int count = 0;
-				while (count != failedLines.size() && !CollectionUtils.isEmpty(failedLines)) {
-					log.info("Attempting to save again " + failedLines.size() + " previously failed CSV line(s)...");
-					count = failedLines.size();
-					failedLines = parser.save(failedLines);
+				while (!CollectionUtils.isEmpty(lines) && count != lines.size()) {
+					log.info(
+					    "Attempting to process " + lines.size() + " CSV line(s) that has/have not been processed yet...");
+					count = lines.size();
+					lines = parser.process(lines);
 				}
 				
 				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());
 				
-				// logging
-				if (CollectionUtils.isEmpty(failedLines)) {
+				// summary logging
+				if (CollectionUtils.isEmpty(lines)) {
 					log.info("The following '" + dirUtil.getDomain() + "' config file was entirely successfully processed: "
 					        + file.getFile().getName());
 				} else {
-					log.error("The following '" + dirUtil.getDomain() + "' config file was processed but "
-					        + failedLines.size() + " error(s) remained: " + file.getFile().getName());
+					log.error("The following '" + dirUtil.getDomain() + "' config file was processed but " + lines.size()
+					        + " error(s) remained: " + file.getFile().getName());
 					log.error("");
-					for (String[] line : failedLines) {
+					for (String[] line : lines) {
 						log.error(Arrays.toString(line));
 					}
 					log.error("");
