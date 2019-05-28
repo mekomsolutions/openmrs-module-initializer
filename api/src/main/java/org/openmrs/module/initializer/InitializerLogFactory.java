@@ -32,10 +32,9 @@ public class InitializerLogFactory {
 				    new FileAppender(new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n"), inizLogFilePath, true));
 				logger.setLevel((Level) Level.ALL);
 			}
-			log = new InitializerLog(logger);
 		}
 		catch (IOException e) {
-			log.error("The custom logger could not be setup, defaulting on using only the usual logging mechanism.", e);
+			log.error("The custom logger could not be setup, defaulting on the usual logging mechanism.", e);
 		}
 		
 		return log;

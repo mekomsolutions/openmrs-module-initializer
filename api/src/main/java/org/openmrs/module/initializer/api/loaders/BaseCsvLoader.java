@@ -69,15 +69,17 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 				List<String[]> failedLines = parser.saveAll();
 				
 				int count = 0;
-				while (count != failedLines.size()) {
+				while (count != failedLines.size() && !CollectionUtils.isEmpty(failedLines)) {
 					log.info("Attempting to save again " + failedLines.size() + " previously failed CSV line(s)...");
 					count = failedLines.size();
 					failedLines = parser.save(failedLines);
 				}
 				
+				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());
+				
 				// logging
 				if (CollectionUtils.isEmpty(failedLines)) {
-					log.info("The following '" + dirUtil.getDomain() + "' config file was successfully processed: "
+					log.info("The following '" + dirUtil.getDomain() + "' config file was entirely successfully processed: "
 					        + file.getFile().getName());
 				} else {
 					log.error("The following '" + dirUtil.getDomain() + "' config file was processed but "
@@ -88,8 +90,6 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 					}
 					log.error("");
 				}
-				
-				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());
 			}
 			catch (IOException e) {
 				log.error("Could not parse the '" + dirUtil.getDomain() + "' config file: " + file.getFile().getPath(), e);
