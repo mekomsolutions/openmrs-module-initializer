@@ -14,7 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.initializer.InitializerLogFactory;
 
 /**
  * Helps read and write to and from the configuration and checksum directories.
@@ -27,7 +27,7 @@ public class ConfigDirUtil {
 	
 	protected static final String CHECKSUM_FILE_EXT = "checksum";
 	
-	protected static Log log = LogFactory.getLog(ConfigDirUtil.class);
+	protected static Log log = InitializerLogFactory.getLog(ConfigDirUtil.class);
 	
 	/*
 	 * The domain name, so the final part of configuration domain subdirectory. Eg.

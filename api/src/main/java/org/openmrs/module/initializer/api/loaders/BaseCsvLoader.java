@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderableCsvFile;
+import org.springframework.util.CollectionUtils;
 
 /**
  * All CSV loaders should subclass the base CSV loader. This class takes care of loading and sorting
@@ -64,19 +66,30 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 				is = new FileInputStream(file.getFile());
 				final CsvParser<T, BaseLineProcessor<T>> parser = csvLoader.getParser(is);
 				
-				List<T> failures = parser.saveAll();
+				List<String[]> failedLines = parser.saveAll();
 				
 				int count = 0;
-				while (count != failures.size()) {
-					log.info("Attempting to save again " + failures.size() + " previously failed entities...");
-					count = failures.size();
-					failures = parser.save(failures);
+				while (count != failedLines.size() && !CollectionUtils.isEmpty(failedLines)) {
+					log.info("Attempting to save again " + failedLines.size() + " previously failed CSV line(s)...");
+					count = failedLines.size();
+					failedLines = parser.save(failedLines);
 				}
 				
 				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());
-				log.info("The following '" + dirUtil.getDomain() + "' config file was succesfully processed: "
-				        + file.getFile().getName());
 				
+				// logging
+				if (CollectionUtils.isEmpty(failedLines)) {
+					log.info("The following '" + dirUtil.getDomain() + "' config file was entirely successfully processed: "
+					        + file.getFile().getName());
+				} else {
+					log.error("The following '" + dirUtil.getDomain() + "' config file was processed but "
+					        + failedLines.size() + " error(s) remained: " + file.getFile().getName());
+					log.error("");
+					for (String[] line : failedLines) {
+						log.error(Arrays.toString(line));
+					}
+					log.error("");
+				}
 			}
 			catch (IOException e) {
 				log.error("Could not parse the '" + dirUtil.getDomain() + "' config file: " + file.getFile().getPath(), e);

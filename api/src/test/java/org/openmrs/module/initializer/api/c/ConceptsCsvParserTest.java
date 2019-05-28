@@ -81,11 +81,10 @@ public class ConceptsCsvParserTest {
 		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
 		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
 		parser.setInputStream(is);
-		List<Concept> conceptsFailures = parser.saveAll();
+		List<String[]> conceptsFailures = parser.saveAll();
 		
 		// verif
 		Assert.assertEquals(1, conceptsFailures.size());
-		Assert.assertNull(conceptsFailures.get(0)); // the one instance could not even be bootstrapped
 	}
 	
 	@Test

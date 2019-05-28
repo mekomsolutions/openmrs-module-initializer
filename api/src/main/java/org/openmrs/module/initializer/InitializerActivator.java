@@ -10,7 +10,6 @@
 package org.openmrs.module.initializer;
 
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.initializer.api.InitializerService;
@@ -21,7 +20,7 @@ import org.openmrs.module.initializer.api.loaders.Loader;
  */
 public class InitializerActivator extends BaseModuleActivator {
 	
-	private Log log = LogFactory.getLog(this.getClass());
+	static Log log = InitializerLogFactory.getLog(InitializerActivator.class);
 	
 	/**
 	 * @see #started()
@@ -34,13 +33,14 @@ public class InitializerActivator extends BaseModuleActivator {
 			loader.load();
 		}
 		
-		log.info("Started " + InitializerConstants.MODULE_NAME);
+		log.info("Start of initializer module.");
+		
 	}
 	
 	/**
 	 * @see #shutdown()
 	 */
 	public void shutdown() {
-		log.info("Shutdown " + InitializerConstants.MODULE_NAME);
+		// log.info("Shutdown " + InitializerConstants.MODULE_NAME);
 	}
 }

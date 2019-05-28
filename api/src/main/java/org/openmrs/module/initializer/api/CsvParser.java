@@ -10,13 +10,13 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Retireable;
 import org.openmrs.api.APIException;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.InitializerLogFactory;
 
 import com.opencsv.CSVReader;
 
@@ -26,7 +26,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	
 	protected static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
 	
-	protected final Log log = LogFactory.getLog(this.getClass());
+	protected final Log log = InitializerLogFactory.getLog(CsvParser.class);
 	
 	protected CSVReader reader;
 	
@@ -125,69 +125,59 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	}
 	
 	/**
-	 * Main method to proceed to save all instances fetched through parsing the CSV data.
+	 * Saves all instances fetched and created through parsing the CSV data line by line.
 	 * 
-	 * @return The instances that could not be saved.
+	 * @return The failed CSV lines.
 	 */
-	public List<T> saveAll() {
+	public List<String[]> saveAll() {
 		
-		final List<T> failures = new ArrayList<T>();
+		final List<String[]> failedLines = new ArrayList<String[]>();
 		
 		String[] line = null;
 		do {
-			T instance = null;
-			
 			try {
 				line = fetchNextLine();
-				instance = createInstance(line);
-				
-				if (instance != null) {
-					instance = save(instance);
-				}
+				T instance = createInstance(line);
 			}
 			catch (Exception e) {
-				failures.add(instance);
+				failedLines.add(line);
 				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: \n"
 				        + Arrays.toString(line),
 				    e);
 			}
 		} while (line != null);
 		
-		return failures;
+		return failedLines;
 	}
 	
 	/**
-	 * Saves a list of instances that have already been filled up.
+	 * Saves the instances created out of a list of CSV lines.
 	 * 
-	 * @param instances The instances to save.
-	 * @return The instances that could not be saved.
+	 * @param lines The CSV lines to save
+	 * @return The failed CSV lines
 	 */
-	public List<T> save(List<T> instances) {
+	public List<String[]> save(List<String[]> lines) {
 		
-		final List<T> failures = new ArrayList<T>();
+		final List<String[]> failedLines = new ArrayList<String[]>();
 		
-		for (T instance : instances) {
+		for (String[] line : lines) {
 			try {
-				if (instance != null) {
-					instance = save(instance);
-				}
+				T instance = createInstance(line);
 			}
 			catch (Exception e) {
-				failures.add(instance);
-				log.error("An OpenMRS object could not be saved from the following object: " + instance.toString(), e);
+				failedLines.add(line);
+				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: \n"
+				        + Arrays.toString(line),
+				    e);
 			}
 		}
 		
-		return failures;
+		return failedLines;
 	}
 	
 	/**
-	 * Return true if instance is actually saved in database.
+	 * This fills and instance out of the information processed from a CSV line and attempts to save it.
 	 */
-	// protected boolean isSaved(T instance) {
-	// return instance.getId() != null;
-	// }
-	
 	private T createInstance(String[] line) throws APIException {
 		if (line == null) {
 			return null;
@@ -219,6 +209,12 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		for (BaseLineProcessor<T> processor : lineProcessors) {
 			instance = processor.fill(instance, new CsvLine(processor, line));
 		}
+		
+		// Saving
+		if (instance != null) {
+			instance = save(instance);
+		}
+		
 		return instance;
 	}
 	

@@ -6,14 +6,14 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.initializer.InitializerLogFactory;
 
 /**
  * Orderable wrapper for CSV {@link File} objects.
  */
 public class OrderableCsvFile implements Comparable<OrderableCsvFile> {
 	
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Log log = InitializerLogFactory.getLog(getClass());
 	
 	protected Integer order;
 	
