@@ -18,7 +18,7 @@ public class InitializerLogFactory {
 	private static final String inizLogFilePath = Paths
 	        .get(OpenmrsUtil.getApplicationDataDirectory(), InitializerConstants.MODULE_ARTIFACT_ID + ".log").toString();
 	
-	private static Set<Class> knownClasses = new HashSet<Class>();
+	private static Set<Class> classesWithLogger = new HashSet<Class>();
 	
 	@SuppressWarnings("rawtypes")
 	public static Log getLog(Class className) {
@@ -27,12 +27,12 @@ public class InitializerLogFactory {
 		
 		final Logger logger = Logger.getLogger(className);
 		try {
-			if (!knownClasses.contains(className)) {
+			if (!classesWithLogger.contains(className)) {
 				logger.addAppender(
 				    new FileAppender(new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n"), inizLogFilePath, true));
 				logger.setLevel((Level) Level.ALL);
 			}
-			log = new InitializerLog(log, logger);
+			log = new InitializerLog(logger);
 		}
 		catch (IOException e) {
 			log.error("The custom logger could not be setup, defaulting on using only the usual logging mechanism.", e);

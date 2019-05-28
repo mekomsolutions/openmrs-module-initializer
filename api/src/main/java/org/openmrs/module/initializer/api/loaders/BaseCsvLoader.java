@@ -75,15 +75,18 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 					failedLines = parser.save(failedLines);
 				}
 				
+				// logging
 				if (CollectionUtils.isEmpty(failedLines)) {
 					log.info("The following '" + dirUtil.getDomain() + "' config file was successfully processed: "
 					        + file.getFile().getName());
 				} else {
-					log.warn("The following '" + dirUtil.getDomain() + "' config file was processed but "
+					log.error("The following '" + dirUtil.getDomain() + "' config file was processed but "
 					        + failedLines.size() + " error(s) remained: " + file.getFile().getName());
+					log.error("");
 					for (String[] line : failedLines) {
-						log.warn(Arrays.toString(line));
+						log.error(Arrays.toString(line));
 					}
+					log.error("");
 				}
 				
 				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());

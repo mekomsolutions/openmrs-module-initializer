@@ -1,118 +1,104 @@
 package org.openmrs.module.initializer;
 
 import org.apache.commons.logging.Log;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class InitializerLog implements Log {
 	
-	private Log log;
-	
 	private Logger logger;
 	
-	public InitializerLog(Log log, Logger logger) {
-		this.log = log;
+	public InitializerLog(Logger logger) {
 		this.logger = logger;
 	}
 	
 	@Override
 	public boolean isDebugEnabled() {
-		return log.isDebugEnabled();
+		return logger.isDebugEnabled();
 	}
 	
 	@Override
 	public boolean isErrorEnabled() {
-		return log.isErrorEnabled();
+		return logger.isEnabledFor(Level.ERROR);
 	}
 	
 	@Override
 	public boolean isFatalEnabled() {
-		return log.isFatalEnabled();
+		return logger.isEnabledFor(Level.FATAL);
 	}
 	
 	@Override
 	public boolean isInfoEnabled() {
-		return log.isInfoEnabled();
+		return logger.isInfoEnabled();
 	}
 	
 	@Override
 	public boolean isTraceEnabled() {
-		return log.isTraceEnabled();
+		return logger.isTraceEnabled();
 	}
 	
 	@Override
 	public boolean isWarnEnabled() {
-		return false;
+		return logger.isEnabledFor(Level.WARN);
 	}
 	
 	@Override
 	public void trace(Object o) {
-		log.trace(o);
 		logger.trace(o);
 	}
 	
 	@Override
 	public void trace(Object o, Throwable throwable) {
-		log.trace(o, throwable);
 		logger.trace(o, throwable);
 	}
 	
 	@Override
 	public void debug(Object o) {
-		log.debug(o);
 		logger.debug(o);
 	}
 	
 	@Override
 	public void debug(Object o, Throwable throwable) {
-		log.debug(o, throwable);
 		logger.debug(o, throwable);
 	}
 	
 	@Override
 	public void info(Object o) {
-		log.info(o);
 		logger.info(o);
 	}
 	
 	@Override
 	public void info(Object o, Throwable throwable) {
-		log.info(o, throwable);
 		logger.info(o, throwable);
 	}
 	
 	@Override
 	public void warn(Object o) {
-		log.warn(o);
 		logger.warn(o);
 	}
 	
 	@Override
 	public void warn(Object o, Throwable throwable) {
-		log.warn(o, throwable);
 		logger.warn(o, throwable);
 	}
 	
 	@Override
 	public void error(Object o) {
-		log.error(o);
 		logger.error(o);
 	}
 	
 	@Override
 	public void error(Object o, Throwable throwable) {
-		log.error(o, throwable);
 		logger.error(o, throwable);
 	}
 	
 	@Override
 	public void fatal(Object o) {
-		log.fatal(o);
 		logger.fatal(o);
 	}
 	
 	@Override
 	public void fatal(Object o, Throwable throwable) {
-		log.fatal(o, throwable);
 		logger.fatal(o, throwable);
 	}
 }
