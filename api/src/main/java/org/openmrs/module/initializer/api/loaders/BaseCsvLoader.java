@@ -16,6 +16,7 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderableCsvFile;
+import org.springframework.util.CollectionUtils;
 
 /**
  * All CSV loaders should subclass the base CSV loader. This class takes care of loading and sorting
@@ -69,18 +70,23 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 				
 				int count = 0;
 				while (count != failedLines.size()) {
-					log.info("Attempting to save again " + failedLines.size() + " previously failed CSV lines...");
-					for (String[] line : failedLines) {
-						log.info(Arrays.toString(line));
-					}
+					log.info("Attempting to save again " + failedLines.size() + " previously failed CSV line(s)...");
 					count = failedLines.size();
 					failedLines = parser.save(failedLines);
 				}
 				
-				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());
-				log.info("The following '" + dirUtil.getDomain() + "' config file was succesfully processed: "
-				        + file.getFile().getName());
+				if (CollectionUtils.isEmpty(failedLines)) {
+					log.info("The following '" + dirUtil.getDomain() + "' config file was successfully processed: "
+					        + file.getFile().getName());
+				} else {
+					log.warn("The following '" + dirUtil.getDomain() + "' config file was processed but "
+					        + failedLines.size() + " error(s) remained: " + file.getFile().getName());
+					for (String[] line : failedLines) {
+						log.warn(Arrays.toString(line));
+					}
+				}
 				
+				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());
 			}
 			catch (IOException e) {
 				log.error("Could not parse the '" + dirUtil.getDomain() + "' config file: " + file.getFile().getPath(), e);
