@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.CsvParser;
-import org.openmrs.module.initializer.api.Instance;
 import org.openmrs.module.initializer.api.OrderableCsvFile;
 
 /**
@@ -65,16 +65,16 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 				is = new FileInputStream(file.getFile());
 				final CsvParser<T, BaseLineProcessor<T>> parser = csvLoader.getParser(is);
 				
-				List<Instance<T>> failures = parser.saveAll();
+				List<String[]> failedLines = parser.saveAll();
 				
 				int count = 0;
-				while (count != failures.size()) {
-					log.info("Attempting to save again " + failures.size() + " previously failed entities...");
-					for (Instance<T> failure : failures) {
-						log.info(failure.toString());
+				while (count != failedLines.size()) {
+					log.info("Attempting to save again " + failedLines.size() + " previously failed CSV lines...");
+					for (String[] line : failedLines) {
+						log.info(Arrays.toString(line));
 					}
-					count = failures.size();
-					failures = parser.save(failures);
+					count = failedLines.size();
+					failedLines = parser.save(failedLines);
 				}
 				
 				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());

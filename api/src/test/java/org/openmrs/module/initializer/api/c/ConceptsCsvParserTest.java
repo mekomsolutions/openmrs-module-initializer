@@ -19,7 +19,6 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.initializer.api.Instance;
 import org.openmrs.module.initializer.api.utils.ConceptListParser;
 import org.openmrs.module.initializer.api.utils.ConceptMapListParser;
 
@@ -82,11 +81,10 @@ public class ConceptsCsvParserTest {
 		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
 		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
 		parser.setInputStream(is);
-		List<Instance<Concept>> conceptsFailures = parser.saveAll();
+		List<String[]> conceptsFailures = parser.saveAll();
 		
 		// verif
 		Assert.assertEquals(1, conceptsFailures.size());
-		Assert.assertNull(conceptsFailures.get(0).getObject()); // the one instance could not even be bootstrapped
 	}
 	
 	@Test

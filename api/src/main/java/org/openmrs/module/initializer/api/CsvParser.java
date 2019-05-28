@@ -125,69 +125,59 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	}
 	
 	/**
-	 * Main method to proceed to save all instances fetched through parsing the CSV data.
+	 * Saves all instances fetched and created through parsing the CSV data line by line.
 	 * 
-	 * @return The instances that could not be saved.
+	 * @return The failed CSV lines.
 	 */
-	public List<Instance<T>> saveAll() {
+	public List<String[]> saveAll() {
 		
-		final List<Instance<T>> failures = new ArrayList<Instance<T>>();
+		final List<String[]> failedLines = new ArrayList<String[]>();
 		
 		String[] line = null;
 		do {
-			T obj = null;
-			
 			try {
 				line = fetchNextLine();
-				obj = createInstance(line);
-				
-				if (obj != null) {
-					obj = save(obj);
-				}
+				T instance = createInstance(line);
 			}
 			catch (Exception e) {
-				failures.add(new Instance<T>(obj, line));
+				failedLines.add(line);
 				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: \n"
 				        + Arrays.toString(line),
 				    e);
 			}
 		} while (line != null);
 		
-		return failures;
+		return failedLines;
 	}
 	
 	/**
-	 * Saves a list of instances that have already been filled up.
+	 * Saves the instances created out of a list of CSV lines.
 	 * 
-	 * @param instances The instances to save.
-	 * @return The instances that could not be saved.
+	 * @param lines The CSV lines to save
+	 * @return The failed CSV lines
 	 */
-	public List<Instance<T>> save(List<Instance<T>> instances) {
+	public List<String[]> save(List<String[]> lines) {
 		
-		final List<Instance<T>> failures = new ArrayList<Instance<T>>();
+		final List<String[]> failedLines = new ArrayList<String[]>();
 		
-		for (Instance<T> instance : instances) {
+		for (String[] line : lines) {
 			try {
-				if (instance.getObject() != null) {
-					instance = new Instance<T>(save(instance.getObject()), instance.getLine());
-				}
+				T instance = createInstance(line);
 			}
 			catch (Exception e) {
-				failures.add(instance);
-				log.error("An OpenMRS object could not be saved from the following object: " + instance.toString(), e);
+				failedLines.add(line);
+				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: \n"
+				        + Arrays.toString(line),
+				    e);
 			}
 		}
 		
-		return failures;
+		return failedLines;
 	}
 	
 	/**
-	 * Return true if instance is actually saved in database.
+	 * This fills and instance out of the information processed from a CSV line and attempts to save it.
 	 */
-	// protected boolean isSaved(T instance) {
-	// return instance.getId() != null;
-	// }
-	
 	private T createInstance(String[] line) throws APIException {
 		if (line == null) {
 			return null;
@@ -219,6 +209,12 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		for (BaseLineProcessor<T> processor : lineProcessors) {
 			instance = processor.fill(instance, new CsvLine(processor, line));
 		}
+		
+		// Saving
+		if (instance != null) {
+			instance = save(instance);
+		}
+		
 		return instance;
 	}
 	
