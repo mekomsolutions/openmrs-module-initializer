@@ -3,13 +3,13 @@ package org.openmrs.module.initializer;
 import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 
-public class InitializerLoggerWrapper implements Log {
+public class InitializerLog implements Log {
 	
 	private Log log;
 	
 	private Logger logger;
 	
-	public InitializerLoggerWrapper(Log log, Logger logger) {
+	public InitializerLog(Log log, Logger logger) {
 		this.log = log;
 		this.logger = logger;
 	}

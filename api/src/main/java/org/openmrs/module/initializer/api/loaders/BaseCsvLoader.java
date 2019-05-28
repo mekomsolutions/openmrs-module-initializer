@@ -14,6 +14,7 @@ import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.CsvParser;
+import org.openmrs.module.initializer.api.Instance;
 import org.openmrs.module.initializer.api.OrderableCsvFile;
 
 /**
@@ -64,11 +65,14 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 				is = new FileInputStream(file.getFile());
 				final CsvParser<T, BaseLineProcessor<T>> parser = csvLoader.getParser(is);
 				
-				List<T> failures = parser.saveAll();
+				List<Instance<T>> failures = parser.saveAll();
 				
 				int count = 0;
 				while (count != failures.size()) {
 					log.info("Attempting to save again " + failures.size() + " previously failed entities...");
+					for (Instance<T> failure : failures) {
+						log.info(failure.toString());
+					}
 					count = failures.size();
 					failures = parser.save(failures);
 				}

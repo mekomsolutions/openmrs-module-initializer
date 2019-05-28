@@ -1,5 +1,8 @@
 package org.openmrs.module.initializer;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.FileAppender;
@@ -8,45 +11,27 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.openmrs.util.OpenmrsUtil;
 
-import java.io.IOException;
-
 public class InitializerLogFactory {
 	
-	static String targetLog = OpenmrsUtil.getApplicationDataDirectory() + "initializer.log";
+	private static final String inizLogFilePath = Paths
+	        .get(OpenmrsUtil.getApplicationDataDirectory(), InitializerConstants.MODULE_ARTIFACT_ID + ".log").toString();
 	
-	static FileAppender inizAppender = null;
-	
-	static Log log = null;
-	
-	/**
-	 * SetUp new InitializerLoggerWrapper instance.
-	 * 
-	 * @param className class which called InitializerLogFactory
-	 * @return loggerWrapper instance.
-	 * @throws IOException
-	 */
-	private static Log setUpLog(Class className) throws IOException {
-		Log log = LogFactory.getLog(className);
-		Logger logger = Logger.getLogger(className);
-		inizAppender = new FileAppender(new PatternLayout("%d{ABSOLUTE} %-5p [%c{1}] %m%n"), targetLog, true);
-		logger.addAppender(inizAppender);
-		logger.setLevel((Level) Level.ALL);
-		return new InitializerLoggerWrapper(log, logger);
-	}
-	
-	/**
-	 * @param className class which called InitializerLogFactory
-	 * @return Custom Log instance.
-	 */
+	@SuppressWarnings("rawtypes")
 	public static Log getLog(Class className) {
-		if (log == null) {
-			try {
-				log = setUpLog(className);
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+		
+		Log log = LogFactory.getLog(className);
+		
+		final Logger logger = Logger.getLogger(className);
+		try {
+			logger.addAppender(
+			    new FileAppender(new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n"), inizLogFilePath, true));
+			logger.setLevel((Level) Level.ALL);
+			log = new InitializerLog(log, logger);
 		}
+		catch (IOException e) {
+			log.error("The custom logger could not be setup, defaulting on using only the usual logging mechanism.", e);
+		}
+		
 		return log;
 	}
 	

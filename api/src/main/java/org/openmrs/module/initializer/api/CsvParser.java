@@ -16,9 +16,9 @@ import org.openmrs.Retireable;
 import org.openmrs.api.APIException;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.InitializerLogFactory;
 
 import com.opencsv.CSVReader;
-import org.openmrs.module.initializer.InitializerLogFactory;
 
 public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineProcessor<T>> {
 	
@@ -129,24 +129,24 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	 * 
 	 * @return The instances that could not be saved.
 	 */
-	public List<T> saveAll() {
+	public List<Instance<T>> saveAll() {
 		
-		final List<T> failures = new ArrayList<T>();
+		final List<Instance<T>> failures = new ArrayList<Instance<T>>();
 		
 		String[] line = null;
 		do {
-			T instance = null;
+			T obj = null;
 			
 			try {
 				line = fetchNextLine();
-				instance = createInstance(line);
+				obj = createInstance(line);
 				
-				if (instance != null) {
-					instance = save(instance);
+				if (obj != null) {
+					obj = save(obj);
 				}
 			}
 			catch (Exception e) {
-				failures.add(instance);
+				failures.add(new Instance<T>(obj, line));
 				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: \n"
 				        + Arrays.toString(line),
 				    e);
@@ -162,14 +162,14 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	 * @param instances The instances to save.
 	 * @return The instances that could not be saved.
 	 */
-	public List<T> save(List<T> instances) {
+	public List<Instance<T>> save(List<Instance<T>> instances) {
 		
-		final List<T> failures = new ArrayList<T>();
+		final List<Instance<T>> failures = new ArrayList<Instance<T>>();
 		
-		for (T instance : instances) {
+		for (Instance<T> instance : instances) {
 			try {
-				if (instance != null) {
-					instance = save(instance);
+				if (instance.getObject() != null) {
+					instance = new Instance<T>(save(instance.getObject()), instance.getLine());
 				}
 			}
 			catch (Exception e) {
