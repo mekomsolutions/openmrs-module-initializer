@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Retireable;
@@ -19,6 +18,7 @@ import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerConstants;
 
 import com.opencsv.CSVReader;
+import org.openmrs.module.initializer.InitializerLogFactory;
 
 public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineProcessor<T>> {
 	
@@ -26,7 +26,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	
 	protected static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
 	
-	protected final Log log = LogFactory.getLog(this.getClass());
+	protected final Log log = InitializerLogFactory.getLog(CsvParser.class);
 	
 	protected CSVReader reader;
 	
