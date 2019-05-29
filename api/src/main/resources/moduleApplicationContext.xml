@@ -43,7 +43,7 @@
             <ref bean="transactionAttributeSource" />
         </property>
     </bean>
-
+    
     <!-- Adds InitializerService to OpenMRS context so it can be accessed
     calling Context.getService(InitializerService.class) -->
     <bean parent="serviceContext">

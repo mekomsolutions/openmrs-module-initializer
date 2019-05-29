@@ -7,18 +7,17 @@
     <version>1.2.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>initializer-api-2.3</artifactId>
+  <artifactId>initializer-api-2.2</artifactId>
   <packaging>jar</packaging>
-  <name>Initializer API 2.3</name>
-  <description>API 2.3 project for Initializer</description>
+  <name>Initializer API 2.2</name>
+  <description>API 2.2 project for Initializer</description>
 
   <properties>
-    <openMRSVersion>2.3.0-SNAPSHOT</openMRSVersion>
-    <datafilterVersion>1.0.0-SNAPSHOT</datafilterVersion>
-    <appframeworkVersion>2.14.0-SNAPSHOT</appframeworkVersion>
+    <openMRSVersion>2.2.0</openMRSVersion>
   </properties>
-
+ 
   <dependencies>
+
     <dependency>
       <groupId>${project.parent.groupId}</groupId>
       <artifactId>${project.parent.artifactId}-api</artifactId>
@@ -34,21 +33,6 @@
       <type>test-jar</type>
     </dependency>
 
-    <dependency>
-      <groupId>${project.parent.groupId}</groupId>
-      <artifactId>${project.parent.artifactId}-api-2.2</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.parent.groupId}</groupId>
-      <artifactId>${project.parent.artifactId}-api-2.2</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>test</scope>
-      <type>test-jar</type>
-    </dependency>
-    
     <dependency>
       <groupId>org.openmrs.api</groupId>
       <artifactId>openmrs-api</artifactId>
@@ -102,13 +86,6 @@
 
     <dependency>
       <groupId>org.openmrs.module</groupId>
-      <artifactId>appointments-api</artifactId>
-      <version>${appointmentsVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.openmrs.module</groupId>
       <artifactId>addresshierarchy-api</artifactId>
       <version>${addresshierarchyVersion}</version>
       <scope>test</scope>
@@ -116,15 +93,8 @@
 
     <dependency>
       <groupId>org.openmrs.module</groupId>
-      <artifactId>datafilter-api</artifactId>
-      <version>${datafilterVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.openmrs.module</groupId>
-      <artifactId>appframework-api</artifactId>
-      <version>${appframeworkVersion}</version>
+      <artifactId>appointments-api</artifactId>
+      <version>${appointmentsVersion}</version>
       <scope>test</scope>
     </dependency>
 
@@ -137,5 +107,5 @@
       </testResource>
     </testResources>
   </build>
-
+  
 </project>

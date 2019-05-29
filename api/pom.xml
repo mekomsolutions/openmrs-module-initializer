@@ -13,6 +13,7 @@
 	<description>API project for Initializer</description>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.openmrs.web</groupId>
 			<artifactId>openmrs-web</artifactId>
@@ -20,6 +21,7 @@
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
+
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
@@ -33,6 +35,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
@@ -40,6 +43,7 @@
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.openmrs.test</groupId>
 			<artifactId>openmrs-test</artifactId>
