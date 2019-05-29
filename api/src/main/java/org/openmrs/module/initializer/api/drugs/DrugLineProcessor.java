@@ -36,7 +36,8 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug> {
 		String uuid = getUuid(line.asLine());
 		Drug drug = conceptService.getDrugByUuid(uuid);
 		if (drug == null) {
-			drug = conceptService.getDrugByNameOrId(line.get(HEADER_NAME));
+			drug = conceptService.getDrug(line.get(HEADER_NAME));
+			
 		}
 		if (drug == null) {
 			drug = new Drug();
@@ -48,6 +49,7 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug> {
 		return drug;
 	}
 	
+	@Override
 	protected Drug fill(Drug drug, CsvLine line) throws IllegalArgumentException {
 		
 		String drugName = line.get(HEADER_NAME, true); // should fail is name column missing
