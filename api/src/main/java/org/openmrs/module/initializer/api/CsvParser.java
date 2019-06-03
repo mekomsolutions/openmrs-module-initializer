@@ -111,6 +111,13 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		return headerLine;
 	}
 	
+	/**
+	 * @return The header line of the file that this parser is set on.
+	 */
+	public String[] getHeaderLine() throws IOException {
+		return headerLine;
+	}
+	
 	protected T setVoidedOrRetired(boolean isVoidedOrRetired, T instance) {
 		if (instance instanceof Retireable) {
 			Retireable metadataInstance = (Retireable) instance;

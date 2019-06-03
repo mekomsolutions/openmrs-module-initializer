@@ -32,6 +32,12 @@ public interface InitializerService extends OpenmrsService {
 	String getChecksumsDirPath();
 	
 	/**
+	 * @return The path to the checksum folder (with NO trailing forward slash), eg.
+	 *         "/opt/openmrs/configuration_rejections"
+	 */
+	String getRejectionsDirPath();
+	
+	/**
 	 * @return The list of ordered domain loaders.
 	 */
 	List<Loader> getLoaders();

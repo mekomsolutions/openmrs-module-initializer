@@ -149,10 +149,10 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		setUseCodeAsDefaultMessage(true);
 		
 		ConfigDirUtil ahDir = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
-		        InitializerConstants.DOMAIN_ADDR));
+		        iniz.getRejectionsDirPath(), InitializerConstants.DOMAIN_ADDR));
 		addMessageProperties(ahDir.getDomainDirPath());
 		ConfigDirUtil msgDir = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
-		        InitializerConstants.DOMAIN_MSGPROP));
+		        iniz.getRejectionsDirPath(), InitializerConstants.DOMAIN_MSGPROP));
 		addMessageProperties(msgDir.getDomainDirPath());
 		
 		if (MapUtils.isEmpty(messagePropertiesMap)) {

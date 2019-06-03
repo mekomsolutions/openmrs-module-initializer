@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,16 +48,23 @@ public class ConfigDirUtil {
 	 */
 	protected String checksumDirPath = "";
 	
+	/*
+	 * The absolute path to the configuration domain rejections subdirectory. Eg.
+	 * "../configuration_rejections/concepts"
+	 */
+	protected String rejectionsDirPath = "";
+	
 	/**
 	 * @param configDirPath The absolute path to the config directory, eg. "../configuration"
 	 * @param checksumDirPath The absolute path to the checksum directory, eg.
 	 *            "../configuration_checksums"
 	 * @param domain The metadata domain, eg. "addresshierarchy"
 	 */
-	public ConfigDirUtil(String configDirPath, String checksumDirPath, String domain) {
+	public ConfigDirUtil(String configDirPath, String checksumDirPath, String rejectionsDirPath, String domain) {
 		this.domain = domain;
-		this.domainDirPath = new StringBuilder(configDirPath).append(File.separator).append(domain).toString();
-		this.checksumDirPath = new StringBuilder(checksumDirPath).append(File.separator).append(domain).toString();
+		this.domainDirPath = Paths.get(configDirPath, domain).toString();
+		this.checksumDirPath = Paths.get(checksumDirPath, domain).toString();
+		this.rejectionsDirPath = Paths.get(rejectionsDirPath, domain).toString();
 	}
 	
 	public String getDomain() {

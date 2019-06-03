@@ -10,6 +10,7 @@
 package org.openmrs.module.initializer.api;
 
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,14 +39,17 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	@Override
 	public String getConfigDirPath() {
-		return new StringBuilder().append(OpenmrsUtil.getApplicationDataDirectory())
-		        .append(InitializerConstants.DIR_NAME_CONFIG).toString();
+		return Paths.get(OpenmrsUtil.getApplicationDataDirectory(), InitializerConstants.DIR_NAME_CONFIG).toString();
 	}
 	
 	@Override
 	public String getChecksumsDirPath() {
-		return new StringBuilder().append(OpenmrsUtil.getApplicationDataDirectory())
-		        .append(InitializerConstants.DIR_NAME_CHECKSUM).toString();
+		return Paths.get(OpenmrsUtil.getApplicationDataDirectory(), InitializerConstants.DIR_NAME_CHECKSUM).toString();
+	}
+	
+	@Override
+	public String getRejectionsDirPath() {
+		return Paths.get(OpenmrsUtil.getApplicationDataDirectory(), InitializerConstants.DIR_NAME_REJECTIONS).toString();
 	}
 	
 	@Override
@@ -150,4 +154,5 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	public Boolean getBooleanFromKey(String key) {
 		return getBooleanFromKey(key, null);
 	}
+	
 }

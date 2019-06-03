@@ -23,6 +23,8 @@ public class InitializerConstants {
 	
 	public static final String DIR_NAME_CHECKSUM = "configuration_checksums";
 	
+	public static final String DIR_NAME_REJECTIONS = "configuration_rejections";
+	
 	/*
 	 * Domains The lower-cased suffixes should be used as packages suffixes,
 	 * example: 'org.openmrs.module.initializer.api.gp'
