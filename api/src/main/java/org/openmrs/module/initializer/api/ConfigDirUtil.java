@@ -2,20 +2,25 @@ package org.openmrs.module.initializer.api;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.opencsv.CSVWriter;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.openmrs.module.initializer.InitializerLogFactory;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Helps read and write to and from the configuration and checksum directories.
@@ -27,6 +32,8 @@ public class ConfigDirUtil {
 	protected static final String NOT_READABLE_CHECKSUM = "not_readadble_checksum";
 	
 	protected static final String CHECKSUM_FILE_EXT = "checksum";
+	
+	protected static final String REJECTIONS_FILE_EXT = ".csv";
 	
 	protected static Log log = InitializerLogFactory.getLog(ConfigDirUtil.class);
 	
@@ -53,6 +60,8 @@ public class ConfigDirUtil {
 	 * "../configuration_rejections/concepts"
 	 */
 	protected String rejectionsDirPath = "";
+	
+	protected static CSVWriter csvWriter;
 	
 	/**
 	 * @param configDirPath The absolute path to the config directory, eg. "../configuration"
@@ -86,7 +95,7 @@ public class ConfigDirUtil {
 	
 	/*
 	 * To filter files of a certain extension only.
-	 * 
+	 *
 	 * @param extension The file extension to filter for.
 	 */
 	protected static FilenameFilter getExtensionFilenameFilter(final String extension) {
@@ -401,6 +410,73 @@ public class ConfigDirUtil {
 			for (File file : checksumFiles) {
 				file.delete();
 			}
+		}
+	}
+	
+	/**
+	 * Returns the rejection file name inside the domain folder.
+	 * 
+	 * @param configFileName The config file name, eg. "config.xml"
+	 * @return The rejection file name, eg. "config.csv"
+	 */
+	public static String toRejectionsFileName(String configFileName) {
+		return FilenameUtils.getBaseName(configFileName) + "." + REJECTIONS_FILE_EXT;
+	}
+	
+	/**
+	 * Writes the the rejection data into the corresponding .cvs file.
+	 * 
+	 * @param rejectionsDirPath The absolute path to the checksum directory, eg.
+	 *            "../configuration_checksums"
+	 * @param rejectionFileName The config file name, eg. "config.xml"
+	 */
+	protected static void writeRejectionFile(String rejectionsDirPath, String rejectionFileName, String[] headers,
+	        List<String[]> rejectLines) {
+		
+		deleteRejectionFile(rejectionsDirPath, rejectionFileName);
+		
+		if (CollectionUtils.isEmpty(rejectLines)) {
+			log.info("No rejected lines");
+		} else {
+			try {
+				FileOutputStream fileWritter = new FileOutputStream(getFile(rejectionsDirPath, rejectionFileName));
+				OutputStreamWriter osw = new OutputStreamWriter(fileWritter, StandardCharsets.UTF_8);
+				csvWriter = new CSVWriter(osw);
+				csvWriter.writeNext(headers, false);
+				for (String[] line : rejectLines) {
+					csvWriter.writeNext(line, false);
+				}
+				csvWriter.close();
+				
+			}
+			catch (Exception e) {
+				log.error("Error writing rejection data to: " + rejectionFileName, e);
+			}
+		}
+		
+	}
+	
+	/**
+	 * @see #writeRejectionFile(String, String, String[], List<String[]>)
+	 */
+	public void writeRejectionFile(String configFileName, String[] headers, List<String[]> rejectLines) {
+		writeRejectionFile(rejectionsDirPath, ConfigDirUtil.toRejectionsFileName(configFileName), headers, rejectLines);
+	}
+	
+	/**
+	 * Deletes the rejection file
+	 * 
+	 * @param rejectionsDirPath The absolute path to the rejection file directory, eg.
+	 *            "../configuration_rejections"
+	 * @param rejectionFileName The config file name, eg. "config.xml"
+	 */
+	protected static void deleteRejectionFile(String rejectionsDirPath, String rejectionFileName) {
+		
+		try {
+			Files.deleteIfExists(getFile(rejectionsDirPath, rejectionFileName).toPath());
+		}
+		catch (IOException e) {
+			log.warn("Error deleting rejection file: " + rejectionFileName, e);
 		}
 	}
 }

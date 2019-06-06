@@ -67,6 +67,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 				is = new FileInputStream(file.getFile());
 				final CsvParser<T, BaseLineProcessor<T>> parser = csvLoader.getParser(is);
 				List<String[]> lines = parser.getLines();
+				String[] headers = parser.getHeaderLine();
 				int fileCount = lines.size();
 				
 				// processing while possible
@@ -78,6 +79,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 				}
 				
 				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());
+				dirUtil.writeRejectionFile(file.getFile().getName(), headers, lines);
 				
 				// summary logging
 				if (CollectionUtils.isEmpty(lines)) {
