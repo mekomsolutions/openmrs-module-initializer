@@ -133,9 +133,13 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	}
 	
 	/**
+	 * Returns the CSV lines out of the CSV data on which the parser is based.
+	 * 
+	 * @param firstLineIsHeader Indicates whether the first line should be skipped, being the header
+	 *            line.
 	 * @return The list of CSV lines.
 	 */
-	public List<String[]> getLines() {
+	public List<String[]> getLines(boolean firstLineIsHeader) {
 		
 		final List<String[]> lines = new ArrayList<String[]>();
 		
@@ -143,17 +147,29 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		do {
 			try {
 				line = fetchNextLine();
-				lines.add(line);
+				if (firstLineIsHeader) {
+					lines.add(line);
+				}
 			}
 			catch (IOException e) {
 				lines.add(new String[0]);
 				log.error(
-				    "There was an I/O exception while simply reading one of the CSV lines. That line will produce an error when it will be processed by the parser.",
+				    "There was an I/O exception while reading one of the CSV lines. That line will produce an error when it will be processed by the parser.",
 				    e);
 			}
 		} while (line != null);
 		
 		return lines;
+	}
+	
+	/**
+	 * Returns the CSV lines out of the CSV data on which the parser is based, asssuming the that the
+	 * first line is the header line.
+	 * 
+	 * @return The list of CSV lines.
+	 */
+	public List<String[]> getLines() {
+		return getLines(true);
 	}
 	
 	/**
