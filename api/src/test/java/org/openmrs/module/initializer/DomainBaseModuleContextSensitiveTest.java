@@ -10,10 +10,12 @@
 package org.openmrs.module.initializer;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Module;
@@ -33,6 +35,8 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	public static final String appDataTestDir = "testAppDataDir";
+	
+	protected ConfigDirUtil dirUtil = null;
 	
 	@Autowired
 	private InitializerService iniz;
@@ -54,7 +58,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	}
 	
 	@Before
-	public void setupAppDataDir() {
+	public void setupAppDataDir() throws IOException {
 		
 		String path = getClass().getClassLoader().getResource(appDataTestDir).getPath() + File.separator;
 		
@@ -64,6 +68,11 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
 		Context.setRuntimeProperties(prop);
 		
-		ConfigDirUtil.deleteChecksums(iniz.getChecksumsDirPath(), true);
+		dirUtil = new ConfigDirUtil(path, iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), iniz.getRejectionsDirPath());
+	}
+	
+	@After
+	public void assertRejections() {
+		ConfigDirUtil.deleteFiles(iniz.getChecksumsDirPath(), null, true);
 	}
 }

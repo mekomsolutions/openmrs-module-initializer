@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.opencsv.CSVWriter;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -21,6 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.openmrs.module.initializer.InitializerLogFactory;
 import org.springframework.util.CollectionUtils;
+
+import com.opencsv.CSVWriter;
 
 /**
  * Helps read and write to and from the configuration and checksum directories.
@@ -31,9 +32,9 @@ public class ConfigDirUtil {
 	
 	protected static final String NOT_READABLE_CHECKSUM = "not_readadble_checksum";
 	
-	protected static final String CHECKSUM_FILE_EXT = "checksum";
+	protected static final String CHECKSUM_FILES_EXT = "checksum";
 	
-	protected static final String REJECTIONS_FILE_EXT = ".csv";
+	protected static final String REJECTION_FILES_EXT = ".csv";
 	
 	protected static Log log = InitializerLogFactory.getLog(ConfigDirUtil.class);
 	
@@ -99,6 +100,7 @@ public class ConfigDirUtil {
 	 * @param extension The file extension to filter for.
 	 */
 	protected static FilenameFilter getExtensionFilenameFilter(final String extension) {
+		
 		return new FilenameFilter() {
 			
 			@Override
@@ -234,7 +236,7 @@ public class ConfigDirUtil {
 	 */
 	public static String toChecksumFileName(String configFileName) {
 		// addressConfiguration.xml -> addressConfiguration.checksum
-		return FilenameUtils.getBaseName(configFileName) + "." + CHECKSUM_FILE_EXT;
+		return FilenameUtils.getBaseName(configFileName) + "." + CHECKSUM_FILES_EXT;
 	}
 	
 	/**
@@ -315,7 +317,7 @@ public class ConfigDirUtil {
 	 */
 	protected static void writeChecksum(String checksumDirPath, String checksumFileName, String checksum) {
 		
-		deleteChecksum(checksumDirPath, checksumFileName);
+		deleteChecksumFile(checksumDirPath, checksumFileName);
 		
 		if (NOT_COMPUTABLE_CHECKSUM.equals(checksum)) {
 			return;
@@ -343,74 +345,65 @@ public class ConfigDirUtil {
 	 *            "../configuration_checksums"
 	 * @param configFileName The config file name, eg. "config.xml"
 	 */
-	protected static void deleteChecksum(String checksumDirPath, String checksumFileName) {
+	protected static void deleteChecksumFile(String checksumDirPath, String checksumFileName) {
 		
 		try {
 			Files.deleteIfExists(getFile(checksumDirPath, checksumFileName).toPath());
 		}
 		catch (IOException e) {
-			log.warn("Error deleting hash of configuration file: " + checksumFileName, e);
+			log.error("Error deleting hash of configuration file: " + checksumFileName, e);
 		}
 	}
 	
 	/**
-	 * @see #deleteChecksum(String, String)
+	 * Deletes all files non-recursively in a folder.
+	 * 
+	 * @param dirAbsPath The absolute path to the folder.
+	 * @param filter The file filter to apply, null if none.
 	 */
-	public void deleteChecksum(String checksumFileName) {
-		deleteChecksum(checksumDirPath, checksumFileName);
+	public static void deleteFiles(String dirAbsPath, FilenameFilter filter) {
+		final File[] files = new File(dirAbsPath).listFiles(filter);
+		
+		if (files != null) {
+			for (File file : files) {
+				file.delete();
+			}
+		}
 	}
 	
 	/**
-	 * Removes all the checksum files inside the provided directory.
+	 * Deletes all files in a folder.
 	 * 
-	 * @param checksumDirPath The absolute path to a config directory, eg.
-	 *            "../configuration/addresshierarchy" or "../configuration"
-	 * @param recursive Set to true to continue recursively into subdirectories.
+	 * @param dirAbsPath The absolute path to the folder.
+	 * @param filter The file filter to apply, null if none.
+	 * @param recursive Set to true for a recursive deletion.
 	 */
-	public static void deleteChecksums(String checksumDirPath, boolean recursive) {
+	public static void deleteFiles(String dirAbsPath, FilenameFilter filter, boolean recursive) {
 		
-		deleteChecksums(checksumDirPath);
+		deleteFiles(dirAbsPath, filter);
 		
 		if (recursive) {
-			final String[] dirNames = new File(checksumDirPath).list(getDirectoryFilenameFilter());
+			final String[] dirNames = new File(dirAbsPath).list(getDirectoryFilenameFilter());
 			if (dirNames != null) {
 				for (String dirName : dirNames) {
-					deleteChecksums(new StringBuilder(checksumDirPath).append(File.separator).append(dirName).toString(),
-					    true);
+					deleteFiles(Paths.get(dirAbsPath, dirName).toString(), filter, true);
 				}
 			}
 		}
 	}
 	
 	/**
-	 * @see #deleteChecksums(String, boolean)
-	 */
-	public void deleteChecksums(boolean recursive) {
-		deleteChecksums(checksumDirPath, recursive);
-	}
-	
-	/**
-	 * @see #deleteChecksums(boolean)
+	 * Deletes all the checksum files for this domain.
 	 */
 	public void deleteChecksums() {
-		deleteChecksums(checksumDirPath);
+		deleteFiles(checksumDirPath, getExtensionFilenameFilter(CHECKSUM_FILES_EXT), true);
 	}
 	
 	/**
-	 * Removes all the checksum files inside the provided directory.
-	 * 
-	 * @param checksumDirPath The absolute path to a config directory, eg.
-	 *            "../configuration/addresshierarchy" or "../configuration"
+	 * Deletes all the rejection files for this domain.
 	 */
-	public static void deleteChecksums(String checksumDirPath) {
-		
-		final File[] checksumFiles = new File(checksumDirPath).listFiles(getExtensionFilenameFilter(CHECKSUM_FILE_EXT));
-		
-		if (checksumFiles != null) {
-			for (File file : checksumFiles) {
-				file.delete();
-			}
-		}
+	public void deleteRejections() {
+		deleteFiles(rejectionsDirPath, getExtensionFilenameFilter(REJECTION_FILES_EXT), true);
 	}
 	
 	/**
@@ -420,7 +413,7 @@ public class ConfigDirUtil {
 	 * @return The rejection file name, eg. "config.csv"
 	 */
 	public static String toRejectionsFileName(String configFileName) {
-		return FilenameUtils.getBaseName(configFileName) + "." + REJECTIONS_FILE_EXT;
+		return FilenameUtils.getBaseName(configFileName) + "." + REJECTION_FILES_EXT;
 	}
 	
 	/**
