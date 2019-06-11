@@ -16,6 +16,7 @@ import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.openmrs.module.initializer.InitializerLogFactory;
@@ -61,8 +62,6 @@ public class ConfigDirUtil {
 	 * "../configuration_rejections/concepts"
 	 */
 	protected String rejectionsDirPath = "";
-	
-	protected static CSVWriter csvWriter;
 	
 	/**
 	 * @param configDirPath The absolute path to the config directory, eg. "../configuration"
@@ -417,43 +416,46 @@ public class ConfigDirUtil {
 	}
 	
 	/**
-	 * Writes the the rejection data into the corresponding .cvs file.
+	 * Writes a CSV rejection file based on the projected rejection data.
 	 * 
-	 * @param rejectionsDirPath The absolute path to the checksum directory, eg.
-	 *            "../configuration_checksums"
-	 * @param rejectionFileName The config file name, eg. "config.xml"
+	 * @param rejectionsDirPath The absolute path to the rejection folder.
+	 * @param rejectionFileName The rejection file name.
+	 * @param headerLine The CSV header line.
+	 * @param lines The rejected CSV lines.
 	 */
-	protected static void writeRejectionFile(String rejectionsDirPath, String rejectionFileName, String[] headers,
-	        List<String[]> rejectLines) {
+	protected static void writeRejectionFile(String rejectionsDirPath, String rejectionFileName, String[] headerLine,
+	        List<String[]> lines) {
 		
 		deleteRejectionFile(rejectionsDirPath, rejectionFileName);
 		
-		if (CollectionUtils.isEmpty(rejectLines)) {
-			log.info("No rejected lines");
-		} else {
-			try {
-				FileOutputStream fileWritter = new FileOutputStream(getFile(rejectionsDirPath, rejectionFileName));
-				OutputStreamWriter osw = new OutputStreamWriter(fileWritter, StandardCharsets.UTF_8);
-				csvWriter = new CSVWriter(osw);
-				csvWriter.writeNext(headers, false);
-				for (String[] line : rejectLines) {
-					csvWriter.writeNext(line, false);
-				}
-				csvWriter.close();
-				
-			}
-			catch (Exception e) {
-				log.error("Error writing rejection data to: " + rejectionFileName, e);
-			}
+		if (CollectionUtils.isEmpty(lines)) {
+			return;
 		}
 		
+		OutputStreamWriter osw = null;
+		try {
+			osw = new OutputStreamWriter(new FileOutputStream(getFile(rejectionsDirPath, rejectionFileName)),
+			        StandardCharsets.UTF_8);
+			final CSVWriter csvWriter = new CSVWriter(osw);
+			csvWriter.writeNext(headerLine, false);
+			for (String[] line : lines) {
+				csvWriter.writeNext(line, false);
+			}
+			csvWriter.close();
+		}
+		catch (IOException e) {
+			log.error("I/O error while writing rejection file: " + rejectionFileName, e);
+		}
+		finally {
+			IOUtils.closeQuietly(osw);
+		}
 	}
 	
 	/**
 	 * @see #writeRejectionFile(String, String, String[], List<String[]>)
 	 */
-	public void writeRejectionFile(String configFileName, String[] headers, List<String[]> rejectLines) {
-		writeRejectionFile(rejectionsDirPath, ConfigDirUtil.toRejectionsFileName(configFileName), headers, rejectLines);
+	public void writeRejectionFile(String configFileName, String[] headerLine, List<String[]> lines) {
+		writeRejectionFile(rejectionsDirPath, ConfigDirUtil.toRejectionsFileName(configFileName), headerLine, lines);
 	}
 	
 	/**
