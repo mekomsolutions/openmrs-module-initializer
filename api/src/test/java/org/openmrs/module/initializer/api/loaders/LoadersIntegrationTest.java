@@ -15,7 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
@@ -31,7 +31,7 @@ import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkf
 import org.openmrs.module.initializer.api.roles.RolesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class LoadersIntegrationTest extends DomainIntegrationTest {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
@@ -79,6 +79,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	
 	@Autowired
 	private MetadataMappingsLoader mdmLoader;
+	
+	@Override
+	protected Loader getLoader() {
+		return null;
+	}
 	
 	@Test
 	public void getLoaders_shouldBeUnivoquelyOrdered() {

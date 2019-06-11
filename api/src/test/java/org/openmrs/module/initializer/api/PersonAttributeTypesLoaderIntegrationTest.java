@@ -21,12 +21,13 @@ import org.openmrs.Privilege;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class PersonAttributeTypesLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	@Qualifier("personService")
@@ -36,6 +37,11 @@ public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 	
 	@Autowired
 	private PersonAttributeTypesLoader loader;
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	@Before
 	public void setup() {
@@ -86,7 +92,7 @@ public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 	public void load_shouldLoadAccordingToCsvFiles() {
 		
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		// Verif foreign key
 		{

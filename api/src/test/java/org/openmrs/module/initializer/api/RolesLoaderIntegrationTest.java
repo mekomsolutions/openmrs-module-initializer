@@ -9,12 +9,13 @@ import org.junit.Test;
 import org.openmrs.Privilege;
 import org.openmrs.Role;
 import org.openmrs.api.UserService;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.roles.RolesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class RolesLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	@Qualifier("userService")
@@ -22,6 +23,11 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 	
 	@Autowired
 	private RolesLoader loader;
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	@Before
 	public void setup() {
@@ -72,7 +78,7 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 	public void load_shouldLoadRolesAccordingToCsvFiles() {
 		
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		// created role
 		{

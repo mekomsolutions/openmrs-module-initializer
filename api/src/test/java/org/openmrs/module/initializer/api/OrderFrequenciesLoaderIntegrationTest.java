@@ -19,12 +19,13 @@ import org.openmrs.ConceptName;
 import org.openmrs.OrderFrequency;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.OrderService;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class OrderFrequenciesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class OrderFrequenciesLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	@Qualifier("orderService")
@@ -36,6 +37,11 @@ public class OrderFrequenciesLoaderIntegrationTest extends DomainBaseModuleConte
 	
 	@Autowired
 	private OrderFrequenciesLoader loader;
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	private Concept hourlyConcept;
 	
@@ -94,7 +100,7 @@ public class OrderFrequenciesLoaderIntegrationTest extends DomainBaseModuleConte
 	public void load_shouldLoadOrderFrequenciesAccordingToCsvFiles() {
 		
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		// created frequency
 		{

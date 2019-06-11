@@ -11,13 +11,14 @@ import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.ProgramWorkflowService;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.programs.ProgramsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class ProgramWorkflowsLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	@Qualifier("conceptService")
@@ -32,6 +33,11 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleConte
 	
 	@Autowired
 	private ProgramWorkflowsLoader loader;
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	public static void setupWorkflows(ConceptService cs, ProgramWorkflowService pws) {
 		
@@ -120,7 +126,7 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleConte
 	@Test
 	public void load_shouldLoadProgramWorkflowsAccordingToCsvFiles() {
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		// Verify
 		

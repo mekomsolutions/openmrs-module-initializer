@@ -29,20 +29,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * This class configured as controller using annotation and mapped to an URL.
  */
 @Controller(InitializerConstants.COMPONENT_LEGACY_CONTROLLER)
-@RequestMapping(value = "module/" + InitializerConstants.MODULE_ARTIFACT_ID + "/" + InitializerConstants.MODULE_ARTIFACT_ID
-        + ".form")
+@RequestMapping(value = "module/" + InitializerConstants.MODULE_ARTIFACT_ID + "/"
+		+ InitializerConstants.MODULE_ARTIFACT_ID + ".form")
 public class InitializerController {
-	
+
 	/** Logger for this class and subclasses */
 	protected final Log log = LogFactory.getLog(getClass());
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	/** Success form view name */
 	private final String VIEW = "/module/" + InitializerConstants.MODULE_ARTIFACT_ID + "/"
-	        + InitializerConstants.MODULE_ARTIFACT_ID;
-	
+			+ InitializerConstants.MODULE_ARTIFACT_ID;
+
 	/**
 	 * Initially called after the getUsers method to get the landing form name
 	 * 
@@ -52,7 +52,7 @@ public class InitializerController {
 	public String onGet() {
 		return VIEW;
 	}
-	
+
 	/**
 	 * All the parameters are optional based on the necessity
 	 * 
@@ -63,27 +63,27 @@ public class InitializerController {
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public String onPost(HttpSession httpSession, @ModelAttribute("anyRequestObject") Object anyRequestObject,
-	        BindingResult errors) {
-		
+			BindingResult errors) {
+
 		if (errors.hasErrors()) {
 			// return error view
 		}
-		
+
 		return VIEW;
 	}
-	
+
 	/**
-	 * This class returns the form backing object. This can be a string, a boolean, or a normal java
-	 * pojo. The bean name defined in the ModelAttribute annotation and the type can be just defined by
-	 * the return type of this method
+	 * This class returns the form backing object. This can be a string, a boolean,
+	 * or a normal java pojo. The bean name defined in the ModelAttribute annotation
+	 * and the type can be just defined by the return type of this method
 	 */
 	@ModelAttribute("users")
 	protected List<User> getUsers() throws Exception {
 		List<User> users = userService.getAllUsers();
-		
+
 		// this object will be made available to the jsp page under the variable name
 		// that is defined in the @ModuleAttribute tag
 		return users;
 	}
-	
+
 }

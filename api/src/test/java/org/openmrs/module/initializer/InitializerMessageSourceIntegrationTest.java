@@ -16,10 +16,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
+import org.openmrs.module.initializer.api.loaders.Loader;
 
-public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class InitializerMessageSourceIntegrationTest extends DomainIntegrationTest {
 	
 	protected InitializerMessageSource inizSrc;
+	
+	@Override
+	protected Loader getLoader() {
+		return null;
+	}
 	
 	@Before
 	public void setup() {

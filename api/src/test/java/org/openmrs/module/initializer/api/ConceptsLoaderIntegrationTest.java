@@ -27,13 +27,14 @@ import org.openmrs.ConceptNumeric;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class ConceptsLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	@Qualifier("conceptService")
@@ -45,6 +46,11 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	private Locale localeEn = Locale.ENGLISH;
 	
 	private Locale localeKm = new Locale("km", "KH");
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	@Before
 	public void setup() {
@@ -171,7 +177,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		}
 		
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		// Verif 'base' CSV loading
 		{

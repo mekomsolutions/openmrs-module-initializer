@@ -5,12 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Privilege;
 import org.openmrs.api.UserService;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.privileges.PrivilegesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class PrivilegesLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	@Qualifier("userService")
@@ -18,6 +19,11 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	
 	@Autowired
 	private PrivilegesLoader loader;
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	@Before
 	public void setup() {
@@ -49,7 +55,7 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	public void load_shouldLoadPrivilegesAccordingToCsvFiles() {
 		
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		// privilege created
 		{

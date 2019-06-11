@@ -26,7 +26,7 @@ public class JsonKeyValuesLoader extends BaseLoader {
 		
 		ConfigDirUtil dirUtil = getDirUtil();
 		
-		for (File file : dirUtil.getFiles("json")) { // processing all the JSON files inside the domain
+		for (File file : dirUtil.getFilesByExtension("json")) { // processing all the JSON files inside the domain
 			
 			String fileName = dirUtil.getFileName(file.getPath());
 			

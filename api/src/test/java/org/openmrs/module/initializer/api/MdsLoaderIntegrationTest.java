@@ -14,14 +14,20 @@ import org.junit.Test;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.loaders.MdsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class MdsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class MdsLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	private MdsLoader loader;
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	@Test
 	public void load_shouldImportMDSPackages() {
@@ -31,7 +37,7 @@ public class MdsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTe
 		personAttType = Context.getPersonService().getPersonAttributeTypeByUuid("b3b6d540-a32e-44c7-91b3-292d97667518");
 		Assert.assertEquals("Race", personAttType.getName());
 		
-		loader.load();
+		getLoader().load();
 		
 		// Verif
 		PatientIdentifierType patientIdType = Context.getPatientService()

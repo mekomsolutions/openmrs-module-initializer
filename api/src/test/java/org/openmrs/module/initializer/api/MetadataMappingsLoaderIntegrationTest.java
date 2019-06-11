@@ -5,7 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.EncounterType;
 import org.openmrs.PatientIdentifierType;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.mdm.MetadataMappingsLoader;
 import org.openmrs.module.metadatamapping.MetadataSet;
 import org.openmrs.module.metadatamapping.MetadataSource;
@@ -13,13 +14,18 @@ import org.openmrs.module.metadatamapping.MetadataTermMapping;
 import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class MetadataMappingsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class MetadataMappingsLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	private MetadataMappingService service;
 	
 	@Autowired
 	private MetadataMappingsLoader loader;
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	private MetadataSource ms;
 	
@@ -72,7 +78,7 @@ public class MetadataMappingsLoaderIntegrationTest extends DomainBaseModuleConte
 		MetadataTermMapping mtm;
 		
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		// Verify created
 		mtm = service.getMetadataTermMapping(ms, "emr.atFacilityVisitType");

@@ -22,12 +22,13 @@ import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.loc.LocationsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class LocationsLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	@Qualifier("locationService")
@@ -35,6 +36,11 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	
 	@Autowired
 	private LocationsLoader loader;
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	@Before
 	public void setup() {
@@ -61,9 +67,8 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	
 	@Test
 	public void load_shouldLoadAccordingToCsvFiles() {
-		
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		// Verif creation
 		{

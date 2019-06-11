@@ -33,7 +33,7 @@ public class GlobalPropertiesLoader extends BaseLoader {
 		ConfigDirUtil dirUtil = getDirUtil();
 		
 		final List<GlobalProperty> globalProperties = new ArrayList<GlobalProperty>();
-		for (File file : dirUtil.getFiles("xml")) { // processing all the XML files inside the domain
+		for (File file : dirUtil.getFilesByExtension("xml")) { // processing all the XML files inside the domain
 			
 			String fileName = dirUtil.getFileName(file.getPath());
 			String checksum = dirUtil.getChecksumIfChanged(fileName);

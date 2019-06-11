@@ -24,13 +24,14 @@ import org.openmrs.ConceptSource;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.PersonService;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
 import org.openmrs.module.initializer.api.loaders.JsonKeyValuesLoader;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class JsonKeyValuesLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	@Qualifier("conceptService")
@@ -42,6 +43,11 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	
 	@Autowired
 	private JsonKeyValuesLoader loader;
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	@Before
 	public void setup() {
@@ -77,7 +83,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	@Test
 	public void load_shouldFetchConceptsFromAllPossibleKeys() {
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		Concept c1 = getService().getConceptFromKey("impl.purpose.concept.uuid");
 		Assert.assertNotNull(c1);
@@ -93,7 +99,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	@Test
 	public void load_shouldFetchPATFromAllPossibleKeys() {
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		PersonAttributeType pat1 = getService().getPersonAttributeTypeFromKey("impl.purpose.pat.uuid");
 		Assert.assertNotNull(pat1);
@@ -107,7 +113,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	@Test
 	public void load_shouldLoadStructuredJsonValue() {
 		// Replay
-		loader.load();
+		getLoader().load();
 		String json = getService().getValueFromKey("structured.json");
 		
 		// Verif
@@ -117,7 +123,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	@Test
 	public void load_shouldLoadConceptList() {
 		// Replay
-		loader.load();
+		getLoader().load();
 		List<Concept> concepts = getService().getConceptsFromKey("impl.purpose.concepts");
 		
 		// Verif

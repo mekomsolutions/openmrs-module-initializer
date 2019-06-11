@@ -1,13 +1,13 @@
 package org.openmrs.module.initializer.api;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,6 @@ import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.openmrs.module.initializer.InitializerLogFactory;
@@ -25,7 +24,7 @@ import org.springframework.util.CollectionUtils;
 import com.opencsv.CSVWriter;
 
 /**
- * Helps read and write to and from the configuration and checksum directories.
+ * Helps read and write to and from the configuration, checksums and rejections directories.
  */
 public class ConfigDirUtil {
 	
@@ -35,7 +34,7 @@ public class ConfigDirUtil {
 	
 	protected static final String CHECKSUM_FILES_EXT = "checksum";
 	
-	protected static final String REJECTION_FILES_EXT = ".csv";
+	protected static final String REJECTION_FILES_EXT = "csv";
 	
 	protected static Log log = InitializerLogFactory.getLog(ConfigDirUtil.class);
 	
@@ -65,14 +64,14 @@ public class ConfigDirUtil {
 	
 	/**
 	 * @param configDirPath The absolute path to the config directory, eg. "../configuration"
-	 * @param checksumDirPath The absolute path to the checksum directory, eg.
+	 * @param checksumsDirPath The absolute path to the checksum files directory, eg.
 	 *            "../configuration_checksums"
 	 * @param domain The metadata domain, eg. "addresshierarchy"
 	 */
-	public ConfigDirUtil(String configDirPath, String checksumDirPath, String rejectionsDirPath, String domain) {
+	public ConfigDirUtil(String configDirPath, String checksumsDirPath, String rejectionsDirPath, String domain) {
 		this.domain = domain;
 		this.domainDirPath = Paths.get(configDirPath, domain).toString();
-		this.checksumDirPath = Paths.get(checksumDirPath, domain).toString();
+		this.checksumDirPath = Paths.get(checksumsDirPath, domain).toString();
 		this.rejectionsDirPath = Paths.get(rejectionsDirPath, domain).toString();
 	}
 	
@@ -93,12 +92,12 @@ public class ConfigDirUtil {
 		return domainDirPath;
 	}
 	
-	/*
+	/**
 	 * To filter files of a certain extension only.
-	 *
-	 * @param extension The file extension to filter for.
+	 * 
+	 * @param extension Eg. "csv", "xml", ... etc.
 	 */
-	protected static FilenameFilter getExtensionFilenameFilter(final String extension) {
+	public static FilenameFilter getExtensionFilenameFilter(final String extension) {
 		
 		return new FilenameFilter() {
 			
@@ -111,7 +110,7 @@ public class ConfigDirUtil {
 				if (new File(dir, name).isDirectory()) {
 					return false;
 				}
-				if (ext.equals(extension)) {
+				if (ext.equalsIgnoreCase(extension)) {
 					return true; // filtering only checksum files based on their extension
 				}
 				return false;
@@ -122,7 +121,7 @@ public class ConfigDirUtil {
 	/*
 	 * To filter directories only.
 	 */
-	protected static FilenameFilter getDirectoryFilenameFilter() {
+	public static FilenameFilter getDirectoryFilenameFilter() {
 		return new FilenameFilter() {
 			
 			@Override
@@ -180,30 +179,10 @@ public class ConfigDirUtil {
 	}
 	
 	/**
-	 * Fetches all the files in a directory based on their extension.
-	 * 
-	 * @param domainDirPath The absolute path to the domain directory, eg.
-	 *            "../configuration/addresshierarchy"
-	 * @param extension The extension to filter for, eg "xml".
-	 * @return The list of {@link File} instances.
+	 * @see #getFiles(String, FilenameFilter)
 	 */
-	protected static List<File> getFiles(String domainDirPath, String extension) {
-		
-		final List<File> allFiles = new ArrayList<File>();
-		
-		final File[] files = new File(domainDirPath).listFiles(getExtensionFilenameFilter(extension));
-		if (files != null) {
-			allFiles.addAll(Arrays.asList(files));
-		}
-		
-		return allFiles;
-	}
-	
-	/**
-	 * @see #getFiles(String, String)
-	 */
-	public List<File> getFiles(String extension) {
-		return getFiles(domainDirPath, extension);
+	public List<File> getFilesByExtension(String extension) {
+		return getFiles(domainDirPath, getExtensionFilenameFilter(extension));
 	}
 	
 	/**
@@ -215,9 +194,7 @@ public class ConfigDirUtil {
 	 * @return The {@link File} instance.
 	 */
 	protected static File getFile(String dirPath, String fileName) {
-		StringBuilder path = new StringBuilder(dirPath);
-		path.append(File.separator).append(fileName);
-		return new File(path.toString());
+		return Paths.get(dirPath, fileName).toFile();
 	}
 	
 	/**
@@ -256,7 +233,7 @@ public class ConfigDirUtil {
 		try {
 			final File checksumFile = getFile(checksumDirPath, checksumFileName);
 			if (checksumFile.exists()) {
-				checksum = FileUtils.readFileToString(checksumFile, "UTF-8");
+				checksum = FileUtils.readFileToString(checksumFile, UTF_8.toString());
 			}
 		}
 		catch (Exception e) {
@@ -323,7 +300,7 @@ public class ConfigDirUtil {
 		}
 		
 		try {
-			FileUtils.writeStringToFile(getFile(checksumDirPath, checksumFileName), checksum, "UTF-8");
+			FileUtils.writeStringToFile(getFile(checksumDirPath, checksumFileName), checksum, UTF_8.toString());
 		}
 		catch (Exception e) {
 			log.error("Error writing hash ('" + checksum + "') of configuration file to: " + checksumFileName, e);
@@ -345,7 +322,6 @@ public class ConfigDirUtil {
 	 * @param configFileName The config file name, eg. "config.xml"
 	 */
 	protected static void deleteChecksumFile(String checksumDirPath, String checksumFileName) {
-		
 		try {
 			Files.deleteIfExists(getFile(checksumDirPath, checksumFileName).toPath());
 		}
@@ -354,55 +330,35 @@ public class ConfigDirUtil {
 		}
 	}
 	
+	public static List<File> getFiles(String dirAbsPath, FilenameFilter filter) {
+		
+		List<File> fileList = new ArrayList<File>();
+		
+		final File[] files = new File(dirAbsPath).listFiles(filter);
+		if (files != null) {
+			fileList.addAll(Arrays.asList(files));
+		}
+		
+		final String[] dirNames = new File(dirAbsPath).list(getDirectoryFilenameFilter());
+		if (dirNames != null) {
+			for (String dirName : dirNames) {
+				fileList.addAll(getFiles(Paths.get(dirAbsPath, dirName).toString(), filter));
+			}
+		}
+		
+		return fileList;
+	}
+	
 	/**
-	 * Deletes all files non-recursively in a folder.
+	 * Deletes all files in a folder and recursively through its nested folders.
 	 * 
 	 * @param dirAbsPath The absolute path to the folder.
 	 * @param filter The file filter to apply, null if none.
 	 */
 	public static void deleteFiles(String dirAbsPath, FilenameFilter filter) {
-		final File[] files = new File(dirAbsPath).listFiles(filter);
-		
-		if (files != null) {
-			for (File file : files) {
-				file.delete();
-			}
+		for (File file : getFiles(dirAbsPath, filter)) {
+			file.delete();
 		}
-	}
-	
-	/**
-	 * Deletes all files in a folder.
-	 * 
-	 * @param dirAbsPath The absolute path to the folder.
-	 * @param filter The file filter to apply, null if none.
-	 * @param recursive Set to true for a recursive deletion.
-	 */
-	public static void deleteFiles(String dirAbsPath, FilenameFilter filter, boolean recursive) {
-		
-		deleteFiles(dirAbsPath, filter);
-		
-		if (recursive) {
-			final String[] dirNames = new File(dirAbsPath).list(getDirectoryFilenameFilter());
-			if (dirNames != null) {
-				for (String dirName : dirNames) {
-					deleteFiles(Paths.get(dirAbsPath, dirName).toString(), filter, true);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Deletes all the checksum files for this domain.
-	 */
-	public void deleteChecksums() {
-		deleteFiles(checksumDirPath, getExtensionFilenameFilter(CHECKSUM_FILES_EXT), true);
-	}
-	
-	/**
-	 * Deletes all the rejection files for this domain.
-	 */
-	public void deleteRejections() {
-		deleteFiles(rejectionsDirPath, getExtensionFilenameFilter(REJECTION_FILES_EXT), true);
 	}
 	
 	/**
@@ -419,43 +375,58 @@ public class ConfigDirUtil {
 	 * Writes a CSV rejection file based on the projected rejection data.
 	 * 
 	 * @param rejectionsDirPath The absolute path to the rejection folder.
-	 * @param rejectionFileName The rejection file name.
+	 * @param csvFileName The rejection CSV file name.
 	 * @param headerLine The CSV header line.
 	 * @param lines The rejected CSV lines.
 	 */
-	protected static void writeRejectionFile(String rejectionsDirPath, String rejectionFileName, String[] headerLine,
+	protected static void writeCsvRejectionFile(String rejectionsDirPath, String csvFileName, String[] headerLine,
 	        List<String[]> lines) {
 		
-		deleteRejectionFile(rejectionsDirPath, rejectionFileName);
+		// deleteRejectionFile(rejectionsDirPath, csvFileName);
 		
 		if (CollectionUtils.isEmpty(lines)) {
 			return;
 		}
 		
-		OutputStreamWriter osw = null;
+		createDirectoriesFromPath(rejectionsDirPath);
+		
 		try {
-			osw = new OutputStreamWriter(new FileOutputStream(getFile(rejectionsDirPath, rejectionFileName)),
-			        StandardCharsets.UTF_8);
-			final CSVWriter csvWriter = new CSVWriter(osw);
+			final CSVWriter csvWriter = new CSVWriter(Files.newBufferedWriter(Paths.get(rejectionsDirPath, csvFileName)));
+			
 			csvWriter.writeNext(headerLine, false);
 			for (String[] line : lines) {
 				csvWriter.writeNext(line, false);
 			}
+			
 			csvWriter.close();
 		}
 		catch (IOException e) {
-			log.error("I/O error while writing rejection file: " + rejectionFileName, e);
+			log.error("I/O error while writing rejection file: " + csvFileName, e);
 		}
-		finally {
-			IOUtils.closeQuietly(osw);
+	}
+	
+	/**
+	 * Creates the directory structure specified by a path, if it does not exist yet.
+	 * 
+	 * @param path Eg. "/opt/openmrs/configuration_rejections"
+	 */
+	public static void createDirectoriesFromPath(String path) {
+		try {
+			Path p = Paths.get(path);
+			if (!Files.exists(p)) {
+				Files.createDirectories(p);
+			}
+		}
+		catch (Exception e) {
+			log.error("Error while creating the directories specified through this path:\n" + path, e);
 		}
 	}
 	
 	/**
 	 * @see #writeRejectionFile(String, String, String[], List<String[]>)
 	 */
-	public void writeRejectionFile(String configFileName, String[] headerLine, List<String[]> lines) {
-		writeRejectionFile(rejectionsDirPath, ConfigDirUtil.toRejectionsFileName(configFileName), headerLine, lines);
+	public void writeCsvRejectionFile(String csvFileName, String[] headerLine, List<String[]> lines) {
+		writeCsvRejectionFile(rejectionsDirPath, ConfigDirUtil.toRejectionsFileName(csvFileName), headerLine, lines);
 	}
 	
 	/**
@@ -463,15 +434,15 @@ public class ConfigDirUtil {
 	 * 
 	 * @param rejectionsDirPath The absolute path to the rejection file directory, eg.
 	 *            "../configuration_rejections"
-	 * @param rejectionFileName The config file name, eg. "config.xml"
+	 * @param csvFileName The config file name, eg. "config.xml"
 	 */
-	protected static void deleteRejectionFile(String rejectionsDirPath, String rejectionFileName) {
+	protected static void deleteRejectionFile(String rejectionsDirPath, String csvFileName) {
 		
 		try {
-			Files.deleteIfExists(getFile(rejectionsDirPath, rejectionFileName).toPath());
+			Files.deleteIfExists(getFile(rejectionsDirPath, csvFileName).toPath());
 		}
 		catch (IOException e) {
-			log.warn("Error deleting rejection file: " + rejectionFileName, e);
+			log.error("I/O error while deleting rejection file: " + csvFileName, e);
 		}
 	}
 }

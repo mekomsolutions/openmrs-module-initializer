@@ -13,14 +13,20 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainIntegrationTest;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class GlobalPropertiesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class GlobalPropertiesLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
 	private GlobalPropertiesLoader loader;
+	
+	@Override
+	protected Loader getLoader() {
+		return loader;
+	}
 	
 	@Test
 	public void loadGlobalProperties_shouldLoadGlobalProperties() {
@@ -45,7 +51,7 @@ public class GlobalPropertiesLoaderIntegrationTest extends DomainBaseModuleConte
 		Assert.assertEquals("foobar", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
 		
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		// Verif
 		Assert.assertEquals("GP one one", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
@@ -60,7 +66,7 @@ public class GlobalPropertiesLoaderIntegrationTest extends DomainBaseModuleConte
 		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("gp.baz", "Baz"));
 		
 		// Replay
-		loader.load();
+		getLoader().load();
 		
 		// Verif
 		Assert.assertEquals("Foo", Context.getAdministrationService().getGlobalProperty("gp.foo"));

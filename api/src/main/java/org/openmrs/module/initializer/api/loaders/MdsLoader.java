@@ -36,7 +36,7 @@ public class MdsLoader extends BaseLoader {
 		importConfig.setExactMatch(ImportType.PREFER_THEIRS);
 		importer.setImportConfig(importConfig);
 		
-		for (File file : dirUtil.getFiles("zip")) { // processing all the zip files inside the domain
+		for (File file : dirUtil.getFilesByExtension("zip")) { // processing all the zip files inside the domain
 			
 			String fileName = dirUtil.getFileName(file.getPath());
 			String checksum = dirUtil.getChecksumIfChanged(fileName);

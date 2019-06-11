@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,7 +49,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		
 		// Selecting the files that havent' been checksum'd yet
 		List<OrderableCsvFile> files = new ArrayList<OrderableCsvFile>();
-		for (File file : dirUtil.getFiles("csv")) {
+		for (File file : dirUtil.getFilesByExtension("csv")) {
 			String fileName = dirUtil.getFileName(file.getPath());
 			String checksum = dirUtil.getChecksumIfChanged(fileName);
 			if (!checksum.isEmpty()) {
@@ -57,6 +58,10 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		}
 		
 		Collections.sort(files); // sorting based on the CSV order metadata
+		
+		// emptying the rejection files if any yet
+		String rejectionsPath = Paths.get(iniz.getRejectionsDirPath(), this.getDomainName()).toString();
+		ConfigDirUtil.deleteFiles(rejectionsPath, ConfigDirUtil.getExtensionFilenameFilter("csv"));
 		
 		// parsing the CSV files
 		for (OrderableCsvFile file : files) {
@@ -67,7 +72,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 				is = new FileInputStream(file.getFile());
 				final CsvParser<T, BaseLineProcessor<T>> parser = csvLoader.getParser(is);
 				List<String[]> lines = parser.getLines();
-				String[] headers = parser.getHeaderLine();
+				String[] headerLine = parser.getHeaderLine();
 				int fileCount = lines.size();
 				
 				// processing while possible
@@ -79,7 +84,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 				}
 				
 				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());
-				dirUtil.writeRejectionFile(file.getFile().getName(), headers, lines);
+				dirUtil.writeCsvRejectionFile(file.getFile().getName(), headerLine, lines);
 				
 				// summary logging
 				if (CollectionUtils.isEmpty(lines)) {

@@ -39,16 +39,22 @@ import org.openmrs.module.addresshierarchy.service.AddressHierarchyService;
 import org.openmrs.module.exti18n.ExtI18nConstants;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
+import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.test.Verifies;
 import org.openmrs.util.OpenmrsConstants;
 
 @Ignore
-public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContextSensitiveTest {
+public class AddressHierarchyMessagesLoadingTest extends DomainIntegrationTest {
 	
 	protected static final String MODULES_TO_LOAD = "org/openmrs/module/addresshierarchy/include/"
 	        + ExtI18nConstants.MODULE_ARTIFACT_ID + ".omod";
 	
 	private InitializerMessageSource inizSrc;
+	
+	@Override
+	protected Loader getLoader() {
+		return null;
+	}
 	
 	@Before
 	public void setup() {
