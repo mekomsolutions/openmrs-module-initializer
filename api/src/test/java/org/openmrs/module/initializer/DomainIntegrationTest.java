@@ -13,11 +13,14 @@ import static org.openmrs.module.initializer.api.ConfigDirUtil.getExtensionFilen
 import static org.openmrs.module.initializer.api.ConfigDirUtil.getFiles;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
 
+import com.opencsv.CSVReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.After;
@@ -93,12 +96,28 @@ public abstract class DomainIntegrationTest extends BaseModuleContextSensitiveTe
 	private void analyzeRejections() {
 		// CSV rejections
 		if (getLoader() instanceof CsvLoader) {
-			List<File> rejectionCsvFiles = getFiles(
-			    Paths.get(iniz.getRejectionsDirPath(), getLoader().getDomainName()).toString(),
-			    getExtensionFilenameFilter("csv"));
+			String domainPath = Paths.get(iniz.getRejectionsDirPath(), getLoader().getDomainName()).toString();
+			List<File> rejectionCsvFiles = getFiles(domainPath, getExtensionFilenameFilter("csv"));
 			
 			if (!CollectionUtils.isEmpty(rejectionCsvFiles)) {
-				assertCsvRejectionFiles(rejectionCsvFiles);
+				// assertCsvRejectionFiles(rejectionCsvFiles);
+				for (File rejectionFile : rejectionCsvFiles) {
+					CSVReader reader = null;
+					try {
+						reader = new CSVReader(new FileReader(rejectionFile));
+						List<String[]> allRows = reader.readAll();
+						for (int i = 1; i < allRows.size(); i++) {
+							assertCsvRejectionLine(domainPath, allRows.get(i));
+						}
+					}
+					catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+					catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+				}
 			}
 			
 		}
@@ -113,6 +132,20 @@ public abstract class DomainIntegrationTest extends BaseModuleContextSensitiveTe
 		log.error("A number of rejection CSV files have been created and are not being asserted yet.");
 		for (File file : rejectionCsvFiles) {
 			log.error(file.getAbsolutePath());
+		}
+		
+		String thisMethodName = new Object() {}.getClass().getEnclosingMethod().getName();
+		
+		log.error("You must override the method '" + thisMethodName
+		        + "' in your test class and assert the lines of the CSV rejection files.");
+		
+		Assert.fail();
+	}
+	
+	protected void assertCsvRejectionLine(String filePath, String[] line) {
+		log.error("A number of rejection CSV files have been created and are not being asserted yet.");
+		for (String string : line) {
+			log.error(filePath);
 		}
 		
 		String thisMethodName = new Object() {}.getClass().getEnclosingMethod().getName();

@@ -1,7 +1,12 @@
 package org.openmrs.module.initializer.api;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +43,12 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainIntegrationTest
 	protected Loader getLoader() {
 		return loader;
 	}
+	
+	public static List<String[]> exceptedRejectionData = new ArrayList();
+	
+	public static int rejectionDataIndex = 0;
+	
+	protected final Log log = LogFactory.getLog(getClass());
 	
 	public static void setupWorkflows(ConceptService cs, ProgramWorkflowService pws) {
 		
@@ -114,6 +125,9 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainIntegrationTest
 			prog.addWorkflow(wf);
 			pws.saveProgram(prog);
 		}
+		
+		exceptedRejectionData.add(new String[] { "2b98bc76-245c-11e1-9cf0-00248140a5ee", "",
+		        "eae98b4c-e195-403b-b34a-82d94103b2c0", "Standard Treatment Status (workflow)" });
 	}
 	
 	@Before
@@ -172,6 +186,19 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainIntegrationTest
 			wf = prog.getWorkflowByName("Electroshock (workflow)");
 			Assert.assertFalse(prog.getWorkflows().contains(wf));
 			Assert.assertTrue(prog.getAllWorkflows().contains(wf));
+		}
+	}
+	
+	public void assertCsvRejectionLine(String file, String[] line) {
+		Assert.assertArrayEquals(exceptedRejectionData.get(rejectionDataIndex), line);
+		rejectionDataIndex = rejectionDataIndex + 1;
+	}
+	
+	@After
+	public void finish() {
+		if (rejectionDataIndex < exceptedRejectionData.size() - 1) {
+			log.error("rejection file didn't have all expected rejection data");
+			Assert.fail();
 		}
 	}
 }

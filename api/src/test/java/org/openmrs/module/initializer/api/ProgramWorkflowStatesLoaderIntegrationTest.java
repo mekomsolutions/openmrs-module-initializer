@@ -1,7 +1,13 @@
 package org.openmrs.module.initializer.api;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +25,8 @@ import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkf
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import static org.openmrs.module.initializer.api.ProgramWorkflowsLoaderIntegrationTest.exceptedRejectionData;
 
 public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainIntegrationTest {
 	
@@ -43,6 +51,12 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainIntegratio
 	protected Loader getLoader() {
 		return loader;
 	}
+	
+	public static List<String[]> exceptedRejectionData = new ArrayList();
+	
+	public static int rejectionDataIndex = 0;
+	
+	protected final Log log = LogFactory.getLog(getClass());
 	
 	@Before
 	public void setup() {
@@ -111,6 +125,10 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainIntegratio
 			wf.addState(state);
 		}
 		
+		// Add rejection data
+		exceptedRejectionData.add(new String[] { "88b717c0-f580-497a-8d2b-026b60dd6bfd", "",
+		        "TB Treatment Status (workflow)", "Deceased", "true", "true" });
+		
 	}
 	
 	@Test
@@ -172,6 +190,19 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainIntegratio
 			ProgramWorkflow wf = Utils.fetchProgramWorkflow("Extended Discharge (workflow)", pws, cs);
 			Assert.assertTrue(wf.getStates().contains(state));
 			Assert.assertTrue(wf.getStates(true).contains(state));
+		}
+	}
+	
+	public void assertCsvRejectionLine(String file, String[] line) {
+		Assert.assertArrayEquals(exceptedRejectionData.get(rejectionDataIndex), line);
+		rejectionDataIndex = rejectionDataIndex + 1;
+	}
+	
+	@After
+	public void finish() {
+		if (rejectionDataIndex < exceptedRejectionData.size() - 1) {
+			log.error("rejection file didn't have all expected rejection data");
+			Assert.fail();
 		}
 	}
 }

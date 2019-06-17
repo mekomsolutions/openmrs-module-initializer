@@ -9,8 +9,10 @@
  */
 package org.openmrs.module.initializer.api;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -373,5 +375,9 @@ public class ConceptsLoaderIntegrationTest extends DomainIntegrationTest {
 			Assert.assertNotNull(c);
 			Assert.assertEquals("ឈ្មោះខ្លីថ្មី", c.getShortNameInLocale(localeKm).toString());
 		}
+	}
+	
+	public void assertCsvRejectionLine(String file, String[] line) {
+		System.out.println("Overide the method");
 	}
 }

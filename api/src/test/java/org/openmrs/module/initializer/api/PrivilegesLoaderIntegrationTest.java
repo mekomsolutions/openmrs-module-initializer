@@ -11,6 +11,9 @@ import org.openmrs.module.initializer.api.privileges.PrivilegesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.io.File;
+import java.util.List;
+
 public class PrivilegesLoaderIntegrationTest extends DomainIntegrationTest {
 	
 	@Autowired
@@ -89,5 +92,9 @@ public class PrivilegesLoaderIntegrationTest extends DomainIntegrationTest {
 			Assert.assertEquals(p.getName(), p.getPrivilege());
 			Assert.assertEquals("Able to add reports.", p.getDescription());
 		}
+	}
+	
+	public void assertCsvRejectionLine(String file, String[] line) {
+		System.out.println("Overide the method");
 	}
 }
