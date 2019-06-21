@@ -8,7 +8,7 @@ import org.openmrs.VisitAttributeType;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.attributes.types.AttributeType;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEnum;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeCsvLineHandler;
 import org.openmrs.module.initializer.api.attributes.types.BaseAttributeTypeLineProcessor;
 
@@ -16,22 +16,22 @@ import org.openmrs.module.initializer.api.attributes.types.BaseAttributeTypeLine
 public class AttributeTypeCsvLineHandlerImpl2_2 implements AttributeTypeCsvLineHandler {
 	
 	@Override
-	public AttributeType getAttributeType(CsvLine line) {
+	public AttributeTypeEnum getAttributeType(CsvLine line) {
 		String attributeDomain = line.getString(BaseAttributeTypeLineProcessor.HEADER_DOMAIN);
-		if (attributeDomain.equalsIgnoreCase(AttributeType.LOCATION.toString())) {
-			return AttributeType.LOCATION;
+		if (attributeDomain.equalsIgnoreCase(AttributeTypeEnum.LOCATION.toString())) {
+			return AttributeTypeEnum.LOCATION;
 		}
-		if (attributeDomain.equalsIgnoreCase(AttributeType.VISIT.toString())) {
-			return AttributeType.VISIT;
+		if (attributeDomain.equalsIgnoreCase(AttributeTypeEnum.VISIT.toString())) {
+			return AttributeTypeEnum.VISIT;
 		}
-		if (attributeDomain.equalsIgnoreCase(AttributeType.PROVIDER.toString())) {
-			return AttributeType.PROVIDER;
+		if (attributeDomain.equalsIgnoreCase(AttributeTypeEnum.PROVIDER.toString())) {
+			return AttributeTypeEnum.PROVIDER;
 		}
-		if (attributeDomain.equalsIgnoreCase(AttributeType.PROGRAM.toString())) {
-			return AttributeType.PROGRAM;
+		if (attributeDomain.equalsIgnoreCase(AttributeTypeEnum.PROGRAM.toString())) {
+			return AttributeTypeEnum.PROGRAM;
 		}
-		if (attributeDomain.equalsIgnoreCase(AttributeType.CONCEPT.toString())) {
-			return AttributeType.CONCEPT;
+		if (attributeDomain.equalsIgnoreCase(AttributeTypeEnum.CONCEPT.toString())) {
+			return AttributeTypeEnum.CONCEPT;
 		}
 		throw new IllegalArgumentException(
 		        "No Attribute type could be guessed from the CSV line: '" + line.toString() + "'.");
@@ -40,7 +40,7 @@ public class AttributeTypeCsvLineHandlerImpl2_2 implements AttributeTypeCsvLineH
 	@Override
 	@SuppressWarnings("rawtypes")
 	public BaseAttributeType newAttributeType(CsvLine line) {
-		AttributeType type = getAttributeType(line);
+		AttributeTypeEnum type = getAttributeType(line);
 		switch (type) {
 			case LOCATION:
 				return new LocationAttributeType();

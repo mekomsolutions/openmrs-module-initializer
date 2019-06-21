@@ -7,20 +7,26 @@ import org.openmrs.ProgramAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.customdatatype.datatype.FreeTextDatatype;
-import org.openmrs.module.initializer.api.attributes.types.AttributeType;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeService1_11Test;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEnum;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypeService;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class AttributeTypeService2_2Test extends AttributeTypeService1_11Test {
+public class AttributeTypeService2_2Test extends BaseModuleContextSensitiveTest {
 	
 	private final static String CONCEPT_ATT_TYPE_UUID = "9eca4f4e-707f-4bb8-8289-2f9b6e93803c";
 	
 	private final static String PROGRAM_ATT_TYPE_UUID = "78caHf4e-707f-4bb8-8289-2f9bBKJ3803T";
 	
+	@Autowired
+	public AttributeTypeService service;
+	
 	@Test
 	public void getAttributeTypeByUuid_shouldGetConceptAttributeType() {
 		// Setup
 		Context.getConceptService().saveConceptAttributeType(createConceptAttributeType());
-		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(CONCEPT_ATT_TYPE_UUID, AttributeType.CONCEPT);
+		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(CONCEPT_ATT_TYPE_UUID,
+		    AttributeTypeEnum.CONCEPT);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);
@@ -32,7 +38,8 @@ public class AttributeTypeService2_2Test extends AttributeTypeService1_11Test {
 	public void getAttributeTypeByUuid_shouldGetProgramAttributeType() {
 		// Setup
 		Context.getProgramWorkflowService().saveProgramAttributeType(createProgramAttributeType());
-		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(PROGRAM_ATT_TYPE_UUID, AttributeType.PROGRAM);
+		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(PROGRAM_ATT_TYPE_UUID,
+		    AttributeTypeEnum.PROGRAM);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);
@@ -45,7 +52,7 @@ public class AttributeTypeService2_2Test extends AttributeTypeService1_11Test {
 		// Setup
 		Context.getConceptService().saveConceptAttributeType(createConceptAttributeType());
 		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByName("Test Concept AttributeType",
-		    AttributeType.CONCEPT);
+		    AttributeTypeEnum.CONCEPT);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);
@@ -58,7 +65,7 @@ public class AttributeTypeService2_2Test extends AttributeTypeService1_11Test {
 		// Setup
 		Context.getProgramWorkflowService().saveProgramAttributeType(createProgramAttributeType());
 		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByName("Test Program AttributeType",
-		    AttributeType.PROGRAM);
+		    AttributeTypeEnum.PROGRAM);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);

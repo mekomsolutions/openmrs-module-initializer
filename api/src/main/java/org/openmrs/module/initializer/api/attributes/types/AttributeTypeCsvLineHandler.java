@@ -6,7 +6,7 @@ import org.openmrs.module.initializer.api.CsvLine;
 @SuppressWarnings("rawtypes")
 public interface AttributeTypeCsvLineHandler {
 	
-	public AttributeType getAttributeType(CsvLine line);
+	public AttributeTypeEnum getAttributeType(CsvLine line);
 	
 	public BaseAttributeType newAttributeType(CsvLine line);
 }

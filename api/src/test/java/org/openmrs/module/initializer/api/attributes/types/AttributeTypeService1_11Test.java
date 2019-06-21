@@ -59,7 +59,7 @@ public class AttributeTypeService1_11Test extends BaseModuleContextSensitiveTest
 		// Setup
 		service.saveAttributeType(createLocationAttributeType());
 		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(LOCATION_ATT_TYPE_UUID,
-		    AttributeType.LOCATION);
+		    AttributeTypeEnum.LOCATION);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);
@@ -71,7 +71,7 @@ public class AttributeTypeService1_11Test extends BaseModuleContextSensitiveTest
 	public void getAttributeTypeByUuid_shouldGetVisitAttributeType() {
 		// Setup
 		service.saveAttributeType(createVisitAttributeType());
-		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(VISIT_ATT_TYPE_UUID, AttributeType.VISIT);
+		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(VISIT_ATT_TYPE_UUID, AttributeTypeEnum.VISIT);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);
@@ -84,7 +84,7 @@ public class AttributeTypeService1_11Test extends BaseModuleContextSensitiveTest
 		// Setup
 		service.saveAttributeType(createProviderAttributeType());
 		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(PROVIDER_ATT_TYPE_UUID,
-		    AttributeType.PROVIDER);
+		    AttributeTypeEnum.PROVIDER);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);
@@ -99,9 +99,9 @@ public class AttributeTypeService1_11Test extends BaseModuleContextSensitiveTest
 		service.saveAttributeType(createLocationAttributeType());
 		service.saveAttributeType(createProviderAttributeType());
 		
-		BaseAttributeType vat = service.getAttributeTypeByName("Another one", AttributeType.VISIT);
-		BaseAttributeType lat = service.getAttributeTypeByName("Facility Phone", AttributeType.LOCATION);
-		BaseAttributeType pat = service.getAttributeTypeByName("Test ProviderAttributeType", AttributeType.PROVIDER);
+		BaseAttributeType vat = service.getAttributeTypeByName("Another one", AttributeTypeEnum.VISIT);
+		BaseAttributeType lat = service.getAttributeTypeByName("Facility Phone", AttributeTypeEnum.LOCATION);
+		BaseAttributeType pat = service.getAttributeTypeByName("Test ProviderAttributeType", AttributeTypeEnum.PROVIDER);
 		
 		// Verif
 		Assert.assertNotNull(vat);

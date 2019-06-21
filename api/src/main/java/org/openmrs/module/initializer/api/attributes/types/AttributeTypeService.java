@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer.api.attributes.types;
 
-import java.util.List;
+import java.util.Set;
 
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.attribute.BaseAttributeType;
@@ -23,23 +23,23 @@ public interface AttributeTypeService extends OpenmrsService {
 	 * Gets an <code>AttributeType</code> by uuid.
 	 * 
 	 * @param uuid of AttributeType
-	 * @param attributeType the required {@link AttributeType}
+	 * @param attributeType the required {@link AttributeTypeEnum}
 	 * @return attributeType
 	 */
-	public BaseAttributeType getAttributeTypeByUuid(String uuid, AttributeType attributeType);
+	public BaseAttributeType getAttributeTypeByUuid(String uuid, AttributeTypeEnum attributeType);
 	
 	/**
 	 * Gets an <code>AttributeType</code> by name.
 	 * 
 	 * @param name of AttributeType
-	 * @param attributeType the required {@link AttributeType}
+	 * @param attributeType the required {@link AttributeTypeEnum}
 	 * @return attributeType
 	 */
-	public BaseAttributeType getAttributeTypeByName(String name, AttributeType attributeType);
+	public BaseAttributeType getAttributeTypeByName(String name, AttributeTypeEnum attributeType);
 	
 	/**
-	 * @return list of supported {@link AttributeType} names.
+	 * @return The set of supported {@link AttributeTypeEnum}.
 	 */
-	public List<String> getSupportedTypes();
+	public Set<AttributeTypeEnum> getSupportedTypes();
 	
 }

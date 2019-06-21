@@ -11,16 +11,16 @@ import org.openmrs.module.initializer.api.CsvLine;
 public class AttributeTypeCsvLineHandlerImpl1_11 implements AttributeTypeCsvLineHandler {
 	
 	@Override
-	public AttributeType getAttributeType(CsvLine line) {
+	public AttributeTypeEnum getAttributeType(CsvLine line) {
 		String attributeDomain = line.getString(BaseAttributeTypeLineProcessor.HEADER_DOMAIN);
-		if (AttributeType.LOCATION.toString().equalsIgnoreCase(attributeDomain)) {
-			return AttributeType.LOCATION;
+		if (AttributeTypeEnum.LOCATION.toString().equalsIgnoreCase(attributeDomain)) {
+			return AttributeTypeEnum.LOCATION;
 		}
-		if (AttributeType.VISIT.toString().equalsIgnoreCase(attributeDomain)) {
-			return AttributeType.VISIT;
+		if (AttributeTypeEnum.VISIT.toString().equalsIgnoreCase(attributeDomain)) {
+			return AttributeTypeEnum.VISIT;
 		}
-		if (AttributeType.PROVIDER.toString().equalsIgnoreCase(attributeDomain)) {
-			return AttributeType.PROVIDER;
+		if (AttributeTypeEnum.PROVIDER.toString().equalsIgnoreCase(attributeDomain)) {
+			return AttributeTypeEnum.PROVIDER;
 		}
 		throw new IllegalArgumentException(
 		        "No attribute type domain could be guessed from the CSV line: '" + line.toString() + "'.");
@@ -29,7 +29,7 @@ public class AttributeTypeCsvLineHandlerImpl1_11 implements AttributeTypeCsvLine
 	@SuppressWarnings("rawtypes")
 	@Override
 	public BaseAttributeType newAttributeType(CsvLine line) {
-		AttributeType type = getAttributeType(line);
+		AttributeTypeEnum type = getAttributeType(line);
 		switch (type) {
 			case LOCATION:
 				return new LocationAttributeType();
