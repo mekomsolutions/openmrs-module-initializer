@@ -5,6 +5,7 @@ import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@SuppressWarnings("rawtypes")
 @Component
 public class AttributeTypeLoader extends BaseCsvLoader<BaseAttributeType, AttributeTypeCsvParser> {
 	
@@ -12,5 +13,4 @@ public class AttributeTypeLoader extends BaseCsvLoader<BaseAttributeType, Attrib
 	public void setParser(AttributeTypeCsvParser parser) {
 		this.parser = parser;
 	}
-	
 }

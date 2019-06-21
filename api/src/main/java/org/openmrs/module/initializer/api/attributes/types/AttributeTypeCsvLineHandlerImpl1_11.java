@@ -8,24 +8,25 @@ import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.CsvLine;
 
 @OpenmrsProfile(openmrsPlatformVersion = "[1.11.9 - 2.1.*]")
-public class AttributeTypeLineProcessorCompatibiltyHandler1_11_9 implements AttributeTypeLineProcessorCompatibilty {
+public class AttributeTypeCsvLineHandlerImpl1_11 implements AttributeTypeCsvLineHandler {
 	
 	@Override
 	public AttributeType getAttributeType(CsvLine line) {
 		String attributeDomain = line.getString(BaseAttributeTypeLineProcessor.HEADER_DOMAIN);
-		if (attributeDomain.equalsIgnoreCase(AttributeType.LOCATION.toString())) {
+		if (AttributeType.LOCATION.toString().equalsIgnoreCase(attributeDomain)) {
 			return AttributeType.LOCATION;
 		}
-		if (attributeDomain.equalsIgnoreCase(AttributeType.VISIT.toString())) {
+		if (AttributeType.VISIT.toString().equalsIgnoreCase(attributeDomain)) {
 			return AttributeType.VISIT;
 		}
-		if (attributeDomain.equalsIgnoreCase(AttributeType.PROVIDER.toString())) {
+		if (AttributeType.PROVIDER.toString().equalsIgnoreCase(attributeDomain)) {
 			return AttributeType.PROVIDER;
 		}
 		throw new IllegalArgumentException(
-		        "No Attribute type could be guessed from the CSV line: '" + line.toString() + "'.");
+		        "No attribute type domain could be guessed from the CSV line: '" + line.toString() + "'.");
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public BaseAttributeType newAttributeType(CsvLine line) {
 		AttributeType type = getAttributeType(line);
@@ -38,7 +39,7 @@ public class AttributeTypeLineProcessorCompatibiltyHandler1_11_9 implements Attr
 				return new ProviderAttributeType();
 			default:
 				throw new IllegalArgumentException(
-				        "No Attribute type could be guessed from the CSV line: '" + line.toString() + "'.");
+				        "No attribute type could be guessed from the CSV line: '" + line.toString() + "'.");
 		}
 	}
 	

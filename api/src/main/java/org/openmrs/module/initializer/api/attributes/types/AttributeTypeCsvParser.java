@@ -7,21 +7,16 @@ import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@SuppressWarnings("rawtypes")
 @Component
 public class AttributeTypeCsvParser extends CsvParser<BaseAttributeType, BaseLineProcessor<BaseAttributeType>> {
 	
-	private AttributeTypeServiceCompatibility service;
+	private AttributeTypeService service;
 	
 	@Autowired
-	public AttributeTypeCsvParser(AttributeTypeServiceCompatibility service, BaseAttributeTypeLineProcessor lineProcessor) {
-		super(lineProcessor);
+	public AttributeTypeCsvParser(AttributeTypeService service, BaseAttributeTypeLineProcessor processor) {
+		super(processor);
 		this.service = service;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	@Override
-	protected BaseAttributeType save(BaseAttributeType instance) {
-		return service.saveAttributeType(instance);
 	}
 	
 	@Override
@@ -29,4 +24,8 @@ public class AttributeTypeCsvParser extends CsvParser<BaseAttributeType, BaseLin
 		return Domain.ATTRIBUTE_TYPES;
 	}
 	
+	@Override
+	protected BaseAttributeType save(BaseAttributeType instance) {
+		return service.saveAttributeType(instance);
+	}
 }

@@ -11,7 +11,7 @@ import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AttributeTypeServiceHandler1_11_9Test extends BaseModuleContextSensitiveTest {
+public class AttributeTypeService1_11Test extends BaseModuleContextSensitiveTest {
 	
 	private final static String LOCATION_ATT_TYPE_UUID = "0bb29984-3193-11e7-93ae-92367f002671";
 	
@@ -20,7 +20,7 @@ public class AttributeTypeServiceHandler1_11_9Test extends BaseModuleContextSens
 	private final static String PROVIDER_ATT_TYPE_UUID = "75caHf4e-709f-4bb8-8289-2f9bUDJ3803M";
 	
 	@Autowired
-	public AttributeTypeServiceCompatibility service;
+	public AttributeTypeService service;
 	
 	@Test
 	public void saveAttributeType_shouldSaveLocationAttributeType() {

@@ -25,11 +25,19 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 	
 	public static String HEADER_DOMAIN = "domain";
 	
-	@Autowired
-	private AttributeTypeLineProcessorCompatibilty handler;
+	private AttributeTypeCsvLineHandler handler;
+	
+	private AttributeTypeService service;
 	
 	@Autowired
-	private AttributeTypeServiceCompatibility service;
+	public void setHandler(AttributeTypeCsvLineHandler handler) {
+		this.handler = handler;
+	}
+	
+	@Autowired
+	public void setService(AttributeTypeService service) {
+		this.service = service;
+	}
 	
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -65,14 +73,6 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 		instance.setHandlerConfig(line.getString(HEADER_HANDLER_CONFIG));
 		
 		return instance;
-	}
-	
-	public void setHandler(AttributeTypeLineProcessorCompatibilty handler) {
-		this.handler = handler;
-	}
-	
-	public void setService(AttributeTypeServiceCompatibility service) {
-		this.service = service;
 	}
 	
 }

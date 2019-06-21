@@ -5,21 +5,29 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.LocationAttributeType;
 import org.openmrs.ProviderAttributeType;
 import org.openmrs.VisitAttributeType;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.attribute.BaseAttributeType;
+import org.openmrs.module.initializer.InitializerLogFactory;
 
+@SuppressWarnings("rawtypes")
 @OpenmrsProfile(openmrsPlatformVersion = "[1.11.9 - 2.1.*]")
-public class AttributeTypeServiceHandler1_11_9 implements AttributeTypeServiceCompatibility {
+public class AttributeTypeServiceImpl1_11 implements AttributeTypeService {
 	
-	private final Log log = LogFactory.getLog(this.getClass());
+	private final Log log = InitializerLogFactory.getLog(this.getClass());
 	
 	@Override
-	@SuppressWarnings("rawtypes")
+	public void onShutdown() {
+	}
+	
+	@Override
+	public void onStartup() {
+	}
+	
+	@Override
 	public BaseAttributeType saveAttributeType(BaseAttributeType instance) {
 		if (instance == null) {
 			return null;
@@ -42,17 +50,6 @@ public class AttributeTypeServiceHandler1_11_9 implements AttributeTypeServiceCo
 	}
 	
 	@Override
-	public void onShutdown() {
-		
-	}
-	
-	@Override
-	public void onStartup() {
-		
-	}
-	
-	@Override
-	@SuppressWarnings("rawtypes")
 	public BaseAttributeType getAttributeTypeByUuid(String uuid, AttributeType attributeType) {
 		if (StringUtils.isEmpty(uuid) || attributeType == null) {
 			return null;

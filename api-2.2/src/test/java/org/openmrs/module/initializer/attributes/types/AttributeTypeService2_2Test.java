@@ -8,9 +8,9 @@ import org.openmrs.api.context.Context;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.module.initializer.api.attributes.types.AttributeType;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeServiceHandler1_11_9Test;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypeService1_11Test;
 
-public class AttributeTypeServiceHandler2_2Test extends AttributeTypeServiceHandler1_11_9Test {
+public class AttributeTypeService2_2Test extends AttributeTypeService1_11Test {
 	
 	private final static String CONCEPT_ATT_TYPE_UUID = "9eca4f4e-707f-4bb8-8289-2f9b6e93803c";
 	

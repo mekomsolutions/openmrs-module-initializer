@@ -15,15 +15,23 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.attributes.types.AttributeType;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeServiceCompatibility;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypeService;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.2.0")
-public class AttributeTypeServiceCompatibilityHandler2_2 implements AttributeTypeServiceCompatibility {
+@SuppressWarnings("rawtypes")
+@OpenmrsProfile(openmrsPlatformVersion = "[2.2.0 - 2.3.*]")
+public class AttributeTypeServiceImpl2_2 implements AttributeTypeService {
 	
 	private final Log log = LogFactory.getLog(this.getClass());
 	
 	@Override
-	@SuppressWarnings("rawtypes")
+	public void onShutdown() {
+	}
+	
+	@Override
+	public void onStartup() {
+	}
+	
+	@Override
 	public BaseAttributeType saveAttributeType(BaseAttributeType instance) {
 		if (instance == null) {
 			return null;
@@ -54,7 +62,6 @@ public class AttributeTypeServiceCompatibilityHandler2_2 implements AttributeTyp
 	}
 	
 	@Override
-	@SuppressWarnings("rawtypes")
 	public BaseAttributeType getAttributeTypeByUuid(String uuid, AttributeType attributeType) {
 		if (StringUtils.isEmpty(uuid) || attributeType == null) {
 			return null;
@@ -80,16 +87,6 @@ public class AttributeTypeServiceCompatibilityHandler2_2 implements AttributeTyp
 				        + " is not supported, here are the currently supported attribute types " + getSupportedTypes());
 				return null;
 		}
-	}
-	
-	@Override
-	public void onShutdown() {
-		
-	}
-	
-	@Override
-	public void onStartup() {
-		
 	}
 	
 	@Override

@@ -5,7 +5,11 @@ import java.util.List;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.attribute.BaseAttributeType;
 
-public interface AttributeTypeServiceCompatibility extends OpenmrsService {
+/**
+ * Proxy OpenMRS service to interface CRUD operations with attribute types.
+ */
+@SuppressWarnings("rawtypes")
+public interface AttributeTypeService extends OpenmrsService {
 	
 	/**
 	 * Saves an <code>AttributeType</code>

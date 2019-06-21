@@ -9,11 +9,11 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.attributes.types.AttributeType;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeLineProcessorCompatibilty;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypeCsvLineHandler;
 import org.openmrs.module.initializer.api.attributes.types.BaseAttributeTypeLineProcessor;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.2.0")
-public class AttributeTypeLineProcessorCompatibilty2_2 implements AttributeTypeLineProcessorCompatibilty {
+@OpenmrsProfile(openmrsPlatformVersion = "[2.2.0 - 2.3.*]")
+public class AttributeTypeCsvLineHandlerImpl2_2 implements AttributeTypeCsvLineHandler {
 	
 	@Override
 	public AttributeType getAttributeType(CsvLine line) {
