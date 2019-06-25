@@ -94,7 +94,7 @@ public class PrivilegesLoaderIntegrationTest extends DomainIntegrationTest {
 		}
 	}
 	
-	public void assertCsvRejectionLine(String file, String[] line) {
-		System.out.println("Overide the method");
+	protected void assertCsvRejectionLines(String filePath, List<String[]> lines) {
+		System.out.println("Run Csv rejection lines");
 	}
 }

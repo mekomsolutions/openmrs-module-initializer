@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -54,6 +55,15 @@ public abstract class DomainIntegrationTest extends BaseModuleContextSensitiveTe
 	 */
 	protected abstract Loader getLoader();
 	
+	/**
+	 * This method need to be override from domain tests which have rejection data
+	 * 
+	 * @return ArrayList of rejection data expected for each domain
+	 */
+	protected List<String[]> getRejectionData() {
+		return new ArrayList<String[]>();
+	};
+	
 	@Autowired
 	private InitializerService iniz;
 	
@@ -63,7 +73,7 @@ public abstract class DomainIntegrationTest extends BaseModuleContextSensitiveTe
 	
 	/*
 	 * pre-Spring loading setup for all integration tests
-	 * 
+	 *
 	 * We start all the conditional modules here.
 	 */
 	public DomainIntegrationTest() {
@@ -100,15 +110,12 @@ public abstract class DomainIntegrationTest extends BaseModuleContextSensitiveTe
 			List<File> rejectionCsvFiles = getFiles(domainPath, getExtensionFilenameFilter("csv"));
 			
 			if (!CollectionUtils.isEmpty(rejectionCsvFiles)) {
-				// assertCsvRejectionFiles(rejectionCsvFiles);
 				for (File rejectionFile : rejectionCsvFiles) {
 					CSVReader reader = null;
 					try {
 						reader = new CSVReader(new FileReader(rejectionFile));
 						List<String[]> allRows = reader.readAll();
-						for (int i = 1; i < allRows.size(); i++) {
-							assertCsvRejectionLine(domainPath, allRows.get(i));
-						}
+						assertCsvRejectionLines(getLoader().getDomainName() + rejectionFile.getName(), allRows);
 					}
 					catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -124,35 +131,23 @@ public abstract class DomainIntegrationTest extends BaseModuleContextSensitiveTe
 	}
 	
 	/**
-	 * This method should be overridden to assert the content of the rejection CSV files, if any.
+	 * This method will rejection file has expected rejection data.
 	 * 
-	 * @param rejectionCsvFiles The list of rejection CSV files.
+	 * @param filePath The rejection file path.
+	 * @param lines The rejection lines in domain rejection file.
 	 */
-	protected void assertCsvRejectionFiles(List<File> rejectionCsvFiles) {
-		log.error("A number of rejection CSV files have been created and are not being asserted yet.");
-		for (File file : rejectionCsvFiles) {
-			log.error(file.getAbsolutePath());
+	protected void assertCsvRejectionLines(String filePath, List<String[]> lines) {
+		
+		int rejectionDataCount = 0;
+		
+		for (int i = 1; i < lines.size(); i++) {
+			Assert.assertArrayEquals(getRejectionData().get(rejectionDataCount), lines.get(i));
+			rejectionDataCount = rejectionDataCount + 1;
 		}
 		
-		String thisMethodName = new Object() {}.getClass().getEnclosingMethod().getName();
-		
-		log.error("You must override the method '" + thisMethodName
-		        + "' in your test class and assert the lines of the CSV rejection files.");
-		
-		Assert.fail();
-	}
-	
-	protected void assertCsvRejectionLine(String filePath, String[] line) {
-		log.error("A number of rejection CSV files have been created and are not being asserted yet.");
-		for (String string : line) {
-			log.error(filePath);
+		if (rejectionDataCount < getRejectionData().size() - 1) {
+			log.error("rejection file didn't have all expected rejection data in domain" + filePath);
+			Assert.fail();
 		}
-		
-		String thisMethodName = new Object() {}.getClass().getEnclosingMethod().getName();
-		
-		log.error("You must override the method '" + thisMethodName
-		        + "' in your test class and assert the lines of the CSV rejection files.");
-		
-		Assert.fail();
 	}
 }

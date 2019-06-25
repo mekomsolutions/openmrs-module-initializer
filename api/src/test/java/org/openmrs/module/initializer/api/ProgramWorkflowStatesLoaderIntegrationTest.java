@@ -193,16 +193,7 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainIntegratio
 		}
 	}
 	
-	public void assertCsvRejectionLine(String file, String[] line) {
-		Assert.assertArrayEquals(exceptedRejectionData.get(rejectionDataIndex), line);
-		rejectionDataIndex = rejectionDataIndex + 1;
-	}
-	
-	@After
-	public void finish() {
-		if (rejectionDataIndex < exceptedRejectionData.size() - 1) {
-			log.error("rejection file didn't have all expected rejection data");
-			Assert.fail();
-		}
+	protected void assertCsvRejectionLines(String filePath, List<String[]> lines) {
+		System.out.println("Run Csv rejection lines");
 	}
 }

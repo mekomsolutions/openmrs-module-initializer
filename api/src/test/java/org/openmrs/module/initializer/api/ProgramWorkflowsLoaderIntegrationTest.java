@@ -44,7 +44,18 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainIntegrationTest
 		return loader;
 	}
 	
-	public static List<String[]> exceptedRejectionData = new ArrayList();
+	public static List<String[]> exceptedRejectionData = new ArrayList<String[]>() {
+		
+		{
+			add(new String[] { "2b98bc76-245c-11e1-9cf0-00248140a5ee", "", "eae98b4c-e195-403b-b34a-82d94103b2c0",
+			        "Standard Treatment Status (workflow)" });
+		}
+	};
+	
+	@Override
+	protected List<String[]> getRejectionData() {
+		return exceptedRejectionData;
+	}
 	
 	public static int rejectionDataIndex = 0;
 	
@@ -125,9 +136,7 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainIntegrationTest
 			prog.addWorkflow(wf);
 			pws.saveProgram(prog);
 		}
-		
-		exceptedRejectionData.add(new String[] { "2b98bc76-245c-11e1-9cf0-00248140a5ee", "",
-		        "eae98b4c-e195-403b-b34a-82d94103b2c0", "Standard Treatment Status (workflow)" });
+
 	}
 	
 	@Before
@@ -186,19 +195,6 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainIntegrationTest
 			wf = prog.getWorkflowByName("Electroshock (workflow)");
 			Assert.assertFalse(prog.getWorkflows().contains(wf));
 			Assert.assertTrue(prog.getAllWorkflows().contains(wf));
-		}
-	}
-	
-	public void assertCsvRejectionLine(String file, String[] line) {
-		Assert.assertArrayEquals(exceptedRejectionData.get(rejectionDataIndex), line);
-		rejectionDataIndex = rejectionDataIndex + 1;
-	}
-	
-	@After
-	public void finish() {
-		if (rejectionDataIndex < exceptedRejectionData.size() - 1) {
-			log.error("rejection file didn't have all expected rejection data");
-			Assert.fail();
 		}
 	}
 }
