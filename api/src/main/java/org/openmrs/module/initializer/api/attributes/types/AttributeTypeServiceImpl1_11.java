@@ -111,56 +111,70 @@ public class AttributeTypeServiceImpl1_11 implements AttributeTypeService {
 	/**
 	 * To be overridden and extended by subclasses.
 	 */
-	protected BaseAttributeType getByUuid(String uuid, AttributeTypeEnum attributeType) {
+	protected BaseAttributeType getByUuid(String uuid, AttributeTypeEnum typeEnum) {
 		
-		switch (attributeType) {
+		BaseAttributeType attType = null;
+		
+		switch (typeEnum) {
 			case LOCATION:
-				return Context.getLocationService().getLocationAttributeTypeByUuid(uuid);
+				attType = Context.getLocationService().getLocationAttributeTypeByUuid(uuid);
+				break;
 			
 			case VISIT:
-				return Context.getVisitService().getVisitAttributeTypeByUuid(uuid);
+				attType = Context.getVisitService().getVisitAttributeTypeByUuid(uuid);
+				break;
 			
 			case PROVIDER:
-				return Context.getProviderService().getProviderAttributeTypeByUuid(uuid);
+				attType = Context.getProviderService().getProviderAttributeTypeByUuid(uuid);
+				break;
 			
 			default:
-				return null;
+				;
 		}
+		
+		return attType;
 	}
 	
 	/**
 	 * To be overridden and extended by subclasses.
 	 */
-	protected BaseAttributeType getByName(String name, AttributeTypeEnum attributeType) {
-		switch (attributeType) {
+	protected BaseAttributeType getByName(String name, AttributeTypeEnum typeEnum) {
+		
+		BaseAttributeType attType = null;
+		
+		switch (typeEnum) {
 			case LOCATION:
-				return Context.getLocationService().getLocationAttributeTypeByName(name);
+				attType = Context.getLocationService().getLocationAttributeTypeByName(name);
+				break;
 			
 			case VISIT:
-				List<VisitAttributeType> existingVisitAttTypes = Context.getVisitService().getAllVisitAttributeTypes();
-				if (existingVisitAttTypes != null) {
-					for (VisitAttributeType candidate : existingVisitAttTypes) {
-						if (candidate.getName().equals(name)) {
-							return candidate;
+				List<VisitAttributeType> visitAttTypes = Context.getVisitService().getAllVisitAttributeTypes();
+				if (visitAttTypes != null) {
+					for (VisitAttributeType candidate : visitAttTypes) {
+						if (name.equals(candidate.getName())) {
+							attType = candidate;
+							break; // for loop
 						}
 					}
 				}
-				return null;
+				break;
 			
 			case PROVIDER:
-				List<ProviderAttributeType> existingProvAttTypes = Context.getProviderService()
-				        .getAllProviderAttributeTypes();
-				if (existingProvAttTypes != null) {
-					for (ProviderAttributeType candidate : existingProvAttTypes) {
-						if (candidate.getName().equals(name)) {
-							return candidate;
+				List<ProviderAttributeType> providerAttTypes = Context.getProviderService().getAllProviderAttributeTypes();
+				if (providerAttTypes != null) {
+					for (ProviderAttributeType candidate : providerAttTypes) {
+						if (name.equals(candidate.getName())) {
+							attType = candidate;
+							break; // for loop
 						}
 					}
 				}
-				return null;
+				break;
 			
 			default:
-				return null;
+				;
 		}
+		
+		return attType;
 	}
 }

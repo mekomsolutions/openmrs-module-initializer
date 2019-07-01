@@ -41,44 +41,54 @@ public class AttributeTypeServiceImpl2_2 extends AttributeTypeServiceImpl1_11 {
 	}
 	
 	@Override
-	protected BaseAttributeType getByUuid(String uuid, AttributeTypeEnum attributeType) {
+	protected BaseAttributeType getByUuid(String uuid, AttributeTypeEnum typeEnum) {
 		
-		switch (attributeType) {
+		BaseAttributeType attType = super.getByUuid(uuid, typeEnum);
+		
+		switch (typeEnum) {
 			case CONCEPT:
-				return Context.getConceptService().getConceptAttributeTypeByUuid(uuid);
+				attType = Context.getConceptService().getConceptAttributeTypeByUuid(uuid);
+				break;
 			
 			case PROGRAM:
-				return Context.getProgramWorkflowService().getProgramAttributeTypeByUuid(uuid);
+				attType = Context.getProgramWorkflowService().getProgramAttributeTypeByUuid(uuid);
+				break;
 			
 			default:
-				return null;
+				;
 		}
+		
+		return attType;
 	}
 	
 	@Override
 	protected BaseAttributeType getByName(String name, AttributeTypeEnum typeEnum) {
+		
+		BaseAttributeType attType = super.getByName(name, typeEnum);
+		
 		switch (typeEnum) {
 			case CONCEPT:
-				return Context.getConceptService().getConceptAttributeTypeByName(name);
+				attType = Context.getConceptService().getConceptAttributeTypeByName(name);
+				break;
 			
 			case PROGRAM:
-				List<ProgramAttributeType> existingProgAttType = Context.getProgramWorkflowService()
+				List<ProgramAttributeType> programAttTypes = Context.getProgramWorkflowService()
 				        .getAllProgramAttributeTypes();
-				if (existingProgAttType != null) {
-					for (ProgramAttributeType candidate : existingProgAttType) {
-						if (candidate.getName().equals(name)) {
-							return candidate;
+				if (programAttTypes != null) {
+					for (ProgramAttributeType candidate : programAttTypes) {
+						if (name.equals(candidate.getName())) {
+							attType = candidate;
+							break; // for loop
 						}
 					}
 				}
-				return null;
+				break;
 			
 			default:
-				log.info(getClass().getSimpleName() + " does not support the attribute type '" + typeEnum.toString()
-				        + "'. The supported attribute types for this implementation are '" + getSupportedTypes() + "'.");
-				
-				return null;
+				;
 		}
+		
+		return attType;
 	}
 	
 }
