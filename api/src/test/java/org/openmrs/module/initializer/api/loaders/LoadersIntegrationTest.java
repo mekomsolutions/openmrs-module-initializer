@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
+import org.openmrs.module.initializer.api.et.EncounterTypesLoader;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
@@ -75,6 +76,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private PrivilegesLoader privilegesLoader;
 	
 	@Autowired
+	private EncounterTypesLoader encounterTypesLoader;
+	
+	@Autowired
 	private RolesLoader rolesLoader;
 	
 	@Autowired
@@ -91,7 +95,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		count++;
 		Assert.assertThat(mdmLoader.getOrder(), lessThan(privilegesLoader.getOrder()));
 		count++;
-		Assert.assertThat(privilegesLoader.getOrder(), lessThan(rolesLoader.getOrder()));
+		Assert.assertThat(privilegesLoader.getOrder(), lessThan(encounterTypesLoader.getOrder()));
+		count++;
+		Assert.assertThat(encounterTypesLoader.getOrder(), lessThan(rolesLoader.getOrder()));
 		count++;
 		Assert.assertThat(rolesLoader.getOrder(), lessThan(gpLoader.getOrder()));
 		count++;

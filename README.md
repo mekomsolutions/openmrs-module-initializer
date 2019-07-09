@@ -16,6 +16,7 @@ configuration/
   ├── addresshierarchy/
   ├── concepts/
   ├── drugs/
+  ├── encountertypes/
   ├── globalproperties/
   ├── idgen/
   ├── jsonkeyvalues/
@@ -49,6 +50,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
 1. [Metadata Mappings (CSV files)](readme/mdm.md)
 1. [Privileges (CSV files)](readme/priv.md)
+1. [Encounter Types (CSV files)](readme/et.md)
 1. [Roles (CSV files)](readme/roles.md)
 1. [Global properties (XML files)](readme/globalproperties.md)
 1. [Locations (CSV files)](readme/loc.md)
@@ -83,23 +85,24 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 
 #### Version 1.2.0
 * Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
-* Bulk creation and edition of programs provided through CSV files in  **configuration/programs**.
-* Bulk creation and edition of program workflows provided through CSV files in  **configuration/programworkflows**.
-* Bulk creation and edition of program workflow states provided through CSV files in  **configuration/programworkflowstates**.
-* Bulk creation and edition of privileges provided through CSV files in  **configuration/privileges**.
-* Bulk creation and edition of roles provided through CSV files in  **configuration/roles**.
-* Bulk creation and edition of metadata terms mappings provided through CSV files in  **configuration/metadatamappings**.
+* Bulk creation and edition of programs provided through CSV files in **configuration/programs**.
+* Bulk creation and edition of program workflows provided through CSV files in **configuration/programworkflows**.
+* Bulk creation and edition of program workflow states provided through CSV files in **configuration/programworkflowstates**.
+* Bulk creation and edition of privileges provided through CSV files in **configuration/privileges**.
+* Bulk creation and edition of roles provided through CSV files in **configuration/roles**.
+* Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatamappings**.
+* Bulk creation and edition of encounter types provided through CSV files in **configuration/encountertypes**.
 
 #### Version 1.1.0
-* Bulk creation and edition of drugs provided through CSV files in  **configuration/locations**.
+* Bulk creation and edition of drugs provided through CSV files in **configuration/locations**.
 
 #### Version 1.0.1
 * Loads i18n messages files from **configuration/addresshierarchy** and **configuration/messageproperties**.
-* Bulk creation and edition of concepts provided through CSV files in  **configuration/concepts**.<br/>This covers: basic concepts, concepts with nested members or answers and concepts with multiple mappings.
-* Bulk creation and edition of drugs provided through CSV files in  **configuration/drugs**.
+* Bulk creation and edition of concepts provided through CSV files in **configuration/concepts**.<br/>This covers: basic concepts, concepts with nested members or answers and concepts with multiple mappings.
+* Bulk creation and edition of drugs provided through CSV files in **configuration/drugs**.
 * Overrides global properties provided through XML configuration files in **configuration/globalproperties**.
 * Modifies (retire) or create identifier sources through CSV files in **configuration/idgen**.
 * Exposes runtime key-values configuration parameters through JSON files in **configuration/jsonkeyvalues**.
-* Bulk creation and edition of person attribute types provided through CSV files in  **configuration/personattributetypes**.
+* Bulk creation and edition of person attribute types provided through CSV files in **configuration/personattributetypes**.
 * Imports MDS packages provided as .zip files in **configuration/metadatasharing**.
-* Bulk creation and edition of order frequencies provided through CSV files in  **configuration/orderfrequencies**.
+* Bulk creation and edition of order frequencies provided through CSV files in **configuration/orderfrequencies**.

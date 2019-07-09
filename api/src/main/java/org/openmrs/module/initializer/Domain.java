@@ -6,17 +6,18 @@ public enum Domain {
 	MDS(2, "metadatasharing"),
 	METADATA_MAPPINGS(3, "metadatamappings"),
 	PRIVILEGES(4, "privileges"),
-	ROLES(5, "roles"),
-	GLOBAL_PROPERTIES(6, "globalproperties"),
-	LOCATIONS(7, "locations"),
-	CONCEPTS(8, "concepts"),
-	PROGRAMS(9, "programs"),
-	PROGRAM_WORKFLOWS(10, "programworkflows"),
-	PROGRAM_WORKFLOW_STATES(11, "programworkflowstates"),
-	PERSON_ATTRIBUTE_TYPES(12, "personattributetypes"),
-	IDENTIFIER_SOURCES(13, "idgen"),
-	DRUGS(14, "drugs"),
-	ORDER_FREQUENCIES(15, "orderfrequencies");
+	ENCOUNTER_TYPES(5, "encountertypes"),
+	ROLES(6, "roles"),
+	GLOBAL_PROPERTIES(7, "globalproperties"),
+	LOCATIONS(8, "locations"),
+	CONCEPTS(9, "concepts"),
+	PROGRAMS(10, "programs"),
+	PROGRAM_WORKFLOWS(11, "programworkflows"),
+	PROGRAM_WORKFLOW_STATES(12, "programworkflowstates"),
+	PERSON_ATTRIBUTE_TYPES(13, "personattributetypes"),
+	IDENTIFIER_SOURCES(14, "idgen"),
+	DRUGS(15, "drugs"),
+	ORDER_FREQUENCIES(16, "orderfrequencies");
 	
 	private final int order;
 	
