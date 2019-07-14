@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.initializer;
 
+import java.util.Collection;
 import java.util.Locale;
 
 import org.junit.Assert;
@@ -16,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
+import org.openmrs.messagesource.PresentationMessage;
 
 public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -27,13 +29,13 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 	}
 	
 	@Test
-	public void refreshCache_shouldLoadMessageProperties() {
+	public void getCachedMessages_shouldLoadMessageProperties() {
 		
 		// Setup
 		MessageSourceService ms = Context.getMessageSourceService();
 		
 		// Replay
-		inizSrc.refreshCache();
+		inizSrc.getCachedMessages();
 		
 		// Working in fr
 		Context.setLocale(Locale.FRENCH);
@@ -47,5 +49,25 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 		    ms.getMessage("metadata.healthcenter.description"));
 		
 		Assert.assertEquals("Kingdom of Cambodia", ms.getMessage("addresshierarchy.cambodia"));
+	}
+	
+	@Test
+	public void getPresentations_shouldContainParentPresentations() {
+		// setup
+		int initSize = inizSrc.getPresentations().size();
+		MessageSourceService coreSrc = (MessageSourceService) applicationContext.getBean("messageSourceServiceTarget");
+		coreSrc.addPresentation(new PresentationMessage("helloWorld.692af26f1c07", Locale.ENGLISH, "Hello World!", null));
+		coreSrc.addPresentation(
+		    new PresentationMessage("helloWorld.692af26f1c07", Locale.FRENCH, "Bonjour le Monde !", null));
+		
+		// replay
+		Collection<PresentationMessage> allPres = inizSrc.getPresentations();
+		
+		// verify
+		Assert.assertEquals(initSize + 2, allPres.size());
+		Assert.assertEquals("Hello World!",
+		    Context.getMessageSourceService().getMessage("helloWorld.692af26f1c07", null, Locale.ENGLISH));
+		Assert.assertEquals("Bonjour le Monde !",
+		    Context.getMessageSourceService().getMessage("helloWorld.692af26f1c07", null, Locale.FRENCH));
 	}
 }

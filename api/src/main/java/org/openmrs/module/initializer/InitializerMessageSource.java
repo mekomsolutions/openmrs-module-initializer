@@ -30,7 +30,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -38,7 +37,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.messagesource.MutableMessageSource;
 import org.openmrs.messagesource.PresentationMessage;
@@ -62,7 +60,7 @@ import org.springframework.context.support.AbstractMessageSource;
  */
 public class InitializerMessageSource extends AbstractMessageSource implements MutableMessageSource, ApplicationContextAware {
 	
-	protected static final Log log = LogFactory.getLog(InitializerMessageSource.class);
+	protected static final Log log = InitializerLogFactory.getLog(InitializerMessageSource.class);
 	
 	private Map<Locale, PresentationMessageMap> cache = null;
 	
@@ -89,7 +87,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	}
 	
 	/**
-	 * @return the cached messages, merged from the custom source and the parent source
+	 * @return the cached messages, for this source only
 	 */
 	public synchronized Map<Locale, PresentationMessageMap> getCachedMessages() {
 		if (cache == null) {
@@ -99,37 +97,10 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	}
 	
 	/**
-	 * @return all message codes defined in the system
-	 */
-	public Set<String> getAllMessageCodes() {
-		return getAllMessagesByCode().keySet();
-	}
-	
-	/**
-	 * @return a Map from code to Map of Locale string to message
-	 */
-	public Map<String, Map<Locale, PresentationMessage>> getAllMessagesByCode() {
-		Map<String, Map<Locale, PresentationMessage>> ret = new TreeMap<String, Map<Locale, PresentationMessage>>();
-		Map<Locale, PresentationMessageMap> m = getCachedMessages();
-		for (Locale locale : m.keySet()) {
-			PresentationMessageMap pmm = m.get(locale);
-			for (String code : pmm.keySet()) {
-				Map<Locale, PresentationMessage> messagesForCode = ret.get(code);
-				if (messagesForCode == null) {
-					messagesForCode = new LinkedHashMap<Locale, PresentationMessage>();
-					ret.put(code, messagesForCode);
-				}
-				messagesForCode.put(locale, pmm.get(code));
-			}
-		}
-		return ret;
-	}
-	
-	/**
 	 * @param pm the presentation message to add to the cache
 	 * @param override if true, should override any existing message
 	 */
-	public void addPresentationMessageToCache(PresentationMessage pm, boolean override) {
+	protected void addPresentationMessageToCache(PresentationMessage pm, boolean override) {
 		PresentationMessageMap pmm = getCachedMessages().get(pm.getLocale());
 		if (pmm == null) {
 			pmm = new PresentationMessageMap(pm.getLocale());
@@ -143,7 +114,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	/**
 	 * Refreshes the cache, merged from the custom source and the parent source
 	 */
-	public synchronized void refreshCache() {
+	protected synchronized void refreshCache() {
 		
 		cache = new HashMap<Locale, PresentationMessageMap>();
 		setUseCodeAsDefaultMessage(true);
@@ -250,6 +221,10 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	@Override
 	public Collection<PresentationMessage> getPresentations() {
 		Collection<PresentationMessage> ret = new ArrayList<PresentationMessage>();
+		
+		MutableMessageSource parent = getMutableParentSource();
+		ret.addAll(parent.getPresentations());
+		
 		for (PresentationMessageMap pmm : getCachedMessages().values()) {
 			ret.addAll(pmm.values());
 		}
@@ -350,7 +325,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	/**
 	 * Convenience method to get the parent message source as a MutableMessageSource
 	 */
-	public MutableMessageSource getMutableParentSource() {
+	protected MutableMessageSource getMutableParentSource() {
 		return (MutableMessageSource) getParentMessageSource();
 	}
 	

@@ -80,7 +80,7 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 	public void refreshCache_shouldLoadAddressHierarchyMessages() throws IOException {
 		
 		// Replay
-		inizSrc.refreshCache();
+		inizSrc.getCachedMessages();
 		AddressConfigurationLoader.loadAddressConfiguration();
 		
 		AddressHierarchyService ahs = Context.getService(AddressHierarchyService.class);
