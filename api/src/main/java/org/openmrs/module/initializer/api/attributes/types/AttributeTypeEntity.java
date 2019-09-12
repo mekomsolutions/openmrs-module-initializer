@@ -2,7 +2,7 @@ package org.openmrs.module.initializer.api.attributes.types;
 
 import org.openmrs.LocationAttributeType;
 
-public enum AttributeTypeEnum {
+public enum AttributeTypeEntity {
 	LOCATION(LocationAttributeType.class.getSimpleName()),
 	VISIT(LocationAttributeType.class.getSimpleName()),
 	CONCEPT(LocationAttributeType.class.getSimpleName()),
@@ -11,7 +11,7 @@ public enum AttributeTypeEnum {
 	
 	private final String attTypeName;
 	
-	AttributeTypeEnum(String attTypeName) {
+	AttributeTypeEntity(String attTypeName) {
 		this.attTypeName = attTypeName;
 	}
 	

@@ -8,7 +8,7 @@ import org.openmrs.ProgramAttributeType;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.attribute.BaseAttributeType;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEnum;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeServiceImpl1_11;
 
 @SuppressWarnings("rawtypes")
@@ -16,10 +16,10 @@ import org.openmrs.module.initializer.api.attributes.types.AttributeTypeServiceI
 public class AttributeTypeServiceImpl2_2 extends AttributeTypeServiceImpl1_11 {
 	
 	@Override
-	public Set<AttributeTypeEnum> getSupportedTypes() {
-		Set<AttributeTypeEnum> types = super.getSupportedTypes();
-		types.add(AttributeTypeEnum.CONCEPT);
-		types.add(AttributeTypeEnum.PROGRAM);
+	public Set<AttributeTypeEntity> getSupportedTypes() {
+		Set<AttributeTypeEntity> types = super.getSupportedTypes();
+		types.add(AttributeTypeEntity.CONCEPT);
+		types.add(AttributeTypeEntity.PROGRAM);
 		return types;
 	}
 	
@@ -41,7 +41,7 @@ public class AttributeTypeServiceImpl2_2 extends AttributeTypeServiceImpl1_11 {
 	}
 	
 	@Override
-	protected BaseAttributeType getByUuid(String uuid, AttributeTypeEnum typeEnum) {
+	protected BaseAttributeType getByUuid(String uuid, AttributeTypeEntity typeEnum) {
 		
 		BaseAttributeType attType = super.getByUuid(uuid, typeEnum);
 		
@@ -62,7 +62,7 @@ public class AttributeTypeServiceImpl2_2 extends AttributeTypeServiceImpl1_11 {
 	}
 	
 	@Override
-	protected BaseAttributeType getByName(String name, AttributeTypeEnum typeEnum) {
+	protected BaseAttributeType getByName(String name, AttributeTypeEntity typeEnum) {
 		
 		BaseAttributeType attType = super.getByName(name, typeEnum);
 		

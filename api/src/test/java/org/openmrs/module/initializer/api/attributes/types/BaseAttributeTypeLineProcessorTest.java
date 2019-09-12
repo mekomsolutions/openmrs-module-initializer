@@ -18,7 +18,7 @@ public class BaseAttributeTypeLineProcessorTest extends BaseModuleContextSensiti
 	@Test
 	public void fill_shouldParseABaseAttributeType() {
 		// Setup
-		String[] headerLine = { "Name", "Description", "Min occurs", "Max occurs", "Datatype classname", "Domain" };
+		String[] headerLine = { "Name", "Description", "Min occurs", "Max occurs", "Datatype classname", "Entity" };
 		String[] line = { "Facility phone", "Some description..", "0", "5",
 		        "org.openmrs.customdatatype.datatype.FreeTextDatatype", "Location" };
 		
@@ -35,7 +35,7 @@ public class BaseAttributeTypeLineProcessorTest extends BaseModuleContextSensiti
 	@Test
 	public void bootstrap_shouldBootstrapLocationAttributeType() {
 		// Setup
-		String[] headerLine = { "uuid", "Name", "Description", "Domain" };
+		String[] headerLine = { "uuid", "Name", "Description", "Entity" };
 		String[] line = { "0bb29984-3193-11e7-93ae-92367f002671", "Facility phone", "Some description..", "Location" };
 		
 		// Replay
@@ -49,7 +49,7 @@ public class BaseAttributeTypeLineProcessorTest extends BaseModuleContextSensiti
 	@Test
 	public void bootstrap_shouldBootstrapVisitAttributeType() {
 		// Setup
-		String[] headerLine = { "uuid", "Name", "Description", "Domain" };
+		String[] headerLine = { "uuid", "Name", "Description", "Entity" };
 		String[] line = { "0bb29984-3193-11e7-93ae-92367f002671", "Visit Reason", "Some description..", "Visit" };
 		
 		// Replay
@@ -62,7 +62,7 @@ public class BaseAttributeTypeLineProcessorTest extends BaseModuleContextSensiti
 	@Test
 	public void bootstrap_shouldBootstrapProviderAttributeType() {
 		// Setup
-		String[] headerLine = { "uuid", "Name", "Description", "Domain" };
+		String[] headerLine = { "uuid", "Name", "Description", "Entity" };
 		String[] line = { "0bb29984-3193-11e7-93ae-92367f002671", "Provider perception", "Some description..", "Provider" };
 		
 		// Replay
@@ -76,7 +76,7 @@ public class BaseAttributeTypeLineProcessorTest extends BaseModuleContextSensiti
 	@Test(expected = IllegalArgumentException.class)
 	public void bootstrap_shouldFailWhenDomainIsNotSupported() {
 		// Setup
-		String[] headerLine = { "uuid", "Name", "Description", "Domain" };
+		String[] headerLine = { "uuid", "Name", "Description", "Entity" };
 		String[] line = { "0bb29984-3193-11e7-93ae-92367f002671", "Facility phone", "Some description..", "Patient" };
 		
 		// Replay

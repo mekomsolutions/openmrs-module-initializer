@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api.attributes.types;
 
-import static org.openmrs.module.initializer.api.attributes.types.AttributeTypeEnum.LOCATION;
-import static org.openmrs.module.initializer.api.attributes.types.AttributeTypeEnum.PROVIDER;
-import static org.openmrs.module.initializer.api.attributes.types.AttributeTypeEnum.VISIT;
+import static org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity.LOCATION;
+import static org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity.PROVIDER;
+import static org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity.VISIT;
 
 import org.openmrs.LocationAttributeType;
 import org.openmrs.ProviderAttributeType;
@@ -15,9 +15,9 @@ import org.openmrs.module.initializer.api.CsvLine;
 public class AttributeTypeCsvLineHandlerImpl1_11 implements AttributeTypeCsvLineHandler {
 	
 	@Override
-	final public AttributeTypeEnum getAttributeType(CsvLine line) {
-		String attributeDomain = line.getString(BaseAttributeTypeLineProcessor.HEADER_DOMAIN);
-		AttributeTypeEnum type = getType(attributeDomain);
+	final public AttributeTypeEntity getAttributeType(CsvLine line) {
+		String attributeDomain = line.getString(BaseAttributeTypeLineProcessor.HEADER_ENTITY);
+		AttributeTypeEntity type = getType(attributeDomain);
 		if (type == null) {
 			throw new IllegalArgumentException(
 			        "No attribute type domain could be guessed from the CSV line: '" + line.toString() + "'.");
@@ -28,7 +28,7 @@ public class AttributeTypeCsvLineHandlerImpl1_11 implements AttributeTypeCsvLine
 	@SuppressWarnings("rawtypes")
 	@Override
 	final public BaseAttributeType newAttributeType(CsvLine line) {
-		AttributeTypeEnum type = getAttributeType(line);
+		AttributeTypeEntity type = getAttributeType(line);
 		BaseAttributeType attType = newType(type);
 		if (attType == null) {
 			throw new IllegalArgumentException(
@@ -40,9 +40,9 @@ public class AttributeTypeCsvLineHandlerImpl1_11 implements AttributeTypeCsvLine
 	/**
 	 * To be overridden and extended by subclasses.
 	 */
-	protected AttributeTypeEnum getType(String attributeDomain) {
+	protected AttributeTypeEntity getType(String attributeDomain) {
 		
-		AttributeTypeEnum type = null;
+		AttributeTypeEntity type = null;
 		
 		if (LOCATION.toString().equalsIgnoreCase(attributeDomain)) {
 			type = LOCATION;
@@ -60,7 +60,7 @@ public class AttributeTypeCsvLineHandlerImpl1_11 implements AttributeTypeCsvLine
 	 * To be overridden and extended by subclasses.
 	 */
 	@SuppressWarnings("rawtypes")
-	protected BaseAttributeType newType(AttributeTypeEnum type) {
+	protected BaseAttributeType newType(AttributeTypeEntity type) {
 		
 		BaseAttributeType attType = null;
 		

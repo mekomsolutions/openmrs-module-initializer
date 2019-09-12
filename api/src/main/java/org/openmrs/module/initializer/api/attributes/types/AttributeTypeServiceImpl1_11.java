@@ -29,11 +29,11 @@ public class AttributeTypeServiceImpl1_11 implements AttributeTypeService {
 	}
 	
 	@Override
-	public Set<AttributeTypeEnum> getSupportedTypes() {
-		Set<AttributeTypeEnum> types = new HashSet<AttributeTypeEnum>();
-		types.add(AttributeTypeEnum.LOCATION);
-		types.add(AttributeTypeEnum.VISIT);
-		types.add(AttributeTypeEnum.PROVIDER);
+	public Set<AttributeTypeEntity> getSupportedTypes() {
+		Set<AttributeTypeEntity> types = new HashSet<AttributeTypeEntity>();
+		types.add(AttributeTypeEntity.LOCATION);
+		types.add(AttributeTypeEntity.VISIT);
+		types.add(AttributeTypeEntity.PROVIDER);
 		return types;
 	}
 	
@@ -56,7 +56,7 @@ public class AttributeTypeServiceImpl1_11 implements AttributeTypeService {
 	}
 	
 	@Override
-	public final BaseAttributeType getAttributeTypeByUuid(String uuid, AttributeTypeEnum typeEnum) {
+	public final BaseAttributeType getAttributeTypeByUuid(String uuid, AttributeTypeEntity typeEnum) {
 		if (StringUtils.isEmpty(uuid) || typeEnum == null) {
 			return null;
 		}
@@ -72,7 +72,7 @@ public class AttributeTypeServiceImpl1_11 implements AttributeTypeService {
 	}
 	
 	@Override
-	public final BaseAttributeType getAttributeTypeByName(String name, AttributeTypeEnum typeEnum) {
+	public final BaseAttributeType getAttributeTypeByName(String name, AttributeTypeEntity typeEnum) {
 		if (StringUtils.isEmpty(name) || typeEnum == null) {
 			return null;
 		}
@@ -111,7 +111,7 @@ public class AttributeTypeServiceImpl1_11 implements AttributeTypeService {
 	/**
 	 * To be overridden and extended by subclasses.
 	 */
-	protected BaseAttributeType getByUuid(String uuid, AttributeTypeEnum typeEnum) {
+	protected BaseAttributeType getByUuid(String uuid, AttributeTypeEntity typeEnum) {
 		
 		BaseAttributeType attType = null;
 		
@@ -138,7 +138,7 @@ public class AttributeTypeServiceImpl1_11 implements AttributeTypeService {
 	/**
 	 * To be overridden and extended by subclasses.
 	 */
-	protected BaseAttributeType getByName(String name, AttributeTypeEnum typeEnum) {
+	protected BaseAttributeType getByName(String name, AttributeTypeEntity typeEnum) {
 		
 		BaseAttributeType attType = null;
 		

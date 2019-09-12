@@ -23,23 +23,23 @@ public interface AttributeTypeService extends OpenmrsService {
 	 * Gets an <code>AttributeType</code> by uuid.
 	 * 
 	 * @param uuid of AttributeType
-	 * @param attributeType the required {@link AttributeTypeEnum}
+	 * @param attributeType the required {@link AttributeTypeEntity}
 	 * @return attributeType
 	 */
-	public BaseAttributeType getAttributeTypeByUuid(String uuid, AttributeTypeEnum attributeType);
+	public BaseAttributeType getAttributeTypeByUuid(String uuid, AttributeTypeEntity attributeType);
 	
 	/**
 	 * Gets an <code>AttributeType</code> by name.
 	 * 
 	 * @param name of AttributeType
-	 * @param attributeType the required {@link AttributeTypeEnum}
+	 * @param attributeType the required {@link AttributeTypeEntity}
 	 * @return attributeType
 	 */
-	public BaseAttributeType getAttributeTypeByName(String name, AttributeTypeEnum attributeType);
+	public BaseAttributeType getAttributeTypeByName(String name, AttributeTypeEntity attributeType);
 	
 	/**
-	 * @return The set of supported {@link AttributeTypeEnum}.
+	 * @return The set of supported {@link AttributeTypeEntity}.
 	 */
-	public Set<AttributeTypeEnum> getSupportedTypes();
+	public Set<AttributeTypeEntity> getSupportedTypes();
 	
 }

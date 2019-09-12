@@ -23,7 +23,7 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 	
 	protected static String HEADER_HANDLER_CONFIG = "handler config";
 	
-	public static String HEADER_DOMAIN = "domain";
+	public static String HEADER_ENTITY = "entity";
 	
 	private AttributeTypeCsvLineHandler handler;
 	

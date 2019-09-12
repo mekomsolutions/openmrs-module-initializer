@@ -8,11 +8,11 @@ import org.openmrs.VisitAttributeType;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest2_2;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AttributeTypeLoaderTest extends DomainBaseModuleContextSensitiveTest {
+public class AttributeTypeLoaderTest extends DomainBaseModuleContextSensitiveTest2_2 {
 	
 	@Autowired
 	private AttributeTypeLoader loader;

@@ -7,7 +7,7 @@ import org.openmrs.ProgramAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.customdatatype.datatype.FreeTextDatatype;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEnum;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class AttributeTypeService2_2Test extends BaseModuleContextSensitiveTest 
 		// Setup
 		Context.getConceptService().saveConceptAttributeType(createConceptAttributeType());
 		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(CONCEPT_ATT_TYPE_UUID,
-		    AttributeTypeEnum.CONCEPT);
+		    AttributeTypeEntity.CONCEPT);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);
@@ -39,7 +39,7 @@ public class AttributeTypeService2_2Test extends BaseModuleContextSensitiveTest 
 		// Setup
 		Context.getProgramWorkflowService().saveProgramAttributeType(createProgramAttributeType());
 		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(PROGRAM_ATT_TYPE_UUID,
-		    AttributeTypeEnum.PROGRAM);
+		    AttributeTypeEntity.PROGRAM);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);
@@ -52,7 +52,7 @@ public class AttributeTypeService2_2Test extends BaseModuleContextSensitiveTest 
 		// Setup
 		Context.getConceptService().saveConceptAttributeType(createConceptAttributeType());
 		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByName("Test Concept AttributeType",
-		    AttributeTypeEnum.CONCEPT);
+		    AttributeTypeEntity.CONCEPT);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);
@@ -65,7 +65,7 @@ public class AttributeTypeService2_2Test extends BaseModuleContextSensitiveTest 
 		// Setup
 		Context.getProgramWorkflowService().saveProgramAttributeType(createProgramAttributeType());
 		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByName("Test Program AttributeType",
-		    AttributeTypeEnum.PROGRAM);
+		    AttributeTypeEntity.PROGRAM);
 		
 		// Verif
 		Assert.assertNotNull(attributeTypeFromDB);
