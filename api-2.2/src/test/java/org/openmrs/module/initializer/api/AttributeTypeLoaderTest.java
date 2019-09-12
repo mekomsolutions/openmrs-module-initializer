@@ -7,25 +7,26 @@ import org.openmrs.LocationAttributeType;
 import org.openmrs.VisitAttributeType;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.VisitService;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest2_2;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeLoader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public class AttributeTypeLoaderTest extends DomainBaseModuleContextSensitiveTest2_2 {
 	
 	@Autowired
 	private AttributeTypeLoader loader;
 	
+	@Autowired
+	@Qualifier("locationService")
 	private LocationService ls;
 	
+	@Autowired
+	@Qualifier("visitService")
 	private VisitService vs;
 	
 	@Before
 	public void setup() {
-		ls = Context.getLocationService();
-		vs = Context.getVisitService();
-		
 		// A location attr. type to be edited via CSV
 		LocationAttributeType lat = new LocationAttributeType();
 		lat.setUuid("9eca4f4e-707f-4bb8-8289-2f9b6e93803c");
