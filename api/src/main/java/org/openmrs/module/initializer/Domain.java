@@ -17,7 +17,8 @@ public enum Domain {
 	PERSON_ATTRIBUTE_TYPES(13, "personattributetypes"),
 	IDENTIFIER_SOURCES(14, "idgen"),
 	DRUGS(15, "drugs"),
-	ORDER_FREQUENCIES(16, "orderfrequencies");
+	ORDER_FREQUENCIES(16, "orderfrequencies"),
+	SPECIALITIES(17, "specialities");
 	
 	private final int order;
 	
