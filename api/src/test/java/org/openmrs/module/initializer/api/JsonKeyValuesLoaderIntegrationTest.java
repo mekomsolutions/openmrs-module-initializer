@@ -47,6 +47,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	public void setup() {
 		ConceptSource source = new ConceptSource();
 		source.setName("Cambodia");
+		source.setDescription("Test 'Cambodia' source");
 		source = cs.saveConceptSource(source);
 		
 		// A concept to be fetched via JKV

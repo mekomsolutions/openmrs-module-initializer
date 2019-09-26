@@ -48,9 +48,21 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	 */
 	public DomainBaseModuleContextSensitiveTest() {
 		super();
-		ModuleFactory.getStartedModulesMap().put("idgen", new Module("", "idgen", "", "", "", "4.3"));
-		ModuleFactory.getStartedModulesMap().put("metadatasharing", new Module("", "metadatasharing", "", "", "", "1.2.2"));
-		ModuleFactory.getStartedModulesMap().put("metadatamapping", new Module("", "metadatamapping", "", "", "", "1.3.4"));
+		{
+			Module mod = new Module("", "idgen", "", "", "", "4.3");
+			mod.setFile(new File(""));
+			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+		}
+		{
+			Module mod = new Module("", "metadatasharing", "", "", "", "1.2.2");
+			mod.setFile(new File(""));
+			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+		}
+		{
+			Module mod = new Module("", "metadatamapping", "", "", "", "1.3.4");
+			mod.setFile(new File(""));
+			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+		}
 	}
 	
 	@Before
@@ -58,7 +70,6 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		
 		String path = getClass().getClassLoader().getResource(appDataTestDir).getPath() + File.separator;
 		
-		OpenmrsConstants.APPLICATION_DATA_DIRECTORY = path; // The 1.10 way
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
 		Properties prop = new Properties();
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);

@@ -2,22 +2,13 @@ package org.openmrs.module.initializer;
 
 public enum Domain {
 	
-	JSON_KEY_VALUES(1, "jsonkeyvalues"),
-	MDS(2, "metadatasharing"),
-	METADATA_MAPPINGS(3, "metadatamappings"),
-	PRIVILEGES(4, "privileges"),
-	ENCOUNTER_TYPES(5, "encountertypes"),
-	ROLES(6, "roles"),
-	GLOBAL_PROPERTIES(7, "globalproperties"),
-	LOCATIONS(8, "locations"),
-	CONCEPTS(9, "concepts"),
-	PROGRAMS(10, "programs"),
-	PROGRAM_WORKFLOWS(11, "programworkflows"),
-	PROGRAM_WORKFLOW_STATES(12, "programworkflowstates"),
-	PERSON_ATTRIBUTE_TYPES(13, "personattributetypes"),
-	IDENTIFIER_SOURCES(14, "idgen"),
-	DRUGS(15, "drugs"),
-	ORDER_FREQUENCIES(16, "orderfrequencies");
+	JSON_KEY_VALUES(1, "jsonkeyvalues"), MDS(2, "metadatasharing"), METADATA_MAPPINGS(3, "metadatamappings"), PRIVILEGES(4,
+	        "privileges"), ENCOUNTER_TYPES(5, "encountertypes"), ROLES(6, "roles"), GLOBAL_PROPERTIES(7,
+	                "globalproperties"), LOCATIONS(8, "locations"), CONCEPTS(9, "concepts"), PROGRAMS(10,
+	                        "programs"), PROGRAM_WORKFLOWS(11, "programworkflows"), PROGRAM_WORKFLOW_STATES(12,
+	                                "programworkflowstates"), PERSON_ATTRIBUTE_TYPES(13,
+	                                        "personattributetypes"), IDENTIFIER_SOURCES(14,
+	                                                "idgen"), DRUGS(15, "drugs"), ORDER_FREQUENCIES(16, "orderfrequencies");
 	
 	private final int order;
 	

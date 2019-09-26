@@ -52,10 +52,12 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		ConceptSource source = null;
 		source = new ConceptSource();
 		source.setName("Cambodia");
+		source.setDescription("Test 'Cambodia' source");
 		source = cs.saveConceptSource(source);
 		
 		source = new ConceptSource();
 		source.setName("CIEL");
+		source.setDescription("Test 'CIEL' source");
 		source = cs.saveConceptSource(source);
 		
 		// A concept to be retired via CSV

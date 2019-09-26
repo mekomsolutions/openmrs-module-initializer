@@ -103,7 +103,7 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 		
 		// a vanilla drug
 		{
-			Drug d = cs.getDrugByNameOrId("Cetirizine 10mg Tablet");
+			Drug d = cs.getDrug("Cetirizine 10mg Tablet");
 			Assert.assertNotNull(d);
 			Assert.assertEquals(cs.getConceptByName("Cetirizine"), d.getConcept());
 			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
@@ -111,7 +111,7 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 		
 		// a drug without dosage form
 		{
-			Drug d = cs.getDrugByNameOrId("Erythromycine 500mg Tablet");
+			Drug d = cs.getDrug("Erythromycine 500mg Tablet");
 			Assert.assertNotNull(d);
 			Assert.assertEquals(cs.getConceptByName("Erythromycine"), d.getConcept());
 			Assert.assertNull(d.getDosageForm());
@@ -119,7 +119,7 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 		
 		// an edited drug
 		{
-			Drug d = cs.getDrugByNameOrId("Metronidazole 500mg Tablet");
+			Drug d = cs.getDrug("Metronidazole 500mg Tablet");
 			Assert.assertNotNull(d);
 			Assert.assertEquals(cs.getConceptByName("Metronidazole (new)"), d.getConcept());
 			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
