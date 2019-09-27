@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.appt;
+package org.openmrs.module.initializer.api.appt.specialities;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.module.appointments.model.Speciality;

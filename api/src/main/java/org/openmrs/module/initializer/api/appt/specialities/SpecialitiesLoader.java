@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.appt;
+package org.openmrs.module.initializer.api.appt.specialities;
 
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;
