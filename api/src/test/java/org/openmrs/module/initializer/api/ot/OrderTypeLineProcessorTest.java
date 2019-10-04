@@ -47,7 +47,7 @@ public class OrderTypeLineProcessorTest {
 		String[] line = { "OT name", "OT desc.", "org.openmrs.Order", "01727040-a587-484d-b66a-f0afbae6c281" };
 		
 		// Replay
-
+		
 		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os);
 		o.setHelper(helper);
 		o.setHeaderLine(headerLine);
@@ -65,11 +65,11 @@ public class OrderTypeLineProcessorTest {
 	public void fill_shouldParseWithNameAndJavaClassNameOnly() {
 		
 		// Setup
-		String[] headerLine = { "Name", "Java class name",};
+		String[] headerLine = { "Name", "Java class name", };
 		String[] line = { "OT name", "org.openmrs.Order" };
 		
 		// Replay
-
+		
 		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os);
 		o.setHelper(helper);
 		o.setHeaderLine(headerLine);

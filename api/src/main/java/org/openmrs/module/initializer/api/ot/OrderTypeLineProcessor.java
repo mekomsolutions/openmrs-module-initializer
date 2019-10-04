@@ -95,8 +95,8 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 				Class.forName(javaClassName);
 			}
 			catch (ClassNotFoundException e) {
-				throw new IllegalArgumentException("'" + javaClassName + "' does not represent a valid Java or OpenMRS class.",
-				        e);
+				throw new IllegalArgumentException(
+				        "'" + javaClassName + "' does not represent a valid Java or OpenMRS class.", e);
 			}
 			orderType.setJavaClassName(javaClassName);
 		}
