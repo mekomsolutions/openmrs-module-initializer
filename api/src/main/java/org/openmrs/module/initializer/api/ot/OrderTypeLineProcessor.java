@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderTypesLineProcessor extends BaseLineProcessor<OrderType> {
+public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 	
 	protected static class Helper {
 		
@@ -58,7 +58,7 @@ public class OrderTypesLineProcessor extends BaseLineProcessor<OrderType> {
 	private OrderService orderService;
 	
 	@Autowired
-	public OrderTypesLineProcessor(@Qualifier("orderService") OrderService orderService) {
+	public OrderTypeLineProcessor(@Qualifier("orderService") OrderService orderService) {
 		this.orderService = orderService;
 		this.helper = new Helper();
 	}

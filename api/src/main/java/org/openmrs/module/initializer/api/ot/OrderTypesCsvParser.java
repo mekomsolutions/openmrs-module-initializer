@@ -16,7 +16,7 @@ public class OrderTypesCsvParser extends CsvParser<OrderType, BaseLineProcessor<
 	
 	@Autowired
 	public OrderTypesCsvParser(@Qualifier("orderService") OrderService orderService,
-	    OrderTypesLineProcessor processor) {
+	    OrderTypeLineProcessor processor) {
 		super(processor);
 		this.orderService = orderService;
 	}
