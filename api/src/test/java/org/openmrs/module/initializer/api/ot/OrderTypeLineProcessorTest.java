@@ -10,10 +10,8 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.openmrs.OrderType;
-import org.openmrs.PersonAttributeType;
 import org.openmrs.Privilege;
 import org.openmrs.api.OrderService;
-import org.openmrs.api.PersonService;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.ot.OrderTypeLineProcessor.Helper;
 
@@ -54,15 +52,13 @@ public class OrderTypeLineProcessorTest {
 		o.setHelper(helper);
 		o.setHeaderLine(headerLine);
 		
-		OrderType parentOrderType = new OrderType("Parent OT name", "Parent OT desc.", "org.openmrs.Order");
-		parentOrderType.setUuid("01727040-a587-484d-b66a-f0afbae6c281");
-		
 		OrderType ot = o.fill(new OrderType(), new CsvLine(o, line));
 		
 		// Verif
 		Assert.assertEquals("OT name", ot.getName());
 		Assert.assertEquals("OT desc.", ot.getDescription());
 		Assert.assertEquals("org.openmrs.Order", ot.getJavaClassName());
+		// TODO Add test metadata for order type and verify if ot.getParent().getUuid() returns '01727040-a587-484d-b66a-f0afbae6c281' here
 	}
 	
 	@Test
