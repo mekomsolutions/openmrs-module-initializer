@@ -27,11 +27,11 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 
 	private String parentOrderTypeUuid = "01727040-a587-484d-b66a-f0afbae6c281";
 	
-	private String labOrderTypeUuid = "8189b409-3f10-11e4-adec-0800271c1b75";
+	private String newLabOrderTypeUuid = "8189b409-3f10-11e4-adec-0800271c1b75";
 	
-	private String labOrderTypeName = "Lab Order";
+	private String newLabOrderTypeName = "New Lab Order";
 	
-	private String labOrderTypeDesc = "An order for laboratory tests";
+	private String newLabOrderTypeDesc = "An order for laboratory tests created by Iniz";
 
 	@Autowired
 	private OrderTypesLoader loader;
@@ -48,10 +48,10 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		
 		// Verif creation of order type
 		{
-			OrderType ot = os.getOrderTypeByName("Lab Order");
-			Assert.assertEquals(labOrderTypeUuid, ot.getUuid());
-			Assert.assertEquals(labOrderTypeName, ot.getParent().getName());
-			Assert.assertEquals(labOrderTypeDesc, ot.getDescription());
+			OrderType ot = os.getOrderTypeByName("New Lab Order");
+			Assert.assertEquals(newLabOrderTypeUuid, ot.getUuid());
+			Assert.assertEquals(newLabOrderTypeName, ot.getName());
+			Assert.assertEquals(newLabOrderTypeDesc, ot.getDescription());
 		}
 
 		// Verif parent order type

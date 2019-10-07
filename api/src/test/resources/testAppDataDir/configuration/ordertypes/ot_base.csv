@@ -1,5 +1,5 @@
 Uuid,Void/Retire,Name,Description,Java class name,Parent uuid,_order:1000
 01727040-a587-484d-b66a-f0afbae6c281,,Parent OT name,Parent OT desc.,org.openmrs.Order,,
 131168f4-15f5-102d-96e4-000c29c2a5d7,,Drug Order,An order for a medication to be given to the patient,org.openmrs.Order,01727040-a587-484d-b66a-f0afbae6c281,
-8189b409-3f10-11e4-adec-0800271c1b75,,Lab Order,An order for laboratory tests,org.openmrs.Order,,
+8189b409-3f10-11e4-adec-0800271c1b75,,New Lab Order,An order for laboratory tests created by Iniz,org.openmrs.Order,,
 8189dbdd-3f10-11e4-adec-0800271c1b75,,Radiology Order,An order for radiology tests,org.openmrs.Order,,
