@@ -18,6 +18,7 @@ import org.openmrs.ConceptReferenceTerm;
 import org.openmrs.ConceptSource;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
+import org.openmrs.OrderType;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Privilege;
 import org.openmrs.Program;
@@ -26,9 +27,11 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.Role;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
+import org.openmrs.api.OrderService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
+import org.openmrs.api.context.Context;
 import org.springframework.util.CollectionUtils;
 
 public class Utils {
@@ -326,5 +329,18 @@ public class Utils {
 			stringList.add(asString(o));
 		}
 		return stringList;
+	}
+	
+	public static OrderType getParentOrderType(OrderService orderService, String javaClassName, String uuid) {
+		OrderType parentOrdertype = null;
+		if (javaClassName.equals("org.openmrs.Order")) {
+			parentOrdertype = getParentOrderType(orderService, uuid);
+		}
+		// TODO verify if Context.getOrderService() is enough to handle more specific java class names (...like org.openmrs.DrugOrder)
+		return parentOrdertype;
+	}
+	
+	public static OrderType getParentOrderType(OrderService orderService, String uuid) {
+		return orderService.getOrderTypeByUuid(uuid);
 	}
 }
