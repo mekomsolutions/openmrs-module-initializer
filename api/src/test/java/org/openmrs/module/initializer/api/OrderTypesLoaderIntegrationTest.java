@@ -20,11 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
-
+	
 	@Autowired
 	@Qualifier("orderService")
 	private OrderService os;
-
+	
 	private String parentOrderTypeUuid = "01727040-a587-484d-b66a-f0afbae6c281";
 	
 	private String newLabOrderTypeUuid = "8189b409-3f10-11e4-adec-0800271c1b75";
@@ -32,17 +32,17 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	private String newLabOrderTypeName = "New Lab Order";
 	
 	private String newLabOrderTypeDesc = "An order for laboratory tests created by Iniz";
-
+	
 	@Autowired
 	private OrderTypesLoader loader;
-
+	
 	@Before
 	public void setup() {
 	}
-
+	
 	@Test
 	public void load_shouldLoadAccordingToCsvFiles() {
-
+		
 		// Replay
 		loader.load();
 		
@@ -53,10 +53,10 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			Assert.assertEquals(newLabOrderTypeName, ot.getName());
 			Assert.assertEquals(newLabOrderTypeDesc, ot.getDescription());
 		}
-
+		
 		// Verif parent order type
 		{
-			OrderType ot = os.getOrderTypeByName("Drug Order");
+			OrderType ot = os.getOrderTypeByName("New Lab Order");
 			Assert.assertEquals(parentOrderTypeUuid, ot.getParent().getUuid());
 		}
 	}
