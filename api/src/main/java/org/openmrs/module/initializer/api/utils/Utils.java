@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -31,7 +32,6 @@ import org.openmrs.api.OrderService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
-import org.openmrs.api.context.Context;
 import org.springframework.util.CollectionUtils;
 
 public class Utils {
@@ -331,16 +331,31 @@ public class Utils {
 		return stringList;
 	}
 	
-	public static OrderType getParentOrderType(OrderService orderService, String javaClassName, String uuid) {
+	public static OrderType getParentOrderType(OrderService orderService, String javaClassName, String lookup) {
 		OrderType parentOrdertype = null;
 		if (javaClassName.equals("org.openmrs.Order")) {
-			parentOrdertype = getParentOrderType(orderService, uuid);
+			parentOrdertype = fetchOrderType(orderService, lookup);
 		}
 		// TODO verify if Context.getOrderService() is enough to handle more specific java class names (...like org.openmrs.DrugOrder)
 		return parentOrdertype;
 	}
 	
-	public static OrderType getParentOrderType(OrderService orderService, String uuid) {
-		return orderService.getOrderTypeByUuid(uuid);
+	/**
+	 * Fetches an order type trying various routes.
+	 * 
+	 * @param lookup The order type name or UUID.
+	 * @param orderService
+	 * @return The {@link OrderType} instance if found, null otherwise.
+	 */
+	public static OrderType fetchOrderType(OrderService orderService, String lookup) {
+		OrderType instance = null;
+		if (instance == null) {
+			lookup = UUID.fromString(lookup).toString();
+			instance = orderService.getOrderTypeByUuid(lookup);
+		}
+		if (instance == null) {
+			instance = orderService.getOrderTypeByName(lookup);
+		}
+		return instance;
 	}
 }

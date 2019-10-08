@@ -24,7 +24,7 @@ public class OrderTypeLineProcessorTest {
 	public void fill_shouldParseOrderType() {
 		
 		// Setup
-		String[] headerLine = { "Name", "Description", "Java class name", "Parent uuid" };
+		String[] headerLine = { "Name", "Description", "Java class name", "Parent" };
 		String[] line = { "OT name", "OT desc.", "org.openmrs.Order", "01727040-a587-484d-b66a-f0afbae6c281" };
 		
 		// Replay

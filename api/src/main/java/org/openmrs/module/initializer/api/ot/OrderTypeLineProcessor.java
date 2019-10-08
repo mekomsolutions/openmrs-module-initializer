@@ -1,7 +1,5 @@
 package org.openmrs.module.initializer.api.ot;
 
-import java.util.UUID;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.OrderType;
 import org.openmrs.api.OrderService;
@@ -17,7 +15,7 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 	
 	protected static String JAVA_CLASS_NAME = "java class name";
 	
-	protected static String PARENT_UUID = "parent uuid";
+	protected static String PARENT = "parent";
 	
 	private OrderService orderService;
 	
@@ -60,10 +58,9 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 			orderType.setJavaClassName(javaClassName);
 		}
 		
-		String parentUuid = line.get(PARENT_UUID);
-		if (!StringUtils.isEmpty(parentUuid)) {
-			parentUuid = UUID.fromString(parentUuid).toString();
-			orderType.setParent(Utils.getParentOrderType(orderService, javaClassName, parentUuid));
+		String lookup = line.get(PARENT);
+		if (!StringUtils.isEmpty(lookup)) {
+			orderType.setParent(Utils.getParentOrderType(orderService, javaClassName, lookup));
 		}
 		
 		return orderType;
