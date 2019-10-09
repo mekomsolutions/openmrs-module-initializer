@@ -10,12 +10,14 @@
 package org.openmrs.module.initializer.api.loaders;
 
 import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.greaterThan;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.api.appt.specialities.SpecialitiesLoader;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
 import org.openmrs.module.initializer.api.et.EncounterTypesLoader;
@@ -84,6 +86,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	@Autowired
 	private MetadataMappingsLoader mdmLoader;
 	
+	@Autowired
+	private SpecialitiesLoader spLoader;
+	
 	@Test
 	public void getLoaders_shouldBeUnivoquelyOrdered() {
 		
@@ -118,6 +123,8 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		Assert.assertThat(idSourcesLoader.getOrder(), lessThan(drugsLoader.getOrder()));
 		count++;
 		Assert.assertThat(drugsLoader.getOrder(), lessThan(freqLoader.getOrder()));
+		count++;
+		Assert.assertThat(spLoader.getOrder(), greaterThan(conceptsLoader.getOrder()));
 		count++;
 		
 		Assert.assertEquals(getService().getLoaders().size(), count);
