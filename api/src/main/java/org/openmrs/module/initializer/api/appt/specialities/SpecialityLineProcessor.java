@@ -43,7 +43,7 @@ public class SpecialityLineProcessor extends BaseLineProcessor<Speciality> {
 	public Speciality fill(Speciality speciality, CsvLine line) throws IllegalArgumentException {
 		
 		String specialityName = line.get(HEADER_NAME, true); // should fail is name column missing
-		if (specialityName == null) {
+		if (specialityName == null || specialityName.isEmpty()) {
 			throw new IllegalArgumentException("A speciality must at least be provided a name: '" + line.toString() + "'");
 		}
 		speciality.setName(specialityName);
