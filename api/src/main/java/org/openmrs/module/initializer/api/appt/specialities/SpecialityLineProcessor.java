@@ -1,19 +1,19 @@
 package org.openmrs.module.initializer.api.appt.specialities;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 /**
  * This is the first level line processor for specialities. It allows to parse and save specialities
  * with the minimal set of required fields.
  */
-@Component
+@OpenmrsProfile(modules = { "appointments:*" })
 public class SpecialityLineProcessor extends BaseLineProcessor<Speciality> {
 	
 	private SpecialityService specialityservice;

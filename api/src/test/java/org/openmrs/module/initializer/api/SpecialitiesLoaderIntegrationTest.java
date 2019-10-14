@@ -43,5 +43,15 @@ public class SpecialitiesLoaderIntegrationTest extends DomainBaseModuleContextSe
 			Speciality speciality = specialityService.getSpecialityByUuid("21ec1632-420f-473c-b380-31ed45214362");
 			Assert.assertEquals("New speciality", speciality.getName());
 		}
+		// Verif renaming
+		{
+			Speciality speciality = specialityService.getSpecialityByUuid("c8085c78-e80e-436b-b845-caa3496058a6");
+			Assert.assertEquals("Speciality B", speciality.getName());
+		}
+		// Verif creation without UUID
+		{
+			Assert.assertEquals(3, specialityService.getAllSpecialities().size()); //Unfortunately, there is no #specialityService.getSpecialityByName method.
+		}
+		
 	}
 }

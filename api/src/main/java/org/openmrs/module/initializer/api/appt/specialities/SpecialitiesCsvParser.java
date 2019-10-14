@@ -1,5 +1,6 @@
 package org.openmrs.module.initializer.api.appt.specialities;
 
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.Domain;
@@ -7,9 +8,8 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
-@Component
+@OpenmrsProfile(modules = { "appointments:*" })
 public class SpecialitiesCsvParser extends CsvParser<Speciality, BaseLineProcessor<Speciality>> {
 	
 	private SpecialityService specialityService;

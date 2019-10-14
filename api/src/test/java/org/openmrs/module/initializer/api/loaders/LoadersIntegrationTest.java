@@ -87,7 +87,7 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private MetadataMappingsLoader mdmLoader;
 	
 	@Autowired
-	private SpecialitiesLoader spLoader;
+	private SpecialitiesLoader specialityLoader;
 	
 	@Test
 	public void getLoaders_shouldBeUnivoquelyOrdered() {
@@ -124,7 +124,7 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		count++;
 		Assert.assertThat(drugsLoader.getOrder(), lessThan(freqLoader.getOrder()));
 		count++;
-		Assert.assertThat(spLoader.getOrder(), greaterThan(conceptsLoader.getOrder()));
+		Assert.assertThat(specialityLoader.getOrder(), greaterThan(conceptsLoader.getOrder()));
 		count++;
 		
 		Assert.assertEquals(getService().getLoaders().size(), count);

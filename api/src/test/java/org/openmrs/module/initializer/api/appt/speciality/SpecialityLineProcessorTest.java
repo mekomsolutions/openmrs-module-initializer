@@ -22,7 +22,7 @@ public class SpecialityLineProcessorTest {
 	}
 	
 	@Test
-	public void fill_shouldParsePersonAttributeType() {
+	public void fill_shouldParseSpeciality() {
 		
 		// Setup
 		String[] headerLine = { "Name" };

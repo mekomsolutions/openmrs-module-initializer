@@ -63,6 +63,11 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
+		{
+			Module mod = new Module("", "appointments", "", "", "", "1.2-SNAPSHOT");
+			mod.setFile(new File(""));
+			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+		}
 	}
 	
 	@Before

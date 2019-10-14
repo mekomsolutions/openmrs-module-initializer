@@ -100,6 +100,19 @@
       <layout>default</layout>
       <url>http://repo1.maven.org/maven2</url>
     </repository>
+	<repository>
+		<id>repo.mybahmni.org</id>
+		<name>bahmni-artifactory-snapshots</name>
+		<url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
+		<snapshots>
+			<updatePolicy>always</updatePolicy>
+		</snapshots>
+	</repository>
+	<repository>
+		<id>repo.mybahmni.org-release</id>
+		<name>bahmni-artifactory-release</name>
+		<url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
+	</repository>
   </repositories>
 
   <pluginRepositories>
