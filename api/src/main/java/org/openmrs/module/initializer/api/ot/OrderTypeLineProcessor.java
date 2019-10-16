@@ -15,8 +15,6 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 	
 	protected static String JAVA_CLASS_NAME = "java class name";
 	
-	protected static String PARENT = "parent";
-	
 	private OrderService orderService;
 	
 	@Autowired
