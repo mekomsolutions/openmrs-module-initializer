@@ -1,6 +1,7 @@
 package org.openmrs.module.initializer.api.ot;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openmrs.Order;
 import org.openmrs.OrderType;
 import org.openmrs.api.OrderService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
@@ -44,7 +45,7 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 		orderType.setName(line.get(HEADER_NAME));
 		orderType.setDescription(line.get(HEADER_DESC));
 		
-		String javaClassName = line.get(JAVA_CLASS_NAME);
+		String javaClassName = line.getString(JAVA_CLASS_NAME, Order.class.getName());
 		if (!StringUtils.isEmpty(javaClassName)) {
 			try {
 				Class.forName(javaClassName);
