@@ -33,6 +33,8 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	
 	private String newLabOrderTypeDesc = "An order for laboratory tests created by Iniz";
 	
+	private String renamedOrderType = "New Name";
+	
 	@Autowired
 	private OrderTypesLoader loader;
 	
@@ -58,6 +60,18 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		{
 			OrderType ot = os.getOrderTypeByName("New Lab Order");
 			Assert.assertEquals(parentOrderTypeUuid, ot.getParent().getUuid());
+		}
+		
+		// Verif renaming
+		{
+			OrderType ot = os.getOrderTypeByUuid("8be5f714-ee92-4d09-939e-2d1897bb2f95");
+			Assert.assertEquals(renamedOrderType, ot.getName());
+		}
+		
+		// Verif retiring
+		{
+			OrderType ot = os.getOrderTypeByUuid("96f94b64-6c9e-489d-b258-633878b9af69");
+			Assert.assertEquals(true, ot.getRetired());
 		}
 	}
 }
