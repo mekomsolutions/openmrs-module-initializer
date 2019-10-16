@@ -3,7 +3,6 @@ package org.openmrs.module.initializer.api.ot;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.OrderType;
 import org.openmrs.api.OrderService;
@@ -15,10 +14,6 @@ import org.openmrs.module.initializer.api.CsvLine;
 public class OrderTypeLineProcessorTest {
 	
 	private OrderService os = mock(OrderService.class);
-	
-	@Before
-	public void setup() {
-	}
 	
 	@Test
 	public void fill_shouldParseOrderType() {
