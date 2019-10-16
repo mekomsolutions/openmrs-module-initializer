@@ -57,7 +57,7 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 			orderType.setJavaClassName(javaClassName);
 		}
 		
-		String lookup = line.get(PARENT);
+		String lookup = line.getString(PARENT,"");
 		if (!StringUtils.isEmpty(lookup)) {
 			orderType.setParent(Utils.getParentOrderType(orderService, javaClassName, lookup));
 		}
