@@ -43,7 +43,7 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 	protected OrderType fill(OrderType orderType, CsvLine line) throws IllegalArgumentException {
 		
 		orderType.setName(line.get(HEADER_NAME));
-		orderType.setDescription(line.get(HEADER_DESC));
+		orderType.setDescription(line.getString(HEADER_DESC, ""));
 		
 		String javaClassName = line.getString(JAVA_CLASS_NAME, Order.class.getName());
 		if (!StringUtils.isEmpty(javaClassName)) {
