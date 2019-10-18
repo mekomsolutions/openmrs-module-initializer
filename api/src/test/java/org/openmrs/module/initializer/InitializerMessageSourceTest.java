@@ -16,7 +16,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.test.Verifies;
 
 public class InitializerMessageSourceTest {
 	
@@ -34,7 +33,6 @@ public class InitializerMessageSourceTest {
 	}
 	
 	@Test
-	@Verifies(value = "should save messages files as keys and create appropriate as values", method = "getMessageProperties(String dirPath)")
 	public void getMessageProperties_shouldScanMessagesFiles() {
 		
 		InitializerMessageSource src = new InitializerMessageSource();
@@ -53,5 +51,20 @@ public class InitializerMessageSourceTest {
 		Assert.assertTrue(msgPropMap.containsKey(propFile));
 		locale = msgPropMap.get(propFile);
 		Assert.assertEquals(new Locale("fr"), locale);
+	}
+	
+	@Test
+	public void getLocaleFromFileBaseName_shouldInferLocaleOrFallback() {
+		
+		InitializerMessageSource src = new InitializerMessageSource();
+		
+		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("basename_fr", Locale.ENGLISH));
+		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("my_base_name_fr", Locale.ENGLISH));
+		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr", Locale.ENGLISH));
+		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr_", Locale.ENGLISH));
+		Assert.assertEquals(new Locale("fr", "FR"), src.getLocaleFromFileBaseName("my_base_name_fr_FR", Locale.ENGLISH));
+		Assert.assertEquals(Locale.ENGLISH, src.getLocaleFromFileBaseName("my_base_name", Locale.ENGLISH));
+		Assert.assertEquals(Locale.ENGLISH, src.getLocaleFromFileBaseName("my_base_name_fr_XX", Locale.ENGLISH));
+		Assert.assertEquals(new Locale("fr", "BE"), src.getLocaleFromFileBaseName("my_base_name_fr_BE", Locale.ENGLISH));
 	}
 }
