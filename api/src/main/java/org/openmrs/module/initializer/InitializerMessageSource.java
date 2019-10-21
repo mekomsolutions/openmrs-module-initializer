@@ -43,7 +43,6 @@ import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.messagesource.PresentationMessageMap;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.util.LocaleUtility;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -152,13 +151,15 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 * Infers the locale from a message properties file base name.
 	 * 
 	 * @param baseName A message properties file base name, eg. "my_properties_file_en_GB"
-	 * @param fallbackLocale The locale to return if none could be inferred.
 	 * @return The locale, eg. "en_GB"
+	 * @throws IllegalArgumentException when no locale could be inferred
 	 */
-	public Locale getLocaleFromFileBaseName(String baseName, Locale fallbackLocale) {
+	public Locale getLocaleFromFileBaseName(String baseName) throws IllegalArgumentException {
 		String[] parts = baseName.split("_");
+		
 		if (parts.length == 1) {
-			return fallbackLocale;
+			throw new IllegalArgumentException(
+			        "'" + baseName + "' is not suffixed with the string representation of a locale.");
 		}
 		
 		String candidate = "";
@@ -178,7 +179,8 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			}
 		}
 		
-		return fallbackLocale;
+		throw new IllegalArgumentException(
+		        "No valid locale could be inferred from the following file base name: '" + baseName + "'.");
 	}
 	
 	/**
@@ -210,8 +212,13 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			for (File file : propFiles) {
 				// Now reading the locale info out of the base name
 				String baseName = FilenameUtils.getBaseName(file.getName()); // "messages_en_GB"
-				Locale locale = getLocaleFromFileBaseName(baseName, LocaleUtility.getDefaultLocale()); // "en_GB"
-				messagePropertiesMap.put(file, locale);
+				try {
+					Locale locale = getLocaleFromFileBaseName(baseName); // "en_GB"
+					messagePropertiesMap.put(file, locale);
+				}
+				catch (IllegalArgumentException e) {
+					log.error(e);
+				}
 			}
 		}
 	}
