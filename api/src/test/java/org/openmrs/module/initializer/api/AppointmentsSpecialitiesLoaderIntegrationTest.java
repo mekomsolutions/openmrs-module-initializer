@@ -10,7 +10,6 @@
 package org.openmrs.module.initializer.api;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.SpecialityService;
@@ -27,10 +26,6 @@ public class AppointmentsSpecialitiesLoaderIntegrationTest extends DomainBaseMod
 	
 	@Autowired
 	private AppointmentsSpecialitiesLoader loader;
-	
-	@Before
-	public void setup() {
-	}
 	
 	@Test
 	public void load_shouldLoadAccordingToCsvFiles() {
