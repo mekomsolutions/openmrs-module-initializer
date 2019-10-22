@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.appt.specialities.SpecialitiesLoader;
+import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -26,7 +26,7 @@ public class SpecialitiesLoaderIntegrationTest extends DomainBaseModuleContextSe
 	private SpecialityService specialityService;
 	
 	@Autowired
-	private SpecialitiesLoader loader;
+	private AppointmentsSpecialitiesLoader loader;
 	
 	@Before
 	public void setup() {
