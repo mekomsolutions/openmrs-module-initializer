@@ -16,7 +16,7 @@ public class AppointmentsSpecialitiesCsvParser extends CsvParser<Speciality, Bas
 	
 	@Autowired
 	public AppointmentsSpecialitiesCsvParser(@Qualifier("specialityService") SpecialityService specialityService,
-	    SpecialityLineProcessor processor) {
+	    AppointmentsSpecialityLineProcessor processor) {
 		super(processor);
 		this.specialityService = specialityService;
 	}

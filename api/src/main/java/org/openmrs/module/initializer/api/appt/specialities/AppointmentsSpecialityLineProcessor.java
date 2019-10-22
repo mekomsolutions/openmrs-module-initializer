@@ -14,12 +14,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
  * with the minimal set of required fields.
  */
 @OpenmrsProfile(modules = { "appointments:*" })
-public class SpecialityLineProcessor extends BaseLineProcessor<Speciality> {
+public class AppointmentsSpecialityLineProcessor extends BaseLineProcessor<Speciality> {
 	
 	private SpecialityService specialityservice;
 	
 	@Autowired
-	public SpecialityLineProcessor(@Qualifier("specialityService") SpecialityService specialityservice) {
+	public AppointmentsSpecialityLineProcessor(@Qualifier("specialityService") SpecialityService specialityservice) {
 		super();
 		this.specialityservice = specialityservice;
 	}
