@@ -331,10 +331,10 @@ public class Utils {
 		return stringList;
 	}
 	
-	public static OrderType getParentOrderType(OrderService orderService, String javaClassName, String lookup) {
+	public static OrderType getParentOrderType(OrderService orderService, String javaClassName, String parentIdentifier) {
 		OrderType parentOrdertype = null;
 		if (javaClassName.equals("org.openmrs.Order")) {
-			parentOrdertype = fetchOrderType(orderService, lookup);
+			parentOrdertype = fetchOrderType(orderService, parentIdentifier);
 		}
 		// TODO verify if Context.getOrderService() is enough to handle more specific java class names (...like org.openmrs.DrugOrder)
 		return parentOrdertype;
@@ -343,18 +343,18 @@ public class Utils {
 	/**
 	 * Fetches an order type trying various routes.
 	 * 
-	 * @param lookup The order type name or UUID.
+	 * @param parentIdentifier The order type name or UUID.
 	 * @param orderService
 	 * @return The {@link OrderType} instance if found, null otherwise.
 	 */
-	public static OrderType fetchOrderType(OrderService orderService, String lookup) {
+	public static OrderType fetchOrderType(OrderService orderService, String parentIdentifier) {
 		OrderType instance = null;
 		if (instance == null) {
-			lookup = UUID.fromString(lookup).toString();
-			instance = orderService.getOrderTypeByUuid(lookup);
+			parentIdentifier = UUID.fromString(parentIdentifier).toString();
+			instance = orderService.getOrderTypeByUuid(parentIdentifier);
 		}
 		if (instance == null) {
-			instance = orderService.getOrderTypeByName(lookup);
+			instance = orderService.getOrderTypeByName(parentIdentifier);
 		}
 		return instance;
 	}
