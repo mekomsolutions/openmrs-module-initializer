@@ -19,7 +19,7 @@ import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpeciali
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class SpecialitiesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class AppointmentsSpecialitiesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("specialityService")
