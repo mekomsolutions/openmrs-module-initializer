@@ -3,7 +3,6 @@ package org.openmrs.module.initializer.api.appt.speciality;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.SpecialityService;
@@ -13,13 +12,9 @@ import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpeciali
 /*
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
  */
-public class SpecialityLineProcessorTest {
+public class AppointmentsSpecialityLineProcessorTest {
 	
 	private SpecialityService ss = mock(SpecialityService.class);
-	
-	@Before
-	public void setup() {
-	}
 	
 	@Test
 	public void fill_shouldParseSpeciality() {
