@@ -6,10 +6,10 @@ import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @OpenmrsProfile(modules = { "appointments:*" })
-public class AppointmentsSpecialitiesLoader extends BaseCsvLoader<Speciality, SpecialitiesCsvParser> {
+public class AppointmentsSpecialitiesLoader extends BaseCsvLoader<Speciality, AppointmentsSpecialitiesCsvParser> {
 	
 	@Autowired
-	public void setParser(SpecialitiesCsvParser parser) {
+	public void setParser(AppointmentsSpecialitiesCsvParser parser) {
 		this.parser = parser;
 	}
 }

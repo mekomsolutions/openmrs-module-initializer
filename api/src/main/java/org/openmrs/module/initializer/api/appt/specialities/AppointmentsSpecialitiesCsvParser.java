@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "appointments:*" })
-public class SpecialitiesCsvParser extends CsvParser<Speciality, BaseLineProcessor<Speciality>> {
+public class AppointmentsSpecialitiesCsvParser extends CsvParser<Speciality, BaseLineProcessor<Speciality>> {
 	
 	private SpecialityService specialityService;
 	
 	@Autowired
-	public SpecialitiesCsvParser(@Qualifier("specialityService") SpecialityService specialityService,
+	public AppointmentsSpecialitiesCsvParser(@Qualifier("specialityService") SpecialityService specialityService,
 	    SpecialityLineProcessor processor) {
 		super(processor);
 		this.specialityService = specialityService;
