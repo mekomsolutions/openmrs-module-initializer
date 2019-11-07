@@ -30,6 +30,9 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 		
 		OrderType orderType = orderService.getOrderTypeByUuid(uuid);
 		if (orderType == null) {
+			orderType = orderService.getOrderTypeByName(line.get(HEADER_NAME));
+		}
+		if (orderType == null) {
 			orderType = new OrderType();
 			if (!StringUtils.isEmpty(uuid)) {
 				orderType.setUuid(uuid);
