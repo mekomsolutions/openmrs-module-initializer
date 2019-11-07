@@ -6,19 +6,20 @@ This is a possible example of how the configuration subfolder may look like:
 ordertypes/
   └── ordertypes.csv
 ```
-The CSV configuration allows to either modify exisiting order types or to create new order types, here are the possible headers:
+The CSV configuration allows to either modify exisiting order types or to create new order types, here are the possible headers with a typical set of values:
 
 | <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Name</sub>  | <sub>Description</sub> | <sub>Java class name</sub> | <sub>Parent</sub> |
 | - | - | - | - | - | - |
+| <sub>8189dbdd-3f10-11e4-adec-0800271c1b75</sub> | - | <sub>Radiology Order</sub>  | <sub>An order for radiology tests</sub> | <sub>org.openmrs.Order</sub> | - |
 
 ###### Headers `Name` and `Description`
 The order type **name** is mandatory and must be provided. The description is optional, however it is best practise to provide a rich and meaningful description.
 
 ###### Header `Java class name`
-Can be org.openmrs.Order class or it's sub-classes (such as `org.openmrs.DrugOrder` or org.openmrs.TestOrder for example)
+This can be `org.openmrs.Order` class or it's sub-classes (such as `org.openmrs.DrugOrder` or `org.openmrs.TestOrder`.)
 
 ###### Header `Parent`
-This is a pointer to the parent order type. Both order type UUIDs and names are supported to refer to another order type.
+This is a pointer to the parent order type. Both order type UUIDs and names are supported to refer to the parent order type.
 
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).
