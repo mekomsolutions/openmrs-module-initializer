@@ -63,5 +63,12 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			OrderType ot = os.getOrderTypeByUuid("96f94b64-6c9e-489d-b258-633878b9af69");
 			Assert.assertEquals(true, ot.getRetired());
 		}
+		
+		// Verif bootstrapping by name
+		{
+			OrderType ot = os.getOrderTypeByName("No Uuid");
+			Assert.assertNotNull(ot);
+			Assert.assertEquals("For testing processing order type by name", ot.getDescription());
+		}
 	}
 }

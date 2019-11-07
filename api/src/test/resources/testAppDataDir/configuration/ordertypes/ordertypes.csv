@@ -7,3 +7,4 @@ Uuid,Void/Retire,Name,Description,Java class name,Parent,_order:1000
 96f94b64-6c9e-489d-b258-633878b9af69,,To Retire,For testing retiring an oreder type,org.openmrs.Order,,
 8be5f714-ee92-4d09-939e-2d1897bb2f95,,New Name,,org.openmrs.Order,,
 96f94b64-6c9e-489d-b258-633878b9af69,TRUE,,,org.openmrs.Order,,
+,,No Uuid,For testing processing order type by name,org.openmrs.Order,,
