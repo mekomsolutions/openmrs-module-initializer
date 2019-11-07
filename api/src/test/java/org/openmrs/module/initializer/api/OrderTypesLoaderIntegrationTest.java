@@ -25,16 +25,6 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	@Qualifier("orderService")
 	private OrderService os;
 	
-	private String parentOrderTypeUuid = "01727040-a587-484d-b66a-f0afbae6c281";
-	
-	private String newLabOrderTypeUuid = "8189b409-3f10-11e4-adec-0800271c1b75";
-	
-	private String newLabOrderTypeName = "New Lab Order";
-	
-	private String newLabOrderTypeDesc = "An order for laboratory tests created by Iniz";
-	
-	private String renamedOrderType = "New Name";
-	
 	@Autowired
 	private OrderTypesLoader loader;
 	
@@ -51,21 +41,21 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		// Verif creation of order type
 		{
 			OrderType ot = os.getOrderTypeByName("New Lab Order");
-			Assert.assertEquals(newLabOrderTypeUuid, ot.getUuid());
-			Assert.assertEquals(newLabOrderTypeName, ot.getName());
-			Assert.assertEquals(newLabOrderTypeDesc, ot.getDescription());
+			Assert.assertEquals("8189b409-3f10-11e4-adec-0800271c1b75", ot.getUuid());
+			Assert.assertEquals("New Lab Order", ot.getName());
+			Assert.assertEquals("An order for laboratory tests created by Iniz", ot.getDescription());
 		}
 		
 		// Verif parent order type
 		{
 			OrderType ot = os.getOrderTypeByName("New Lab Order");
-			Assert.assertEquals(parentOrderTypeUuid, ot.getParent().getUuid());
+			Assert.assertEquals("01727040-a587-484d-b66a-f0afbae6c281", ot.getParent().getUuid());
 		}
 		
 		// Verif renaming
 		{
 			OrderType ot = os.getOrderTypeByUuid("8be5f714-ee92-4d09-939e-2d1897bb2f95");
-			Assert.assertEquals(renamedOrderType, ot.getName());
+			Assert.assertEquals("New Name", ot.getName());
 		}
 		
 		// Verif retiring
