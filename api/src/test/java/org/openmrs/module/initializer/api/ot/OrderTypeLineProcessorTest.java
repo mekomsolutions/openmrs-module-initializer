@@ -5,8 +5,10 @@ import static org.mockito.Mockito.mock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.OrderType;
+import org.openmrs.api.ConceptService;
 import org.openmrs.api.OrderService;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.utils.ConceptClassListParser;
 
 /*
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
@@ -14,6 +16,8 @@ import org.openmrs.module.initializer.api.CsvLine;
 public class OrderTypeLineProcessorTest {
 	
 	private OrderService os = mock(OrderService.class);
+	
+	private ConceptService cs = mock(ConceptService.class);
 	
 	@Test
 	public void fill_shouldParseOrderType() {
@@ -24,7 +28,7 @@ public class OrderTypeLineProcessorTest {
 		
 		// Replay
 		
-		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os);
+		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os,new ConceptClassListParser(cs));
 		o.setHeaderLine(headerLine);
 		
 		OrderType ot = o.fill(new OrderType(), new CsvLine(o, line));
@@ -45,7 +49,7 @@ public class OrderTypeLineProcessorTest {
 		
 		// Replay
 		
-		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os);
+		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os, new ConceptClassListParser(cs));
 		o.setHeaderLine(headerLine);
 		
 		OrderType ot = o.fill(new OrderType(), new CsvLine(o, line));
@@ -62,7 +66,7 @@ public class OrderTypeLineProcessorTest {
 		String[] line = {};
 		
 		// Replay
-		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os);
+		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os, new ConceptClassListParser(cs));
 		o.setHeaderLine(headerLine);
 		OrderType ot = o.fill(new OrderType(), new CsvLine(o, line));
 		

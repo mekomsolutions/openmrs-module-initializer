@@ -12,7 +12,9 @@ package org.openmrs.module.initializer.api;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.ConceptClass;
 import org.openmrs.OrderType;
+import org.openmrs.api.ConceptService;
 import org.openmrs.api.OrderService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.ot.OrderTypesLoader;
@@ -26,10 +28,32 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	private OrderService os;
 	
 	@Autowired
+	@Qualifier("conceptService")
+	private ConceptService cs;
+	
+	@Autowired
 	private OrderTypesLoader loader;
 	
 	@Before
 	public void setup() {
+		
+		// A couple of concept classes to use with order types
+		{
+			ConceptClass cc = new ConceptClass();
+			cc.setName("FirstConceptClass");
+			cc.setDescription("Panels");
+			cc.setUuid("c652c923-552f-4634-9418-17692a856f03");
+			cs.saveConceptClass(cc);
+		}
+		
+		{
+			ConceptClass cc = new ConceptClass();
+			cc.setName("SecondConceptClass");
+			cc.setDescription("Lab Tests");
+			cc.setUuid("9ce20038-c1de-4856-b2b1-297d06e58326");
+			cs.saveConceptClass(cc);
+		}
+		
 	}
 	
 	@Test
@@ -38,12 +62,13 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		// Replay
 		loader.load();
 		
-		// Verif creation of order type
+		// Verif creation of order type with its concept classes
 		{
 			OrderType ot = os.getOrderTypeByName("New Lab Order");
 			Assert.assertEquals("8189b409-3f10-11e4-adec-0800271c1b75", ot.getUuid());
 			Assert.assertEquals("New Lab Order", ot.getName());
 			Assert.assertEquals("An order for laboratory tests created by Iniz", ot.getDescription());
+			Assert.assertEquals(2, ot.getConceptClasses().size());
 		}
 		
 		// Verif parent order type

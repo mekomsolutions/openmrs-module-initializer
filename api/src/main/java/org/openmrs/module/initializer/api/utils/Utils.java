@@ -12,6 +12,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Concept;
+import org.openmrs.ConceptClass;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptName;
@@ -355,6 +356,20 @@ public class Utils {
 		}
 		if (instance == null) {
 			instance = orderService.getOrderTypeByName(id);
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a ConceptClass trying various routes for its "id".
+	 * 
+	 * @param id The ConceptClass UUID or name
+	 * @return The {@link ConceptClass} instance if found, null otherwise.
+	 */
+	public static ConceptClass fetchConceptClass(String id, ConceptService cs) {
+		ConceptClass instance = cs.getConceptClassByName(id);
+		if (instance == null) {
+			instance = cs.getConceptClassByUuid(id);
 		}
 		return instance;
 	}
