@@ -62,6 +62,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Identifier sources (CSV files)](readme/idgen.md)
 1. [Drugs (CSV files)](readme/drugs.md)
 1. [Order Frequencies(CSV files)](readme/freqs.md)
+1. [Order Types(CSV files)](readme/ordertypes.md)
 
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:

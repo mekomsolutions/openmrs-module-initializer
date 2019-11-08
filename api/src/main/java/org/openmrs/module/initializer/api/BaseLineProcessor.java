@@ -41,6 +41,8 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
 	public static String UNDEFINED_METADATA_VALUE = "__metadata__value__undefined__"; // for header only
 	
+	protected static String PARENT = "parent";
+	
 	protected String[] headerLine = new String[0];
 	
 	protected Map<String, Integer> indexMap = new HashMap<String, Integer>();
