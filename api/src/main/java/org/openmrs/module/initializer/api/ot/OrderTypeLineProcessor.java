@@ -27,7 +27,8 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 	private ConceptClassListParser conceptClassListParser;
 	
 	@Autowired
-	public OrderTypeLineProcessor(@Qualifier("orderService") OrderService orderService, ConceptClassListParser conceptClassListParser) {
+	public OrderTypeLineProcessor(@Qualifier("orderService") OrderService orderService,
+	    ConceptClassListParser conceptClassListParser) {
 		this.orderService = orderService;
 		this.conceptClassListParser = conceptClassListParser;
 	}
@@ -69,14 +70,15 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 			orderType.setJavaClassName(javaClassName);
 		}
 		
-		String parentIdentifier = line.getString(PARENT,"");
+		String parentIdentifier = line.getString(PARENT, "");
 		if (!StringUtils.isEmpty(parentIdentifier)) {
 			orderType.setParent(Utils.getParentOrderType(orderService, javaClassName, parentIdentifier));
 		}
 		
-		String conceptClassesStr = line.getString(HEADER_CONCEPT_CLASSES,"");
+		String conceptClassesStr = line.getString(HEADER_CONCEPT_CLASSES, "");
 		if (!StringUtils.isEmpty(conceptClassesStr)) {
-			orderType.setConceptClasses(new HashSet<ConceptClass>(conceptClassListParser.parseList(line.get(HEADER_CONCEPT_CLASSES))));
+			orderType.setConceptClasses(
+			    new HashSet<ConceptClass>(conceptClassListParser.parseList(line.get(HEADER_CONCEPT_CLASSES))));
 		}
 		
 		return orderType;

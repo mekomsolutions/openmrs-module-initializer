@@ -28,7 +28,7 @@ public class OrderTypeLineProcessorTest {
 		
 		// Replay
 		
-		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os,new ConceptClassListParser(cs));
+		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os, new ConceptClassListParser(cs));
 		o.setHeaderLine(headerLine);
 		
 		OrderType ot = o.fill(new OrderType(), new CsvLine(o, line));
