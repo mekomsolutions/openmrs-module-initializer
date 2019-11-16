@@ -148,6 +148,42 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	}
 	
 	/**
+	 * Infers the locale from a message properties file base name.
+	 * 
+	 * @param baseName A message properties file base name, eg. "my_properties_file_en_GB"
+	 * @return The locale, eg. "en_GB"
+	 * @throws IllegalArgumentException when no locale could be inferred
+	 */
+	public Locale getLocaleFromFileBaseName(String baseName) throws IllegalArgumentException {
+		String[] parts = baseName.split("_");
+		
+		if (parts.length == 1) {
+			throw new IllegalArgumentException(
+			        "'" + baseName + "' is not suffixed with the string representation of a locale.");
+		}
+		
+		String candidate = "";
+		for (int i = parts.length - 1; i > 0; i--) {
+			
+			candidate = parts[i] + (candidate == "" ? "" : "_") + candidate;
+			Locale locale;
+			try {
+				locale = LocaleUtils.toLocale(candidate);
+			}
+			catch (IllegalArgumentException e) {
+				continue;
+			}
+			
+			if (LocaleUtils.isAvailableLocale(locale)) {
+				return locale;
+			}
+		}
+		
+		throw new IllegalArgumentException(
+		        "No valid locale could be inferred from the following file base name: '" + baseName + "'.");
+	}
+	
+	/**
 	 * Scans a directory for possible message properties files and adds it to the internal map.
 	 * 
 	 * @param dirPath The directory to scan.
@@ -176,13 +212,12 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			for (File file : propFiles) {
 				// Now reading the locale info out of the base name
 				String baseName = FilenameUtils.getBaseName(file.getName()); // "messages_en_GB"
-				String localeStr = baseName.substring(baseName.indexOf("_") + 1); // "en_GB"
 				try {
-					messagePropertiesMap.put(file, LocaleUtils.toLocale(localeStr));
+					Locale locale = getLocaleFromFileBaseName(baseName); // "en_GB"
+					messagePropertiesMap.put(file, locale);
 				}
 				catch (IllegalArgumentException e) {
-					log.error("The locale could not be implied from the message properties file provided: " + file.getPath(),
-					    e);
+					log.error(e);
 				}
 			}
 		}

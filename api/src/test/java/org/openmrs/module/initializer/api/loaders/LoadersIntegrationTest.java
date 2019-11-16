@@ -9,8 +9,8 @@
  */
 package org.openmrs.module.initializer.api.loaders;
 
-import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,6 +26,7 @@ import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
 import org.openmrs.module.initializer.api.loc.LocationsLoader;
 import org.openmrs.module.initializer.api.mdm.MetadataMappingsLoader;
+import org.openmrs.module.initializer.api.ot.OrderTypesLoader;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesLoader;
 import org.openmrs.module.initializer.api.privileges.PrivilegesLoader;
 import org.openmrs.module.initializer.api.programs.ProgramsLoader;
@@ -89,6 +90,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	@Autowired
 	private AppointmentsSpecialitiesLoader appointmentsSpecialitiesLoader;
 	
+	@Autowired
+	private OrderTypesLoader otLoader;
+	
 	@Test
 	public void getLoaders_shouldBeUnivoquelyOrdered() {
 		
@@ -126,7 +130,8 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		count++;
 		Assert.assertThat(appointmentsSpecialitiesLoader.getOrder(), greaterThan(conceptsLoader.getOrder()));
 		count++;
-		
+		Assert.assertThat(otLoader.getOrder(), greaterThan(conceptsLoader.getOrder()));
+		count++;
 		Assert.assertEquals(getService().getLoaders().size(), count);
 		
 		// System.out.println("Here is the list of loaders in order:");

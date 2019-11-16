@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -11,6 +12,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Concept;
+import org.openmrs.ConceptClass;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptName;
@@ -18,6 +20,7 @@ import org.openmrs.ConceptReferenceTerm;
 import org.openmrs.ConceptSource;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
+import org.openmrs.OrderType;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Privilege;
 import org.openmrs.Program;
@@ -26,6 +29,7 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.Role;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
+import org.openmrs.api.OrderService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
@@ -326,5 +330,47 @@ public class Utils {
 			stringList.add(asString(o));
 		}
 		return stringList;
+	}
+	
+	public static OrderType getParentOrderType(OrderService orderService, String javaClassName, String id) {
+		OrderType parentOrdertype = null;
+		if (javaClassName.equals("org.openmrs.Order")) {
+			parentOrdertype = fetchOrderType(orderService, id);
+		}
+		// TODO verify if Context.getOrderService() is enough to handle more specific java class names (...like org.openmrs.DrugOrder)
+		return parentOrdertype;
+	}
+	
+	/**
+	 * Fetches an order type trying various routes.
+	 * 
+	 * @param id The order type name or UUID.
+	 * @param orderService
+	 * @return The {@link OrderType} instance if found, null otherwise.
+	 */
+	public static OrderType fetchOrderType(OrderService orderService, String id) {
+		OrderType instance = null;
+		if (instance == null) {
+			id = UUID.fromString(id).toString();
+			instance = orderService.getOrderTypeByUuid(id);
+		}
+		if (instance == null) {
+			instance = orderService.getOrderTypeByName(id);
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a ConceptClass trying various routes for its "id".
+	 * 
+	 * @param id The ConceptClass UUID or name
+	 * @return The {@link ConceptClass} instance if found, null otherwise.
+	 */
+	public static ConceptClass fetchConceptClass(String id, ConceptService cs) {
+		ConceptClass instance = cs.getConceptClassByName(id);
+		if (instance == null) {
+			instance = cs.getConceptClassByUuid(id);
+		}
+		return instance;
 	}
 }

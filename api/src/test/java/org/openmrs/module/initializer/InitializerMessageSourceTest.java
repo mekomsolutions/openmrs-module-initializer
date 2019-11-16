@@ -15,12 +15,16 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.openmrs.test.Verifies;
+import org.junit.rules.ExpectedException;
 
 public class InitializerMessageSourceTest {
 	
 	private String dirPath = "";
+	
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Before
 	public void setup() {
@@ -34,7 +38,6 @@ public class InitializerMessageSourceTest {
 	}
 	
 	@Test
-	@Verifies(value = "should save messages files as keys and create appropriate as values", method = "getMessageProperties(String dirPath)")
 	public void getMessageProperties_shouldScanMessagesFiles() {
 		
 		InitializerMessageSource src = new InitializerMessageSource();
@@ -53,5 +56,46 @@ public class InitializerMessageSourceTest {
 		Assert.assertTrue(msgPropMap.containsKey(propFile));
 		locale = msgPropMap.get(propFile);
 		Assert.assertEquals(new Locale("fr"), locale);
+	}
+	
+	@Test
+	public void getLocaleFromFileBaseName_shouldInferValidLocale() {
+		
+		InitializerMessageSource src = new InitializerMessageSource();
+		
+		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("basename_fr"));
+		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("my_base_name_fr"));
+		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr"));
+		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr_"));
+		Assert.assertEquals(new Locale("fr", "FR"), src.getLocaleFromFileBaseName("my_base_name_fr_FR"));
+		Assert.assertEquals(new Locale("fr", "BE"), src.getLocaleFromFileBaseName("my_base_name_fr_BE"));
+	}
+	
+	@Test
+	public void getLocaleFromFileBaseName_shouldThrowIfNoValidLocaleAsSuffixToFileBaseName() {
+		
+		InitializerMessageSource src = new InitializerMessageSource();
+		
+		try {
+			src.getLocaleFromFileBaseName("my_base_name");
+		}
+		catch (IllegalArgumentException e) {
+			Assert.assertTrue(e.getMessage()
+			        .equals("No valid locale could be inferred from the following file base name: 'my_base_name'."));
+		}
+	}
+	
+	@Test
+	public void getLocaleFromFileBaseName_shouldThrowIfNoSuffixInFileBaseName() {
+		
+		InitializerMessageSource src = new InitializerMessageSource();
+		
+		try {
+			src.getLocaleFromFileBaseName("my-base-name");
+		}
+		catch (IllegalArgumentException e) {
+			Assert.assertTrue(
+			    e.getMessage().equals("'my-base-name' is not suffixed with the string representation of a locale."));
+		}
 	}
 }

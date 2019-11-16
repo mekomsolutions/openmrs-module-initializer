@@ -9,7 +9,7 @@ public enum Domain {
 	                                "programworkflowstates"), PERSON_ATTRIBUTE_TYPES(13,
 	                                        "personattributetypes"), IDENTIFIER_SOURCES(14, "idgen"), DRUGS(15,
 	                                                "drugs"), ORDER_FREQUENCIES(16,
-	                                                        "orderfrequencies"), SPECIALITIES(18, "specialities");
+	                                                        "orderfrequencies"), SPECIALITIES(18, "specialities"), ORDER_TYPES(17, "ordertypes");
 	
 	private final int order;
 	
