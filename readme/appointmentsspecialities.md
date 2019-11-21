@@ -1,6 +1,6 @@
 ## Domain 'specialities'
 
-The **specialities** subfolder contains CSV configuration files that help modify and create appointments specialities. It should be possible in most cases to configure them via a single CSV configuration file, however there can be as many CSV files as desired.
+The **specialities** subfolder contains CSV configuration files that help modify and create Bahmni appointments specialities. It should be possible in most cases to configure them via a single CSV configuration file, however there can be as many CSV files as desired.
 This is a possible example of how the configuration subfolder may look like:
 ```bash
 specialities/
