@@ -29,7 +29,17 @@ public class AppointmentsSpecialityLineProcessor extends BaseLineProcessor<Speci
 		
 		String uuid = getUuid(line.asLine());
 		
-		Speciality speciality = specialityservice.getSpecialityByUuid(uuid); // unfortunately, there is no #getSpecialityByName
+		Speciality speciality = specialityservice.getSpecialityByUuid(uuid);
+		
+		if (speciality == null) {
+			String specialityName = line.get(HEADER_NAME, true); // should fail is name column missing
+			for (Speciality currentSpeciality : specialityservice.getAllSpecialities()) {
+				if(currentSpeciality.getName().equalsIgnoreCase(specialityName)) {
+					speciality = currentSpeciality;
+				}
+			}
+		}
+		
 		if (speciality == null) {
 			speciality = new Speciality();
 			if (!StringUtils.isEmpty(uuid)) {
