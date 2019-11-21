@@ -23,7 +23,7 @@ public class AppointmentsSpecialitiesCsvParser extends CsvParser<Speciality, Bas
 	
 	@Override
 	public Domain getDomain() {
-		return Domain.SPECIALITIES;
+		return Domain.APPOINTMENTS_SPECIALITIES;
 	}
 	
 	@Override
