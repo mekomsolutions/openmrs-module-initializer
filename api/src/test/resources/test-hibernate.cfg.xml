@@ -16,5 +16,7 @@
         <!-- MetadataMapping -->
         <mapping resource="MetadataSource.hbm.xml"/>
         <mapping resource="MetadataTermMapping.hbm.xml"/>
+        <!-- Speciality -->
+        <mapping resource="Speciality.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
