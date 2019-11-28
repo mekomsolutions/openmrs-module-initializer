@@ -33,7 +33,9 @@ public class MetadataTermMappingsLineProcessor extends BaseLineProcessor<Metadat
 	
 	@Override
 	protected MetadataTermMapping bootstrap(CsvLine line) throws IllegalArgumentException {
-		String uuid = getUuid(line.asLine());
+		
+		String uuid = line.getUuid();
+		
 		String sourceName = line.get(MAPPING_SOURCE, true);
 		String mappingCode = line.get(MAPPING_CODE, true);
 		

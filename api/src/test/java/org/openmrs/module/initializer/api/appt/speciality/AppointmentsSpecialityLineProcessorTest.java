@@ -24,9 +24,8 @@ public class AppointmentsSpecialityLineProcessorTest {
 		String[] line = { "Speciality name" };
 		
 		// Replay
-		AppointmentsSpecialityLineProcessor s = new AppointmentsSpecialityLineProcessor(ss);
-		s.setHeaderLine(headerLine);
-		Speciality speciality = s.fill(new Speciality(), new CsvLine(s, line));
+		AppointmentsSpecialityLineProcessor p = new AppointmentsSpecialityLineProcessor(ss);
+		Speciality speciality = p.fill(new Speciality(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertEquals("Speciality name", speciality.getName());

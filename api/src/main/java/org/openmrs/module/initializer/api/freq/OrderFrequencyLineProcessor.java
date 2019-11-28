@@ -38,7 +38,7 @@ public class OrderFrequencyLineProcessor extends BaseLineProcessor<OrderFrequenc
 	@Override
 	protected OrderFrequency bootstrap(CsvLine line) throws IllegalArgumentException {
 		
-		String uuid = getUuid(line.asLine());
+		String uuid = line.getUuid();
 		
 		OrderFrequency freq = service.getOrderFrequencyByUuid(uuid);
 		if (freq == null) {

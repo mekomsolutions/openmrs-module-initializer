@@ -10,22 +10,15 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
-import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsObject;
-import org.openmrs.Retireable;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.InitializerLogFactory;
 
 import com.opencsv.CSVReader;
 
 public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineProcessor<T>> {
-	
-	protected static final String DEFAULT_RETIRE_REASON = "Retired by module " + InitializerConstants.MODULE_NAME;
-	
-	protected static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
 	
 	protected final Log log = InitializerLogFactory.getLog(CsvParser.class);
 	
@@ -81,13 +74,13 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	 * The order of the line processors does greatly matter, make sure you add them
 	 * in the right order.
 	 */
-	protected void setLineProcessors(String version, String[] headerLine) {
+	protected void setLineProcessors(String version) {
 		if (singleLineProcessor == null) {
 			throw new IllegalStateException(
 			        "It was not possible to set the default single processor for the CSV parser, there was none to be found. Make sure to initialize your CSV parser with at least one line processor.");
 		}
 		lineProcessors.clear();
-		lineProcessors.add(singleLineProcessor.setHeaderLine(headerLine));
+		lineProcessors.add(singleLineProcessor);
 	}
 	
 	public void setInputStream(InputStream is) throws IOException {
@@ -96,7 +89,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		
 		String version = P.getVersion(headerLine);
 		
-		setLineProcessors(version, headerLine);
+		setLineProcessors(version);
 	}
 	
 	/**
@@ -118,38 +111,19 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		return headerLine;
 	}
 	
-	protected T setVoidedOrRetired(boolean isVoidedOrRetired, T instance) {
-		if (instance instanceof Retireable) {
-			Retireable metadataInstance = (Retireable) instance;
-			metadataInstance.setRetired(isVoidedOrRetired);
-			metadataInstance.setRetireReason(DEFAULT_RETIRE_REASON);
-		}
-		if (instance instanceof BaseOpenmrsData) {
-			BaseOpenmrsData dataInstance = (BaseOpenmrsData) instance;
-			dataInstance.setVoided(isVoidedOrRetired);
-			dataInstance.setVoidReason(DEFAULT_VOID_REASON);
-		}
-		return instance;
-	}
-	
 	/**
-	 * Returns the CSV lines out of the CSV data on which the parser is based.
+	 * Returns the CSV lines out of the CSV data, excluding the header line.
 	 * 
-	 * @param firstLineIsHeader Indicates whether the first line should be skipped, being the header
-	 *            line.
-	 * @return The list of CSV lines.
+	 * @return The list of CSV lines below the header line.
 	 */
-	public List<String[]> getLines(boolean firstLineIsHeader) {
+	public List<String[]> getLines() {
 		
 		final List<String[]> lines = new ArrayList<String[]>();
 		
 		String[] line = null;
-		do {
+		for (;;) {
 			try {
 				line = fetchNextLine();
-				if (firstLineIsHeader) {
-					lines.add(line);
-				}
 			}
 			catch (IOException e) {
 				lines.add(new String[0]);
@@ -157,19 +131,15 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 				    "There was an I/O exception while reading one of the CSV lines. That line will produce an error when it will be processed by the parser.",
 				    e);
 			}
-		} while (line != null);
+			
+			if (line == null) {
+				break;
+			}
+			
+			lines.add(line);
+		}
 		
 		return lines;
-	}
-	
-	/**
-	 * Returns the CSV lines out of the CSV data on which the parser is based, asssuming the that the
-	 * first line is the header line.
-	 * 
-	 * @return The list of CSV lines.
-	 */
-	public List<String[]> getLines() {
-		return getLines(true);
 	}
 	
 	/**
@@ -211,8 +181,11 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		if (line == null) {
 			return null;
 		}
+		final CsvLine csvLine = new CsvLine(headerLine, line);
 		
-		// Boostrapping
+		//
+		// 1. Boostrapping with the bootstrapper line processor
+		//
 		BaseLineProcessor<T> bootstrapper = getAnyLineProcessor();
 		if (bootstrapper == null) { // no processors available
 			log.error(
@@ -221,25 +194,32 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 			return null;
 		}
 		
-		T instance = bootstrapper.bootstrap(new CsvLine(bootstrapper, line));
+		T instance = bootstrapper.bootstrap(csvLine);
+		
 		if (instance == null) {
 			throw new APIException(
 			        "An instance that could not be bootstrapped was not provided as an empty object either. Check the implementation of this parser: "
 			                + getClass().getSuperclass().getCanonicalName());
 		}
 		
-		boolean voidedOrRetired = BaseLineProcessor.getVoidOrRetire(headerLine, line);
-		instance = setVoidedOrRetired(voidedOrRetired, instance);
-		if (voidedOrRetired) {
+		//
+		// 2. Voiding/retiring with the bootstrapper line processor
+		//
+		boolean isVoidedOrRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
+		if (bootstrapper.voidOrRetire(isVoidedOrRetired, instance)) {
 			return instance;
 		}
 		
-		// Applying the lines processors in order
+		//
+		// 3. Filling the instance using all line processors
+		//
 		for (BaseLineProcessor<T> processor : lineProcessors) {
-			instance = processor.fill(instance, new CsvLine(processor, line));
+			instance = processor.fill(instance, csvLine);
 		}
 		
-		// Saving
+		//
+		// 4. Saving the instance
+		//
 		if (instance != null) {
 			instance = save(instance);
 		}

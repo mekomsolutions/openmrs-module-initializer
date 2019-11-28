@@ -7,15 +7,17 @@ import org.apache.commons.lang3.StringUtils;
 
 public class CsvLine {
 	
+	private String[] headerLine;
+	
 	protected String[] line;
 	
-	@SuppressWarnings("rawtypes")
-	protected BaseLineProcessor processor;
-	
-	@SuppressWarnings("rawtypes")
-	public CsvLine(BaseLineProcessor processor, String[] line) {
+	public CsvLine(String[] headerLine, String[] line) {
+		this.headerLine = headerLine;
 		this.line = line;
-		this.processor = processor;
+	}
+	
+	public String[] getHeaderLine() {
+		return headerLine;
 	}
 	
 	public String[] asLine() {
@@ -25,7 +27,7 @@ public class CsvLine {
 	public String get(String header, boolean canThrowException) throws IllegalArgumentException {
 		String val = null;
 		try {
-			val = line[processor.getColumn(header)];
+			val = line[BaseLineProcessor.getColumn(headerLine, header)];
 		}
 		catch (IllegalArgumentException e) {
 			if (canThrowException) {
@@ -37,6 +39,24 @@ public class CsvLine {
 	
 	public String get(String header) {
 		return get(header, false);
+	}
+	
+	public String getUuid() throws IllegalArgumentException {
+		
+		String str = get(BaseLineProcessor.HEADER_UUID, true);
+		
+		// TODO Reuse UUID.fromString(str) when MRSCMNS-59 is implemented
+		if (!StringUtils.isEmpty(str)) {
+			boolean validUuid = str.length() == 36 || "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAA".equals(str)
+			        || "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA".equals(str);
+			if (!validUuid) {
+				throw new IllegalArgumentException(
+				        "'" + str + "' did not pass the soft check for being a valid OpenMRS UUID.");
+			}
+			
+			// str = UUID.fromString(str).toString();
+		}
+		return str;
 	}
 	
 	public String getString(String header, String defaultValue) {

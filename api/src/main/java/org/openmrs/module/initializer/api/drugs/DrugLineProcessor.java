@@ -33,7 +33,9 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug> {
 	
 	@Override
 	protected Drug bootstrap(CsvLine line) throws IllegalArgumentException {
-		String uuid = getUuid(line.asLine());
+		
+		String uuid = line.getUuid();
+		
 		Drug drug = conceptService.getDrugByUuid(uuid);
 		if (drug == null) {
 			drug = conceptService.getDrug(line.get(HEADER_NAME));

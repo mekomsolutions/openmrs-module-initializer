@@ -48,8 +48,7 @@ public class ConceptNumericLineProcessorTest {
 		
 		// Replay
 		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(cs);
-		p.setHeaderLine(headerLine);
-		ConceptNumeric cn = (ConceptNumeric) p.fill(new Concept(), new CsvLine(p, line));
+		ConceptNumeric cn = (ConceptNumeric) p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertEquals(ConceptNumericLineProcessor.DATATYPE_NUMERIC, cn.getDatatype().getName());
@@ -73,8 +72,7 @@ public class ConceptNumericLineProcessorTest {
 		
 		// Replay
 		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(cs);
-		p.setHeaderLine(headerLine);
-		Concept c = p.fill(new Concept(), new CsvLine(p, line));
+		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertFalse(c instanceof ConceptNumeric);
@@ -89,7 +87,6 @@ public class ConceptNumericLineProcessorTest {
 		
 		// Replay
 		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(cs);
-		p.setHeaderLine(headerLine);
-		p.fill(new Concept(), new CsvLine(p, line));
+		p.fill(new Concept(), new CsvLine(headerLine, line));
 	}
 }

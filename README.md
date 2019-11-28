@@ -14,7 +14,9 @@ The configuration folder is subdivided into _domain_ subfolders:
 ```bash
 configuration/
   ├── addresshierarchy/
+  ├── appointmentsspecialities/
   ├── concepts/
+  ├── datafiltermappings/
   ├── drugs/
   ├── encountertypes/
   ├── globalproperties/
@@ -64,6 +66,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Order Frequencies(CSV files)](readme/freqs.md)
 1. [Order Types(CSV files)](readme/ordertypes.md)
 1. [Bahmni Appointments Specialities (CSV files)](readme/appointmentsspecialities.md)
+1. [Data Filter entity-basis mappings (CSV files)](readme/datafiltermappings.md)
 
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:
@@ -73,7 +76,12 @@ cd openmrs-module-initializer
 mvn clean install
 ```
 ##### Runtime requirements & compatibility
-* Core 1.11.9
+* OpenMRS Core 2.1.1 (*required*)
+* ID Gen 4.3 (*compatible*)
+* Metadata Sharing 1.2.2 (*compatible*)
+* Metadata Mapping 1.3.4 (*compatible*)
+* Bahmni Appointments 1.2 (*compatible*)
+* Data Filter 1.0.0 (*compatible*)
 
 ### Quick facts
 Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.
@@ -94,6 +102,8 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and edition of roles provided through CSV files in **configuration/roles**.
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatamappings**.
 * Bulk creation and edition of encounter types provided through CSV files in **configuration/encountertypes**.
+* Bulk creation and edition of Bahmni appointments specialities provided through CSV files in **configuration/appointmentsspecialities**.
+* Bulk access management of Data Filter entity to basis mappings provided through CSV files in **configuration/datafiltermappings**.
 
 #### Version 1.1.0
 * Bulk creation and edition of drugs provided through CSV files in **configuration/locations**.

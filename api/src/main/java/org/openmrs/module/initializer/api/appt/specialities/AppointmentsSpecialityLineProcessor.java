@@ -27,14 +27,14 @@ public class AppointmentsSpecialityLineProcessor extends BaseLineProcessor<Speci
 	@Override
 	protected Speciality bootstrap(CsvLine line) throws IllegalArgumentException {
 		
-		String uuid = getUuid(line.asLine());
+		String uuid = line.getUuid();
 		
 		Speciality speciality = specialityservice.getSpecialityByUuid(uuid);
 		
 		if (speciality == null) {
 			String specialityName = line.get(HEADER_NAME, true); // should fail is name column missing
 			for (Speciality currentSpeciality : specialityservice.getAllSpecialities()) {
-				if(currentSpeciality.getName().equalsIgnoreCase(specialityName)) {
+				if (currentSpeciality.getName().equalsIgnoreCase(specialityName)) {
 					speciality = currentSpeciality;
 				}
 			}

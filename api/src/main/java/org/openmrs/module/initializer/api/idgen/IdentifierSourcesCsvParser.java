@@ -38,9 +38,9 @@ public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, Ba
 	}
 	
 	@Override
-	protected void setLineProcessors(String version, String[] headerLine) {
+	protected void setLineProcessors(String version) {
 		lineProcessors.clear();
-		lineProcessors.add(processor.setHeaderLine(headerLine));
-		lineProcessors.add(seqProcessor.setHeaderLine(headerLine));
+		lineProcessors.add(processor);
+		lineProcessors.add(seqProcessor);
 	}
 }
