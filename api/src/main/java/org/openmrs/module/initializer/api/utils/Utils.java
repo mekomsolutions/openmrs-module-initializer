@@ -33,6 +33,11 @@ import org.openmrs.api.OrderService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
+import org.openmrs.module.appointments.model.AppointmentServiceType;
+import org.openmrs.module.appointments.model.ServiceWeeklyAvailability;
+import org.openmrs.module.appointments.model.Speciality;
+import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
+import org.openmrs.module.appointments.service.SpecialityService;
 import org.springframework.util.CollectionUtils;
 
 public class Utils {
@@ -372,5 +377,81 @@ public class Utils {
 			instance = cs.getConceptClassByUuid(id);
 		}
 		return instance;
+	}
+	
+	/**
+	 * Fetches an AppointmentServiceType using it's UUID. The name column is not unique, we can't use it.
+	 * 
+	 * @param id The AppointmentServiceType UUID.
+	 * @return The {@link AppointmentServiceType} instance if found, null otherwise.
+	 */
+	public static AppointmentServiceType fetchAppointmentServiceType(String id, AppointmentServiceDefinitionService asds) {
+		AppointmentServiceType instance = asds.getAppointmentServiceTypeByUuid(id);
+		return instance;
+	}
+	
+	/**
+	 * Fetches a ServiceWeeklyAvailability using it's UUID. 
+	 * There is no "name" column in "appointment_service_weekly_availability" table, so we can't fetch ServiceWeeklyAvailability by name.
+	 * 
+	 * @param id The ServiceWeeklyAvailability UUID.
+	 * @return The {@link ServiceWeeklyAvailability} instance if found, null otherwise.
+	 */
+	public static ServiceWeeklyAvailability fetchAppointmentServiceWeeklyAvailability(String id, AppointmentServiceDefinitionService asds) {
+		//TODO Implement this method when we have we have a method to fetch ServiceWeeklyAvailability instances in AppointmentServiceDefinitionService
+		return null;
+	}
+	
+	/**
+	 * Fetches Bahmni appointment speciality trying various routes.
+	 * 
+	 * @param id The appointment speciality name or UUID.
+	 * @param specialityService
+	 * @return The {@link Speciality} instance if found, null otherwise.
+	 */
+	public static Speciality fetchBahmniAppointmentSpeciality(String id, SpecialityService specialityService) {
+		Speciality instance = null;
+		if (instance == null) {
+			id = UUID.fromString(id).toString();
+			instance = specialityService.getSpecialityByUuid(id);
+		}
+		if (instance == null) {
+			for (Speciality currentSpeciality : specialityService.getAllSpecialities()) { //Because we don't have #specialityService.getSpecialityByName
+				if(currentSpeciality.getName().equalsIgnoreCase(id)) {
+					instance = currentSpeciality;
+				}
+			}
+		}
+		return instance;
+	}
+	
+	/**
+	 * Checks if a location is an appointment location
+	 * 
+	 * @param location The location to check
+	 * @return true if the location is an appointment location, false otherwise.
+	 */
+	public static boolean isAppointmentLocation(Location location) {
+		for (LocationTag tag : location.getTags()) {
+			if(tag.getName().equalsIgnoreCase("Admission Location")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks if a string can be converted to an integer
+	 * 
+	 * @param input The string to check
+	 * @return true if the location is an appointment location, false otherwise.
+	 */
+	public static boolean isParsableToInt(String input){
+	    try{
+	        Integer.parseInt(input);
+	        return true;
+	    }catch(NumberFormatException e){
+	        return false;
+	    }
 	}
 }
