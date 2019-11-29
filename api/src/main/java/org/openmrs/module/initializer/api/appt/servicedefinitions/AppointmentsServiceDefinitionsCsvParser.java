@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.appt.appointmentservicedefinitions;
+package org.openmrs.module.initializer.api.appt.servicedefinitions;
 
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
@@ -12,22 +12,22 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @OpenmrsProfile(modules = { "appointments:*" })
 public class AppointmentsServiceDefinitionsCsvParser extends CsvParser<AppointmentServiceDefinition, BaseLineProcessor<AppointmentServiceDefinition>> {
 	
-	private AppointmentServiceDefinitionService appointmentServiceDefinitionService;
+	private AppointmentServiceDefinitionService appointmentServiceService;
 	
 	@Autowired
-	public AppointmentsServiceDefinitionsCsvParser(@Qualifier("appointmentServiceDefinitionService") AppointmentServiceDefinitionService appointmentServiceDefinitionService,
+	public AppointmentsServiceDefinitionsCsvParser(@Qualifier("appointmentServiceService") AppointmentServiceDefinitionService appointmentServiceService,
 	    AppointmentsServiceDefinitionLineProcessor processor) {
 		super(processor);
-		this.appointmentServiceDefinitionService = appointmentServiceDefinitionService;
+		this.appointmentServiceService = appointmentServiceService;
 	}
 	
 	@Override
 	public Domain getDomain() {
-		return Domain.APPOINTMENTS_SPECIALITIES;
+		return Domain.APPOINTMENTS_SERVICE_DEFINITIONS;
 	}
 	
 	@Override
 	protected AppointmentServiceDefinition save(AppointmentServiceDefinition instance) {
-		return appointmentServiceDefinitionService.save(instance);
+		return appointmentServiceService.save(instance);
 	}
 }

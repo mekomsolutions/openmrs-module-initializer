@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.appt.appointmentservicedefinitions;
+package org.openmrs.module.initializer.api.appt.servicedefinitions;
 
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;

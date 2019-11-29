@@ -380,29 +380,6 @@ public class Utils {
 	}
 	
 	/**
-	 * Fetches an AppointmentServiceType using it's UUID. The name column is not unique, we can't use it.
-	 * 
-	 * @param id The AppointmentServiceType UUID.
-	 * @return The {@link AppointmentServiceType} instance if found, null otherwise.
-	 */
-	public static AppointmentServiceType fetchAppointmentServiceType(String id, AppointmentServiceDefinitionService asds) {
-		AppointmentServiceType instance = asds.getAppointmentServiceTypeByUuid(id);
-		return instance;
-	}
-	
-	/**
-	 * Fetches a ServiceWeeklyAvailability using it's UUID. 
-	 * There is no "name" column in "appointment_service_weekly_availability" table, so we can't fetch ServiceWeeklyAvailability by name.
-	 * 
-	 * @param id The ServiceWeeklyAvailability UUID.
-	 * @return The {@link ServiceWeeklyAvailability} instance if found, null otherwise.
-	 */
-	public static ServiceWeeklyAvailability fetchAppointmentServiceWeeklyAvailability(String id, AppointmentServiceDefinitionService asds) {
-		//TODO Implement this method when we have we have a method to fetch ServiceWeeklyAvailability instances in AppointmentServiceDefinitionService
-		return null;
-	}
-	
-	/**
 	 * Fetches Bahmni appointment speciality trying various routes.
 	 * 
 	 * @param id The appointment speciality name or UUID.
@@ -433,7 +410,7 @@ public class Utils {
 	 */
 	public static boolean isAppointmentLocation(Location location) {
 		for (LocationTag tag : location.getTags()) {
-			if(tag.getName().equalsIgnoreCase("Admission Location")) {
+			if(tag.getName().equalsIgnoreCase("Appointment Location")) {
 				return true;
 			}
 		}
