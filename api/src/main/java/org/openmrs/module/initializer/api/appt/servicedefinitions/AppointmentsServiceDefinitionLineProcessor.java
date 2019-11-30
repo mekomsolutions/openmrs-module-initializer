@@ -17,15 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
- * This is the first level line processor for Bahmni Appointment Service Definition. It allows to parse and save Appointment Service Definitions
- * with the minimal set of required fields.
+ * This is the first level line processor for Bahmni Appointment Service Definition. It allows to
+ * parse and save Appointment Service Definitions with the minimal set of required fields.
  */
 @OpenmrsProfile(modules = { "appointments:*" })
 public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcessor<AppointmentServiceDefinition> {
-		
-	protected static String HEADER_SPECIALITY = "speciality";	
 	
-	protected static String HEADER_LOCATION = "location";	
+	protected static String HEADER_SPECIALITY = "speciality";
+	
+	protected static String HEADER_LOCATION = "location";
 	
 	protected static String HEADER_LABEL_COLOUR = "label colour";
 	
@@ -36,9 +36,10 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 	private LocationService locationService;
 	
 	@Autowired
-	public AppointmentsServiceDefinitionLineProcessor(@Qualifier("appointmentServiceService") AppointmentServiceDefinitionService appointmentServiceService,
-			@Qualifier("specialityService") SpecialityService specialityService,
-			@Qualifier("locationService") LocationService locationService) {
+	public AppointmentsServiceDefinitionLineProcessor(
+	    @Qualifier("appointmentServiceService") AppointmentServiceDefinitionService appointmentServiceService,
+	    @Qualifier("specialityService") SpecialityService specialityService,
+	    @Qualifier("locationService") LocationService locationService) {
 		super();
 		this.appointmentServiceService = appointmentServiceService;
 		this.specialityService = specialityService;
@@ -50,12 +51,14 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		
 		String uuid = getUuid(line.asLine());
 		
-		AppointmentServiceDefinition appointmentServiceDefinition = appointmentServiceService.getAppointmentServiceByUuid(uuid);
+		AppointmentServiceDefinition appointmentServiceDefinition = appointmentServiceService
+		        .getAppointmentServiceByUuid(uuid);
 		
 		if (appointmentServiceDefinition == null) {
 			String appointmentServiceDefinitionName = line.get(HEADER_NAME, true); // should fail if name column missing
-			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : appointmentServiceService.getAllAppointmentServices(false)) { //We don't have #getAppointmentServiceByName, so we use a loop
-				if(currentAppointmentServiceDefinition.getName().equalsIgnoreCase(appointmentServiceDefinitionName)) {
+			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : appointmentServiceService
+			        .getAllAppointmentServices(false)) { //We don't have #getAppointmentServiceByName, so we use a loop
+				if (currentAppointmentServiceDefinition.getName().equalsIgnoreCase(appointmentServiceDefinitionName)) {
 					appointmentServiceDefinition = currentAppointmentServiceDefinition;
 				}
 			}
@@ -71,11 +74,13 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		return appointmentServiceDefinition;
 	}
 	
-	public AppointmentServiceDefinition fill(AppointmentServiceDefinition appointmentServiceDefinition, CsvLine line) throws IllegalArgumentException {
+	public AppointmentServiceDefinition fill(AppointmentServiceDefinition appointmentServiceDefinition, CsvLine line)
+	        throws IllegalArgumentException {
 		
 		String appointmentServiceDefinitionName = line.get(HEADER_NAME, true); // should fail is name column missing
 		if (StringUtils.isEmpty(appointmentServiceDefinitionName)) {
-			throw new IllegalArgumentException("An AppointmentServiceDefinition must at least be provided a name: '" + line.toString() + "'");
+			throw new IllegalArgumentException(
+			        "An AppointmentServiceDefinition must at least be provided a name: '" + line.toString() + "'");
 		}
 		appointmentServiceDefinition.setName(appointmentServiceDefinitionName);
 		appointmentServiceDefinition.setDescription(line.getString(HEADER_DESC, ""));
@@ -103,15 +108,15 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		String serviceSpeciality = line.getString(HEADER_SPECIALITY, "");
 		if (!StringUtils.isEmpty(serviceSpeciality)) {
 			Speciality fetchedSpeciality = Utils.fetchBahmniAppointmentSpeciality(serviceSpeciality, specialityService);
-			if(fetchedSpeciality != null) {
+			if (fetchedSpeciality != null) {
 				appointmentServiceDefinition.setSpeciality(fetchedSpeciality);
 			}
 		}
 		
 		String serviceLocation = line.getString(HEADER_LOCATION, "");
-		if(!StringUtils.isEmpty(serviceLocation)) {
+		if (!StringUtils.isEmpty(serviceLocation)) {
 			Location fetchedLocation = Utils.fetchLocation(line.getString(HEADER_LOCATION, ""), locationService);
-			if(fetchedLocation != null && Utils.isAppointmentLocation(fetchedLocation)) {
+			if (fetchedLocation != null && Utils.isAppointmentLocation(fetchedLocation)) {
 				appointmentServiceDefinition.setLocation(fetchedLocation);
 			}
 		}

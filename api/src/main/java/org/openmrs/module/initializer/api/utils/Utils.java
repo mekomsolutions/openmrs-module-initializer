@@ -394,7 +394,7 @@ public class Utils {
 		}
 		if (instance == null) {
 			for (Speciality currentSpeciality : specialityService.getAllSpecialities()) { //Because we don't have #specialityService.getSpecialityByName
-				if(currentSpeciality.getName().equalsIgnoreCase(id)) {
+				if (currentSpeciality.getName().equalsIgnoreCase(id)) {
 					instance = currentSpeciality;
 				}
 			}
@@ -410,7 +410,7 @@ public class Utils {
 	 */
 	public static boolean isAppointmentLocation(Location location) {
 		for (LocationTag tag : location.getTags()) {
-			if(tag.getName().equalsIgnoreCase("Appointment Location")) {
+			if (tag.getName().equalsIgnoreCase("Appointment Location")) {
 				return true;
 			}
 		}
@@ -423,12 +423,13 @@ public class Utils {
 	 * @param input The string to check
 	 * @return true if the location is an appointment location, false otherwise.
 	 */
-	public static boolean isParsableToInt(String input){
-	    try{
-	        Integer.parseInt(input);
-	        return true;
-	    }catch(NumberFormatException e){
-	        return false;
-	    }
+	public static boolean isParsableToInt(String input) {
+		try {
+			Integer.parseInt(input);
+			return true;
+		}
+		catch (NumberFormatException e) {
+			return false;
+		}
 	}
 }

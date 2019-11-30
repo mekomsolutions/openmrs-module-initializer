@@ -62,7 +62,7 @@ public class AppointmentsServiceDefinitionsLoaderIntegrationTest extends DomainB
 			s.setUuid("cf213609-11ab-11ea-a6a0-080027405b36");
 			specialityService.save(s);
 		}
-	
+		
 	}
 	
 	@Test
@@ -77,7 +77,8 @@ public class AppointmentsServiceDefinitionsLoaderIntegrationTest extends DomainB
 		}
 		// Verif adding appointment service location
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService.getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
+			AppointmentServiceDefinition asd = appointmentServiceService
+			        .getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
 			Assert.assertEquals("Xanadu", asd.getLocation().getName());
 		}
 		

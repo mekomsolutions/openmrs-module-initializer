@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServiceDefinitionsLoader;
 import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
@@ -93,6 +94,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	@Autowired
 	private OrderTypesLoader otLoader;
 	
+	@Autowired
+	private AppointmentsServiceDefinitionsLoader appointmentsServiceDefinitionsLoader;
+	
 	@Test
 	public void getLoaders_shouldBeUnivoquelyOrdered() {
 		
@@ -131,6 +135,8 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		Assert.assertThat(appointmentsSpecialitiesLoader.getOrder(), greaterThan(conceptsLoader.getOrder()));
 		count++;
 		Assert.assertThat(otLoader.getOrder(), greaterThan(conceptsLoader.getOrder()));
+		count++;
+		Assert.assertThat(appointmentsServiceDefinitionsLoader.getOrder(), greaterThan(appointmentsSpecialitiesLoader.getOrder()));
 		count++;
 		Assert.assertEquals(getService().getLoaders().size(), count);
 		

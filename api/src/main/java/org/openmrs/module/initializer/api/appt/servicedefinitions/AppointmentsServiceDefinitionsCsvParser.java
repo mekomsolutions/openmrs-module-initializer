@@ -15,7 +15,8 @@ public class AppointmentsServiceDefinitionsCsvParser extends CsvParser<Appointme
 	private AppointmentServiceDefinitionService appointmentServiceService;
 	
 	@Autowired
-	public AppointmentsServiceDefinitionsCsvParser(@Qualifier("appointmentServiceService") AppointmentServiceDefinitionService appointmentServiceService,
+	public AppointmentsServiceDefinitionsCsvParser(
+	    @Qualifier("appointmentServiceService") AppointmentServiceDefinitionService appointmentServiceService,
 	    AppointmentsServiceDefinitionLineProcessor processor) {
 		super(processor);
 		this.appointmentServiceService = appointmentServiceService;

@@ -31,9 +31,9 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
 	protected static String HEADER_DURATION = "duration";
 	
-	protected static String HEADER_START_TIME = "start time";	
+	protected static String HEADER_START_TIME = "start time";
 	
-	protected static String HEADER_END_TIME = "end time";	
+	protected static String HEADER_END_TIME = "end time";
 	
 	protected static String HEADER_MAX_LOAD = "max load";
 	

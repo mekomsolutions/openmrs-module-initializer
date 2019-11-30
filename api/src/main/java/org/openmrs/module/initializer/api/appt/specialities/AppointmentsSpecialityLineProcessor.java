@@ -34,7 +34,7 @@ public class AppointmentsSpecialityLineProcessor extends BaseLineProcessor<Speci
 		if (speciality == null) {
 			String specialityName = line.get(HEADER_NAME, true); // should fail is name column missing
 			for (Speciality currentSpeciality : specialityservice.getAllSpecialities()) {
-				if(currentSpeciality.getName().equalsIgnoreCase(specialityName)) {
+				if (currentSpeciality.getName().equalsIgnoreCase(specialityName)) {
 					speciality = currentSpeciality;
 				}
 			}

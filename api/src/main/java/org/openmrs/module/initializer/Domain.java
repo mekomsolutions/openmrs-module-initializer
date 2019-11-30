@@ -10,8 +10,8 @@ public enum Domain {
 	                                        "personattributetypes"), IDENTIFIER_SOURCES(14, "idgen"), DRUGS(15,
 	                                                "drugs"), ORDER_FREQUENCIES(16, "orderfrequencies"), ORDER_TYPES(17,
 	                                                        "ordertypes"), APPOINTMENTS_SPECIALITIES(18,
-	                                                                "appointmentsspecialities"), APPOINTMENTS_SERVICE_DEFINITIONS(19,
-	    	                                                                "appointmentsservicedefinitions");
+	                                                                "appointmentsspecialities"), APPOINTMENTS_SERVICE_DEFINITIONS(
+	                                                                        19, "appointmentsservicedefinitions");
 	
 	private final int order;
 	
