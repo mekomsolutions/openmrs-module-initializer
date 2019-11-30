@@ -1,6 +1,7 @@
 package org.openmrs.module.initializer.api.appt.servicedefinitions;
 
 import java.sql.Time;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Location;
@@ -86,23 +87,33 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		appointmentServiceDefinition.setDescription(line.getString(HEADER_DESC, ""));
 		
 		String serviceDuration = line.getString(HEADER_DURATION, "");
-		if (!StringUtils.isEmpty(serviceDuration) && Utils.isParsableToInt(serviceDuration)) {
-			appointmentServiceDefinition.setDurationMins(Integer.parseInt(serviceDuration));
+		if (!StringUtils.isEmpty(serviceDuration)) {
+			Integer duration = Utils.getIntegerFromString(serviceDuration);
+			if (duration != null) {
+				appointmentServiceDefinition.setDurationMins(duration);
+			}
 		}
 		
 		String serviceStartTime = line.getString(HEADER_START_TIME, "");
-		if (!StringUtils.isEmpty(serviceStartTime) && Utils.isParsableToInt(serviceStartTime)) {
-			appointmentServiceDefinition.setStartTime(Time.valueOf(serviceStartTime));
+		if (!StringUtils.isEmpty(serviceStartTime)) {
+			Date startTime = Utils.getTimeFromString(serviceStartTime);
+			if (startTime != null) {
+				appointmentServiceDefinition.setStartTime(new Time(startTime.getTime()));
+			}
 		}
 		
 		String serviceEndTime = line.getString(HEADER_END_TIME, "");
-		if (!StringUtils.isEmpty(serviceEndTime) && Utils.isParsableToInt(serviceEndTime)) {
-			appointmentServiceDefinition.setEndTime(Time.valueOf(serviceEndTime));
+		if (!StringUtils.isEmpty(serviceEndTime)) {
+			Date endTime = Utils.getTimeFromString(serviceEndTime);
+			appointmentServiceDefinition.setEndTime(new Time(endTime.getTime()));
 		}
 		
 		String serviceMaxLoad = line.getString(HEADER_MAX_LOAD, "");
-		if (!StringUtils.isEmpty(serviceMaxLoad) && Utils.isParsableToInt(serviceMaxLoad)) {
-			appointmentServiceDefinition.setMaxAppointmentsLimit(Integer.parseInt(serviceMaxLoad));
+		if (!StringUtils.isEmpty(serviceMaxLoad)) {
+			Integer maxLoad = Utils.getIntegerFromString(serviceMaxLoad);
+			if (maxLoad != null) {
+				appointmentServiceDefinition.setMaxAppointmentsLimit(maxLoad);
+			}
 		}
 		
 		String serviceSpeciality = line.getString(HEADER_SPECIALITY, "");

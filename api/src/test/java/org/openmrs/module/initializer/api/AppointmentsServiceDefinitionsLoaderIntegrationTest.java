@@ -71,15 +71,52 @@ public class AppointmentsServiceDefinitionsLoaderIntegrationTest extends DomainB
 		// Replay
 		loader.load();
 		
-		// Verif creation of appointment service definitions
+		// Verify creation of appointment service definitions
 		{
 			Assert.assertEquals(5, appointmentServiceService.getAllAppointmentServices(false).size());
 		}
-		// Verif adding appointment service location
+		// Verify adding appointment service location using location uuid
 		{
 			AppointmentServiceDefinition asd = appointmentServiceService
 			        .getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
 			Assert.assertEquals("Xanadu", asd.getLocation().getName());
+		}
+		// Verify adding appointment service location using location name
+		{
+			AppointmentServiceDefinition asd = appointmentServiceService
+			        .getAppointmentServiceByUuid("bfff3484-320a-4c1e-84c8-dbe8f0d44e8b");
+			Assert.assertEquals("Xanadu", asd.getLocation().getName());
+		}
+		// Verify adding appointment service speciality using speciality name
+		{
+			AppointmentServiceDefinition asd = appointmentServiceService
+			        .getAppointmentServiceByUuid("c12829d8-6bdd-426c-a386-104eed0d2c41");
+			Assert.assertEquals("Orthopaedic", asd.getSpeciality().getName());
+		}
+		// Verify adding appointment service speciality using speciality UUID
+		{
+			AppointmentServiceDefinition asd = appointmentServiceService
+			        .getAppointmentServiceByUuid("b4b96cea-a0ed-4bbc-84f0-6c6b4e79f447");
+			Assert.assertEquals("Orthopaedic", asd.getSpeciality().getName());
+		}
+		// Verify adding appointment service start time and end time
+		{
+			AppointmentServiceDefinition asd = appointmentServiceService
+			        .getAppointmentServiceByUuid("fc46dedf-5e96-44d4-bd99-bec1d80d15d5");
+			Assert.assertEquals("08:00:00", asd.getStartTime().toString());
+			Assert.assertEquals("17:00:00", asd.getEndTime().toString());
+		}
+		// Verify adding appointment service duration
+		{
+			AppointmentServiceDefinition asd = appointmentServiceService
+			        .getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
+			Assert.assertEquals(new Integer(30), asd.getDurationMins());
+		}
+		// Verify adding appointment service max load
+		{
+			AppointmentServiceDefinition asd = appointmentServiceService
+			        .getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
+			Assert.assertEquals(new Integer(15), asd.getMaxAppointmentsLimit());
 		}
 		
 	}

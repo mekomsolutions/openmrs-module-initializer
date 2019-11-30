@@ -1,7 +1,11 @@
 package org.openmrs.module.initializer.api.utils;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -33,10 +37,7 @@ import org.openmrs.api.OrderService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
-import org.openmrs.module.appointments.model.AppointmentServiceType;
-import org.openmrs.module.appointments.model.ServiceWeeklyAvailability;
 import org.openmrs.module.appointments.model.Speciality;
-import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.springframework.util.CollectionUtils;
 
@@ -389,7 +390,6 @@ public class Utils {
 	public static Speciality fetchBahmniAppointmentSpeciality(String id, SpecialityService specialityService) {
 		Speciality instance = null;
 		if (instance == null) {
-			id = UUID.fromString(id).toString();
 			instance = specialityService.getSpecialityByUuid(id);
 		}
 		if (instance == null) {
@@ -418,18 +418,33 @@ public class Utils {
 	}
 	
 	/**
-	 * Checks if a string can be converted to an integer
+	 * Converts a string to a java.lang.Integer
 	 * 
-	 * @param input The string to check
-	 * @return true if the location is an appointment location, false otherwise.
+	 * @param input The string to convert
+	 * @return a java.lang.Integer representation value of the input string, null otherwise.
 	 */
-	public static boolean isParsableToInt(String input) {
+	public static Integer getIntegerFromString(String input) {
 		try {
-			Integer.parseInt(input);
-			return true;
+			return Integer.parseInt(input);
 		}
 		catch (NumberFormatException e) {
-			return false;
+			return null;
+		}
+	}
+	
+	/**
+	 * Converts a string to java.util.Date
+	 * 
+	 * @param input The string to convert
+	 * @return a java.util.Date representation value of the input string, null otherwise.
+	 */
+	public static Date getTimeFromString(String input) {
+		DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+		try {
+			return dateFormat.parse(input);
+		}
+		catch (ParseException e) {
+			return null;
 		}
 	}
 }

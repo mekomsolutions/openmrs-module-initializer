@@ -136,7 +136,8 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		count++;
 		Assert.assertThat(otLoader.getOrder(), greaterThan(conceptsLoader.getOrder()));
 		count++;
-		Assert.assertThat(appointmentsServiceDefinitionsLoader.getOrder(), greaterThan(appointmentsSpecialitiesLoader.getOrder()));
+		Assert.assertThat(appointmentsServiceDefinitionsLoader.getOrder(),
+		    greaterThan(appointmentsSpecialitiesLoader.getOrder()));
 		count++;
 		Assert.assertEquals(getService().getLoaders().size(), count);
 		
