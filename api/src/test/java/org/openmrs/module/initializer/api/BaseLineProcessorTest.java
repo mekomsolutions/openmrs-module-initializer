@@ -149,22 +149,22 @@ public class BaseLineProcessorTest {
 		String[] headerLine = { "uuid" };
 		{
 			String[] line = { uuid_1 };
-			String uuid = BaseLineProcessor.getUuid(headerLine, line);
+			String uuid = new CsvLine(headerLine, line).getUuid();
 			Assert.assertEquals(uuid_1, uuid);
 		}
 		{
 			String[] line = { uuid_4 };
-			String uuid = BaseLineProcessor.getUuid(headerLine, line);
+			String uuid = new CsvLine(headerLine, line).getUuid();
 			Assert.assertEquals(uuid_4, uuid);
 		}
 		{
 			String[] line = { null };
-			String uuid = BaseLineProcessor.getUuid(headerLine, line);
+			String uuid = new CsvLine(headerLine, line).getUuid();
 			Assert.assertEquals(null, uuid);
 		}
 		{
 			String[] line = { "" };
-			String uuid = BaseLineProcessor.getUuid(headerLine, line);
+			String uuid = new CsvLine(headerLine, line).getUuid();
 			Assert.assertEquals("", uuid);
 		}
 	}
@@ -173,6 +173,6 @@ public class BaseLineProcessorTest {
 	public void getUuid_shouldFailOnInvalidUuid() {
 		String[] headerLine = { "uuid" };
 		String[] line = { "foobar" };
-		BaseLineProcessor.getUuid(headerLine, line);
+		new CsvLine(headerLine, line).getUuid();
 	}
 }

@@ -50,8 +50,7 @@ public class PersonAttributeTypeLineProcessorTest {
 		// Replay
 		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(ps);
 		p.setHelper(helper);
-		p.setHeaderLine(headerLine);
-		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(p, line));
+		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertEquals("PAT name", pat.getName());
@@ -72,8 +71,7 @@ public class PersonAttributeTypeLineProcessorTest {
 		// Replay
 		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(ps);
 		p.setHelper(helper);
-		p.setHeaderLine(headerLine);
-		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(p, line));
+		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertEquals("PAT name", pat.getName());
@@ -89,8 +87,7 @@ public class PersonAttributeTypeLineProcessorTest {
 		// Replay
 		PersonAttributeTypeLineProcessor p = new PersonAttributeTypeLineProcessor(ps);
 		p.setHelper(helper);
-		p.setHeaderLine(headerLine);
-		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(p, line));
+		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertNull(pat.getName());

@@ -17,17 +17,11 @@ README.html
 *.iml
 
 .settings/*
-api/bin
-omod/bin
-api/.classpath
-api/.project
-api/.settings/*
-api/target/*
-omod/.classpath
-omod/.project
-omod/.settings/*
-omod/target/*
-/.settings
+**/bin
+**/.classpath
+**/.project
+**/.settings/*
+**/target/*
 
 # OS X auto-generated files #
 .DS_Store

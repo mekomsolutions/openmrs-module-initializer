@@ -37,7 +37,8 @@ public class ProgramLineProcessor extends BaseLineProcessor<Program> {
 	
 	@Override
 	protected Program bootstrap(CsvLine line) throws IllegalArgumentException {
-		String uuid = getUuid(line.asLine());
+		
+		String uuid = line.getUuid();
 		
 		String id = uuid;
 		if (id == null) {
@@ -54,8 +55,6 @@ public class ProgramLineProcessor extends BaseLineProcessor<Program> {
 				program.setUuid(uuid);
 			}
 		}
-		
-		program.setRetired(getVoidOrRetire(line.asLine()));
 		
 		return program;
 	}

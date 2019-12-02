@@ -73,8 +73,7 @@ public class MappingsConceptLineProcessorTest {
 		
 		// Replay
 		MappingsConceptLineProcessor p = new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs));
-		p.setHeaderLine(headerLine);
-		Concept c = p.fill(new Concept(), new CsvLine(p, line));
+		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Collection<ConceptMap> mappings = c.getConceptMappings();
@@ -98,8 +97,7 @@ public class MappingsConceptLineProcessorTest {
 		
 		// Replay
 		MappingsConceptLineProcessor p = new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs));
-		p.setHeaderLine(headerLine);
-		Concept c = p.fill(new Concept(), new CsvLine(p, line));
+		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertTrue(CollectionUtils.isEmpty(c.getConceptMappings()));
@@ -113,8 +111,7 @@ public class MappingsConceptLineProcessorTest {
 		
 		// Replay
 		MappingsConceptLineProcessor p = new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs));
-		p.setHeaderLine(headerLine);
-		Concept c = p.fill(new Concept(), new CsvLine(p, line));
+		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		Assert.assertNull(c.getConceptMappings());
 	}
 }

@@ -34,7 +34,7 @@ public class EncounterTypeLineProcessor extends BaseLineProcessor<EncounterType>
 	@Override
 	protected EncounterType bootstrap(CsvLine line) throws IllegalArgumentException {
 		
-		String uuid = getUuid(line.asLine());
+		String uuid = line.getUuid();
 		
 		EncounterType type = service.getEncounterTypeByUuid(uuid);
 		if (type == null) {

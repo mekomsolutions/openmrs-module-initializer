@@ -20,29 +20,8 @@ public class PrivilegesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	private PrivilegesLoader loader;
 	
 	@Before
-	public void setup() {
-		
-		// privileges to be edited
-		{
-			Privilege p = new Privilege();
-			p.setPrivilege("Add Apples");
-			p.setDescription("Able to add fruits.");
-			us.savePrivilege(p);
-		}
-		{
-			Privilege p = new Privilege();
-			p.setPrivilege("Add Reports");
-			p.setDescription("Able to add analytic reports.");
-			p.setUuid("cf68a296-2700-102b-80cb-0017a47871b2");
-			us.savePrivilege(p);
-		}
-		{
-			Privilege p = new Privilege();
-			p.setPrivilege("Add Hens");
-			p.setDescription("Able to add poultry.");
-			p.setUuid("36404041-c255-4c5b-9b47-0d757d2afa95");
-			us.savePrivilege(p);
-		}
+	public void setup() throws Exception {
+		executeDataSet("testdata/test-metadata.xml");
 	}
 	
 	@Test

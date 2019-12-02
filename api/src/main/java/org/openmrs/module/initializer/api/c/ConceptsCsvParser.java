@@ -54,12 +54,12 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 	}
 	
 	@Override
-	protected void setLineProcessors(String version, String[] headerLine) {
+	protected void setLineProcessors(String version) {
 		lineProcessors.clear();
-		lineProcessors.add(numericProcessor.setHeaderLine(headerLine));
-		lineProcessors.add(complexProcessor.setHeaderLine(headerLine));
-		lineProcessors.add(baseProcessor.setHeaderLine(headerLine));
-		lineProcessors.add(nestedProcessor.setHeaderLine(headerLine));
-		lineProcessors.add(mappingsProcessor.setHeaderLine(headerLine));
+		lineProcessors.add(numericProcessor);
+		lineProcessors.add(complexProcessor);
+		lineProcessors.add(baseProcessor);
+		lineProcessors.add(nestedProcessor);
+		lineProcessors.add(mappingsProcessor);
 	}
 }

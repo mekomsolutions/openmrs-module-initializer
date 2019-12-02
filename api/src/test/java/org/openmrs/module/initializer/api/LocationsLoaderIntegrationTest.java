@@ -12,8 +12,6 @@ package org.openmrs.module.initializer.api;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -37,26 +35,8 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	private LocationsLoader loader;
 	
 	@Before
-	public void setup() {
-		
-		LocationTag tag = ls.saveLocationTag(new LocationTag("Facility Location", ""));
-		
-		// location to edit
-		{
-			Location loc = new Location();
-			loc.setUuid("a03e395c-b881-49b7-b6fc-983f6bddc7fc");
-			loc.setName("Acme Clinic");
-			loc.setTags(new HashSet<LocationTag>(Arrays.asList(tag)));
-			ls.saveLocation(loc);
-		}
-		// location to retire
-		{
-			Location loc = new Location();
-			loc.setUuid("cbaaaab4-d960-4ae9-9b6a-8983fbd947b6");
-			loc.setName("Legacy Location");
-			loc.setDescription("Legacy location that must be retired");
-			ls.saveLocation(loc);
-		}
+	public void setup() throws Exception {
+		executeDataSet("testdata/test-metadata.xml");
 	}
 	
 	@Test

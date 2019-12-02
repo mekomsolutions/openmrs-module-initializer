@@ -57,8 +57,7 @@ public class NestedConceptLineProcessorTest {
 		
 		// Replay
 		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs));
-		p.setHeaderLine(headerLine);
-		Concept c = p.fill(new Concept(), new CsvLine(p, line));
+		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertFalse(c.getSet());
@@ -81,8 +80,7 @@ public class NestedConceptLineProcessorTest {
 		
 		// Replay
 		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs));
-		p.setHeaderLine(headerLine);
-		Concept c = p.fill(new Concept(), new CsvLine(p, line));
+		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertTrue(c.getSet());
@@ -105,8 +103,7 @@ public class NestedConceptLineProcessorTest {
 		
 		// Replay
 		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs));
-		p.setHeaderLine(headerLine);
-		Concept c = p.fill(new Concept(), new CsvLine(p, line));
+		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertFalse(c.getSet());
@@ -122,8 +119,7 @@ public class NestedConceptLineProcessorTest {
 		
 		// Replay
 		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs));
-		p.setHeaderLine(headerLine);
-		Concept c = p.fill(new Concept(), new CsvLine(p, line));
+		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		Assert.assertNull(c.getAnswers());
 		Assert.assertNull(c.getSetMembers());
 	}

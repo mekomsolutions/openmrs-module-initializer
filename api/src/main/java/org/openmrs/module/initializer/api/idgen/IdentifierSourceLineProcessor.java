@@ -134,7 +134,8 @@ public abstract class IdentifierSourceLineProcessor extends BaseLineProcessor<Id
 	@Override
 	protected IdgenSourceWrapper bootstrap(CsvLine line) throws IllegalArgumentException {
 		
-		String uuid = getUuid(line.asLine());
+		String uuid = line.getUuid();
+		
 		IdentifierSource source = idgenService.getIdentifierSourceByUuid(uuid);
 		
 		if (source == null) {

@@ -76,7 +76,9 @@ public class PersonAttributeTypeLineProcessor extends BaseLineProcessor<PersonAt
 	
 	@Override
 	protected PersonAttributeType bootstrap(CsvLine line) throws IllegalArgumentException {
-		String uuid = getUuid(line.asLine());
+		
+		String uuid = line.getUuid();
+		
 		PersonAttributeType pat = personService.getPersonAttributeTypeByUuid(uuid);
 		
 		if (pat == null) {
@@ -85,8 +87,6 @@ public class PersonAttributeTypeLineProcessor extends BaseLineProcessor<PersonAt
 				pat.setUuid(uuid);
 			}
 		}
-		
-		pat.setRetired(getVoidOrRetire(line.asLine()));
 		
 		return pat;
 	}

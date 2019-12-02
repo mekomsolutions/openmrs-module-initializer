@@ -34,6 +34,9 @@
 		<aware_of_module version="${appointmentsVersion}">
 			org.openmrs.module.appointments
 		</aware_of_module>
+		<aware_of_module version="${datafilterVersion}">
+			org.openmrs.module.datafilter
+		</aware_of_module>
 	</aware_of_modules>
 	
 	<!-- Internationalization -->

@@ -11,7 +11,10 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
+import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.Retireable;
+import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.InitializerLogFactory;
 
 /**
@@ -20,6 +23,10 @@ import org.openmrs.module.initializer.InitializerLogFactory;
 abstract public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
 	protected final static Log log = InitializerLogFactory.getLog(BaseLineProcessor.class);
+	
+	protected static final String DEFAULT_RETIRE_REASON = "Retired by module " + InitializerConstants.MODULE_NAME;
+	
+	protected static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
 	
 	protected static String HEADER_UUID = "uuid";
 	
@@ -43,17 +50,36 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
 	protected static String PARENT = "parent";
 	
-	protected String[] headerLine = new String[0];
-	
-	protected Map<String, Integer> indexMap = new HashMap<String, Integer>();
-	
-	protected Map<String, LocalizedHeader> l10nHeadersMap = new HashMap<String, LocalizedHeader>();
-	
-	protected BaseLineProcessor() {
-		// for Spring
-	}
-	
+	/**
+	 * Bootstraps an instance from a CSV line. The bootstrapping consists in 1. Either fetching an
+	 * existing instance ready to be overridden from the available identifying keys found on the CSV
+	 * line (UUID, name(s), ... etc) ; 2. Or instantiating a new instance ready to be filled up.
+	 * 
+	 * @param line The CSV line.
+	 * @return The bootstrapped instance.
+	 */
 	abstract protected T bootstrap(CsvLine line) throws IllegalArgumentException;
+	
+	/**
+	 * @param csvVoidOrRetireFlag The boolean flag for 'void or retire' as coming out of the CSV line.
+	 * @param instance
+	 * @return True whether the instance has been marked as voided or retired, false otherwise.
+	 */
+	protected boolean voidOrRetire(boolean csvVoidOrRetireFlag, T instance) {
+		if (instance instanceof Retireable) {
+			Retireable metadataInstance = (Retireable) instance;
+			metadataInstance.setRetired(csvVoidOrRetireFlag);
+			metadataInstance.setRetireReason(DEFAULT_RETIRE_REASON);
+			return metadataInstance.isRetired();
+		} else if (instance instanceof BaseOpenmrsData) {
+			BaseOpenmrsData dataInstance = (BaseOpenmrsData) instance;
+			dataInstance.setVoided(csvVoidOrRetireFlag);
+			dataInstance.setVoidReason(DEFAULT_VOID_REASON);
+			return dataInstance.isVoided();
+		} else {
+			return false;
+		}
+	}
 	
 	/*
 	 * This implements how to fill T instances from any CSV line, ignoring the
@@ -62,44 +88,14 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	 */
 	abstract protected T fill(T instance, CsvLine line) throws IllegalArgumentException;
 	
-	/**
-	 * @param headerLine The CSV file header line
-	 * @param line A line of the CSV file
-	 * @return The UUID
-	 * @throws IllegalArgumentException
-	 */
-	public static String getUuid(String[] headerLine, String[] line) throws IllegalArgumentException {
-		String str = line[getColumn(headerLine, HEADER_UUID)];
-		// TODO Reuse UUID.fromString(str) when MRSCMNS-59 is implemented
-		if (!StringUtils.isEmpty(str)) {
-			boolean validUuid = str.length() == 36 || "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAA".equals(str)
-			        || "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAA".equals(str);
-			if (!validUuid) {
-				throw new IllegalArgumentException(
-				        "'" + str + "' did not pass the soft check for being a valid OpenMRS UUID.");
-			}
-			
-			// str = UUID.fromString(str).toString();
-		}
-		return str;
-	}
-	
-	protected String getUuid(String[] line) throws IllegalArgumentException {
-		return getUuid(headerLine, line);
-	}
-	
-	public static Boolean getVoidOrRetire(String[] headerLine, String[] line) {
+	public static Boolean getVoidOrRetire(CsvLine line) {
 		String str = Boolean.FALSE.toString();
 		try {
-			str = line[getColumn(headerLine, HEADER_VOID_RETIRE)];
+			str = line.getString(HEADER_VOID_RETIRE);
 		}
 		catch (IllegalArgumentException e) {}
 		
 		return BooleanUtils.toBoolean(str);
-	}
-	
-	protected boolean getVoidOrRetire(String[] line) throws IllegalArgumentException {
-		return getVoidOrRetire(headerLine, line);
 	}
 	
 	/*
@@ -186,25 +182,13 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	/**
 	 * @see #getLocalizedHeadersMap(String[])
 	 */
-	public LocalizedHeader getLocalizedHeader(String header) {
+	public LocalizedHeader getLocalizedHeader(String[] headerLine, String header) {
+		Map<String, LocalizedHeader> l10nHeadersMap = getLocalizedHeadersMap(headerLine);
 		if (l10nHeadersMap.containsKey(header.trim().toLowerCase())) {
 			return l10nHeadersMap.get(header.trim().toLowerCase());
 		} else {
 			return new LocalizedHeader("");
 		}
-	}
-	
-	/**
-	 * Sets the header line that this processor will operate on.
-	 * 
-	 * @param headerLine The header line as an array of strings.
-	 * @return The processor set to be worked with.
-	 */
-	public final BaseLineProcessor<T> setHeaderLine(String[] headerLine) {
-		this.headerLine = headerLine;
-		this.indexMap = createIndexMap(headerLine);
-		this.l10nHeadersMap = getLocalizedHeadersMap(headerLine);
-		return this;
 	}
 	
 	/**
@@ -229,10 +213,6 @@ abstract public class BaseLineProcessor<T extends BaseOpenmrsObject> {
 			col++;
 		}
 		return indexMap;
-	}
-	
-	public int getColumn(String header) throws IllegalArgumentException {
-		return getColumn(indexMap, header.trim().toLowerCase());
 	}
 	
 	public static int getColumn(String[] headerLine, String header) throws IllegalArgumentException {

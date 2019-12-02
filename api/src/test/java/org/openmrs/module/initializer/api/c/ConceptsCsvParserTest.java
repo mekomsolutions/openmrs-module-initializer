@@ -99,16 +99,16 @@ public class ConceptsCsvParserTest {
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_uuid.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(parser.process(parser.getLines()).size(), 1);
+		Assert.assertEquals(1, parser.process(parser.getLines()).size());
 		
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_fsn.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(parser.process(parser.getLines()).size(), 1);
+		Assert.assertEquals(1, parser.process(parser.getLines()).size());
 		
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_shortname.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(parser.process(parser.getLines()).size(), 1);
+		Assert.assertEquals(1, parser.process(parser.getLines()).size());
 	}
 }

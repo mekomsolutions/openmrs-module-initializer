@@ -52,8 +52,7 @@ public class LocationLineProcessorTest {
 		
 		// Replay
 		LocationLineProcessor p = new LocationLineProcessor(ls, new LocationTagListParser(ls));
-		p.setHeaderLine(headerLine);
-		Location c = p.fill(new Location(), new CsvLine(p, line));
+		Location c = p.fill(new Location(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Set<LocationTag> tags = c.getTags();

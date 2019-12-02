@@ -41,12 +41,14 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	
 	@Override
 	protected Concept bootstrap(CsvLine line) throws IllegalArgumentException {
-		String uuid = getUuid(line.asLine());
+		
+		String uuid = line.getUuid();
+		
 		Concept concept = conceptService.getConceptByUuid(uuid);
 		
 		if (StringUtils.isEmpty(uuid) && concept == null) {
 			Locale currentLocale = Context.getLocale();
-			LocalizedHeader lh = getLocalizedHeader(HEADER_FSNAME);
+			LocalizedHeader lh = getLocalizedHeader(line.getHeaderLine(), HEADER_FSNAME);
 			for (Locale nameLocale : lh.getLocales()) {
 				String name = line.get(lh.getI18nHeader(nameLocale));
 				if (!StringUtils.isEmpty(name)) {
@@ -83,7 +85,7 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		}
 		
 		// Fully specified names
-		lh = getLocalizedHeader(HEADER_FSNAME);
+		lh = getLocalizedHeader(line.getHeaderLine(), HEADER_FSNAME);
 		for (Locale locale : lh.getLocales()) {
 			String name = line.get(lh.getI18nHeader(locale));
 			if (!StringUtils.isEmpty(name)) {
@@ -93,7 +95,7 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		}
 		
 		// Short names
-		lh = getLocalizedHeader(HEADER_SHORTNAME);
+		lh = getLocalizedHeader(line.getHeaderLine(), HEADER_SHORTNAME);
 		for (Locale locale : lh.getLocales()) {
 			String name = line.get(lh.getI18nHeader(locale));
 			if (!StringUtils.isEmpty(name)) {
@@ -106,7 +108,7 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		if (!CollectionUtils.isEmpty(concept.getDescriptions())) {
 			concept.getDescriptions().clear();
 		}
-		lh = getLocalizedHeader(HEADER_DESC);
+		lh = getLocalizedHeader(line.getHeaderLine(), HEADER_DESC);
 		for (Locale locale : lh.getLocales()) {
 			String desc = line.get(lh.getI18nHeader(locale));
 			if (!StringUtils.isEmpty(desc)) {

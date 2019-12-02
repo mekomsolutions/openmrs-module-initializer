@@ -27,11 +27,8 @@ public class OrderTypeLineProcessorTest {
 		String[] line = { "OT name", "OT desc.", "org.openmrs.Order", "01727040-a587-484d-b66a-f0afbae6c281" };
 		
 		// Replay
-		
-		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os, new ConceptClassListParser(cs));
-		o.setHeaderLine(headerLine);
-		
-		OrderType ot = o.fill(new OrderType(), new CsvLine(o, line));
+		OrderTypeLineProcessor p = new OrderTypeLineProcessor(os, new ConceptClassListParser(cs));
+		OrderType ot = p.fill(new OrderType(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertEquals("OT name", ot.getName());
@@ -48,11 +45,8 @@ public class OrderTypeLineProcessorTest {
 		String[] line = { "OT name", "org.openmrs.Order" };
 		
 		// Replay
-		
-		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os, new ConceptClassListParser(cs));
-		o.setHeaderLine(headerLine);
-		
-		OrderType ot = o.fill(new OrderType(), new CsvLine(o, line));
+		OrderTypeLineProcessor p = new OrderTypeLineProcessor(os, new ConceptClassListParser(cs));
+		OrderType ot = p.fill(new OrderType(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertEquals("OT name", ot.getName());
@@ -66,9 +60,8 @@ public class OrderTypeLineProcessorTest {
 		String[] line = {};
 		
 		// Replay
-		OrderTypeLineProcessor o = new OrderTypeLineProcessor(os, new ConceptClassListParser(cs));
-		o.setHeaderLine(headerLine);
-		OrderType ot = o.fill(new OrderType(), new CsvLine(o, line));
+		OrderTypeLineProcessor p = new OrderTypeLineProcessor(os, new ConceptClassListParser(cs));
+		OrderType ot = p.fill(new OrderType(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertNull(ot.getName());

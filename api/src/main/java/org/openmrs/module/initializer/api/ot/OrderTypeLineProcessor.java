@@ -36,7 +36,7 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 	@Override
 	protected OrderType bootstrap(CsvLine line) throws IllegalArgumentException {
 		
-		String uuid = getUuid(line.asLine());
+		String uuid = line.getUuid();
 		
 		OrderType orderType = orderService.getOrderTypeByUuid(uuid);
 		if (orderType == null) {

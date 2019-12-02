@@ -25,8 +25,7 @@ public class BaseConceptLineProcessorTest {
 		
 		// Replay
 		ConceptLineProcessor p = new ConceptLineProcessor(cs);
-		p.setHeaderLine(headerLine);
-		Concept c = p.fill(new Concept(), new CsvLine(p, line));
+		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertTrue(CollectionUtils.isEmpty(c.getNames()));

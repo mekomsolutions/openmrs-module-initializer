@@ -1,0 +1,3 @@
+Void/Retire,Entity UUID,Entity class,Basis UUID,Basis class,_order:1000
+,3f8f0ab7-c240-4b68-8951-bb7020be01f6,org.openmrs.Role,787ec1bd-19a6-4577-9121-899588795737,org.openmrs.Program,
+TRUE,4604e928-96bf-4e2c-be08-cbbc40dd000c,org.openmrs.Privilege,a03e395c-b881-49b7-b6fc-983f6bddc7fc,org.openmrs.Location,

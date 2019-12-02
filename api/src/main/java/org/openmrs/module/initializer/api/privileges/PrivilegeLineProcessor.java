@@ -24,7 +24,7 @@ public class PrivilegeLineProcessor extends BaseLineProcessor<Privilege> {
 	@Override
 	protected Privilege bootstrap(CsvLine line) throws IllegalArgumentException {
 		
-		String uuid = getUuid(line.asLine());
+		String uuid = line.getUuid();
 		String privilegeName = line.get(HEADER_PRIVILEGE_NAME, true);
 		
 		Privilege privilege = userService.getPrivilegeByUuid(uuid);

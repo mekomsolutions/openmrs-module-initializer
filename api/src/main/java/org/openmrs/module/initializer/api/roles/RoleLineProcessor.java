@@ -39,7 +39,8 @@ public class RoleLineProcessor extends BaseLineProcessor<Role> {
 	
 	@Override
 	protected Role bootstrap(CsvLine line) throws IllegalArgumentException {
-		String uuid = getUuid(line.asLine());
+		
+		String uuid = line.getUuid();
 		String roleName = line.get(HEADER_ROLE_NAME, true);
 		
 		Role role = userService.getRoleByUuid(uuid);
