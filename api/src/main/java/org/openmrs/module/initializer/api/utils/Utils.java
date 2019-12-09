@@ -439,7 +439,7 @@ public class Utils {
 	 * @return a java.util.Date representation value of the input string, null otherwise.
 	 */
 	public static Date getTimeFromString(String input) {
-		DateFormat dateFormat = new SimpleDateFormat("mm");
+		DateFormat dateFormat = new SimpleDateFormat("hh:mm");
 		try {
 			return dateFormat.parse(input);
 		}
