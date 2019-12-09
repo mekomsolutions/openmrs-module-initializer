@@ -23,7 +23,7 @@ public class AppointmentsServiceDefinitionLineProcessorTest {
 	private LocationService ls = mock(LocationService.class);
 	
 	@Test
-	public void fill_shouldParseSpeciality() {
+	public void fill_shouldParseAppointmentsServiceDefinition() {
 		
 		// Setup
 		String[] headerLine = { "Name", "Description", "Duration", "Max Load" };
@@ -31,7 +31,8 @@ public class AppointmentsServiceDefinitionLineProcessorTest {
 		
 		// Replay
 		AppointmentsServiceDefinitionLineProcessor p = new AppointmentsServiceDefinitionLineProcessor(asds, ss, ls);
-		AppointmentServiceDefinition appointmentServiceDefinition = p.fill(new AppointmentServiceDefinition(), new CsvLine(headerLine, line));
+		AppointmentServiceDefinition appointmentServiceDefinition = p.fill(new AppointmentServiceDefinition(),
+		    new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertEquals("X-Ray", appointmentServiceDefinition.getName());
