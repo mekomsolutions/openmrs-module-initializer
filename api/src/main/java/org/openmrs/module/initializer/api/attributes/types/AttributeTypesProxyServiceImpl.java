@@ -16,9 +16,9 @@ import org.openmrs.module.initializer.InitializerLogFactory;
 
 @SuppressWarnings("rawtypes")
 @OpenmrsProfile(openmrsPlatformVersion = "[1.11.9 - 2.1.*]")
-public class AttributeTypeServiceImpl1_11 implements AttributeTypeService {
+public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyService {
 	
-	protected final Log log = InitializerLogFactory.getLog(AttributeTypeService.class);
+	protected final Log log = InitializerLogFactory.getLog(AttributeTypesProxyService.class);
 	
 	@Override
 	public void onShutdown() {

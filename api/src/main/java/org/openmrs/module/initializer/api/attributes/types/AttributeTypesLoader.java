@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("rawtypes")
 @Component
-public class AttributeTypeLoader extends BaseCsvLoader<BaseAttributeType, AttributeTypeCsvParser> {
+public class AttributeTypesLoader extends BaseCsvLoader<BaseAttributeType, AttributeTypesCsvParser> {
 	
 	@Autowired
-	public void setParser(AttributeTypeCsvParser parser) {
+	public void setParser(AttributeTypesCsvParser parser) {
 		this.parser = parser;
 	}
 }

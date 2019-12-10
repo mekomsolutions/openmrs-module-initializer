@@ -9,11 +9,11 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeServiceImpl1_11;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypesProxyServiceImpl;
 
 @SuppressWarnings("rawtypes")
-@OpenmrsProfile(openmrsPlatformVersion = "[2.2.0 - 2.3.*]")
-public class AttributeTypeServiceImpl2_2 extends AttributeTypeServiceImpl1_11 {
+@OpenmrsProfile(openmrsPlatformVersion = "2.2.0")
+public class AttributeTypesProxyServiceImpl2_2 extends AttributeTypesProxyServiceImpl {
 	
 	@Override
 	public Set<AttributeTypeEntity> getSupportedTypes() {

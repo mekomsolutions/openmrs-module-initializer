@@ -7,11 +7,11 @@ import org.openmrs.ConceptAttributeType;
 import org.openmrs.ProgramAttributeType;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.attribute.BaseAttributeType;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeCsvLineHandlerImpl1_11;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypeCsvLineHandlerImpl;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity;
 
 @OpenmrsProfile(openmrsPlatformVersion = "[2.2.0 - 2.3.*]")
-public class AttributeTypeCsvLineHandlerImpl2_2 extends AttributeTypeCsvLineHandlerImpl1_11 {
+public class AttributeTypeCsvLineHandlerImpl2_2 extends AttributeTypeCsvLineHandlerImpl {
 	
 	@Override
 	protected AttributeTypeEntity getType(String attributeDomain) {

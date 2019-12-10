@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("rawtypes")
 @Component
-public class AttributeTypeCsvParser extends CsvParser<BaseAttributeType, BaseLineProcessor<BaseAttributeType>> {
+public class AttributeTypesCsvParser extends CsvParser<BaseAttributeType, BaseLineProcessor<BaseAttributeType>> {
 	
-	private AttributeTypeService service;
+	private AttributeTypesProxyService service;
 	
 	@Autowired
-	public AttributeTypeCsvParser(AttributeTypeService service, BaseAttributeTypeLineProcessor processor) {
+	public AttributeTypesCsvParser(AttributeTypesProxyService service, BaseAttributeTypeLineProcessor processor) {
 		super(processor);
 		this.service = service;
 	}

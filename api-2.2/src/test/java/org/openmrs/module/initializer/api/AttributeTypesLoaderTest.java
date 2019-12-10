@@ -8,14 +8,14 @@ import org.openmrs.VisitAttributeType;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.VisitService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeLoader;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class AttributeTypeLoaderTest extends DomainBaseModuleContextSensitiveTest {
+public class AttributeTypesLoaderTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
-	private AttributeTypeLoader loader;
+	private AttributeTypesLoader loader;
 	
 	@Autowired
 	@Qualifier("locationService")
@@ -56,4 +56,7 @@ public class AttributeTypeLoaderTest extends DomainBaseModuleContextSensitiveTes
 		Assert.assertEquals(10, editedLocAttType.getMaxOccurs().intValue());
 		Assert.assertEquals(1, editedLocAttType.getMinOccurs().intValue());
 	}
+	
+	// More tests go here ....
+	
 }

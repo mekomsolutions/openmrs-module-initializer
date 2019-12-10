@@ -27,7 +27,7 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 	
 	private AttributeTypeCsvLineHandler handler;
 	
-	private AttributeTypeService service;
+	private AttributeTypesProxyService service;
 	
 	@Autowired
 	public void setHandler(AttributeTypeCsvLineHandler handler) {
@@ -35,7 +35,7 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 	}
 	
 	@Autowired
-	public void setService(AttributeTypeService service) {
+	public void setService(AttributeTypesProxyService service) {
 		this.service = service;
 	}
 	

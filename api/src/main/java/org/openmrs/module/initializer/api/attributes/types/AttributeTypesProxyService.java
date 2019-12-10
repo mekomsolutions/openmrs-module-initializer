@@ -9,7 +9,7 @@ import org.openmrs.attribute.BaseAttributeType;
  * Proxy OpenMRS service to interface CRUD operations with attribute types.
  */
 @SuppressWarnings("rawtypes")
-public interface AttributeTypeService extends OpenmrsService {
+public interface AttributeTypesProxyService extends OpenmrsService {
 	
 	/**
 	 * Saves an <code>AttributeType</code>

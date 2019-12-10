@@ -19,7 +19,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeLoader;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
@@ -52,7 +52,7 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private GlobalPropertiesLoader globalPropertiesLoader;
 	
 	@Autowired
-	private AttributeTypeLoader attributeTypesLoader;
+	private AttributeTypesLoader attributeTypesLoader;
 	
 	@Autowired
 	private LocationsLoader locationsLoader;

@@ -12,7 +12,7 @@ import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.CsvLine;
 
 @OpenmrsProfile(openmrsPlatformVersion = "[1.11.9 - 2.1.*]")
-public class AttributeTypeCsvLineHandlerImpl1_11 implements AttributeTypeCsvLineHandler {
+public class AttributeTypeCsvLineHandlerImpl implements AttributeTypeCsvLineHandler {
 	
 	@Override
 	final public AttributeTypeEntity getAttributeType(CsvLine line) {

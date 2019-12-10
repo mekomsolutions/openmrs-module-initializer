@@ -8,18 +8,18 @@ import org.openmrs.api.context.Context;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeService;
+import org.openmrs.module.initializer.api.attributes.types.AttributeTypesProxyService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AttributeTypeService2_2Test extends BaseModuleContextSensitiveTest {
+public class AttributeTypesProxyServiceTest extends BaseModuleContextSensitiveTest {
 	
 	private final static String CONCEPT_ATT_TYPE_UUID = "9eca4f4e-707f-4bb8-8289-2f9b6e93803c";
 	
 	private final static String PROGRAM_ATT_TYPE_UUID = "78caHf4e-707f-4bb8-8289-2f9bBKJ3803T";
 	
 	@Autowired
-	public AttributeTypeService service;
+	public AttributeTypesProxyService service;
 	
 	@Test
 	public void getAttributeTypeByUuid_shouldGetConceptAttributeType() {
