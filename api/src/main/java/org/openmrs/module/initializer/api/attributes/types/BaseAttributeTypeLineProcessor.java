@@ -23,20 +23,16 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 	
 	protected static String HEADER_HANDLER_CONFIG = "handler config";
 	
-	public static String HEADER_ENTITY = "entity";
+	protected static String HEADER_ENTITY_NAME = "entity name";
 	
 	private AttributeTypeCsvLineHandler handler;
 	
 	private AttributeTypesProxyService service;
 	
 	@Autowired
-	public void setHandler(AttributeTypeCsvLineHandler handler) {
-		this.handler = handler;
-	}
-	
-	@Autowired
-	public void setService(AttributeTypesProxyService service) {
+	public BaseAttributeTypeLineProcessor(AttributeTypesProxyService service, AttributeTypeCsvLineHandler handler) {
 		this.service = service;
+		this.handler = handler;
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -46,8 +42,9 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 		String uuid = line.getUuid();
 		
 		BaseAttributeType attributeType = service.getAttributeTypeByUuid(uuid, handler.getAttributeType(line));
+		
 		if (attributeType == null) {
-			attributeType = service.getAttributeTypeByName(line.get(HEADER_NAME), handler.getAttributeType(line));
+			attributeType = service.getAttributeTypeByName(line.get(HEADER_NAME, true), handler.getAttributeType(line));
 			if (attributeType == null) {
 				attributeType = handler.newAttributeType(line);
 				if (StringUtils.isNotEmpty(uuid)) {
@@ -63,9 +60,9 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 	@Override
 	protected BaseAttributeType fill(BaseAttributeType instance, CsvLine line) throws IllegalArgumentException {
 		
-		instance.setName(line.get(HEADER_NAME));
+		instance.setName(line.get(HEADER_NAME, true));
 		instance.setDescription(line.get(HEADER_DESC));
-		instance.setDatatypeClassname(line.getString(HEADER_DATATYPE_CLASSNAME));
+		instance.setDatatypeClassname(line.get(HEADER_DATATYPE_CLASSNAME, true));
 		instance.setDatatypeConfig(line.getString(HEADER_DATATYPE_CONFIG));
 		instance.setMinOccurs(line.getInt(HEADER_MIN_OCCURS));
 		instance.setMaxOccurs(line.getInt(HEADER_MAX_OCCURS));

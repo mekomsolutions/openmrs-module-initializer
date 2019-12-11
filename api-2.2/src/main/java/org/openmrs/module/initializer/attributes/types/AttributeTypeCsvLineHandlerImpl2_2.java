@@ -10,7 +10,7 @@ import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeCsvLineHandlerImpl;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity;
 
-@OpenmrsProfile(openmrsPlatformVersion = "[2.2.0 - 2.3.*]")
+@OpenmrsProfile(openmrsPlatformVersion = "2.2.0")
 public class AttributeTypeCsvLineHandlerImpl2_2 extends AttributeTypeCsvLineHandlerImpl {
 	
 	@Override

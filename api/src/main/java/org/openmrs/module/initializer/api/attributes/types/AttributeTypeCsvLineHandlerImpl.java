@@ -16,7 +16,7 @@ public class AttributeTypeCsvLineHandlerImpl implements AttributeTypeCsvLineHand
 	
 	@Override
 	final public AttributeTypeEntity getAttributeType(CsvLine line) {
-		String attributeDomain = line.getString(BaseAttributeTypeLineProcessor.HEADER_ENTITY);
+		String attributeDomain = line.getString(BaseAttributeTypeLineProcessor.HEADER_ENTITY_NAME);
 		AttributeTypeEntity type = getType(attributeDomain);
 		if (type == null) {
 			throw new IllegalArgumentException(
