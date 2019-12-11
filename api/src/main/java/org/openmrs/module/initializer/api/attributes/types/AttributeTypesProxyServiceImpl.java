@@ -93,16 +93,13 @@ public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyServic
 	protected BaseAttributeType save(BaseAttributeType instance) {
 		
 		if (instance instanceof LocationAttributeType) {
-			LocationAttributeType locationAttributeType = (LocationAttributeType) instance;
-			instance = Context.getLocationService().saveLocationAttributeType(locationAttributeType);
+			instance = Context.getLocationService().saveLocationAttributeType((LocationAttributeType) instance);
 		}
 		if (instance instanceof VisitAttributeType) {
-			VisitAttributeType visitAttributeType = (VisitAttributeType) instance;
-			instance = Context.getVisitService().saveVisitAttributeType(visitAttributeType);
+			instance = Context.getVisitService().saveVisitAttributeType((VisitAttributeType) instance);
 		}
 		if (instance instanceof ProviderAttributeType) {
-			ProviderAttributeType providerAttributeType = (ProviderAttributeType) instance;
-			instance = Context.getProviderService().saveProviderAttributeType(providerAttributeType);
+			instance = Context.getProviderService().saveProviderAttributeType((ProviderAttributeType) instance);
 		}
 		
 		return instance;

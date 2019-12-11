@@ -7,6 +7,7 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@SuppressWarnings("rawtypes")
 @Component
 public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttributeType> {
 	
@@ -35,7 +36,6 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 		this.handler = handler;
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected BaseAttributeType bootstrap(CsvLine line) throws IllegalArgumentException {
 		
@@ -56,7 +56,6 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 		return attributeType;
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected BaseAttributeType fill(BaseAttributeType instance, CsvLine line) throws IllegalArgumentException {
 		

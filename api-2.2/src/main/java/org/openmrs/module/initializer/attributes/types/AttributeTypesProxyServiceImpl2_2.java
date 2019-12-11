@@ -29,12 +29,10 @@ public class AttributeTypesProxyServiceImpl2_2 extends AttributeTypesProxyServic
 		instance = super.save(instance);
 		
 		if (instance instanceof ProgramAttributeType) {
-			ProgramAttributeType programAttributeType = (ProgramAttributeType) instance;
-			instance = Context.getProgramWorkflowService().saveProgramAttributeType(programAttributeType);
+			instance = Context.getProgramWorkflowService().saveProgramAttributeType((ProgramAttributeType) instance);
 		}
 		if (instance instanceof ConceptAttributeType) {
-			ConceptAttributeType conceptAttributeType = (ConceptAttributeType) instance;
-			instance = Context.getConceptService().saveConceptAttributeType(conceptAttributeType);
+			instance = Context.getConceptService().saveConceptAttributeType((ConceptAttributeType) instance);
 		}
 		
 		return instance;

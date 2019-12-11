@@ -36,11 +36,6 @@ public class AttributeTypesLoaderTest extends DomainBaseModuleContextSensitiveTe
 	@Qualifier("providerService")
 	private ProviderService ps;
 	
-	@Before
-	public void setup() throws Exception {
-		executeDataSet("testdata/test-metadata.xml");
-	}
-	
 	public static void assertCustomDatatype(String className) {
 		Assert.assertThat(className, startsWith("org.openmrs.customdatatype.datatype"));
 		try {
@@ -49,6 +44,11 @@ public class AttributeTypesLoaderTest extends DomainBaseModuleContextSensitiveTe
 		catch (ClassNotFoundException e) {
 			Assert.fail(className + " is not a valid OpenMRS custom data type class name.");
 		}
+	}
+	
+	@Before
+	public void setup() throws Exception {
+		executeDataSet("testdata/test-metadata.xml");
 	}
 	
 	@Test
@@ -62,11 +62,18 @@ public class AttributeTypesLoaderTest extends DomainBaseModuleContextSensitiveTe
 			Assert.assertNull(attType.getMaxOccurs());
 		}
 		{
-			ProviderAttributeType attType = ps.getProviderAttributeType(2089);
+			ProviderAttributeType attType = ps.getProviderAttributeType(1090);
 			Assert.assertEquals("Provider Speciality", attType.getName());
-			Assert.assertEquals("Clinical speciality for this provider.", attType.getDescription());
+			Assert.assertEquals("Clinical speciality for this provider", attType.getDescription());
 			Assert.assertThat(attType.getMinOccurs(), is(0));
 			Assert.assertThat(attType.getMaxOccurs(), is(5));
+		}
+		{
+			ProviderAttributeType attType = ps.getProviderAttributeType(1091);
+			Assert.assertEquals("Provider Rating", attType.getName());
+			assertThat(attType.getDescription(), isEmptyOrNullString());
+			Assert.assertThat(attType.getMinOccurs(), is(1));
+			Assert.assertThat(attType.getMaxOccurs(), is(1));
 		}
 		
 		// Replay
@@ -91,15 +98,33 @@ public class AttributeTypesLoaderTest extends DomainBaseModuleContextSensitiveTe
 			Assert.assertEquals("Location Height", attType.getName());
 		}
 		
-		// Verify editions
+		// Verify edition using UUID as pivot
 		{
 			LocationAttributeType attType = ls.getLocationAttributeTypeByUuid("9eca4f4e-707f-4bb8-8289-2f9b6e93803c");
+			Assert.assertNotNull(attType);
 			Assert.assertEquals("Location ISO Code", attType.getName());
 			Assert.assertEquals("Location ISO Code's description", attType.getDescription());
 			assertCustomDatatype(attType.getDatatypeClassname());
 			Assert.assertEquals("org.openmrs.customdatatype.datatype.FreeTextDatatype", attType.getDatatypeClassname());
 			Assert.assertThat(attType.getMinOccurs(), is(1));
 			Assert.assertThat(attType.getMaxOccurs(), is(10));
+		}
+		// Verify edition using name as pivot
+		{
+			ProviderAttributeType attType = ps.getProviderAttributeType(1090);
+			Assert.assertNotNull(attType);
+			Assert.assertEquals("Provider Speciality", attType.getName());
+			Assert.assertEquals("Clinical speciality for this provider", attType.getDescription());
+			assertCustomDatatype(attType.getDatatypeClassname());
+			Assert.assertEquals("org.openmrs.customdatatype.datatype.FreeTextDatatype", attType.getDatatypeClassname());
+			Assert.assertThat(attType.getMinOccurs(), is(0));
+			Assert.assertThat(attType.getMaxOccurs(), is(7));
+		}
+		// Verify retirement
+		{
+			ProviderAttributeType attType = ps.getProviderAttributeType(1091);
+			Assert.assertNotNull(attType);
+			Assert.assertTrue(attType.getRetired());
 		}
 	}
 }
