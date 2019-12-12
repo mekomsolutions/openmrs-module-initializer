@@ -11,13 +11,12 @@ package org.openmrs.module.initializer.api.loaders;
 
 import static org.hamcrest.Matchers.greaterThan;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServiceDefinitionsLoader;
 import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
@@ -95,6 +94,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	
 	@Autowired
 	private AppointmentsSpecialitiesLoader appointmentsSpecialitiesLoader;
+	
+	@Autowired
+	private AppointmentsServiceDefinitionsLoader appointmentsServiceDefinitionsLoader;
 	
 	@Autowired
 	private OrderTypesLoader orderTypesLoader;
@@ -207,6 +209,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = appointmentsSpecialitiesLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = appointmentsServiceDefinitionsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		

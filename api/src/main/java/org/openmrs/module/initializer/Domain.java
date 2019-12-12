@@ -12,8 +12,9 @@ public enum Domain {
 	                                                        "drugs"), ORDER_FREQUENCIES(17, "orderfrequencies"), ORDER_TYPES(
 	                                                                18, "ordertypes"), APPOINTMENTS_SPECIALITIES(19,
 	                                                                        "appointmentsspecialities"), APPOINTMENTS_SERVICE_DEFINITIONS(
-	                                                                                20, "appointmentsservicedefinitions"), DATAFILTER_MAPPINGS(
-	                                                                                21, "datafiltermappings");
+	                                                                                20,
+	                                                                                "appointmentsservicedefinitions"), DATAFILTER_MAPPINGS(
+	                                                                                        21, "datafiltermappings");
 	
 	private final int order;
 	
