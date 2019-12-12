@@ -3,6 +3,7 @@ package org.openmrs.module.initializer.api;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 import static org.junit.Assert.assertThat;
+import static org.openmrs.module.initializer.api.AttributeTypesLoaderTest.assertCustomDatatype;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,11 +12,12 @@ import org.openmrs.ConceptAttributeType;
 import org.openmrs.ProgramAttributeType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.ProgramWorkflowService;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class AttributeTypesLoaderTest2_2 extends AttributeTypesLoaderTest {
+public class AttributeTypesLoaderTest2_2 extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private AttributeTypesLoader loader;

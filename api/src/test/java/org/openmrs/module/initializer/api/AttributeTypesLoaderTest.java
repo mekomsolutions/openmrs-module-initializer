@@ -3,7 +3,6 @@ package org.openmrs.module.initializer.api;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
-import static org.junit.Assert.assertThat;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -57,7 +56,7 @@ public class AttributeTypesLoaderTest extends DomainBaseModuleContextSensitiveTe
 		{
 			LocationAttributeType attType = ls.getLocationAttributeTypeByUuid("9eca4f4e-707f-4bb8-8289-2f9b6e93803c");
 			Assert.assertEquals("Location Code", attType.getName());
-			assertThat(attType.getDescription(), isEmptyOrNullString());
+			Assert.assertThat(attType.getDescription(), isEmptyOrNullString());
 			Assert.assertThat(attType.getMinOccurs(), is(0));
 			Assert.assertNull(attType.getMaxOccurs());
 		}
@@ -71,7 +70,7 @@ public class AttributeTypesLoaderTest extends DomainBaseModuleContextSensitiveTe
 		{
 			ProviderAttributeType attType = ps.getProviderAttributeType(1091);
 			Assert.assertEquals("Provider Rating", attType.getName());
-			assertThat(attType.getDescription(), isEmptyOrNullString());
+			Assert.assertThat(attType.getDescription(), isEmptyOrNullString());
 			Assert.assertThat(attType.getMinOccurs(), is(1));
 			Assert.assertThat(attType.getMaxOccurs(), is(1));
 		}

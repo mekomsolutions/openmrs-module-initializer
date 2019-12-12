@@ -105,6 +105,9 @@
       <testResource>
         <directory>../api/src/test/resources</directory>
       </testResource>
+      <testResource>
+        <directory>../api-2.2/src/test/resources</directory>
+      </testResource>
     </testResources>
   </build>
   

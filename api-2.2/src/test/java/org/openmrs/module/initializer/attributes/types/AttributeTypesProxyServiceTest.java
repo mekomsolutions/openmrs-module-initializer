@@ -1,116 +1,60 @@
 package org.openmrs.module.initializer.attributes.types;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity.CONCEPT;
+
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.ConceptAttributeType;
-import org.openmrs.ProgramAttributeType;
-import org.openmrs.api.context.Context;
+import org.openmrs.api.ConceptService;
 import org.openmrs.attribute.BaseAttributeType;
-import org.openmrs.customdatatype.datatype.FreeTextDatatype;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesProxyService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public class AttributeTypesProxyServiceTest extends BaseModuleContextSensitiveTest {
 	
-	private final static String CONCEPT_ATT_TYPE_UUID = "9eca4f4e-707f-4bb8-8289-2f9b6e93803c";
-	
-	private final static String PROGRAM_ATT_TYPE_UUID = "78caHf4e-707f-4bb8-8289-2f9bBKJ3803T";
+	private final static String CONCEPT_ATT_TYPE_UUID = "47666db8-a51c-4d9d-a847-98138404f1e3";
 	
 	@Autowired
 	public AttributeTypesProxyService service;
 	
-	@Test
-	public void getAttributeTypeByUuid_shouldGetConceptAttributeType() {
-		// Setup
-		Context.getConceptService().saveConceptAttributeType(createConceptAttributeType());
-		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(CONCEPT_ATT_TYPE_UUID,
-		    AttributeTypeEntity.CONCEPT);
-		
-		// Verif
-		Assert.assertNotNull(attributeTypeFromDB);
-		Assert.assertEquals(attributeTypeFromDB.getName(), "Test Concept AttributeType");
-		Assert.assertTrue(attributeTypeFromDB instanceof ConceptAttributeType);
+	@Autowired
+	@Qualifier("conceptService")
+	private ConceptService cs;
+	
+	@Before
+	public void setup() {
+		executeDataSet("testdata/test-metadata-2.2.xml");
 	}
 	
 	@Test
-	public void getAttributeTypeByUuid_shouldGetProgramAttributeType() {
-		// Setup
-		Context.getProgramWorkflowService().saveProgramAttributeType(createProgramAttributeType());
-		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByUuid(PROGRAM_ATT_TYPE_UUID,
-		    AttributeTypeEntity.PROGRAM);
+	public void getAttributeTypeByUuid_shouldGetAttributeType() {
+		// Replay
+		BaseAttributeType<?> attType = service.getAttributeTypeByUuid(CONCEPT_ATT_TYPE_UUID, CONCEPT);
 		
 		// Verif
-		Assert.assertNotNull(attributeTypeFromDB);
-		Assert.assertEquals(attributeTypeFromDB.getName(), "Test Program AttributeType");
-		Assert.assertTrue(attributeTypeFromDB instanceof ProgramAttributeType);
+		Assert.assertNotNull(attType);
+		Assert.assertThat(attType.getName(), is("Concept Family"));
+		Assert.assertTrue(attType instanceof ConceptAttributeType);
 	}
 	
 	@Test
-	public void getAttributeTypeByName_shouldGetConceptAttributeType() {
+	public void saveAttributeType_shouldSaveAttributeType() {
 		// Setup
-		Context.getConceptService().saveConceptAttributeType(createConceptAttributeType());
-		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByName("Test Concept AttributeType",
-		    AttributeTypeEntity.CONCEPT);
+		BaseAttributeType<?> attType = cs.getConceptAttributeType(1089);
+		
+		// Replay (name edition)
+		String newName = RandomStringUtils.random(30);
+		attType.setName(newName);
+		attType = service.saveAttributeType(attType);
 		
 		// Verif
-		Assert.assertNotNull(attributeTypeFromDB);
-		Assert.assertEquals(attributeTypeFromDB.getName(), "Test Concept AttributeType");
-		Assert.assertTrue(attributeTypeFromDB instanceof ConceptAttributeType);
+		attType = service.getAttributeTypeByName(newName, CONCEPT);
+		Assert.assertNotNull(attType);
+		Assert.assertThat(attType.getId(), is(1089));
 	}
-	
-	@Test
-	public void getAttributeTypeByName_shouldGetProgramAttributeType() {
-		// Setup
-		Context.getProgramWorkflowService().saveProgramAttributeType(createProgramAttributeType());
-		BaseAttributeType attributeTypeFromDB = service.getAttributeTypeByName("Test Program AttributeType",
-		    AttributeTypeEntity.PROGRAM);
-		
-		// Verif
-		Assert.assertNotNull(attributeTypeFromDB);
-		Assert.assertEquals(attributeTypeFromDB.getName(), "Test Program AttributeType");
-		Assert.assertTrue(attributeTypeFromDB instanceof ProgramAttributeType);
-	}
-	
-	@Test
-	public void saveAttributeType_shouldSaveConceptAttributeType() {
-		// Setup
-		BaseAttributeType attributeTypeFromDB = service.saveAttributeType(createConceptAttributeType());
-		
-		// Verif
-		Assert.assertNotNull(attributeTypeFromDB);
-		Assert.assertEquals(attributeTypeFromDB.getName(), "Test Concept AttributeType");
-		Assert.assertTrue(attributeTypeFromDB instanceof ConceptAttributeType);
-		
-	}
-	
-	@Test
-	public void saveAttributeType_shouldSaveProgramAttributeType() {
-		// Setup
-		BaseAttributeType attributeTypeFromDB = service.saveAttributeType(createProgramAttributeType());
-		
-		// Verif
-		Assert.assertNotNull(attributeTypeFromDB);
-		Assert.assertEquals(attributeTypeFromDB.getName(), "Test Program AttributeType");
-		Assert.assertTrue(attributeTypeFromDB instanceof ProgramAttributeType);
-		
-	}
-	
-	private ProgramAttributeType createProgramAttributeType() {
-		ProgramAttributeType pat = new ProgramAttributeType();
-		pat.setUuid(PROGRAM_ATT_TYPE_UUID);
-		pat.setName("Test Program AttributeType");
-		pat.setDatatypeClassname(FreeTextDatatype.class.getName());
-		return pat;
-	}
-	
-	private ConceptAttributeType createConceptAttributeType() {
-		ConceptAttributeType cat = new ConceptAttributeType();
-		cat.setUuid(CONCEPT_ATT_TYPE_UUID);
-		cat.setName("Test Concept AttributeType");
-		cat.setDatatypeClassname(FreeTextDatatype.class.getName());
-		return cat;
-	}
-	
 }
