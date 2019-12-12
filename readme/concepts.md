@@ -18,12 +18,12 @@ The way those CSV files are processed is controlled by a reserved part of the CS
 Those are locale specific headers, they are never used as such because they always need to indicate the locale for the values of their column.
 <br/>For example for a column to contain short names in English (locale 'en') simply name the header `Short name:en`. The same logic applies for the other locale specific headers.
 
-###### Header `Fully specified name` (localized)
+###### Header `Fully specified name` *(mandatory for at least one locale)*
 The fully specified name is a secondary identifier for the concepts domain, it will be used to attempt fetching the concept if no UUID is provided.
 ###### Header `Short name` (localized)
 ###### Header `Description` (localized)
-###### Header `Data class`
-###### Header `Data type`
+###### Header `Data class` *(mandatory)*
+###### Header `Data type` *(mandatory)*
 
 Here is an example of valid CSV to define basic concepts:
 
@@ -32,9 +32,9 @@ Here is an example of valid CSV to define basic concepts:
 | | <sub>Nationality</sub> | <sub>Nat.</sub> | <sub>The status of belonging to a particular nation.</sub> | <sub>Question</sub> | <sub>Text</sub> |
 | <sub>db2f4fc4-..</sub>| <sub>Language</sub> | <sub>Lang.</sub> | <sub>The method of human communication.</sub> | <sub>Question</sub> | <sub>Text</sub> |
 
-###### Header `Answers`
+###### Header `Answers` *(optional)*
 To provide a semicolumn-separated list of answer concepts to the concept to be created or edited.
-###### Header `Members`
+###### Header `Members` *(optional)*
 To provide a semicolumn-separated list of concepts to be members of the concept set to be created or edited. Note that the concept will be marked a being a set as soon as set members are provided.
 
 Here is an example of the 'nested' columns:
@@ -71,7 +71,7 @@ Below are the headers specific to concepts numeric:
 **NOTE** The concept will be considered as a candidate to be a concept numeric if and only if its data type is set to `Numeric`.
 
 Below are the headers specific to concepts complex:
-###### Header `Complex data handler`
+###### Header `Complex data handler` *(mandatory for concepts complex)*
 This should be the class name of a valid complex data handler class at runtime. Eg. `ImageHandler`, `BinaryDataHandler`, ... etc.
 See [here](https://github.com/openmrs/openmrs-core/tree/95641959f3a15ba5ae1a23d694114b9dbc466f12/api/src/main/java/org/openmrs/obs/handler) for the list of handlers shipped with Core 2.x.
 

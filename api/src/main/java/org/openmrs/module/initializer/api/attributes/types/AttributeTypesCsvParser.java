@@ -7,9 +7,8 @@ import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@SuppressWarnings("rawtypes")
 @Component
-public class AttributeTypesCsvParser extends CsvParser<BaseAttributeType, BaseLineProcessor<BaseAttributeType>> {
+public class AttributeTypesCsvParser extends CsvParser<BaseAttributeType<?>, BaseLineProcessor<BaseAttributeType<?>>> {
 	
 	private AttributeTypesProxyService service;
 	
@@ -25,7 +24,7 @@ public class AttributeTypesCsvParser extends CsvParser<BaseAttributeType, BaseLi
 	}
 	
 	@Override
-	protected BaseAttributeType save(BaseAttributeType instance) {
+	protected BaseAttributeType<?> save(BaseAttributeType<?> instance) {
 		return service.saveAttributeType(instance);
 	}
 }

@@ -7,11 +7,9 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@SuppressWarnings("rawtypes")
 @Component
-public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttributeType> {
+public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttributeType<?>> {
 	
-	// Generic headers
 	protected static String HEADER_MIN_OCCURS = "min occurs";
 	
 	protected static String HEADER_MAX_OCCURS = "max occurs";
@@ -24,8 +22,6 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 	
 	protected static String HEADER_HANDLER_CONFIG = "handler config";
 	
-	protected static String HEADER_ENTITY_NAME = "entity name";
-	
 	private AttributeTypeCsvLineHandler handler;
 	
 	private AttributeTypesProxyService service;
@@ -37,11 +33,11 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 	}
 	
 	@Override
-	protected BaseAttributeType bootstrap(CsvLine line) throws IllegalArgumentException {
+	protected BaseAttributeType<?> bootstrap(CsvLine line) throws IllegalArgumentException {
 		
 		String uuid = line.getUuid();
 		
-		BaseAttributeType attributeType = service.getAttributeTypeByUuid(uuid, handler.getAttributeType(line));
+		BaseAttributeType<?> attributeType = service.getAttributeTypeByUuid(uuid, handler.getAttributeType(line));
 		
 		if (attributeType == null) {
 			attributeType = service.getAttributeTypeByName(line.get(HEADER_NAME, true), handler.getAttributeType(line));
@@ -57,7 +53,7 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 	}
 	
 	@Override
-	protected BaseAttributeType fill(BaseAttributeType instance, CsvLine line) throws IllegalArgumentException {
+	protected BaseAttributeType<?> fill(BaseAttributeType<?> instance, CsvLine line) throws IllegalArgumentException {
 		
 		instance.setName(line.get(HEADER_NAME, true));
 		instance.setDescription(line.get(HEADER_DESC));

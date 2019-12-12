@@ -27,11 +27,10 @@ public class AttributeTypeCsvLineHandlerImpl2_2 extends AttributeTypeCsvLineHand
 		return type;
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected BaseAttributeType newType(AttributeTypeEntity type) {
+	protected BaseAttributeType<?> newType(AttributeTypeEntity type) {
 		
-		BaseAttributeType attType = super.newType(type);
+		BaseAttributeType<?> attType = super.newType(type);
 		
 		switch (type) {
 			case PROGRAM:

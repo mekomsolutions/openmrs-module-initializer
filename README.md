@@ -15,6 +15,7 @@ The configuration folder is subdivided into _domain_ subfolders:
 configuration/
   ├── addresshierarchy/
   ├── appointmentsspecialities/
+  ├── attributetypes/
   ├── concepts/
   ├── datafiltermappings/
   ├── drugs/
@@ -55,6 +56,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Encounter Types (CSV files)](readme/et.md)
 1. [Roles (CSV files)](readme/roles.md)
 1. [Global properties (XML files)](readme/globalproperties.md)
+1. [Attribute types (CSV files)](readme/atttypes.md)
 1. [Locations (CSV files)](readme/loc.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Programs (CSV files)](readme/prog.md)
@@ -104,6 +106,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and edition of encounter types provided through CSV files in **configuration/encountertypes**.
 * Bulk creation and edition of Bahmni appointments specialities provided through CSV files in **configuration/appointmentsspecialities**.
 * Bulk access management of Data Filter entity to basis mappings provided through CSV files in **configuration/datafiltermappings**.
+* Bulk creation and edition of attribute types provided through CSV files in **configuration/attributetypes**.
 
 #### Version 1.1.0
 * Bulk creation and edition of drugs provided through CSV files in **configuration/locations**.

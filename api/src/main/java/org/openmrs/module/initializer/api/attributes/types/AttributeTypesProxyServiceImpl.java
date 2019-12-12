@@ -14,8 +14,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.InitializerLogFactory;
 
-@SuppressWarnings("rawtypes")
-@OpenmrsProfile(openmrsPlatformVersion = "[1.11.9 - 2.1.*]")
+@OpenmrsProfile(openmrsPlatformVersion = "[2.1.1 - 2.1.*]")
 public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyService {
 	
 	protected final Log log = InitializerLogFactory.getLog(AttributeTypesProxyService.class);
@@ -38,7 +37,7 @@ public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyServic
 	}
 	
 	@Override
-	public final BaseAttributeType saveAttributeType(BaseAttributeType instance) {
+	public final BaseAttributeType<?> saveAttributeType(BaseAttributeType<?> instance) {
 		
 		if (instance == null || instance.getId() != null) {
 			return instance;
@@ -56,7 +55,7 @@ public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyServic
 	}
 	
 	@Override
-	public final BaseAttributeType getAttributeTypeByUuid(String uuid, AttributeTypeEntity typeEnum) {
+	public final BaseAttributeType<?> getAttributeTypeByUuid(String uuid, AttributeTypeEntity typeEnum) {
 		if (StringUtils.isEmpty(uuid) || typeEnum == null) {
 			return null;
 		}
@@ -72,7 +71,7 @@ public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyServic
 	}
 	
 	@Override
-	public final BaseAttributeType getAttributeTypeByName(String name, AttributeTypeEntity typeEnum) {
+	public final BaseAttributeType<?> getAttributeTypeByName(String name, AttributeTypeEntity typeEnum) {
 		if (StringUtils.isEmpty(name) || typeEnum == null) {
 			return null;
 		}
@@ -90,7 +89,7 @@ public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyServic
 	/**
 	 * To be overridden and extended by subclasses.
 	 */
-	protected BaseAttributeType save(BaseAttributeType instance) {
+	protected BaseAttributeType<?> save(BaseAttributeType<?> instance) {
 		
 		if (instance instanceof LocationAttributeType) {
 			instance = Context.getLocationService().saveLocationAttributeType((LocationAttributeType) instance);
@@ -108,9 +107,9 @@ public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyServic
 	/**
 	 * To be overridden and extended by subclasses.
 	 */
-	protected BaseAttributeType getByUuid(String uuid, AttributeTypeEntity typeEnum) {
+	protected BaseAttributeType<?> getByUuid(String uuid, AttributeTypeEntity typeEnum) {
 		
-		BaseAttributeType attType = null;
+		BaseAttributeType<?> attType = null;
 		
 		switch (typeEnum) {
 			case LOCATION:
@@ -135,9 +134,9 @@ public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyServic
 	/**
 	 * To be overridden and extended by subclasses.
 	 */
-	protected BaseAttributeType getByName(String name, AttributeTypeEntity typeEnum) {
+	protected BaseAttributeType<?> getByName(String name, AttributeTypeEntity typeEnum) {
 		
-		BaseAttributeType attType = null;
+		BaseAttributeType<?> attType = null;
 		
 		switch (typeEnum) {
 			case LOCATION:

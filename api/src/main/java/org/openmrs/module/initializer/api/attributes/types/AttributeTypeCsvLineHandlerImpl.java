@@ -11,12 +11,12 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.CsvLine;
 
-@OpenmrsProfile(openmrsPlatformVersion = "[1.11.9 - 2.1.*]")
+@OpenmrsProfile(openmrsPlatformVersion = "[2.1.1 - 2.1.*]")
 public class AttributeTypeCsvLineHandlerImpl implements AttributeTypeCsvLineHandler {
 	
 	@Override
 	final public AttributeTypeEntity getAttributeType(CsvLine line) {
-		String attributeDomain = line.getString(BaseAttributeTypeLineProcessor.HEADER_ENTITY_NAME);
+		String attributeDomain = line.get(HEADER_ENTITY_NAME, true);
 		AttributeTypeEntity type = getType(attributeDomain);
 		if (type == null) {
 			throw new IllegalArgumentException(
@@ -25,11 +25,10 @@ public class AttributeTypeCsvLineHandlerImpl implements AttributeTypeCsvLineHand
 		return type;
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	final public BaseAttributeType newAttributeType(CsvLine line) {
+	final public BaseAttributeType<?> newAttributeType(CsvLine line) {
 		AttributeTypeEntity type = getAttributeType(line);
-		BaseAttributeType attType = newType(type);
+		BaseAttributeType<?> attType = newType(type);
 		if (attType == null) {
 			throw new IllegalArgumentException(
 			        "No attribute type could be guessed from the CSV line: '" + line.toString() + "'.");
@@ -59,10 +58,9 @@ public class AttributeTypeCsvLineHandlerImpl implements AttributeTypeCsvLineHand
 	/**
 	 * To be overridden and extended by subclasses.
 	 */
-	@SuppressWarnings("rawtypes")
-	protected BaseAttributeType newType(AttributeTypeEntity type) {
+	protected BaseAttributeType<?> newType(AttributeTypeEntity type) {
 		
-		BaseAttributeType attType = null;
+		BaseAttributeType<?> attType = null;
 		
 		switch (type) {
 			case LOCATION:

@@ -13,8 +13,7 @@ The CSV configuration allows to either modify exisiting appointments specialitie
 |  <sub>aaa1a367-3047-4833-af27-b30e2dac9028</sub> |             | <sub>Radiology</sub> |                           
 | <sub>439559c2-a3a4-4a25-b4b2-1a0299e287ee</sub> |             | <sub>Cardiology</sub>   
 
-###### Header `Name` 
-The appointment speciality **name** is mandatory and must be provided.
+###### Header `Name` *(mandatory)*
 
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).

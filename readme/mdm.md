@@ -15,16 +15,16 @@ Headers that start with an underscore such as `_order:1000` are metadata headers
 
 Let's review some important headers.
 
-###### Header `Mapping source`
+###### Header `Mapping source` *(mandatory)*
 A logical grouping of metadata terms mappings.
 
-###### Header `Mapping code`
+###### Header `Mapping code` *(mandatory)*
 The code part of the metadata term mapping. That is a unique code, in the scope of the source, that points to and represents the metadata. Together the mapping source and the mapping code form the metadata term mapping that identify univocally a piece of metadata.
 
-###### Header `Metadata class name`
+###### Header `Metadata class name` *(mandatory)*
 The complete Java class name of the metadata object, eg. `org.openmrs.PatientIdentifierType`, `org.openmrs.Location`, ... etc.
 
-###### Header `Metadata Uuid`
+###### Header `Metadata Uuid` *(mandatory)*
 The UUID of the metadata object represented by the metadata term mapping.
 
 #### Further examples:

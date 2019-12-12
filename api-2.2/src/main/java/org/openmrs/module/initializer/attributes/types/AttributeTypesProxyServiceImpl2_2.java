@@ -11,7 +11,6 @@ import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesProxyServiceImpl;
 
-@SuppressWarnings("rawtypes")
 @OpenmrsProfile(openmrsPlatformVersion = "2.2.0")
 public class AttributeTypesProxyServiceImpl2_2 extends AttributeTypesProxyServiceImpl {
 	
@@ -24,7 +23,7 @@ public class AttributeTypesProxyServiceImpl2_2 extends AttributeTypesProxyServic
 	}
 	
 	@Override
-	protected BaseAttributeType save(BaseAttributeType instance) {
+	protected BaseAttributeType<?> save(BaseAttributeType<?> instance) {
 		
 		instance = super.save(instance);
 		
@@ -39,9 +38,9 @@ public class AttributeTypesProxyServiceImpl2_2 extends AttributeTypesProxyServic
 	}
 	
 	@Override
-	protected BaseAttributeType getByUuid(String uuid, AttributeTypeEntity typeEnum) {
+	protected BaseAttributeType<?> getByUuid(String uuid, AttributeTypeEntity typeEnum) {
 		
-		BaseAttributeType attType = super.getByUuid(uuid, typeEnum);
+		BaseAttributeType<?> attType = super.getByUuid(uuid, typeEnum);
 		
 		switch (typeEnum) {
 			case CONCEPT:
@@ -60,9 +59,9 @@ public class AttributeTypesProxyServiceImpl2_2 extends AttributeTypesProxyServic
 	}
 	
 	@Override
-	protected BaseAttributeType getByName(String name, AttributeTypeEntity typeEnum) {
+	protected BaseAttributeType<?> getByName(String name, AttributeTypeEntity typeEnum) {
 		
-		BaseAttributeType attType = super.getByName(name, typeEnum);
+		BaseAttributeType<?> attType = super.getByName(name, typeEnum);
 		
 		switch (typeEnum) {
 			case CONCEPT:
