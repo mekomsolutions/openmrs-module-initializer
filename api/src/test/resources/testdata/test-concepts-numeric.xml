@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+  <concept_numeric CONCEPT_ID="5497" HI_ABSOLUTE="2500.0" HI_CRITICAL="1800.0" HI_NORMAL="1497.0" LOW_ABSOLUTE="0.0" LOW_CRITICAL="99.0" LOW_NORMAL="445.0" UNITS="cells/mmL" PRECISE="false"/>
+  <concept_numeric CONCEPT_ID="5504" HI_NORMAL="55.2" LOW_NORMAL="44.8" PRECISE="false"/>
+
+</dataset>

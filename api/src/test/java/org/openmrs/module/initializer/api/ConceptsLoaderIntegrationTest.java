@@ -46,6 +46,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	@Before
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-concepts.xml");
+		executeDataSet("testdata/test-concepts-numeric.xml");
 	}
 	
 	@Test

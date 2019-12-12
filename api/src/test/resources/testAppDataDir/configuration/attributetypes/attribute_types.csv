@@ -4,3 +4,7 @@ Uuid,Void/Retire,Entity name,Name,Description,Min occurs,Max occurs,Datatype cla
 9eca4f4e-707f-4bb8-8289-2f9b6e93803c,,Location,Location ISO Code,Location ISO Code's description,1,10,org.openmrs.customdatatype.datatype.FreeTextDatatype,,,,
 ,,Provider,Provider Speciality,Clinical speciality for this provider,0,7,org.openmrs.customdatatype.datatype.FreeTextDatatype,,,,
 ,TRUE,Provider,Provider Rating,,,,,,,,
+7d002484-0fcd-4759-a67a-04dbf8fdaab1,,Concept,Concept Location,,1,1,org.openmrs.customdatatype.datatype.LocationDatatype,,,,
+3884c889-35f5-47b4-a6b7-5b1165cee218,,Program,Program Assessment,Program Assessment's description,,,org.openmrs.customdatatype.datatype.FreeTextDatatype,,,,
+b1d98f27-c058-46f2-9c12-87dd7c92f7e3,,Program,Program Efficiency Indicator,Metric of the program efficiency,0,1,org.openmrs.customdatatype.datatype.FloatDatatype,,,,
+,TRUE,Concept,Concept Family,,,,,,,,
