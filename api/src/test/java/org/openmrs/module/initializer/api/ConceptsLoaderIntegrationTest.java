@@ -22,14 +22,11 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptComplex;
 import org.openmrs.ConceptMap;
-import org.openmrs.ConceptName;
 import org.openmrs.ConceptNumeric;
-import org.openmrs.ConceptSource;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
-import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -47,122 +44,15 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	private Locale localeKm = new Locale("km", "KH");
 	
 	@Before
-	public void setup() {
-		
-		ConceptSource source = null;
-		source = new ConceptSource();
-		source.setName("Cambodia");
-		source.setDescription("Test 'Cambodia' source");
-		source = cs.saveConceptSource(source);
-		
-		source = new ConceptSource();
-		source.setName("CIEL");
-		source.setDescription("Test 'CIEL' source");
-		source = cs.saveConceptSource(source);
-		
-		// A concept to be retired via CSV
-		{
-			Concept c = new Concept();
-			c.setUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
-			c.setFullySpecifiedName(new ConceptName("CONCEPT_RETIRE", localeEn));
-			c.setConceptClass(cs.getConceptClassByName("Misc"));
-			c.setDatatype(cs.getConceptDatatypeByName("Text"));
-			cs.saveConcept(c);
-		}
-		
-		// A concept to be edited via CSV
-		{
-			Concept c = new Concept();
-			c.setUuid("276c5861-cd46-429f-9665-e067ddeca8e3");
-			c.setFullySpecifiedName(new ConceptName("CONCEPT_EDIT_SHORTNAME", localeEn));
-			c.setShortName(new ConceptName("Old short name", Locale.ENGLISH));
-			c.setConceptClass(cs.getConceptClassByName("Misc"));
-			c.setDatatype(cs.getConceptDatatypeByName("Text"));
-			cs.saveConcept(c);
-		}
-		
-		// A concept with a mapping to be retired via CSV
-		{
-			Assert.assertNull(cs.getConceptByMapping("foo12bar", "Cambodia"));
-			Concept c = new Concept();
-			c.setFullySpecifiedName(new ConceptName("CONCEPT_WITH_MAPPING_TO_RETIRE", localeEn));
-			c.setConceptClass(cs.getConceptClassByName("Misc"));
-			c.setDatatype(cs.getConceptDatatypeByName("Text"));
-			c.addConceptMapping((new Utils.ConceptMappingWrapper("Cambodia:foo12bar", cs)).getConceptMapping());
-			cs.saveConcept(c);
-			Assert.assertNotNull(cs.getConceptByMapping("foo12bar", "Cambodia"));
-		}
-		
-		// A concept with members to be removed via CSV
-		{
-			Concept cm1 = new Concept();
-			cm1.setFullySpecifiedName(new ConceptName("member_1", localeEn));
-			cm1.setConceptClass(cs.getConceptClassByName("Misc"));
-			cm1.setDatatype(cs.getConceptDatatypeByName("Text"));
-			cm1 = cs.saveConcept(cm1);
-			Concept cm2 = new Concept();
-			cm2.setFullySpecifiedName(new ConceptName("member_2", localeEn));
-			cm2.setConceptClass(cs.getConceptClassByName("Misc"));
-			cm2.setDatatype(cs.getConceptDatatypeByName("Text"));
-			cm2 = cs.saveConcept(cm2);
-			
-			Concept c = new Concept();
-			c.setUuid("d803e973-1010-4415-8659-c011dec707c0");
-			c.setFullySpecifiedName(new ConceptName("CONCEPT_REMOVE_MEMBERS", localeEn));
-			c.setConceptClass(cs.getConceptClassByName("Misc"));
-			c.setDatatype(cs.getConceptDatatypeByName("Text"));
-			c.addSetMember(cm1);
-			c.addSetMember(cm2);
-			c = cs.saveConcept(c);
-		}
-		
-		// A concept numeric to be edited
-		{
-			ConceptNumeric cn = new ConceptNumeric();
-			cn.setUuid("4280217a-eb93-4e2f-9684-28bed4690e7b");
-			cn.setFullySpecifiedName(new ConceptName("CN_2_EDIT", localeEn));
-			cn.setConceptClass(cs.getConceptClassByName("Misc"));
-			cn.setDatatype(cs.getConceptDatatypeByName("Numeric"));
-			cn.setLowNormal(44.8);
-			cn.setHiNormal(55.2);
-			cs.saveConcept(cn);
-		}
-		
-		// A concept complex to be edited
-		{
-			ConceptComplex cc = new ConceptComplex();
-			cc.setUuid("b0b15817-79d6-4c33-b7e9-bfa079d46f5f");
-			cc.setFullySpecifiedName(new ConceptName("CC_2_EDIT", localeEn));
-			cc.setConceptClass(cs.getConceptClassByName("Misc"));
-			cc.setDatatype(cs.getConceptDatatypeByName("Complex"));
-			cc.setHandler("TextHandler");
-			cs.saveConcept(cc);
-		}
-		
-		// Concepts to be fetched and edited by FSN
-		{
-			Concept c = new Concept();
-			c.setFullySpecifiedName(new ConceptName("CONCEPT_FETCH_BY_FSN", localeEn));
-			c.setShortName(new ConceptName("Old short name", localeEn));
-			c.setConceptClass(cs.getConceptClassByName("Misc"));
-			c.setDatatype(cs.getConceptDatatypeByName("Text"));
-			cs.saveConcept(c);
-		}
-		{
-			Concept c = new Concept();
-			c.setFullySpecifiedName(new ConceptName("គំនិត_ដោយ_FSN", localeKm));
-			// c.setShortName(new ConceptName("ឈ្មោះខ្លីចាស់", localeKm));
-			c.setShortName(new ConceptName("old km short name", localeKm));
-			c.setConceptClass(cs.getConceptClassByName("Misc"));
-			c.setDatatype(cs.getConceptDatatypeByName("Text"));
-			cs.saveConcept(c);
-		}
+	public void setup() throws Exception {
+		executeDataSet("testdata/test-concepts.xml");
+		executeDataSet("testdata/test-concepts-numeric.xml");
 	}
 	
 	@Test
 	public void load_shouldLoadDrugsAccordingToCsvFiles() {
 		
-		// Setup
+		// Verif setup
 		Concept c = null;
 		{
 			c = cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0");

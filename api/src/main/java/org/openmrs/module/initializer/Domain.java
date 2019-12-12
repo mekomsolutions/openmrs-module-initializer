@@ -4,14 +4,15 @@ public enum Domain {
 	
 	JSON_KEY_VALUES(1, "jsonkeyvalues"), MDS(2, "metadatasharing"), METADATA_MAPPINGS(3, "metadatamappings"), PRIVILEGES(4,
 	        "privileges"), ENCOUNTER_TYPES(5, "encountertypes"), ROLES(6, "roles"), GLOBAL_PROPERTIES(7,
-	                "globalproperties"), LOCATIONS(8, "locations"), CONCEPTS(9, "concepts"), PROGRAMS(10,
-	                        "programs"), PROGRAM_WORKFLOWS(11, "programworkflows"), PROGRAM_WORKFLOW_STATES(12,
-	                                "programworkflowstates"), PERSON_ATTRIBUTE_TYPES(13,
-	                                        "personattributetypes"), IDENTIFIER_SOURCES(14, "idgen"), DRUGS(15,
-	                                                "drugs"), ORDER_FREQUENCIES(16, "orderfrequencies"), ORDER_TYPES(17,
-	                                                        "ordertypes"), APPOINTMENTS_SPECIALITIES(18,
-	                                                                "appointmentsspecialities"), DATAFILTER_MAPPINGS(19,
-	                                                                        "datafiltermappings");
+	                "globalproperties"), ATTRIBUTE_TYPES(8, "attributetypes"), LOCATIONS(9,
+	                        "locations"), CONCEPTS(10, "concepts"), PROGRAMS(11,
+	                                "programs"), PROGRAM_WORKFLOWS(12, "programworkflows"), PROGRAM_WORKFLOW_STATES(13,
+	                                        "programworkflowstates"), PERSON_ATTRIBUTE_TYPES(14,
+	                                                "personattributetypes"), IDENTIFIER_SOURCES(15, "idgen"), DRUGS(16,
+	                                                        "drugs"), ORDER_FREQUENCIES(17, "orderfrequencies"), ORDER_TYPES(
+	                                                                18, "ordertypes"), APPOINTMENTS_SPECIALITIES(19,
+	                                                                        "appointmentsspecialities"), DATAFILTER_MAPPINGS(
+	                                                                                20, "datafiltermappings");
 	
 	private final int order;
 	

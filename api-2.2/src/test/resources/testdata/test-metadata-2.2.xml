@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+  <program_attribute_type PROGRAM_ATTRIBUTE_TYPE_ID="1089" NAME="Program Efficiency Score" DESCRIPTION="Metric of the program efficiency" DATATYPE="org.openmrs.customdatatype.datatype.FloatDatatype" MIN_OCCURS="0" CREATOR="1" DATE_CREATED="2019-12-11 09:31:48.0" RETIRED="false" UUID="b1d98f27-c058-46f2-9c12-87dd7c92f7e3"/>
+
+  <concept_attribute_type CONCEPT_ATTRIBUTE_TYPE_ID="1089" NAME="Concept Family" DESCRIPTION="The concept class's family" DATATYPE="org.openmrs.customdatatype.datatype.RegexValidatedTextDatatype" MIN_OCCURS="1" CREATOR="1" DATE_CREATED="2019-12-11 09:31:48.0" RETIRED="false" UUID="47666db8-a51c-4d9d-a847-98138404f1e3"/>
+
+</dataset>

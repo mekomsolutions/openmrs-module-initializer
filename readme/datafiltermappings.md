@@ -25,17 +25,17 @@ Let us summarise the set of available headers.
 ###### Header `Void/Retire` 
 If `true` the entity access will be granted, if `false` or empty the the entity access will be revoked. This header is mandatory.
 
-###### Header `Entity UUID` 
-The entity UUID. This header is mandatory.
+###### Header `Entity UUID` *(mandatory)* 
+The entity UUID.
 
-###### Header `Entity class` 
-The entity class name. This header is mandatory.
+###### Header `Entity class` *(mandatory)* 
+The entity class name.
 
-###### Header `Basis UUID` 
-The basis UUID. This header is mandatory.
+###### Header `Basis UUID` *(mandatory)* 
+The basis UUID.
 
-###### Header `Basis class` 
-The basis class name. This header is mandatory.
+###### Header `Basis class` *(mandatory)* 
+The basis class name.
 
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).
