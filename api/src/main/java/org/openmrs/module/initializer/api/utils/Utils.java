@@ -440,20 +440,4 @@ public class Utils {
 		}
 		return false;
 	}
-	
-	/**
-	 * Converts a string to java.util.Date
-	 * 
-	 * @param input The string to convert
-	 * @return a java.util.Date representation value of the input string, null otherwise.
-	 */
-	public static Date getTimeFromString(String input) {
-		DateFormat dateFormat = new SimpleDateFormat("hh:mm");
-		try {
-			return dateFormat.parse(input);
-		}
-		catch (ParseException e) {
-			return null;
-		}
-	}
 }

@@ -1,8 +1,5 @@
 package org.openmrs.module.initializer.api.appt.servicedefinitions;
 
-import java.sql.Time;
-import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Location;
 import org.openmrs.annotation.OpenmrsProfile;
@@ -81,21 +78,8 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		definition.setName(name);
 		definition.setDescription(line.getString(HEADER_DESC));		
 		definition.setDurationMins(line.getInt(HEADER_DURATION));
-		
-		String serviceStartTime = line.getString(HEADER_START_TIME);
-		if (!StringUtils.isEmpty(serviceStartTime)) {
-			Date startTime = Utils.getTimeFromString(serviceStartTime);
-			if (startTime != null) {
-				definition.setStartTime(new Time(startTime.getTime()));
-			}
-		}
-		
-		String serviceEndTime = line.getString(HEADER_END_TIME);
-		if (!StringUtils.isEmpty(serviceEndTime)) {
-			Date endTime = Utils.getTimeFromString(serviceEndTime);
-			definition.setEndTime(new Time(endTime.getTime()));
-		}
-		
+		definition.setStartTime(line.getSqlTime(HEADER_START_TIME));
+		definition.setStartTime(line.getSqlTime(HEADER_END_TIME));
 		definition.setMaxAppointmentsLimit(line.getInt(HEADER_MAX_LOAD));
 		
 		String serviceSpeciality = line.getString(HEADER_SPECIALITY);

@@ -1,5 +1,6 @@
 package org.openmrs.module.initializer.api;
 
+import java.sql.Time;
 import java.util.Arrays;
 
 import org.apache.commons.lang.BooleanUtils;
@@ -95,6 +96,15 @@ public class CsvLine {
 			return null;
 		} else {
 			return BooleanUtils.toBoolean(val);
+		}
+	}
+	
+	public Time getSqlTime(String header) {
+		String val = get(header);
+		if (StringUtils.isEmpty(val)) {
+			return null;
+		} else {
+			return Time.valueOf(header+":00"); //Append :00 just because that's what Bahmni does to allow users to only provide hours and minutes
 		}
 	}
 	
