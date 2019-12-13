@@ -104,7 +104,7 @@ public class CsvLine {
 		if (StringUtils.isEmpty(val)) {
 			return null;
 		} else {
-			return Time.valueOf(header+":00"); //Append :00 just because that's what Bahmni does to allow users to only provide hours and minutes
+			return Time.valueOf(val+":00"); //Append :00 just because that's what Bahmni does to allow users to only provide hours and minutes
 		}
 	}
 	

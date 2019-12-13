@@ -79,7 +79,7 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		definition.setDescription(line.getString(HEADER_DESC));		
 		definition.setDurationMins(line.getInt(HEADER_DURATION));
 		definition.setStartTime(line.getSqlTime(HEADER_START_TIME));
-		definition.setStartTime(line.getSqlTime(HEADER_END_TIME));
+		definition.setEndTime(line.getSqlTime(HEADER_END_TIME));
 		definition.setMaxAppointmentsLimit(line.getInt(HEADER_MAX_LOAD));
 		
 		String serviceSpeciality = line.getString(HEADER_SPECIALITY);
