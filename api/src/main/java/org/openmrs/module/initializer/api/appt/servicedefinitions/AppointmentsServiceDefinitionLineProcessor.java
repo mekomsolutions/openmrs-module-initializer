@@ -79,9 +79,9 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 			        "An AppointmentServiceDefinition must at least be provided a name: '" + line.toString() + "'");
 		}
 		definition.setName(name);
-		definition.setDescription(line.getString(HEADER_DESC, ""));
+		definition.setDescription(line.getString(HEADER_DESC));
 		
-		String serviceDuration = line.getString(HEADER_DURATION, "");
+		String serviceDuration = line.getString(HEADER_DURATION);
 		if (!StringUtils.isEmpty(serviceDuration)) {
 			Integer duration = Utils.getIntegerFromString(serviceDuration);
 			if (duration != null) {
@@ -89,7 +89,7 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 			}
 		}
 		
-		String serviceStartTime = line.getString(HEADER_START_TIME, "");
+		String serviceStartTime = line.getString(HEADER_START_TIME);
 		if (!StringUtils.isEmpty(serviceStartTime)) {
 			Date startTime = Utils.getTimeFromString(serviceStartTime);
 			if (startTime != null) {
@@ -97,13 +97,13 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 			}
 		}
 		
-		String serviceEndTime = line.getString(HEADER_END_TIME, "");
+		String serviceEndTime = line.getString(HEADER_END_TIME);
 		if (!StringUtils.isEmpty(serviceEndTime)) {
 			Date endTime = Utils.getTimeFromString(serviceEndTime);
 			definition.setEndTime(new Time(endTime.getTime()));
 		}
 		
-		String serviceMaxLoad = line.getString(HEADER_MAX_LOAD, "");
+		String serviceMaxLoad = line.getString(HEADER_MAX_LOAD);
 		if (!StringUtils.isEmpty(serviceMaxLoad)) {
 			Integer maxLoad = Utils.getIntegerFromString(serviceMaxLoad);
 			if (maxLoad != null) {
@@ -111,7 +111,7 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 			}
 		}
 		
-		String serviceSpeciality = line.getString(HEADER_SPECIALITY, "");
+		String serviceSpeciality = line.getString(HEADER_SPECIALITY);
 		if (!StringUtils.isEmpty(serviceSpeciality)) {
 			Speciality fetchedSpeciality = Utils.fetchBahmniAppointmentSpeciality(serviceSpeciality, specialityService);
 			if (fetchedSpeciality != null) {
@@ -119,15 +119,15 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 			}
 		}
 		
-		String serviceLocation = line.getString(HEADER_LOCATION, "");
+		String serviceLocation = line.getString(HEADER_LOCATION);
 		if (!StringUtils.isEmpty(serviceLocation)) {
-			Location fetchedLocation = Utils.fetchLocation(line.getString(HEADER_LOCATION, ""), locationService);
+			Location fetchedLocation = Utils.fetchLocation(line.getString(HEADER_LOCATION), locationService);
 			if (fetchedLocation != null && Utils.isAppointmentLocation(fetchedLocation)) {
 				definition.setLocation(fetchedLocation);
 			}
 		}
 		
-		definition.setColor(line.getString(HEADER_LABEL_COLOUR, ""));
+		definition.setColor(line.getString(HEADER_LABEL_COLOUR));
 		
 		return definition;
 	}
