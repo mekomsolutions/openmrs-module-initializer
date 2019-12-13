@@ -31,13 +31,13 @@ public class AppointmentsServicesDefinitionLineProcessorTest {
 		
 		// Replay
 		AppointmentsServiceDefinitionLineProcessor p = new AppointmentsServiceDefinitionLineProcessor(asds, ss, ls);
-		AppointmentServiceDefinition appointmentServiceDefinition = p.fill(new AppointmentServiceDefinition(),
+		AppointmentServiceDefinition definition = p.fill(new AppointmentServiceDefinition(),
 		    new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertEquals("X-Ray", appointmentServiceDefinition.getName());
-		Assert.assertEquals("Radiology Service", appointmentServiceDefinition.getDescription());
-		Assert.assertEquals(Integer.valueOf(30), appointmentServiceDefinition.getDurationMins());
-		Assert.assertEquals(Integer.valueOf(50), appointmentServiceDefinition.getMaxAppointmentsLimit());
+		Assert.assertEquals("X-Ray", definition.getName());
+		Assert.assertEquals("Radiology Service", definition.getDescription());
+		Assert.assertEquals(Integer.valueOf(30), definition.getDurationMins());
+		Assert.assertEquals(Integer.valueOf(50), definition.getMaxAppointmentsLimit());
 	}
 }

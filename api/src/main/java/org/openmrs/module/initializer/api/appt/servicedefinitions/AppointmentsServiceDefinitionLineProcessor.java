@@ -52,40 +52,40 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		
 		String uuid = line.getUuid();
 		
-		AppointmentServiceDefinition appointmentServiceDefinition = appointmentServiceService
+		AppointmentServiceDefinition definition = appointmentServiceService
 		        .getAppointmentServiceByUuid(uuid);
 		
-		if (appointmentServiceDefinition == null) {
-			String appointmentServiceDefinitionName = line.get(HEADER_NAME, true); // should fail if name column missing
-			appointmentServiceDefinition = Utils.fetchBahmniAppointmentServiceDefinition(appointmentServiceDefinitionName, appointmentServiceService);
+		if (definition == null) {
+			String name = line.get(HEADER_NAME, true); // should fail if name column missing
+			definition = Utils.fetchBahmniAppointmentServiceDefinition(name, appointmentServiceService);
 		}
 		
-		if (appointmentServiceDefinition == null) {
-			appointmentServiceDefinition = new AppointmentServiceDefinition();
+		if (definition == null) {
+			definition = new AppointmentServiceDefinition();
 			if (!StringUtils.isEmpty(uuid)) {
-				appointmentServiceDefinition.setUuid(uuid);
+				definition.setUuid(uuid);
 			}
 		}
 		
-		return appointmentServiceDefinition;
+		return definition;
 	}
 	
-	public AppointmentServiceDefinition fill(AppointmentServiceDefinition appointmentServiceDefinition, CsvLine line)
+	public AppointmentServiceDefinition fill(AppointmentServiceDefinition definition, CsvLine line)
 	        throws IllegalArgumentException {
 		
-		String appointmentServiceDefinitionName = line.get(HEADER_NAME, true); // should fail is name column missing
-		if (StringUtils.isEmpty(appointmentServiceDefinitionName)) {
+		String name = line.get(HEADER_NAME, true); // should fail is name column missing
+		if (StringUtils.isEmpty(name)) {
 			throw new IllegalArgumentException(
 			        "An AppointmentServiceDefinition must at least be provided a name: '" + line.toString() + "'");
 		}
-		appointmentServiceDefinition.setName(appointmentServiceDefinitionName);
-		appointmentServiceDefinition.setDescription(line.getString(HEADER_DESC, ""));
+		definition.setName(name);
+		definition.setDescription(line.getString(HEADER_DESC, ""));
 		
 		String serviceDuration = line.getString(HEADER_DURATION, "");
 		if (!StringUtils.isEmpty(serviceDuration)) {
 			Integer duration = Utils.getIntegerFromString(serviceDuration);
 			if (duration != null) {
-				appointmentServiceDefinition.setDurationMins(duration);
+				definition.setDurationMins(duration);
 			}
 		}
 		
@@ -93,21 +93,21 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		if (!StringUtils.isEmpty(serviceStartTime)) {
 			Date startTime = Utils.getTimeFromString(serviceStartTime);
 			if (startTime != null) {
-				appointmentServiceDefinition.setStartTime(new Time(startTime.getTime()));
+				definition.setStartTime(new Time(startTime.getTime()));
 			}
 		}
 		
 		String serviceEndTime = line.getString(HEADER_END_TIME, "");
 		if (!StringUtils.isEmpty(serviceEndTime)) {
 			Date endTime = Utils.getTimeFromString(serviceEndTime);
-			appointmentServiceDefinition.setEndTime(new Time(endTime.getTime()));
+			definition.setEndTime(new Time(endTime.getTime()));
 		}
 		
 		String serviceMaxLoad = line.getString(HEADER_MAX_LOAD, "");
 		if (!StringUtils.isEmpty(serviceMaxLoad)) {
 			Integer maxLoad = Utils.getIntegerFromString(serviceMaxLoad);
 			if (maxLoad != null) {
-				appointmentServiceDefinition.setMaxAppointmentsLimit(maxLoad);
+				definition.setMaxAppointmentsLimit(maxLoad);
 			}
 		}
 		
@@ -115,7 +115,7 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		if (!StringUtils.isEmpty(serviceSpeciality)) {
 			Speciality fetchedSpeciality = Utils.fetchBahmniAppointmentSpeciality(serviceSpeciality, specialityService);
 			if (fetchedSpeciality != null) {
-				appointmentServiceDefinition.setSpeciality(fetchedSpeciality);
+				definition.setSpeciality(fetchedSpeciality);
 			}
 		}
 		
@@ -123,12 +123,12 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		if (!StringUtils.isEmpty(serviceLocation)) {
 			Location fetchedLocation = Utils.fetchLocation(line.getString(HEADER_LOCATION, ""), locationService);
 			if (fetchedLocation != null && Utils.isAppointmentLocation(fetchedLocation)) {
-				appointmentServiceDefinition.setLocation(fetchedLocation);
+				definition.setLocation(fetchedLocation);
 			}
 		}
 		
-		appointmentServiceDefinition.setColor(line.getString(HEADER_LABEL_COLOUR, ""));
+		definition.setColor(line.getString(HEADER_LABEL_COLOUR, ""));
 		
-		return appointmentServiceDefinition;
+		return definition;
 	}
 }
