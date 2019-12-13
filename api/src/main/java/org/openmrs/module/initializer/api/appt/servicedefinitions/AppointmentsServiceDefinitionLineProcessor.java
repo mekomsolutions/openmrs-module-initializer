@@ -70,12 +70,7 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 	public AppointmentServiceDefinition fill(AppointmentServiceDefinition definition, CsvLine line)
 	        throws IllegalArgumentException {
 		
-		String name = line.get(HEADER_NAME, true); // should fail is name column missing
-		if (StringUtils.isEmpty(name)) {
-			throw new IllegalArgumentException(
-			        "An AppointmentServiceDefinition must at least be provided a name: '" + line.toString() + "'");
-		}
-		definition.setName(name);
+		definition.setName(line.get(HEADER_NAME, true));
 		definition.setDescription(line.getString(HEADER_DESC));		
 		definition.setDurationMins(line.getInt(HEADER_DURATION));
 		definition.setStartTime(line.getSqlTime(HEADER_START_TIME));
