@@ -43,7 +43,7 @@ public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends Domain
 	
 	@Before
 	public void setup() {
-		// An appointment location to be retired via CSV
+		// An appointment location to be retrieved via CSV
 		{
 			LocationTag lt = new LocationTag();
 			lt.setName("Appointment Location");
@@ -55,7 +55,7 @@ public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends Domain
 			ls.saveLocation(l);
 		}
 		
-		// A Speciality to be retired via CSV
+		// A Speciality to be retrieved via CSV
 		{
 			Speciality s = new Speciality();
 			s.setName("Orthopaedic");
@@ -63,17 +63,51 @@ public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends Domain
 			specialityService.save(s);
 		}
 		
+		// Service to test removing service speciality via CSV
+		{
+			AppointmentServiceDefinition sd = new AppointmentServiceDefinition();
+			sd.setName("ServiceWithSpeciality");
+			sd.setUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb");
+			sd.setSpeciality(specialityService.getSpecialityByUuid("cf213609-11ab-11ea-a6a0-080027405b36"));
+			appointmentServiceService.save(sd);
+
+		}
+		
+		// Service to test removing service location via CSV
+		{
+			AppointmentServiceDefinition sd = new AppointmentServiceDefinition();
+			sd.setName("ServiceWithLocation");
+			sd.setUuid("a1039051-6f34-420d-9779-24e77eb0ca00");
+			sd.setLocation(ls.getLocation("Xanadu"));
+			appointmentServiceService.save(sd);
+
+		}
+
 	}
 	
 	@Test
 	public void load_shouldLoadAccordingToCsvFiles() {
+		
+		// Verify the 'ServiceWithSpeciality' in #setup() was indeed created with a speciality
+		{
+			AppointmentServiceDefinition asd = appointmentServiceService
+			        .getAppointmentServiceByUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb");
+			Assert.assertEquals("Orthopaedic", asd.getSpeciality().getName());
+		}
+		
+		// Verify the 'ServiceWithLocation' in #setup() was indeed created with a speciality
+		{
+			AppointmentServiceDefinition asd = appointmentServiceService
+			        .getAppointmentServiceByUuid("a1039051-6f34-420d-9779-24e77eb0ca00");
+			Assert.assertEquals("Xanadu", asd.getLocation().getName());
+		}
 		
 		// Replay
 		loader.load();
 		
 		// Verify creation of appointment service definitions
 		{
-			Assert.assertEquals(5, appointmentServiceService.getAllAppointmentServices(false).size());
+			Assert.assertEquals(7, appointmentServiceService.getAllAppointmentServices(false).size());
 		}
 		// Verify adding appointment service location using location uuid
 		{
@@ -123,6 +157,20 @@ public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends Domain
 			AppointmentServiceDefinition asd = appointmentServiceService
 			        .getAppointmentServiceByUuid("c12829d8-6bdd-426c-a386-104eed0d2c41");
 			Assert.assertEquals("#8FBC8F", asd.getColor());
+		}
+		
+		// Verify removing service speciality via CSV
+		{
+			AppointmentServiceDefinition asd = appointmentServiceService
+					.getAppointmentServiceByUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb");
+			Assert.assertNull(asd.getSpeciality());
+		}
+		
+		// Verify removing service location via CSV
+		{
+			AppointmentServiceDefinition asd = appointmentServiceService
+					.getAppointmentServiceByUuid("a1039051-6f34-420d-9779-24e77eb0ca00");
+			Assert.assertNull(asd.getLocation());
 		}
 	}
 }

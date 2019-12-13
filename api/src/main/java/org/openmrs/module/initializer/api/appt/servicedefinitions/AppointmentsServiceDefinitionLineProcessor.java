@@ -77,21 +77,11 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		definition.setEndTime(line.getSqlTime(HEADER_END_TIME));
 		definition.setMaxAppointmentsLimit(line.getInt(HEADER_MAX_LOAD));
 		
-		String serviceSpeciality = line.getString(HEADER_SPECIALITY);
-		if (!StringUtils.isEmpty(serviceSpeciality)) {
-			Speciality fetchedSpeciality = Utils.fetchBahmniAppointmentSpeciality(serviceSpeciality, specialityService);
-			if (fetchedSpeciality != null) {
-				definition.setSpeciality(fetchedSpeciality);
-			}
-		}
+		Speciality fetchedSpeciality = Utils.fetchBahmniAppointmentSpeciality(line.getString(HEADER_SPECIALITY), specialityService);
+		definition.setSpeciality(fetchedSpeciality);
 		
-		String serviceLocation = line.getString(HEADER_LOCATION);
-		if (!StringUtils.isEmpty(serviceLocation)) {
-			Location fetchedLocation = Utils.fetchLocation(line.getString(HEADER_LOCATION), locationService);
-			if (fetchedLocation != null && Utils.isAppointmentLocation(fetchedLocation)) {
-				definition.setLocation(fetchedLocation);
-			}
-		}
+		Location fetchedLocation = Utils.fetchLocation(line.getString(HEADER_LOCATION), locationService);
+		definition.setLocation(fetchedLocation);
 		
 		definition.setColor(line.getString(HEADER_LABEL_COLOUR));
 		
