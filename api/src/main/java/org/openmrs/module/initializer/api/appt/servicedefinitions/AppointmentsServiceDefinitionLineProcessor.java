@@ -57,12 +57,7 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		
 		if (appointmentServiceDefinition == null) {
 			String appointmentServiceDefinitionName = line.get(HEADER_NAME, true); // should fail if name column missing
-			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : appointmentServiceService
-			        .getAllAppointmentServices(false)) { //We don't have #getAppointmentServiceByName, so we use a loop
-				if (currentAppointmentServiceDefinition.getName().equalsIgnoreCase(appointmentServiceDefinitionName)) {
-					appointmentServiceDefinition = currentAppointmentServiceDefinition;
-				}
-			}
+			appointmentServiceDefinition = Utils.fetchBahmniAppointmentServiceDefinition(appointmentServiceDefinitionName, appointmentServiceService);
 		}
 		
 		if (appointmentServiceDefinition == null) {

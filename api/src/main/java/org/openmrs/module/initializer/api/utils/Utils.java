@@ -37,7 +37,9 @@ import org.openmrs.api.OrderService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
+import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.Speciality;
+import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.springframework.util.CollectionUtils;
 
@@ -396,6 +398,28 @@ public class Utils {
 			for (Speciality currentSpeciality : specialityService.getAllSpecialities()) { //Because we don't have #specialityService.getSpecialityByName
 				if (currentSpeciality.getName().equalsIgnoreCase(id)) {
 					instance = currentSpeciality;
+				}
+			}
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches Bahmni appointment service definition trying various routes.
+	 * 
+	 * @param id The appointment service definition name or UUID.
+	 * @param appointmentServiceService
+	 * @return The {@link AppointmentServiceDefinition} instance if found, null otherwise.
+	 */
+	public static AppointmentServiceDefinition fetchBahmniAppointmentServiceDefinition(String id, AppointmentServiceDefinitionService appointmentServiceService) {
+		AppointmentServiceDefinition instance = null;
+		if (instance == null) {
+			instance = appointmentServiceService.getAppointmentServiceByUuid(id);
+		}
+		if (instance == null) {
+			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : appointmentServiceService.getAllAppointmentServices(false)) { //Because we don't have #appointmentServiceService.getAppointmentServiceDefinitionByName
+				if (currentAppointmentServiceDefinition.getName().equalsIgnoreCase(id)) {
+					instance = currentAppointmentServiceDefinition;
 				}
 			}
 		}
