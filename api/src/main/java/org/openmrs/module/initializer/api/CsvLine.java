@@ -99,6 +99,11 @@ public class CsvLine {
 		}
 	}
 	
+	/**
+	 * Converts a string into a java.sql.Time Object
+	 * @param header a string representing time. Only hours and minutes are expected (eg. "17:00") 
+	 * @return a java.sql.Time Object representing the time, null if the parameter is empty.
+	 */
 	public Time getSqlTime(String header) {
 		String val = get(header);
 		if (StringUtils.isEmpty(val)) {
