@@ -79,15 +79,8 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 			        "An AppointmentServiceDefinition must at least be provided a name: '" + line.toString() + "'");
 		}
 		definition.setName(name);
-		definition.setDescription(line.getString(HEADER_DESC));
-		
-		String serviceDuration = line.getString(HEADER_DURATION);
-		if (!StringUtils.isEmpty(serviceDuration)) {
-			Integer duration = Utils.getIntegerFromString(serviceDuration);
-			if (duration != null) {
-				definition.setDurationMins(duration);
-			}
-		}
+		definition.setDescription(line.getString(HEADER_DESC));		
+		definition.setDurationMins(line.getInt(HEADER_DURATION));
 		
 		String serviceStartTime = line.getString(HEADER_START_TIME);
 		if (!StringUtils.isEmpty(serviceStartTime)) {
@@ -103,13 +96,7 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 			definition.setEndTime(new Time(endTime.getTime()));
 		}
 		
-		String serviceMaxLoad = line.getString(HEADER_MAX_LOAD);
-		if (!StringUtils.isEmpty(serviceMaxLoad)) {
-			Integer maxLoad = Utils.getIntegerFromString(serviceMaxLoad);
-			if (maxLoad != null) {
-				definition.setMaxAppointmentsLimit(maxLoad);
-			}
-		}
+		definition.setMaxAppointmentsLimit(line.getInt(HEADER_MAX_LOAD));
 		
 		String serviceSpeciality = line.getString(HEADER_SPECIALITY);
 		if (!StringUtils.isEmpty(serviceSpeciality)) {

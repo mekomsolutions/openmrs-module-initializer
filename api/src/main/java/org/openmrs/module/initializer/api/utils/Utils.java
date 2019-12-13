@@ -442,21 +442,6 @@ public class Utils {
 	}
 	
 	/**
-	 * Converts a string to a java.lang.Integer
-	 * 
-	 * @param input The string to convert
-	 * @return a java.lang.Integer representation value of the input string, null otherwise.
-	 */
-	public static Integer getIntegerFromString(String input) {
-		try {
-			return Integer.parseInt(input);
-		}
-		catch (NumberFormatException e) {
-			return null;
-		}
-	}
-	
-	/**
 	 * Converts a string to java.util.Date
 	 * 
 	 * @param input The string to convert
