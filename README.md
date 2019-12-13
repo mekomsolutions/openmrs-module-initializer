@@ -15,6 +15,7 @@ The configuration folder is subdivided into _domain_ subfolders:
 configuration/
   ├── addresshierarchy/
   ├── appointmentsspecialities/
+  ├── appointmentsservicesdefinitions/
   ├── attributetypes/
   ├── concepts/
   ├── datafiltermappings/
@@ -68,7 +69,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Order Frequencies(CSV files)](readme/freqs.md)
 1. [Order Types(CSV files)](readme/ordertypes.md)
 1. [Bahmni Appointments Specialities (CSV files)](readme/appointmentsspecialities.md)
-1. [Bahmni Appointments Service Definitions (CSV files)](readme/appointmentsservicedefinitions.md)
+1. [Bahmni Appointments Service Definitions (CSV files)](readme/appointmentsservicesdefinitions.md)
 1. [Data Filter entity-basis mappings (CSV files)](readme/datafiltermappings.md)
 
 ### How to try it out?

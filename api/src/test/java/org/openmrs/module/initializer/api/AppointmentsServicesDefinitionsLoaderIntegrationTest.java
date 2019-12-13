@@ -20,11 +20,11 @@ import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServiceDefinitionsLoader;
+import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServicesDefinitionsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class AppointmentsServiceDefinitionsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("appointmentServiceService")
@@ -39,7 +39,7 @@ public class AppointmentsServiceDefinitionsLoaderIntegrationTest extends DomainB
 	private LocationService ls;
 	
 	@Autowired
-	private AppointmentsServiceDefinitionsLoader loader;
+	private AppointmentsServicesDefinitionsLoader loader;
 	
 	@Before
 	public void setup() {

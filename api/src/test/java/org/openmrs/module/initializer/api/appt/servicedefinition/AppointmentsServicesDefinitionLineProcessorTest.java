@@ -14,7 +14,7 @@ import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsSe
 /*
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
  */
-public class AppointmentsServiceDefinitionLineProcessorTest {
+public class AppointmentsServicesDefinitionLineProcessorTest {
 	
 	private AppointmentServiceDefinitionService asds = mock(AppointmentServiceDefinitionService.class);
 	

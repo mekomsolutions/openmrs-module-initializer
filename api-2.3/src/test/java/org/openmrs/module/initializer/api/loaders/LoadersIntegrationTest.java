@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServiceDefinitionsLoader;
+import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServicesDefinitionsLoader;
 import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
@@ -96,7 +96,7 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private AppointmentsSpecialitiesLoader appointmentsSpecialitiesLoader;
 	
 	@Autowired
-	private AppointmentsServiceDefinitionsLoader appointmentsServiceDefinitionsLoader;
+	private AppointmentsServicesDefinitionsLoader appointmentsServiceDefinitionsLoader;
 	
 	@Autowired
 	private OrderTypesLoader orderTypesLoader;

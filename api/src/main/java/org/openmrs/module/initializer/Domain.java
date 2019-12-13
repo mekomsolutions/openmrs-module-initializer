@@ -11,9 +11,9 @@ public enum Domain {
 	                                                "personattributetypes"), IDENTIFIER_SOURCES(15, "idgen"), DRUGS(16,
 	                                                        "drugs"), ORDER_FREQUENCIES(17, "orderfrequencies"), ORDER_TYPES(
 	                                                                18, "ordertypes"), APPOINTMENTS_SPECIALITIES(19,
-	                                                                        "appointmentsspecialities"), APPOINTMENTS_SERVICE_DEFINITIONS(
+	                                                                        "appointmentsspecialities"), APPOINTMENTS_SERVICES_DEFINITIONS(
 	                                                                                20,
-	                                                                                "appointmentsservicedefinitions"), DATAFILTER_MAPPINGS(
+	                                                                                "appointmentsservicesdefinitions"), DATAFILTER_MAPPINGS(
 	                                                                                        21, "datafiltermappings");
 	
 	private final int order;
