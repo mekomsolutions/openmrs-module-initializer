@@ -1,7 +1,11 @@
 package org.openmrs.module.initializer.api.utils;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -33,6 +37,10 @@ import org.openmrs.api.OrderService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
+import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
+import org.openmrs.module.appointments.model.Speciality;
+import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
+import org.openmrs.module.appointments.service.SpecialityService;
 import org.springframework.util.CollectionUtils;
 
 public class Utils {
@@ -372,5 +380,66 @@ public class Utils {
 			instance = cs.getConceptClassByUuid(id);
 		}
 		return instance;
+	}
+	
+	/**
+	 * Fetches Bahmni appointment speciality trying various routes.
+	 * 
+	 * @param id The appointment speciality name or UUID.
+	 * @param specialityService
+	 * @return The {@link Speciality} instance if found, null otherwise.
+	 */
+	public static Speciality fetchBahmniAppointmentSpeciality(String id, SpecialityService specialityService) {
+		Speciality instance = null;
+		if (instance == null) {
+			instance = specialityService.getSpecialityByUuid(id);
+		}
+		if (instance == null) {
+			for (Speciality currentSpeciality : specialityService.getAllSpecialities()) { //Because we don't have #specialityService.getSpecialityByName
+				if (currentSpeciality.getName().equalsIgnoreCase(id)) {
+					instance = currentSpeciality;
+				}
+			}
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches Bahmni appointment service definition trying various routes.
+	 * 
+	 * @param id The appointment service definition name or UUID.
+	 * @param appointmentServiceService
+	 * @return The {@link AppointmentServiceDefinition} instance if found, null otherwise.
+	 */
+	public static AppointmentServiceDefinition fetchBahmniAppointmentServiceDefinition(String id,
+	        AppointmentServiceDefinitionService appointmentServiceService) {
+		AppointmentServiceDefinition instance = null;
+		if (instance == null) {
+			instance = appointmentServiceService.getAppointmentServiceByUuid(id);
+		}
+		if (instance == null) {
+			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : appointmentServiceService
+			        .getAllAppointmentServices(false)) { //Because we don't have #appointmentServiceService.getAppointmentServiceDefinitionByName
+				if (currentAppointmentServiceDefinition.getName().equalsIgnoreCase(id)) {
+					instance = currentAppointmentServiceDefinition;
+				}
+			}
+		}
+		return instance;
+	}
+	
+	/**
+	 * Checks if a location is an appointment location
+	 * 
+	 * @param location The location to check
+	 * @return true if the location is an appointment location, false otherwise.
+	 */
+	public static boolean isAppointmentLocation(Location location) {
+		for (LocationTag tag : location.getTags()) {
+			if (tag.getName().equalsIgnoreCase("Appointment Location")) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

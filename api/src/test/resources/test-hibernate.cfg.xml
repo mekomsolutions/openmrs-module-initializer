@@ -18,5 +18,11 @@
         <mapping resource="MetadataTermMapping.hbm.xml"/>
         <!-- Speciality -->
         <mapping resource="Speciality.hbm.xml"/>
+        <!-- AppointmentServiceDefinition -->
+        <mapping resource="AppointmentServiceDefinition.hbm.xml"/>
+        <!-- ServiceWeeklyAvailability -->
+        <mapping resource="ServiceWeeklyAvailability.hbm.xml"/>
+        <!-- AppointmentServiceType -->
+        <mapping resource="AppointmentServiceType.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
