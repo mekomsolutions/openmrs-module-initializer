@@ -22,7 +22,7 @@ public class AppointmentsSpecialitiesLoaderIntegrationTest extends DomainBaseMod
 	
 	@Autowired
 	@Qualifier("specialityService")
-	private SpecialityService specialityService;
+	private SpecialityService sps;
 	
 	@Autowired
 	private AppointmentsSpecialitiesLoader loader;
@@ -35,17 +35,17 @@ public class AppointmentsSpecialitiesLoaderIntegrationTest extends DomainBaseMod
 		
 		// Verif speciality name
 		{
-			Speciality speciality = specialityService.getSpecialityByUuid("21ec1632-420f-473c-b380-31ed45214362");
+			Speciality speciality = sps.getSpecialityByUuid("21ec1632-420f-473c-b380-31ed45214362");
 			Assert.assertEquals("New speciality", speciality.getName());
 		}
 		// Verif renaming
 		{
-			Speciality speciality = specialityService.getSpecialityByUuid("c8085c78-e80e-436b-b845-caa3496058a6");
+			Speciality speciality = sps.getSpecialityByUuid("c8085c78-e80e-436b-b845-caa3496058a6");
 			Assert.assertEquals("Speciality B", speciality.getName());
 		}
 		// Verif creation without UUID
 		{
-			Assert.assertEquals(3, specialityService.getAllSpecialities().size()); //Unfortunately, there is no #specialityService.getSpecialityByName method.
+			Assert.assertEquals(3, sps.getAllSpecialities().size()); //Unfortunately, there is no #specialityService.getSpecialityByName method.
 		}
 		
 	}

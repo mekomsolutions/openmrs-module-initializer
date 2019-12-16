@@ -411,13 +411,15 @@ public class Utils {
 	 * @param appointmentServiceService
 	 * @return The {@link AppointmentServiceDefinition} instance if found, null otherwise.
 	 */
-	public static AppointmentServiceDefinition fetchBahmniAppointmentServiceDefinition(String id, AppointmentServiceDefinitionService appointmentServiceService) {
+	public static AppointmentServiceDefinition fetchBahmniAppointmentServiceDefinition(String id,
+	        AppointmentServiceDefinitionService appointmentServiceService) {
 		AppointmentServiceDefinition instance = null;
 		if (instance == null) {
 			instance = appointmentServiceService.getAppointmentServiceByUuid(id);
 		}
 		if (instance == null) {
-			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : appointmentServiceService.getAllAppointmentServices(false)) { //Because we don't have #appointmentServiceService.getAppointmentServiceDefinitionByName
+			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : appointmentServiceService
+			        .getAllAppointmentServices(false)) { //Because we don't have #appointmentServiceService.getAppointmentServiceDefinitionByName
 				if (currentAppointmentServiceDefinition.getName().equalsIgnoreCase(id)) {
 					instance = currentAppointmentServiceDefinition;
 				}

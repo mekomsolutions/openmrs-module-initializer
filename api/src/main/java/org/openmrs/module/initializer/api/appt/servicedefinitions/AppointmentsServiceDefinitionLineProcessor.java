@@ -49,8 +49,7 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 		
 		String uuid = line.getUuid();
 		
-		AppointmentServiceDefinition definition = appointmentServiceService
-		        .getAppointmentServiceByUuid(uuid);
+		AppointmentServiceDefinition definition = appointmentServiceService.getAppointmentServiceByUuid(uuid);
 		
 		if (definition == null) {
 			String name = line.get(HEADER_NAME, true); // should fail if name column missing
@@ -71,13 +70,14 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 	        throws IllegalArgumentException {
 		
 		definition.setName(line.get(HEADER_NAME, true));
-		definition.setDescription(line.getString(HEADER_DESC));		
+		definition.setDescription(line.getString(HEADER_DESC));
 		definition.setDurationMins(line.getInt(HEADER_DURATION));
 		definition.setStartTime(line.getSqlTime(HEADER_START_TIME));
 		definition.setEndTime(line.getSqlTime(HEADER_END_TIME));
 		definition.setMaxAppointmentsLimit(line.getInt(HEADER_MAX_LOAD));
 		
-		Speciality fetchedSpeciality = Utils.fetchBahmniAppointmentSpeciality(line.getString(HEADER_SPECIALITY), specialityService);
+		Speciality fetchedSpeciality = Utils.fetchBahmniAppointmentSpeciality(line.getString(HEADER_SPECIALITY),
+		    specialityService);
 		definition.setSpeciality(fetchedSpeciality);
 		
 		Location fetchedLocation = Utils.fetchLocation(line.getString(HEADER_LOCATION), locationService);

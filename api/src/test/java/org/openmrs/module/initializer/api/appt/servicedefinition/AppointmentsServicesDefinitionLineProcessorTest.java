@@ -31,8 +31,7 @@ public class AppointmentsServicesDefinitionLineProcessorTest {
 		
 		// Replay
 		AppointmentsServiceDefinitionLineProcessor p = new AppointmentsServiceDefinitionLineProcessor(asds, ss, ls);
-		AppointmentServiceDefinition definition = p.fill(new AppointmentServiceDefinition(),
-		    new CsvLine(headerLine, line));
+		AppointmentServiceDefinition definition = p.fill(new AppointmentServiceDefinition(), new CsvLine(headerLine, line));
 		
 		// Verif
 		Assert.assertEquals("X-Ray", definition.getName());

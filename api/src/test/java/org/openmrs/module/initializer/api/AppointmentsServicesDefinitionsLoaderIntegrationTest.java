@@ -28,11 +28,11 @@ public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends Domain
 	
 	@Autowired
 	@Qualifier("appointmentServiceService")
-	private AppointmentServiceDefinitionService appointmentServiceService;
+	private AppointmentServiceDefinitionService apts;
 	
 	@Autowired
 	@Qualifier("specialityService")
-	private SpecialityService specialityService;
+	private SpecialityService sps;
 	
 	@Autowired
 	@Qualifier("locationService")
@@ -60,7 +60,7 @@ public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends Domain
 			Speciality s = new Speciality();
 			s.setName("Orthopaedic");
 			s.setUuid("cf213609-11ab-11ea-a6a0-080027405b36");
-			specialityService.save(s);
+			sps.save(s);
 		}
 		
 		// Service to test removing service speciality via CSV
@@ -68,9 +68,9 @@ public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends Domain
 			AppointmentServiceDefinition sd = new AppointmentServiceDefinition();
 			sd.setName("ServiceWithSpeciality");
 			sd.setUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb");
-			sd.setSpeciality(specialityService.getSpecialityByUuid("cf213609-11ab-11ea-a6a0-080027405b36"));
-			appointmentServiceService.save(sd);
-
+			sd.setSpeciality(sps.getSpecialityByUuid("cf213609-11ab-11ea-a6a0-080027405b36"));
+			apts.save(sd);
+			
 		}
 		
 		// Service to test removing service location via CSV
@@ -79,10 +79,10 @@ public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends Domain
 			sd.setName("ServiceWithLocation");
 			sd.setUuid("a1039051-6f34-420d-9779-24e77eb0ca00");
 			sd.setLocation(ls.getLocation("Xanadu"));
-			appointmentServiceService.save(sd);
-
+			apts.save(sd);
+			
 		}
-
+		
 	}
 	
 	@Test
@@ -90,15 +90,13 @@ public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends Domain
 		
 		// Verify the 'ServiceWithSpeciality' in #setup() was indeed created with a speciality
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-			        .getAppointmentServiceByUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb");
 			Assert.assertEquals("Orthopaedic", asd.getSpeciality().getName());
 		}
 		
 		// Verify the 'ServiceWithLocation' in #setup() was indeed created with a speciality
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-			        .getAppointmentServiceByUuid("a1039051-6f34-420d-9779-24e77eb0ca00");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("a1039051-6f34-420d-9779-24e77eb0ca00");
 			Assert.assertEquals("Xanadu", asd.getLocation().getName());
 		}
 		
@@ -107,69 +105,59 @@ public class AppointmentsServicesDefinitionsLoaderIntegrationTest extends Domain
 		
 		// Verify creation of appointment service definitions
 		{
-			Assert.assertEquals(7, appointmentServiceService.getAllAppointmentServices(false).size());
+			Assert.assertEquals(7, apts.getAllAppointmentServices(false).size());
 		}
 		// Verify adding appointment service location using location uuid
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-			        .getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
 			Assert.assertEquals("Xanadu", asd.getLocation().getName());
 		}
 		// Verify adding appointment service location using location name
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-			        .getAppointmentServiceByUuid("bfff3484-320a-4c1e-84c8-dbe8f0d44e8b");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("bfff3484-320a-4c1e-84c8-dbe8f0d44e8b");
 			Assert.assertEquals("Xanadu", asd.getLocation().getName());
 		}
 		// Verify adding appointment service speciality using speciality name
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-			        .getAppointmentServiceByUuid("c12829d8-6bdd-426c-a386-104eed0d2c41");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("c12829d8-6bdd-426c-a386-104eed0d2c41");
 			Assert.assertEquals("Orthopaedic", asd.getSpeciality().getName());
 		}
 		// Verify adding appointment service speciality using speciality UUID
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-			        .getAppointmentServiceByUuid("b4b96cea-a0ed-4bbc-84f0-6c6b4e79f447");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("b4b96cea-a0ed-4bbc-84f0-6c6b4e79f447");
 			Assert.assertEquals("Orthopaedic", asd.getSpeciality().getName());
 		}
 		// Verify adding appointment service start time and end time
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-			        .getAppointmentServiceByUuid("fc46dedf-5e96-44d4-bd99-bec1d80d15d5");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("fc46dedf-5e96-44d4-bd99-bec1d80d15d5");
 			Assert.assertEquals("08:00:00", asd.getStartTime().toString());
 			Assert.assertEquals("17:00:00", asd.getEndTime().toString());
 		}
 		// Verify adding appointment service duration
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-			        .getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
 			Assert.assertEquals(new Integer(30), asd.getDurationMins());
 		}
 		// Verify adding appointment service max load
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-			        .getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
 			Assert.assertEquals(new Integer(15), asd.getMaxAppointmentsLimit());
 		}
 		// Verify adding appointment service label colour
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-			        .getAppointmentServiceByUuid("c12829d8-6bdd-426c-a386-104eed0d2c41");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("c12829d8-6bdd-426c-a386-104eed0d2c41");
 			Assert.assertEquals("#8FBC8F", asd.getColor());
 		}
 		
 		// Verify removing service speciality via CSV
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-					.getAppointmentServiceByUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb");
 			Assert.assertNull(asd.getSpeciality());
 		}
 		
 		// Verify removing service location via CSV
 		{
-			AppointmentServiceDefinition asd = appointmentServiceService
-					.getAppointmentServiceByUuid("a1039051-6f34-420d-9779-24e77eb0ca00");
+			AppointmentServiceDefinition asd = apts.getAppointmentServiceByUuid("a1039051-6f34-420d-9779-24e77eb0ca00");
 			Assert.assertNull(asd.getLocation());
 		}
 	}
