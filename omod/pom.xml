@@ -24,6 +24,12 @@
 			<artifactId>${project.parent.artifactId}-api-2.2</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>${project.parent.artifactId}-api-2.3</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.openmrs.web</groupId>
