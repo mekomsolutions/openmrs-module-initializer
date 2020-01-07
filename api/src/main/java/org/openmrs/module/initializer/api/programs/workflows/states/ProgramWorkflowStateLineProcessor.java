@@ -1,7 +1,6 @@
 package org.openmrs.module.initializer.api.programs.workflows.states;
 
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
@@ -42,28 +41,7 @@ public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<Program
 	}
 	
 	@Override
-	protected ProgramWorkflowState bootstrap(CsvLine line) throws IllegalArgumentException {
-		
-		String uuid = line.getUuid();
-		
-		String id = uuid;
-		if (id == null) {
-			id = line.get(HEADER_STATE_CONCEPT);
-		}
-		
-		ProgramWorkflowState state = Utils.fetchProgramWorkflowState(id, pwfService, conceptService);
-		if (state == null) {
-			state = new ProgramWorkflowState();
-			if (!StringUtils.isEmpty(uuid)) {
-				state.setUuid(uuid);
-			}
-		}
-		
-		return state;
-	}
-	
-	@Override
-	protected ProgramWorkflowState fill(ProgramWorkflowState state, CsvLine line) throws IllegalArgumentException {
+	public ProgramWorkflowState fill(ProgramWorkflowState state, CsvLine line) throws IllegalArgumentException {
 		
 		Concept c = Utils.fetchConcept(line.get(HEADER_STATE_CONCEPT), conceptService);
 		state.setConcept(c);

@@ -25,7 +25,7 @@ public class MappingsConceptLineProcessor extends ConceptLineProcessor {
 		this.listParser = listParser;
 	}
 	
-	protected Concept fill(Concept concept, CsvLine line) throws IllegalArgumentException {
+	public Concept fill(Concept concept, CsvLine line) throws IllegalArgumentException {
 		
 		if (!CollectionUtils.isEmpty(concept.getConceptMappings())) {
 			concept.getConceptMappings().clear();

@@ -1,6 +1,5 @@
 package org.openmrs.module.initializer.api.idgen;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
@@ -112,39 +111,5 @@ public abstract class IdentifierSourceLineProcessor extends BaseLineProcessor<Id
 		throw new IllegalArgumentException(
 		        "No identifier source type could be guessed from the identifier source instance: '" + source.toString()
 		                + "'.");
-	}
-	
-	protected IdentifierSource newIdentifierSource(CsvLine line) throws IllegalArgumentException {
-		
-		switch (getIdentifierSourceType(line)) {
-			
-			case POOL:
-				return new IdentifierPool();
-			case REMOTE:
-				return new RemoteIdentifierSource();
-			case SEQUENTIAL:
-				return new SequentialIdentifierGenerator();
-			default:
-				throw new IllegalArgumentException(
-				        "No identifier source type could be guessed from the CSV line: '" + line.toString() + "'.");
-				
-		}
-	}
-	
-	@Override
-	protected IdgenSourceWrapper bootstrap(CsvLine line) throws IllegalArgumentException {
-		
-		String uuid = line.getUuid();
-		
-		IdentifierSource source = idgenService.getIdentifierSourceByUuid(uuid);
-		
-		if (source == null) {
-			source = newIdentifierSource(line);
-			if (!StringUtils.isEmpty(uuid)) {
-				source.setUuid(uuid);
-			}
-		}
-		
-		return new IdgenSourceWrapper(source);
 	}
 }

@@ -1,5 +1,7 @@
 package org.openmrs.module.initializer.api.c;
 
+import static org.openmrs.module.initializer.api.c.LocalizedHeader.getLocalizedHeader;
+
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,7 +11,6 @@ import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptService;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,13 @@ import org.springframework.util.CollectionUtils;
 @Component("initializer.conceptLineProcessor")
 public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	
-	protected static String HEADER_SHORTNAME = "short name";
+	final public static String HEADER_SHORTNAME = "short name";
 	
-	protected static String HEADER_FSNAME = "fully specified name";
+	final public static String HEADER_FSNAME = "fully specified name";
 	
-	protected static String HEADER_CLASS = "data class";
+	final public static String HEADER_CLASS = "data class";
 	
-	protected static String HEADER_DATATYPE = "data type";
+	final public static String HEADER_DATATYPE = "data type";
 	
 	protected ConceptService conceptService;
 	
@@ -39,43 +40,11 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		this.conceptService = conceptService;
 	}
 	
-	@Override
-	protected Concept bootstrap(CsvLine line) throws IllegalArgumentException {
-		
-		String uuid = line.getUuid();
-		
-		Concept concept = conceptService.getConceptByUuid(uuid);
-		
-		if (StringUtils.isEmpty(uuid) && concept == null) {
-			Locale currentLocale = Context.getLocale();
-			LocalizedHeader lh = getLocalizedHeader(line.getHeaderLine(), HEADER_FSNAME);
-			for (Locale nameLocale : lh.getLocales()) {
-				String name = line.get(lh.getI18nHeader(nameLocale));
-				if (!StringUtils.isEmpty(name)) {
-					Context.setLocale(nameLocale);
-					concept = conceptService.getConceptByName(name);
-					if (concept != null) {
-						break;
-					}
-				}
-			}
-			Context.setLocale(currentLocale);
-		}
-		
-		if (concept == null) {
-			concept = new Concept();
-			if (!StringUtils.isEmpty(uuid)) {
-				concept.setUuid(uuid);
-			}
-		}
-		
-		return concept;
-	}
-	
 	/*
 	 * This is the base concept implementation.
 	 */
-	protected Concept fill(Concept concept, CsvLine line) throws IllegalArgumentException {
+	@Override
+	public Concept fill(Concept concept, CsvLine line) throws IllegalArgumentException {
 		
 		LocalizedHeader lh = null;
 		

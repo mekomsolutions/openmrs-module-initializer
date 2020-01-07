@@ -27,7 +27,7 @@ public class NestedConceptLineProcessor extends ConceptLineProcessor {
 		this.listParser = listParser;
 	}
 	
-	protected Concept fill(Concept concept, CsvLine line) throws IllegalArgumentException {
+	public Concept fill(Concept concept, CsvLine line) throws IllegalArgumentException {
 		
 		if (!CollectionUtils.isEmpty(concept.getAnswers())) {
 			concept.getAnswers().clear();

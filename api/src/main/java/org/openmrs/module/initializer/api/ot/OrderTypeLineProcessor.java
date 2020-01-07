@@ -34,26 +34,7 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 	}
 	
 	@Override
-	protected OrderType bootstrap(CsvLine line) throws IllegalArgumentException {
-		
-		String uuid = line.getUuid();
-		
-		OrderType orderType = orderService.getOrderTypeByUuid(uuid);
-		if (orderType == null) {
-			orderType = orderService.getOrderTypeByName(line.get(HEADER_NAME));
-		}
-		if (orderType == null) {
-			orderType = new OrderType();
-			if (!StringUtils.isEmpty(uuid)) {
-				orderType.setUuid(uuid);
-			}
-		}
-		
-		return orderType;
-	}
-	
-	@Override
-	protected OrderType fill(OrderType orderType, CsvLine line) throws IllegalArgumentException {
+	public OrderType fill(OrderType orderType, CsvLine line) throws IllegalArgumentException {
 		
 		orderType.setName(line.get(HEADER_NAME));
 		orderType.setDescription(line.getString(HEADER_DESC, ""));

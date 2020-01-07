@@ -18,7 +18,7 @@ public class CommonIdentifierSourceLineProcessor extends IdentifierSourceLinePro
 	}
 	
 	@Override
-	protected IdgenSourceWrapper fill(IdgenSourceWrapper instance, CsvLine line) throws IllegalArgumentException {
+	public IdgenSourceWrapper fill(IdgenSourceWrapper instance, CsvLine line) throws IllegalArgumentException {
 		
 		instance.getIdentifierSource().setIdentifierType(getPatientIdentifierType(line.getString(HEADER_IDTYPE)));
 		instance.getIdentifierSource().setName(line.getString(HEADER_NAME));

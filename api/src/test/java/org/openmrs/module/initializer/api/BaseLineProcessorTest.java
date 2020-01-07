@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openmrs.module.initializer.api.BaseLineProcessor.LocalizedHeader;
+import org.openmrs.module.initializer.api.c.LocalizedHeader;
 
 public class BaseLineProcessorTest {
 	
@@ -124,7 +124,7 @@ public class BaseLineProcessorTest {
 		Locale localeKm = new Locale("km", "KH");
 		
 		// a regular header line
-		Map<String, LocalizedHeader> lhMap = BaseLineProcessor.getLocalizedHeadersMap(hl1.toArray(new String[hl1.size()]));
+		Map<String, LocalizedHeader> lhMap = LocalizedHeader.getLocalizedHeadersMap(hl1.toArray(new String[hl1.size()]));
 		
 		// Verif
 		Assert.assertEquals(2, lhMap.size());

@@ -55,23 +55,7 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 	}
 	
 	@Override
-	protected Location bootstrap(CsvLine line) throws IllegalArgumentException {
-		
-		String uuid = line.getUuid();
-		
-		Location loc = locationService.getLocationByUuid(uuid);
-		if (loc == null) {
-			loc = new Location();
-			if (!StringUtils.isEmpty(uuid)) {
-				loc.setUuid(uuid);
-			}
-		}
-		
-		return loc;
-	}
-	
-	@Override
-	protected Location fill(Location loc, CsvLine line) throws IllegalArgumentException {
+	public Location fill(Location loc, CsvLine line) throws IllegalArgumentException {
 		
 		loc.setName(line.get(HEADER_NAME));
 		loc.setDescription(line.get(HEADER_DESC));

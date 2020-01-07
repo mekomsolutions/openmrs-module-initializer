@@ -46,7 +46,7 @@ public class IdgenSourceWrapper extends BaseOpenmrsMetadata {
 	}
 	
 	@Override
-	public Boolean isRetired() {
+	public Boolean getRetired() {
 		return source.isRetired();
 	}
 	
