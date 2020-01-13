@@ -1,9 +1,14 @@
 package org.openmrs.module.initializer.api.c;
 
+import java.util.Locale;
+
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,8 +23,6 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 	
 	private ConceptComplexLineProcessor complexProcessor;
 	
-	private ConceptLineProcessor baseProcessor;
-	
 	private NestedConceptLineProcessor nestedProcessor;
 	
 	private MappingsConceptLineProcessor mappingsProcessor;
@@ -32,11 +35,10 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 	    @Qualifier("initializer.nestedConceptLineProcessor") NestedConceptLineProcessor nestedProcessor,
 	    @Qualifier("initializer.mappingsConceptLineProcessor") MappingsConceptLineProcessor mappingsProcessor) {
 		
-		super();
+		super(baseProcessor);
 		
 		this.conceptService = conceptService;
 		
-		this.baseProcessor = baseProcessor;
 		this.numericProcessor = numericProcessor;
 		this.complexProcessor = complexProcessor;
 		this.nestedProcessor = nestedProcessor;
@@ -49,16 +51,51 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 	}
 	
 	@Override
-	protected Concept save(Concept instance) {
+	public Concept bootstrap(CsvLine line) throws IllegalArgumentException {
+		
+		String uuid = line.getUuid();
+		
+		Concept concept = conceptService.getConceptByUuid(uuid);
+		
+		if (StringUtils.isEmpty(uuid) && concept == null) {
+			Locale currentLocale = Context.getLocale();
+			LocalizedHeader lh = LocalizedHeader.getLocalizedHeader(line.getHeaderLine(),
+			    ConceptLineProcessor.HEADER_FSNAME);
+			for (Locale nameLocale : lh.getLocales()) {
+				String name = line.get(lh.getI18nHeader(nameLocale));
+				if (!StringUtils.isEmpty(name)) {
+					Context.setLocale(nameLocale);
+					concept = conceptService.getConceptByName(name);
+					if (concept != null) {
+						break;
+					}
+				}
+			}
+			Context.setLocale(currentLocale);
+		}
+		
+		if (concept == null) {
+			concept = new Concept();
+			if (!StringUtils.isEmpty(uuid)) {
+				concept.setUuid(uuid);
+			}
+		}
+		
+		return concept;
+	}
+	
+	@Override
+	public Concept save(Concept instance) {
 		return conceptService.saveConcept(instance);
 	}
 	
 	@Override
 	protected void setLineProcessors(String version) {
 		lineProcessors.clear();
+		
 		lineProcessors.add(numericProcessor);
 		lineProcessors.add(complexProcessor);
-		lineProcessors.add(baseProcessor);
+		lineProcessors.add(getSingleLineProcessor());
 		lineProcessors.add(nestedProcessor);
 		lineProcessors.add(mappingsProcessor);
 	}

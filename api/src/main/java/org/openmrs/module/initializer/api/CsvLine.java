@@ -42,6 +42,14 @@ public class CsvLine {
 		return get(header, false);
 	}
 	
+	public String getName(boolean canThrowException) throws IllegalArgumentException {
+		return get(BaseLineProcessor.HEADER_NAME, canThrowException);
+	}
+	
+	public String getName() {
+		return getName(false);
+	}
+	
 	public String getUuid() throws IllegalArgumentException {
 		
 		String str = get(BaseLineProcessor.HEADER_UUID, true);

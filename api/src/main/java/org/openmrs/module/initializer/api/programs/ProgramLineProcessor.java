@@ -1,10 +1,8 @@
 package org.openmrs.module.initializer.api.programs;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Program;
 import org.openmrs.api.ConceptService;
-import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
@@ -20,8 +18,6 @@ public class ProgramLineProcessor extends BaseLineProcessor<Program> {
 	
 	protected static String HEADER_OUTCOMES_CONCEPT = "outcomes concept";
 	
-	private ProgramWorkflowService pwfService;
-	
 	private ConceptService conceptService;
 	
 	/**
@@ -29,38 +25,12 @@ public class ProgramLineProcessor extends BaseLineProcessor<Program> {
 	 * @param service
 	 */
 	@Autowired
-	public ProgramLineProcessor(@Qualifier("programWorkflowService") ProgramWorkflowService pwService,
-	    @Qualifier("conceptService") ConceptService conceptService) {
-		this.pwfService = pwService;
+	public ProgramLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
 		this.conceptService = conceptService;
 	}
 	
 	@Override
-	protected Program bootstrap(CsvLine line) throws IllegalArgumentException {
-		
-		String uuid = line.getUuid();
-		
-		String id = uuid;
-		if (id == null) {
-			id = line.get(HEADER_NAME);
-		}
-		if (id == null) {
-			id = line.get(HEADER_CONCEPT_PROGRAM);
-		}
-		
-		Program program = Utils.fetchProgram(id, pwfService, conceptService);
-		if (program == null) {
-			program = new Program();
-			if (!StringUtils.isEmpty(uuid)) {
-				program.setUuid(uuid);
-			}
-		}
-		
-		return program;
-	}
-	
-	@Override
-	protected Program fill(Program program, CsvLine line) throws IllegalArgumentException {
+	public Program fill(Program program, CsvLine line) throws IllegalArgumentException {
 		
 		Concept programConcept = Utils.fetchConcept(line.get(HEADER_CONCEPT_PROGRAM), conceptService);
 		program.setConcept(programConcept);

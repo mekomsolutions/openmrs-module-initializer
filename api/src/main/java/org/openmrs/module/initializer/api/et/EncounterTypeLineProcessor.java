@@ -32,27 +32,9 @@ public class EncounterTypeLineProcessor extends BaseLineProcessor<EncounterType>
 	}
 	
 	@Override
-	protected EncounterType bootstrap(CsvLine line) throws IllegalArgumentException {
+	public EncounterType fill(EncounterType type, CsvLine line) throws IllegalArgumentException {
 		
-		String uuid = line.getUuid();
-		
-		EncounterType type = service.getEncounterTypeByUuid(uuid);
-		if (type == null) {
-			type = service.getEncounterType(line.get(HEADER_NAME));
-		}
-		if (type == null) {
-			type = new EncounterType();
-			if (!StringUtils.isEmpty(uuid)) {
-				type.setUuid(uuid);
-			}
-		}
-		
-		return type;
-	}
-	
-	protected EncounterType fill(EncounterType type, CsvLine line) throws IllegalArgumentException {
-		
-		type.setName(line.get(HEADER_NAME, true));
+		type.setName(line.getName(true));
 		type.setDescription(line.get(HEADER_DESC));
 		{
 			String privilegeId = line.get(HEADER_VIEW_PRIV);

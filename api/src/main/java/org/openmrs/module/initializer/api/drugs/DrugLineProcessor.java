@@ -1,6 +1,5 @@
 package org.openmrs.module.initializer.api.drugs;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Drug;
 import org.openmrs.api.ConceptService;
@@ -32,33 +31,9 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug> {
 	}
 	
 	@Override
-	protected Drug bootstrap(CsvLine line) throws IllegalArgumentException {
+	public Drug fill(Drug drug, CsvLine line) throws IllegalArgumentException {
 		
-		String uuid = line.getUuid();
-		
-		Drug drug = conceptService.getDrugByUuid(uuid);
-		if (drug == null) {
-			drug = conceptService.getDrug(line.get(HEADER_NAME));
-			
-		}
-		if (drug == null) {
-			drug = new Drug();
-			if (!StringUtils.isEmpty(uuid)) {
-				drug.setUuid(uuid);
-			}
-		}
-		
-		return drug;
-	}
-	
-	@Override
-	protected Drug fill(Drug drug, CsvLine line) throws IllegalArgumentException {
-		
-		String drugName = line.get(HEADER_NAME, true); // should fail is name column missing
-		if (drugName == null) {
-			throw new IllegalArgumentException("A drug must at least be provided a name: '" + line.toString() + "'");
-		}
-		drug.setName(drugName);
+		drug.setName(line.getName(true));
 		drug.setDescription(line.getString(HEADER_DESC, ""));
 		drug.setStrength(line.getString(HEADER_STRENGTH, ""));
 		

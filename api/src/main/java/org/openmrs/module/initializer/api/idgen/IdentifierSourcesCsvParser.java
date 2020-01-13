@@ -1,9 +1,15 @@
 package org.openmrs.module.initializer.api.idgen;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.annotation.OpenmrsProfile;
+import org.openmrs.module.idgen.IdentifierPool;
+import org.openmrs.module.idgen.IdentifierSource;
+import org.openmrs.module.idgen.RemoteIdentifierSource;
+import org.openmrs.module.idgen.SequentialIdentifierGenerator;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,18 +18,15 @@ public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, Ba
 	
 	private IdentifierSourceService idgenService;
 	
-	private CommonIdentifierSourceLineProcessor processor;
-	
 	private SequentialIdentifierGeneratorLineProcessor seqProcessor;
 	
 	@Autowired
 	public IdentifierSourcesCsvParser(IdentifierSourceService idgenService, CommonIdentifierSourceLineProcessor processor,
 	    SequentialIdentifierGeneratorLineProcessor seqProcessor) {
-		super();
+		super(processor);
 		
 		this.idgenService = idgenService;
 		
-		this.processor = processor;
 		this.seqProcessor = seqProcessor;
 	}
 	
@@ -32,15 +35,49 @@ public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, Ba
 		return Domain.IDENTIFIER_SOURCES;
 	}
 	
+	protected IdentifierSource newIdentifierSource(CsvLine line) throws IllegalArgumentException {
+		
+		switch (IdentifierSourceLineProcessor.getIdentifierSourceType(line)) {
+			
+			case POOL:
+				return new IdentifierPool();
+			case REMOTE:
+				return new RemoteIdentifierSource();
+			case SEQUENTIAL:
+				return new SequentialIdentifierGenerator();
+			default:
+				throw new IllegalArgumentException(
+				        "No identifier source type could be guessed from the CSV line: '" + line.toString() + "'.");
+				
+		}
+	}
+	
 	@Override
-	protected IdgenSourceWrapper save(IdgenSourceWrapper instance) {
+	public IdgenSourceWrapper bootstrap(CsvLine line) throws IllegalArgumentException {
+		
+		String uuid = line.getUuid();
+		
+		IdentifierSource source = idgenService.getIdentifierSourceByUuid(uuid);
+		
+		if (source == null) {
+			source = newIdentifierSource(line);
+			if (!StringUtils.isEmpty(uuid)) {
+				source.setUuid(uuid);
+			}
+		}
+		
+		return new IdgenSourceWrapper(source);
+	}
+	
+	@Override
+	public IdgenSourceWrapper save(IdgenSourceWrapper instance) {
 		return new IdgenSourceWrapper(idgenService.saveIdentifierSource(instance.getIdentifierSource()));
 	}
 	
 	@Override
 	protected void setLineProcessors(String version) {
 		lineProcessors.clear();
-		lineProcessors.add(processor);
+		lineProcessors.add(getSingleLineProcessor());
 		lineProcessors.add(seqProcessor);
 	}
 }

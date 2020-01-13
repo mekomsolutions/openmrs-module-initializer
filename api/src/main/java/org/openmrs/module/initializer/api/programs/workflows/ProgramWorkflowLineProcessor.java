@@ -1,6 +1,5 @@
 package org.openmrs.module.initializer.api.programs.workflows;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
@@ -37,28 +36,7 @@ public class ProgramWorkflowLineProcessor extends BaseLineProcessor<ProgramWorkf
 	}
 	
 	@Override
-	protected ProgramWorkflow bootstrap(CsvLine line) throws IllegalArgumentException {
-		
-		String uuid = line.getUuid();
-		
-		String id = uuid;
-		if (id == null) {
-			id = line.get(HEADER_WORKFLOW_CONCEPT);
-		}
-		
-		ProgramWorkflow wf = Utils.fetchProgramWorkflow(id, pwfService, Context.getConceptService());
-		if (wf == null) {
-			wf = new ProgramWorkflow();
-			if (!StringUtils.isEmpty(uuid)) {
-				wf.setUuid(uuid);
-			}
-		}
-		
-		return wf;
-	}
-	
-	@Override
-	protected ProgramWorkflow fill(ProgramWorkflow wf, CsvLine line) throws IllegalArgumentException {
+	public ProgramWorkflow fill(ProgramWorkflow wf, CsvLine line) throws IllegalArgumentException {
 		
 		Concept c = Utils.fetchConcept(line.get(HEADER_WORKFLOW_CONCEPT), conceptService);
 		wf.setConcept(c);

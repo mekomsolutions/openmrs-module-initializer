@@ -1,10 +1,8 @@
 package org.openmrs.module.initializer.api.freq;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.OrderFrequency;
 import org.openmrs.api.ConceptService;
-import org.openmrs.api.OrderService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.Utils;
@@ -23,37 +21,19 @@ public class OrderFrequencyLineProcessor extends BaseLineProcessor<OrderFrequenc
 	
 	protected static String HEADER_CONCEPT_FREQ = "concept frequency";
 	
-	private OrderService service;
-	
 	private ConceptService conceptService;
 	
 	@Autowired
-	public OrderFrequencyLineProcessor(@Qualifier("orderService") OrderService orderService,
-	    @Qualifier("conceptService") ConceptService conceptService) {
+	public OrderFrequencyLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
 		super();
-		this.service = orderService;
 		this.conceptService = conceptService;
 	}
 	
 	@Override
-	protected OrderFrequency bootstrap(CsvLine line) throws IllegalArgumentException {
-		
-		String uuid = line.getUuid();
-		
-		OrderFrequency freq = service.getOrderFrequencyByUuid(uuid);
-		if (freq == null) {
-			freq = new OrderFrequency();
-			if (!StringUtils.isEmpty(uuid)) {
-				freq.setUuid(uuid);
-			}
-		}
-		
-		return freq;
-	}
-	
-	protected OrderFrequency fill(OrderFrequency freq, CsvLine line) throws IllegalArgumentException {
+	public OrderFrequency fill(OrderFrequency freq, CsvLine line) throws IllegalArgumentException {
 		
 		Concept conceptFreq = Utils.fetchConcept(line.get(HEADER_CONCEPT_FREQ), conceptService);
+		
 		freq.setConcept(conceptFreq);
 		freq.setFrequencyPerDay(line.getDouble(HEADER_FREQ_PER_DAY));
 		

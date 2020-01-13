@@ -47,34 +47,6 @@ public class DataFilterMappingLineProcessor extends BaseLineProcessor<DataFilter
 	}
 	
 	@Override
-	protected DataFilterMapping bootstrap(CsvLine line) throws IllegalArgumentException {
-		
-		OpenmrsObject entity = null;
-		OpenmrsObject basis = null;
-		try {
-			
-			entity = getOpenmrsObject(line.get(HEADER_ENTITY_UUID, true), line.get(HEADER_ENTITY_CLASS, true));
-			basis = getOpenmrsObject(line.get(HEADER_BASIS_UUID, true), line.get(HEADER_BASIS_CLASS, true));
-			
-		}
-		catch (HibernateException | ClassNotFoundException e) {
-			throw new IllegalArgumentException(e);
-		}
-		
-		if (entity == null || basis == null) {
-			throw new IllegalArgumentException(
-			        "Either the entity or the basis could not be fetched from database on the following CSV line: "
-			                + line.toString());
-		}
-		
-		return new DataFilterMapping(entity, basis);
-	}
-	
-	@Override
-	protected boolean voidOrRetire(boolean isVoidedOrRetired, DataFilterMapping instance) {
-		return false;
-	}
-	
 	public DataFilterMapping fill(DataFilterMapping mapping, CsvLine line) throws IllegalArgumentException {
 		
 		boolean revoke = getVoidOrRetire(line);

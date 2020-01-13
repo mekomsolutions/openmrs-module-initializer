@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
-import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServiceDefinitionLineProcessor;
@@ -15,8 +14,6 @@ import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsSe
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
  */
 public class AppointmentsServicesDefinitionLineProcessorTest {
-	
-	private AppointmentServiceDefinitionService asds = mock(AppointmentServiceDefinitionService.class);
 	
 	private SpecialityService ss = mock(SpecialityService.class);
 	
@@ -30,7 +27,7 @@ public class AppointmentsServicesDefinitionLineProcessorTest {
 		String[] line = { "X-Ray", "Radiology Service", "30", "50" };
 		
 		// Replay
-		AppointmentsServiceDefinitionLineProcessor p = new AppointmentsServiceDefinitionLineProcessor(asds, ss, ls);
+		AppointmentsServiceDefinitionLineProcessor p = new AppointmentsServiceDefinitionLineProcessor(ss, ls);
 		AppointmentServiceDefinition definition = p.fill(new AppointmentServiceDefinition(), new CsvLine(headerLine, line));
 		
 		// Verif

@@ -1,10 +1,8 @@
 package org.openmrs.module.initializer.api.attributes.types;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,40 +20,10 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 	
 	protected static String HEADER_HANDLER_CONFIG = "handler config";
 	
-	private AttributeTypeCsvLineHandler handler;
-	
-	private AttributeTypesProxyService service;
-	
-	@Autowired
-	public BaseAttributeTypeLineProcessor(AttributeTypesProxyService service, AttributeTypeCsvLineHandler handler) {
-		this.service = service;
-		this.handler = handler;
-	}
-	
 	@Override
-	protected BaseAttributeType<?> bootstrap(CsvLine line) throws IllegalArgumentException {
+	public BaseAttributeType<?> fill(BaseAttributeType<?> instance, CsvLine line) throws IllegalArgumentException {
 		
-		String uuid = line.getUuid();
-		
-		BaseAttributeType<?> attributeType = service.getAttributeTypeByUuid(uuid, handler.getAttributeType(line));
-		
-		if (attributeType == null) {
-			attributeType = service.getAttributeTypeByName(line.get(HEADER_NAME, true), handler.getAttributeType(line));
-			if (attributeType == null) {
-				attributeType = handler.newAttributeType(line);
-				if (StringUtils.isNotEmpty(uuid)) {
-					attributeType.setUuid(uuid);
-				}
-			}
-		}
-		
-		return attributeType;
-	}
-	
-	@Override
-	protected BaseAttributeType<?> fill(BaseAttributeType<?> instance, CsvLine line) throws IllegalArgumentException {
-		
-		instance.setName(line.get(HEADER_NAME, true));
+		instance.setName(line.getName(true));
 		instance.setDescription(line.get(HEADER_DESC));
 		instance.setDatatypeClassname(line.get(HEADER_DATATYPE_CLASSNAME, true));
 		instance.setDatatypeConfig(line.getString(HEADER_DATATYPE_CONFIG));
@@ -66,5 +34,4 @@ public class BaseAttributeTypeLineProcessor extends BaseLineProcessor<BaseAttrib
 		
 		return instance;
 	}
-	
 }

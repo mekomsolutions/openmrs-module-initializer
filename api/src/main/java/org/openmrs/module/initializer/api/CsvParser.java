@@ -10,10 +10,13 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
+import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.Retireable;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.InitializerLogFactory;
 
 import com.opencsv.CSVReader;
@@ -21,6 +24,10 @@ import com.opencsv.CSVReader;
 public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineProcessor<T>> {
 	
 	protected final Log log = InitializerLogFactory.getLog(CsvParser.class);
+	
+	protected static final String DEFAULT_RETIRE_REASON = "Retired by module " + InitializerConstants.MODULE_NAME;
+	
+	protected static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
 	
 	protected CSVReader reader;
 	
@@ -39,26 +46,58 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	// The current line
 	protected String[] line = new String[0];
 	
-	protected CsvParser() {
-	}
-	
 	/**
 	 * Most CSV parsers are built on a single line processor. This superclass constructor should be used
 	 * to initialize such parsers.
 	 * 
 	 * @param lineProcessor The single line processor for the CSV parser.
 	 */
-	protected CsvParser(P lineProcessor) {
+	protected CsvParser(BaseLineProcessor<T> lineProcessor) {
 		this.singleLineProcessor = lineProcessor;
 	}
 	
+	public BaseLineProcessor<T> getSingleLineProcessor() {
+		return singleLineProcessor;
+	}
+	
 	/**
-	 * Each parser implementation should specify how an instance is actually saved.
+	 * Each parser must know how to bootstrap an instance from a CSV line. Bootstrapping means
+	 * attempting to load an instance based on its identifiers provided through the CSV line (such as
+	 * UUID or name), and if no instance can be loaded a new instance must be provided.
+	 * 
+	 * @param line The CSV line.
+	 * @return The bootstrapped instance.
+	 */
+	public abstract T bootstrap(CsvLine line) throws IllegalArgumentException;
+	
+	/**
+	 * Each parser must know how to save an instance.
 	 * 
 	 * @param instance The domain instance to save.
 	 * @return The domain instance that has been saved.
 	 */
-	protected abstract T save(T instance);
+	public abstract T save(T instance);
+	
+	/**
+	 * Each parser must know how to retire an instance.
+	 * 
+	 * @return true if the instance was retired, false otherwise
+	 */
+	public boolean retire(T instance) {
+		if (instance instanceof Retireable) {
+			Retireable metadataInstance = (Retireable) instance;
+			metadataInstance.setRetired(true);
+			metadataInstance.setRetireReason(DEFAULT_RETIRE_REASON);
+			return metadataInstance.getRetired();
+		} else if (instance instanceof BaseOpenmrsData) {
+			BaseOpenmrsData dataInstance = (BaseOpenmrsData) instance;
+			dataInstance.setVoided(true);
+			dataInstance.setVoidReason(DEFAULT_VOID_REASON);
+			return dataInstance.getVoided();
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	 * Each parser implementation should on which domain it operates.
@@ -75,12 +114,8 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	 * in the right order.
 	 */
 	protected void setLineProcessors(String version) {
-		if (singleLineProcessor == null) {
-			throw new IllegalStateException(
-			        "It was not possible to set the default single processor for the CSV parser, there was none to be found. Make sure to initialize your CSV parser with at least one line processor.");
-		}
 		lineProcessors.clear();
-		lineProcessors.add(singleLineProcessor);
+		lineProcessors.add(getSingleLineProcessor());
 	}
 	
 	public void setInputStream(InputStream is) throws IOException {
@@ -184,17 +219,9 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		final CsvLine csvLine = new CsvLine(headerLine, line);
 		
 		//
-		// 1. Boostrapping with the bootstrapper line processor
+		// 1. Boostrapping
 		//
-		BaseLineProcessor<T> bootstrapper = getAnyLineProcessor();
-		if (bootstrapper == null) { // no processors available
-			log.error(
-			    "No line processors have been set, you should either overload '" + getClass().getEnclosingMethod().getName()
-			            + "' directly or provide lines processors to this class: " + getClass().getCanonicalName());
-			return null;
-		}
-		
-		T instance = bootstrapper.bootstrap(csvLine);
+		T instance = bootstrap(csvLine);
 		
 		if (instance == null) {
 			throw new APIException(
@@ -203,15 +230,15 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		}
 		
 		//
-		// 2. Voiding/retiring with the bootstrapper line processor
+		// 2. Retiring
 		//
-		boolean isVoidedOrRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
-		if (bootstrapper.voidOrRetire(isVoidedOrRetired, instance)) {
+		boolean shouldBeRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
+		if (shouldBeRetired && retire(instance)) {
 			return instance;
 		}
 		
 		//
-		// 3. Filling the instance using all line processors
+		// 3. Filling the instance using all line processors in their specified order
 		//
 		for (BaseLineProcessor<T> processor : lineProcessors) {
 			instance = processor.fill(instance, csvLine);
@@ -225,13 +252,6 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		}
 		
 		return instance;
-	}
-	
-	/*
-	 * Returns null if there are no processors set.
-	 */
-	protected BaseLineProcessor<T> getAnyLineProcessor() {
-		return lineProcessors.iterator().next();
 	}
 	
 	/*

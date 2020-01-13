@@ -20,8 +20,7 @@ public class ConceptComplexLineProcessor extends ConceptLineProcessor {
 		super(conceptService);
 	}
 	
-	@Override
-	protected Concept fill(Concept instance, CsvLine line) throws IllegalArgumentException {
+	public Concept fill(Concept instance, CsvLine line) throws IllegalArgumentException {
 		
 		if (!DATATYPE_COMPLEX.equals(line.get(ConceptLineProcessor.HEADER_DATATYPE))) {
 			return instance;

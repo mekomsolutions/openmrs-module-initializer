@@ -18,7 +18,7 @@ public class SequentialIdentifierGeneratorLineProcessor extends IdentifierSource
 	}
 	
 	@Override
-	protected IdgenSourceWrapper fill(IdgenSourceWrapper instance, CsvLine line) throws IllegalArgumentException {
+	public IdgenSourceWrapper fill(IdgenSourceWrapper instance, CsvLine line) throws IllegalArgumentException {
 		
 		if (!IdentifierSourceType.SEQUENTIAL.equals(instance.getType())) {
 			return instance;
