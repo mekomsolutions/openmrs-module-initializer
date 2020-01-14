@@ -79,7 +79,7 @@ public class ConceptsCsvParserTest {
 		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs),
 		        new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
 		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
-		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
+		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)), new ConceptAttributeLineProcessor(cs));
 		parser.setInputStream(is);
 		
 		List<String[]> lines = parser.process(parser.getLines());
@@ -93,7 +93,7 @@ public class ConceptsCsvParserTest {
 		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs),
 		        new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
 		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
-		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
+		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)), new ConceptAttributeLineProcessor(cs));
 		InputStream is = null;
 		
 		is = getClass().getClassLoader()

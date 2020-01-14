@@ -180,4 +180,32 @@ public class UtilsTest {
 		
 		Assert.assertNull(Utils.fetchProgramWorkflowState("concept-uuid", pws, cs));
 	}
+	
+	@Test
+	public void getAttributeHeadersMap_shouldReturnHeaderAndAttributeMap() {
+		
+		String[] headerLine = new String[] { "attribute|firstAttribute", "not attribute", "attribute|secondAttribute" };
+		
+		Assert.assertEquals(2, Utils.getAttributeTypeHeadersMap(headerLine).size());
+		Utils.getAttributeTypeHeadersMap(headerLine).keySet().forEach((attributeType) -> {
+			Assert.assertNotEquals("not attribute", attributeType);
+		});
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void getAttributeHeadersMap_shouldThrowErrorWhenAttributeNotAvailable() {
+		
+		String[] headerLine = new String[] { "attribute|firstAttribute", "attribute| " };
+		
+		Utils.getAttributeTypeHeadersMap(headerLine);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void getAttributeHeadersMap_shouldThrowErrorWhenAttributeIsDuplicate() {
+		
+		String[] headerLine = new String[] { "attribute|firstAttribute", "attribute|firstAttribute" };
+		
+		Utils.getAttributeTypeHeadersMap(headerLine);
+	}
+	
 }

@@ -5,9 +5,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +45,10 @@ import org.openmrs.module.appointments.service.SpecialityService;
 import org.springframework.util.CollectionUtils;
 
 public class Utils {
+	
+	private static String HEADER_ATTRIBUTE = "attribute";
+	
+	private static String ATTRIBUTE_SEPARATOR = "|";
 	
 	/**
 	 * Helps build a {@link ConceptMap} out the usual string inputs.
@@ -441,5 +446,31 @@ public class Utils {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * @param headerLine
+	 * @return A Map of Attribute headers and Attribute names or/and UUIDs
+	 * @throws IllegalArgumentException
+	 */
+	public static Map<String, String> getAttributeTypeHeadersMap(String[] headerLine) {
+		
+		Map<String, String> attributeTypes = new HashMap<String, String>();
+		
+		for (String header : headerLine) {
+			String[] parts = StringUtils.split(header, ATTRIBUTE_SEPARATOR);
+			if (parts.length == 2 && parts[0].trim().equals(HEADER_ATTRIBUTE)) {
+				String attributeTypeRef = parts[1].trim();
+				if (attributeTypes.containsValue(attributeTypeRef)) {
+					throw new IllegalArgumentException(
+					        "The CSV header line cannot contain twice the same attribute type: '" + attributeTypeRef + "'");
+				}
+				if (attributeTypeRef.isEmpty()) {
+					throw new IllegalArgumentException("The attribute type name or Uuid cannot be empty.");
+				}
+				attributeTypes.put(header, attributeTypeRef);
+			}
+		}
+		return attributeTypes;
 	}
 }

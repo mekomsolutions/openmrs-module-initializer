@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <concept_attribute_type concept_attribute_type_id="1" name="Test" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype" uuid="9516cc50-6f9f-11e0-8414-001e378eb67e" creator="1" date_created="2005-01-01 00:00:00.0" min_occurs="0" retired="false" />
+</dataset>
