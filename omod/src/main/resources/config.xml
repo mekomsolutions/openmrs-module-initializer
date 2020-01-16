@@ -13,12 +13,6 @@
 	<activator>org.openmrs.module.initializer.InitializerActivator</activator>
 	
 	<require_version>${openMRSVersion}</require_version>
-	
-	<!-- Extensions -->
-	<extension>
-		<point>org.openmrs.admin.list</point>
-		<class>org.openmrs.module.initializer.extension.html.AdminList</class>
-	</extension>
 
 	<aware_of_modules>
 		<aware_of_module>org.openmrs.module.legacyui</aware_of_module>
