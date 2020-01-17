@@ -80,6 +80,14 @@ public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 			pat.setForeignKey(c.getId());
 			ps.savePersonAttributeType(pat);
 		}
+		// A person attr. type to be renamed
+		{
+			PersonAttributeType pat = new PersonAttributeType();
+			pat.setUuid("fcafe720-392b-11ea-9712-f727922144a4");
+			pat.setName("PAT_NO_UUID");
+			pat.setFormat("java.lang.String");
+			ps.savePersonAttributeType(pat);
+		}
 	}
 	
 	@Test
@@ -88,6 +96,13 @@ public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 		// Replay
 		loader.load();
 		
+		// Verif fetch by name
+		{
+			PersonAttributeType pat = ps.getPersonAttributeTypeByName("PAT_NO_UUID");
+			Assert.assertNotNull(pat);
+			Assert.assertEquals("fcafe720-392b-11ea-9712-f727922144a4", pat.getUuid());
+			Assert.assertEquals("a description", pat.getDescription());
+		}
 		// Verif foreign key
 		{
 			PersonAttributeType pat = ps.getPersonAttributeTypeByName("PAT_with_concept");

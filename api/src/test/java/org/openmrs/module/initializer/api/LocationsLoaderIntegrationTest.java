@@ -45,6 +45,12 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		// Replay
 		loader.load();
 		
+		// Verif fetch by name
+		{
+			Location loc = ls.getLocation("LOCATION_NO_UUID");
+			Assert.assertEquals("Main Street", loc.getAddress1());
+			Assert.assertEquals("fdddc31a-3930-11ea-9712-a73c3c19744f", loc.getUuid());
+		}
 		// Verif creation
 		{
 			Location loc = ls.getLocation("The Lake Clinic-Cambodia");
