@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer.api.pat;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.PersonService;
 import org.openmrs.module.initializer.Domain;
@@ -32,13 +32,18 @@ public class PersonAttributeTypesCsvParser extends CsvParser<PersonAttributeType
 	public PersonAttributeType bootstrap(CsvLine line) throws IllegalArgumentException {
 		
 		String uuid = line.getUuid();
+		String name = line.getName();
 		
-		PersonAttributeType pat = personService.getPersonAttributeTypeByUuid(uuid);
+		PersonAttributeType pat = new PersonAttributeType();
+		pat = personService.getPersonAttributeTypeByUuid(uuid);
+		
+		if (pat == null && StringUtils.isEmpty(uuid) && !StringUtils.isEmpty(name)) {
+			pat = personService.getPersonAttributeTypeByName(name);
+		}
 		
 		if (pat == null) {
-			// TODO: Should bootstrap by name!
 			pat = new PersonAttributeType();
-			if (!StringUtils.isEmpty(uuid)) {
+			if (StringUtils.isEmpty(uuid)) {
 				pat.setUuid(uuid);
 			}
 		}

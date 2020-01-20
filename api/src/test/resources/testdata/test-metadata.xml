@@ -5,6 +5,7 @@
 
   <location LOCATION_ID="4089" UUID="a03e395c-b881-49b7-b6fc-983f6bddc7fc" NAME="Acme Clinic" DATE_CREATED="2019-11-29 20:41:38.0" CREATOR="1" RETIRED="false"/>
   <location LOCATION_ID="4090" UUID="cbaaaab4-d960-4ae9-9b6a-8983fbd947b6" NAME="Legacy Location" DESCRIPTION="Legacy location that must be retired" DATE_CREATED="2019-11-29 20:41:38.0" CREATOR="1" RETIRED="false"/>
+  <location LOCATION_ID="4091" UUID="fdddc31a-3930-11ea-9712-a73c3c19744f" NAME="LOCATION_NO_UUID" DESCRIPTION="Location used to test fetching by name" DATE_CREATED="2019-11-29 20:41:38.0" CREATOR="1" RETIRED="false"/>
 
   <location_attribute_type LOCATION_ATTRIBUTE_TYPE_ID="1089" NAME="Location Code" DATATYPE="org.openmrs.customdatatype.datatype.FreeTextDatatype" MIN_OCCURS="0" CREATOR="1" DATE_CREATED="2019-12-11 09:31:48.0" RETIRED="false" UUID="9eca4f4e-707f-4bb8-8289-2f9b6e93803c"/>
 
