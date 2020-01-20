@@ -79,24 +79,11 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	public abstract T save(T instance);
 	
 	/**
-	 * Each parser must know how to retire an instance.
+	 * Each parser must know how to setRetire of an instance.
 	 * 
-	 * @return true if the instance is retired, false otherwise
+	 * @return true if the type of instance is supported, false otherwise
 	 */
-	public boolean retire(T instance) {
-		return setRetired(instance, true);
-	}
-	
-	/**
-	 * Each parser must know how to unretire an instance.
-	 * 
-	 * @return true if the instance is unretired, false otherwise
-	 */
-	public boolean unretire(T instance) {
-		return setRetired(instance, false);
-	}
-	
-	private boolean setRetired(T instance, boolean retired) {
+	public boolean setRetired(T instance, boolean retired) {
 		if (instance instanceof Retireable) {
 			Retireable metadataInstance = (Retireable) instance;
 			metadataInstance.setRetired(retired);
@@ -105,7 +92,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 			} else {
 				metadataInstance.setRetireReason("");
 			}
-			return true;
+			return retired;
 		} else if (instance instanceof BaseOpenmrsData) {
 			BaseOpenmrsData dataInstance = (BaseOpenmrsData) instance;
 			dataInstance.setVoided(retired);
@@ -114,7 +101,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 			} else {
 				dataInstance.setVoidReason("");
 			}
-			return true;
+			return retired;
 		} else {
 			return false;
 		}
@@ -253,11 +240,9 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		//
 		// 2. Retiring & Unretiring
 		//
-		boolean shouldBeRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
-		if (shouldBeRetired && retire(instance)) {
+		boolean isRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
+		if (setRetired(instance, isRetired)) {
 			return instance;
-		} else if (!shouldBeRetired) {
-			unretire(instance);
 		}
 		
 		//

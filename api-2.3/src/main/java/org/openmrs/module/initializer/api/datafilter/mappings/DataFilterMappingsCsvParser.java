@@ -72,7 +72,8 @@ public class DataFilterMappingsCsvParser extends CsvParser<DataFilterMapping, Ba
 	}
 	
 	@Override
-	public boolean retire(DataFilterMapping instance) {
-		return false;
+	public boolean setRetired(DataFilterMapping instance, boolean retired) {
+		instance.setRetired(false);
+		return instance.getRetired();
 	}
 }
