@@ -124,6 +124,15 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			c = cs.getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
 			Assert.assertTrue(c.isRetired());
 			
+			// Un-retire one
+			Context.setLocale(localeEn);
+			c = cs.getConceptByUuid("4c93c34e-37c2-11ea-bd28-d70ffe7aa802");
+			Assert.assertNotNull(c);
+			Assert.assertFalse(c.getRetired());
+			Assert.assertEquals("MMR", c.getFullySpecifiedName(localeEn).getName());
+			Assert.assertEquals("Misc", c.getConceptClass().getName());
+			Assert.assertEquals("N/A", c.getDatatype().getName());
+			
 			// Edited one
 			Context.setLocale(localeEn);
 			c = cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3");
