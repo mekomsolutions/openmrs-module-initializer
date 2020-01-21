@@ -43,7 +43,7 @@ public class LocationsCsvParser extends CsvParser<Location, BaseLineProcessor<Lo
 		
 		if (loc == null) {
 			loc = new Location();
-			if (StringUtils.isEmpty(uuid)) {
+			if (!StringUtils.isEmpty(uuid)) {
 				loc.setUuid(uuid);
 			}
 		}

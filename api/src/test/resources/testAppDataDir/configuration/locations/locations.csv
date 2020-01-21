@@ -4,3 +4,4 @@ Uuid,Void/Retire,Name,Description,Parent,Tags,Address 1,Address 2,Address 3,Addr
 a03e395c-b881-49b7-b6fc-983f6bddc7fc,,Acme Clinic,This now becomes a child of TLC,The Lake Clinic-Cambodia,Login Location,,,,,,,,,,,,
 cbaaaab4-d960-4ae9-9b6a-8983fbd947b6,TRUE,Legacy Location,Legacy location that must be retired,,,,,,,,,,,,,,
 ,,LOCATION_NO_UUID,,,,Main Street,,,,,,,Siem Reap,Siem Reap,,Cambodia,
+1cb58794-3c49-11ea-b3eb-f7801304f314,,New Location,,,,,,,,,,,,,,,

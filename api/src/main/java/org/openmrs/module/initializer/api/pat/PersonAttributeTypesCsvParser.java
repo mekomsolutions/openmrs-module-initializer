@@ -43,7 +43,7 @@ public class PersonAttributeTypesCsvParser extends CsvParser<PersonAttributeType
 		
 		if (pat == null) {
 			pat = new PersonAttributeType();
-			if (StringUtils.isEmpty(uuid)) {
+			if (!StringUtils.isEmpty(uuid)) {
 				pat.setUuid(uuid);
 			}
 		}
