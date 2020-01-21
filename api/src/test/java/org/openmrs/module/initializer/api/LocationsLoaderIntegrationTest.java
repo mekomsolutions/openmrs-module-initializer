@@ -75,6 +75,12 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Assert.assertThat(tags.size(), is(1));
 			Assert.assertThat(tags.contains(ls.getLocationTagByName("Consultation Location")), is(true));
 		}
+		// Verif that the provided UUID is correctly assigned
+		{
+			Location loc = ls.getLocationByUuid("1cb58794-3c49-11ea-b3eb-f7801304f314");
+			Assert.assertNotNull(loc);
+			Assert.assertEquals("New Location", loc.getName());
+		}
 		// Verif edition
 		{
 			Location loc = ls.getLocation("Acme Clinic");

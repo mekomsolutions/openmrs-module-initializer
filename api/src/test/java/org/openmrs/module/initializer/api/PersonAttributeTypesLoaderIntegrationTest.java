@@ -80,7 +80,7 @@ public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 			pat.setForeignKey(c.getId());
 			ps.savePersonAttributeType(pat);
 		}
-		// A person attr. type to be renamed
+		// A person attr. type to be edited via CSV
 		{
 			PersonAttributeType pat = new PersonAttributeType();
 			pat.setUuid("fcafe720-392b-11ea-9712-f727922144a4");
@@ -113,6 +113,12 @@ public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 		{
 			PersonAttributeType pat = ps.getPersonAttributeTypeByUuid("9eca4f4e-707f-4bb8-8289-2f9b6e93803c");
 			Assert.assertEquals("PAT_RENAME_NEW_NAME", pat.getName());
+		}
+		// Verif that the provided UUID is correctly assigned
+		{
+			PersonAttributeType pat = ps.getPersonAttributeTypeByUuid("717ec942-3c4a-11ea-b024-ffc81a23382e");
+			Assert.assertNotNull(pat);
+			Assert.assertEquals("NEW_PAT", pat.getName());
 		}
 		// Verif foreign key changed
 		{
