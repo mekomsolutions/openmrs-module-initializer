@@ -20,7 +20,7 @@ import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsSe
 import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
-import org.openmrs.module.initializer.api.c_class.ConceptClassLoader;
+import org.openmrs.module.initializer.api.c.ConceptClassLoader;
 import org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
 import org.openmrs.module.initializer.api.et.EncounterTypesLoader;

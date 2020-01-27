@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.openmrs.ConceptClass;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.c_class.ConceptClassLoader;
+import org.openmrs.module.initializer.api.c.ConceptClassLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -32,19 +32,25 @@ public class ConceptClassLoaderIntegrationTest extends DomainBaseModuleContextSe
 		
 		loader.load();
 		
-		{ // created with uuid
+		{ // created with uuid and description
 			ConceptClass c = service.getConceptClassByName("Medical supply");
 			Assert.assertNotNull(c);
 			Assert.assertEquals("69d620da-93c4-4767-916e-48f5fe8824c4", c.getUuid());
+			Assert.assertEquals("Materials used in the facility", c.getDescription());
 		}
 		{ // retired Procedure
 			ConceptClass c = service.getConceptClassByName("Procedure");
 			Assert.assertNotNull(c);
 			Assert.assertTrue(c.getRetired());
 		}
-		{ // created without uuid
+		{ // created without uuid or description
 			ConceptClass c = service.getConceptClassByName("Animal");
 			Assert.assertNotNull(c);
+		}
+		{ // edited to change description
+			ConceptClass c = service.getConceptClassByUuid("3d065ed4-b0b9-4710-9a17-6d8c4fd259b7");
+			Assert.assertEquals("Drug", c.getName()); // unchanged
+			Assert.assertEquals("Not what it sounds like", c.getDescription());
 		}
 	}
 }

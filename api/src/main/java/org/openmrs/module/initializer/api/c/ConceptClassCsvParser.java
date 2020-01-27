@@ -1,8 +1,7 @@
-package org.openmrs.module.initializer.api.c_class;
+package org.openmrs.module.initializer.api.c;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.ConceptClass;
-import org.openmrs.EncounterType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
@@ -33,18 +32,18 @@ public class ConceptClassCsvParser extends CsvParser<ConceptClass, BaseLineProce
 		
 		String uuid = line.getUuid();
 		
-		ConceptClass c_class = service.getConceptClassByUuid(uuid);
-		if (c_class == null) {
-			c_class = service.getConceptClassByName(line.getName(true));
+		ConceptClass conceptClass = service.getConceptClassByUuid(uuid);
+		if (conceptClass == null) {
+			conceptClass = service.getConceptClassByName(line.getName(true));
 		}
-		if (c_class == null) {
-			c_class = new ConceptClass();
+		if (conceptClass == null) {
+			conceptClass = new ConceptClass();
 			if (!StringUtils.isEmpty(uuid)) {
-				c_class.setUuid(uuid);
+				conceptClass.setUuid(uuid);
 			}
 		}
 		
-		return c_class;
+		return conceptClass;
 	}
 	
 	@Override

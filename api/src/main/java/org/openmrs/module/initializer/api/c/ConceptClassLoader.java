@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.c_class;
+package org.openmrs.module.initializer.api.c;
 
 import org.openmrs.ConceptClass;
 import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;

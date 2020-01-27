@@ -1,6 +1,5 @@
-package org.openmrs.module.initializer.api.c_class;
+package org.openmrs.module.initializer.api.c;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.ConceptClass;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConceptClassLineProcessor extends BaseLineProcessor<ConceptClass> {
 	
-	protected static String HEADER_NAME = "name";
-	
 	private ConceptService service;
 	
 	@Autowired
@@ -22,10 +19,9 @@ public class ConceptClassLineProcessor extends BaseLineProcessor<ConceptClass> {
 		this.service = conceptService;
 	}
 	
-	public ConceptClass fill(ConceptClass c_class, CsvLine line) throws IllegalArgumentException {
-		
-		c_class.setName(line.get(HEADER_NAME, true));
-		
-		return c_class;
+	public ConceptClass fill(ConceptClass conceptClass, CsvLine line) throws IllegalArgumentException {
+		conceptClass.setName(line.get(HEADER_NAME, true));
+		conceptClass.setDescription(line.get(HEADER_DESC));
+		return conceptClass;
 	}
 }
