@@ -74,8 +74,8 @@ public class InitializerController {
 	
 	/**
 	 * This class returns the form backing object. This can be a string, a boolean, or a normal java
-	 * pojo. The bean name defined in the ModelAttribute annotation and the type can be just defined by
-	 * the return type of this method
+	 * pojo. The bean name defined in the ModelAttribute annotation and the type can be just defined
+	 * by the return type of this method
 	 */
 	@ModelAttribute("users")
 	protected List<User> getUsers() throws Exception {
