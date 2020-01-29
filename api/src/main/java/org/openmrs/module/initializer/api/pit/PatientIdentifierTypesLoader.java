@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PatientIdentifierTypeLoader extends BaseCsvLoader<PatientIdentifierType, PatientIdentifierTypeCsvParser> {
+public class PatientIdentifierTypesLoader extends BaseCsvLoader<PatientIdentifierType, PatientIdentifierTypesCsvParser> {
 	
 	@Autowired
-	public void setParser(PatientIdentifierTypeCsvParser parser) {
+	public void setParser(PatientIdentifierTypesCsvParser parser) {
 		this.parser = parser;
 	}
 }

@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PatientIdentifierTypeCsvParser extends CsvParser<PatientIdentifierType, BaseLineProcessor<PatientIdentifierType>> {
+public class PatientIdentifierTypesCsvParser extends CsvParser<PatientIdentifierType, BaseLineProcessor<PatientIdentifierType>> {
 	
 	private PatientService patientService;
 	
 	@Autowired
-	public PatientIdentifierTypeCsvParser(@Qualifier("patientService") PatientService patientService,
+	public PatientIdentifierTypesCsvParser(@Qualifier("patientService") PatientService patientService,
 	    PatientIdentifierTypeLineProcessor processor) {
 		super(processor);
 		this.patientService = patientService;

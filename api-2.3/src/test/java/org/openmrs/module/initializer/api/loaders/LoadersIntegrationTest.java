@@ -31,7 +31,7 @@ import org.openmrs.module.initializer.api.loc.LocationsLoader;
 import org.openmrs.module.initializer.api.mdm.MetadataMappingsLoader;
 import org.openmrs.module.initializer.api.ot.OrderTypesLoader;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesLoader;
-import org.openmrs.module.initializer.api.pit.PatientIdentifierTypeLoader;
+import org.openmrs.module.initializer.api.pit.PatientIdentifierTypesLoader;
 import org.openmrs.module.initializer.api.privileges.PrivilegesLoader;
 import org.openmrs.module.initializer.api.programs.ProgramsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
@@ -50,7 +50,7 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private MdsLoader mdsLoader;
 	
 	@Autowired
-	private PatientIdentifierTypeLoader pitLoader;
+	private PatientIdentifierTypesLoader pitLoader;
 	
 	@Autowired
 	private GlobalPropertiesLoader globalPropertiesLoader;

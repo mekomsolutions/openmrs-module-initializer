@@ -15,18 +15,18 @@ import org.junit.Test;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.PatientService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.pit.PatientIdentifierTypeLoader;
+import org.openmrs.module.initializer.api.pit.PatientIdentifierTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class PatientIdentifierTypeLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class PatientIdentifierTypesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("patientService")
 	private PatientService ps;
 	
 	@Autowired
-	private PatientIdentifierTypeLoader loader;
+	private PatientIdentifierTypesLoader loader;
 	
 	@Before
 	public void setup() {
