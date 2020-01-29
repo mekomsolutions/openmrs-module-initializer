@@ -12,12 +12,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ConceptClassCsvParser extends CsvParser<ConceptClass, BaseLineProcessor<ConceptClass>> {
+public class ConceptClassesCsvParser extends CsvParser<ConceptClass, BaseLineProcessor<ConceptClass>> {
 	
 	private ConceptService service;
 	
 	@Autowired
-	public ConceptClassCsvParser(@Qualifier("conceptService") ConceptService service, ConceptClassLineProcessor processor) {
+	public ConceptClassesCsvParser(@Qualifier("conceptService") ConceptService service,
+	    ConceptClassLineProcessor processor) {
 		super(processor);
 		this.service = service;
 	}

@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ConceptClassLoader extends BaseCsvLoader<ConceptClass, ConceptClassCsvParser> {
+public class ConceptClassesLoader extends BaseCsvLoader<ConceptClass, ConceptClassesCsvParser> {
 	
 	@Autowired
-	public void setParser(ConceptClassCsvParser parser) {
+	public void setParser(ConceptClassesCsvParser parser) {
 		this.parser = parser;
 	}
 }

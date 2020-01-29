@@ -14,18 +14,18 @@ import org.junit.Test;
 import org.openmrs.ConceptClass;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.c.ConceptClassLoader;
+import org.openmrs.module.initializer.api.c.ConceptClassesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class ConceptClassLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class ConceptClassesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService service;
 	
 	@Autowired
-	private ConceptClassLoader loader;
+	private ConceptClassesLoader loader;
 	
 	@Test
 	public void load_shouldLoadConceptClassesAccordingToCsvFiles() {
