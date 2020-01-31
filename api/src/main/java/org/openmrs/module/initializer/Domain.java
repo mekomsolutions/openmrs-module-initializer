@@ -4,17 +4,17 @@ public enum Domain {
 	
 	JSON_KEY_VALUES(1, "jsonkeyvalues"), MDS(2, "metadatasharing"), METADATA_MAPPINGS(3, "metadatamappings"), PRIVILEGES(4,
 	        "privileges"), ENCOUNTER_TYPES(5, "encountertypes"), ROLES(6, "roles"), GLOBAL_PROPERTIES(7,
-	                "globalproperties"), ATTRIBUTE_TYPES(8, "attributetypes"), LOCATIONS(9,
-	                        "locations"), CONCEPTS(10, "concepts"), PROGRAMS(11,
-	                                "programs"), PROGRAM_WORKFLOWS(12, "programworkflows"), PROGRAM_WORKFLOW_STATES(13,
-	                                        "programworkflowstates"), PERSON_ATTRIBUTE_TYPES(14,
-	                                                "personattributetypes"), IDENTIFIER_SOURCES(15, "idgen"), DRUGS(16,
-	                                                        "drugs"), ORDER_FREQUENCIES(17, "orderfrequencies"), ORDER_TYPES(
-	                                                                18, "ordertypes"), APPOINTMENTS_SPECIALITIES(19,
+	                "globalproperties"), ATTRIBUTE_TYPES(8, "attributetypes"), LOCATIONS(9, "locations"), CONCEPT_CLASSES(10,
+	                        "conceptclasses"), CONCEPTS(11, "concepts"), PROGRAMS(12,
+	                                "programs"), PROGRAM_WORKFLOWS(13, "programworkflows"), PROGRAM_WORKFLOW_STATES(14,
+	                                        "programworkflowstates"), PERSON_ATTRIBUTE_TYPES(15,
+	                                                "personattributetypes"), IDENTIFIER_SOURCES(16, "idgen"), DRUGS(17,
+	                                                        "drugs"), ORDER_FREQUENCIES(18, "orderfrequencies"), ORDER_TYPES(
+	                                                                19, "ordertypes"), APPOINTMENTS_SPECIALITIES(20,
 	                                                                        "appointmentsspecialities"), APPOINTMENTS_SERVICES_DEFINITIONS(
-	                                                                                20,
+	                                                                                21,
 	                                                                                "appointmentsservicesdefinitions"), DATAFILTER_MAPPINGS(
-	                                                                                        21, "datafiltermappings");
+	                                                                                        22, "datafiltermappings");
 	
 	private final int order;
 	
