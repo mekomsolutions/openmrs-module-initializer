@@ -22,7 +22,8 @@ Mandatory. This is _not_ a localized header.
 A true/false whether every patient MUST have this type.
 
 ###### Header `Format`
-A regular expression defining what the identifier text should contain.
+A regular expression defining what the identifier text should contain. Note
+that backslashes must be backslash-escaped.
 
 ###### Header `Format description`
 Textual explanation of the "Format" regular expression. 
