@@ -2,7 +2,6 @@ package org.openmrs.module.initializer.api.loc;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Location;
-import org.openmrs.PersonAttributeType;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
@@ -17,11 +16,15 @@ public class LocationsCsvParser extends CsvParser<Location, BaseLineProcessor<Lo
 	
 	private LocationService locationService;
 	
+	private LocationAttributeLineProcessor locationAttributeLineProcessor;
+	
 	@Autowired
 	public LocationsCsvParser(@Qualifier("locationService") LocationService locationService,
-	    LocationLineProcessor processor) {
-		super(processor);
+	    @Qualifier("initializer.locationLineProcessor") LocationLineProcessor baseProcessor,
+	    @Qualifier("initializer.locationAttributeLineProcessor") LocationAttributeLineProcessor locationAttributeLineProcessor) {
+		super(baseProcessor);
 		this.locationService = locationService;
+		this.locationAttributeLineProcessor = locationAttributeLineProcessor;
 	}
 	
 	@Override
@@ -54,5 +57,12 @@ public class LocationsCsvParser extends CsvParser<Location, BaseLineProcessor<Lo
 	@Override
 	public Location save(Location instance) {
 		return locationService.saveLocation(instance);
+	}
+	
+	@Override
+	protected void setLineProcessors(String version) {
+		lineProcessors.clear();
+		lineProcessors.add(getSingleLineProcessor());
+		lineProcessors.add(locationAttributeLineProcessor);
 	}
 }

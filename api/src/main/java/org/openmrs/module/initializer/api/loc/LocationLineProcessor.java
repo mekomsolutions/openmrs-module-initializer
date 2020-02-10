@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("initializer.locationLineProcessor")
 public class LocationLineProcessor extends BaseLineProcessor<Location> {
 	
 	protected static String HEADER_PARENT = "parent";
