@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Location;
 import org.openmrs.LocationAttribute;
 import org.openmrs.LocationAttributeType;
-import org.openmrs.api.APIException;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.initializer.api.BaseAttributeLineProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component("initializer.locationAttributeLineProcessor")
-public class LocationAttributeLineProcessor extends BaseAttributeLineProcessor<Location, LocationAttribute> {
+public class LocationAttributeLineProcessor extends BaseAttributeLineProcessor<Location, LocationAttributeType, LocationAttribute> {
 	
 	private LocationService locationService;
 	
@@ -21,34 +20,32 @@ public class LocationAttributeLineProcessor extends BaseAttributeLineProcessor<L
 		this.locationService = locationService;
 	}
 	
+	/**
+	 * See {@link BaseAttributeLineProcessor#getAttributeType(String)}
+	 */
 	@Override
-	protected LocationAttribute newAttributeInstance(String header, String attributeValue) {
-		LocationAttribute attribute = new LocationAttribute();
-		LocationAttributeType attributeType = getAttributeType(header);
-		if (attributeType == null && StringUtils.isNotBlank(attributeValue)) {
-			throw new APIException("Could not find AttributeType identified by: " + getAttributeTypeRef(header));
+	public LocationAttributeType getAttributeType(String identifier) {
+		if (StringUtils.isBlank(identifier)) {
+			throw new IllegalArgumentException("A blank attribute type identifier was provided.");
 		}
-		attribute.setAttributeType(attributeType);
-		attribute.setValue(attributeValue);
-		return attribute;
+		LocationAttributeType ret = locationService.getLocationAttributeTypeByUuid(identifier);
+		if (ret == null) {
+			ret = locationService.getLocationAttributeTypeByName(identifier);
+		}
+		return ret;
 	}
 	
 	/**
-	 * Gets {@link LocationAttributeType} from the DB basing on the <code>attributeTypeReference</code>
-	 * that's generated from the <code>header</code>.
-	 * 
-	 * @param header string that contains the attribute type reference
-	 * @return the <code>attributeType</code>
+	 * See
+	 * {@link BaseAttributeLineProcessor#newAttribute(org.openmrs.attribute.BaseAttributeType, Object)}
 	 */
-	private LocationAttributeType getAttributeType(String header) {
-		String attributeTypeRef = getAttributeTypeRef(header);
-		if (StringUtils.isBlank(attributeTypeRef)) {
-			throw new IllegalArgumentException("AttributeType Reference cannot be blank");
-		}
-		LocationAttributeType ret = locationService.getLocationAttributeTypeByUuid(attributeTypeRef);
-		if (ret == null) {
-			ret = locationService.getLocationAttributeTypeByName(attributeTypeRef);
-		}
-		return ret;
+	@Override
+	public LocationAttribute newAttribute(LocationAttributeType type, Object value) {
+		
+		LocationAttribute attribute = new LocationAttribute();
+		attribute.setAttributeType(type);
+		attribute.setValue(value);
+		
+		return attribute;
 	}
 }

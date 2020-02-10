@@ -1,21 +1,33 @@
 package org.openmrs.module.initializer.api.loc;
 
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.Matchers.is;
+import static org.openmrs.module.initializer.api.BaseAttributeLineProcessor.HEADER_ATTRIBUTE_PREFIX;
 
 import java.util.Collection;
+import java.util.Properties;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openmrs.Location;
 import org.openmrs.LocationAttribute;
 import org.openmrs.LocationAttributeType;
-import org.openmrs.api.APIException;
+import org.openmrs.api.DatatypeService;
 import org.openmrs.api.LocationService;
+import org.openmrs.api.context.Context;
+import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.utils.LocationTagListParser;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Context.class)
 public class LocationAttributeLineProcessorTest {
 	
 	private LocationService ls;
@@ -26,10 +38,16 @@ public class LocationAttributeLineProcessorTest {
 	
 	private static String EMAIL_ATT_TYPE_NAME = "Facility Email";
 	
-	private static String HEADER_PREFIX = "attribute|";
-	
 	@Before
 	public void setup() {
+		PowerMockito.mockStatic(Context.class);
+		DatatypeService datatypeService = mock(DatatypeService.class);
+		when(Context.getDatatypeService()).thenReturn(datatypeService);
+		
+		when(datatypeService.getDatatype(any(Class.class), anyString())).thenReturn(new FreeTextDatatype());
+		
+		when(Context.getRuntimeProperties()).thenReturn(new Properties());
+		
 		ls = mock(LocationService.class);
 		processor = new LocationAttributeLineProcessor(ls);
 		
@@ -54,7 +72,8 @@ public class LocationAttributeLineProcessorTest {
 	@Test
 	public void fill_shouldParseLocationAttributes() {
 		// Setup
-		String[] headerLine = { HEADER_PREFIX + PHONE_ATT_TYPE_UUID, HEADER_PREFIX + EMAIL_ATT_TYPE_NAME };
+		String[] headerLine = { HEADER_ATTRIBUTE_PREFIX + PHONE_ATT_TYPE_UUID,
+		        HEADER_ATTRIBUTE_PREFIX + EMAIL_ATT_TYPE_NAME };
 		String[] line = { "+254 703203342", "admin@facility.com" };
 		
 		// Replay
@@ -68,10 +87,11 @@ public class LocationAttributeLineProcessorTest {
 		Assert.assertThat(((LocationAttribute) attributesArray[1]).getValue(), is("admin@facility.com"));
 	}
 	
-	@Test(expected = APIException.class)
-	public void fill_shouldFailIfAttributeTypeDoesNotExistYetAttributeValueIsNotBlank() {
+	@Test(expected = IllegalArgumentException.class)
+	public void fill_shouldFailIfAttributeTypeDoesNotExistAndAttributeValueIsNotBlank() {
 		// Setup
-		String[] headerLine = { HEADER_PREFIX + PHONE_ATT_TYPE_UUID, HEADER_PREFIX + EMAIL_ATT_TYPE_NAME };
+		String[] headerLine = { HEADER_ATTRIBUTE_PREFIX + PHONE_ATT_TYPE_UUID,
+		        HEADER_ATTRIBUTE_PREFIX + EMAIL_ATT_TYPE_NAME };
 		String[] line = { "+254 703203342", "admin@facility.com" };
 		when(ls.getLocationAttributeTypeByName(EMAIL_ATT_TYPE_NAME)).thenReturn(null);
 		

@@ -1,6 +1,6 @@
-Uuid,Void/Retire,Name,Description,Parent,Tags,Address 1,Address 2,Address 3,Address 4,Address 5,Address 6,City/Village,County/District,State/Province,Postal Code,Country,Attribute|9eca4f4e-707f-4bb8-8289-2f9b6e93803c,_order:1000
-,,The Lake Clinic-Cambodia,,,Login Location; Facility Location,Paradise Street,,,,,,,Siem Reap,Siem Reap,,Cambodia,Test Facility,
-,,OPD Room,,The Lake Clinic-Cambodia,Consultation Location,,,,,,,,,,,,,
-a03e395c-b881-49b7-b6fc-983f6bddc7fc,,Acme Clinic,This now becomes a child of TLC,The Lake Clinic-Cambodia,Login Location,,,,,,,,,,,,,
-cbaaaab4-d960-4ae9-9b6a-8983fbd947b6,TRUE,Legacy Location,Legacy location that must be retired,,,,,,,,,,,,,,,
-,,LOCATION_NO_UUID,,,,Main Street,,,,,,,Siem Reap,Siem Reap,,Cambodia,,
+Uuid,Void/Retire,Name,Description,Parent,Tags,Attribute|9eca4f4e-707f-4bb8-8289-2f9b6e93803c,Attribute|Last Audit Date,Address 1,Address 2,Address 3,Address 4,Address 5,Address 6,City/Village,County/District,State/Province,Postal Code,Country,_order:1000
+,,The Lake Clinic-Cambodia,,,Login Location; Facility Location,HQ Facility,2017-05-15,Paradise Street,,,,,,,Siem Reap,Siem Reap,,Cambodia,
+,,OPD Room,,The Lake Clinic-Cambodia,Consultation Location,,,,,,,,,,,,,,
+a03e395c-b881-49b7-b6fc-983f6bddc7fc,,Acme Clinic,This now becomes a child of TLC,The Lake Clinic-Cambodia,Login Location,,,,,,,,,,,,,,
+cbaaaab4-d960-4ae9-9b6a-8983fbd947b6,TRUE,Legacy Location,Legacy location that must be retired,,,,,,,,,,,,,,,,
+,,LOCATION_NO_UUID,,,,,,Main Street,,,,,,,Siem Reap,Siem Reap,,Cambodia,
