@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api;
 
-import java.util.ArrayList;
+import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,48 +28,31 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 		Customizable<A> attributable = (Customizable<A>) instance;
 		attributable.getAttributes().clear();
 		
-		Consumer<String> attributeConsumer = attributeHeader -> {
-			String strValue = line.get(attributeHeader);
-			if (StringUtils.isNotBlank(strValue)) {
-				
-				String attTypeIdentifier = StringUtils.removeStartIgnoreCase(attributeHeader, HEADER_ATTRIBUTE_PREFIX);
-				
-				AT attType = getAttributeType(attTypeIdentifier);
-				if (attType == null) {
-					throw new IllegalArgumentException("An attribute value is specified ('" + strValue
-					        + "') for an attribute type that cannot be resolved by the following identifier: '"
-					        + attTypeIdentifier + "'");
-				}
-				CustomDatatype<?> datatype = CustomDatatypeUtil.getDatatype(attType.getDatatypeClassname(),
-				    attType.getDatatypeConfig());
-				Object value = datatype.fromReferenceString(strValue);
-				
-				A attribute = newAttribute();
-				attribute.setAttributeType(attType);
-				attribute.setValue(value);
-				
-				attributable.addAttribute(attribute);
+		Consumer<? super SimpleEntry<String, String>> processAttributeData = attData -> {
+			
+			AT attType = getAttributeType(attData.getKey());
+			if (attType == null) {
+				throw new IllegalArgumentException("An attribute value is specified ('" + attData.getValue()
+				        + "') for an attribute type that cannot be resolved by the following identifier: '"
+				        + attData.getKey() + "'");
 			}
+			CustomDatatype<?> datatype = CustomDatatypeUtil.getDatatype(attType.getDatatypeClassname(),
+			    attType.getDatatypeConfig());
+			Object value = datatype.fromReferenceString(attData.getValue());
+			
+			A attribute = newAttribute();
+			attribute.setAttributeType(attType);
+			attribute.setValue(value);
+			
+			attributable.addAttribute(attribute);
 		};
 		
-		Arrays.stream(line.getHeaderLine())
-		        .filter(header -> StringUtils.startsWithIgnoreCase(header, HEADER_ATTRIBUTE_PREFIX))
-		        .forEach(attributeConsumer);
+		// process the attribute value from each attribute header
+		Arrays.stream(line.getHeaderLine()).filter(h -> StringUtils.startsWithIgnoreCase(h, HEADER_ATTRIBUTE_PREFIX)).map(
+		    h -> new AbstractMap.SimpleEntry<>(StringUtils.removeStartIgnoreCase(h, HEADER_ATTRIBUTE_PREFIX), line.get(h)))
+		        .filter(attData -> StringUtils.isNotBlank(attData.getValue())).forEach(processAttributeData);
 		
 		return instance;
-	}
-	
-	/**
-	 * Gathers all attributes headers in one collection.
-	 */
-	protected List<String> getAllAttributeHeaders(String[] headerLine) {
-		List<String> attributeHeaders = new ArrayList<>();
-		for (String header : headerLine) {
-			if (StringUtils.startsWithIgnoreCase(header, HEADER_ATTRIBUTE_PREFIX)) {
-				attributeHeaders.add(header);
-			}
-		}
-		return attributeHeaders;
 	}
 	
 	/**
