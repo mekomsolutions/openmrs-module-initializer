@@ -11,6 +11,7 @@ package org.openmrs.module.initializer.api;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.Collection;
 import java.util.Date;
@@ -44,10 +45,30 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	@Before
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
+		{
+			Location loc = ls.getLocation("Acme Clinic");
+			
+			Collection<LocationAttribute> attributes = loc.getActiveAttributes();
+			Assert.assertThat(attributes.size(), is(1));
+		}
 	}
 	
 	@Test
 	public void load_shouldLoadAccordingToCsvFiles() {
+		// Pre-load verif
+		{
+			Location loc = ls.getLocation(4089);
+			Assert.assertEquals("a03e395c-b881-49b7-b6fc-983f6bddc7fc", loc.getUuid());
+			Assert.assertEquals("Acme Clinic", loc.getName());
+			Assert.assertThat(loc.getDescription(), nullValue());
+			Assert.assertThat(loc.getParentLocation(), nullValue());
+			Assert.assertThat(loc.getTags().size(), is(0));
+			
+			Collection<LocationAttribute> attributes = loc.getActiveAttributes();
+			Assert.assertThat(attributes.size(), is(1));
+			Assert.assertEquals("2016-04-14",
+			    dateDatatype.serialize((Date) ((LocationAttribute) attributes.toArray()[0]).getValue()));
+		}
 		
 		// Replay
 		loader.load();
@@ -90,7 +111,8 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		}
 		// Verif edition
 		{
-			Location loc = ls.getLocation("Acme Clinic");
+			Location loc = ls.getLocationByUuid("a03e395c-b881-49b7-b6fc-983f6bddc7fc");
+			Assert.assertEquals("Acme Clinic", loc.getName());
 			Assert.assertEquals("This now becomes a child of TLC", loc.getDescription());
 			Assert.assertEquals(ls.getLocation("The Lake Clinic-Cambodia"), loc.getParentLocation());
 			
@@ -100,7 +122,9 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Assert.assertThat(tags.contains(ls.getLocationTagByName("Login Location")), is(true));
 			
 			Collection<LocationAttribute> attributes = loc.getActiveAttributes();
-			Assert.assertTrue(attributes.isEmpty());
+			Assert.assertThat(attributes.size(), is(1));
+			Assert.assertEquals("2019-03-13",
+			    dateDatatype.serialize((Date) ((LocationAttribute) attributes.toArray()[0]).getValue()));
 			
 		}
 		// Verif retire
