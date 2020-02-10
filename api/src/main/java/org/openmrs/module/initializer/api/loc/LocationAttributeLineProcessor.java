@@ -40,12 +40,7 @@ public class LocationAttributeLineProcessor extends BaseAttributeLineProcessor<L
 	 * {@link BaseAttributeLineProcessor#newAttribute(org.openmrs.attribute.BaseAttributeType, Object)}
 	 */
 	@Override
-	public LocationAttribute newAttribute(LocationAttributeType type, Object value) {
-		
-		LocationAttribute attribute = new LocationAttribute();
-		attribute.setAttributeType(type);
-		attribute.setValue(value);
-		
-		return attribute;
+	public LocationAttribute newAttribute() {
+		return new LocationAttribute();
 	}
 }

@@ -16,7 +16,7 @@ import org.openmrs.customdatatype.Customizable;
  * Base class to any <code>AttributeLineProcessor</code> that processes all attributes of a domain
  * entity.
  */
-public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT extends BaseAttributeType<?>, A extends BaseAttribute<?, ?>> extends BaseLineProcessor<T> {
+public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT extends BaseAttributeType<?>, A extends BaseAttribute<AT, ?>> extends BaseLineProcessor<T> {
 	
 	public static final String HEADER_ATTRIBUTE_PREFIX = "attribute|";
 	
@@ -50,7 +50,11 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 				    attType.getDatatypeConfig());
 				Object value = datatype.fromReferenceString(strValue);
 				
-				attributable.addAttribute(newAttribute(attType, value));
+				A attribute = newAttribute();
+				attribute.setAttributeType(attType);
+				attribute.setValue(value);
+				
+				attributable.addAttribute(attribute);
 			}
 		}
 		
@@ -80,5 +84,5 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 	/**
 	 * Constructs a new {@link Attribute} instance.
 	 */
-	public abstract A newAttribute(AT type, Object value);
+	public abstract A newAttribute();
 }
