@@ -74,7 +74,7 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			
 			Collection<LocationAttribute> attributes = loc.getActiveAttributes();
 			Assert.assertThat(attributes.size(), is(2));
-			Assert.assertEquals("HQ Facility", ((LocationAttribute) attributes.toArray()[0]).getValue());
+			Assert.assertEquals("CODE-TLC-123", ((LocationAttribute) attributes.toArray()[0]).getValue());
 			Assert.assertEquals("2017-05-15",
 			    dateDatatype.serialize((Date) ((LocationAttribute) attributes.toArray()[1]).getValue()));
 		}
