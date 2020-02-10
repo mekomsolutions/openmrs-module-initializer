@@ -1,7 +1,9 @@
 package org.openmrs.module.initializer.api;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.BaseOpenmrsObject;
@@ -20,21 +22,13 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 	
 	public static final String HEADER_ATTRIBUTE_PREFIX = "attribute|";
 	
-	protected List<String> allAttributeHeaders;
-	
 	@Override
 	public T fill(T instance, CsvLine line) throws IllegalArgumentException {
 		
-		if (allAttributeHeaders == null) {
-			setAllAttributeHeaders(line.getHeaderLine());
-		}
-		
 		Customizable<A> attributable = (Customizable<A>) instance;
-		
 		attributable.getAttributes().clear();
 		
-		for (String attributeHeader : allAttributeHeaders) {
-			
+		Consumer<String> attributeConsumer = attributeHeader -> {
 			String strValue = line.get(attributeHeader);
 			if (StringUtils.isNotBlank(strValue)) {
 				
@@ -56,7 +50,11 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 				
 				attributable.addAttribute(attribute);
 			}
-		}
+		};
+		
+		Arrays.stream(line.getHeaderLine())
+		        .filter(header -> StringUtils.startsWithIgnoreCase(header, HEADER_ATTRIBUTE_PREFIX))
+		        .forEach(attributeConsumer);
 		
 		return instance;
 	}
@@ -64,13 +62,14 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 	/**
 	 * Gathers all attributes headers in one collection.
 	 */
-	protected void setAllAttributeHeaders(String[] headerLine) {
-		allAttributeHeaders = new ArrayList<>();
+	protected List<String> getAllAttributeHeaders(String[] headerLine) {
+		List<String> attributeHeaders = new ArrayList<>();
 		for (String header : headerLine) {
 			if (StringUtils.startsWithIgnoreCase(header, HEADER_ATTRIBUTE_PREFIX)) {
-				allAttributeHeaders.add(header);
+				attributeHeaders.add(header);
 			}
 		}
+		return attributeHeaders;
 	}
 	
 	/**
