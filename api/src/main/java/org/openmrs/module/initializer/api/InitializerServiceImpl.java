@@ -9,7 +9,9 @@
  */
 package org.openmrs.module.initializer.api;
 
+import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,19 +39,26 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	private Map<String, Object> keyValueCache = new HashMap<String, Object>();
 	
+	public Path getBasePath() {
+		return Paths.get(new File(OpenmrsUtil.getApplicationDataDirectory()).toURI());
+	}
+	
+	//Path based concatenation using Path/Paths resolve method
+	//https://docs.oracle.com/javase/tutorial/essential/io/pathOps.html#resolve
+	
 	@Override
 	public String getConfigDirPath() {
-		return Paths.get(OpenmrsUtil.getApplicationDataDirectory(), InitializerConstants.DIR_NAME_CONFIG).toString();
+		return getBasePath().resolve(InitializerConstants.DIR_NAME_CONFIG).toString();
 	}
 	
 	@Override
 	public String getChecksumsDirPath() {
-		return Paths.get(OpenmrsUtil.getApplicationDataDirectory(), InitializerConstants.DIR_NAME_CHECKSUM).toString();
+		return getBasePath().resolve(InitializerConstants.DIR_NAME_CHECKSUM).toString();
 	}
 	
 	@Override
 	public String getRejectionsDirPath() {
-		return Paths.get(OpenmrsUtil.getApplicationDataDirectory(), InitializerConstants.DIR_NAME_REJECTIONS).toString();
+		return getBasePath().resolve(InitializerConstants.DIR_NAME_REJECTIONS).toString();
 	}
 	
 	@Override
