@@ -88,13 +88,25 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		
 		// Concept data class
 		String conceptClassName = line.getString(HEADER_CLASS, "");
-		ConceptClass conceptClass = conceptService.getConceptClassByName(conceptClassName);
-		concept.setConceptClass(conceptClass);
+		if (!StringUtils.isEmpty(conceptClassName)) {
+			ConceptClass conceptClass = conceptService.getConceptClassByName(conceptClassName);
+			if (conceptClass == null) {
+				throw new IllegalArgumentException(
+				        "Bad concept class name '" + conceptClassName + "' for line '" + line.toString() + "'.");
+			}
+			concept.setConceptClass(conceptClass);
+		}
 		
 		// Concept data type
 		String conceptTypeName = line.getString(HEADER_DATATYPE, "");
-		ConceptDatatype conceptDatatype = conceptService.getConceptDatatypeByName(conceptTypeName);
-		concept.setDatatype(conceptDatatype);
+		if (!StringUtils.isEmpty(conceptTypeName)) {
+			ConceptDatatype conceptDatatype = conceptService.getConceptDatatypeByName(conceptTypeName);
+			if (conceptDatatype == null) {
+				throw new IllegalArgumentException(
+				        "Bad concept datatype name '" + conceptTypeName + "' for line '" + line.toString() + "'.");
+			}
+			concept.setDatatype(conceptDatatype);
+		}
 		
 		return concept;
 	}

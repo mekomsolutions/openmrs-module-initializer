@@ -45,6 +45,9 @@ public class ConceptsCsvParserTest {
 		ConceptDatatype typeText = new ConceptDatatype();
 		typeText.setName("Text");
 		when(cs.getConceptDatatypeByName(eq("Text"))).thenReturn(typeText);
+		ConceptDatatype typeNA = new ConceptDatatype();
+		typeNA.setName("N/A");
+		when(cs.getConceptDatatypeByName(eq("N/A"))).thenReturn(typeNA);
 		
 		when(cs.saveConcept(any(Concept.class))).thenAnswer(new Answer<Concept>() {
 			
