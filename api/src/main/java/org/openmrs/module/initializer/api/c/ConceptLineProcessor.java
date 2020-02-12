@@ -92,7 +92,7 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 			ConceptClass conceptClass = conceptService.getConceptClassByName(conceptClassName);
 			if (conceptClass == null) {
 				throw new IllegalArgumentException(
-				        "Bad class name '" + conceptClassName + "' for line '" + line.toString() + "'.");
+				        "Bad concept class name '" + conceptClassName + "' for line '" + line.toString() + "'.");
 			}
 			concept.setConceptClass(conceptClass);
 		}
@@ -103,7 +103,7 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 			ConceptDatatype conceptDatatype = conceptService.getConceptDatatypeByName(conceptTypeName);
 			if (conceptDatatype == null) {
 				throw new IllegalArgumentException(
-				        "Bad data type '" + conceptTypeName + "' for line '" + line.toString() + "'.");
+				        "Bad concept datatype name '" + conceptTypeName + "' for line '" + line.toString() + "'.");
 			}
 			concept.setDatatype(conceptDatatype);
 		}
