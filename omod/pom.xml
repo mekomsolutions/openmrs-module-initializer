@@ -34,13 +34,13 @@
 		<dependency>
 			<groupId>org.openmrs.web</groupId>
 			<artifactId>openmrs-web</artifactId>
-			<version>${openMRSVersion}</version>
+			<version>${openmrsPlatformVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openmrs.web</groupId>
 			<artifactId>openmrs-web</artifactId>
-			<version>${openMRSVersion}</version>
+			<version>${openmrsPlatformVersion}</version>
 			<scope>provided</scope>
 			<classifier>tests</classifier>
 		</dependency>

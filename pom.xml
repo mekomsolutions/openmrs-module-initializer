@@ -38,7 +38,7 @@
   </modules>
 
   <properties>
-    <openMRSVersion>2.1.1</openMRSVersion>
+    <openmrsPlatformVersion>2.1.1</openmrsPlatformVersion>
     <addresshierarchyVersion>2.11.0</addresshierarchyVersion>
     <idgenVersion>4.3</idgenVersion>
     <metadatasharingVersion>1.2.2</metadatasharingVersion>

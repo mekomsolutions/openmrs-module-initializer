@@ -13,7 +13,7 @@
   <description>API 2.3 project for Initializer</description>
 
   <properties>
-    <openMRSVersion>2.3.0-SNAPSHOT</openMRSVersion>
+    <openmrsPlatformVersion>2.3.0</openmrsPlatformVersion>
     <datafilterVersion>1.0.0-SNAPSHOT</datafilterVersion>
     <appframeworkVersion>2.14.0-SNAPSHOT</appframeworkVersion>
   </properties>
@@ -53,7 +53,7 @@
     <dependency>
       <groupId>org.openmrs.api</groupId>
       <artifactId>openmrs-api</artifactId>
-      <version>${openMRSVersion}</version>
+      <version>${openmrsPlatformVersion}</version>
       <scope>provided</scope>
       <type>jar</type>
       <exclusions>
@@ -68,14 +68,14 @@
       <groupId>org.openmrs.api</groupId>
       <artifactId>openmrs-api</artifactId>
       <type>test-jar</type>
-      <version>${openMRSVersion}</version>
+      <version>${openmrsPlatformVersion}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.openmrs.test</groupId>
       <artifactId>openmrs-test</artifactId>
-      <version>${openMRSVersion}</version>
+      <version>${openmrsPlatformVersion}</version>
       <type>pom</type>
       <scope>test</scope>
     </dependency>
