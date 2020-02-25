@@ -29,6 +29,7 @@ configuration/
   ├── messageproperties/
   ├── metadatamappings/ 
   ├── metadatasharing/ 
+  ├── patientidentifiertypes/ 
   ├── personattributetypes/ 
   ├── privileges/ 
   ├── programs/ 
@@ -112,6 +113,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and edition of Bahmni appointments specialities provided through CSV files in **configuration/appointmentsspecialities**.
 * Bulk access management of Data Filter entity to basis mappings provided through CSV files in **configuration/datafiltermappings**.
 * Bulk creation and edition of attribute types provided through CSV files in **configuration/attributetypes**.
+* Bulk creation and edition of patient identifier types provided through CSV files in **configuration/patientidentifiertypes**.
 
 #### Version 1.1.0
 * Bulk creation and edition of drugs provided through CSV files in **configuration/locations**.
