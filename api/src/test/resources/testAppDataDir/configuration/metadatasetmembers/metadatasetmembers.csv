@@ -1,0 +1,4 @@
+Uuid,Void/Retire,Name,Description,Metadata Set Uuid,Metadata Class,Metadata Uuid,Sort Weight,_order:2000
+ee00777d-0cbe-41b7-4c67-8ff93de67b9e,,Legacy Id,,f0ebcb99-7618-41b7-b0bf-8ff93de67b9e,org.openmrs.PatientIdentifierType,n0ebcb90-m618-n1b1-b0bf-kff93de97b9j,,
+f0ebcb99-272d-41b7-4c67-078de9342492,True,Old OpenMRS Id,,f0ebcb99-7618-41b7-b0bf-8ff93de67b9e,org.openmrs.PatientIdentifierType,8f6ed8bb-0cbe-4c67-bc45-c5c0320e1324,,
+dbfd899d-e9e1-4059-8992-73737c924f88,,Outpatient Id,IdentifierType for OPD,f0ebcb99-7618-41b7-b0bf-8ff93de67b9e,org.openmrs.PatientIdentifierType,7b0f5697-27e3-40c4-8bae-f4049abfb4ed,34,

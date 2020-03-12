@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<!-- Metadata sets -->
+	<metadatamapping_metadata_set metadata_set_id="1"
+								  name="Extra Identifiers"
+								  uuid="f0ebcb99-7618-41b7-b0bf-8ff93de67b9e"
+								  description="Patient extra identifiers"
+								  creator="1"
+								  date_created="2020-03-12 22:02:00.0"
+								  retired="false" />
+								
+	<metadatamapping_metadata_set metadata_set_id="2"
+								  name="Secondary Identifier Types"
+								  uuid="97f94721-2f01-463a-95bb-3ce780bdfea6"
+								  creator="1"
+								  date_created="2020-03-12 22:02:00.0"
+								  retired="false" />
+	
+	<!-- Metadata set members -->
+	<metadatamapping_metadata_set_member metadata_set_member_id="1"
+										 metadata_set_id="1"
+										 name="Inpatient Id"
+										 uuid="ee00777d-0cbe-41b7-4c67-8ff93de67b9e"
+										 metadata_class="org.openmrs.PatientIdentifierType"
+										 metadata_uuid="ee00777d-272d-4392-a158-078de9342492"
+										 creator="1"
+										 date_created="2020-03-12 22:02:00.0"
+										 retired="false" />
+	
+	<metadatamapping_metadata_set_member metadata_set_member_id="2"
+										 metadata_set_id="1"
+										 name="Old OpenMRS Id"
+										 uuid="f0ebcb99-272d-41b7-4c67-078de9342492"
+										 metadata_class="org.openmrs.PatientIdentifierType"
+										 metadata_uuid="8f6ed8bb-0cbe-4c67-bc45-c5c0320e1324"
+										 creator="1"
+										 date_created="2020-03-12 22:02:00.0"
+										 retired="false" />  
+</dataset>
