@@ -6,20 +6,20 @@ import org.junit.Test;
 import org.openmrs.EncounterType;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.mdm.MetadataMappingsLoader;
+import org.openmrs.module.initializer.api.mdm.MetadataTermMappingsLoader;
 import org.openmrs.module.metadatamapping.MetadataSet;
 import org.openmrs.module.metadatamapping.MetadataSource;
 import org.openmrs.module.metadatamapping.MetadataTermMapping;
 import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class MetadataMappingsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class MetadataTermMappingsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private MetadataMappingService service;
 	
 	@Autowired
-	private MetadataMappingsLoader loader;
+	private MetadataTermMappingsLoader loader;
 	
 	private MetadataSource ms;
 	

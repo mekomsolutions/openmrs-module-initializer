@@ -23,7 +23,7 @@ public class MetadataTermMappingsCsvParser extends CsvParser<MetadataTermMapping
 	
 	@Override
 	public Domain getDomain() {
-		return Domain.METADATA_MAPPINGS;
+		return Domain.METADATA_TERM_MAPPINGS;
 	}
 	
 	@Override

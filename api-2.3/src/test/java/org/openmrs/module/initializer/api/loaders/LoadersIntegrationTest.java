@@ -28,9 +28,9 @@ import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
 import org.openmrs.module.initializer.api.loc.LocationsLoader;
-import org.openmrs.module.initializer.api.mdm.MetadataMappingsLoader;
 import org.openmrs.module.initializer.api.mds.MetadataSetsLoader;
 import org.openmrs.module.initializer.api.mds.MetadataSetMembersLoader;
+import org.openmrs.module.initializer.api.mdm.MetadataTermMappingsLoader;
 import org.openmrs.module.initializer.api.ot.OrderTypesLoader;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesLoader;
 import org.openmrs.module.initializer.api.pit.PatientIdentifierTypesLoader;
@@ -100,7 +100,7 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private RolesLoader rolesLoader;
 	
 	@Autowired
-	private MetadataMappingsLoader metadataMappingsLoader;
+	private MetadataTermMappingsLoader metadataTermMappingsLoader;
 	
 	@Autowired
 	private AppointmentsSpecialitiesLoader appointmentsSpecialitiesLoader;
@@ -145,11 +145,6 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = pitLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = metadataMappingsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
@@ -245,6 +240,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = dataFilterMappingsLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = metadataTermMappingsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		

@@ -1,7 +1,7 @@
-## Domain 'metadatamappings'
-The **metadatamappings** subfolder contains CSV import files for saving metadata terms mappings in bulk. This is a possible example of its content:
+## Domain 'metadatatermmappings'
+The **metadatatermmappings** subfolder contains CSV import files for saving metadata terms mappings in bulk. This is a possible example of its content:
 ```bash
-metadatamappings/
+metadatatermmappings/
   ├──metadataterms.csv
   └── ...
 ```
