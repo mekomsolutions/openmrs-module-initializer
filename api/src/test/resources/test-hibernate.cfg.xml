@@ -24,5 +24,9 @@
         <mapping resource="ServiceWeeklyAvailability.hbm.xml"/>
         <!-- AppointmentServiceType -->
         <mapping resource="AppointmentServiceType.hbm.xml"/>
+        <!-- MetadataSet -->
+        <mapping resource="MetadataSet.hbm.xml"/>
+        <!-- MetadataSetMember -->
+        <mapping resource="MetadataSetMember.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

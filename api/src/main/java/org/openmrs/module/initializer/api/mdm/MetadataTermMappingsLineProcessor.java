@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 @OpenmrsProfile(modules = { "metadatamapping:*" })
 public class MetadataTermMappingsLineProcessor extends BaseLineProcessor<MetadataTermMapping> {
 	
-	protected static String MAPPING_SOURCE = "Mapping source";
+	final public static String MAPPING_SOURCE = "mapping source";
 	
-	protected static String MAPPING_CODE = "Mapping code";
+	final public static String MAPPING_CODE = "mapping code";
 	
-	protected static String METADATA_CLASS_NAME = "Metadata class name";
+	final public static String METADATA_CLASS_NAME = "metadata class name";
 	
-	protected static String METADATA_UUID = "Metadata Uuid";
+	final public static String METADATA_UUID = "metadata uuid";
 	
 	private MetadataMappingService mdmService;
 	
