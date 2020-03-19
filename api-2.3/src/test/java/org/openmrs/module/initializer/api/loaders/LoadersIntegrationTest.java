@@ -244,17 +244,17 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
 		previousLoader = loader;
-		loader = metadataTermMappingsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
 		loader = metadataSetLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
 		previousLoader = loader;
 		loader = metadataSetMemberLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = metadataTermMappingsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		

@@ -55,7 +55,6 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
 1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
 1. [Patient identifier types (CSV files)](readme/pit.md)
-1. [Metadata Mappings (CSV files)](readme/mdm.md)
 1. [Privileges (CSV files)](readme/priv.md)
 1. [Encounter Types (CSV files)](readme/et.md)
 1. [Roles (CSV files)](readme/roles.md)
@@ -75,6 +74,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Bahmni Appointments Specialities (CSV files)](readme/appointmentsspecialities.md)
 1. [Bahmni Appointments Service Definitions (CSV files)](readme/appointmentsservicesdefinitions.md)
 1. [Data Filter entity-basis mappings (CSV files)](readme/datafiltermappings.md)
+1. [Metadata Term Mappings (CSV files)](readme/mdm.md)
 
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:

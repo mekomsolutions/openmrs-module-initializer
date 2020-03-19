@@ -24,9 +24,9 @@ public enum Domain {
 	APPOINTMENTS_SPECIALITIES(20, "appointmentsspecialities"),
 	APPOINTMENTS_SERVICES_DEFINITIONS(21, "appointmentsservicesdefinitions"),
 	DATAFILTER_MAPPINGS(22, "datafiltermappings"),
-	METADATA_TERM_MAPPINGS(23, "metadatatermmappings"),
-	METADATA_SETS(24, "metadatasets"),
-	METADATA_SET_MEMBERS(25, "metadatasetmembers");
+	METADATA_SETS(23, "metadatasets"),
+	METADATA_SET_MEMBERS(24, "metadatasetmembers"),
+	METADATA_TERM_MAPPINGS(25, "metadatatermmappings");
 	
 	private final int order;
 	
