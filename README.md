@@ -27,7 +27,7 @@ configuration/
   ├── jsonkeyvalues/
   ├── locations/
   ├── messageproperties/
-  ├── metadatamappings/ 
+  ├── metadatatermmappings/ 
   ├── metadatasharing/ 
   ├── patientidentifiertypes/ 
   ├── personattributetypes/ 
@@ -108,7 +108,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and edition of program workflow states provided through CSV files in **configuration/programworkflowstates**.
 * Bulk creation and edition of privileges provided through CSV files in **configuration/privileges**.
 * Bulk creation and edition of roles provided through CSV files in **configuration/roles**.
-* Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatamappings**.
+* Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatatermmappings**.
 * Bulk creation and edition of encounter types provided through CSV files in **configuration/encountertypes**.
 * Bulk creation and edition of Bahmni appointments specialities provided through CSV files in **configuration/appointmentsspecialities**.
 * Bulk access management of Data Filter entity to basis mappings provided through CSV files in **configuration/datafiltermappings**.

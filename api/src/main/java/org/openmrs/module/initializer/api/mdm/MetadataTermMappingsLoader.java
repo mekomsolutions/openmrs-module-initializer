@@ -6,7 +6,7 @@ import org.openmrs.module.metadatamapping.MetadataTermMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @OpenmrsProfile(modules = { "metadatamapping:*" })
-public class MetadataMappingsLoader extends BaseCsvLoader<MetadataTermMapping, MetadataTermMappingsCsvParser> {
+public class MetadataTermMappingsLoader extends BaseCsvLoader<MetadataTermMapping, MetadataTermMappingsCsvParser> {
 	
 	@Autowired
 	public void setParser(MetadataTermMappingsCsvParser parser) {
