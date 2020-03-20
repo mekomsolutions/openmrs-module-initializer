@@ -27,8 +27,10 @@ configuration/
   ├── jsonkeyvalues/
   ├── locations/
   ├── messageproperties/
-  ├── metadatatermmappings/ 
+  ├── metadatasetmembers/ 
+  ├── metadatasets/ 
   ├── metadatasharing/ 
+  ├── metadatatermmappings/ 
   ├── patientidentifiertypes/ 
   ├── personattributetypes/ 
   ├── privileges/ 
@@ -40,13 +42,14 @@ configuration/
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain. Although several file types are supported for providing metadata, CSV files are the preferred format and all domain should aim at being covered through parsing CSV files.
 
 ### Objectives
-* This module allows to preload an OpenMRS installation with **maintained and versioned data and metadata**.
-* Initializer processes **CSV files** upon startup.
-* Each line of those CSV files represents an **OpenMRS object to be created or edited**.
+* This module allows to preload an OpenMRS installation with **maintained and versioned metadata**.
+* CSV files are the preferred format, however a number of metadata domains rely on other file formats. See the list [below](#supported-domains-and-default-loading-order) for details.
+* Initializer processes all configuration files upon starting up.
+* Initializer produces a checksum file for each processed file. A file will never be processed again until its checksum has changed.
+* Each line of those CSV files represents an **OpenMRS object to be created, edited or retired**.
+* Each line of those CSV files follows the WYSIWYG principle.
 
-Even though using CSV files is the preferred approach, some data or metadata domains rely on other file formats to be imported. You will encounter those other formats in the list below.
-
-### Supported domains and loading order
+### Supported domains and default loading order
 We suggest to go through the following before looking at specific import domains:
 * [Conventions for CSV files](readme/csv_conventions.md)
 
@@ -74,14 +77,16 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Bahmni Appointments Specialities (CSV files)](readme/appointmentsspecialities.md)
 1. [Bahmni Appointments Service Definitions (CSV files)](readme/appointmentsservicesdefinitions.md)
 1. [Data Filter entity-basis mappings (CSV files)](readme/datafiltermappings.md)
-1. [Metadata Term Mappings (CSV files)](readme/mdm.md)
+1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
+1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
+1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
 
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:
 ```bash
 git clone https://github.com/mekomsolutions/openmrs-module-initializer/tree/master
 cd openmrs-module-initializer
-mvn clean install
+mvn clean package
 ```
 ##### Runtime requirements & compatibility
 * OpenMRS Core 2.1.1 (*required*)
@@ -95,7 +100,7 @@ mvn clean install
 Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.
 
 ### Get in touch
-Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversation and ping us with the mentions starting with @mks.. in your message.
+Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversation and ping us with the mentions starting with @mks.. in your message. Or find us on the [Initializer OpenMRS Slack channel](https://openmrs.slack.com/archives/CPC20CBFH).
 
 ----
 
@@ -114,6 +119,8 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk access management of Data Filter entity to basis mappings provided through CSV files in **configuration/datafiltermappings**.
 * Bulk creation and edition of attribute types provided through CSV files in **configuration/attributetypes**.
 * Bulk creation and edition of patient identifier types provided through CSV files in **configuration/patientidentifiertypes**.
+* Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatasets**.
+* Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatasetmembers**.
 
 #### Version 1.1.0
 * Bulk creation and edition of drugs provided through CSV files in **configuration/locations**.

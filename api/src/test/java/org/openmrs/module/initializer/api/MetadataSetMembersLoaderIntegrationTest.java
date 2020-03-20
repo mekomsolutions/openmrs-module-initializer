@@ -24,8 +24,8 @@ public class MetadataSetMembersLoaderIntegrationTest extends DomainBaseModuleCon
 	
 	@Before
 	public void setup() throws Exception {
-		executeDataSet("testdata/test-metadata-sets.xml");
-
+		executeDataSet("testdata/test-metadatasets.xml");
+		
 	}
 	
 	@Test

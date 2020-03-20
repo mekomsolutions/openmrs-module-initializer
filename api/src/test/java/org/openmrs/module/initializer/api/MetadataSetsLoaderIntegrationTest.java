@@ -20,10 +20,10 @@ public class MetadataSetsLoaderIntegrationTest extends DomainBaseModuleContextSe
 	private static String SET_TO_RETIRE_UUID = "97f94721-2f01-463a-95bb-3ce780bdfea6";
 	
 	private static String SET_TO_EDIT_UUID = "f0ebcb99-7618-41b7-b0bf-8ff93de67b9e";
-		
+	
 	@Before
 	public void setup() throws Exception {
-		executeDataSet("testdata/test-metadata-sets.xml");
+		executeDataSet("testdata/test-metadatasets.xml");
 	}
 	
 	@Test
