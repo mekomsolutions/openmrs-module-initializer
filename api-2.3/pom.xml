@@ -109,6 +109,13 @@
     </dependency>
 
     <dependency>
+      <groupId>org.bahmni.module</groupId>
+      <artifactId>bahmni.ie.apps-api</artifactId>
+      <version>${bahmniIeAppsVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.openmrs.module</groupId>
       <artifactId>addresshierarchy-api</artifactId>
       <version>${addresshierarchyVersion}</version>

@@ -1,0 +1,19 @@
+<config>
+    <globalProperties>
+        <globalProperty>
+            <property>bahmni.forms.directory</property>
+            <defaultValue>/src/test/resources/</defaultValue>
+            <description>
+                File system path for saving Bahmni forms.
+            </description>
+        </globalProperty>
+
+        <globalProperty>
+            <property>bahmni.formTranslations.directory</property>
+            <defaultValue>src/test/resources/</defaultValue>
+            <description>
+                File system path for saving Bahmni forms translations.
+            </description>
+        </globalProperty>
+    </globalProperties>
+</config>

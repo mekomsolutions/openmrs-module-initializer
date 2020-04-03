@@ -26,7 +26,8 @@ public enum Domain {
 	DATAFILTER_MAPPINGS(22, "datafiltermappings"),
 	METADATA_SETS(23, "metadatasets"),
 	METADATA_SET_MEMBERS(24, "metadatasetmembers"),
-	METADATA_TERM_MAPPINGS(25, "metadatatermmappings");
+	METADATA_TERM_MAPPINGS(25, "metadatatermmappings"),
+	BAHMNI_FORMS(26, "bahmniforms");
 	
 	private final int order;
 	
