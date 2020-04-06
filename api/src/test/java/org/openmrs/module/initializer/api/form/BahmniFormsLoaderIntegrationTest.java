@@ -71,6 +71,22 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	}
 	
 	@Test
+	public void load_shouldNotCreateNewRecord() {
+		
+		// Setup
+		bahmniFormsLoader.load();
+		
+		// Replay
+		bahmniFormsLoader.load();
+		
+		//Verify
+		Assert.assertNull(formService.getForm("test", "2"));
+		Assert.assertEquals(1,
+		    formService.getAllForms().stream().filter(form -> form.getName().equals("test")).toArray().length);
+		
+	}
+	
+	@Test
 	public void load_shouldSaveFormTranslation() {
 		
 		// Replay
