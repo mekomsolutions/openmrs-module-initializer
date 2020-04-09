@@ -7,6 +7,7 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.openmrs.module.initializer.InitializerLogFactory;
+import org.openmrs.module.initializer.api.utils.IgnoreBOMInputStream;
 
 /**
  * Orderable wrapper for CSV {@link File} objects.
@@ -28,7 +29,7 @@ public class OrderableCsvFile implements Comparable<OrderableCsvFile> {
 		InputStream is = null;
 		String[] headerLine;
 		try {
-			is = new FileInputStream(file);
+			is = new IgnoreBOMInputStream(new FileInputStream(file));
 			headerLine = CsvParser.getHeaderLine(is);
 			this.order = BaseLineProcessor.getOrder(headerLine);
 		}
