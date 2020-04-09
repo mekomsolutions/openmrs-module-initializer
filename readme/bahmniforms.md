@@ -1,8 +1,11 @@
 ## Domain 'bahmniforms'
-The **bahmniforms** subfolder contains JSON configuration files that help provide Bahmni forms at runtime. This is how this domain may look like:
+The **bahmniforms** subfolder contains [Bahmni Forms 2.0](https://bahmni.atlassian.net/wiki/spaces/BAH/pages/683966468/Forms+2.0) JSON definitions to provide the forms at runtime.
+
+
+This is how this domain may look like:
 ```bash
 bahmniforms/
-  └── form.json
+  └── form1.json
 ```
 
 ###### JSON file example:
@@ -34,7 +37,7 @@ bahmniforms/
 }
 ```
 
-a JSON file of a bahmni form can be obtained by exporting the form from bahmni implementer interface.
+The easiest way to retrieve such a JSON file in the first place is by exporting the form using the Form Builder [export tool](https://bahmni.atlassian.net/wiki/spaces/BAH/pages/239796253/Import+Export).
 
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).
