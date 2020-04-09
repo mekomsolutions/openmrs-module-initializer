@@ -25,7 +25,7 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	
 	private String formFolderPath = "src/test/resources/forms/";
 	
-	private String formTranslationPath = "src/test/resources/formsTranslation/";
+	private String formTranslationPath = "src/test/resources/forms/translations/";
 	
 	@Autowired
 	@Qualifier("adminService")

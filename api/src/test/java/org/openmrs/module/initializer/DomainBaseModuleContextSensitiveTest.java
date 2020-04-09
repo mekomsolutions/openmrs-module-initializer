@@ -43,7 +43,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	
 	/*
 	 * pre-Spring loading setup for all integration tests
-	 * 
+	 *
 	 * We start all the conditional modules here.
 	 */
 	public DomainBaseModuleContextSensitiveTest() {
@@ -74,7 +74,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
 		{
-			Module mod = new Module("", "bahmni.ie.apps", "", "", "", "");
+			Module mod = new Module("", "bahmni.ie.apps", "", "", "", "0.92-SNAPSHOT");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}

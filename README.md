@@ -37,7 +37,8 @@ configuration/
   ├── programs/ 
   ├── programworkflows/
   ├── programworkflowstates/
-  └── roles/
+  ├── roles/
+  └── bahmniforms/
 ```  
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain. Although several file types are supported for providing metadata, CSV files are the preferred format and all domain should aim at being covered through parsing CSV files.
 
@@ -80,6 +81,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
+1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:
@@ -95,6 +97,7 @@ mvn clean package
 * Metadata Mapping 1.3.4 (*compatible*)
 * Bahmni Appointments 1.2 (*compatible*)
 * Data Filter 1.0.0 (*compatible*)
+* Bahmni I.e Apps 0.92-SNAPSHOT (*compatible*)
 
 ### Quick facts
 Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.
@@ -121,6 +124,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and edition of patient identifier types provided through CSV files in **configuration/patientidentifiertypes**.
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatasets**.
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatasetmembers**.
+* Bulk creation and edition of bahmni forms provided JSON files in **configuration/bahmniforms**
 
 #### Version 1.1.0
 * Bulk creation and edition of drugs provided through CSV files in **configuration/locations**.

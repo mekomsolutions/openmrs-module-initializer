@@ -67,11 +67,9 @@ public class BahmniFormsLoader extends BaseLoader {
 				// check if form exist
 				Form existingForm = formService.getForm(formName);
 				Form form;
-				
-				if (existingForm != null) {
+				if (existingForm != null)
 					form = existingForm;
-					form.setPublished(false);
-				} else {
+				else {
 					form = new Form();
 					form.setVersion("1");
 				}
@@ -79,21 +77,19 @@ public class BahmniFormsLoader extends BaseLoader {
 				// Save OpenMRS form
 				form.setPublished(false);
 				form.setName(formName);
-				
-				Form savedForm = formService.saveForm(form);
+				form = formService.saveForm(form);
 				
 				// Save Bahmni form resource
 				BahmniForm bahmniForm = new BahmniForm();
-				bahmniForm.setName(savedForm.getName());
-				bahmniForm.setVersion(savedForm.getVersion());
-				bahmniForm.setUuid(savedForm.getUuid());
-				bahmniForm.setPublished(false);
+				bahmniForm.setName(form.getName());
+				bahmniForm.setVersion(form.getVersion());
+				bahmniForm.setUuid(form.getUuid());
+				bahmniForm.setPublished(form.getPublished());
 				
 				BahmniFormResource bahmniFormResource = new BahmniFormResource();
 				bahmniFormResource.setForm(bahmniForm);
-				bahmniFormResource.setUuid(savedForm.getUuid());
+				bahmniFormResource.setUuid(form.getUuid());
 				bahmniFormResource.setValue(resourceValue);
-				
 				bahmniFormService.saveFormResource(bahmniFormResource);
 				
 				// Save Translation
