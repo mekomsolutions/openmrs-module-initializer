@@ -16,6 +16,7 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderableCsvFile;
+import org.openmrs.module.initializer.api.utils.IgnoreBOMInputStream;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -64,7 +65,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 			try {
 				
 				// getting the lines
-				is = new FileInputStream(file.getFile());
+				is = new IgnoreBOMInputStream(new FileInputStream(file.getFile()));
 				final CsvParser<T, BaseLineProcessor<T>> parser = csvLoader.getParser(is);
 				List<String[]> lines = parser.getLines();
 				int fileCount = lines.size();
