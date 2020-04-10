@@ -17,6 +17,7 @@ configuration/
   ├── appointmentsspecialities/
   ├── appointmentsservicesdefinitions/
   ├── attributetypes/
+  ├── bahmniforms/
   ├── conceptclasses/
   ├── concepts/
   ├── datafiltermappings/
@@ -37,8 +38,8 @@ configuration/
   ├── programs/ 
   ├── programworkflows/
   ├── programworkflowstates/
-  ├── roles/
-  └── bahmniforms/
+  └── roles/
+   
 ```  
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain. Although several file types are supported for providing metadata, CSV files are the preferred format and all domain should aim at being covered through parsing CSV files.
 
@@ -65,6 +66,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Global properties (XML files)](readme/globalproperties.md)
 1. [Attribute types (CSV files)](readme/atttypes.md)
 1. [Locations (CSV files)](readme/loc.md)
+1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept classes (CSV files)](readme/conceptclasses.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Programs (CSV files)](readme/prog.md)
@@ -81,7 +83,6 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
-1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:

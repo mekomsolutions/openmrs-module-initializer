@@ -1,5 +1,5 @@
 ## Domain 'bahmniforms'
-The **bahmniforms** subfolder contains [Bahmni Forms 2.0](https://bahmni.atlassian.net/wiki/spaces/BAH/pages/683966468/Forms+2.0) JSON definitions to provide the forms at runtime.
+The **bahmniforms** subfolder contains [Bahmni Forms 2.0](https://bahmni.atlassian.net/wiki/spaces/BAH/pages/683966468/Forms+2.0) JSON definition files.
 
 
 This is how this domain may look like:
