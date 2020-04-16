@@ -39,5 +39,7 @@ bahmniforms/
 
 The easiest way to retrieve such a JSON file in the first place is by exporting the form using the Form Builder [export tool](https://bahmni.atlassian.net/wiki/spaces/BAH/pages/239796253/Import+Export).
 
+Note: the unique identifier for Bahmni Forms is their `name`. The `uuid` field is not taken into account.
+
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).

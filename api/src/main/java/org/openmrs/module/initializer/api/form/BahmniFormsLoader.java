@@ -61,6 +61,7 @@ public class BahmniFormsLoader extends BaseLoader {
 				Map jsonFile = new ObjectMapper().readValue(is, Map.class);
 				Map formJson = (Map) jsonFile.get("formJson");
 				String formName = (String) formJson.get("name");
+				Boolean published = (Boolean) formJson.get("published");
 				List<Map> resources = (List<Map>) formJson.get("resources");
 				String resourceValue = (String) resources.get(0).get("value");
 				
@@ -97,7 +98,8 @@ public class BahmniFormsLoader extends BaseLoader {
 				bahmniFormTranslationService.saveFormTranslation(formTranslations);
 				
 				// publish the form
-				bahmniFormService.publish(bahmniForm.getUuid());
+				if (published)
+					bahmniFormService.publish(bahmniForm.getUuid());
 				dirUtil.writeChecksum(fileName, checksum); // the updated config. file is marked as processed
 				log.info("The form file has been processed: " + fileName);
 			}
