@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component("initializer.conceptAttributeLineProcessor")
 public class ConceptAttributeLineProcessor extends BaseAttributeLineProcessor<Concept, ConceptAttributeType, ConceptAttribute> {
-
+	
 	private ConceptService conceptService;
 	
 	@Autowired
@@ -30,10 +30,10 @@ public class ConceptAttributeLineProcessor extends BaseAttributeLineProcessor<Co
 		}
 		return ret;
 	}
-
+	
 	@Override
 	public ConceptAttribute newAttribute() {
 		return new ConceptAttribute();
 	}
-
+	
 }

@@ -8,6 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 package org.openmrs.module.initializer.api;
+
 import static org.hamcrest.CoreMatchers.is;
 
 import java.util.Arrays;
@@ -149,12 +150,11 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			
 			// Concept attributes
 			c = cs.getConceptByUuid("4d3cfdcf-1f3f-4b41-9b31-02dfd951c582");
-			Object[]attributes = c.getActiveAttributes().toArray();
+			Object[] attributes = c.getActiveAttributes().toArray();
 			Assert.assertThat(attributes.length, is(2));
 			Assert.assertEquals("admin@facility.com", ((ConceptAttribute) attributes[0]).getValue());
-			Assert.assertEquals("2020-04-06",
-			    dateDatatype.serialize((Date) ((ConceptAttribute) attributes[1]).getValue()));
-
+			Assert.assertEquals("2020-04-06", dateDatatype.serialize((Date) ((ConceptAttribute) attributes[1]).getValue()));
+			
 		}
 		
 		Context.setLocale(localeEn);

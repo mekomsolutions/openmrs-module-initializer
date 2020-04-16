@@ -30,9 +30,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Context.class, CustomDatatypeUtil.class})
+@PrepareForTest({ Context.class, CustomDatatypeUtil.class })
 public class ConceptAttributeLineProcessorTest {
-
+	
 	private ConceptService cs;
 	
 	private ConceptAttributeLineProcessor processor;
@@ -48,8 +48,10 @@ public class ConceptAttributeLineProcessorTest {
 		PowerMockito.mockStatic(Context.class);
 		PowerMockito.mockStatic(CustomDatatypeUtil.class);
 		
-		when(CustomDatatypeUtil.getDatatype(eq(FreeTextDatatype.class.getName()), anyString())).thenReturn((CustomDatatype) new FreeTextDatatype());
-		when(CustomDatatypeUtil.getDatatype(eq(DateDatatype.class.getName()), anyString())).thenReturn((CustomDatatype) new DateDatatype());
+		when(CustomDatatypeUtil.getDatatype(eq(FreeTextDatatype.class.getName()), anyString()))
+		        .thenReturn((CustomDatatype) new FreeTextDatatype());
+		when(CustomDatatypeUtil.getDatatype(eq(DateDatatype.class.getName()), anyString()))
+		        .thenReturn((CustomDatatype) new DateDatatype());
 		when(Context.getRuntimeProperties()).thenReturn(new Properties());
 		
 		cs = mock(ConceptService.class);
@@ -60,7 +62,7 @@ public class ConceptAttributeLineProcessorTest {
 		autditDateAttType.setName("Audit Date");
 		autditDateAttType.setUuid(AUDIT_DATE_ATT_TYPE_UUID);
 		autditDateAttType.setDatatypeClassname(DateDatatype.class.getName());
-				
+		
 		ConceptAttributeType emailAttrType = new ConceptAttributeType();
 		emailAttrType.setName("Email Address");
 		emailAttrType.setDatatypeClassname(FreeTextDatatype.class.getName());
@@ -75,17 +77,17 @@ public class ConceptAttributeLineProcessorTest {
 		String[] headerLine = { HEADER_ATTRIBUTE_PREFIX + AUDIT_DATE_ATT_TYPE_UUID,
 		        HEADER_ATTRIBUTE_PREFIX + EMAIL_ATT_TYPE_UUID };
 		String[] line = { "2013-03-19", "admin@facility.com" };
-
+		
 		// Replay
 		Concept concept = processor.fill(new Concept(), new CsvLine(headerLine, line));
-
+		
 		// Verify
 		Collection<ConceptAttribute> attributes = concept.getActiveAttributes();
 		Assert.assertEquals(2, attributes.size());
 		Object[] attributesArray = attributes.toArray();
-		Object auditDate = ((ConceptAttribute)attributesArray[0]).getValue();
+		Object auditDate = ((ConceptAttribute) attributesArray[0]).getValue();
 		Assert.assertTrue(auditDate instanceof Date);
-		Assert.assertThat(dateDatatype.serialize(((Date)auditDate)), is("2013-03-19"));
+		Assert.assertThat(dateDatatype.serialize(((Date) auditDate)), is("2013-03-19"));
 		Assert.assertThat(((ConceptAttribute) attributesArray[1]).getValue(), is("admin@facility.com"));
 	}
 }
