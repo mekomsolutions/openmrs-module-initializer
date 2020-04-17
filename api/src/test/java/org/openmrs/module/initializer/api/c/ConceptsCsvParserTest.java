@@ -90,22 +90,22 @@ public class ConceptsCsvParserTest {
 		// verif
 		Assert.assertEquals(1, lines.size());
 	}
-
+	
 	@Test
 	public void process_shouldParseCsvWithBom() throws IOException {
 		// setup
 		InputStream is = getClass().getClassLoader()
-				.getResourceAsStream("org/openmrs/module/initializer/include/csv/with_bom.csv");
-
+		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/with_bom.csv");
+		
 		// replay
 		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs),
-				new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
-				new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
-				new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
+		        new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
+		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
+		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
 		parser.setInputStream(is);
-
+		
 		List<String[]> lines = parser.process(parser.getLines());
-
+		
 		// verify
 		Assert.assertEquals(1, lines.size());
 	}

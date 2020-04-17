@@ -1,30 +1,28 @@
 package org.openmrs.module.initializer.api.form;
 
-import org.apache.commons.logging.Log;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.openmrs.Form;
-import org.openmrs.annotation.OpenmrsProfile;
-import org.openmrs.api.FormService;
-import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
-import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
-import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
-import org.bahmni.module.bahmni.ie.apps.service.BahmniFormService;
-import org.bahmni.module.bahmni.ie.apps.service.BahmniFormTranslationService;
-import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.InitializerLogFactory;
-import org.openmrs.module.initializer.api.ConfigDirUtil;
-import org.openmrs.module.initializer.api.loaders.BaseLoader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
+import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
+import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
+import org.bahmni.module.bahmni.ie.apps.service.BahmniFormService;
+import org.bahmni.module.bahmni.ie.apps.service.BahmniFormTranslationService;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.openmrs.Form;
+import org.openmrs.annotation.OpenmrsProfile;
+import org.openmrs.api.FormService;
+import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.InitializerLogFactory;
+import org.openmrs.module.initializer.api.ConfigDirUtil;
+import org.openmrs.module.initializer.api.loaders.BaseLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+
 @OpenmrsProfile(modules = { "bahmni.ie.apps:*" })
-@Component
 public class BahmniFormsLoader extends BaseLoader {
 	
 	private final Log log = InitializerLogFactory.getLog(getClass());
