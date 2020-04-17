@@ -41,8 +41,8 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	private FormService formService;
 	
 	@Before
-	public void setup() throws Exception {
-		executeDataSet("testdata/test-bahmniforms.xml");
+	public void setup() {
+		
 		// Set default directory for saving Bahmni form and Bahmni form translation files
 		administrationService.saveGlobalProperty(new GlobalProperty("bahmni.forms.directory", formFolderPath));
 		administrationService
@@ -51,8 +51,8 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	
 	@After
 	public void clean() throws IOException {
-		// Delete created form files
 		
+		// Delete created form files
 		FileUtils.deleteDirectory(new File(formFolderPath));
 		FileUtils.deleteDirectory(new File(formTranslationPath));
 	}
@@ -71,23 +71,34 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	}
 	
 	@Test
-	public void load_shouldLoadAndUpdateForm() {
+	public void load_shouldLoadAndUpdateForm() throws Exception {
 		
 		// Setup
-		Form form = formService.getForm("form2");
+		bahmniFormsLoader.load();
+		Form form = formService.getForm("form1");
 		
 		Assert.assertEquals(true, form.getPublished());
 		
+		String test_file_updated = "src/test/resources/testdata/testBahmniforms/test_form_updated.json";
+		File srcFile = new File(test_file_updated);
+		File dstFile = new File(bahmniFormsLoader.getDirUtil().getDomainDirPath() + "/test_form_updated.json");
+		
+		FileUtils.copyFile(srcFile, dstFile);
+		
 		// Replay
 		bahmniFormsLoader.load();
+		Form updatedForm = formService.getForm("form1");
+		List<FormTranslation> bahmniFormTranslation = bahmniFormTranslationService.getFormTranslations("form1", "1", null);
 		
 		// Verify
-		Form unpublishedForm = formService.getForm("form2");
-		Assert.assertEquals(false, unpublishedForm.getPublished());
+		
+		Assert.assertEquals(false, updatedForm.getPublished());
+		Map<String, String> labels = bahmniFormTranslation.get(0).getLabels();
+		Assert.assertEquals("updated label", labels.get("LABEL_2"));
 	}
 	
 	@Test
-	public void load_shouldNotCreateNewRecord() {
+	public void load_shouldNotCreateDuplicates() {
 		
 		// Setup
 		bahmniFormsLoader.load();
