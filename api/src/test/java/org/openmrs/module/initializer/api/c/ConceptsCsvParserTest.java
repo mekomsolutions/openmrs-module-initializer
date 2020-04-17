@@ -1,10 +1,10 @@
 package org.openmrs.module.initializer.api.c;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.anyString;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -131,7 +131,7 @@ public class ConceptsCsvParserTest {
 		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs),
 		        new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
 		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
-		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
+		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)), new ConceptAttributeLineProcessor(cs));
 		parser.setInputStream(is);
 		
 		List<String[]> lines = parser.process(parser.getLines());
