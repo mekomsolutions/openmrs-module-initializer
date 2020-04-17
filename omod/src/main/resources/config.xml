@@ -31,6 +31,9 @@
 		<aware_of_module version="${datafilterVersion}">
 			org.openmrs.module.datafilter
 		</aware_of_module>
+		<aware_of_module version="${bahmniIeAppsVersion}">
+			org.bahmni.module.bahmni.ie.apps
+		</aware_of_module>
 	</aware_of_modules>
 	
 	<!-- Internationalization -->

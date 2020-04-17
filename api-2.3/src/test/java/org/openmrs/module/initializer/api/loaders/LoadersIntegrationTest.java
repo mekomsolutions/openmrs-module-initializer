@@ -24,6 +24,7 @@ import org.openmrs.module.initializer.api.c.ConceptClassesLoader;
 import org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
 import org.openmrs.module.initializer.api.et.EncounterTypesLoader;
+import org.openmrs.module.initializer.api.form.BahmniFormsLoader;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
@@ -115,6 +116,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private DataFilterMappingsLoader dataFilterMappingsLoader;
 	
 	@Autowired
+	private BahmniFormsLoader bahmniFormsLoader;
+	
+	@Autowired
 	private MetadataSetsLoader metadataSetLoader;
 	
 	@Autowired
@@ -175,6 +179,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = locationsLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = bahmniFormsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
