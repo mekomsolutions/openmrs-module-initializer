@@ -55,6 +55,7 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		// Delete created form files
 		FileUtils.deleteDirectory(new File(formFolderPath));
 		FileUtils.deleteDirectory(new File(formTranslationPath));
+		FileUtils.deleteQuietly(new File(bahmniFormsLoader.getDirUtil().getDomainDirPath() + "/test_form1_updated.json"));
 	}
 	
 	@Test
@@ -79,9 +80,9 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		
 		Assert.assertEquals(true, form.getPublished());
 		
-		String test_file_updated = "src/test/resources/testdata/testBahmniforms/test_form_updated.json";
+		String test_file_updated = "src/test/resources/testdata/testBahmniforms/test_form1_updated.json";
 		File srcFile = new File(test_file_updated);
-		File dstFile = new File(bahmniFormsLoader.getDirUtil().getDomainDirPath() + "/test_form_updated.json");
+		File dstFile = new File(bahmniFormsLoader.getDirUtil().getDomainDirPath() + "/test_form1_updated.json");
 		
 		FileUtils.copyFile(srcFile, dstFile);
 		
