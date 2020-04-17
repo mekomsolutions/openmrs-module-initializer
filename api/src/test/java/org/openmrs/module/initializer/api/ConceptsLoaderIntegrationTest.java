@@ -9,7 +9,11 @@
  */
 package org.openmrs.module.initializer.api;
 
+import static org.hamcrest.CoreMatchers.is;
+
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -20,11 +24,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
+import org.openmrs.ConceptAttribute;
 import org.openmrs.ConceptComplex;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptNumeric;
+import org.openmrs.LocationAttribute;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
+import org.openmrs.customdatatype.datatype.DateDatatype;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +45,9 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	
 	@Autowired
 	private ConceptsLoader loader;
+	
+	@Autowired
+	private DateDatatype dateDatatype;
 	
 	private Locale localeEn = Locale.ENGLISH;
 	
@@ -137,6 +147,14 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Context.setLocale(localeEn);
 			c = cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3");
 			Assert.assertEquals("New short name", c.getShortNameInLocale(localeEn).getName());
+			
+			// Concept attributes
+			c = cs.getConceptByUuid("4d3cfdcf-1f3f-4b41-9b31-02dfd951c582");
+			Object[] attributes = c.getActiveAttributes().toArray();
+			Assert.assertThat(attributes.length, is(2));
+			Assert.assertEquals("jdoe@example.com", ((ConceptAttribute) attributes[0]).getValue());
+			Assert.assertEquals("2020-04-06", dateDatatype.serialize((Date) ((ConceptAttribute) attributes[1]).getValue()));
+			
 		}
 		
 		Context.setLocale(localeEn);

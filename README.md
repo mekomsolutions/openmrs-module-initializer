@@ -104,7 +104,7 @@ mvn clean package
 Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.
 
 ### Get in touch
-Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversation and ping us with the mentions starting with @mks.. in your message. Or find us on the [Initializer OpenMRS Slack channel](https://openmrs.slack.com/archives/CPC20CBFH).
+Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversation and ping us with the mention `@MekomSolutions` in your message. Or find us on the [Initializer OpenMRS Slack channel](https://openmrs.slack.com/archives/CPC20CBFH).
 
 ----
 
@@ -122,10 +122,12 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and edition of Bahmni appointments specialities provided through CSV files in **configuration/appointmentsspecialities**.
 * Bulk access management of Data Filter entity to basis mappings provided through CSV files in **configuration/datafiltermappings**.
 * Bulk creation and edition of attribute types provided through CSV files in **configuration/attributetypes**.
+* Support location attributes.
 * Bulk creation and edition of patient identifier types provided through CSV files in **configuration/patientidentifiertypes**.
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatasets**.
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatasetmembers**.
 * Bulk creation and edition of bahmni forms provided JSON files in **configuration/bahmniforms**
+* Support concept attributes.
 
 #### Version 1.1.0
 * Bulk creation and edition of drugs provided through CSV files in **configuration/locations**.

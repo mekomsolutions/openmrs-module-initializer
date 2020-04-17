@@ -40,5 +40,7 @@
 
   <concept_set CONCEPT_SET_ID="1089" UUID="75e21f76-a09a-4c53-a401-13d2f38628b0" SORT_WEIGHT="1000.0" DATE_CREATED="2019-12-11 17:18:05.0" CONCEPT_ID="5501" CONCEPT_SET="5503" CREATOR="1"/>
   <concept_set CONCEPT_SET_ID="1090" UUID="c99b2737-c824-48f9-b095-c8cf516b9532" SORT_WEIGHT="1010.0" DATE_CREATED="2019-12-11 17:18:05.0" CONCEPT_ID="5502" CONCEPT_SET="5503" CREATOR="1"/>
-  
+  <concept_attribute_type concept_attribute_type_id="3081" name="Audit Date" datatype="org.openmrs.customdatatype.datatype.DateDatatype" uuid="9516cc50-6f9f-11e0-8414-001e378eb67e" creator="1" date_created="2020-04-03 00:00:00.0" min_occurs="0" retired="false" />
+  <concept_attribute_type concept_attribute_type_id="3082" name="Email Address" datatype="org.openmrs.customdatatype.datatype.FreeTextDatatype" uuid="k516cc50-6f9f-11e0-8414-101e378e467f" creator="1" date_created="2020-04-03 00:00:00.0" min_occurs="0" retired="false" />
+  <concept_attribute concept_attribute_id="3083" concept_id="5500" attribute_type_id="3081" value_reference="2011-04-25" uuid="3a2bdb18-6faa-11e0-8414-001e378eb67e" creator="1" date_created="2020-04-03 00:00:00.0" voided="false" />
 </dataset>

@@ -57,6 +57,15 @@ Here is an example of the 'mappings' columns:
 | - | - | - |
 | ... | <sub>ICD-10-WHO:T45.9; CIEL:122226; Cambodia:115</sub> | ... |
 
+###### Attribute headers
+Concepts support *attributes*. The values for those attributes can be set under ad-hoc headers starting with the special prefix `Attribute|`. The value indicated on a CSV line will be resolved to its final value based on the type of the attribute. Let us look at an example:
+
+| ... | <sub>Attribute\|Last Audit Date</sub> | ... |
+| - | - | - |
+| ... | <sub>2017-05-15</sub> | ... |
+
+This attribute points to an attribute type identified by "`Last Audit Date`". The attribute type identifier (a name here) suggests that it might be an attribute of custom datatype `Date`. This means that its value, represented by the string `2017-05-15`, will eventually be resolved as the Java date `Mon May 15 00:00:00 2017` set as an attribute of the concept described by the CSV line.
+
 Below are the headers specific to concepts numeric:
 ###### Header `Absolute low`
 ###### Header `Critical low`

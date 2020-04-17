@@ -27,13 +27,16 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 	
 	private MappingsConceptLineProcessor mappingsProcessor;
 	
+	private ConceptAttributeLineProcessor conceptAttributeLineProcessor;
+	
 	@Autowired
 	public ConceptsCsvParser(@Qualifier("conceptService") ConceptService conceptService,
 	    @Qualifier("initializer.conceptLineProcessor") ConceptLineProcessor baseProcessor,
 	    @Qualifier("initializer.conceptNumericLineProcessor") ConceptNumericLineProcessor numericProcessor,
 	    @Qualifier("initializer.conceptComplexLineProcessor") ConceptComplexLineProcessor complexProcessor,
 	    @Qualifier("initializer.nestedConceptLineProcessor") NestedConceptLineProcessor nestedProcessor,
-	    @Qualifier("initializer.mappingsConceptLineProcessor") MappingsConceptLineProcessor mappingsProcessor) {
+	    @Qualifier("initializer.mappingsConceptLineProcessor") MappingsConceptLineProcessor mappingsProcessor,
+	    @Qualifier("initializer.conceptAttributeLineProcessor") ConceptAttributeLineProcessor conceptAttributeLineProcessor) {
 		
 		super(baseProcessor);
 		
@@ -43,6 +46,7 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 		this.complexProcessor = complexProcessor;
 		this.nestedProcessor = nestedProcessor;
 		this.mappingsProcessor = mappingsProcessor;
+		this.conceptAttributeLineProcessor = conceptAttributeLineProcessor;
 	}
 	
 	@Override
@@ -98,5 +102,6 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 		lineProcessors.add(getSingleLineProcessor());
 		lineProcessors.add(nestedProcessor);
 		lineProcessors.add(mappingsProcessor);
+		lineProcessors.add(conceptAttributeLineProcessor);
 	}
 }
