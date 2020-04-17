@@ -76,7 +76,7 @@ public class ConceptAttributeLineProcessorTest {
 		// Setup
 		String[] headerLine = { HEADER_ATTRIBUTE_PREFIX + AUDIT_DATE_ATT_TYPE_UUID,
 		        HEADER_ATTRIBUTE_PREFIX + EMAIL_ATT_TYPE_UUID };
-		String[] line = { "2013-03-19", "admin@facility.com" };
+		String[] line = { "2013-03-19", "jdoe@example.com" };
 		
 		// Replay
 		Concept concept = processor.fill(new Concept(), new CsvLine(headerLine, line));
@@ -88,6 +88,6 @@ public class ConceptAttributeLineProcessorTest {
 		Object auditDate = ((ConceptAttribute) attributesArray[0]).getValue();
 		Assert.assertTrue(auditDate instanceof Date);
 		Assert.assertThat(dateDatatype.serialize(((Date) auditDate)), is("2013-03-19"));
-		Assert.assertThat(((ConceptAttribute) attributesArray[1]).getValue(), is("admin@facility.com"));
+		Assert.assertThat(((ConceptAttribute) attributesArray[1]).getValue(), is("jdoe@example.com"));
 	}
 }

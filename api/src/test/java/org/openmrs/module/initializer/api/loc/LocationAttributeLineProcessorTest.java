@@ -74,7 +74,7 @@ public class LocationAttributeLineProcessorTest {
 		// Setup
 		String[] headerLine = { HEADER_ATTRIBUTE_PREFIX + PHONE_ATT_TYPE_UUID,
 		        HEADER_ATTRIBUTE_PREFIX + EMAIL_ATT_TYPE_NAME };
-		String[] line = { "+254 703203342", "admin@facility.com" };
+		String[] line = { "+1 206 555 0100", "jdoe@example.com" };
 		
 		// Replay
 		Location loc = processor.fill(new Location(), new CsvLine(headerLine, line));
@@ -83,8 +83,8 @@ public class LocationAttributeLineProcessorTest {
 		Collection<LocationAttribute> attributes = loc.getActiveAttributes();
 		Assert.assertEquals(2, attributes.size());
 		Object[] attributesArray = attributes.toArray();
-		Assert.assertThat(((LocationAttribute) attributesArray[0]).getValue(), is("+254 703203342"));
-		Assert.assertThat(((LocationAttribute) attributesArray[1]).getValue(), is("admin@facility.com"));
+		Assert.assertThat(((LocationAttribute) attributesArray[0]).getValue(), is("+1 206 555 0100"));
+		Assert.assertThat(((LocationAttribute) attributesArray[1]).getValue(), is("jdoe@example.com"));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -92,7 +92,7 @@ public class LocationAttributeLineProcessorTest {
 		// Setup
 		String[] headerLine = { HEADER_ATTRIBUTE_PREFIX + PHONE_ATT_TYPE_UUID,
 		        HEADER_ATTRIBUTE_PREFIX + EMAIL_ATT_TYPE_NAME };
-		String[] line = { "+254 703203342", "admin@facility.com" };
+		String[] line = { "+1 206 555 0100", "jdoe@example.com" };
 		when(ls.getLocationAttributeTypeByName(EMAIL_ATT_TYPE_NAME)).thenReturn(null);
 		
 		// Replay
