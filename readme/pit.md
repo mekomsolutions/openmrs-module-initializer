@@ -19,8 +19,13 @@ Let's review some important headers.
 Mandatory. This is _not_ a localized header.
 
 ###### Header `Required`
-A true/false whether every patient MUST have this type. Valid options are `TRUE` and `FALSE`.
-Note that an empty value will trigger an OpenMRS API exception.
+A true/false whether every patient MUST have this patient identifier type.
+Note that a blank or missing value will trigger an exception:
+```
+org.hibernate.PropertyValueException:
+  not-null property references a null or transient value : org.openmrs.PatientIdentifierType.required
+```
+This requires to actively set the value to a true-able (`TRUE`, `1`, `Yes`, ...) or a false-able value (`False`, `0`, `No`, ...).
 
 ###### Header `Format`
 A regular expression defining what the identifier text should contain. Note
