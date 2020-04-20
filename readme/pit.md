@@ -7,10 +7,10 @@ patientidentifiertypes/
 ```
 There is currently only one format for the patient identifier type CSV line, here are the possible headers:
 
-| <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Name</sub> | <sub>Description</sub> | <sub>Format</sub> | <sub>Format description</sub> | <sub>Validator</sub> | <sub>Location behavior</sub> | <sub>Uniqueness behavior</sub> | <sub>_order:1000</sub> |
+| <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Name</sub> | <sub>Description</sub> | <sub>Required</sub> | <sub>Format</sub> | <sub>Format description</sub> | <sub>Validator</sub> | <sub>Location behavior</sub> | <sub>Uniqueness behavior</sub> | <sub>_order:1000</sub> |
 | - | - | - | - | - | - | - | - | - | - |
 
-Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under 
+Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under
 those headers are never read by the CSV parser.
 
 Let's review some important headers.
@@ -19,14 +19,20 @@ Let's review some important headers.
 Mandatory. This is _not_ a localized header.
 
 ###### Header `Required`
-A true/false whether every patient MUST have this type.
+A true/false whether every patient MUST have this patient identifier type.
+Note that a blank or missing value will trigger an exception:
+```
+org.hibernate.PropertyValueException:
+  not-null property references a null or transient value : org.openmrs.PatientIdentifierType.required
+```
+This requires to actively set the value to a true-able (`TRUE`, `1`, `Yes`, ...) or a false-able value (`False`, `0`, `No`, ...).
 
 ###### Header `Format`
 A regular expression defining what the identifier text should contain. Note
 that backslashes must be backslash-escaped.
 
 ###### Header `Format description`
-Textual explanation of the "Format" regular expression. 
+Textual explanation of the "Format" regular expression.
 
 ###### Header `Validator`
 The full class name of an IdentifierValidator.
