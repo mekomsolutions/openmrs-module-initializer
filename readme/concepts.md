@@ -53,7 +53,7 @@ To provide a semicolumn-separated list of concept mappings for the concept to be
 
 Here is an example of the 'mappings' columns:
 
-| ... | <sub>Same as concept mappings</sub> | ... |
+| ... | <sub>Same as mappings</sub> | ... |
 | - | - | - |
 | ... | <sub>ICD-10-WHO:T45.9; CIEL:122226; Cambodia:115</sub> | ... |
 
