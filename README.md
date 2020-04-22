@@ -110,7 +110,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 
 ### Releases notes
 
-#### Version 1.2.0
+#### Version 2.0.0
 * Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
 * Bulk creation and edition of programs provided through CSV files in **configuration/programs**.
 * Bulk creation and edition of program workflows provided through CSV files in **configuration/programworkflows**.
