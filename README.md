@@ -17,11 +17,8 @@ configuration/
   ├── appointmentsspecialities/
   ├── appointmentsservicesdefinitions/
   ├── attributetypes/
-<<<<<<< HEAD
   ├── bahmniforms/
-=======
   ├── autogenerationoptions/
->>>>>>> Support for 'autogenerationoptions' domain
   ├── conceptclasses/
   ├── concepts/
   ├── datafiltermappings/
