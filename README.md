@@ -17,7 +17,11 @@ configuration/
   ├── appointmentsspecialities/
   ├── appointmentsservicesdefinitions/
   ├── attributetypes/
+<<<<<<< HEAD
   ├── bahmniforms/
+=======
+  ├── autogenerationoptions/
+>>>>>>> Support for 'autogenerationoptions' domain
   ├── conceptclasses/
   ├── concepts/
   ├── datafiltermappings/
@@ -74,6 +78,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Programs worklow states (CSV files)](readme/prog.md)
 1. [Person attribute types (CSV files)](readme/pat.md)
 1. [Identifier sources (CSV files)](readme/idgen.md)
+1. [Auto Generation Options (CSV files)](readme/autogenerationoptions.md)
 1. [Drugs (CSV files)](readme/drugs.md)
 1. [Order Frequencies (CSV files)](readme/freqs.md)
 1. [Order Types (CSV files)](readme/ordertypes.md)

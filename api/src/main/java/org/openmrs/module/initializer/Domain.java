@@ -19,15 +19,16 @@ public enum Domain {
 	PROGRAM_WORKFLOW_STATES(15, "programworkflowstates"),
 	PERSON_ATTRIBUTE_TYPES(16, "personattributetypes"),
 	IDENTIFIER_SOURCES(17, "idgen"),
-	DRUGS(18, "drugs"),
-	ORDER_FREQUENCIES(19, "orderfrequencies"),
-	ORDER_TYPES(20, "ordertypes"),
-	APPOINTMENTS_SPECIALITIES(21, "appointmentsspecialities"),
-	APPOINTMENTS_SERVICES_DEFINITIONS(22, "appointmentsservicesdefinitions"),
-	DATAFILTER_MAPPINGS(23, "datafiltermappings"),
-	METADATA_SETS(24, "metadatasets"),
-	METADATA_SET_MEMBERS(25, "metadatasetmembers"),
-	METADATA_TERM_MAPPINGS(26, "metadatatermmappings");
+	AUTO_GENERATION_OPTION(18, "autogenerationoptions"),
+	DRUGS(19, "drugs"),
+	ORDER_FREQUENCIES(20, "orderfrequencies"),
+	ORDER_TYPES(21, "ordertypes"),
+	APPOINTMENTS_SPECIALITIES(22, "appointmentsspecialities"),
+	APPOINTMENTS_SERVICES_DEFINITIONS(23, "appointmentsservicesdefinitions"),
+	DATAFILTER_MAPPINGS(24, "datafiltermappings"),
+	METADATA_SETS(25, "metadatasets"),
+	METADATA_SET_MEMBERS(26, "metadatasetmembers"),
+	METADATA_TERM_MAPPINGS(27, "metadatatermmappings");
 	
 	private final int order;
 	
