@@ -63,6 +63,13 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Assert.assertEquals("2016-04-14",
 			    dateDatatype.serialize((Date) ((LocationAttribute) attributes.toArray()[0]).getValue()));
 		}
+		{
+			Location loc = ls.getLocation(4090);
+			Assert.assertEquals("cbaaaab4-d960-4ae9-9b6a-8983fbd947b6", loc.getUuid());
+			Assert.assertEquals("Legacy Location", loc.getName());
+			Assert.assertEquals("Legacy location that must be retired", loc.getDescription());
+			Assert.assertThat(loc.getRetired(), is(false));
+		}
 		
 		// Replay
 		loader.load();

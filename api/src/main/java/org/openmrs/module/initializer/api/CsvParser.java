@@ -198,7 +198,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		int saved = 0;
 		for (String[] line : lines) {
 			try {
-				T instance = createInstance(line);
+				save(initialize(line));
 				
 				saved++;
 				if (saved > 250) { // TODO make this configurable
@@ -218,9 +218,10 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	}
 	
 	/**
-	 * This fills and instance out of the information processed from a CSV line and attempts to save it.
+	 * "Initializes" an instance from a CSV line. It bootstraps the instance, then retires early or
+	 * fills it. It returns an instance ready to be saved through the API service layer.
 	 */
-	private T createInstance(String[] line) throws APIException {
+	private T initialize(String[] line) throws APIException {
 		if (line == null) {
 			return null;
 		}
@@ -250,13 +251,11 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		//
 		for (BaseLineProcessor<T> processor : lineProcessors) {
 			instance = processor.fill(instance, csvLine);
-		}
-		
-		//
-		// 4. Saving the instance
-		//
-		if (instance != null) {
-			instance = save(instance);
+			if (instance == null) {
+				throw new APIException(
+				        "An instance came null out of a line processor. Check the implementation of this line processor: "
+				                + processor.getClass().getCanonicalName());
+			}
 		}
 		
 		return instance;
