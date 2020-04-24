@@ -174,9 +174,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 				continue;
 			}
 			
-			if (LocaleUtils.isAvailableLocale(locale)) {
-				return locale;
-			}
+			return locale;
 		}
 		
 		throw new IllegalArgumentException(
