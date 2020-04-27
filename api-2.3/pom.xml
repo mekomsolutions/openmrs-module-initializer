@@ -14,8 +14,6 @@
 
   <properties>
     <openmrsPlatformVersion>2.3.0</openmrsPlatformVersion>
-    <datafilterVersion>1.0.0-SNAPSHOT</datafilterVersion>
-    <appframeworkVersion>2.14.0-SNAPSHOT</appframeworkVersion>
   </properties>
 
   <dependencies>
