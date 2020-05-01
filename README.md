@@ -96,9 +96,9 @@ mvn clean package
 * ID Gen 4.3 (*compatible*)
 * Metadata Sharing 1.2.2 (*compatible*)
 * Metadata Mapping 1.3.4 (*compatible*)
-* Bahmni Appointments 1.2 (*compatible*)
+* Bahmni Appointments 1.2-beta (*compatible*)
 * Data Filter 1.0.0 (*compatible*)
-* Bahmni I.e Apps 0.92-SNAPSHOT (*compatible*)
+* Bahmni I.e Apps 1.0.0 (*compatible*)
 
 ### Quick facts
 Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.

@@ -74,7 +74,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
 		{
-			Module mod = new Module("", "bahmni.ie.apps", "", "", "", "0.92-SNAPSHOT");
+			Module mod = new Module("", "bahmni.ie.apps", "", "", "", "1.0.0");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
