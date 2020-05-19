@@ -13,10 +13,9 @@ autogenerationoptions/
 The CSV configuration allows to either modify existing autogeneration options or to
 create new autogeneration options. Here is a sample CSV:
 
-| <sub>Uuid</sub>                                 | <sub>Identifier Type</sub> | <sub>Location</sub>      | <sub>Identifier Source</sub>                    | <sub>Manual Entry Enabled</sub> | <sub>Auto Generation Enabled</sub> | <sub>Sort Weight</sub> | <sub>_order:2000</sub> |
-|--------------------------------------|-----------------|---------------|--------------------------------------|----------------------|-------------------------|-------------|-------------|
-| <sub>eade77b6-3365-47ed-9ee3-2324598629eb</sub> | <sub>Legacy ID</sub>       |  | <sub>9eca4f4e-707f-4lb8-8289-2f9b6e93803f</sub> | <sub>true</sub></sub>                 | <sub>false</sub>                   |             |             |
-
+| <sub>Uuid</sub>                                 | <sub>Identifier Type</sub> | <sub>Location</sub>      | <sub>Identifier Source</sub>                    | <sub>Manual Entry Enabled</sub> | <sub>Auto Generation Enabled</sub> | <sub>_order:2000</sub> |
+|--------------------------------------|-----------------|---------------|--------------------------------------|----------------------|-------------------------|-------------|
+| <sub>eade77b6-3365-47ed-9ee3-2324598629eb</sub> | <sub>Legacy ID</sub>       |  | <sub>9eca4f4e-707f-4lb8-8289-2f9b6e93803f</sub> | <sub>true</sub></sub>                 | <sub>false</sub>                   |             |
 
 
 ###### Header `Identifier Type` *(mandatory)*
