@@ -28,6 +28,7 @@ import org.openmrs.module.initializer.api.form.BahmniFormsLoader;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
+import org.openmrs.module.initializer.api.idgen.autogen.AutoGenerationOptionsLoader;
 import org.openmrs.module.initializer.api.loc.LocationsLoader;
 import org.openmrs.module.initializer.api.mds.MetadataSetsLoader;
 import org.openmrs.module.initializer.api.mds.MetadataSetMembersLoader;
@@ -124,6 +125,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	@Autowired
 	private MetadataSetMembersLoader metadataSetMemberLoader;
 	
+	@Autowired
+	private AutoGenerationOptionsLoader autoGenerationOptionsLoader;
+	
 	@Override
 	public void updateSearchIndex() {
 		// to prevent Data Filter's 'Illegal Record Access'
@@ -219,6 +223,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = identifierSourcesLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = autoGenerationOptionsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		

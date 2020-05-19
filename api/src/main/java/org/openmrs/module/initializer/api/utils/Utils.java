@@ -25,6 +25,7 @@ import org.openmrs.ConceptSource;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.OrderType;
+import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Privilege;
 import org.openmrs.Program;
@@ -34,6 +35,7 @@ import org.openmrs.Role;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.OrderService;
+import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
@@ -197,6 +199,24 @@ public class Utils {
 		}
 		if (instance == null) {
 			instance = service.getLocation(id);
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a patient identifier type trying various routes for its "id".
+	 * 
+	 * @param id The patient identifier type name or UUID.
+	 * @param service
+	 * @return The {@link PatientIdentifierType} instance if found, null otherwise.
+	 */
+	public static PatientIdentifierType fetchPatientIdentifierType(String id, PatientService service) {
+		PatientIdentifierType instance = null;
+		if (instance == null) {
+			instance = service.getPatientIdentifierTypeByUuid(id);
+		}
+		if (instance == null) {
+			instance = service.getPatientIdentifierTypeByName(id);
 		}
 		return instance;
 	}

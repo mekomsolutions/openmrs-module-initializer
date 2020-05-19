@@ -17,6 +17,7 @@ configuration/
   ├── appointmentsspecialities/
   ├── appointmentsservicesdefinitions/
   ├── attributetypes/
+  ├── autogenerationoptions/
   ├── bahmniforms/
   ├── conceptclasses/
   ├── concepts/
@@ -74,6 +75,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Programs worklow states (CSV files)](readme/prog.md)
 1. [Person attribute types (CSV files)](readme/pat.md)
 1. [Identifier sources (CSV files)](readme/idgen.md)
+1. [Auto Generation Options (CSV files)](readme/autogenerationoptions.md)
 1. [Drugs (CSV files)](readme/drugs.md)
 1. [Order Frequencies (CSV files)](readme/freqs.md)
 1. [Order Types (CSV files)](readme/ordertypes.md)
@@ -110,6 +112,9 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 
 ### Releases notes
 
+#### Version 2.1.0
+* Bulk creation and edition of ID Gen's autogeneration options provided through CSV files in **configuration/autogenerationoptions**.
+
 #### Version 2.0.0
 * Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
 * Bulk creation and edition of programs provided through CSV files in **configuration/programs**.
@@ -137,7 +142,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and edition of concepts provided through CSV files in **configuration/concepts**.<br/>This covers: basic concepts, concepts with nested members or answers and concepts with multiple mappings.
 * Bulk creation and edition of drugs provided through CSV files in **configuration/drugs**.
 * Overrides global properties provided through XML configuration files in **configuration/globalproperties**.
-* Modifies (retire) or create identifier sources through CSV files in **configuration/idgen**.
+* Modifies (retire) or create ID Gen's identifier sources through CSV files in **configuration/idgen**.
 * Exposes runtime key-values configuration parameters through JSON files in **configuration/jsonkeyvalues**.
 * Bulk creation and edition of person attribute types provided through CSV files in **configuration/personattributetypes**.
 * Imports MDS packages provided as .zip files in **configuration/metadatasharing**.
