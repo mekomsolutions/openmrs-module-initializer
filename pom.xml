@@ -47,7 +47,7 @@
     <datafilterVersion>1.0.0</datafilterVersion>
 
     <!-- Modules compatibility -->
-    <appointmentsVersion>1.2-beta</appointmentsVersion>
+    <appointmentsVersion>1.2.1</appointmentsVersion>
     <bahmniIeAppsVersion>1.0.0</bahmniIeAppsVersion>
     <idgenVersion>4.3</idgenVersion>
     <metadatasharingVersion>1.2.2</metadatasharingVersion>
@@ -131,6 +131,14 @@
 		<name>bahmni-artifactory-release</name>
 		<url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
 	</repository>
+    <repository>
+      <id>bahmni-nexus</id>
+      <name>Bahmni Nexus Repository</name>
+      <url>https://oss.sonatype.org/content/groups/public</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
   </repositories>
 
   <pluginRepositories>

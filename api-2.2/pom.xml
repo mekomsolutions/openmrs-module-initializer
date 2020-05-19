@@ -92,7 +92,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.openmrs.module</groupId>
+      <groupId>org.bahmni.module</groupId>
       <artifactId>appointments-api</artifactId>
       <version>${appointmentsVersion}</version>
       <scope>test</scope>
