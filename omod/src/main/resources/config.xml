@@ -26,7 +26,7 @@
 			org.openmrs.module.metadatamapping
 		</aware_of_module>
 		<aware_of_module version="${appointmentsVersion}">
-			org.openmrs.module.appointments
+			org.bahmni.module.appointments
 		</aware_of_module>
 		<aware_of_module version="${datafilterVersion}">
 			org.openmrs.module.datafilter
