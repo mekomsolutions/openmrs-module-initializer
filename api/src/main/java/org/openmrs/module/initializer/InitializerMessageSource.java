@@ -324,6 +324,22 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		if (showMessageCode) {
 			return new MessageFormat(code);
 		}
+		
+		String message = resolveCodeWithoutArguments(code, locale);
+		
+		if (message != null) {
+			return new MessageFormat(message);
+		}
+		
+		return null;
+	}
+	
+	@Override
+	protected String resolveCodeWithoutArguments(String code, Locale locale) {
+		if (showMessageCode) {
+			return code;
+		}
+		
 		PresentationMessage pm = getPresentation(code, locale); // Check exact match
 		if (pm == null) {
 			if (locale.getVariant() != null) {
@@ -335,9 +351,11 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 				}
 			}
 		}
+		
 		if (pm != null) {
-			return new MessageFormat(pm.getMessage());
+			return pm.getMessage();
 		}
+		
 		return null;
 	}
 	
