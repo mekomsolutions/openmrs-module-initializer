@@ -1,5 +1,5 @@
 "Uuid","Void/Retire","Name","Description","Required","Format","Format description","Validator","Location behavior","Uniqueness behavior"
-"73f4f1d6-6086-41d5-a0f1-6d688a4b10af",,"Hospital ID","The patient ID for the hospital. You know the one",TRUE,"H-\\d\\d\\d\\d-\\d","Must have format H-####-C where C is the Luhn check digit","org.openmrs.patient.impl.LuhnIdentifierValidator","NOT_USED","UNIQUE"
+"73f4f1d6-6086-41d5-a0f1-6d688a4b10af",,"Hospital ID","The patient ID for the hospital. You know the one",TRUE,"H-\d\d\d\d-\d","Must have format H-####-C where C is the Luhn check digit","org.openmrs.patient.impl.LuhnIdentifierValidator","NOT_USED","UNIQUE"
 ,TRUE,"Old Identification Number",,,,,,,
-,,"Test National ID No","Changing all the fields",TRUE,"\\a\\a\\a\\d\\d\\d\\d","Three letters and four numbers","org.openmrs.patient.impl.LuhnIdentifierValidator","REQUIRED","LOCATION"
+,,"Test National ID No","Changing all the fields",TRUE,"\a\a\a\d\d\d\d","Three letters and four numbers","org.openmrs.patient.impl.LuhnIdentifierValidator","REQUIRED","LOCATION"
 ,,"Minimal ID",,FALSE,,,,,

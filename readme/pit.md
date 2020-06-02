@@ -28,8 +28,7 @@ org.hibernate.PropertyValueException:
 This requires to actively set the value to a true-able (`TRUE`, `1`, `Yes`, ...) or a false-able value (`False`, `0`, `No`, ...).
 
 ###### Header `Format`
-A regular expression defining what the identifier text should contain. Note
-that backslashes must be backslash-escaped.
+A regular expression defining what the identifier text should contain.
 
 ###### Header `Format description`
 Textual explanation of the "Format" regular expression.

@@ -113,6 +113,13 @@
 			<artifactId>opencsv</artifactId>
 			<version>4.5</version>
 		</dependency>
+
+		<!-- Force updated version of lang3, which OpenCSV requires -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.9</version>
+		</dependency>
 	</dependencies>
 	
 </project>
