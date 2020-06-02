@@ -52,6 +52,20 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 	}
 	
 	@Test
+	public void getCachedMessages_shouldLoadMessagePropertiesWithArguments() {
+		
+		// Setup
+		MessageSourceService ms = Context.getMessageSourceService();
+		
+		// Replay
+		inizSrc.getCachedMessages();
+		
+		Context.setLocale(Locale.FRENCH);
+		Assert.assertEquals("Ceci est la description de la clinique Azul.",
+		    ms.getMessage("metadata.healthcenter.description.named", new Object[] { "Azul" }, Context.getLocale()));
+	}
+	
+	@Test
 	public void getPresentations_shouldContainParentPresentations() {
 		// setup
 		int initSize = inizSrc.getPresentations().size();
