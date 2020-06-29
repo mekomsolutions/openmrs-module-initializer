@@ -29,6 +29,7 @@ import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
 import org.openmrs.module.initializer.api.idgen.autogen.AutoGenerationOptionsLoader;
+import org.openmrs.module.initializer.api.loc.LocationTagMapsLoader;
 import org.openmrs.module.initializer.api.loc.LocationTagsLoader;
 import org.openmrs.module.initializer.api.loc.LocationsLoader;
 import org.openmrs.module.initializer.api.mds.MetadataSetsLoader;
@@ -68,6 +69,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	
 	@Autowired
 	private LocationsLoader locationsLoader;
+	
+	@Autowired
+	private LocationTagMapsLoader locationTagMapsLoader;
 	
 	@Autowired
 	private ConceptClassesLoader conceptClassesLoader;
@@ -192,6 +196,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = locationsLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = locationTagMapsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
