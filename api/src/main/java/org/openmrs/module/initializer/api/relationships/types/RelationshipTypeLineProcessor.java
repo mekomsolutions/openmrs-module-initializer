@@ -10,7 +10,7 @@ public class RelationshipTypeLineProcessor extends BaseLineProcessor<Relationshi
 	
 	final public static String WEIGHT = "weight";
 	
-	final public static String PREFFERED = "preffered";
+	final public static String PREFERRED = "preferred";
 	
 	final public static String A_IS_TO_B = "a is to b";
 	
@@ -22,7 +22,7 @@ public class RelationshipTypeLineProcessor extends BaseLineProcessor<Relationshi
 		instance.setDescription(line.get(HEADER_DESC));
 		instance.setaIsToB(line.get(A_IS_TO_B, true));
 		instance.setbIsToA(line.get(B_IS_TO_A, true));
-		instance.setPreferred(line.getBool(PREFFERED));
+		instance.setPreferred(line.getBool(PREFERRED));
 		Integer weight = line.getInt(WEIGHT);
 		if (weight != null) {
 			instance.setWeight(weight);

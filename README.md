@@ -39,6 +39,7 @@ configuration/
   ├── programs/ 
   ├── programworkflows/
   ├── programworkflowstates/
+  ├── relationshiptypes/
   └── roles/
    
 ```  
@@ -60,6 +61,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Message properties key-values (.properties files)](readme/messageproperties.md)
 1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
 1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
+1. [Relationship types (CSV files)](readme/relationshiptypes.md)
 1. [Patient identifier types (CSV files)](readme/pit.md)
 1. [Privileges (CSV files)](readme/priv.md)
 1. [Encounter Types (CSV files)](readme/et.md)
