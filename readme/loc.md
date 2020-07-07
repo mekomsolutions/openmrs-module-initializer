@@ -22,7 +22,13 @@ This is a pointer to the parent location. Both location UUIDs and names are supp
 to another location.
 
 #### Tag headers
-There are two ways to assign *location tags* to locations.
+There are two ways to assign *location tags* to locations. Choose one or the other.
+Note that tag assignments are processed in the following way:
+
+1. All tags are cleared from the location.
+2. The location is assigned tags from the `Tags` header. 
+3. Tags are assigned from the `Tag|` headers which are `true`.
+  Setting the header to false has no further effect.
 
 ###### `Tag|` headers
 Tags can be assigned in true/false columns under headers starting with `Tag|`
