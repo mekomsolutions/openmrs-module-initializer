@@ -32,7 +32,9 @@ public class RelationshipTypesCsvParser extends CsvParser<RelationshipType, Base
 		}
 		if (relationshipType == null) {
 			relationshipType = new RelationshipType();
-			relationshipType.setUuid(uuid);
+			if (StringUtils.isNotBlank(uuid)) {
+				relationshipType.setUuid(uuid);
+			}
 		}
 		return relationshipType;
 	}
