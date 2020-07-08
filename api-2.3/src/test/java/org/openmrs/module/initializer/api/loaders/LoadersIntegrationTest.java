@@ -40,6 +40,7 @@ import org.openmrs.module.initializer.api.privileges.PrivilegesLoader;
 import org.openmrs.module.initializer.api.programs.ProgramsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkflowStatesLoader;
+import org.openmrs.module.initializer.api.relationships.types.RelationshipTypesLoader;
 import org.openmrs.module.initializer.api.roles.RolesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -128,6 +129,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	@Autowired
 	private AutoGenerationOptionsLoader autoGenerationOptionsLoader;
 	
+	@Autowired
+	private RelationshipTypesLoader relationshipTypesLoader;
+	
 	@Override
 	public void updateSearchIndex() {
 		// to prevent Data Filter's 'Illegal Record Access'
@@ -148,6 +152,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = mdsLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = relationshipTypesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
