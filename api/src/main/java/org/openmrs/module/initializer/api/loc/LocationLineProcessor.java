@@ -22,9 +22,9 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 	protected static String HEADER_PARENT = "parent";
 	
 	protected static String HEADER_TAGS = "tags";
-
+	
 	public static final String HEADER_TAG_PREFIX = "tag|";
-
+	
 	protected static String HEADER_CITY_VILLAGE = "city/village";
 	
 	protected static String HEADER_COUNTY_DISTRICT = "county/district";
@@ -50,7 +50,7 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 	private LocationService locationService;
 	
 	private LocationTagListParser tagListParser;
-
+	
 	@Autowired
 	public LocationLineProcessor(@Qualifier("locationService") LocationService locationService,
 	    LocationTagListParser listParser) {
@@ -91,24 +91,21 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 		
 		return loc;
 	}
-
+	
 	private void setLocationTagsFromPrefixHeaders(Location location, CsvLine line) {
-
+		
 		Consumer<String> processTagData = tagName -> {
 			LocationTag tag = locationService.getLocationTagByName(tagName);
 			if (tag == null) {
-				throw new IllegalArgumentException("No Location Tag '" + tagName
-						+ "' exists for header '" + HEADER_TAG_PREFIX + tagName);
+				throw new IllegalArgumentException(
+				        "No Location Tag '" + tagName + "' exists for header '" + HEADER_TAG_PREFIX + tagName);
 			}
 			location.addTag(tag);
 		};
-
+		
 		// process the value for each tag header
-		Arrays
-				.stream(line.getHeaderLine())
-				.filter(h -> StringUtils.startsWithIgnoreCase(h, HEADER_TAG_PREFIX))
-				.filter(h -> Boolean.TRUE.equals(line.getBool(h)))
-				.map(h -> StringUtils.removeStartIgnoreCase(h, HEADER_TAG_PREFIX))
-				.forEach(processTagData);
+		Arrays.stream(line.getHeaderLine()).filter(h -> StringUtils.startsWithIgnoreCase(h, HEADER_TAG_PREFIX))
+		        .filter(h -> Boolean.TRUE.equals(line.getBool(h)))
+		        .map(h -> StringUtils.removeStartIgnoreCase(h, HEADER_TAG_PREFIX)).forEach(processTagData);
 	}
 }

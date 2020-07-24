@@ -161,6 +161,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
 		previousLoader = loader;
+		loader = locationTagsLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
 		loader = privilegesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
@@ -182,11 +187,6 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = attributeTypesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = locationTagsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		

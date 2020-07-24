@@ -27,12 +27,12 @@ public class LocationTagsLoaderIntegrationTest extends DomainBaseModuleContextSe
 	
 	@Autowired
 	private LocationTagsLoader loader;
-
+	
 	@Before
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
 	}
-
+	
 	@Test
 	public void load_shouldLoadLocationTagsAccordingToCsvFiles() {
 		
