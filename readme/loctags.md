@@ -2,7 +2,7 @@
 The **locationtags** subfolder contains CSV import files for saving location tags in bulk.
 This is a possible example of its content:
 ```bash
-locationstags/
+locationtags/
   ├──locationtags.csv
   └── ...
 ```
