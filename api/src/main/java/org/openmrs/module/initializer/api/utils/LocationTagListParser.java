@@ -5,6 +5,9 @@ import org.openmrs.api.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/* Parses the "Location Tags" entry of the Locations domain and dynamically
+ * creates tags as needed.
+ */
 @Component
 public class LocationTagListParser extends ListParser<LocationTag> {
 	

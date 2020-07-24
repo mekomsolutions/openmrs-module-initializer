@@ -1,6 +1,8 @@
 package org.openmrs.module.initializer.api.loc;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Location;
@@ -20,7 +22,9 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 	protected static String HEADER_PARENT = "parent";
 	
 	protected static String HEADER_TAGS = "tags";
-	
+
+	public static final String HEADER_TAG_PREFIX = "tag|";
+
 	protected static String HEADER_CITY_VILLAGE = "city/village";
 	
 	protected static String HEADER_COUNTY_DISTRICT = "county/district";
@@ -45,13 +49,13 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 	
 	private LocationService locationService;
 	
-	private LocationTagListParser listParser;
-	
+	private LocationTagListParser tagListParser;
+
 	@Autowired
 	public LocationLineProcessor(@Qualifier("locationService") LocationService locationService,
 	    LocationTagListParser listParser) {
 		this.locationService = locationService;
-		this.listParser = listParser;
+		this.tagListParser = listParser;
 	}
 	
 	@Override
@@ -69,8 +73,9 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 		loc.setTags(null);
 		String tags = line.getString(HEADER_TAGS, "");
 		if (!StringUtils.isEmpty(tags)) {
-			loc.setTags(new HashSet<LocationTag>(listParser.parseList(tags)));
+			loc.setTags(new HashSet<LocationTag>(tagListParser.parseList(tags)));
 		}
+		setLocationTagsFromPrefixHeaders(loc, line);
 		
 		loc.setCityVillage(line.get(HEADER_CITY_VILLAGE));
 		loc.setCountyDistrict(line.get(HEADER_COUNTY_DISTRICT));
@@ -85,5 +90,25 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 		loc.setAddress6(line.get(HEADER_ADDRESS_6));
 		
 		return loc;
+	}
+
+	private void setLocationTagsFromPrefixHeaders(Location location, CsvLine line) {
+
+		Consumer<String> processTagData = tagName -> {
+			LocationTag tag = locationService.getLocationTagByName(tagName);
+			if (tag == null) {
+				throw new IllegalArgumentException("No Location Tag '" + tagName
+						+ "' exists for header '" + HEADER_TAG_PREFIX + tagName);
+			}
+			location.addTag(tag);
+		};
+
+		// process the value for each tag header
+		Arrays
+				.stream(line.getHeaderLine())
+				.filter(h -> StringUtils.startsWithIgnoreCase(h, HEADER_TAG_PREFIX))
+				.filter(h -> Boolean.TRUE.equals(line.getBool(h)))
+				.map(h -> StringUtils.removeStartIgnoreCase(h, HEADER_TAG_PREFIX))
+				.forEach(processTagData);
 	}
 }

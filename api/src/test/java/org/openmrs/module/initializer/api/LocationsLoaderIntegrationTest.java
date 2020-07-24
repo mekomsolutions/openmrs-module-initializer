@@ -41,12 +41,12 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	
 	@Autowired
 	private DateDatatype dateDatatype;
-	
+
 	@Before
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
 	}
-	
+
 	@Test
 	public void load_shouldLoadAccordingToCsvFiles() {
 		// Pre-load verif
@@ -74,13 +74,13 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		// Replay
 		loader.load();
 		
-		// Verif fetch by name
+		// Verify fetch by name
 		{
 			Location loc = ls.getLocation("LOCATION_NO_UUID");
 			Assert.assertEquals("Main Street", loc.getAddress1());
 			Assert.assertEquals("fdddc31a-3930-11ea-9712-a73c3c19744f", loc.getUuid());
 		}
-		// Verif creation
+		// Verify creation with dynamic tag creation
 		{
 			Location loc = ls.getLocation("The Lake Clinic-Cambodia");
 			Assert.assertEquals("Paradise Street", loc.getAddress1());
@@ -92,7 +92,7 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Assert.assertThat(tags, notNullValue());
 			Assert.assertThat(tags.size(), is(2));
 			Assert.assertThat(tags.contains(ls.getLocationTagByName("Login Location")), is(true));
-			Assert.assertThat(tags.contains(ls.getLocationTagByName("Facility Location")), is(true));
+			Assert.assertThat(tags.contains(ls.getLocationTagByName("Another Location Tag")), is(true));
 			
 			Collection<LocationAttribute> attributes = loc.getActiveAttributes();
 			Assert.assertThat(attributes.size(), is(2));
@@ -100,7 +100,7 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Assert.assertEquals("2017-05-15",
 			    dateDatatype.serialize((Date) ((LocationAttribute) attributes.toArray()[1]).getValue()));
 		}
-		// Verif creation
+		// Verify creation with Tag| headers
 		{
 			Location loc = ls.getLocation("OPD Room");
 			Assert.assertEquals(ls.getLocation("The Lake Clinic-Cambodia"), loc.getParentLocation());
@@ -108,15 +108,15 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Set<LocationTag> tags = loc.getTags();
 			Assert.assertThat(tags, notNullValue());
 			Assert.assertThat(tags.size(), is(1));
-			Assert.assertThat(tags.contains(ls.getLocationTagByName("Consultation Location")), is(true));
+			Assert.assertThat(tags.contains(ls.getLocationTagByName("Facility Location")), is(true));
 		}
-		// Verif that the provided UUID is correctly assigned
+		// Verify that the provided UUID is correctly assigned
 		{
 			Location loc = ls.getLocationByUuid("1cb58794-3c49-11ea-b3eb-f7801304f314");
 			Assert.assertNotNull(loc);
 			Assert.assertEquals("New Location", loc.getName());
 		}
-		// Verif edition
+		// Verify edit
 		{
 			Location loc = ls.getLocationByUuid("a03e395c-b881-49b7-b6fc-983f6bddc7fc");
 			Assert.assertEquals("Acme Clinic", loc.getName());
@@ -134,7 +134,7 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			    dateDatatype.serialize((Date) ((LocationAttribute) attributes.toArray()[0]).getValue()));
 			
 		}
-		// Verif retire
+		// Verify retire
 		{
 			Location loc = ls.getLocationByUuid("cbaaaab4-d960-4ae9-9b6a-8983fbd947b6");
 			Assert.assertThat(loc.getRetired(), is(true));
