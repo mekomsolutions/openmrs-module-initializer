@@ -10,11 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component("initializer.locationTagLineProcessor")
 public class LocationTagLineProcessor extends BaseLineProcessor<LocationTag> {
-	
-	protected static String HEADER_NAME = "name";
-	
-	protected static String HEADER_DESC = "description";
-	
+
 	private LocationService locationService;
 	
 	@Autowired
