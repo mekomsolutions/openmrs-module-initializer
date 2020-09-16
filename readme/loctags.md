@@ -1,11 +1,11 @@
 ## Domain 'locationtags'
 The **locationtags** subfolder contains CSV import files for saving location tags in bulk.
 
-This is useful if you want to manage location tags explicitly. This compliments the
+This is useful if you want to manage location tags explicitly. This complements the
 `Tag|TagName` headers of the location loader. However, location tags can also be created
-dynamically by the location loader, using its `Tags` header. If using that header,
+dynamically by the locations loader, using its `Tags` header. If using that header,
 you do not need to use this location tag loader. Please see the
-locations loader [docs](./loc.md) for details.
+locations domain [README](./loc.md) for details.
 
 This is an example of the content of the `locationtags` subfolder:
 ```bash
