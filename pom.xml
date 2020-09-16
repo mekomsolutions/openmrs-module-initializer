@@ -48,7 +48,7 @@
 
     <!-- Modules compatibility -->
     <appointmentsVersion>1.2.1</appointmentsVersion>
-    <bahmniIeAppsVersion>1.0.0</bahmniIeAppsVersion>
+    <bahmniIeAppsVersion>1.1.0-SNAPSHOT</bahmniIeAppsVersion>
     <idgenVersion>4.6.0-SNAPSHOT</idgenVersion>
     <metadatasharingVersion>1.2.2</metadatasharingVersion>
     <metadatamappingVersion>1.3.4</metadatamappingVersion>

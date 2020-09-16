@@ -2,9 +2,13 @@ package org.openmrs.module.initializer.api.form;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
@@ -12,7 +16,9 @@ import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
 import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormService;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormTranslationService;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.openmrs.Form;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.FormService;
@@ -48,6 +54,7 @@ public class BahmniFormsLoader extends BaseLoader {
 			
 			String fileName = dirUtil.getFileName(file.getPath());
 			String checksum = dirUtil.getChecksumIfChanged(fileName);
+			ObjectMapper mapper = new ObjectMapper();
 			if (checksum.isEmpty()) {
 				continue;
 			}
@@ -58,6 +65,7 @@ public class BahmniFormsLoader extends BaseLoader {
 				is = new FileInputStream(file);
 				Map jsonFile = new ObjectMapper().readValue(is, Map.class);
 				Map formJson = (Map) jsonFile.get("formJson");
+				List<Object> translations = (List<Object>) jsonFile.get("translations");
 				String formName = (String) formJson.get("name");
 				Boolean published = (Boolean) formJson.get("published");
 				List<Map> resources = (List<Map>) formJson.get("resources");
@@ -92,7 +100,15 @@ public class BahmniFormsLoader extends BaseLoader {
 				bahmniFormService.saveFormResource(bahmniFormResource);
 				
 				// Save Translation
-				List<FormTranslation> formTranslations = (List<FormTranslation>) jsonFile.get("translations");
+				List<FormTranslation> formTranslations = mapper.convertValue(translations,
+				    new TypeReference<List<FormTranslation>>() {});
+				
+				Form finalForm = form;
+				formTranslations = formTranslations.stream().map(formTranslation -> {
+					formTranslation.setFormUuid(finalForm.getUuid());
+					return formTranslation;
+				}).collect(Collectors.toList());
+				
 				bahmniFormTranslationService.saveFormTranslation(formTranslations);
 				
 				// publish the form

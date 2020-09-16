@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +90,8 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		// Replay
 		bahmniFormsLoader.load();
 		Form updatedForm = formService.getForm("form1");
-		List<FormTranslation> bahmniFormTranslation = bahmniFormTranslationService.getFormTranslations("form1", "1", null);
+		List<FormTranslation> bahmniFormTranslation = bahmniFormTranslationService.getFormTranslations(form.getName(),
+		    form.getVersion(), null, form.getUuid());
 		
 		// Verify
 		
@@ -118,8 +120,10 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		
 		// Replay
 		bahmniFormsLoader.load();
+		Form form = formService.getForm("form1");
 		
-		List<FormTranslation> bahmniFormTranslation = bahmniFormTranslationService.getFormTranslations("form1", "1", null);
+		List<FormTranslation> bahmniFormTranslation = bahmniFormTranslationService.getFormTranslations(form.getName(), "1",
+		    null, form.getUuid());
 		
 		// Verify
 		Assert.assertEquals(bahmniFormTranslation.size(), 1);
@@ -138,7 +142,8 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		bahmniFormsLoader.load();
 		
 		// Verify
-		File testFile = new File(formFolderPath + "form1_1.json");
+		Form form = formService.getForm("form1");
+		File testFile = new File(formFolderPath + form.getUuid() + ".json");
 		
 		Assert.assertTrue(testFile.exists());
 		
@@ -155,7 +160,8 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		bahmniFormsLoader.load();
 		
 		// Verify
-		File testFile = new File(formTranslationPath + "form1_1.json");
+		Form form = formService.getForm("form1");
+		File testFile = new File(formTranslationPath + form.getUuid() + ".json");
 		
 		Assert.assertTrue(testFile.exists());
 		
