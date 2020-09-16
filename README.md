@@ -28,6 +28,7 @@ configuration/
   ├── idgen/
   ├── jsonkeyvalues/
   ├── locations/
+  ├── locationtags/
   ├── messageproperties/
   ├── metadatasetmembers/ 
   ├── metadatasets/ 
@@ -67,6 +68,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Global properties (XML files)](readme/globalproperties.md)
 1. [Attribute types (CSV files)](readme/atttypes.md)
 1. [Locations (CSV files)](readme/loc.md)
+1. [Location Tags (CSV files)](readme/loctags.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept classes (CSV files)](readme/conceptclasses.md)
 1. [Concepts (CSV files)](readme/concepts.md)
@@ -115,6 +117,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 #### Version 2.1.0
 * Bulk creation and edition of ID Gen's autogeneration options provided through CSV files in **configuration/autogenerationoptions**.
 * Support associating location tags to locations using boolean `Tag|` headers.
+* Bulk creation and editing of location tags provided through CSV files in **configuration/locationtags**.
 
 #### Version 2.0.0
 * Support for conditional loading of domains based on the runtime availability of OpenMRS modules.

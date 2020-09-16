@@ -2,6 +2,7 @@
 <dataset>
 
   <location_tag LOCATION_TAG_ID="4089" NAME="Facility Location" DATE_CREATED="2019-11-29 20:44:07.0" CREATOR="1" RETIRED="false" UUID="a2327745-2970-4752-ac8a-dd0ba131f40e"/>
+  <location_tag LOCATION_TAG_ID="4090" NAME="Shed" DATE_CREATED="2019-11-30 20:44:07.0" CREATOR="1" RETIRED="false" UUID="a1417745-1170-5752-fc8a-dd0ba131f40e"/>
 
   <location LOCATION_ID="4089" UUID="a03e395c-b881-49b7-b6fc-983f6bddc7fc" NAME="Acme Clinic" DATE_CREATED="2019-11-29 20:41:38.0" CREATOR="1" RETIRED="false"/>
   <location LOCATION_ID="4090" UUID="cbaaaab4-d960-4ae9-9b6a-8983fbd947b6" NAME="Legacy Location" DESCRIPTION="Legacy location that must be retired" DATE_CREATED="2019-11-29 20:41:38.0" CREATOR="1" RETIRED="false"/>
