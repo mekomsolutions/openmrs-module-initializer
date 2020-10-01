@@ -2,8 +2,8 @@
 The **locationtagmaps** subfolder contains CSV import files for assigning location tags to locations.
 This is a possible example of its content:
 ```bash
-locationstagmappings/
-  ├──locationtagmappings.csv
+locationtagmaps/
+  ├──locationtagmaps.csv
   └── ...
 ```
 There is currently only one format for the location tag map CSV line.
