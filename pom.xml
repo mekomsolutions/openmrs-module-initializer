@@ -35,6 +35,7 @@
     <module>api-2.2</module>
     <module>api-2.3</module>
     <module>omod</module>
+    <module>validator</module>
   </modules>
 
   <properties>
