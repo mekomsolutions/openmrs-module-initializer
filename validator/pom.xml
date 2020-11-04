@@ -13,7 +13,7 @@
   <description>Validator project for Initializer</description>
 
   <properties>
-    <openmrsPlatformVersion>2.2.0</openmrsPlatformVersion>
+    <openmrsPlatformVersion>2.1.1</openmrsPlatformVersion>
   </properties>
  
   <dependencies>
@@ -36,14 +36,14 @@
       <groupId>${project.parent.groupId}</groupId>
       <artifactId>${project.parent.artifactId}-api</artifactId>
       <version>${project.parent.version}</version>
-      <scope>provided</scope>
+      <!-- <scope>provided</scope> -->
     </dependency>
 
     <dependency>
       <groupId>${project.parent.groupId}</groupId>
       <artifactId>${project.parent.artifactId}-api</artifactId>
       <version>${project.parent.version}</version>
-      <scope>test</scope>
+      <!-- <scope>test</scope> -->
       <type>test-jar</type>
     </dependency>
 
@@ -51,21 +51,21 @@
       <groupId>${project.parent.groupId}</groupId>
       <artifactId>${project.parent.artifactId}-api-2.2</artifactId>
       <version>${project.parent.version}</version>
-      <scope>provided</scope>
+      <!-- <scope>provided</scope> -->
     </dependency>
 
     <dependency>
       <groupId>${project.parent.groupId}</groupId>
       <artifactId>${project.parent.artifactId}-api-2.3</artifactId>
       <version>${project.parent.version}</version>
-      <scope>provided</scope>
+      <!-- <scope>provided</scope> -->
     </dependency>
 
     <dependency>
       <groupId>org.openmrs.api</groupId>
       <artifactId>openmrs-api</artifactId>
       <version>${openmrsPlatformVersion}</version>
-      <scope>provided</scope>
+      <!-- <scope>provided</scope> -->
       <type>jar</type>
       <exclusions>
         <exclusion>
@@ -80,7 +80,7 @@
       <artifactId>openmrs-api</artifactId>
       <type>test-jar</type>
       <version>${openmrsPlatformVersion}</version>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
@@ -88,62 +88,93 @@
       <artifactId>openmrs-test</artifactId>
       <version>${openmrsPlatformVersion}</version>
       <type>pom</type>
-      <scope>test</scope>
+      <!-- <scope>test</scope> -->
     </dependency>
 
     <dependency>
       <groupId>org.openmrs.module</groupId>
       <artifactId>idgen-api</artifactId>
       <version>${idgenVersion}</version>
-      <scope>test</scope>
+      <!-- <scope>test</scope> -->
     </dependency>
 
     <dependency>
       <groupId>org.openmrs.module</groupId>
       <artifactId>metadatasharing-api</artifactId>
       <version>${metadatasharingVersion}</version>
-      <scope>test</scope>
+      <!-- <scope>test</scope> -->
     </dependency>
 
     <dependency>
       <groupId>org.openmrs.module</groupId>
       <artifactId>metadatamapping-api</artifactId>
       <version>${metadatamappingVersion}</version>
-      <scope>test</scope>
+      <!-- <scope>test</scope> -->
     </dependency>
 
     <dependency>
       <groupId>org.openmrs.module</groupId>
       <artifactId>addresshierarchy-api</artifactId>
       <version>${addresshierarchyVersion}</version>
-      <scope>test</scope>
+      <!-- <scope>test</scope> -->
     </dependency>
 
     <dependency>
       <groupId>org.bahmni.module</groupId>
       <artifactId>appointments-api</artifactId>
       <version>${appointmentsVersion}</version>
-      <scope>test</scope>
+      <!-- <scope>test</scope> -->
     </dependency>
 
     <dependency>
       <groupId>org.bahmni.module</groupId>
       <artifactId>bahmni.ie.apps-api</artifactId>
       <version>${bahmniIeAppsVersion}</version>
-      <scope>test</scope>
+      <!-- <scope>test</scope> -->
     </dependency>
 
   </dependencies>
 
   <build>
-    <testResources>
-      <testResource>
-        <directory>../api/src/test/resources</directory>
-      </testResource>
-      <testResource>
-        <directory>../validator/src/test/resources</directory>
-      </testResource>
-    </testResources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>org.openmrs.module.initializer.validator.Validator</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <finalName>${project.artifactId}-${project.version}-full</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+            <configuration>
+              <skipIfEmpty>true</skipIfEmpty>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
   
 </project>
