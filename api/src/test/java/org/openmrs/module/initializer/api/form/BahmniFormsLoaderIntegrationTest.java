@@ -167,29 +167,28 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		
 		String jsonString = FileUtils.readFileToString(testFile);
 		JSONObject fileContent = new JSONObject(jsonString);
-
+		
 		JSONObject localeContent = (JSONObject) fileContent.get("en");
 		Assert.assertEquals(localeContent.get("concepts").toString(), "{\"TEST_UPLOAD_3\":\"test_upload\"}");
 		Assert.assertEquals(localeContent.get("labels").toString(), "{\"LABEL_2\":\"just a label\"}");
 	}
-
+	
 	@Test
 	public void load_shouldCreateFileWithSameUuidInJsonAndForm() throws IOException {
-
+		
 		// Setup
 		String formUuid = "ecb6002f-d0a0-4c25-8b0e-2da78ab4aab4";
-
+		
 		// Replay
 		bahmniFormsLoader.load();
-
+		
 		// Verify
 		Form form = formService.getForm("form1");
-
+		
 		File testFile = new File(formFolderPath + formUuid + ".json");
-
+		
 		Assert.assertTrue(testFile.exists());
 		Assert.assertEquals(formUuid, form.getUuid());
-
-
+		
 	}
 }

@@ -73,7 +73,7 @@ public class BahmniFormsLoader extends BaseLoader {
 				String resourceValue = (String) resources.get(0).get("value");
 				
 				// check if form exist
-				Form existingForm = formService.getForm(formName);
+				Form existingForm = formService.getFormByUuid(uuid);
 				Form form;
 				if (existingForm != null)
 					form = existingForm;
