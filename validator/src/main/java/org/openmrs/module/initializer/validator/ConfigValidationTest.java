@@ -2,12 +2,11 @@ package org.openmrs.module.initializer.validator;
 
 import org.junit.Assert;
 import org.junit.Test;
-//import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 @SkipBaseSetup
-public class ConfigValidationTest extends BaseModuleContextSensitiveTest {
+public class ConfigValidationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	public ConfigValidationTest() {
 		super();
