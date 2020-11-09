@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -150,7 +149,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	/**
 	 * @return The header line of the file that this parser is set on.
 	 */
-	public String[] getHeaderLine() throws IOException {
+	public String[] getHeaderLine() {
 		return headerLine;
 	}
 	
@@ -208,8 +207,8 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 			}
 			catch (Exception e) {
 				failedLines.add(line);
-				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: \n"
-				        + Arrays.toString(line),
+				log.error("An OpenMRS object could not be constructed or saved from the following CSV line:"
+				        + new CsvLine(getHeaderLine(), line).prettyPrint(),
 				    e);
 			}
 		}

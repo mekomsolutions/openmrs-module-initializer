@@ -95,11 +95,11 @@
 		</dependency>
 
 		<dependency>
-      <groupId>org.openmrs.module</groupId>
-      <artifactId>exti18n-api</artifactId>
-      <version>${exti18nVersion}</version>
-      <scope>test</scope>
-    </dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>exti18n-api</artifactId>
+			<version>${exti18nVersion}</version>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- External dependencies -->
 		<dependency>
@@ -112,6 +112,12 @@
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
 			<version>4.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.freva</groupId>
+			<artifactId>ascii-table</artifactId>
+			<version>1.1.0</version>
 		</dependency>
 	</dependencies>
 	

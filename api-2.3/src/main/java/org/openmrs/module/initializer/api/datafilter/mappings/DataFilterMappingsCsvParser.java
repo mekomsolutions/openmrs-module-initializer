@@ -58,7 +58,7 @@ public class DataFilterMappingsCsvParser extends CsvParser<DataFilterMapping, Ba
 		
 		if (entity == null || basis == null) {
 			throw new IllegalArgumentException(
-			        "Either the entity or the basis could not be fetched from database on the following CSV line: "
+			        "Either the entity or the basis could not be fetched from database on the following CSV line:"
 			                + line.toString());
 		}
 		

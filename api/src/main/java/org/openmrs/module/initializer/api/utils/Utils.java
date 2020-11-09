@@ -1,11 +1,10 @@
 package org.openmrs.module.initializer.api.utils;
 
+import static org.openmrs.module.initializer.api.BaseLineProcessor.LIST_SEPARATOR;
+
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -43,9 +42,58 @@ import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
+import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.util.CollectionUtils;
 
+import com.github.freva.asciitable.AsciiTable;
+
 public class Utils {
+	
+	private static String[] setLineSeparators(String[] strings) {
+		List<String> res = new ArrayList<>();
+		for (String s : strings) {
+			res.add(StringUtils.replace(s, LIST_SEPARATOR, LIST_SEPARATOR + System.lineSeparator()));
+		}
+		return res.toArray(new String[0]);
+	}
+	
+	/**
+	 * Prints as a pretty string a batch of CSV lines that share a common header.
+	 * 
+	 * @return The pretty string of CSV lines.
+	 * @throws IllegalArgumentException as soon as one line has a diverging header from the others.
+	 */
+	public static String prettyPrint(List<CsvLine> lines) throws IllegalArgumentException {
+		String[] prevHeader = null;
+		
+		List<String[]> data = new ArrayList<>();
+		for (CsvLine line : lines) {
+			if (prevHeader != null && !Arrays.equals(line.getHeaderLine(), prevHeader)) {
+				throw new IllegalArgumentException(
+				        "Printing a batch of CSV lines is only supported if they share a common header.");
+			}
+			prevHeader = line.getHeaderLine();
+			data.add(setLineSeparators(line.asLine()));
+		}
+		return System.lineSeparator() + AsciiTable.getTable(prevHeader, data.toArray(new String[0][0]));
+	}
+	
+	public static String pastePrint(List<CsvLine> lines) {
+		String printout = "";
+		String[] prevHeader = null;
+		
+		List<String[]> data = new ArrayList<>();
+		for (CsvLine line : lines) {
+			if (prevHeader != null && !Arrays.equals(line.getHeaderLine(), prevHeader)) {
+				throw new IllegalArgumentException(
+				        "Printing a batch of CSV lines is only supported if they share a common header.");
+			}
+			prevHeader = line.getHeaderLine();
+			printout += StringUtils.join(line.asLine(), ",") + "\n";
+		}
+		printout = StringUtils.join(prevHeader, ",") + "\n" + printout;
+		return System.lineSeparator() + printout;
+	}
 	
 	/**
 	 * Helps build a {@link ConceptMap} out the usual string inputs.

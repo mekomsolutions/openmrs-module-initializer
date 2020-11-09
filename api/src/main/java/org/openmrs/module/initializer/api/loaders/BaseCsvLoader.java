@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,9 +13,11 @@ import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
+import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderableCsvFile;
 import org.openmrs.module.initializer.api.utils.IgnoreBOMInputStream;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -87,13 +88,25 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 					log.info(fileCount + " entities were saved.");
 					
 				} else {
-					log.error(file.getFile().getName() + " ('" + dirUtil.getDomain()
-					        + "' domain) was processed but errors remained.");
-					log.error(fileCount - lines.size() + " out of " + fileCount + " entities were saved.");
-					log.error("");
+					final List<CsvLine> csvLines = new ArrayList<>();
 					for (String[] line : lines) {
-						log.error(Arrays.toString(line));
+						csvLines.add(new CsvLine(parser.getHeaderLine(), line));
 					}
+					
+					log.error("");
+					log.error("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+					log.error("+-+-+-+-- BEGINNING OF CSV FILE PROCESSING SUMMARY ---+-+-+-+");
+					log.error("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+					log.error(file.getFile().getName() + " ('" + dirUtil.getDomain() + "' domain) was processed and "
+					        + (fileCount - lines.size()) + " out of " + fileCount + " entities were saved.");
+					log.error("The error CSV line(s) that could not be processed are listed below:");
+					log.error(Utils.prettyPrint(csvLines));
+					log.error("");
+					log.error("Paste print for spreadsheets... etc:");
+					log.error(Utils.pastePrint(csvLines));
+					log.error("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+					log.error("+-+-+-+-- END OF CSV FILE PROCESSING SUMMARY ---+-+-+-+");
+					log.error("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
 					log.error("");
 				}
 			}
@@ -105,5 +118,4 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 			}
 		}
 	}
-	
 }

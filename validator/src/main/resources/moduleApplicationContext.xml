@@ -23,6 +23,7 @@
             http://www.springframework.org/schema/util
             http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
+    <!-- This is a placeholder Spring configuration file -->
     <context:component-scan base-package="org.openmrs.module.initializer.validator" />
 
 </beans>

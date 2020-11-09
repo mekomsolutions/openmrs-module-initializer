@@ -24,8 +24,6 @@ public class InitializerLogFactory {
 	@SuppressWarnings("rawtypes")
 	public static Log getLog(Class className) {
 		
-		Log log = LogFactory.getLog(className);
-		
 		final Logger logger = Logger.getLogger(className);
 		try {
 			logger.addAppender(
@@ -33,10 +31,12 @@ public class InitializerLogFactory {
 			logger.setLevel((Level) Level.ALL);
 		}
 		catch (IOException e) {
+			Log log = LogFactory.getLog(className);
 			log.error("The custom logger could not be setup, defaulting on the usual logging mechanism.", e);
+			return log;
 		}
 		
-		return log;
+		return new InitializerLog(logger);
 	}
 	
 }

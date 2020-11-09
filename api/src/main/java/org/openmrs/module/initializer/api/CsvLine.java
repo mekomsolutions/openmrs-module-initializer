@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openmrs.module.initializer.api.utils.Utils;
 
 public class CsvLine {
 	
@@ -13,6 +14,11 @@ public class CsvLine {
 	protected String[] line;
 	
 	public CsvLine(String[] headerLine, String[] line) {
+		// TODO: Figure out why the below fails some tests
+		//		if (headerLine.length < line.length) {
+		//			throw new IllegalArgumentException(
+		//			        "A CSV line cannot contain more data than suggested by its header structure.");
+		//		}
 		this.headerLine = headerLine;
 		this.line = line;
 	}
@@ -124,7 +130,11 @@ public class CsvLine {
 	
 	@Override
 	public String toString() {
-		return Arrays.toString(line);
+		return Utils.pastePrint(Arrays.asList(this));
+	}
+	
+	public String prettyPrint() {
+		return Utils.prettyPrint(Arrays.asList(this));
 	}
 	
 }
