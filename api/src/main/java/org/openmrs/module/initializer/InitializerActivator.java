@@ -9,26 +9,56 @@
  */
 package org.openmrs.module.initializer;
 
+import static org.apache.log4j.Level.ERROR;
+import static org.openmrs.module.initializer.InitializerConstants.MODULE_ARTIFACT_ID;
+
+import java.nio.file.Paths;
+
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Appender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Layout;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
+import org.openmrs.util.OpenmrsUtil;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
 public class InitializerActivator extends BaseModuleActivator {
 	
-	static Log log = InitializerLogFactory.getLog(InitializerActivator.class);
+	static Log log = LogFactory.getLog(InitializerActivator.class);
 	
 	/**
 	 * @see #started()
 	 */
 	public void started() {
 		
-		InitializerService iniz = Context.getService(InitializerService.class);
+		// setting the custom logging for all Iniz errors
+		try {
+			String inizLogFilePath = Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log")
+			        .toString();
+			
+			Appender appender = Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
+			Layout layout = appender == null ? new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n")
+			        : appender.getLayout();
+			appender = new FileAppender(layout, inizLogFilePath);
+			
+			Logger logger = Logger.getLogger(InitializerActivator.class.getPackage().getName());
+			logger.addAppender(appender);
+			logger.setLevel(ERROR);
+		}
+		catch (Exception e) {
+			log.error("The custom error log appender could not be setup for Initializer.", e);
+		}
 		
+		// loading all domains
+		InitializerService iniz = Context.getService(InitializerService.class);
 		for (Loader loader : iniz.getLoaders()) {
 			loader.load();
 		}

@@ -8,10 +8,10 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.InitializerLogFactory;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerSerializer;
 import org.openmrs.module.initializer.api.loaders.BaseLoader;
@@ -25,7 +25,7 @@ public class GlobalPropertiesLoader extends BaseLoader {
 		return Domain.GLOBAL_PROPERTIES;
 	}
 	
-	private final Log log = InitializerLogFactory.getLog(getClass());
+	private final Log log = LogFactory.getLog(getClass());
 	
 	@Override
 	public void load() {

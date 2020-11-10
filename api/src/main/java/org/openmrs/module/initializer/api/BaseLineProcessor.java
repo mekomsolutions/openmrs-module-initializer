@@ -7,15 +7,15 @@ import java.util.Map;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsObject;
-import org.openmrs.module.initializer.InitializerLogFactory;
 
 /**
  * Base class to any CSV line processor.
  */
 public abstract class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
-	protected final static Log log = InitializerLogFactory.getLog(BaseLineProcessor.class);
+	protected final static Log log = LogFactory.getLog(BaseLineProcessor.class);
 	
 	final public static String HEADER_UUID = "uuid";
 	

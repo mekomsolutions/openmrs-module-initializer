@@ -37,6 +37,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.messagesource.MutableMessageSource;
 import org.openmrs.messagesource.PresentationMessage;
@@ -60,7 +61,7 @@ import org.springframework.context.support.AbstractMessageSource;
  */
 public class InitializerMessageSource extends AbstractMessageSource implements MutableMessageSource, ApplicationContextAware {
 	
-	protected static final Log log = InitializerLogFactory.getLog(InitializerMessageSource.class);
+	protected static final Log log = LogFactory.getLog(InitializerMessageSource.class);
 	
 	private Map<Locale, PresentationMessageMap> cache = null;
 	

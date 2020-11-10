@@ -2,28 +2,24 @@ package org.openmrs.module.initializer.api.form;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
 import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormService;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormTranslationService;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.openmrs.Form;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.FormService;
 import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.InitializerLogFactory;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.loaders.BaseLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @OpenmrsProfile(modules = { "bahmni.ie.apps:*" })
 public class BahmniFormsLoader extends BaseLoader {
 	
-	private final Log log = InitializerLogFactory.getLog(getClass());
+	private final Log log = LogFactory.getLog(getClass());
 	
 	@Autowired
 	private FormService formService;

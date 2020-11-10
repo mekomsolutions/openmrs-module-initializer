@@ -6,8 +6,8 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.InitializerLogFactory;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ public class JsonKeyValuesLoader extends BaseLoader {
 		return Domain.JSON_KEY_VALUES;
 	}
 	
-	private final Log log = InitializerLogFactory.getLog(getClass());
+	private final Log log = LogFactory.getLog(getClass());
 	
 	@Override
 	public void load() {
