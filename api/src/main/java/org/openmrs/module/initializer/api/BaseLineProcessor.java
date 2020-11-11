@@ -163,7 +163,7 @@ public abstract class BaseLineProcessor<T extends BaseOpenmrsObject> {
 			order = Integer.parseInt(str);
 		}
 		catch (NumberFormatException e) {
-			log.error("'" + str + "' could not be parsed as a valid integer in header line: " + Arrays.toString(headerLine),
+			log.warn("'" + str + "' could not be parsed as a valid integer in header line: " + Arrays.toString(headerLine),
 			    e);
 		}
 		return order;

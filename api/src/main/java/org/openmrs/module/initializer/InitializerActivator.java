@@ -9,22 +9,19 @@
  */
 package org.openmrs.module.initializer;
 
-import static org.apache.log4j.Level.ERROR;
 import static org.openmrs.module.initializer.InitializerConstants.MODULE_ARTIFACT_ID;
 
 import java.nio.file.Paths;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Appender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 
 /**
@@ -32,45 +29,30 @@ import org.openmrs.util.OpenmrsUtil;
  */
 public class InitializerActivator extends BaseModuleActivator {
 	
-	static Log log = LogFactory.getLog(InitializerActivator.class);
+	private Log log = LogFactory.getLog(getClass());
 	
 	/**
 	 * @see #started()
 	 */
 	public void started() {
 		
-		// setting the custom logging for all Iniz errors
-		try {
-			String inizLogFilePath = Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log")
-			        .toString();
-			
-			Appender appender = Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
-			Layout layout = appender == null ? new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n")
-			        : appender.getLayout();
-			appender = new FileAppender(layout, inizLogFilePath);
-			
-			Logger logger = Logger.getLogger(InitializerActivator.class.getPackage().getName());
-			logger.addAppender(appender);
-			logger.setLevel(ERROR);
-		}
-		catch (Exception e) {
-			log.error("The custom error log appender could not be setup for Initializer.", e);
-		}
+		Logger logger = Logger.getLogger(InitializerActivator.class.getPackage().getName());
+		logger.addAppender(
+		    Utils.getFileAppender(Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log")));
+		logger.setLevel(Level.WARN);
 		
-		// loading all domains
 		InitializerService iniz = Context.getService(InitializerService.class);
 		for (Loader loader : iniz.getLoaders()) {
 			loader.load();
 		}
 		
-		log.info("Start of initializer module.");
-		
+		log.info("Start of " + MODULE_ARTIFACT_ID + " module.");
 	}
 	
 	/**
 	 * @see #shutdown()
 	 */
 	public void shutdown() {
-		// log.info("Shutdown " + InitializerConstants.MODULE_NAME);
+		log.info("Shutdown of " + MODULE_ARTIFACT_ID + " module.");
 	}
 }

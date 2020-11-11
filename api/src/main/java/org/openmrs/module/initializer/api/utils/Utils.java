@@ -1,8 +1,10 @@
 package org.openmrs.module.initializer.api.utils;
 
+import static org.openmrs.module.initializer.InitializerConstants.MODULE_NAME;
 import static org.openmrs.module.initializer.api.BaseLineProcessor.LIST_SEPARATOR;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +12,13 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Appender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Layout;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -48,6 +57,26 @@ import org.springframework.util.CollectionUtils;
 import com.github.freva.asciitable.AsciiTable;
 
 public class Utils {
+	
+	private static Log log = LogFactory.getLog(Utils.class);
+	
+	public static Appender getFileAppender(Path logFilePath) {
+		
+		Appender defaultAppender = Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
+		Layout layout = defaultAppender == null ? new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n")
+		        : defaultAppender.getLayout();
+		
+		Appender appender = defaultAppender;
+		try {
+			appender = new FileAppender(layout, logFilePath.toString());
+			appender.setName(logFilePath.getFileName().toString());
+		}
+		catch (IOException e) {
+			log.error("The custom error log appender could not be setup for " + MODULE_NAME + ".", e);
+		}
+		
+		return appender;
+	}
 	
 	private static String[] setLineSeparators(String[] strings) {
 		List<String> res = new ArrayList<>();
@@ -92,7 +121,7 @@ public class Utils {
 			printout += StringUtils.join(line.asLine(), ",") + "\n";
 		}
 		printout = StringUtils.join(prevHeader, ",") + "\n" + printout;
-		return System.lineSeparator() + printout;
+		return System.lineSeparator() + StringUtils.removeEnd(printout, "\n");
 	}
 	
 	/**

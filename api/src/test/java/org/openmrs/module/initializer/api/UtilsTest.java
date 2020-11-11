@@ -101,7 +101,7 @@ public class UtilsTest {
 		}
 		
 		// replay
-		Assert.assertEquals("\nFirst name,Last name,Age\n" + "John,Doe,40\n" + "Paul,Smith,20\n", Utils.pastePrint(lines));
+		Assert.assertEquals("\nFirst name,Last name,Age\n" + "John,Doe,40\n" + "Paul,Smith,20", Utils.pastePrint(lines));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)

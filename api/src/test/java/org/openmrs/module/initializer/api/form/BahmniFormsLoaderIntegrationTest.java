@@ -13,6 +13,7 @@ import org.openmrs.GlobalProperty;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.FormService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.api.loaders.BahmniFormsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

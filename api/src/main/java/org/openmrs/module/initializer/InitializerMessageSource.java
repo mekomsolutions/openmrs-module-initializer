@@ -116,7 +116,6 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 * Refreshes the cache, merged from the custom source and the parent source
 	 */
 	protected synchronized void refreshCache() {
-		
 		cache = new HashMap<Locale, PresentationMessageMap>();
 		setUseCodeAsDefaultMessage(true);
 		

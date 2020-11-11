@@ -24,7 +24,6 @@ import org.openmrs.module.initializer.api.c.ConceptClassesLoader;
 import org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
 import org.openmrs.module.initializer.api.et.EncounterTypesLoader;
-import org.openmrs.module.initializer.api.form.BahmniFormsLoader;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;

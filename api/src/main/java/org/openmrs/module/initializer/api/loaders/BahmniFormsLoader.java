@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.form;
+package org.openmrs.module.initializer.api.loaders;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
@@ -21,7 +22,6 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.FormService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
-import org.openmrs.module.initializer.api.loaders.BaseLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @OpenmrsProfile(modules = { "bahmni.ie.apps:*" })
@@ -111,10 +111,13 @@ public class BahmniFormsLoader extends BaseLoader {
 				if (published)
 					bahmniFormService.publish(bahmniForm.getUuid());
 				dirUtil.writeChecksum(fileName, checksum); // the updated config. file is marked as processed
-				log.info("The form file has been processed: " + fileName);
+				log.info("The Bahmni form has been processed: " + fileName);
 			}
 			catch (Exception e) {
-				log.error("Could not load the form from: " + file.getPath(), e);
+				log.error("The Bahmni form could not be imported: " + file.getPath(), e);
+			}
+			finally {
+				IOUtils.closeQuietly(is);
 			}
 		}
 		

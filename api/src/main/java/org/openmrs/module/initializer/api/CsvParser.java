@@ -169,7 +169,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 			}
 			catch (IOException e) {
 				lines.add(new String[0]);
-				log.error(
+				log.warn(
 				    "There was an I/O exception while reading one of the CSV lines. That line will produce an error when it will be processed by the parser.",
 				    e);
 			}
@@ -207,7 +207,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 			}
 			catch (Exception e) {
 				failedLines.add(line);
-				log.error("An OpenMRS object could not be constructed or saved from the following CSV line:"
+				log.warn("An OpenMRS object could not be constructed or saved from the following CSV line:"
 				        + new CsvLine(getHeaderLine(), line).prettyPrint(),
 				    e);
 			}

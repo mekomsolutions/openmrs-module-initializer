@@ -93,21 +93,23 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 						csvLines.add(new CsvLine(parser.getHeaderLine(), line));
 					}
 					
-					log.error("");
-					log.error("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-					log.error("+-+-+-+-- BEGINNING OF CSV FILE PROCESSING SUMMARY ---+-+-+-+");
-					log.error("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-					log.error(file.getFile().getName() + " ('" + dirUtil.getDomain() + "' domain) was processed and "
-					        + (fileCount - lines.size()) + " out of " + fileCount + " entities were saved.");
-					log.error("The error CSV line(s) that could not be processed are listed below:");
-					log.error(Utils.prettyPrint(csvLines));
-					log.error("");
-					log.error("Paste print for spreadsheets... etc:");
-					log.error(Utils.pastePrint(csvLines));
-					log.error("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-					log.error("+-+-+-+-- END OF CSV FILE PROCESSING SUMMARY ---+-+-+-+");
-					log.error("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-					log.error("");
+					StringBuilder sb = new StringBuilder();
+					sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+					sb.append(System.lineSeparator() + "+-+-+-+-- BEGINNING OF CSV FILE ERROR SUMMARY --+-+-+-+");
+					sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+					sb.append(System.lineSeparator());
+					sb.append(file.getFile().getName() + " ('" + dirUtil.getDomain() + "' domain) was processed and "
+					        + lines.size() + " out of " + fileCount + " entities were not saved.");
+					sb.append(System.lineSeparator() + "The CSV line(s) corresponding to those entities are listed below:");
+					sb.append(Utils.prettyPrint(csvLines));
+					sb.append(System.lineSeparator());
+					sb.append(System.lineSeparator() + "Paste print for spreadsheets... etc:");
+					sb.append(System.lineSeparator());
+					sb.append(Utils.pastePrint(csvLines));
+					sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+					sb.append(System.lineSeparator() + "+-+-+-+-- END OF CSV FILE ERROR SUMMARY --+-+-+-+");
+					sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+					log.error(sb.toString());
 				}
 			}
 			catch (IOException e) {
