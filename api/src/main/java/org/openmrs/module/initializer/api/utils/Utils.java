@@ -60,6 +60,12 @@ public class Utils {
 	
 	private static Log log = LogFactory.getLog(Utils.class);
 	
+	/**
+	 * Returns a ready-to-use appender to log to a custom file.
+	 * 
+	 * @param logFilePath The path to the log file.
+	 * @return The appender to be added to any logger.
+	 */
 	public static Appender getFileAppender(Path logFilePath) {
 		
 		Appender defaultAppender = Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
@@ -72,7 +78,7 @@ public class Utils {
 			appender.setName(logFilePath.getFileName().toString());
 		}
 		catch (IOException e) {
-			log.error("The custom error log appender could not be setup for " + MODULE_NAME + ".", e);
+			log.error("The custom log file appender could not be setup for " + MODULE_NAME + ".", e);
 		}
 		
 		return appender;
