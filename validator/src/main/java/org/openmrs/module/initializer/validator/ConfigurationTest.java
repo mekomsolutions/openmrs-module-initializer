@@ -8,7 +8,9 @@ import static org.hamcrest.Matchers.not;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Properties;
 
+import org.hibernate.cfg.Environment;
 import org.hsqldb.cmdline.SqlFile;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,15 +18,49 @@ import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.test.TestUtil;
 
+import ch.vorburger.exec.ManagedProcessException;
+import ch.vorburger.mariadb4j.DB;
+import ch.vorburger.mariadb4j.DBConfigurationBuilder;
+
 public class ConfigurationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	private String configDirPath;
 	
 	private String sqlScriptPath;
 	
-	@Override
 	protected String getAppDataDirPath() {
 		return Paths.get(configDirPath).getParent().toString();
+	}
+	
+	protected void setMariaDB4jProps(Properties props) throws ManagedProcessException {
+		DBConfigurationBuilder config = DBConfigurationBuilder.newBuilder();
+		config.setPort(0); // 0 => autom. detect free port
+		
+		DB db = DB.newEmbeddedDB(config.build());
+		db.start();
+		db.createDB("openmrs");
+		
+		props.setProperty(Environment.URL, config.getURL("openmrs"));
+		props.setProperty(Environment.USER, "root");
+		props.setProperty(Environment.PASS, "");
+	}
+	
+	@Override
+	public Properties getRuntimeProperties() {
+		
+		if (runtimeProperties == null) {
+			runtimeProperties = TestUtil.getRuntimeProperties(getWebappName());
+		}
+		
+		try {
+			setMariaDB4jProps(runtimeProperties);
+		}
+		catch (ManagedProcessException e) {
+			log.error("MariaDB4j could not be setup, reverting to defaults.", e);
+			runtimeProperties = super.getRuntimeProperties();
+		}
+		
+		return runtimeProperties;
 	}
 	
 	public ConfigurationTest() {
