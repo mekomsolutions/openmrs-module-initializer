@@ -31,17 +31,24 @@ public class Validator {
 	
 	public static Set<org.apache.log4j.spi.LoggingEvent> errors = new HashSet<>();
 	
-	public static String replaceInnerSingleQuotes(String line) {
+	/**
+	 * Properly escapes the single quotes of a piece of SQL for MySQL.
+	 * 
+	 * @param sqlPiece A whole SQL instruction or a piece of SQL instruction
+	 * @return The piece of SQL with single quotes properly escaped
+	 * @see https://stackoverflow.com/a/64878054/321797
+	 */
+	public static String escapeSingleQuotes(String sqlPiece) {
 		boolean needsReappending = false;
-		if (endsWith(line, ";")) {
+		if (endsWith(sqlPiece, ";")) {
 			needsReappending = true;
-			line = removeEnd(line, ";");
+			sqlPiece = removeEnd(sqlPiece, ";");
 		}
-		return replace(line, "\\'", "''") + (needsReappending ? ";" : "");
+		return replace(sqlPiece, "\\'", "''") + (needsReappending ? ";" : "");
 	}
 	
 	/**
-	 * Turns an original CIEL SQL dump into a comment-less set of SQL instructions.
+	 * Turns an original CIEL SQL dump into a HSQLDB-friendly one.
 	 */
 	public static File trimCielSqlFile(File originalCielSqlFile) throws IOException {
 		File trimmedCielSqlFile = File.createTempFile("iniz-validator-trimmed-ciel", ".sql");
@@ -50,7 +57,7 @@ public class Validator {
 		final BufferedWriter writer = new BufferedWriter(new FileWriter(trimmedCielSqlFile));
 		for (String line : Files.readAllLines(Paths.get(originalCielSqlFile.getAbsolutePath()), Charsets.UTF_8)) {
 			if (!startsWith(line, "--") && !startsWith(line, "/*!40") && !isEmpty(line)) {
-				writer.write(replaceInnerSingleQuotes(line + "\n"));
+				writer.write(escapeSingleQuotes(line + "\n"));
 			}
 		}
 		writer.close();
@@ -58,16 +65,21 @@ public class Validator {
 		return trimmedCielSqlFile;
 	}
 	
-	public static void main(String[] args) throws URISyntaxException {
-		
+	public static String getJarDirPath() throws URISyntaxException {
 		CodeSource codeSource = Validator.class.getProtectionDomain().getCodeSource();
 		File jarFile = new File(codeSource.getLocation().toURI().getPath());
 		String jarDir = jarFile.getParentFile().getPath();
-		
-		org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
-		logger.addAppender(Utils.getFileAppender(Paths.get(jarDir, "initializer.log")));
-		logger.addAppender(new ValidatorAppender());
-		logger.setLevel(org.apache.log4j.Level.WARN);
+		return jarDir;
+	}
+	
+	public static void main(String[] args) throws URISyntaxException {
+		// setting up logging
+		{
+			org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
+			logger.addAppender(Utils.getFileAppender(Paths.get(getJarDirPath(), "initializer.log")));
+			logger.addAppender(new ValidatorAppender());
+			logger.setLevel(org.apache.log4j.Level.WARN);
+		}
 		
 		arguments = Collections.unmodifiableList(Arrays.asList(args));
 		

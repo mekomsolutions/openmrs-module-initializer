@@ -41,6 +41,6 @@ public class ValidatorTest {
 	public void test_replaceInnerSingleQuotes() {
 		String line = "INSERT INTO `concept_description` VALUES (5350,118409,'Impairment of biliary flow at any level from the hepatocyte to Vater\\'s ampulla.','en',1,'2007-10-18 04:28:24',1,NULL,'5350FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');";
 		String expectedLine = "INSERT INTO `concept_description` VALUES (5350,118409,'Impairment of biliary flow at any level from the hepatocyte to Vater''s ampulla.','en',1,'2007-10-18 04:28:24',1,NULL,'5350FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');";
-		Assert.assertEquals(expectedLine, Validator.replaceInnerSingleQuotes(line));
+		Assert.assertEquals(expectedLine, Validator.escapeSingleQuotes(line));
 	}
 }

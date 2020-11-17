@@ -161,8 +161,6 @@ public class ConfigurationTest extends DomainBaseModuleContextSensitiveTest {
 			turnOffDBConstraints(connection);
 			sqlFile.execute();
 			turnOnDBConstraints(connection);
-			TestUtil.printOutTableContents(connection, "concept");
-			"".toString();
 		}
 	}
 	

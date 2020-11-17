@@ -13,9 +13,14 @@
   <description>Validator project for Initializer</description>
 
   <properties>
+    <springVersion>4.1.4.RELEASE</springVersion>
+    <!-- OpenMRS Core and modules -->
     <!-- <openmrsPlatformVersion>2.1.1</openmrsPlatformVersion> -->
     <openmrsPlatformVersion>2.2.0</openmrsPlatformVersion>
-    <springVersion>4.1.4.RELEASE</springVersion>
+    <reportingVersion>1.19.0</reportingVersion>
+    <htmlwidgetsVersion>1.7.2</htmlwidgetsVersion>
+    <serializationVersion>0.2.14</serializationVersion>
+    <calculationVersion>1.2</calculationVersion>
   </properties>
 
   <dependencies>
@@ -25,12 +30,6 @@
       <artifactId>spring-context</artifactId>
       <version>${springVersion}</version>
       <type>jar</type>
-      <!-- <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions> -->
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -43,14 +42,6 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
-      <type>jar</type>
-    </dependency>
-
-    <!-- check if necessary -->
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.10.19</version>
       <type>jar</type>
     </dependency>
 
@@ -68,7 +59,6 @@
       <type>jar</type>
     </dependency>
 
-    <!-- check if necessary -->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
@@ -117,10 +107,9 @@
       <artifactId>openmrs-api</artifactId>
       <version>${openmrsPlatformVersion}</version>
       <type>jar</type>
-      <scope>compile</scope>
       <exclusions>
         <exclusion>
-          <groupId>org.slf4j</groupId>
+          <groupId>*</groupId>
           <artifactId>*</artifactId>
         </exclusion>
       </exclusions>
@@ -130,7 +119,6 @@
       <groupId>org.openmrs.api</groupId>
       <artifactId>openmrs-api</artifactId>
       <type>test-jar</type>
-      <scope>compile</scope>
       <version>${openmrsPlatformVersion}</version>
       <exclusions>
         <exclusion>
@@ -171,6 +159,38 @@
       <type>jar</type>
     </dependency>
 
+    <!-- <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>reporting-api</artifactId>
+      <version>${reportingVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>htmlwidgets-api</artifactId>
+      <version>${htmlwidgetsVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>serialization.xstream-api</artifactId>
+      <version>${serializationVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>calculation-api</artifactId>
+      <version>${calculationVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency> -->
+
     <dependency>
       <groupId>org.openmrs.module</groupId>
       <artifactId>addresshierarchy-api</artifactId>
@@ -208,7 +228,6 @@
   <build>
 
     <plugins>
-
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
@@ -277,6 +296,7 @@
         </executions>
       </plugin>
     </plugins>
+
   </build>
   
 </project>
