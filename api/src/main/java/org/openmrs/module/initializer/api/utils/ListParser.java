@@ -5,14 +5,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class ListParser<T extends BaseOpenmrsObject> {
 	
-	protected final Log log = LogFactory.getLog(this.getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	/**
 	 * There are cases where we might want to ensure that the object that we will attempt to fetch does

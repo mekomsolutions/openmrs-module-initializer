@@ -13,33 +13,35 @@ import static org.openmrs.module.initializer.InitializerConstants.MODULE_ARTIFAC
 
 import java.nio.file.Paths;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
 public class InitializerActivator extends BaseModuleActivator {
 	
-	private Log log = LogFactory.getLog(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	/**
 	 * @see #started()
 	 */
 	public void started() {
 		
-		Logger logger = Logger.getLogger(InitializerActivator.class.getPackage().getName());
-		logger.addAppender(
-		    Utils.getFileAppender(Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log")));
-		logger.setLevel(Level.WARN);
+		{
+			org.apache.log4j.Logger logger = org.apache.log4j.Logger
+			        .getLogger(InitializerActivator.class.getPackage().getName());
+			logger.addAppender(
+			    Utils.getFileAppender(Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log")));
+			logger.setLevel(Level.WARN);
+		}
 		
 		InitializerService iniz = Context.getService(InitializerService.class);
 		for (Loader loader : iniz.getLoaders()) {

@@ -21,8 +21,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Concept;
 import org.openmrs.PersonAttributeType;
@@ -32,10 +30,12 @@ import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InitializerServiceImpl extends BaseOpenmrsService implements InitializerService {
 	
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	private Map<String, Object> keyValueCache = new HashMap<String, Object>();
 	
@@ -85,7 +85,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 			return Utils.asString(value);
 		}
 		catch (Exception e) {
-			log.error(e);
+			log.error(null, e);
 		}
 		return "";
 	}

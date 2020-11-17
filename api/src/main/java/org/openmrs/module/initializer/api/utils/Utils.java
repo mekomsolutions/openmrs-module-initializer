@@ -12,12 +12,9 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Appender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Layout;
-import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -52,13 +49,15 @@ import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import com.github.freva.asciitable.AsciiTable;
 
 public class Utils {
 	
-	private static Log log = LogFactory.getLog(Utils.class);
+	private static Logger log = LoggerFactory.getLogger(Utils.class);
 	
 	/**
 	 * Returns a ready-to-use appender to log to a custom file.
@@ -68,7 +67,7 @@ public class Utils {
 	 */
 	public static Appender getFileAppender(Path logFilePath) {
 		
-		Appender defaultAppender = Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
+		Appender defaultAppender = org.apache.log4j.Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
 		Layout layout = defaultAppender == null ? new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n")
 		        : defaultAppender.getLayout();
 		

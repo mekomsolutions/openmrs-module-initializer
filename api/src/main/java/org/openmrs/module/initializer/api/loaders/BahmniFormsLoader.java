@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
 import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
@@ -22,12 +20,14 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.FormService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @OpenmrsProfile(modules = { "bahmni.ie.apps:*" })
 public class BahmniFormsLoader extends BaseLoader {
 	
-	private final Log log = LogFactory.getLog(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
 	private FormService formService;

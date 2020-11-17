@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Retireable;
@@ -17,12 +15,14 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opencsv.CSVReader;
 
 public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineProcessor<T>> {
 	
-	protected final Log log = LogFactory.getLog(CsvParser.class);
+	protected final Logger log = LoggerFactory.getLogger(CsvParser.class);
 	
 	protected static final String DEFAULT_RETIRE_REASON = "Retired by module " + InitializerConstants.MODULE_NAME;
 	

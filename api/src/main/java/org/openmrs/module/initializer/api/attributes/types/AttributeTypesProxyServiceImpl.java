@@ -5,19 +5,19 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.LocationAttributeType;
 import org.openmrs.ProviderAttributeType;
 import org.openmrs.VisitAttributeType;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.attribute.BaseAttributeType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @OpenmrsProfile(openmrsPlatformVersion = "[2.1.1 - 2.1.*]")
 public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyService {
 	
-	protected final Log log = LogFactory.getLog(AttributeTypesProxyService.class);
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	@Override
 	public void onShutdown() {
