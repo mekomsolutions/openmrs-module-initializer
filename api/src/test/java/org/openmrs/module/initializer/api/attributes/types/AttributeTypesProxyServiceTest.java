@@ -10,11 +10,11 @@ import org.junit.Test;
 import org.openmrs.LocationAttributeType;
 import org.openmrs.api.LocationService;
 import org.openmrs.attribute.BaseAttributeType;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class AttributeTypesProxyServiceTest extends BaseModuleContextSensitiveTest {
+public class AttributeTypesProxyServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
 	private final static String LOCATION_ATT_TYPE_UUID = "9eca4f4e-707f-4bb8-8289-2f9b6e93803c";
 	
