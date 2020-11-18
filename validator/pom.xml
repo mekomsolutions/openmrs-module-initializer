@@ -53,6 +53,13 @@
     </dependency>
 
     <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>3.6.0</version>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
       <version>1.3</version>
@@ -129,8 +136,9 @@
       <version>${openmrsPlatformVersion}</version>
       <exclusions>
         <exclusion>
+          <!-- slf4j-api is coming from mariaDB4j -->
           <groupId>org.slf4j</groupId>
-          <artifactId>*</artifactId>
+          <artifactId>slf4j-api</artifactId>
         </exclusion>
         <exclusion>
           <groupId>commons-cli</groupId>
@@ -170,9 +178,25 @@
       <type>jar</type>
     </dependency>
 
-    <!-- <dependency>
+    <dependency>
       <groupId>org.openmrs.module</groupId>
       <artifactId>reporting-api</artifactId>
+      <version>${reportingVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>reporting-api-2.0</artifactId>
+      <version>${reportingVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>reporting-api-2.2</artifactId>
       <version>${reportingVersion}</version>
       <scope>runtime</scope>
       <type>jar</type>
@@ -196,11 +220,19 @@
 
     <dependency>
       <groupId>org.openmrs.module</groupId>
+      <artifactId>serialization.xstream-api-2.0</artifactId>
+      <version>${serializationVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
       <artifactId>calculation-api</artifactId>
       <version>${calculationVersion}</version>
       <scope>runtime</scope>
       <type>jar</type>
-    </dependency> -->
+    </dependency>
 
     <dependency>
       <groupId>org.openmrs.module</groupId>

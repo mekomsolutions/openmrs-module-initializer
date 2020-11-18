@@ -39,7 +39,8 @@ public class Validator {
 	public static Set<org.apache.log4j.spi.LoggingEvent> errors = new HashSet<>();
 	
 	/**
-	 * Properly escapes the single quotes of a piece of SQL for MySQL.
+	 * Properly escapes the single quotes of a piece of SQL for MySQL. Strings ending with a ";" are
+	 * assumed to be the last piece of a SQL instruction.
 	 * 
 	 * @param sqlPiece A whole SQL instruction or a piece of SQL instruction
 	 * @return The piece of SQL with single quotes properly escaped
