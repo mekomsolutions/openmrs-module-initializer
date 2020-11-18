@@ -1,10 +1,12 @@
 package org.openmrs.module.initializer.validator;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.emptyCollectionOf;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.emptyArray;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.openmrs.module.initializer.validator.Validator.ARG_CIEL_PATH;
+import static org.openmrs.module.initializer.validator.Validator.ARG_CONFIG_DIR;
+import static org.openmrs.module.initializer.validator.Validator.cmdLine;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -37,8 +39,6 @@ import ch.vorburger.mariadb4j.DBConfigurationBuilder;
 public class ConfigurationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	private String configDirPath;
-	
-	private String sqlScriptPath;
 	
 	protected String getAppDataDirPath() {
 		return Paths.get(configDirPath).getParent().toString();
@@ -140,23 +140,18 @@ public class ConfigurationTest extends DomainBaseModuleContextSensitiveTest {
 	public ConfigurationTest() {
 		super();
 		
-		assertThat("No arguments were provided to the configuration validator.", Validator.arguments,
-		    not(emptyCollectionOf(String.class)));
-		assertThat("At least the path to a configuration to be tested should be provided.", Validator.arguments.size(),
-		    greaterThanOrEqualTo(1));
+		assertThat("No arguments were provided to the configuration validator.", cmdLine.getOptions(), not(emptyArray()));
+		assertThat("The path to an OpenMRS configuration directory should be provided.", cmdLine.hasOption(ARG_CONFIG_DIR),
+		    is(true));
 		
-		configDirPath = Validator.arguments.get(0);
-		
-		if (Validator.arguments.size() > 1) {
-			sqlScriptPath = Validator.arguments.get(1);
-		}
+		configDirPath = Validator.cmdLine.getOptionValue(ARG_CONFIG_DIR);
 	}
 	
 	@Before
 	public void prepare() throws Exception {
-		if (!isEmpty(sqlScriptPath)) {
+		if (cmdLine.hasOption(ARG_CIEL_PATH)) {
 			Connection connection = getConnection();
-			SqlFile sqlFile = new SqlFile(Validator.trimCielSqlFile(new File(sqlScriptPath)));
+			SqlFile sqlFile = new SqlFile(Validator.trimCielSqlFile(new File(cmdLine.getOptionValue(ARG_CIEL_PATH))));
 			sqlFile.setConnection(connection);
 			turnOffDBConstraints(connection);
 			sqlFile.execute();

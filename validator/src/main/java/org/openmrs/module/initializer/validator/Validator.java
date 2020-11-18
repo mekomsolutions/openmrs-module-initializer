@@ -14,20 +14,27 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.CodeSource;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.runner.JUnitCore;
 import org.openmrs.module.initializer.api.utils.Utils;
 
-import groovy.json.internal.Charsets;
-
 public class Validator {
 	
-	public static List<String> arguments;
+	public static CommandLine cmdLine;
+	
+	public static final String ARG_CONFIG_DIR = "config-dir";
+	
+	public static final String ARG_CIEL_PATH = "ciel-path";
 	
 	public static Set<org.apache.log4j.spi.LoggingEvent> errors = new HashSet<>();
 	
@@ -65,14 +72,18 @@ public class Validator {
 		return trimmedCielSqlFile;
 	}
 	
-	public static String getJarDirPath() throws URISyntaxException {
+	public static File getJarFile() throws URISyntaxException {
 		CodeSource codeSource = Validator.class.getProtectionDomain().getCodeSource();
-		File jarFile = new File(codeSource.getLocation().toURI().getPath());
+		return new File(codeSource.getLocation().toURI().getPath());
+	}
+	
+	public static String getJarDirPath() throws URISyntaxException {
+		File jarFile = getJarFile();
 		String jarDir = jarFile.getParentFile().getPath();
 		return jarDir;
 	}
 	
-	public static void main(String[] args) throws URISyntaxException {
+	public static void main(String[] args) throws URISyntaxException, ParseException {
 		// setting up logging
 		{
 			org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
@@ -81,7 +92,21 @@ public class Validator {
 			logger.setLevel(org.apache.log4j.Level.WARN);
 		}
 		
-		arguments = Collections.unmodifiableList(Arrays.asList(args));
+		// processing args
+		{
+			Options options = new Options();
+			options.addOption("h", "help", false, "prints help");
+			options.addOption("c", ARG_CONFIG_DIR, true, "<arg>: the path to the OpenMRS config directory");
+			options.addOption("l", ARG_CIEL_PATH, true, "<arg>: the path to the CIEL .sql dump file");
+			
+			CommandLineParser parser = new DefaultParser();
+			cmdLine = parser.parse(options, args);
+			
+			if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption("help")) {
+				new HelpFormatter().printHelp(getJarFile().getName(), options);
+				return;
+			}
+		}
 		
 		//		JUnitCore junit = new JUnitCore();
 		//		Result result = junit.run(ConfigValidationTest.class);
