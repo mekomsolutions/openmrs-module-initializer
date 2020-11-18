@@ -1,155 +1,248 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.openmrs.maven.parents</groupId>
-    <artifactId>maven-parent-openmrs-module</artifactId>
-    <version>1.1.1</version>
-  </parent>
+    <parent>
+        <groupId>org.openmrs.maven.parents</groupId>
+        <artifactId>maven-parent-openmrs-module</artifactId>
+        <version>1.1.1</version>
+    </parent>
 
-  <groupId>org.openmrs.module</groupId>
-  <artifactId>initializer</artifactId>
-  <version>2.1.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>Initializer</name>
+    <groupId>org.openmrs.module</groupId>
+    <artifactId>initializer</artifactId>
+    <version>2.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Initializer</name>
   <description>The OpenMRS Initializer module is an API-only module that processes the content of the configuration folder when it is found inside OpenMRS' application data directory.</description>
 
-  <developers>
-    <developer>
-      <name>Mekom Solutions</name>
-    </developer>
-  </developers>
-  <organization>
-    <name>Mekom Solutions</name>
-    <url>http://www.mekomsolutions.com</url>
-  </organization>
+    <developers>
+        <developer>
+            <name>Mekom Solutions</name>
+        </developer>
+    </developers>
+    <organization>
+        <name>Mekom Solutions</name>
+        <url>http://www.mekomsolutions.com</url>
+    </organization>
 
-  <scm>
-    <connection>scm:git@github.com:mekomsolutions/openmrs-module-initializer.git</connection>
-    <developerConnection>scm:git:git@github.com:mekomsolutions/openmrs-module-initializer.git</developerConnection>
-    <url>https://github.com/mekomsolutions/openmrs-module-initializer</url>
-  </scm>
+    <scm>
+        <connection>scm:git@github.com:mekomsolutions/openmrs-module-initializer.git</connection>
+        <developerConnection>scm:git:git@github.com:mekomsolutions/openmrs-module-initializer.git</developerConnection>
+        <url>https://github.com/mekomsolutions/openmrs-module-initializer</url>
+    </scm>
 
-  <modules>
-    <module>api</module>
-    <module>api-2.2</module>
-    <module>api-2.3</module>
-    <module>omod</module>
-  </modules>
+    <modules>
+        <module>api</module>
+        <module>api-2.2</module>
+        <module>api-2.3</module>
+        <module>omod</module>
+    </modules>
 
-  <properties>
-    <openmrsPlatformVersion>2.1.1</openmrsPlatformVersion>
-    <addresshierarchyVersion>2.11.0</addresshierarchyVersion>
-    <exti18nVersion>1.0.0</exti18nVersion>
-    
-    <!-- From Core 2.3.0 -->
-    <appframeworkVersion>2.14.0</appframeworkVersion>
-    <datafilterVersion>1.0.0</datafilterVersion>
+    <properties>
+        <openmrsPlatformVersion>2.1.1</openmrsPlatformVersion>
+        <addresshierarchyVersion>2.11.0</addresshierarchyVersion>
+        <exti18nVersion>1.0.0</exti18nVersion>
 
-    <!-- Modules compatibility -->
-    <appointmentsVersion>1.2.1</appointmentsVersion>
-    <bahmniIeAppsVersion>1.1.0-SNAPSHOT</bahmniIeAppsVersion>
-    <idgenVersion>4.6.0-SNAPSHOT</idgenVersion>
-    <metadatasharingVersion>1.2.2</metadatasharingVersion>
-    <metadatamappingVersion>1.3.4</metadatamappingVersion>
-  </properties>
+        <!-- From Core 2.3.0 -->
+        <appframeworkVersion>2.14.0</appframeworkVersion>
+        <datafilterVersion>1.0.0</datafilterVersion>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>net.revelc.code.formatter</groupId>
-        <artifactId>formatter-maven-plugin</artifactId>
-        <version>2.10.0</version>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>format</goal>
-            </goals>
-            <configuration>
-              <directories>
-                <directory>.</directory>
-              </directories>
-              <configFile>eclipse/OpenMRSFormatter.xml</configFile>
-              <includes>
-                <include>**/*.java</include>
-                <include>**/*.json</include>
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>net.revelc.code.formatter</groupId>
-          <artifactId>formatter-maven-plugin</artifactId>
-          <dependencies>
-            <dependency>
-              <groupId>org.openmrs.tools</groupId>
-              <artifactId>openmrs-tools</artifactId>
-              <version>${openmrsPlatformVersion}</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-  
-  <repositories>
-    <repository>
-      <id>openmrs-repo</id>
-      <name>OpenMRS Nexus Repository</name>
-      <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
-    </repository>
-    <repository>
-      <id>central</id>
-      <name>Maven Repository Switchboard</name>
-      <layout>default</layout>
-      <url>http://repo1.maven.org/maven2</url>
-    </repository>
-	<repository>
-		<id>repo.mybahmni.org</id>
-		<name>bahmni-artifactory-snapshots</name>
-		<url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
-		<snapshots>
-			<updatePolicy>always</updatePolicy>
-		</snapshots>
-	</repository>
-	<repository>
-		<id>repo.mybahmni.org-release</id>
-		<name>bahmni-artifactory-release</name>
-		<url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
-	</repository>
-    <repository>
-      <id>bahmni-nexus</id>
-      <name>Bahmni Nexus Repository</name>
-      <url>https://oss.sonatype.org/content/groups/public</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+        <!-- Modules compatibility -->
+        <appointmentsVersion>1.2.1</appointmentsVersion>
+        <bahmniIeAppsVersion>1.1.0-SNAPSHOT</bahmniIeAppsVersion>
+        <idgenVersion>4.6.0-SNAPSHOT</idgenVersion>
+        <metadatasharingVersion>1.2.2</metadatasharingVersion>
+        <metadatamappingVersion>1.3.4</metadatamappingVersion>
+    </properties>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>openmrs-repo</id>
-      <name>OpenMRS Nexus Repository</name>
-      <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
-  
+    <dependencies>
+
+        <dependency>
+            <groupId>org.openmrs.api</groupId>
+            <artifactId>openmrs-api</artifactId>
+            <version>${openmrsPlatformVersion}</version>
+            <scope>provided</scope>
+            <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.api</groupId>
+            <artifactId>openmrs-api</artifactId>
+            <type>test-jar</type>
+            <version>${openmrsPlatformVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.api</groupId>
+            <artifactId>openmrs-api</artifactId>
+            <version>${openmrsPlatformVersion}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.test</groupId>
+            <artifactId>openmrs-test</artifactId>
+            <type>pom</type>
+            <version>${openmrsPlatformVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Supported aware-of module dependencies, sorted alphabetically -->
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>addresshierarchy-api</artifactId>
+            <version>${addresshierarchyVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bahmni.module</groupId>
+            <artifactId>appointments-api</artifactId>
+            <version>${appointmentsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bahmni.module</groupId>
+            <artifactId>bahmni.ie.apps-api</artifactId>
+            <version>${bahmniIeAppsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>exti18n-api</artifactId>
+            <version>${exti18nVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>idgen-api</artifactId>
+            <version>${idgenVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>metadatamapping-api</artifactId>
+            <version>${metadatamappingVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>metadatasharing-api</artifactId>
+            <version>${metadatasharingVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>net.revelc.code.formatter</groupId>
+                <artifactId>formatter-maven-plugin</artifactId>
+                <version>2.10.0</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                        <configuration>
+                            <directories>
+                                <directory>.</directory>
+                            </directories>
+                            <configFile>eclipse/OpenMRSFormatter.xml</configFile>
+                            <includes>
+                                <include>**/*.java</include>
+                                <include>**/*.json</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>net.revelc.code.formatter</groupId>
+                    <artifactId>formatter-maven-plugin</artifactId>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.openmrs.tools</groupId>
+                            <artifactId>openmrs-tools</artifactId>
+                            <version>${openmrsPlatformVersion}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>openmrs-repo</id>
+            <name>OpenMRS Nexus Repository</name>
+            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+        </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <layout>default</layout>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>repo.mybahmni.org</id>
+            <name>bahmni-artifactory-snapshots</name>
+            <url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>repo.mybahmni.org-release</id>
+            <name>bahmni-artifactory-release</name>
+            <url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
+        </repository>
+        <repository>
+            <id>bahmni-nexus</id>
+            <name>Bahmni Nexus Repository</name>
+            <url>https://oss.sonatype.org/content/groups/public</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>openmrs-repo</id>
+            <name>OpenMRS Nexus Repository</name>
+            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
 </project>
