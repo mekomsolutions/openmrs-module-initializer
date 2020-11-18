@@ -11,6 +11,8 @@
         <!-- MDS -->
         <mapping resource="ImportedItem.hbm.xml"/>
         <mapping resource="ImportedPackage.hbm.xml"/>
+        <!-- Htmlformentry -->
+        <mapping resource="HtmlFormEntryHtmlForm.hbm.xml"/>
         <!-- Idgen -->
         <mapping resource="IdentifierSource.hbm.xml"/>
         <!-- MetadataMapping -->
