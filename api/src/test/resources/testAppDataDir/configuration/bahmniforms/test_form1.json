@@ -1,6 +1,7 @@
 {
     "formJson" : {
         "name" : "form1",
+        "uuid" : "ecb6002f-d0a0-4c25-8b0e-2da78ab4aab4",
         "published" : true,
         "resources" : [
             {

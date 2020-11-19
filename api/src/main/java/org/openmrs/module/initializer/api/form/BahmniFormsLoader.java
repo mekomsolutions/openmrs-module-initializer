@@ -68,11 +68,12 @@ public class BahmniFormsLoader extends BaseLoader {
 				List<Object> translations = (List<Object>) jsonFile.get("translations");
 				String formName = (String) formJson.get("name");
 				Boolean published = (Boolean) formJson.get("published");
+				String uuid = (String) formJson.get("uuid");
 				List<Map> resources = (List<Map>) formJson.get("resources");
 				String resourceValue = (String) resources.get(0).get("value");
 				
 				// check if form exist
-				Form existingForm = formService.getForm(formName);
+				Form existingForm = formService.getFormByUuid(uuid);
 				Form form;
 				if (existingForm != null)
 					form = existingForm;
@@ -84,6 +85,7 @@ public class BahmniFormsLoader extends BaseLoader {
 				// Save OpenMRS form
 				form.setPublished(false);
 				form.setName(formName);
+				form.setUuid(uuid);
 				form = formService.saveForm(form);
 				
 				// Save Bahmni form resource
