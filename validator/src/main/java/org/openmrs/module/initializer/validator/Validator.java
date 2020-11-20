@@ -16,9 +16,9 @@ import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
@@ -26,6 +26,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.runner.JUnitCore;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.utils.Utils;
 
 public class Validator {
@@ -35,6 +36,10 @@ public class Validator {
 	public static final String ARG_CONFIG_DIR = "config-dir";
 	
 	public static final String ARG_CIEL_PATH = "ciel-path";
+	
+	public static final String ARG_DOMAINS = "domains";
+	
+	public static final String ARG_HELP = "help";
 	
 	public static Set<org.apache.log4j.spi.LoggingEvent> errors = new HashSet<>();
 	
@@ -84,6 +89,24 @@ public class Validator {
 		return jarDir;
 	}
 	
+	public static Options getCLIOptions() {
+		final StringBuilder sb = new StringBuilder();
+		Stream.of(Domain.values()).forEach(d -> {
+			sb.append(d.getName() + ",");
+		});
+		final String domainsCsv = removeEnd(sb.toString(), ",");
+		
+		Options options = new Options();
+		options.addOption("h", ARG_HELP, false, "Prints help.");
+		options.addOption("c", ARG_CONFIG_DIR, true, "<arg>: the path to the OpenMRS config directory.");
+		options.addOption("l", ARG_CIEL_PATH, true, "<arg>: the path to the CIEL .sql dump file.");
+		options.addOption("d", ARG_DOMAINS, true,
+		    "<arg>: a CSV string of selected domains to selectively include, eg.: metadatasharing,concepts,roles ;"
+		            + "\nor to selectively exclude, eg.: !metadatasharing,concepts,roles ;"
+		            + "\nomit the argument altogether to process all domains." + "\nAvailable domains: " + domainsCsv);
+		return options;
+	}
+	
 	public static void main(String[] args) throws URISyntaxException, ParseException {
 		// setting up logging
 		{
@@ -91,19 +114,17 @@ public class Validator {
 			logger.addAppender(Utils.getFileAppender(Paths.get(getJarDirPath(), "initializer.log")));
 			logger.addAppender(new ValidatorAppender());
 			logger.setLevel(org.apache.log4j.Level.WARN);
+			
+			org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(org.apache.log4j.Level.INFO);
+			org.apache.log4j.Logger.getLogger("org.openmrs.apii").setLevel(org.apache.log4j.Level.INFO);
 		}
 		
 		// processing args
 		{
-			Options options = new Options();
-			options.addOption("h", "help", false, "prints help");
-			options.addOption("c", ARG_CONFIG_DIR, true, "<arg>: the path to the OpenMRS config directory");
-			options.addOption("l", ARG_CIEL_PATH, true, "<arg>: the path to the CIEL .sql dump file");
+			Options options = getCLIOptions();
+			cmdLine = new DefaultParser().parse(options, args);
 			
-			CommandLineParser parser = new DefaultParser();
-			cmdLine = parser.parse(options, args);
-			
-			if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption("help")) {
+			if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption(ARG_HELP)) {
 				new HelpFormatter().printHelp(getJarFile().getName(), options);
 				return;
 			}

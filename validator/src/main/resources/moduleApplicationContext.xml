@@ -23,7 +23,19 @@
             http://www.springframework.org/schema/util
             http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-    <!-- This is a placeholder Spring configuration file -->
     <context:component-scan base-package="org.openmrs.module.initializer.validator" />
 
+    <bean id="sessionFactory" class="org.openmrs.api.db.hibernate.HibernateSessionFactoryBean">
+            <property name="configLocations">
+                  <list>
+                        <value>classpath:hibernate.cfg.xml</value>
+                        <value>classpath:test-hibernate.cfg.xml</value>
+                        <value>classpath:reporting-hibernate.cfg.xml</value>
+                  </list>
+            </property>
+            <property name="mappingJarLocations">
+                  <ref bean="mappingJarResources" />
+            </property>
+      </bean>
+    
 </beans>

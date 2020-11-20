@@ -18,6 +18,7 @@
     <!-- <openmrsPlatformVersion>2.1.1</openmrsPlatformVersion> -->
     <openmrsPlatformVersion>2.2.0</openmrsPlatformVersion>
     <reportingVersion>1.19.0</reportingVersion>
+    <reportingCompatibilityVersion>2.0.6</reportingCompatibilityVersion>
     <htmlwidgetsVersion>1.7.2</htmlwidgetsVersion>
     <serializationVersion>0.2.14</serializationVersion>
     <calculationVersion>1.2</calculationVersion>
@@ -56,6 +57,20 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>3.6.0</version>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>2.0.4</version>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito2</artifactId>
+      <version>2.0.4</version>
       <type>jar</type>
     </dependency>
 
@@ -122,12 +137,34 @@
       <version>${openmrsPlatformVersion}</version>
       <type>jar</type>
       <exclusions>
+        <!-- slf4j-api is coming from mariaDB4j -->
         <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+        <!-- AbstractMethodError at org.hibernate.type.CustomType.nullSafeSet(CustomType.java:158) -->
+        <exclusion>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate-search-orm</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
+
+    <!-- <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-search-orm</artifactId>
+      <version>4.5.3.Final</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency> -->
+
+    <!-- <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-analyzers-common</artifactId>
+      <version>4.10.4</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency> -->
 
     <dependency>
       <groupId>org.openmrs.api</groupId>
@@ -135,15 +172,16 @@
       <type>test-jar</type>
       <version>${openmrsPlatformVersion}</version>
       <exclusions>
+        <!-- slf4j-api is coming from mariaDB4j -->
         <exclusion>
-          <!-- slf4j-api is coming from mariaDB4j -->
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>commons-cli</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
+        <!-- AbstractMethodError at org.hibernate.type.CustomType.nullSafeSet(CustomType.java:158) -->
+        <!-- <exclusion>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate-search-orm</artifactId>
+        </exclusion> -->
       </exclusions>
     </dependency>
 
@@ -152,6 +190,12 @@
       <artifactId>openmrs-test</artifactId>
       <version>${openmrsPlatformVersion}</version>
       <type>pom</type>
+      <exclusions>
+        <exclusion>
+          <groupId>org.powermock</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -165,6 +209,14 @@
     <dependency>
       <groupId>org.openmrs.module</groupId>
       <artifactId>metadatasharing-api</artifactId>
+      <version>${metadatasharingVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>metadatasharing-api-2.0</artifactId>
       <version>${metadatasharingVersion}</version>
       <scope>runtime</scope>
       <type>jar</type>
@@ -188,6 +240,14 @@
 
     <dependency>
       <groupId>org.openmrs.module</groupId>
+      <artifactId>reporting-api-tests</artifactId>
+      <version>${reportingVersion}</version>
+      <scope>runtime</scope>
+      <type>test-jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
       <artifactId>reporting-api-2.0</artifactId>
       <version>${reportingVersion}</version>
       <scope>runtime</scope>
@@ -198,6 +258,14 @@
       <groupId>org.openmrs.module</groupId>
       <artifactId>reporting-api-2.2</artifactId>
       <version>${reportingVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>reportingcompatibility-api</artifactId>
+      <version>${reportingCompatibilityVersion}</version>
       <scope>runtime</scope>
       <type>jar</type>
     </dependency>
@@ -299,7 +367,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
+        <version>2.4.3</version>
         <executions>
           <execution>
             <phase>package</phase>

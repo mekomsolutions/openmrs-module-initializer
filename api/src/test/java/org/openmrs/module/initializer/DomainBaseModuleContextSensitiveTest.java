@@ -35,10 +35,14 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	
 	public static final String appDataTestDir = "testAppDataDir";
 	
-	@Autowired
 	private InitializerService iniz;
 	
-	protected InitializerService getService() {
+	@Autowired
+	public void setService(InitializerService iniz) {
+		this.iniz = iniz;
+	}
+	
+	public InitializerService getService() {
 		return iniz;
 	}
 	
