@@ -25,6 +25,7 @@ import org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappings
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
 import org.openmrs.module.initializer.api.et.EncounterTypesLoader;
 import org.openmrs.module.initializer.api.form.BahmniFormsLoader;
+import org.openmrs.module.initializer.api.form.HtmlFormsLoader;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
@@ -131,6 +132,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	
 	@Autowired
 	private AutoGenerationOptionsLoader autoGenerationOptionsLoader;
+	
+	@Autowired
+	private HtmlFormsLoader htmlFormsLoader;
 	
 	@Override
 	public void updateSearchIndex() {
@@ -282,6 +286,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = metadataTermMappingsLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = htmlFormsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		

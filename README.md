@@ -25,6 +25,7 @@ configuration/
   ├── drugs/
   ├── encountertypes/
   ├── globalproperties/
+  ├── htmlforms/
   ├── idgen/
   ├── jsonkeyvalues/
   ├── locations/
@@ -87,6 +88,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
+1. [HTML Forms (XML files)](readme/htmlforms.md)
 
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:
@@ -97,6 +99,7 @@ mvn clean package
 ```
 ##### Runtime requirements & compatibility
 * OpenMRS Core 2.1.1 (*required*)
+* HTML Form Entry (*compatible*)
 * ID Gen 4.3 (*compatible*)
 * Metadata Sharing 1.2.2 (*compatible*)
 * Metadata Mapping 1.3.4 (*compatible*)
@@ -117,7 +120,9 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 #### Version 2.1.0
 * Bulk creation and edition of ID Gen's autogeneration options provided through CSV files in **configuration/autogenerationoptions**.
 * Support associating location tags to locations using boolean `Tag|` headers.
-* Bulk creation and editing of location tags provided through CSV files in **configuration/locationtags**.
+* Bulk creation and edition of location tags provided through CSV files in **configuration/locationtags**.
+* Bulk creation and edition of Bahmni forms provided as JSON schema definitions in **configuration/bahmniforms**.
+* Bulk creation and edition of htmlforms provided as XML schema definitions in **configuration/htmlforms**.
 
 #### Version 2.0.0
 * Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
