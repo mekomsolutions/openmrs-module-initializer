@@ -1,0 +1,16 @@
+<htmlform
+		formUuid="203fa4f8-1234-11eb-bc37-0242ac110002"
+		formName="Test Form 2"
+		formDescription="Test Form in second directory level"
+		formVersion="2.7"
+		formPublished="false"
+		formRetired="true"
+		formEncounterType="61ae96f4-6afe-4351-b6f8-cd4fc383cce1"
+		htmlformUuid="26ddfe02-abcd-11eb-bc37-0242ac110002"
+>
+	Date: <encounterDate/>
+	Location: <encounterLocation/>
+	Provider: <encounterProvider role="Provider"/>
+	Weight: <obs conceptId="5089"/>
+	<submit/>
+</htmlform>
