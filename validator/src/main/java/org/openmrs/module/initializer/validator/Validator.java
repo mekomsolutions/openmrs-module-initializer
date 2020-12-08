@@ -5,6 +5,7 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.apache.commons.lang.StringUtils.removeEnd;
 import static org.apache.commons.lang.StringUtils.replace;
 import static org.apache.commons.lang.StringUtils.startsWith;
+import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,8 +37,6 @@ public class Validator {
 	public static final String ARG_CONFIG_DIR = "config-dir";
 	
 	public static final String ARG_CIEL_PATH = "ciel-path";
-	
-	public static final String ARG_DOMAINS = "domains";
 	
 	public static final String ARG_HELP = "help";
 	
@@ -115,8 +114,9 @@ public class Validator {
 			logger.addAppender(new ValidatorAppender());
 			logger.setLevel(org.apache.log4j.Level.WARN);
 			
+			//			org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 			org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(org.apache.log4j.Level.INFO);
-			org.apache.log4j.Logger.getLogger("org.openmrs.apii").setLevel(org.apache.log4j.Level.INFO);
+			org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(org.apache.log4j.Level.INFO);
 		}
 		
 		// processing args
@@ -134,7 +134,7 @@ public class Validator {
 		//		Result result = junit.run(ConfigValidationTest.class);
 		//		System.out.println("Success: " + result.wasSuccessful());
 		
-		JUnitCore.main(ConfigurationTest.class.getCanonicalName());
+		JUnitCore.main(ConfigurationTester.class.getCanonicalName());
 		
 	}
 }

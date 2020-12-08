@@ -43,6 +43,14 @@ public interface InitializerService extends OpenmrsService {
 	List<Loader> getLoaders();
 	
 	/**
+	 * Loads all domains based on each domain's order.
+	 * 
+	 * @param applyFilters Set this to false to ignore the inclusion or exclusion list and the
+	 *            domain-specific file name wildcard filters.
+	 */
+	void load(boolean applyFilters);
+	
+	/**
 	 * Add a single key value to the memory store.
 	 * 
 	 * @param key

@@ -17,7 +17,6 @@ import org.apache.log4j.Level;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
@@ -43,10 +42,7 @@ public class InitializerActivator extends BaseModuleActivator {
 			logger.setLevel(Level.WARN);
 		}
 		
-		InitializerService iniz = Context.getService(InitializerService.class);
-		for (Loader loader : iniz.getLoaders()) {
-			loader.load();
-		}
+		Context.getService(InitializerService.class).load(true);
 		
 		log.info("Start of " + MODULE_ARTIFACT_ID + " module.");
 	}

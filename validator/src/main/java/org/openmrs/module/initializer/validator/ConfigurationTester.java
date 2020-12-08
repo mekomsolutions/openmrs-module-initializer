@@ -2,12 +2,12 @@ package org.openmrs.module.initializer.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
-import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
 import static org.openmrs.module.initializer.validator.Validator.ARG_CIEL_PATH;
 import static org.openmrs.module.initializer.validator.Validator.ARG_CONFIG_DIR;
-import static org.openmrs.module.initializer.validator.Validator.ARG_DOMAINS;
 import static org.openmrs.module.initializer.validator.Validator.cmdLine;
 
 import java.io.File;
@@ -15,16 +15,9 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.Optional;
 import java.util.Properties;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.DatabaseUnitRuntimeException;
@@ -39,7 +32,7 @@ import org.hibernate.dialect.MySQLDialect;
 import org.hsqldb.cmdline.SqlFile;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.module.initializer.Domain;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.test.TestUtil;
 
@@ -47,15 +40,11 @@ import ch.vorburger.exec.ManagedProcessException;
 import ch.vorburger.mariadb4j.DB;
 import ch.vorburger.mariadb4j.DBConfigurationBuilder;
 
-public class ConfigurationTest extends DomainBaseModuleContextSensitiveTest {
+public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	private String configDirPath;
 	
 	private String cielFilePath;
-	
-	private Set<String> specifiedDomains = Collections.emptySet();
-	
-	private boolean includeSpecifiedDomains = true;
 	
 	protected String getAppDataDirPath() {
 		return Paths.get(configDirPath).getParent().toString();
@@ -134,8 +123,7 @@ public class ConfigurationTest extends DomainBaseModuleContextSensitiveTest {
 	 * This should be an @Override from the protected signature of the superclass
 	 */
 	private void turnOnDBConstraints(Connection connection) throws SQLException {
-		String constraintsOnSql = "SET FOREIGN_KEY_CHECKS=1;";
-		PreparedStatement ps = connection.prepareStatement(constraintsOnSql);
+		PreparedStatement ps = connection.prepareStatement("SET FOREIGN_KEY_CHECKS=1;");
 		ps.execute();
 		ps.close();
 	}
@@ -144,8 +132,7 @@ public class ConfigurationTest extends DomainBaseModuleContextSensitiveTest {
 	 * This should be an @Override from the protected signature of the superclass
 	 */
 	private void turnOffDBConstraints(Connection connection) throws SQLException {
-		String constraintsOffSql = "SET FOREIGN_KEY_CHECKS=0;";
-		PreparedStatement ps = connection.prepareStatement(constraintsOffSql);
+		PreparedStatement ps = connection.prepareStatement("SET FOREIGN_KEY_CHECKS=0;");
 		ps.execute();
 		ps.close();
 	}
@@ -154,7 +141,7 @@ public class ConfigurationTest extends DomainBaseModuleContextSensitiveTest {
 	public void deleteAllData() {
 	}
 	
-	public ConfigurationTest() {
+	public ConfigurationTester() {
 		super();
 		
 		assertThat("No arguments were provided to the configuration validator.", cmdLine.getOptions(), not(emptyArray()));
@@ -166,16 +153,17 @@ public class ConfigurationTest extends DomainBaseModuleContextSensitiveTest {
 			cielFilePath = cmdLine.getOptionValue(ARG_CIEL_PATH);
 		}
 		if (cmdLine.hasOption(ARG_DOMAINS)) {
-			String domains = cmdLine.getOptionValue(ARG_DOMAINS);
-			if (domains.startsWith("!")) {
-				includeSpecifiedDomains = false;
-				domains = StringUtils.removeStart(domains, "!");
-			}
-			specifiedDomains = new HashSet<String>(Arrays.asList(StringUtils.split(domains, ",")));
-			Collection<String> unsupportedDomains = CollectionUtils.subtract(specifiedDomains,
-			    Stream.of(Domain.values()).map(d -> d.getName()).collect(Collectors.toSet()));
-			assertThat("Those domains are unknown and not supported: " + unsupportedDomains.toString(), unsupportedDomains,
-			    emptyCollectionOf(String.class));
+			getRuntimeProperties().put(PROPS_DOMAINS, cmdLine.getOptionValue(ARG_DOMAINS));
+			//			String domains = cmdLine.getOptionValue(ARG_DOMAINS);
+			//			if (domains.startsWith("!")) {
+			//				includeSpecifiedDomains = false;
+			//				domains = StringUtils.removeStart(domains, "!");
+			//			}
+			//			specifiedDomains = new HashSet<String>(Arrays.asList(StringUtils.split(domains, ",")));
+			//			Collection<String> unsupportedDomains = CollectionUtils.subtract(specifiedDomains,
+			//			    Stream.of(Domain.values()).map(d -> d.getName()).collect(Collectors.toSet()));
+			//			assertThat("Those domains are unknown and not supported: " + unsupportedDomains.toString(), unsupportedDomains,
+			//			    emptyCollectionOf(String.class));
 		}
 		
 	}
@@ -190,18 +178,13 @@ public class ConfigurationTest extends DomainBaseModuleContextSensitiveTest {
 			sqlFile.execute();
 			turnOnDBConstraints(connection);
 		}
+		Properties props = Optional.ofNullable(Context.getRuntimeProperties()).orElse(new Properties());
+		props.putAll(getRuntimeProperties());
+		Context.setRuntimeProperties(props);
 	}
 	
 	@Test
 	public void loadConfiguration() {
-		
-		getService().getLoaders().stream().forEach(loader -> {
-			boolean domainSpecified = specifiedDomains.contains(loader.getDomainName());
-			if (specifiedDomains.isEmpty()
-			        || ((includeSpecifiedDomains && domainSpecified) || (!includeSpecifiedDomains && !domainSpecified))) {
-				loader.load();
-			}
-		});
-		
+		getService().load(true);
 	}
 }

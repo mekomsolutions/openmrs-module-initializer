@@ -1,17 +1,82 @@
 package org.openmrs.module.initializer.api;
 
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.openmrs.module.initializer.Domain.CONCEPTS;
+import static org.openmrs.module.initializer.Domain.DRUGS;
+import static org.openmrs.module.initializer.Domain.ENCOUNTER_TYPES;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
+
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.initializer.api.loaders.Loader;
 
 public class InitializerServiceImplTest {
 	
+	private InitializerService iniz;
+	
+	private Loader conceptsLoader = Mockito.spy(new MockLoader(CONCEPTS));
+	
+	private Loader encounterTypesLoader = Mockito.spy(new MockLoader(ENCOUNTER_TYPES));
+	
+	private Loader drugsLoader = Mockito.spy(new MockLoader(DRUGS));
+	
+	@Before
+	public void before() {
+		final List<Loader> loaders = Arrays.asList(conceptsLoader, encounterTypesLoader, drugsLoader);
+		iniz = new InitializerServiceImpl() {
+			
+			@Override
+			public List<Loader> getLoaders() {
+				return loaders;
+			}
+		};
+	}
+	
+	@Test
+	public void load_shouldFollowInclusionList() throws Exception {
+		// setup
+		Properties props = new Properties();
+		props.put(PROPS_DOMAINS, "concepts,encountertypes");
+		Context.setRuntimeProperties(props);
+		
+		// replay
+		iniz.load(true);
+		
+		// verify
+		verify(conceptsLoader, times(1)).load();
+		verify(encounterTypesLoader, times(1)).load();
+		verify(drugsLoader, never()).load();
+	}
+	
+	@Test
+	public void load_shouldSkipExclusionList() throws Exception {
+		// setup
+		Properties props = new Properties();
+		props.put(PROPS_DOMAINS, "!concepts,drugs");
+		Context.setRuntimeProperties(props);
+		
+		// replay
+		iniz.load(true);
+		
+		// verify
+		verify(conceptsLoader, never()).load();
+		verify(encounterTypesLoader, times(1)).load();
+		verify(drugsLoader, never()).load();
+	}
+	
 	@Test
 	public void addKeyValues_shouldFillKeyValuesCache() throws Exception {
-		
-		InitializerServiceImpl iniz = new InitializerServiceImpl();
 		
 		InputStream is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/jsonKeyValues.json");
@@ -31,7 +96,6 @@ public class InitializerServiceImplTest {
 	public void getBooleanFromKey_shouldHandleAllCases() {
 		
 		final String KEY = "key.to.bool.value";
-		InitializerServiceImpl iniz = new InitializerServiceImpl();
 		
 		iniz.addKeyValue(KEY, "true");
 		Assert.assertTrue(iniz.getBooleanFromKey(KEY));

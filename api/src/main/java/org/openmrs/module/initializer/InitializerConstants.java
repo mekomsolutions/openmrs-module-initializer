@@ -17,6 +17,15 @@ public class InitializerConstants {
 	        + "Controller";
 	
 	/*
+	 * Validators args
+	 */
+	public static final String ARG_DOMAINS = "domains";
+	
+	public static final String PROPS_DOMAINS = MODULE_ARTIFACT_ID + "." + ARG_DOMAINS;
+	
+	public static final String ARG_EXCLUDE = "exclude";
+	
+	/*
 	 * 
 	 */
 	public static final String DIR_NAME_CONFIG = "configuration";

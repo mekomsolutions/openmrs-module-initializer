@@ -9,16 +9,26 @@
  */
 package org.openmrs.module.initializer.api;
 
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
+
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -26,6 +36,7 @@ import org.openmrs.Concept;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
@@ -66,6 +77,35 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		List<Loader> loaders = Context.getRegisteredComponents(Loader.class);
 		Collections.sort(loaders);
 		return loaders;
+	}
+	
+	@Override
+	public void load(boolean applyFilters) {
+		Set<String> specifiedDomains = new HashSet<>();
+		boolean includeSpecifiedDomains = true;
+		
+		if (applyFilters) {
+			String domains = Optional.ofNullable(Context.getRuntimeProperties().getProperty(PROPS_DOMAINS)).orElse("");
+			if (StringUtils.startsWith(domains, "!")) {
+				includeSpecifiedDomains = false;
+				domains = StringUtils.removeStart(domains, "!");
+			}
+			specifiedDomains.addAll(Arrays.asList(StringUtils.split(domains, ",")));
+			
+			Collection<String> unsupportedDomains = CollectionUtils.subtract(specifiedDomains,
+			    Stream.of(Domain.values()).map(d -> d.getName()).collect(Collectors.toSet()));
+			log.warn("Those domains are unknown and are not supported, however they are mentioned in the "
+			        + (includeSpecifiedDomains ? "inclusion" : "exclusion") + " list of domains: "
+			        + unsupportedDomains.toString());
+		}
+		
+		for (Loader loader : getLoaders()) {
+			boolean domainSpecified = specifiedDomains.contains(loader.getDomainName());
+			if (specifiedDomains.isEmpty()
+			        || ((includeSpecifiedDomains && domainSpecified) || (!includeSpecifiedDomains && !domainSpecified))) {
+				loader.load();
+			}
+		}
 	}
 	
 	@Override

@@ -13,6 +13,8 @@ import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.FileFileFilter;
+import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -174,14 +176,17 @@ public class ConfigDirUtil {
 	 * 
 	 * @param domainDirPath The absolute path to the domain directory, eg.
 	 *            "../configuration/addresshierarchy"
-	 * @param extension The extension to filter for, eg "xml".
+	 * @param extension The dot-less extension to filter for, eg. "xml", "json", ... etc.
 	 * @return The list of {@link File} instances.
 	 */
 	protected static List<File> getFiles(String domainDirPath, String extension) {
 		
 		final List<File> allFiles = new ArrayList<File>();
 		
-		final File[] files = new File(domainDirPath).listFiles(getExtensionFilenameFilter(extension));
+		FilenameFilter filter = (file, name) -> new SuffixFileFilter("." + extension).accept(file, name)
+		        && FileFileFilter.FILE.accept(file, name);
+		
+		final File[] files = new File(domainDirPath).listFiles(filter);
 		if (files != null) {
 			allFiles.addAll(Arrays.asList(files));
 		}
