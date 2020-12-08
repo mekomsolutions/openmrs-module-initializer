@@ -6,6 +6,7 @@ import static org.apache.commons.lang.StringUtils.removeEnd;
 import static org.apache.commons.lang.StringUtils.replace;
 import static org.apache.commons.lang.StringUtils.startsWith;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
+import static org.openmrs.module.initializer.InitializerConstants.ARG_EXCLUDE;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -103,6 +104,12 @@ public class Validator {
 		    "<arg>: a CSV string of selected domains to selectively include, eg.: metadatasharing,concepts,roles ;"
 		            + "\nor to selectively exclude, eg.: !metadatasharing,concepts,roles ;"
 		            + "\nomit the argument altogether to process all domains." + "\nAvailable domains: " + domainsCsv);
+		
+		Stream.of(Domain.values()).forEach(d -> {
+			options.addOption(null, ARG_EXCLUDE + "." + d.getName(), true,
+			    "<arg>: a CSV string of wildcard file exclusion patterns to apply to the '" + d.getName() + "' domain."
+			            + "\nEg.: *foo*.bar,*f00*.baz");
+		});
 		return options;
 	}
 	

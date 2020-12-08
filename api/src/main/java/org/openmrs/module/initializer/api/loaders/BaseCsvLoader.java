@@ -31,8 +31,8 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 	protected P parser;
 	
 	@Override
-	public void load() {
-		loadCsvFiles(getDirUtil(), this);
+	public void load(List<String> wildcardExclusions) {
+		loadCsvFiles(getDirUtil(), this, wildcardExclusions);
 	}
 	
 	@Override
@@ -46,11 +46,11 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		return parser;
 	}
 	
-	public void loadCsvFiles(ConfigDirUtil dirUtil, CsvLoader csvLoader) {
+	public void loadCsvFiles(ConfigDirUtil dirUtil, CsvLoader csvLoader, List<String> wildcardExclusions) {
 		
 		// Selecting the files that havent' been checksum'd yet
 		List<OrderableCsvFile> files = new ArrayList<OrderableCsvFile>();
-		for (File file : dirUtil.getFiles("csv")) {
+		for (File file : dirUtil.getFiles("csv", wildcardExclusions)) {
 			String fileName = dirUtil.getFileName(file.getPath());
 			String checksum = dirUtil.getChecksumIfChanged(fileName);
 			if (!checksum.isEmpty()) {

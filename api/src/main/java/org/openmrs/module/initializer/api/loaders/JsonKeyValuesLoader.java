@@ -3,6 +3,7 @@ package org.openmrs.module.initializer.api.loaders;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.openmrs.module.initializer.Domain;
@@ -22,11 +23,11 @@ public class JsonKeyValuesLoader extends BaseLoader {
 	}
 	
 	@Override
-	public void load() {
+	public void load(List<String> wildcardExclusions) {
 		
 		ConfigDirUtil dirUtil = getDirUtil();
 		
-		for (File file : dirUtil.getFiles("json")) { // processing all the JSON files inside the domain
+		for (File file : dirUtil.getFiles("json", wildcardExclusions)) { // processing all the JSON files inside the domain
 			
 			String fileName = dirUtil.getFileName(file.getPath());
 			

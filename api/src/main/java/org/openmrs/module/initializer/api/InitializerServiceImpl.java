@@ -9,7 +9,11 @@
  */
 package org.openmrs.module.initializer.api;
 
+import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CHECKSUM;
+import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CONFIG;
+import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_REJECTIONS;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_EXCLUDE;
 
 import java.io.File;
 import java.io.InputStream;
@@ -37,7 +41,6 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
@@ -59,17 +62,17 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	@Override
 	public String getConfigDirPath() {
-		return getBasePath().resolve(InitializerConstants.DIR_NAME_CONFIG).toString();
+		return getBasePath().resolve(DIR_NAME_CONFIG).toString();
 	}
 	
 	@Override
 	public String getChecksumsDirPath() {
-		return getBasePath().resolve(InitializerConstants.DIR_NAME_CHECKSUM).toString();
+		return getBasePath().resolve(DIR_NAME_CHECKSUM).toString();
 	}
 	
 	@Override
 	public String getRejectionsDirPath() {
-		return getBasePath().resolve(InitializerConstants.DIR_NAME_REJECTIONS).toString();
+		return getBasePath().resolve(DIR_NAME_REJECTIONS).toString();
 	}
 	
 	@Override
@@ -84,14 +87,16 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		Set<String> specifiedDomains = new HashSet<>();
 		boolean includeSpecifiedDomains = true;
 		
+		// Inclusion or exclusion list of domains
 		if (applyFilters) {
-			String domains = Optional.ofNullable(Context.getRuntimeProperties().getProperty(PROPS_DOMAINS)).orElse("");
-			if (StringUtils.startsWith(domains, "!")) {
+			String domainsCsv = Optional.ofNullable(Context.getRuntimeProperties().getProperty(PROPS_DOMAINS)).orElse("");
+			if (StringUtils.startsWith(domainsCsv, "!")) {
 				includeSpecifiedDomains = false;
-				domains = StringUtils.removeStart(domains, "!");
+				domainsCsv = StringUtils.removeStart(domainsCsv, "!");
 			}
-			specifiedDomains.addAll(Arrays.asList(StringUtils.split(domains, ",")));
+			specifiedDomains.addAll(Arrays.asList(StringUtils.split(domainsCsv, ",")));
 			
+			@SuppressWarnings("unchecked")
 			Collection<String> unsupportedDomains = CollectionUtils.subtract(specifiedDomains,
 			    Stream.of(Domain.values()).map(d -> d.getName()).collect(Collectors.toSet()));
 			log.warn("Those domains are unknown and are not supported, however they are mentioned in the "
@@ -99,11 +104,22 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 			        + unsupportedDomains.toString());
 		}
 		
+		// Per-domain wildcard exclusion patterns
+		Map<String, List<String>> domainExclusions = new HashMap<>();
+		if (applyFilters) {
+			Stream.of(Domain.values()).forEach(d -> {
+				String exclusionsCsv = Context.getRuntimeProperties().getProperty(PROPS_EXCLUDE + "." + d.getName());
+				if (!StringUtils.isEmpty(exclusionsCsv)) {
+					domainExclusions.put(d.getName(), Arrays.asList(StringUtils.split(exclusionsCsv, ",")));
+				}
+			});
+		}
+		
 		for (Loader loader : getLoaders()) {
 			boolean domainSpecified = specifiedDomains.contains(loader.getDomainName());
 			if (specifiedDomains.isEmpty()
 			        || ((includeSpecifiedDomains && domainSpecified) || (!includeSpecifiedDomains && !domainSpecified))) {
-				loader.load();
+				loader.load(domainExclusions.get(loader.getDomainName()));
 			}
 		}
 	}

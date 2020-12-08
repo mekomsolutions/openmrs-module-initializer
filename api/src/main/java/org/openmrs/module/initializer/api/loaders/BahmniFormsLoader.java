@@ -44,9 +44,9 @@ public class BahmniFormsLoader extends BaseLoader {
 	}
 	
 	@Override
-	public void load() {
+	public void load(List<String> wildcardExclusions) {
 		ConfigDirUtil dirUtil = getDirUtil();
-		for (File file : dirUtil.getFiles("json")) { // processing all the JSON files inside the domain
+		for (File file : dirUtil.getFiles("json", wildcardExclusions)) { // processing all the JSON files inside the domain
 			
 			String fileName = dirUtil.getFileName(file.getPath());
 			String checksum = dirUtil.getChecksumIfChanged(fileName);

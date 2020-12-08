@@ -1,5 +1,6 @@
 package org.openmrs.module.initializer.api;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -54,9 +55,9 @@ public class InitializerServiceImplTest {
 		iniz.load(true);
 		
 		// verify
-		verify(conceptsLoader, times(1)).load();
-		verify(encounterTypesLoader, times(1)).load();
-		verify(drugsLoader, never()).load();
+		verify(conceptsLoader, times(1)).load(any());
+		verify(encounterTypesLoader, times(1)).load(any());
+		verify(drugsLoader, never()).load(any());
 	}
 	
 	@Test
@@ -70,9 +71,9 @@ public class InitializerServiceImplTest {
 		iniz.load(true);
 		
 		// verify
-		verify(conceptsLoader, never()).load();
-		verify(encounterTypesLoader, times(1)).load();
-		verify(drugsLoader, never()).load();
+		verify(conceptsLoader, never()).load(any());
+		verify(encounterTypesLoader, times(1)).load(any());
+		verify(drugsLoader, never()).load(any());
 	}
 	
 	@Test

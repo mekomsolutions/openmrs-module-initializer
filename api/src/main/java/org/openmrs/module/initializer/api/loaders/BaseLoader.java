@@ -1,5 +1,7 @@
 package org.openmrs.module.initializer.api.loaders;
 
+import java.util.Collections;
+
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
@@ -40,6 +42,11 @@ public abstract class BaseLoader implements Loader {
 	@Override
 	public Integer getOrder() {
 		return getDomain().getOrder();
+	}
+	
+	@Override
+	public void load() {
+		load(Collections.emptyList());
 	}
 	
 }

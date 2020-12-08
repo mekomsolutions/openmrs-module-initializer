@@ -25,6 +25,8 @@ public class InitializerConstants {
 	
 	public static final String ARG_EXCLUDE = "exclude";
 	
+	public static final String PROPS_EXCLUDE = MODULE_ARTIFACT_ID + "." + ARG_EXCLUDE;
+	
 	/*
 	 * 
 	 */

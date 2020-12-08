@@ -1,5 +1,7 @@
 package org.openmrs.module.initializer.api;
 
+import java.util.List;
+
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.loaders.BaseLoader;
 
@@ -12,8 +14,8 @@ public class MockLoader extends BaseLoader {
 	}
 	
 	@Override
-	public void load() {
-		System.out.println("load() invoked on mock loader for domain " + getDomainName() + ".");
+	public void load(List<String> wildcardExclusions) {
+		System.out.println("Method load() invoked on mock loader for domain '" + getDomainName() + "'.");
 	}
 	
 	@Override

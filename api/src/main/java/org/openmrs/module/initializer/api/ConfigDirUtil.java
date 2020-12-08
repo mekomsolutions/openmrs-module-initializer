@@ -8,7 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
@@ -16,6 +18,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,19 +37,19 @@ public class ConfigDirUtil {
 	
 	/*
 	 * The domain name, so the final part of configuration domain subdirectory. Eg.
-	 * "addresshierarchy" in "../configuration/addresshierarchy"
+	 * "locations" in "../configuration/locations"
 	 */
 	protected String domain = "";
 	
 	/*
 	 * The absolute path to the configuration domain subdirectory. Eg.
-	 * "../configuration/addresshierarchy"
+	 * "../configuration/locations"
 	 */
 	protected String domainDirPath = "";
 	
 	/*
 	 * The absolute path to the configuration domain checksum subdirectory. Eg.
-	 * "../configuration_checksums/addresshierarchy"
+	 * "../configuration_checksums/locations"
 	 */
 	protected String checksumDirPath = "";
 	
@@ -60,7 +63,7 @@ public class ConfigDirUtil {
 	 * @param configDirPath The absolute path to the config directory, eg. "../configuration"
 	 * @param checksumDirPath The absolute path to the checksum directory, eg.
 	 *            "../configuration_checksums"
-	 * @param domain The metadata domain, eg. "addresshierarchy"
+	 * @param domain The metadata domain, eg. "locations"
 	 */
 	public ConfigDirUtil(String configDirPath, String checksumDirPath, String rejectionsDirPath, String domain) {
 		this.domain = domain;
@@ -87,9 +90,10 @@ public class ConfigDirUtil {
 	}
 	
 	/**
-	 * Convenience method to a filename filter for files of a given extension.
+	 * Convenience method to get a FilenameFilter for 1files of a given extension.
+	 * 
 	 * @param The dot-less extension to filter for, eg. "xml", "json".
-	 * @return The filename filter.
+	 * @return The FilenameFilter.
 	 */
 	public static FilenameFilter getExtensionFilenameFilter(final String extension) {
 		FilenameFilter filter = (file, name) -> new SuffixFileFilter("." + extension).accept(file, name)
@@ -100,10 +104,9 @@ public class ConfigDirUtil {
 	/**
 	 * Extracts the name of a file based on the to the domain directory path.
 	 * 
-	 * @param domainDirPath The absolute path to the domain directory, eg.
-	 *            "../configuration/addresshierarchy"
+	 * @param domainDirPath The absolute path to the domain directory, eg. "../configuration/locations"
 	 * @param filePath The absolute path to a file inside the config. directory structure, eg.
-	 *            "../configuration/addresshierarchy/config.xml".
+	 *            "../configuration/locations/config.xml".
 	 * @return The file name, eg. "config.xml".
 	 */
 	protected static String getFileName(String domainDirPath, String filePath) {
@@ -121,8 +124,7 @@ public class ConfigDirUtil {
 	 * Returns the checksum of a config file if the file has been updated since the last checksum was
 	 * saved.
 	 * 
-	 * @param domainDirPath The absolute path to the domain directory, eg.
-	 *            "../configuration/addresshierarchy"
+	 * @param domainDirPath The absolute path to the domain directory, eg. "../configuration/locations"
 	 * @param checksumDirPath The absolute path to the checksum directory, eg.
 	 *            "../configuration_checksums"
 	 * @param configFileName The config file name, eg. "config.xml"
@@ -142,18 +144,34 @@ public class ConfigDirUtil {
 	}
 	
 	/**
-	 * Fetches all the files in a directory based on their extension.
+	 * Fetches all the files in a directory based on their extension and that do not match the exclusion
+	 * patterns.
 	 * 
-	 * @param domainDirPath The absolute path to the domain directory, eg.
-	 *            "../configuration/addresshierarchy"
+	 * @param domainDirPath The absolute path to the domain directory, eg. "../configuration/locations"
 	 * @param extension The dot-less extension to filter for, eg. "xml", "json", ... etc.
+	 * @param wildcardExclusions A list of wildcard exclusion patterns, eg. "*test*.java~*~".
 	 * @return The list of {@link File} instances.
 	 */
-	protected static List<File> getFiles(String domainDirPath, String extension) {
+	protected static List<File> getFiles(String domainDirPath, String extension, List<String> wildcardExclusions) {
 		
 		final List<File> allFiles = new ArrayList<File>();
 		
-		final File[] files = new File(domainDirPath).listFiles(getExtensionFilenameFilter(extension));
+		FilenameFilter exclusionFilter = new FilenameFilter() {
+			
+			@Override
+			public boolean accept(File dir, String name) {
+				boolean matched = false;
+				for (String pattern : Optional.ofNullable(wildcardExclusions).orElse(Collections.emptyList())) {
+					matched = matched || new WildcardFileFilter(pattern).accept(dir, name);
+				}
+				return !matched; // a file is accepted when the (exclusion) patterns are not matched 
+			}
+		};
+		
+		FilenameFilter filter = (file, name) -> getExtensionFilenameFilter(extension).accept(file, name)
+		        && exclusionFilter.accept(file, name);
+		
+		final File[] files = new File(domainDirPath).listFiles(filter);
 		if (files != null) {
 			allFiles.addAll(Arrays.asList(files));
 		}
@@ -164,15 +182,22 @@ public class ConfigDirUtil {
 	/**
 	 * @see #getFiles(String, String)
 	 */
+	public List<File> getFiles(String extension, List<String> wildcardExclusions) {
+		return getFiles(domainDirPath, extension, wildcardExclusions);
+	}
+	
+	/**
+	 * @see #getFiles(String, String)
+	 */
 	public List<File> getFiles(String extension) {
-		return getFiles(domainDirPath, extension);
+		return getFiles(domainDirPath, extension, Collections.emptyList());
 	}
 	
 	/**
 	 * Fetches the config. file from its relative path inside the configuration folder.
 	 * 
-	 * @param dirPath The absolute path to the containing directory, eg.
-	 *            "../configuration/addresshierarchy" or "../configuration_checksums/addresshierarchy"
+	 * @param dirPath The absolute path to the containing directory, eg. "../configuration/locations" or
+	 *            "../configuration_checksums/locations"
 	 * @param fileName The file name, eg. "config.xml" or "config.checksum"
 	 * @return The {@link File} instance.
 	 */
@@ -237,8 +262,7 @@ public class ConfigDirUtil {
 	/**
 	 * Compute the checksum of a configuration file.
 	 * 
-	 * @param domainDirPath The absolute path to the domain directory, eg.
-	 *            "../configuration/addresshierarchy"
+	 * @param domainDirPath The absolute path to the domain directory, eg. "../configuration/locations"
 	 * @param configFileName The config file name, eg. "config.xml"
 	 * @return The checksum of the file.
 	 */
@@ -326,8 +350,8 @@ public class ConfigDirUtil {
 	/**
 	 * Removes all the checksum files inside the provided directory.
 	 * 
-	 * @param checksumDirPath The absolute path to a config directory, eg.
-	 *            "../configuration/addresshierarchy" or "../configuration"
+	 * @param checksumDirPath The absolute path to a config directory, eg. "../configuration/locations"
+	 *            or "../configuration"
 	 * @param recursive Set to true to continue recursively into subdirectories.
 	 */
 	public static void deleteChecksums(String checksumDirPath, boolean recursive) {
@@ -362,8 +386,8 @@ public class ConfigDirUtil {
 	/**
 	 * Removes all the checksum files inside the provided directory.
 	 * 
-	 * @param checksumDirPath The absolute path to a config directory, eg.
-	 *            "../configuration/addresshierarchy" or "../configuration"
+	 * @param checksumDirPath The absolute path to a config directory, eg. "../configuration/locations"
+	 *            or "../configuration"
 	 */
 	public static void deleteChecksums(String checksumDirPath) {
 		

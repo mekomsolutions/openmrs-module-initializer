@@ -3,6 +3,7 @@ package org.openmrs.module.initializer.api.loaders;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.openmrs.annotation.OpenmrsProfile;
@@ -26,7 +27,7 @@ public class MdsLoader extends BaseLoader {
 	}
 	
 	@Override
-	public void load() {
+	public void load(List<String> wildcardExclusions) {
 		
 		ConfigDirUtil dirUtil = getDirUtil();
 		
@@ -36,7 +37,7 @@ public class MdsLoader extends BaseLoader {
 		importConfig.setExactMatch(ImportType.PREFER_THEIRS);
 		importer.setImportConfig(importConfig);
 		
-		for (File file : dirUtil.getFiles("zip")) { // processing all the zip files inside the domain
+		for (File file : dirUtil.getFiles("zip", wildcardExclusions)) { // processing all the zip files inside the domain
 			
 			String fileName = dirUtil.getFileName(file.getPath());
 			String checksum = dirUtil.getChecksumIfChanged(fileName);
