@@ -13,9 +13,9 @@ import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,45 +86,15 @@ public class ConfigDirUtil {
 		return domainDirPath;
 	}
 	
-	/*
-	 * To filter files of a certain extension only.
-	 * 
-	 * @param extension The file extension to filter for.
+	/**
+	 * Convenience method to a filename filter for files of a given extension.
+	 * @param The dot-less extension to filter for, eg. "xml", "json".
+	 * @return The filename filter.
 	 */
-	protected static FilenameFilter getExtensionFilenameFilter(final String extension) {
-		return new FilenameFilter() {
-			
-			@Override
-			public boolean accept(File dir, String name) {
-				String ext = FilenameUtils.getExtension(name);
-				if (StringUtils.isEmpty(ext)) { // to be safe, ext can only be null if name is null
-					return false;
-				}
-				if (new File(dir, name).isDirectory()) {
-					return false;
-				}
-				if (ext.equals(extension)) {
-					return true; // filtering only checksum files based on their extension
-				}
-				return false;
-			}
-		};
-	}
-	
-	/*
-	 * To filter directories only.
-	 */
-	protected static FilenameFilter getDirectoryFilenameFilter() {
-		return new FilenameFilter() {
-			
-			@Override
-			public boolean accept(File dir, String name) {
-				if (new File(dir, name).isDirectory()) {
-					return true;
-				}
-				return false;
-			}
-		};
+	public static FilenameFilter getExtensionFilenameFilter(final String extension) {
+		FilenameFilter filter = (file, name) -> new SuffixFileFilter("." + extension).accept(file, name)
+		        && FileFileFilter.FILE.accept(file, name);
+		return filter;
 	}
 	
 	/**
@@ -183,10 +153,7 @@ public class ConfigDirUtil {
 		
 		final List<File> allFiles = new ArrayList<File>();
 		
-		FilenameFilter filter = (file, name) -> new SuffixFileFilter("." + extension).accept(file, name)
-		        && FileFileFilter.FILE.accept(file, name);
-		
-		final File[] files = new File(domainDirPath).listFiles(filter);
+		final File[] files = new File(domainDirPath).listFiles(getExtensionFilenameFilter(extension));
 		if (files != null) {
 			allFiles.addAll(Arrays.asList(files));
 		}
@@ -368,7 +335,7 @@ public class ConfigDirUtil {
 		deleteChecksums(checksumDirPath);
 		
 		if (recursive) {
-			final String[] dirNames = new File(checksumDirPath).list(getDirectoryFilenameFilter());
+			final String[] dirNames = new File(checksumDirPath).list(DirectoryFileFilter.INSTANCE);
 			if (dirNames != null) {
 				for (String dirName : dirNames) {
 					deleteChecksums(new StringBuilder(checksumDirPath).append(File.separator).append(dirName).toString(),
