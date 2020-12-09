@@ -1,3 +1,5 @@
 language: java
 jdk:
  - openjdk8
+install:
+  mvn package -Dmaven.javadoc.skip=true -B -V -P validator

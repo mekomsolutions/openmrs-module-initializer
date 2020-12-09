@@ -198,7 +198,7 @@ public class ConfigDirUtil {
 	 * 
 	 * @param dirPath The absolute path to the containing directory, eg. "../configuration/locations" or
 	 *            "../configuration_checksums/locations"
-	 * @param fileName The file name, eg. "config.xml" or "config.checksum"
+	 * @param fileName The file name, eg. "locations.csv" or "locations.checksum"
 	 * @return The {@link File} instance.
 	 */
 	protected static File getFile(String dirPath, String fileName) {
@@ -217,8 +217,8 @@ public class ConfigDirUtil {
 	/**
 	 * Returns the checksum file name inside the domain folder.
 	 * 
-	 * @param configFileName The config file name, eg. "config.xml"
-	 * @return The checksum file name, eg. "config.checksum"
+	 * @param configFileName The config file name, eg. "locations.csv"
+	 * @return The checksum file name, eg. "locations.checksum"
 	 */
 	public static String toChecksumFileName(String configFileName) {
 		// addressConfiguration.xml -> addressConfiguration.checksum
@@ -228,7 +228,7 @@ public class ConfigDirUtil {
 	/**
 	 * @param checksumDirPath The absolute path to the checksum directory, eg.
 	 *            "../configuration_checksums"
-	 * @param configFileName The config file name, eg. "config.xml"
+	 * @param configFileName The config file name, eg. "locations.csv"
 	 * @return The checksum of the config file that was last successfully loaded.
 	 */
 	protected static String readLatestChecksum(String checksumDirPath, String configFileName) {
@@ -263,7 +263,7 @@ public class ConfigDirUtil {
 	 * Compute the checksum of a configuration file.
 	 * 
 	 * @param domainDirPath The absolute path to the domain directory, eg. "../configuration/locations"
-	 * @param configFileName The config file name, eg. "config.xml"
+	 * @param configFileName The config file name, eg. "locations.csv"
 	 * @return The checksum of the file.
 	 */
 	protected static String computeChecksum(String domainDirPath, String configFileName) {
@@ -297,7 +297,7 @@ public class ConfigDirUtil {
 	 * 
 	 * @param checksumDirPath The absolute path to the checksum directory, eg.
 	 *            "../configuration_checksums"
-	 * @param configFileName The config file name, eg. "config.xml"
+	 * @param configFileName The config file name, eg. "locations.csv"
 	 * @param checksum The checksum hash of the config file.
 	 */
 	protected static void writeChecksum(String checksumDirPath, String checksumFileName, String checksum) {
@@ -328,7 +328,7 @@ public class ConfigDirUtil {
 	 * 
 	 * @param checksumDirPath The absolute path to the checksum directory, eg.
 	 *            "../configuration_checksums"
-	 * @param configFileName The config file name, eg. "config.xml"
+	 * @param configFileName The config file name, eg. "locations.csv"
 	 */
 	protected static void deleteChecksum(String checksumDirPath, String checksumFileName) {
 		

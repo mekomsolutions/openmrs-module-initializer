@@ -35,8 +35,16 @@
         <module>api-2.2</module>
         <module>api-2.3</module>
         <module>omod</module>
-        <module>validator</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>validator</id>
+            <modules>
+                <module>validator</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <properties>
         <openmrsPlatformVersion>2.1.1</openmrsPlatformVersion>
