@@ -32,7 +32,7 @@ public interface Loader extends Comparable<Loader> {
 	/**
 	 * Triggers the processing (or "loading") of the domain's files.
 	 * 
-	 * @param wildcardExclusions A list of wildcard file filter patterns to filter out unwanted files.
+	 * @param wildcardExclusions A list of wildcard patterns to filter out unwanted files.
 	 * @see WildcardFileFilter
 	 */
 	void load(List<String> wildcardExclusions);

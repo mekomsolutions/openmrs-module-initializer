@@ -164,7 +164,7 @@ public class ConfigDirUtil {
 				for (String pattern : Optional.ofNullable(wildcardExclusions).orElse(Collections.emptyList())) {
 					matched = matched || new WildcardFileFilter(pattern).accept(dir, name);
 				}
-				return !matched; // a file is accepted when the (exclusion) patterns are not matched 
+				return !matched; // a file is accepted when the (exclusion) patterns are *not* matched 
 			}
 		};
 		

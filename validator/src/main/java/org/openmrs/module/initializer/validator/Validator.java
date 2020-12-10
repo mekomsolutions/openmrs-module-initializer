@@ -108,7 +108,7 @@ public class Validator {
 		Stream.of(Domain.values()).forEach(d -> {
 			options.addOption(null, ARG_EXCLUDE + "." + d.getName(), true,
 			    "<arg>: a CSV string of wildcard file exclusion patterns to apply to the '" + d.getName() + "' domain."
-			            + "\nEg.: *foo*.bar,*f00*.baz");
+			            + "\nEg.: *foo*.bar,*f00?.baz");
 		});
 		return options;
 	}
