@@ -99,9 +99,11 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 			@SuppressWarnings("unchecked")
 			Collection<String> unsupportedDomains = CollectionUtils.subtract(specifiedDomains,
 			    Stream.of(Domain.values()).map(d -> d.getName()).collect(Collectors.toSet()));
-			log.warn("Those domains are unknown and are not supported, however they are mentioned in the "
-			        + (includeSpecifiedDomains ? "inclusion" : "exclusion") + " list of domains: "
-			        + unsupportedDomains.toString());
+			if (CollectionUtils.isNotEmpty(unsupportedDomains)) {
+				log.warn("Those domains are unknown and are not supported, however they are mentioned in the "
+				        + (includeSpecifiedDomains ? "inclusion" : "exclusion") + " list of domains: "
+				        + unsupportedDomains.toString());
+			}
 		}
 		
 		// Per-domain wildcard exclusion patterns

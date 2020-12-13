@@ -41,6 +41,7 @@
         <profile>
             <id>validator</id>
             <modules>
+                <module>validator-first-dependency</module>
                 <module>validator</module>
             </modules>
         </profile>

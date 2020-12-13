@@ -1,11 +1,14 @@
 package org.openmrs.module.initializer.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
+import static org.openmrs.module.initializer.InitializerConstants.ARG_EXCLUDE;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_EXCLUDE;
 import static org.openmrs.module.initializer.validator.Validator.ARG_CIEL_PATH;
 import static org.openmrs.module.initializer.validator.Validator.ARG_CONFIG_DIR;
 import static org.openmrs.module.initializer.validator.Validator.cmdLine;
@@ -17,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 import org.dbunit.DatabaseUnitException;
@@ -30,9 +34,12 @@ import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.cfg.Environment;
 import org.hibernate.dialect.MySQLDialect;
 import org.hsqldb.cmdline.SqlFile;
+import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.test.TestUtil;
 
@@ -154,17 +161,13 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		}
 		if (cmdLine.hasOption(ARG_DOMAINS)) {
 			getRuntimeProperties().put(PROPS_DOMAINS, cmdLine.getOptionValue(ARG_DOMAINS));
-			//			String domains = cmdLine.getOptionValue(ARG_DOMAINS);
-			//			if (domains.startsWith("!")) {
-			//				includeSpecifiedDomains = false;
-			//				domains = StringUtils.removeStart(domains, "!");
-			//			}
-			//			specifiedDomains = new HashSet<String>(Arrays.asList(StringUtils.split(domains, ",")));
-			//			Collection<String> unsupportedDomains = CollectionUtils.subtract(specifiedDomains,
-			//			    Stream.of(Domain.values()).map(d -> d.getName()).collect(Collectors.toSet()));
-			//			assertThat("Those domains are unknown and not supported: " + unsupportedDomains.toString(), unsupportedDomains,
-			//			    emptyCollectionOf(String.class));
 		}
+		Stream.of(Domain.values()).forEach(d -> {
+			String arg = ARG_EXCLUDE + "." + d.getName();
+			if (cmdLine.hasOption(arg)) {
+				getRuntimeProperties().put(PROPS_EXCLUDE + "." + d.getName(), cmdLine.getOptionValue(arg));
+			}
+		});
 		
 	}
 	
@@ -186,5 +189,10 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	@Test
 	public void loadConfiguration() {
 		getService().load(true);
+	}
+	
+	@After
+	public void conclude() {
+		Assert.assertThat("The Initializer log file is not empty, please check its reported errors and warnings.", Validator.errors, is(not(empty())));
 	}
 }
