@@ -27,6 +27,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.log4j.spi.LoggingEvent;
 import org.junit.runner.JUnitCore;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.utils.Utils;
@@ -43,7 +44,7 @@ public class Validator {
 	
 	public static final String ARG_CHECKSUMS = "checksums";
 	
-	public static Set<org.apache.log4j.spi.LoggingEvent> errors = new HashSet<>();
+	public static Set<LoggingEvent> errors = new HashSet<>();
 	
 	/**
 	 * Properly escapes the single quotes of a piece of SQL for MySQL. Strings ending with a ";" are

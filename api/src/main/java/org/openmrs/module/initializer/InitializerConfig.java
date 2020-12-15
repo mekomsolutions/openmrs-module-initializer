@@ -25,21 +25,20 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.api.context.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 /**
  * Contains module's config.
  */
 @Component
-public class InitializerConfig {
+public class InitializerConfig implements InitializingBean {
 	
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
@@ -51,7 +50,14 @@ public class InitializerConfig {
 	
 	private Boolean skipChecksums = false;
 	
-	@PostConstruct
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		init();
+	}
+	
+	/**
+	 * Initializes the configuration from the runtime properties.
+	 */
 	public void init() {
 		// Inclusion or exclusion list of domains
 		String domainsCsv = Optional.ofNullable(Context.getRuntimeProperties().getProperty(PROPS_DOMAINS)).orElse("");

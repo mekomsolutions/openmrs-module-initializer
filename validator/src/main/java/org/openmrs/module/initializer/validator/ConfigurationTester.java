@@ -199,6 +199,6 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	@After
 	public void conclude() {
 		Assert.assertThat("The Initializer log file is not empty, please check its reported errors and warnings.",
-		    Validator.errors, is(not(empty())));
+		    Validator.errors, is(empty()));
 	}
 }
