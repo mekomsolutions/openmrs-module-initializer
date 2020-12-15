@@ -59,6 +59,7 @@
         <!-- Modules compatibility -->
         <appointmentsVersion>1.2.1</appointmentsVersion>
         <bahmniIeAppsVersion>1.1.0-SNAPSHOT</bahmniIeAppsVersion>
+        <htmlformentryVersion>4.0.0-SNAPSHOT</htmlformentryVersion>
         <idgenVersion>4.6.0-SNAPSHOT</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
@@ -131,6 +132,13 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>exti18n-api</artifactId>
             <version>${exti18nVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>htmlformentry-api</artifactId>
+            <version>${htmlformentryVersion}</version>
             <scope>provided</scope>
         </dependency>
 
