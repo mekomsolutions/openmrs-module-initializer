@@ -3,6 +3,7 @@ package org.openmrs.module.initializer.api.loaders;
 import java.util.Collections;
 
 import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.InitializerConfig;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.slf4j.Logger;
@@ -21,10 +22,13 @@ public abstract class BaseLoader implements Loader {
 	@Autowired
 	protected InitializerService iniz;
 	
+	@Autowired
+	protected InitializerConfig cfg;
+	
 	@Override
 	public ConfigDirUtil getDirUtil() {
 		return new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), iniz.getRejectionsDirPath(),
-		        getDomainName());
+		        getDomainName(), cfg);
 	}
 	
 	@Override

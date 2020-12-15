@@ -70,6 +70,9 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	@Autowired
 	protected InitializerService iniz;
 	
+	@Autowired
+	protected InitializerConfig cfg;
+	
 	protected Map<File, Locale> messagePropertiesMap;
 	
 	public Map<File, Locale> getMessagePropertiesMap() {
@@ -120,10 +123,10 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		setUseCodeAsDefaultMessage(true);
 		
 		ConfigDirUtil ahDir = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
-		        iniz.getRejectionsDirPath(), InitializerConstants.DOMAIN_ADDR));
+		        iniz.getRejectionsDirPath(), InitializerConstants.DOMAIN_ADDR, cfg));
 		addMessageProperties(ahDir.getDomainDirPath());
 		ConfigDirUtil msgDir = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
-		        iniz.getRejectionsDirPath(), InitializerConstants.DOMAIN_MSGPROP));
+		        iniz.getRejectionsDirPath(), InitializerConstants.DOMAIN_MSGPROP, cfg));
 		addMessageProperties(msgDir.getDomainDirPath());
 		
 		if (MapUtils.isEmpty(messagePropertiesMap)) {

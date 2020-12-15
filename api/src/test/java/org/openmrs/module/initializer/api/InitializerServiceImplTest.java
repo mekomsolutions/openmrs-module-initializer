@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.initializer.InitializerConfig;
 import org.openmrs.module.initializer.api.loaders.Loader;
 
 public class InitializerServiceImplTest {
@@ -32,6 +33,8 @@ public class InitializerServiceImplTest {
 	
 	private Loader drugsLoader = Mockito.spy(new MockLoader(DRUGS));
 	
+	private InitializerConfig cfg = new InitializerConfig();
+	
 	@Before
 	public void before() {
 		final List<Loader> loaders = Arrays.asList(conceptsLoader, encounterTypesLoader, drugsLoader);
@@ -42,6 +45,8 @@ public class InitializerServiceImplTest {
 				return loaders;
 			}
 		};
+		
+		((InitializerServiceImpl) iniz).setConfig(cfg);
 	}
 	
 	@Test
@@ -50,6 +55,7 @@ public class InitializerServiceImplTest {
 		Properties props = new Properties();
 		props.put(PROPS_DOMAINS, "concepts,encountertypes");
 		Context.setRuntimeProperties(props);
+		cfg.init();
 		
 		// replay
 		iniz.load(true);
@@ -66,6 +72,7 @@ public class InitializerServiceImplTest {
 		Properties props = new Properties();
 		props.put(PROPS_DOMAINS, "!concepts,drugs");
 		Context.setRuntimeProperties(props);
+		cfg.init();
 		
 		// replay
 		iniz.load(true);

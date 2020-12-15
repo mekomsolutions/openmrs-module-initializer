@@ -27,6 +27,8 @@ public class InitializerConstants {
 	
 	public static final String PROPS_EXCLUDE = MODULE_ARTIFACT_ID + "." + ARG_EXCLUDE;
 	
+	public static final String PROPS_SKIPCHECKSUMS = MODULE_ARTIFACT_ID + "." + "skip.checksums";
+	
 	/*
 	 * 
 	 */

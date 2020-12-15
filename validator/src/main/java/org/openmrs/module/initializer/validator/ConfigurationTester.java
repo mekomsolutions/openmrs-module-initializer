@@ -9,6 +9,8 @@ import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_EXCLUDE;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_EXCLUDE;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_SKIPCHECKSUMS;
+import static org.openmrs.module.initializer.validator.Validator.ARG_CHECKSUMS;
 import static org.openmrs.module.initializer.validator.Validator.ARG_CIEL_PATH;
 import static org.openmrs.module.initializer.validator.Validator.ARG_CONFIG_DIR;
 import static org.openmrs.module.initializer.validator.Validator.cmdLine;
@@ -168,6 +170,9 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 				getRuntimeProperties().put(PROPS_EXCLUDE + "." + d.getName(), cmdLine.getOptionValue(arg));
 			}
 		});
+		if (!cmdLine.hasOption(ARG_CHECKSUMS)) {
+			getRuntimeProperties().put(PROPS_SKIPCHECKSUMS, "true");
+		}
 		
 	}
 	

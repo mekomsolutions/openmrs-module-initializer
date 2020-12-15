@@ -12,27 +12,18 @@ package org.openmrs.module.initializer.api;
 import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CHECKSUM;
 import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CONFIG;
 import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_REJECTIONS;
-import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
-import static org.openmrs.module.initializer.InitializerConstants.PROPS_EXCLUDE;
 
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -40,18 +31,26 @@ import org.openmrs.Concept;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.InitializerConfig;
 import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class InitializerServiceImpl extends BaseOpenmrsService implements InitializerService {
 	
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
+	private InitializerConfig cfg;
+	
 	private Map<String, Object> keyValueCache = new HashMap<String, Object>();
+	
+	@Autowired
+	public void setConfig(InitializerConfig cfg) {
+		this.cfg = cfg;
+	}
 	
 	public Path getBasePath() {
 		return Paths.get(new File(OpenmrsUtil.getApplicationDataDirectory()).toURI());
@@ -84,44 +83,19 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	@Override
 	public void load(boolean applyFilters) {
-		Set<String> specifiedDomains = new HashSet<>();
-		boolean includeSpecifiedDomains = true;
 		
-		// Inclusion or exclusion list of domains
-		if (applyFilters) {
-			String domainsCsv = Optional.ofNullable(Context.getRuntimeProperties().getProperty(PROPS_DOMAINS)).orElse("");
-			if (StringUtils.startsWith(domainsCsv, "!")) {
-				includeSpecifiedDomains = false;
-				domainsCsv = StringUtils.removeStart(domainsCsv, "!");
-			}
-			specifiedDomains.addAll(Arrays.asList(StringUtils.split(domainsCsv, ",")));
-			
-			@SuppressWarnings("unchecked")
-			Collection<String> unsupportedDomains = CollectionUtils.subtract(specifiedDomains,
-			    Stream.of(Domain.values()).map(d -> d.getName()).collect(Collectors.toSet()));
-			if (CollectionUtils.isNotEmpty(unsupportedDomains)) {
-				log.warn("Those domains are unknown and are not supported, however they are mentioned in the "
-				        + (includeSpecifiedDomains ? "inclusion" : "exclusion") + " list of domains: "
-				        + unsupportedDomains.toString());
-			}
-		}
-		
-		// Per-domain wildcard exclusion patterns
-		Map<String, List<String>> domainExclusions = new HashMap<>();
-		if (applyFilters) {
-			Stream.of(Domain.values()).forEach(d -> {
-				String exclusionsCsv = Context.getRuntimeProperties().getProperty(PROPS_EXCLUDE + "." + d.getName());
-				if (!StringUtils.isEmpty(exclusionsCsv)) {
-					domainExclusions.put(d.getName(), Arrays.asList(StringUtils.split(exclusionsCsv, ",")));
-				}
-			});
-		}
+		final Set<String> specifiedDomains = applyFilters ? cfg.getFilteredDomains() : Collections.emptySet();
+		final boolean includeSpecifiedDomains = applyFilters ? cfg.isInclusionList() : true;
 		
 		for (Loader loader : getLoaders()) {
 			boolean domainSpecified = specifiedDomains.contains(loader.getDomainName());
 			if (specifiedDomains.isEmpty()
 			        || ((includeSpecifiedDomains && domainSpecified) || (!includeSpecifiedDomains && !domainSpecified))) {
-				loader.load(domainExclusions.get(loader.getDomainName()));
+				
+				final List<String> wildcardExclusions = applyFilters ? cfg.getWidlcardExclusions(loader.getDomainName())
+				        : Collections.emptyList();
+				loader.load(wildcardExclusions);
+				
 			}
 		}
 	}

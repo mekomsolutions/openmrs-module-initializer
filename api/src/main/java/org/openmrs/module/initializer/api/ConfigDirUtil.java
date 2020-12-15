@@ -19,6 +19,7 @@ import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.openmrs.module.initializer.InitializerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,8 @@ public class ConfigDirUtil {
 	protected static final String CHECKSUM_FILE_EXT = "checksum";
 	
 	protected static final Logger log = LoggerFactory.getLogger(ConfigDirUtil.class);
+	
+	protected boolean skipChecksums = true;
 	
 	/*
 	 * The domain name, so the final part of configuration domain subdirectory. Eg.
@@ -65,11 +68,13 @@ public class ConfigDirUtil {
 	 *            "../configuration_checksums"
 	 * @param domain The metadata domain, eg. "locations"
 	 */
-	public ConfigDirUtil(String configDirPath, String checksumDirPath, String rejectionsDirPath, String domain) {
+	public ConfigDirUtil(String configDirPath, String checksumDirPath, String rejectionsDirPath, String domain,
+	    InitializerConfig cfg) {
 		this.domain = domain;
 		this.domainDirPath = Paths.get(configDirPath, domain).toString();
 		this.checksumDirPath = Paths.get(checksumDirPath, domain).toString();
 		this.rejectionsDirPath = Paths.get(rejectionsDirPath, domain).toString();
+		this.skipChecksums = cfg.skipChecksums();
 	}
 	
 	public String getDomain() {
@@ -320,7 +325,9 @@ public class ConfigDirUtil {
 	 * @see #writeChecksum(String, String, String)
 	 */
 	public void writeChecksum(String configFileName, String checksum) {
-		writeChecksum(checksumDirPath, ConfigDirUtil.toChecksumFileName(configFileName), checksum);
+		if (!skipChecksums) {
+			writeChecksum(checksumDirPath, toChecksumFileName(configFileName), checksum);
+		}
 	}
 	
 	/**

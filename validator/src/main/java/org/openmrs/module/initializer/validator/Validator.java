@@ -41,6 +41,8 @@ public class Validator {
 	
 	public static final String ARG_HELP = "help";
 	
+	public static final String ARG_CHECKSUMS = "checksums";
+	
 	public static Set<org.apache.log4j.spi.LoggingEvent> errors = new HashSet<>();
 	
 	/**
@@ -110,6 +112,8 @@ public class Validator {
 			    "<arg>: a CSV string of wildcard file exclusion patterns to apply to the '" + d.getName() + "' domain."
 			            + "\nEg.: *foo*.bar,*f00?.baz");
 		});
+		options.addOption("s", "checksums", false,
+		    "To enable writing the checksum files in a checksum folder besides the configuration folder.");
 		return options;
 	}
 	
