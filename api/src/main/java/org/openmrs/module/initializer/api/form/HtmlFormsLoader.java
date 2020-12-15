@@ -58,7 +58,7 @@ public class HtmlFormsLoader extends BaseLoader {
 	@Override
 	public void load() {
 		ConfigDirUtil dirUtil = getDirUtil();
-		for (File file : dirUtil.getFilesRecursively("xml")) { // processing all the XML files inside the domain
+		for (File file : dirUtil.getFiles("xml")) { // processing all the XML files inside the domain
 			
 			String fileName = dirUtil.getFileName(file.getPath());
 			String checksum = dirUtil.getChecksumIfChanged(fileName);

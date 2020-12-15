@@ -101,12 +101,6 @@ public class HtmlFormsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		Assert.assertEquals(numFormsAfterFirstLoad, numFormsAfterSecondLoad);
 	}
 	
-	@Test
-	public void load_shouldLoadFormsFromNestedSubdirectories() {
-		htmlFormsLoader.load();
-		Assert.assertEquals(3, htmlFormEntryService.getAllHtmlForms().size());
-	}
-	
 	protected void updateHtmlFormAttribute(Document doc, String attributeName, String attributeValue) throws Exception {
 		Node htmlFormNode = HtmlFormEntryUtil.findChild(doc, HtmlFormsLoader.HTML_FORM_TAG);
 		NamedNodeMap atts = htmlFormNode.getAttributes();

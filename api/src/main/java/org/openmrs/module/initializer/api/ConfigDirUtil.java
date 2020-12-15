@@ -190,40 +190,10 @@ public class ConfigDirUtil {
 	}
 	
 	/**
-	 * Fetches all the files in a directory and any subdirectories that matches the given extension.
-	 * 
-	 * @param dir The {@link File} to search for files
-	 * @param extension The extension to filter for, eg "xml".
-	 * @return The list of {@link File} instances.
-	 */
-	protected List<File> getFilesRecursively(File dir, String extension) {
-		final List<File> allFiles = new ArrayList<>();
-		if (dir.exists() && dir.isDirectory()) {
-			allFiles.addAll(getFiles(dir.getAbsolutePath(), extension));
-			final File[] filesInDir = dir.listFiles();
-			if (filesInDir != null) {
-				for (File fileInDir : filesInDir) {
-					if (fileInDir.isDirectory()) {
-						allFiles.addAll(getFilesRecursively(fileInDir, extension));
-					}
-				}
-			}
-		}
-		return allFiles;
-	}
-	
-	/**
 	 * @see #getFiles(String, String)
 	 */
 	public List<File> getFiles(String extension) {
 		return getFiles(domainDirPath, extension);
-	}
-	
-	/**
-	 * @see #getFilesRecursively(File, String)
-	 */
-	public List<File> getFilesRecursively(String extension) {
-		return getFilesRecursively(new File(domainDirPath), extension);
 	}
 	
 	/**
