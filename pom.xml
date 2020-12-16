@@ -48,7 +48,11 @@
     </profiles>
 
     <properties>
-        <openmrsPlatformVersion>2.1.1</openmrsPlatformVersion>
+        <openmrsVersion2.1>2.1.1</openmrsVersion2.1>
+        <openmrsVersion2.2>2.2.0</openmrsVersion2.2>
+        <openmrsVersion2.3>2.3.0</openmrsVersion2.3>
+
+        <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
         <addresshierarchyVersion>2.11.0</addresshierarchyVersion>
         <exti18nVersion>1.0.0</exti18nVersion>
 

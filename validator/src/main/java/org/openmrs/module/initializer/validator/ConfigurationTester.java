@@ -96,6 +96,11 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	}
 	
 	@Override
+	public void updateSearchIndex() {
+		// to prevent Data Filter's 'Illegal Record Access'
+	}
+	
+	@Override
 	public void setAutoIncrementOnTablesWithNativeIfNotAssignedIdentityGenerator() {
 	}
 	

@@ -12,6 +12,10 @@
     <name>Initializer API</name>
     <description>API project for Initializer</description>
 
+    <properties>
+        <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>commons-codec</groupId>

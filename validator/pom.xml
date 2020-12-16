@@ -16,8 +16,7 @@
   <properties>
     <springVersion>4.1.4.RELEASE</springVersion>
     <!-- OpenMRS Core and modules -->
-    <!-- <openmrsPlatformVersion>2.1.1</openmrsPlatformVersion> -->
-    <openmrsPlatformVersion>2.2.0</openmrsPlatformVersion>
+    <openmrsPlatformVersion>${openmrsVersion2.3}</openmrsPlatformVersion>
     <reportingVersion>1.19.0</reportingVersion>
     <reportingCompatibilityVersion>2.0.6</reportingCompatibilityVersion>
     <htmlwidgetsVersion>1.7.2</htmlwidgetsVersion>
@@ -69,20 +68,6 @@
       <type>jar</type>
     </dependency>
 
-    <!-- <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-module-junit4</artifactId>
-      <version>2.0.9</version>
-      <type>jar</type>
-    </dependency>
-
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-api-mockito2</artifactId>
-      <version>2.0.9</version>
-      <type>jar</type>
-    </dependency> -->
-
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
@@ -133,12 +118,12 @@
       <type>jar</type>
     </dependency>
 
-    <!-- <dependency>
+    <dependency>
       <groupId>${project.parent.groupId}</groupId>
       <artifactId>${project.parent.artifactId}-api-2.3</artifactId>
       <version>${project.parent.version}</version>
       <type>jar</type>
-    </dependency> -->
+    </dependency>
 
     <dependency>
       <groupId>org.openmrs.api</groupId>
@@ -152,12 +137,14 @@
           <artifactId>slf4j-api</artifactId>
         </exclusion>
         <!-- AbstractMethodError at org.hibernate.type.CustomType.nullSafeSet(CustomType.java:158) -->
-        <exclusion>
+        <!-- <exclusion>
           <groupId>org.hibernate</groupId>
           <artifactId>hibernate-search-orm</artifactId>
-        </exclusion>
+        </exclusion> -->
       </exclusions>
     </dependency>
+
+    <!-- AbstractMethodError at org.hibernate.type.CustomType.nullSafeSet(CustomType.java:158) -->
 
     <!-- <dependency>
       <groupId>org.hibernate</groupId>
@@ -199,12 +186,6 @@
       <artifactId>openmrs-test</artifactId>
       <version>${openmrsPlatformVersion}</version>
       <type>pom</type>
-      <!-- <exclusions>
-        <exclusion>
-          <groupId>org.powermock</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions> -->
     </dependency>
 
     <dependency>
@@ -343,13 +324,13 @@
       <type>jar</type>
     </dependency>
 
-    <!-- <dependency>
+    <dependency>
       <groupId>org.openmrs.module</groupId>
       <artifactId>datafilter-api</artifactId>
       <version>${datafilterVersion}</version>
       <scope>runtime</scope>
       <type>jar</type>
-    </dependency> -->
+    </dependency>
 
   </dependencies>
 
