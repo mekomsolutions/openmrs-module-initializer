@@ -44,6 +44,8 @@ public class Validator {
 	
 	public static final String ARG_CHECKSUMS = "checksums";
 	
+	public static final String ARG_VERBOSE = "verbose";
+	
 	public static Set<LoggingEvent> errors = new HashSet<>();
 	
 	/**
@@ -115,6 +117,7 @@ public class Validator {
 		});
 		options.addOption("s", "checksums", false,
 		    "To enable writing the checksum files in a checksum folder besides the configuration folder.");
+		options.addOption("D", ARG_VERBOSE, false, "To enable verbose logging.");
 		return options;
 	}
 	
@@ -126,7 +129,6 @@ public class Validator {
 			logger.addAppender(new ValidatorAppender());
 			logger.setLevel(org.apache.log4j.Level.WARN);
 			
-			//			org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 			org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(org.apache.log4j.Level.INFO);
 			org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(org.apache.log4j.Level.INFO);
 		}
@@ -139,6 +141,10 @@ public class Validator {
 			if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption(ARG_HELP)) {
 				new HelpFormatter().printHelp(getJarFile().getName(), options);
 				return;
+			}
+			
+			if (cmdLine.hasOption(ARG_VERBOSE)) {
+				org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.DEBUG);
 			}
 		}
 		
