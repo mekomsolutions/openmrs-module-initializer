@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.Charsets;
@@ -102,22 +103,26 @@ public class Validator {
 		final String domainsCsv = removeEnd(sb.toString(), ",");
 		
 		Options options = new Options();
-		options.addOption("h", ARG_HELP, false, "Prints help.");
-		options.addOption("c", ARG_CONFIG_DIR, true, "<arg>: the path to the OpenMRS config directory.");
-		options.addOption("l", ARG_CIEL_PATH, true, "<arg>: the path to the CIEL .sql dump file.");
-		options.addOption("d", ARG_DOMAINS, true,
-		    "<arg>: a CSV string of selected domains to selectively include, eg.: metadatasharing,concepts,roles ;"
-		            + "\nor to selectively exclude, eg.: !metadatasharing,concepts,roles ;"
-		            + "\nomit the argument altogether to process all domains." + "\nAvailable domains: " + domainsCsv);
+		options.addOption(Option.builder("h").longOpt(ARG_HELP).desc("Prints help.").build());
+		options.addOption(Option.builder("c").hasArg().longOpt(ARG_CONFIG_DIR).argName("DIR")
+		        .desc("The path to the OpenMRS config directory.").build());
+		options.addOption(Option.builder("l").longOpt(ARG_CIEL_PATH).hasArg().argName("FILE")
+		        .desc("The path to the CIEL .sql file.").build());
+		options.addOption(Option.builder("d").longOpt(ARG_DOMAINS).hasArg().argName("CSV")
+		        .desc("A CSV string of selected domains to selectively include, eg.: metadatasharing,concepts,roles ;"
+		                + "\nor to selectively exclude, eg.: '!metadatasharing,concepts,roles' ;"
+		                + "\nomit the argument altogether to process all domains." + "\nAvailable domains: " + domainsCsv)
+		        .build());
 		
 		Stream.of(Domain.values()).forEach(d -> {
-			options.addOption(null, ARG_EXCLUDE + "." + d.getName(), true,
-			    "<arg>: a CSV string of wildcard file exclusion patterns to apply to the '" + d.getName() + "' domain."
-			            + "\nEg.: *foo*.bar,*f00?.baz");
+			options.addOption(Option.builder().longOpt(ARG_EXCLUDE + "." + d.getName()).hasArg().argName("CSV")
+			        .desc("A CSV string of wildcard file exclusion patterns to apply to the '" + d.getName() + "' domain."
+			                + "\nEg.: '*foo*.bar,*f00?.baz'")
+			        .build());
 		});
-		options.addOption("s", "checksums", false,
-		    "To enable writing the checksum files in a checksum folder besides the configuration folder.");
-		options.addOption("D", ARG_VERBOSE, false, "To enable verbose logging.");
+		options.addOption(Option.builder("s").longOpt("checksums")
+		        .desc("Enables writing the checksum files in a checksum folder besides the configuration folder.").build());
+		options.addOption(Option.builder("D").longOpt(ARG_VERBOSE).desc("Enables verbose logging.").build());
 		return options;
 	}
 	
@@ -139,7 +144,9 @@ public class Validator {
 			cmdLine = new DefaultParser().parse(options, args);
 			
 			if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption(ARG_HELP)) {
-				new HelpFormatter().printHelp(getJarFile().getName(), options);
+				HelpFormatter f = new HelpFormatter();
+				f.setWidth(f.getWidth() * 2);
+				f.printHelp(getJarFile().getName(), options);
 				return;
 			}
 			
@@ -148,10 +155,7 @@ public class Validator {
 			}
 		}
 		
-		//		JUnitCore junit = new JUnitCore();
-		//		Result result = junit.run(ConfigValidationTest.class);
-		//		System.out.println("Success: " + result.wasSuccessful());
-		
+		// Testing the config
 		JUnitCore.main(ConfigurationTester.class.getCanonicalName());
 		
 	}

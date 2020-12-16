@@ -107,6 +107,12 @@ mvn clean package
 * Data Filter 1.0.0 (*compatible*)
 * Bahmni I.e Apps 1.0.0 (*compatible*)
 
+### How to test out your OpenMRS configs?
+See [the _Initializer Validator_ README page](readme/validator.md).
+
+### Runtime finer controls of domains loading
+See the [documentation on runtime properties](readme/rtprops.md).
+
 ### Quick facts
 Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.
 
@@ -118,6 +124,10 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 ### Releases notes
 
 #### Version 2.1.0
+* _Initialize Validator_ a standalone fatjar to make dry runs of OpenMRS configs.
+* Added a runtime property to define an inclusion or exclusion list of domains.
+* Added a runtime property to specify wildcard patterns filters for each domain.
+* Added a runtime property to toggle off the generation of the checksums.
 * Bulk creation and edition of ID Gen's autogeneration options provided through CSV files in **configuration/autogenerationoptions**.
 * Support associating location tags to locations using boolean `Tag|` headers.
 * Bulk creation and edition of location tags provided through CSV files in **configuration/locationtags**.
