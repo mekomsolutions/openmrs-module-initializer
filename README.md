@@ -108,10 +108,10 @@ mvn clean package
 * Bahmni I.e Apps 1.0.0 (*compatible*)
 
 ### How to test out your OpenMRS configs?
-See [the _Initializer Validator_ README page](readme/validator.md).
+See the [Initializer Validator README page](readme/validator.md).
 
 ### Runtime finer controls of domains loading
-See the [documentation on runtime properties](readme/rtprops.md).
+See the [documentation on Initializer's runtime properties](readme/rtprops.md).
 
 ### Quick facts
 Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.

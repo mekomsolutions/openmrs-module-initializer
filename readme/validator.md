@@ -20,36 +20,62 @@ java -jar ./validator/target/initializer-validator-2.1.0-SNAPSHOT.jar \
 4) That's it! The dry run will either pass or fail.
 <br/>In case of failures all the relevant logs can be analysed at **./validator/target/initializer.log**.
 
-### Examples on how to make a dry run
-#### On top of CIEL
+### Dry run examples
+##### On top of CIEL
 ```bash
 java -jar ./validator/target/initializer-validator-2.1.0-SNAPSHOT.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration \
   --ciel-path=/Users/mksd/Downloads/openmrs_concepts_2.2_20200927.sql
 ```
-#### Skipping some domains
+##### Skipping some domains
 ```bash
 java -jar validator/target/initializer-validator-2.1.0-SNAPSHOT.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration \
   --domains='!metadatasharing,privileges,roles'
 ```
-#### With only some domains
+##### Including only some domains
 ```bash
 java -jar validator/target/initializer-validator-2.1.0-SNAPSHOT.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration \
   --domains='concepts,locations'
 ```
-#### Excluding some files in a domain
+##### Excluding some files in a domain
 ```bash
 java -jar validator/target/initializer-validator-2.1.0-SNAPSHOT.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration \
   --exclude.concepts='*diags*,*interventions*'
 ```
-In the above example all 'concepts' domain files matching the wildcard patterns `*diags*` and `*interventions*` will be filtered out.
-#### CLI arguments
-Just run the fatjar with no arguments to get a list of all possible options:
+In the above example all 'concepts' domain files matching the [wildcard patterns](https://docs.oracle.com/cd/E23389_01/doc.11116/e21038/conditions.htm#BABEJGAH) `*diags*` and `*interventions*` will be filtered out.
+##### CLI arguments
+Just run the fatjar with no arguments (or with the `--help` argument) to get a list of all possible options:
 ```bash
 java -jar validator/target/initializer-validator-2.1.0-SNAPSHOT.jar
 ```
 ### Kwown issues
 
+##### mariaDB4j `"dyld: Library not loaded"` on macOS:
+```bash
+"dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib"
+```
+This will only clearly come out when runnnig the Initializer Validator in `--verbose` mode.
+
+Try the following commands (assuming you are using [Homebrew](https://brew.sh/)):
+
+1. Uninstall openssl:
+```bash
+brew uninstall --ignore-dependencies openssl
+```
+2. Install openssl 1.0.x:
+```bash
+brew tap-new company/team; brew extract --version 1.0.2t openssl company/team; brew install company/team/openssl@1.0.2t
+```
+3. Link it to the expected path:
+```bash
+ln -s /usr/local/Cellar/openssl@1.0.2t/1.0.2t /usr/local/opt/openssl
+```
+This replaces the openssl vesion currently installed with version 1.0.2t. To undo this, just upgrade openssl: `brew upgrade openssl`.
+
+###### References:
+* '[Mac OS X MariaDB 10.3.13 binaries status unclear - working or not? If NOK, how to fix?](https://github.com/vorburger/MariaDB4j/issues/288)'
+  * Specifically [here](https://github.com/vorburger/MariaDB4j/issues/288#issuecomment-552106844). 
+* '[macOS OpenSSL version issue - Homebrew moved it from v1.0 to v1.1 - initial fix](https://github.com/kelaberetiv/TagUI/issues/635#issuecomment-696948461)'
