@@ -88,7 +88,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 			setMariaDB4jProps(runtimeProperties);
 		}
 		catch (ManagedProcessException e) {
-			log.error("MariaDB4j could not be setup, reverting to defaults.", e);
+			log.error("mariaDB4j could not be setup, reverting to defaults.", e);
 			runtimeProperties = super.getRuntimeProperties();
 		}
 		
