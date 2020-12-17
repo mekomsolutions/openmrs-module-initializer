@@ -1,10 +1,10 @@
 ## Initializer Validator
 
 ### In a nutshell
-The Initializer Validator is a standalone fatjar to make dry runs of your OpenMRS configs and report back on any errors. This enables developers and implementers to be warned well ahead of time that a config would fail when loaded on _real_ OpenMRS instances.
+The Initializer Validator is a standalone fatjar to make dry runs of your OpenMRS configs and to report on any errors. This enables developers and implementers to be warned well ahead of time that a config would fail when loaded on _real_ OpenMRS instances.
 
 ### How it works
-The Initializer Validator replays OpenMRS configs in a Spring context-sensitive test environment, very much alike any OpenMRS Spring context-sensitive test. This means that the data (or metadata in this case) is loaded in a real database, in fact an instance of MariaDB. This ensures that the dry run occurs in an environment that is very close to the real app runtime setup.
+The Initializer Validator replays OpenMRS configs in a Spring context-sensitive test environment, very much like any OpenMRS Spring context-sensitive test. This means that the data (or metadata in this case) is loaded in a real database, in fact an instance of MariaDB. This ensures that the dry run occurs in an environment that is very close to the real app runtime setup.
 
 ### How to make a dry run
 1) Build Initializer with the `validator` profile
