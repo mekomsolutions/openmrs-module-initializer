@@ -1,6 +1,6 @@
 ## Runtime Properties
 
-The runtime behaviour of Initializer can to a certain extent be control by a handful of [OpenMRS runtime properties](https://wiki.openmrs.org/x/zhAz).
+The runtime behaviour of Initializer can to a certain extent be controlled by a handful of [OpenMRS runtime properties](https://wiki.openmrs.org/x/zhAz).
 
 ### 1) `initializer.domains` _(optional)_
 Defines and inclusion or exclusion list of domains as a CSV string of domain names. If this property is unspecified all domains are being processed.
