@@ -41,6 +41,7 @@ import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkf
 import org.openmrs.module.initializer.api.roles.RolesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.openmrs.module.initializer.api.visittypes.VisitTypeLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest {
@@ -52,6 +53,9 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	
 	@Autowired
 	private MdsLoader mdsLoader;
+	
+	@Autowired
+	private VisitTypeLoader visitTypeLoader;
 	
 	@Autowired
 	private PatientIdentifierTypesLoader pitLoader;
@@ -154,6 +158,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = mdsLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = visitTypeLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		

@@ -40,7 +40,8 @@ public class VisitTypesCsvParser extends CsvParser<VisitType, BaseLineProcessor<
 		VisitType visitType = visitService.getVisitTypeByUuid(uuid);
 		if (visitType == null) {
 			
-			visitType = visitService.getVisitTypes(line.getName(true)).stream().filter(vt -> vt.getName() == line.getName(true)).findFirst().map(vt-> vt).orElse(null);
+			visitType = visitService.getVisitTypes(line.getName(true)).stream()
+			        .filter(vt -> vt.getName() == line.getName(true)).findFirst().map(vt -> vt).orElse(null);
 		}
 		if (visitType == null) {
 			visitType = new VisitType();

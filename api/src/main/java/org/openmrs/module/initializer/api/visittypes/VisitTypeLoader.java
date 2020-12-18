@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class VisitTypeLoader extends BaseCsvLoader<VisitType, VisitTypesCsvParser> {
-
+	
 	@Autowired
 	public void setParser(VisitTypesCsvParser parser) {
 		this.parser = parser;

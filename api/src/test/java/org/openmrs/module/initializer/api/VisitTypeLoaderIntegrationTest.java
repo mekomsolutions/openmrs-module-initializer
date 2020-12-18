@@ -22,21 +22,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 public class VisitTypeLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
-
+	
 	@Autowired
 	@Qualifier("visitService")
 	private VisitService vs;
-
+	
 	@Autowired
 	private VisitTypeLoader loader;
-
+	
 	@Test
 	public void load_shouldLoadVisitTypeAccordingToCsvFiles() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
-
+		
 		// Replay
 		loader.load();
-
+		
 		// Test to find visitTypes with the phrase TB...
 		{
 			List<VisitType> v = vs.getVisitTypes("TB");
@@ -44,12 +44,12 @@ public class VisitTypeLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Assert.assertEquals(2, v.size());
 		}
 		// Test to confirm the VisitService added new VisitType
-		{					
+		{
 			VisitType v = vs.getVisitTypeByUuid("2bcf7212-d218-4572-8893-25c4pob71934");
 			Assert.assertNotNull(v);
 			Assert.assertEquals("Malnutrition Visit", v.getDescription());
 		}
-
+		
 		// Test to confirm Description is added when none is given in csv
 		{
 			VisitType v = vs.getVisitTypeByUuid("abcf7209-d218-4572-8893-25c4b5b71934");
@@ -69,13 +69,13 @@ public class VisitTypeLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			// Need to make this pass
 			// Assert.assertEquals("TB Description", v.getDescription());
 		}
-
+		
 		// Test to show that Iniz can retire VisitType using uuid only
 		{
 			VisitType v = vs.getVisitTypeByUuid("l3cf7209-d218-4572-8893-25c4b5b71934");
-			 Assert.assertEquals(true,v.isRetired());
+			Assert.assertEquals(true, v.isRetired());
 		}
-
+		
 		// Test to show that Iniz can retire VisitType using name only
 		{
 			VisitType v = vs.getVisitTypeByUuid("2bcf7212-d218-4572-88o9-25c4b5b71934");
