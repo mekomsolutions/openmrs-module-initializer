@@ -30,22 +30,9 @@ public class VisitTypeLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	@Autowired
 	private VisitTypeLoader loader;
 
-	@Before
-	public void setup() {
-
-		// VisitType added directly
-		{
-			VisitType v = new VisitType();
-			v.setUuid("2bcf7212-d218-4572-8893-25c4pob71934");
-			v.setName("Malnutrition");
-			v.setDescription("Malnutrition Visit");
-			v = vs.saveVisitType(v);
-		}
-
-	}
-
 	@Test
-	public void load_shouldLoadVisitTypeAccordingToCsvFiles() {
+	public void load_shouldLoadVisitTypeAccordingToCsvFiles() throws Exception {
+		executeDataSet("testdata/test-metadata.xml");
 
 		// Replay
 		loader.load();
@@ -57,7 +44,7 @@ public class VisitTypeLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Assert.assertEquals(2, v.size());
 		}
 		// Test to confirm the VisitService added new VisitType
-		{
+		{					
 			VisitType v = vs.getVisitTypeByUuid("2bcf7212-d218-4572-8893-25c4pob71934");
 			Assert.assertNotNull(v);
 			Assert.assertEquals("Malnutrition Visit", v.getDescription());

@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.openmrs.VisitType;
 import org.openmrs.api.VisitService;
 import org.openmrs.module.initializer.Domain;
@@ -15,12 +17,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VisitTypeCsvParser extends CsvParser<VisitType, BaseLineProcessor<VisitType>> {
+public class VisitTypesCsvParser extends CsvParser<VisitType, BaseLineProcessor<VisitType>> {
 	
 	private VisitService visitService;
 	
 	@Autowired
-	public VisitTypeCsvParser(@Qualifier("visitService") VisitService visitService, VisitTypeLineProcessor processor) {
+	public VisitTypesCsvParser(@Qualifier("visitService") VisitService visitService, VisitTypeLineProcessor processor) {
 		super(processor);
 		this.visitService = visitService;
 	}
@@ -38,15 +40,7 @@ public class VisitTypeCsvParser extends CsvParser<VisitType, BaseLineProcessor<V
 		VisitType visitType = visitService.getVisitTypeByUuid(uuid);
 		if (visitType == null) {
 			
-			List<VisitType> visitTypes = visitService.getVisitTypes(line.getName(true));
-			
-			for (VisitType v : visitTypes) {
-
-				if (v.getName() == line.getName(true)) {
-					visitType = v;
-				
-				}
-			}
+			visitType = visitService.getVisitTypes(line.getName(true)).stream().filter(vt -> vt.getName() == line.getName(true)).findFirst().map(vt-> vt).orElse(null);
 		}
 		if (visitType == null) {
 			visitType = new VisitType();

@@ -10,17 +10,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * This is the first level line processor for visitTypes. It allows to parse and
- * save visitTypes with the minimal set of required fields.
+ * save visit types with the minimal set of required fields.
  */
 @Component
 public class VisitTypeLineProcessor extends BaseLineProcessor<VisitType> {
 
-	/*
-	 * protected static String HEADER_NAME = "name";
-	 * 
-	 * protected static String HEADER_DESCRIPTION = "description";
-	 * 
-	 */
 	private VisitService visitService;
 
 	@Autowired
