@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.HashSet;
@@ -126,11 +127,15 @@ public class Validator {
 		return options;
 	}
 	
+	public static Path getLogFilePath() throws URISyntaxException {
+		return Paths.get(getJarDirPath(), "initializer.log");
+	}
+	
 	public static void main(String[] args) throws URISyntaxException, ParseException {
 		// setting up logging
 		{
 			org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
-			logger.addAppender(Utils.getFileAppender(Paths.get(getJarDirPath(), "initializer.log")));
+			logger.addAppender(Utils.getFileAppender(getLogFilePath()));
 			logger.addAppender(new ValidatorAppender());
 			logger.setLevel(org.apache.log4j.Level.WARN);
 			

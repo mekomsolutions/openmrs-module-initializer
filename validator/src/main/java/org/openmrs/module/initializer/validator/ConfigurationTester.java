@@ -16,6 +16,7 @@ import static org.openmrs.module.initializer.validator.Validator.ARG_CONFIG_DIR;
 import static org.openmrs.module.initializer.validator.Validator.cmdLine;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -202,8 +203,9 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	}
 	
 	@After
-	public void conclude() {
-		Assert.assertThat("The Initializer log file is not empty, please check its reported errors and warnings.",
+	public void conclude() throws URISyntaxException {
+		Assert.assertThat("The Initializer log file is not empty, please check its reported errors and warnings at \n"
+		        + Validator.getLogFilePath().toString(),
 		    Validator.errors, is(empty()));
 	}
 }
