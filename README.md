@@ -117,7 +117,14 @@ See the [documentation on Initializer's runtime properties](readme/rtprops.md).
 Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.
 
 ### Get in touch
-Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversation and ping us with the mention `@MekomSolutions` in your message. Or find us on the [Initializer OpenMRS Slack channel](https://openmrs.slack.com/archives/CPC20CBFH).
+* On [OpenMRS Talk](https://talk.openmrs.org/)
+  * Sign up, start a conversation and ping us with the mention `@MekomSolutions` in your message. 
+* On Slack:
+  
+  * Join the [Initializer channel](https://openmrs.slack.com/archives/CPC20CBFH) and ping us with a `@Mekom` mention.
+
+### Report an issue
+https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ----
 
@@ -128,6 +135,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Added a runtime property to define an inclusion or exclusion list of domains.
 * Added a runtime property to specify wildcard patterns filters for each domain.
 * Added a runtime property to toggle off the generation of the checksums.
+* Improved logging output with [ASCII Tables for Java](https://github.com/freva/ascii-table).
 * Bulk creation and edition of ID Gen's autogeneration options provided through CSV files in **configuration/autogenerationoptions**.
 * Support associating location tags to locations using boolean `Tag|` headers.
 * Bulk creation and edition of location tags provided through CSV files in **configuration/locationtags**.
