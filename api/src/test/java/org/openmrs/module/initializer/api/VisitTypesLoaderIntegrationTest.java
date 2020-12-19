@@ -17,18 +17,18 @@ import org.junit.Test;
 import org.openmrs.VisitType;
 import org.openmrs.api.VisitService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.visittypes.VisitTypeLoader;
+import org.openmrs.module.initializer.api.visittypes.VisitTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class VisitTypeLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("visitService")
 	private VisitService vs;
 	
 	@Autowired
-	private VisitTypeLoader loader;
+	private VisitTypesLoader loader;
 	
 	@Test
 	public void load_shouldLoadVisitTypeAccordingToCsvFiles() throws Exception {
@@ -39,48 +39,48 @@ public class VisitTypeLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		
 		// Test to find visitTypes with the phrase TB...
 		{
-			List<VisitType> v = vs.getVisitTypes("TB");
-			Assert.assertNotNull(v);
-			Assert.assertEquals(2, v.size());
+			List<VisitType> vts = vs.getVisitTypes("TB");
+			Assert.assertNotNull(vts);
+			Assert.assertEquals(2, vts.size());
 		}
 		// Test to confirm the VisitService added new VisitType
 		{
-			VisitType v = vs.getVisitTypeByUuid("2bcf7212-d218-4572-8893-25c4pob71934");
-			Assert.assertNotNull(v);
-			Assert.assertEquals("Malnutrition Visit", v.getDescription());
+			VisitType vt = vs.getVisitTypeByUuid("2bcf7212-d218-4572-8893-25c4pob71934");
+			Assert.assertNotNull(vt);
+			Assert.assertEquals("Malnutrition Visit", vt.getDescription());
 		}
 		
 		// Test to confirm Description is added when none is given in csv
 		{
-			VisitType v = vs.getVisitTypeByUuid("abcf7209-d218-4572-8893-25c4b5b71934");
-			Assert.assertEquals("General Visit", v.getDescription());
+			VisitType vt = vs.getVisitTypeByUuid("abcf7209-d218-4572-8893-25c4b5b71934");
+			Assert.assertEquals("General Visit", vt.getDescription());
 		}
 		// Test to confirm Description is changed when uuid is specified in csv
 		{
-			VisitType v = vs.getVisitTypeByUuid("xyzf7209-d218-4572-8893-xyz4b5b71934");
+			VisitType vt = vs.getVisitTypeByUuid("xyzf7209-d218-4572-8893-xyz4b5b71934");
 			//need to make this pass and add the line to the csv
-			//Assert.assertEquals("RANDOM V Description", v.getDescription());
+			//Assert.assertEquals("RANDOM V Description", vt.getDescription());
 		}
 		// Test to show that we can override the description using only the Name without
 		// uuid
 		// Not working yet...Instead a new Visit Type is created
 		{
-			VisitType v = vs.getVisitTypeByUuid("759799ab-c9a5-435e-b671-77773ada74e4");
+			VisitType vt = vs.getVisitTypeByUuid("759799ab-c9a5-435e-b671-77773ada74e4");
 			// Need to make this pass
-			// Assert.assertEquals("TB Description", v.getDescription());
+			// Assert.assertEquals("TB Description", vt.getDescription());
 		}
 		
 		// Test to show that Iniz can retire VisitType using uuid only
 		{
-			VisitType v = vs.getVisitTypeByUuid("l3cf7209-d218-4572-8893-25c4b5b71934");
-			Assert.assertEquals(true, v.isRetired());
+			VisitType vt = vs.getVisitTypeByUuid("l3cf7209-d218-4572-8893-25c4b5b71934");
+			Assert.assertEquals(true, vt.isRetired());
 		}
 		
 		// Test to show that Iniz can retire VisitType using name only
 		{
-			VisitType v = vs.getVisitTypeByUuid("2bcf7212-d218-4572-88o9-25c4b5b71934");
+			VisitType vt = vs.getVisitTypeByUuid("2bcf7212-d218-4572-88o9-25c4b5b71934");
 			// We need to make this pass
-			// Assert.assertNull(v);
+			// Assert.assertNull(vt);
 		}
 	}
 }

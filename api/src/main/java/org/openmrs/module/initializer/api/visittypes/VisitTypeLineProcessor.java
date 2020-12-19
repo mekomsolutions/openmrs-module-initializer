@@ -26,7 +26,7 @@ public class VisitTypeLineProcessor extends BaseLineProcessor<VisitType> {
 	public VisitType fill(VisitType visitType, CsvLine line) throws IllegalArgumentException {
 		
 		visitType.setName(line.getName(true));
-		visitType.setDescription(line.getString(HEADER_DESC, line.getName(true) + " Visit"));
+		visitType.setDescription(line.getString(HEADER_DESC));
 		
 		return visitType;
 	}
