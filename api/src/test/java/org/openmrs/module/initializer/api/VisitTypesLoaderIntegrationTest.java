@@ -12,7 +12,6 @@ package org.openmrs.module.initializer.api;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.VisitType;
 import org.openmrs.api.VisitService;
@@ -41,7 +40,7 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		{
 			List<VisitType> vts = vs.getVisitTypes("TB");
 			Assert.assertNotNull(vts);
-			Assert.assertEquals(2, vts.size());
+			Assert.assertEquals(1, vts.size());
 		}
 		// Test to confirm the VisitService added new VisitType
 		{
@@ -50,24 +49,21 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			Assert.assertEquals("Malnutrition Visit", vt.getDescription());
 		}
 		
-		// Test to confirm Description is added when none is given in csv
+		// Test to confirm Description is not added when none is given in csv
 		{
 			VisitType vt = vs.getVisitTypeByUuid("abcf7209-d218-4572-8893-25c4b5b71934");
-			Assert.assertEquals("General Visit", vt.getDescription());
+			Assert.assertNull(vt.getDescription());
 		}
 		// Test to confirm Description is changed when uuid is specified in csv
 		{
 			VisitType vt = vs.getVisitTypeByUuid("xyzf7209-d218-4572-8893-xyz4b5b71934");
-			//need to make this pass and add the line to the csv
-			//Assert.assertEquals("RANDOM V Description", vt.getDescription());
+			Assert.assertEquals("RANDOM DESC CHANGED", vt.getDescription());
 		}
 		// Test to show that we can override the description using only the Name without
 		// uuid
-		// Not working yet...Instead a new Visit Type is created
 		{
 			VisitType vt = vs.getVisitTypeByUuid("759799ab-c9a5-435e-b671-77773ada74e4");
-			// Need to make this pass
-			// Assert.assertEquals("TB Description", vt.getDescription());
+			Assert.assertEquals("TB Description", vt.getDescription());
 		}
 		
 		// Test to show that Iniz can retire VisitType using uuid only
@@ -79,8 +75,8 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		// Test to show that Iniz can retire VisitType using name only
 		{
 			VisitType vt = vs.getVisitTypeByUuid("2bcf7212-d218-4572-88o9-25c4b5b71934");
-			// We need to make this pass
-			// Assert.assertNull(vt);
+			Assert.assertEquals(true, vt.isRetired());
 		}
+		
 	}
 }

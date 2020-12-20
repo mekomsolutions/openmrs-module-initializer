@@ -2,10 +2,6 @@ package org.openmrs.module.initializer.api.visittypes;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import org.openmrs.VisitType;
 import org.openmrs.api.VisitService;
 import org.openmrs.module.initializer.Domain;
@@ -38,10 +34,12 @@ public class VisitTypesCsvParser extends CsvParser<VisitType, BaseLineProcessor<
 		String uuid = line.getUuid();
 		
 		VisitType visitType = visitService.getVisitTypeByUuid(uuid);
+		
 		if (visitType == null) {
 			
 			visitType = visitService.getVisitTypes(line.getName(true)).stream()
-			        .filter(vt -> vt.getName() == line.getName(true)).findFirst().map(vt -> vt).orElse(null);
+			        .filter(vt -> vt.getName().equals(line.getName(true))).findFirst().orElse(null);
+			
 		}
 		if (visitType == null) {
 			visitType = new VisitType();

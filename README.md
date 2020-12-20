@@ -59,10 +59,11 @@ We suggest to go through the following before looking at specific import domains
 * [Conventions for CSV files](readme/csv_conventions.md)
 
 This is the list of currently supported domains in respect to their loading order:
-1. [Message Properties Key-Values (.properties files)](readme/messageproperties.md)
-1. [Generic JSON Key-Values (JSON files)](readme/jsonkeyvalues.md)
-1. [Metadata Sharing (MDS) packages (ZIP files)](readme/mds.md)
-1. [Patient Identifier Types (CSV files)](readme/pit.md)
+1. [Message properties key-values (.properties files)](readme/messageproperties.md)
+1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
+1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
+1. [Visit Types (CSV files)](readme/visittypes.md)
+1. [Patient identifier types (CSV files)](readme/pit.md)
 1. [Privileges (CSV files)](readme/priv.md)
 1. [Encounter Types (CSV files)](readme/et.md)
 1. [Roles (CSV files)](readme/roles.md)
