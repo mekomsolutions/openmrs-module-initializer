@@ -19,6 +19,7 @@ import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.module.initializer.InitializerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,8 +103,7 @@ public class ConfigDirUtil {
 	 */
 	public static FilenameFilter getExtensionFilenameFilter(final String extension) {
 		FilenameFilter filter = (file, name) -> StringUtils.isNotEmpty(extension)
-		        && new SuffixFileFilter("." + extension).accept(file, name)
-		        && FileFileFilter.FILE.accept(file, name);
+		        && new SuffixFileFilter("." + extension).accept(file, name) && FileFileFilter.FILE.accept(file, name);
 		return filter;
 	}
 	
