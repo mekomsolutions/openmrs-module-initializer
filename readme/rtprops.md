@@ -16,7 +16,7 @@ initializer.domains='!metadatasharing,privileges,roles'
 This is exactly the same logic as for the Initializer Validator's `--domains` argument.
 ### 2) `initializer.exclude.<domain>` _(optional)_
 ##### Example
-In the example below all 'concepts' domain files matching the [wildcard patterns](https://docs.oracle.com/cd/E23389_01/doc.11116/e21038/conditions.htm#BABEJGAH) `*diags*` and `*interventions*` will be filtered out:
+In the example below all 'concepts' domain files matching the [wildcard patterns](https://commons.apache.org/proper/commons-io/apidocs/org/apache/commons/io/FilenameUtils.html#wildcardMatchOnSystem-java.lang.String-java.lang.String-) `*diags*` and `*interventions*` will be filtered out:
 ```java
 initializer.exclude.concepts='*diags*,*interventions*'
 ```
