@@ -56,8 +56,8 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		}
 		// Test to confirm Description is changed when uuid is specified in csv
 		{
-			VisitType vt = vs.getVisitTypeByUuid("xyzf7209-d218-4572-8893-xyz4b5b71934");
-			Assert.assertEquals("RANDOM DESC CHANGED", vt.getDescription());
+			VisitType vt = vs.getVisitTypeByUuid("287463d3-2233-4c69-9851-5841a1f5e109");
+			Assert.assertEquals("Out Patient Visit", vt.getDescription());
 		}
 		// Test to show that we can override the description using only the Name without
 		// uuid
@@ -68,7 +68,7 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		
 		// Test to show that Iniz can retire VisitType using uuid only
 		{
-			VisitType vt = vs.getVisitTypeByUuid("l3cf7209-d218-4572-8893-25c4b5b71934");
+			VisitType vt = vs.getVisitTypeByUuid("e1d02b2e-cc85-48ac-a5bd-b0e4beea96e0");
 			Assert.assertEquals(true, vt.isRetired());
 		}
 		
