@@ -61,16 +61,13 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	}
 	
 	protected void setMariaDB4jProps(Properties props) throws ManagedProcessException {
-		DBConfigurationBuilder config = DBConfigurationBuilder.newBuilder();
-		config.setPort(0); // 0 => autom. detect free port
-		
-		DB db = DB.newEmbeddedDB(config.build());
+		DB db = DB.newEmbeddedDB(DBConfigurationBuilder.newBuilder().build());
 		db.start();
 		db.createDB("openmrs");
 		
 		props.setProperty(Environment.DIALECT, MySQLDialect.class.getName());
 		//		props.setProperty(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-		props.setProperty(Environment.URL, config.getURL("openmrs"));
+		props.setProperty(Environment.URL, db.getConfiguration().getURL("openmrs"));
 		props.setProperty(Environment.USER, "root");
 		props.setProperty(Environment.PASS, "");
 		
