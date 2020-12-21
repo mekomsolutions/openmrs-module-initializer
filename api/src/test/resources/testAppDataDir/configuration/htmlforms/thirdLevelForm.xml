@@ -1,0 +1,14 @@
+<htmlform
+		formUuid="aaaaa4f8-1234-11eb-bc37-0242ac110002"
+		formName="Test Form 3"
+		formDescription="Third Test Form"
+		formVersion="3.0"
+		formEncounterType="61ae96f4-6afe-4351-b6f8-cd4fc383cce1"
+		htmlformUuid="aaaafe02-abcd-11eb-bc37-0242ac110002"
+>
+	Date: <encounterDate/>
+	Location: <encounterLocation/>
+	Provider: <encounterProvider role="Provider"/>
+	Weight: <obs conceptId="5089"/>
+	<submit/>
+</htmlform>

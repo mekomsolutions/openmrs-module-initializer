@@ -18,7 +18,6 @@ import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.loaders.BaseLoader;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -36,6 +35,10 @@ public class HtmlFormsLoader extends BaseLoader {
 	public static final String FORM_DESCRIPTION_ATTRIBUTE = "formDescription";
 	
 	public static final String FORM_VERSION_ATTRIBUTE = "formVersion";
+	
+	public static final String FORM_PUBLISHED_ATTRIBUTE = "formPublished";
+	
+	public static final String FORM_RETIRED_ATTRIBUTE = "formRetired";
 	
 	public static final String FORM_ENCOUNTER_TYPE_ATTRIBUTE = "formEncounterType";
 	
@@ -98,6 +101,21 @@ public class HtmlFormsLoader extends BaseLoader {
 					needToSaveForm = true;
 				}
 				
+				Boolean formPublished = "true".equalsIgnoreCase(getAttributeValue(htmlFormNode, FORM_PUBLISHED_ATTRIBUTE));
+				if (!OpenmrsUtil.nullSafeEquals(form.getPublished(), formPublished)) {
+					form.setPublished(formPublished);
+					needToSaveForm = true;
+				}
+				
+				Boolean formRetired = "true".equalsIgnoreCase(getAttributeValue(htmlFormNode, FORM_RETIRED_ATTRIBUTE));
+				if (!OpenmrsUtil.nullSafeEquals(form.getRetired(), formRetired)) {
+					form.setRetired(formRetired);
+					if (formRetired && StringUtils.isBlank(form.getRetireReason())) {
+						form.setRetireReason("Retired by Initializer");
+					}
+					needToSaveForm = true;
+				}
+				
 				String formEncounterType = getAttributeValue(htmlFormNode, FORM_ENCOUNTER_TYPE_ATTRIBUTE);
 				EncounterType encounterType = null;
 				if (formEncounterType != null) {
@@ -124,6 +142,14 @@ public class HtmlFormsLoader extends BaseLoader {
 				String htmlformUuid = getAttributeValue(htmlFormNode, HTML_FORM_UUID_ATTRIBUTE);
 				if (StringUtils.isNotBlank(htmlformUuid) && !OpenmrsUtil.nullSafeEquals(htmlformUuid, htmlForm.getUuid())) {
 					htmlForm.setUuid(htmlformUuid);
+					needToSaveHtmlForm = true;
+				}
+				
+				if (!OpenmrsUtil.nullSafeEquals(htmlForm.getRetired(), formRetired)) {
+					htmlForm.setRetired(formRetired);
+					if (formRetired && StringUtils.isBlank(htmlForm.getRetireReason())) {
+						htmlForm.setRetireReason("Retired by Initializer");
+					}
 					needToSaveHtmlForm = true;
 				}
 				
