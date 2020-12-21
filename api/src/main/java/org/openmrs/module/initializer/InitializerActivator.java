@@ -34,6 +34,8 @@ public class InitializerActivator extends BaseModuleActivator {
 	 */
 	public void started() {
 		
+		log.info("Start of " + MODULE_ARTIFACT_ID + " module.");
+		
 		{
 			org.apache.log4j.Logger logger = org.apache.log4j.Logger
 			        .getLogger(InitializerActivator.class.getPackage().getName());
@@ -42,9 +44,11 @@ public class InitializerActivator extends BaseModuleActivator {
 			logger.setLevel(Level.WARN);
 		}
 		
+		log.info("OpenMRS config loading process started...");
+		
 		Context.getService(InitializerService.class).load(true);
 		
-		log.info("Start of " + MODULE_ARTIFACT_ID + " module.");
+		log.info("OpenMRS config loading process completed.");
 	}
 	
 	/**

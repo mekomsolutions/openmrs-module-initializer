@@ -113,20 +113,18 @@ public class Utils {
 	}
 	
 	public static String pastePrint(List<CsvLine> lines) {
-		String printout = "";
+		StringBuilder sb = new StringBuilder();
 		String[] prevHeader = null;
-		
-		List<String[]> data = new ArrayList<>();
 		for (CsvLine line : lines) {
 			if (prevHeader != null && !Arrays.equals(line.getHeaderLine(), prevHeader)) {
 				throw new IllegalArgumentException(
 				        "Printing a batch of CSV lines is only supported if they share a common header.");
 			}
 			prevHeader = line.getHeaderLine();
-			printout += StringUtils.join(line.asLine(), ",") + "\n";
+			sb.append(StringUtils.join(line.asLine(), ",") + "\n");
 		}
-		printout = StringUtils.join(prevHeader, ",") + "\n" + printout;
-		return System.lineSeparator() + StringUtils.removeEnd(printout, "\n");
+		sb.insert(0, StringUtils.join(prevHeader, ",") + "\n");
+		return System.lineSeparator() + StringUtils.removeEnd(sb.toString(), "\n");
 	}
 	
 	/**

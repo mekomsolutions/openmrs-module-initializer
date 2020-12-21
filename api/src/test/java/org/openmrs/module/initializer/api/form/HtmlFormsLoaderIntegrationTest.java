@@ -37,6 +37,9 @@ public class HtmlFormsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		Assert.assertEquals("Test Form 1", f.getName());
 		Assert.assertEquals("Test Form With All Attributes", f.getDescription());
 		Assert.assertEquals("1.3", f.getForm().getVersion());
+		Assert.assertEquals(Boolean.TRUE, f.getForm().getPublished());
+		Assert.assertEquals(Boolean.FALSE, f.getForm().getRetired());
+		Assert.assertEquals(Boolean.FALSE, f.getRetired());
 		Assert.assertEquals("61ae96f4-6afe-4351-b6f8-cd4fc383cce1", f.getForm().getEncounterType().getUuid());
 		HtmlFormSchema schema = HtmlFormEntryUtil.getHtmlFormSchema(f, FormEntryContext.Mode.VIEW);
 		Assert.assertEquals(1, schema.getAllFields().size());
@@ -54,6 +57,9 @@ public class HtmlFormsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		Assert.assertEquals("Test Form 1", f1.getName());
 		Assert.assertEquals("Test Form With All Attributes", f1.getDescription());
 		Assert.assertEquals("1.3", f1.getForm().getVersion());
+		Assert.assertEquals(Boolean.TRUE, f1.getForm().getPublished());
+		Assert.assertEquals(Boolean.FALSE, f1.getForm().getRetired());
+		Assert.assertEquals(Boolean.FALSE, f1.getRetired());
 		
 		File formFile = new File(htmlFormsLoader.getDirUtil().getDomainDirPath(), "allAttributeForm.xml");
 		String originalXml = f1.getXmlData();
@@ -64,6 +70,8 @@ public class HtmlFormsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			updateHtmlFormAttribute(doc, HtmlFormsLoader.FORM_NAME_ATTRIBUTE, "Revised Form Name");
 			updateHtmlFormAttribute(doc, HtmlFormsLoader.FORM_DESCRIPTION_ATTRIBUTE, "Revised Form Description");
 			updateHtmlFormAttribute(doc, HtmlFormsLoader.FORM_VERSION_ATTRIBUTE, "2.0");
+			updateHtmlFormAttribute(doc, HtmlFormsLoader.FORM_PUBLISHED_ATTRIBUTE, "false");
+			updateHtmlFormAttribute(doc, HtmlFormsLoader.FORM_RETIRED_ATTRIBUTE, "true");
 			FileUtils.writeStringToFile(formFile, HtmlFormEntryUtil.documentToString(doc));
 			
 			// Now, reload configuration and test that the form has the new values
@@ -73,6 +81,9 @@ public class HtmlFormsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Assert.assertEquals("Revised Form Name", f2.getName());
 			Assert.assertEquals("Revised Form Description", f2.getDescription());
 			Assert.assertEquals("2.0", f2.getForm().getVersion());
+			Assert.assertEquals(Boolean.FALSE, f1.getForm().getPublished());
+			Assert.assertEquals(Boolean.TRUE, f1.getForm().getRetired());
+			Assert.assertEquals(Boolean.TRUE, f1.getRetired());
 		}
 		finally {
 			// Clean up by putting the original file xml back
@@ -83,10 +94,12 @@ public class HtmlFormsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	@Test
 	public void load_shouldNotCreateDuplicates() {
 		htmlFormsLoader.load();
+		int numFormsAfterFirstLoad = htmlFormEntryService.getAllHtmlForms().size();
 		htmlFormsLoader.load();
+		int numFormsAfterSecondLoad = htmlFormEntryService.getAllHtmlForms().size();
 		HtmlForm f1 = htmlFormEntryService.getHtmlFormByUuid("26ddfe02-28f3-11eb-bc37-0242ac110002");
 		Assert.assertNotNull(f1);
-		Assert.assertEquals(1, htmlFormEntryService.getAllHtmlForms().size());
+		Assert.assertEquals(numFormsAfterFirstLoad, numFormsAfterSecondLoad);
 	}
 	
 	protected void updateHtmlFormAttribute(Document doc, String attributeName, String attributeValue) throws Exception {
