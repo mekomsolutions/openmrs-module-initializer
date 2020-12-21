@@ -101,7 +101,8 @@ public class ConfigDirUtil {
 	 * @return The FilenameFilter.
 	 */
 	public static FilenameFilter getExtensionFilenameFilter(final String extension) {
-		FilenameFilter filter = (file, name) -> new SuffixFileFilter("." + extension).accept(file, name)
+		FilenameFilter filter = (file, name) -> StringUtils.isNotEmpty(extension)
+		        && new SuffixFileFilter("." + extension).accept(file, name)
 		        && FileFileFilter.FILE.accept(file, name);
 		return filter;
 	}
