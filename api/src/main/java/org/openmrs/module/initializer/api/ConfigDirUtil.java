@@ -95,7 +95,7 @@ public class ConfigDirUtil {
 	}
 	
 	/**
-	 * Convenience method to get a FilenameFilter for 1files of a given extension.
+	 * Convenience method to get a FilenameFilter for files of a given extension.
 	 * 
 	 * @param The dot-less extension to filter for, eg. "xml", "json".
 	 * @return The FilenameFilter.
