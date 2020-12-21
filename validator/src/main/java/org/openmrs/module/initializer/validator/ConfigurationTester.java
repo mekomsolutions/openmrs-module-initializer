@@ -27,13 +27,10 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.DatabaseUnitRuntimeException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.IDataSet;
 import org.dbunit.ext.mysql.MySqlDataTypeFactory;
-import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.cfg.Environment;
 import org.hibernate.dialect.MySQLDialect;
 import org.hsqldb.cmdline.SqlFile;
@@ -102,48 +99,23 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	public void setAutoIncrementOnTablesWithNativeIfNotAssignedIdentityGenerator() {
 	}
 	
-	/*
-	 * Exact copy override to rely on our own setupDatabaseConnection
-	 */
 	@Override
-	public void executeDataSet(IDataSet dataset) {
-		try {
-			Connection connection = getConnection();
-			
-			IDatabaseConnection dbUnitConn = setupDatabaseConnection(connection);
-			
-			//Do the actual update/insert:
-			//insert new rows, update existing rows, and leave others alone
-			DatabaseOperation.REFRESH.execute(dbUnitConn, dataset);
-		}
-		catch (DatabaseUnitException | SQLException e) {
-			throw new DatabaseUnitRuntimeException(e);
-		}
-	}
-	
-	/*
-	 * This should be an @Override from the protected signature of the superclass
-	 */
-	private IDatabaseConnection setupDatabaseConnection(Connection connection) throws DatabaseUnitException {
+	protected IDatabaseConnection setupDatabaseConnection(Connection connection) throws DatabaseUnitException {
 		IDatabaseConnection dbUnitConn = new DatabaseConnection(connection);
 		DatabaseConfig config = dbUnitConn.getConfig();
 		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
 		return dbUnitConn;
 	}
 	
-	/*
-	 * This should be an @Override from the protected signature of the superclass
-	 */
-	private void turnOnDBConstraints(Connection connection) throws SQLException {
+	@Override
+	protected void turnOnDBConstraints(Connection connection) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SET FOREIGN_KEY_CHECKS=1;");
 		ps.execute();
 		ps.close();
 	}
 	
-	/*
-	 * This should be an @Override from the protected signature of the superclass
-	 */
-	private void turnOffDBConstraints(Connection connection) throws SQLException {
+	@Override
+	protected void turnOffDBConstraints(Connection connection) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SET FOREIGN_KEY_CHECKS=0;");
 		ps.execute();
 		ps.close();

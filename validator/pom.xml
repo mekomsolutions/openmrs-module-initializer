@@ -16,7 +16,7 @@
   <properties>
     <springVersion>4.1.4.RELEASE</springVersion>
     <!-- OpenMRS Core and modules -->
-    <openmrsPlatformVersion>${openmrsVersion2.3}</openmrsPlatformVersion>
+    <openmrsPlatformVersion>2.3.3-SNAPSHOT</openmrsPlatformVersion>
     <reportingVersion>1.19.0</reportingVersion>
     <reportingCompatibilityVersion>2.0.6</reportingCompatibilityVersion>
     <htmlwidgetsVersion>1.7.2</htmlwidgetsVersion>
