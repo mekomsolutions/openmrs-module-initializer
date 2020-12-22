@@ -57,7 +57,7 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		// Test to confirm Description is changed when uuid is specified in csv
 		{
 			VisitType vt = vs.getVisitTypeByUuid("287463d3-2233-4c69-9851-5841a1f5e109");
-			Assert.assertEquals("Out Patient Visit", vt.getDescription());
+			Assert.assertEquals("OPD Visit", vt.getDescription());
 		}
 		// Test to show that we can override the description using only the Name without
 		// uuid
