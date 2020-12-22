@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
- * This is the first level line processor for visitTypes. It allows to parse and save visit types
+ * This is the first level line processor for visit types. It allows to parse and save visit types
  * with the minimal set of required fields.
  */
 @Component
