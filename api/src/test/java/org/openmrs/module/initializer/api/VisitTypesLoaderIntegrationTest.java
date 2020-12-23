@@ -41,28 +41,33 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			List<VisitType> vts = vs.getVisitTypes("TB");
 			Assert.assertNotNull(vts);
 			Assert.assertEquals(1, vts.size());
+			Assert.assertEquals("Return TB Clinic Visit", vts.get(0).getName());
 		}
 		// Test to confirm the VisitService added new VisitType
 		{
 			VisitType vt = vs.getVisitTypeByUuid("2bcf7212-d218-4572-8893-25c4pob71934");
 			Assert.assertNotNull(vt);
+			Assert.assertEquals("Malnutrition", vt.getName());
 			Assert.assertEquals("Malnutrition Visit", vt.getDescription());
 		}
 		
 		// Test to confirm Description is not added when none is given in csv
 		{
 			VisitType vt = vs.getVisitTypeByUuid("abcf7209-d218-4572-8893-25c4b5b71934");
+			Assert.assertEquals("General", vt.getName());
 			Assert.assertNull(vt.getDescription());
 		}
 		// Test to confirm Description is changed when uuid is specified in csv
 		{
 			VisitType vt = vs.getVisitTypeByUuid("287463d3-2233-4c69-9851-5841a1f5e109");
+			Assert.assertEquals("OPD", vt.getName());
 			Assert.assertEquals("OPD Visit", vt.getDescription());
 		}
 		// Test to show that we can override the description using only the Name without
 		// uuid
 		{
 			VisitType vt = vs.getVisitTypeByUuid("759799ab-c9a5-435e-b671-77773ada74e4");
+			Assert.assertEquals("Return TB Clinic Visit", vt.getName());
 			Assert.assertEquals("TB Description", vt.getDescription());
 		}
 		
