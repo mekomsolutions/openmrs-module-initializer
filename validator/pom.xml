@@ -33,17 +33,11 @@
       <type>jar</type>
     </dependency>
 
+    <!-- https://www.baeldung.com/spring-postconstruct-predestroy#java-9 -->
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>${springVersion}</version>
-      <type>jar</type>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
-      <version>${springVersion}</version>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+      <version>1.3.2</version>
       <type>jar</type>
     </dependency>
 
