@@ -130,31 +130,8 @@
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
         </exclusion>
-        <!-- AbstractMethodError at org.hibernate.type.CustomType.nullSafeSet(CustomType.java:158) -->
-        <!-- <exclusion>
-          <groupId>org.hibernate</groupId>
-          <artifactId>hibernate-search-orm</artifactId>
-        </exclusion> -->
       </exclusions>
     </dependency>
-
-    <!-- AbstractMethodError at org.hibernate.type.CustomType.nullSafeSet(CustomType.java:158) -->
-
-    <!-- <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-search-orm</artifactId>
-      <version>4.5.3.Final</version>
-      <scope>runtime</scope>
-      <type>jar</type>
-    </dependency> -->
-
-    <!-- <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-analyzers-common</artifactId>
-      <version>4.10.4</version>
-      <scope>runtime</scope>
-      <type>jar</type>
-    </dependency> -->
 
     <dependency>
       <groupId>org.openmrs.api</groupId>
@@ -167,11 +144,6 @@
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
         </exclusion>
-        <!-- AbstractMethodError at org.hibernate.type.CustomType.nullSafeSet(CustomType.java:158) -->
-        <!-- <exclusion>
-          <groupId>org.hibernate</groupId>
-          <artifactId>hibernate-search-orm</artifactId>
-        </exclusion> -->
       </exclusions>
     </dependency>
 
@@ -228,6 +200,22 @@
       <version>${reportingVersion}</version>
       <scope>runtime</scope>
       <type>jar</type>
+    </dependency>
+
+    <!-- To get reporting-hibernate.cfg.xml -->
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>reporting-api-tests</artifactId>
+      <version>${reportingVersion}</version>
+      <scope>runtime</scope>
+      <type>test-jar</type>
+      <exclusions>
+        <!-- To avoid pulling old impls of Hibernate's UserType -->
+        <exclusion>
+          <groupId>org.openmrs.module</groupId>
+          <artifactId>reporting-api-1.9</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>

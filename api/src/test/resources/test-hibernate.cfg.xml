@@ -25,7 +25,5 @@
         <mapping resource="AppointmentServiceDefinition.hbm.xml"/>
         <mapping resource="ServiceWeeklyAvailability.hbm.xml"/>
         <mapping resource="AppointmentServiceType.hbm.xml"/>
-        <!-- Reporting -->
-        <mapping resource="ReportDesign.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
