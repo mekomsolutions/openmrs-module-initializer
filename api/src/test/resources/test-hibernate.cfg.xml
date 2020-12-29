@@ -18,17 +18,14 @@
         <!-- MetadataMapping -->
         <mapping resource="MetadataSource.hbm.xml"/>
         <mapping resource="MetadataTermMapping.hbm.xml"/>
-        <!-- Speciality -->
-        <mapping resource="Speciality.hbm.xml"/>
-        <!-- AppointmentServiceDefinition -->
-        <mapping resource="AppointmentServiceDefinition.hbm.xml"/>
-        <!-- ServiceWeeklyAvailability -->
-        <mapping resource="ServiceWeeklyAvailability.hbm.xml"/>
-        <!-- AppointmentServiceType -->
-        <mapping resource="AppointmentServiceType.hbm.xml"/>
-        <!-- MetadataSet -->
         <mapping resource="MetadataSet.hbm.xml"/>
-        <!-- MetadataSetMember -->
         <mapping resource="MetadataSetMember.hbm.xml"/>
+        <!-- Bahmni Appointments -->
+        <mapping resource="Speciality.hbm.xml"/>
+        <mapping resource="AppointmentServiceDefinition.hbm.xml"/>
+        <mapping resource="ServiceWeeklyAvailability.hbm.xml"/>
+        <mapping resource="AppointmentServiceType.hbm.xml"/>
+        <!-- Reporting -->
+        <mapping resource="ReportDesign.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
