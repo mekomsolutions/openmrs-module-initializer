@@ -17,11 +17,8 @@
     <springVersion>4.1.4.RELEASE</springVersion>
     <!-- OpenMRS Core and modules -->
     <openmrsPlatformVersion>2.3.3-SNAPSHOT</openmrsPlatformVersion>
-    <reportingVersion>1.19.0</reportingVersion>
     <reportingCompatibilityVersion>2.0.6</reportingCompatibilityVersion>
     <htmlwidgetsVersion>1.7.2</htmlwidgetsVersion>
-    <serializationVersion>0.2.14</serializationVersion>
-    <calculationVersion>1.2</calculationVersion>
   </properties>
 
   <dependencies>
@@ -200,22 +197,6 @@
       <version>${reportingVersion}</version>
       <scope>runtime</scope>
       <type>jar</type>
-    </dependency>
-
-    <!-- To get reporting-hibernate.cfg.xml -->
-    <dependency>
-      <groupId>org.openmrs.module</groupId>
-      <artifactId>reporting-api-tests</artifactId>
-      <version>${reportingVersion}</version>
-      <scope>runtime</scope>
-      <type>test-jar</type>
-      <exclusions>
-        <!-- To avoid pulling old impls of Hibernate's UserType -->
-        <exclusion>
-          <groupId>org.openmrs.module</groupId>
-          <artifactId>reporting-api-1.9</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
