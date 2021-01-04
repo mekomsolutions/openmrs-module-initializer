@@ -74,8 +74,8 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Programs (CSV files)](readme/prog.md)
-1. [Programs Worklows (CSV files)](readme/prog.md)
-1. [Programs Worklow States (CSV files)](readme/prog.md)
+1. [Program Worklows (CSV files)](readme/prog.md)
+1. [Program Worklow States (CSV files)](readme/prog.md)
 1. [Person Attribute Types (CSV files)](readme/pat.md)
 1. [Identifier Sources (CSV files)](readme/idgen.md)
 1. [Autogeneration Options (CSV files)](readme/autogenerationoptions.md)
@@ -110,7 +110,7 @@ mvn clean package
 ### How to test out your OpenMRS configs?
 See the [Initializer Validator README page](readme/validator.md).
 
-### Runtime finer controls of domains loading
+### Finer control of domains loading at app runtime
 See the [documentation on Initializer's runtime properties](readme/rtprops.md).
 
 ### Quick facts
