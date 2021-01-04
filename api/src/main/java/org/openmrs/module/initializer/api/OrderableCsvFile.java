@@ -5,16 +5,16 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.openmrs.module.initializer.InitializerLogFactory;
 import org.openmrs.module.initializer.api.utils.IgnoreBOMInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Orderable wrapper for CSV {@link File} objects.
  */
 public class OrderableCsvFile implements Comparable<OrderableCsvFile> {
 	
-	protected final Log log = InitializerLogFactory.getLog(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	protected Integer order;
 	

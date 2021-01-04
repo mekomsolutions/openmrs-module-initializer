@@ -58,13 +58,13 @@ public class ProgramWorkflowStateLineProcessor extends BaseLineProcessor<Program
 		
 		// states must be bound to a workflow
 		if (wf == null) {
-			throw new IllegalArgumentException("No workflow could be fetched from the CSV line: '" + line.toString() + "'.");
+			throw new IllegalArgumentException("No workflow could be fetched from the CSV line:" + line.toString());
 		}
 		// states linked to a workflow can't be moved to another workflow
 		if (state.getProgramWorkflow() != null && !wf.equals(state.getProgramWorkflow())) {
 			throw new IllegalArgumentException("A State ('" + state.getName() + "') already linked to a workflow ('"
-			        + state.getProgramWorkflow().getName() + "') cannot be added to another workflow, CSV line: '"
-			        + line.toString() + "'.");
+			        + state.getProgramWorkflow().getName() + "') cannot be added to another workflow, CSV line:"
+			        + line.toString());
 		}
 		state.setProgramWorkflow(wf);
 		

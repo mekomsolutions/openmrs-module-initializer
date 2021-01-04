@@ -11,30 +11,26 @@ package org.openmrs.module.initializer.api.loaders;
 
 import static org.hamcrest.Matchers.greaterThan;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServicesDefinitionsLoader;
 import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
-import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.openmrs.module.initializer.api.c.ConceptClassesLoader;
+import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
 import org.openmrs.module.initializer.api.et.EncounterTypesLoader;
-import org.openmrs.module.initializer.api.form.BahmniFormsLoader;
-import org.openmrs.module.initializer.api.form.HtmlFormsLoader;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
 import org.openmrs.module.initializer.api.idgen.autogen.AutoGenerationOptionsLoader;
 import org.openmrs.module.initializer.api.loc.LocationTagsLoader;
 import org.openmrs.module.initializer.api.loc.LocationsLoader;
-import org.openmrs.module.initializer.api.mds.MetadataSetsLoader;
-import org.openmrs.module.initializer.api.mds.MetadataSetMembersLoader;
 import org.openmrs.module.initializer.api.mdm.MetadataTermMappingsLoader;
+import org.openmrs.module.initializer.api.mds.MetadataSetMembersLoader;
+import org.openmrs.module.initializer.api.mds.MetadataSetsLoader;
 import org.openmrs.module.initializer.api.ot.OrderTypesLoader;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypesLoader;
 import org.openmrs.module.initializer.api.pit.PatientIdentifierTypesLoader;
@@ -43,11 +39,13 @@ import org.openmrs.module.initializer.api.programs.ProgramsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkflowStatesLoader;
 import org.openmrs.module.initializer.api.roles.RolesLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
 	private JsonKeyValuesLoader jsonKeyValuesLoader;

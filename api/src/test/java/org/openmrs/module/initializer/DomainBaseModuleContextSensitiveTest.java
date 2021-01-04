@@ -12,8 +12,7 @@ package org.openmrs.module.initializer;
 import java.io.File;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Module;
@@ -22,6 +21,8 @@ import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -30,14 +31,18 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleContextSensitiveTest {
 	
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	public static final String appDataTestDir = "testAppDataDir";
 	
-	@Autowired
 	private InitializerService iniz;
 	
-	protected InitializerService getService() {
+	@Autowired
+	public void setService(InitializerService iniz) {
+		this.iniz = iniz;
+	}
+	
+	public InitializerService getService() {
 		return iniz;
 	}
 	
@@ -85,16 +90,25 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		}
 	}
 	
+	protected String getAppDataDirPath() {
+		return getClass().getClassLoader().getResource(appDataTestDir).getPath() + File.separator;
+	}
+	
 	@Before
 	public void setupAppDataDir() {
 		
-		String path = getClass().getClassLoader().getResource(appDataTestDir).getPath() + File.separator;
+		String path = getAppDataDirPath();
 		
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
 		Properties prop = new Properties();
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
 		Context.setRuntimeProperties(prop);
 		
+		ConfigDirUtil.deleteChecksums(iniz.getChecksumsDirPath(), true);
+	}
+	
+	@After
+	public void tearDown() {
 		ConfigDirUtil.deleteChecksums(iniz.getChecksumsDirPath(), true);
 	}
 }

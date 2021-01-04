@@ -9,13 +9,125 @@
  */
 package org.openmrs.module.initializer;
 
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_EXCLUDE;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_SKIPCHECKSUMS;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.openmrs.api.context.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 /**
  * Contains module's config.
  */
-@Component("initializer.InitializerConfig")
-public class InitializerConfig {
+@Component
+public class InitializerConfig implements InitializingBean {
 	
-	public final static String MODULE_PRIVILEGE = "Initializer Privilege";
+	protected final Logger log = LoggerFactory.getLogger(getClass());
+	
+	private boolean isInclusionList = true;
+	
+	private Set<String> filteredDomains = new HashSet<>();
+	
+	private Map<String, List<String>> allWildCardExclusions = new HashMap<>(); // mapped per domain
+	
+	private Boolean skipChecksums = false;
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		init();
+	}
+	
+	/**
+	 * Initializes the configuration from the runtime properties.
+	 */
+	public void init() {
+		// Inclusion or exclusion list of domains
+		String domainsCsv = Optional.ofNullable(Context.getRuntimeProperties().getProperty(PROPS_DOMAINS)).orElse("");
+		if (StringUtils.startsWith(domainsCsv, "!")) {
+			isInclusionList = false;
+			domainsCsv = StringUtils.removeStart(domainsCsv, "!");
+		}
+		filteredDomains.addAll(Arrays.asList(StringUtils.split(domainsCsv, ",")));
+		
+		@SuppressWarnings("unchecked")
+		Collection<String> unsupportedDomains = CollectionUtils.subtract(filteredDomains,
+		    Stream.of(Domain.values()).map(d -> d.getName()).collect(Collectors.toSet()));
+		if (CollectionUtils.isNotEmpty(unsupportedDomains)) {
+			log.warn("Those domains are unknown and are not supported, however they are mentioned in the "
+			        + (isInclusionList ? "inclusion" : "exclusion") + " list of domains: " + unsupportedDomains.toString());
+		}
+		
+		// Per-domain wildcard exclusion patterns
+		Stream.of(Domain.values()).forEach(d -> {
+			String exclusionsCsv = Context.getRuntimeProperties().getProperty(PROPS_EXCLUDE + "." + d.getName());
+			if (!StringUtils.isEmpty(exclusionsCsv)) {
+				allWildCardExclusions.put(d.getName(), Arrays.asList(StringUtils.split(exclusionsCsv, ",")));
+			}
+		});
+		
+		// checksums
+		skipChecksums = BooleanUtils
+		        .toBoolean(Optional.ofNullable(Context.getRuntimeProperties().getProperty(PROPS_SKIPCHECKSUMS)).orElse(""));
+	}
+	
+	/**
+	 * Gets the list of wildcard exclusion patterns for the given domain.
+	 * 
+	 * @param domain The domain.
+	 * @return The list of wildcard exclusion patterns.
+	 */
+	public List<String> getWidlcardExclusions(Domain domain) {
+		return getWidlcardExclusions(domain.getName());
+	}
+	
+	/**
+	 * @see #getWidlcardExclusions(Domain)
+	 */
+	public List<String> getWidlcardExclusions(String domainName) {
+		if (allWildCardExclusions.containsKey(domainName)) {
+			return allWildCardExclusions.get(domainName);
+		} else {
+			return Collections.emptyList();
+		}
+	}
+	
+	/**
+	 * @return The list of domain names being in or ex filtered.
+	 */
+	public Set<String> getFilteredDomains() {
+		return filteredDomains;
+	}
+	
+	/**
+	 * @return true if the filtered domains represent an inclusion list, false if the filtered domains
+	 *         represent an exclusion list.
+	 */
+	public boolean isInclusionList() {
+		return isInclusionList;
+	}
+	
+	/**
+	 * @return true to skip writing checksums, false otherwise
+	 */
+	public boolean skipChecksums() {
+		return skipChecksums;
+	}
 }

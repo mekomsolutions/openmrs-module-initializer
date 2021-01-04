@@ -9,38 +9,52 @@
  */
 package org.openmrs.module.initializer;
 
-import org.apache.commons.logging.Log;
+import static org.openmrs.module.initializer.InitializerConstants.MODULE_ARTIFACT_ID;
+
+import java.nio.file.Paths;
+
+import org.apache.log4j.Level;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.module.initializer.api.loaders.Loader;
+import org.openmrs.module.initializer.api.utils.Utils;
+import org.openmrs.util.OpenmrsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
 public class InitializerActivator extends BaseModuleActivator {
 	
-	static Log log = InitializerLogFactory.getLog(InitializerActivator.class);
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	/**
 	 * @see #started()
 	 */
 	public void started() {
 		
-		InitializerService iniz = Context.getService(InitializerService.class);
+		log.info("Start of " + MODULE_ARTIFACT_ID + " module.");
 		
-		for (Loader loader : iniz.getLoaders()) {
-			loader.load();
+		{
+			org.apache.log4j.Logger logger = org.apache.log4j.Logger
+			        .getLogger(InitializerActivator.class.getPackage().getName());
+			logger.addAppender(
+			    Utils.getFileAppender(Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log")));
+			logger.setLevel(Level.WARN);
 		}
 		
-		log.info("Start of initializer module.");
+		log.info("OpenMRS config loading process started...");
 		
+		Context.getService(InitializerService.class).load(true);
+		
+		log.info("OpenMRS config loading process completed.");
 	}
 	
 	/**
 	 * @see #shutdown()
 	 */
 	public void shutdown() {
-		// log.info("Shutdown " + InitializerConstants.MODULE_NAME);
+		log.info("Shutdown of " + MODULE_ARTIFACT_ID + " module.");
 	}
 }

@@ -13,6 +13,7 @@ import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.module.htmlformentry.schema.HtmlFormSchema;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.api.loaders.HtmlFormsLoader;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Document;
@@ -22,10 +23,10 @@ import org.w3c.dom.Node;
 public class HtmlFormsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
-	HtmlFormsLoader htmlFormsLoader;
+	private HtmlFormsLoader htmlFormsLoader;
 	
 	@Autowired
-	HtmlFormEntryService htmlFormEntryService;
+	private HtmlFormEntryService htmlFormEntryService;
 	
 	@Test
 	public void load_shouldLoadFormWithAllAttributesSpecified() throws Exception {

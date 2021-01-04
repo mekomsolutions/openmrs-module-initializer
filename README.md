@@ -59,32 +59,32 @@ We suggest to go through the following before looking at specific import domains
 * [Conventions for CSV files](readme/csv_conventions.md)
 
 This is the list of currently supported domains in respect to their loading order:
-1. [Message properties key-values (.properties files)](readme/messageproperties.md)
-1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
-1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
-1. [Patient identifier types (CSV files)](readme/pit.md)
+1. [Message Properties Key-Values (.properties files)](readme/messageproperties.md)
+1. [Generic JSON Key-Values (JSON files)](readme/jsonkeyvalues.md)
+1. [Metadata Sharing (MDS) packages (ZIP files)](readme/mds.md)
+1. [Patient Identifier Types (CSV files)](readme/pit.md)
 1. [Privileges (CSV files)](readme/priv.md)
 1. [Encounter Types (CSV files)](readme/et.md)
 1. [Roles (CSV files)](readme/roles.md)
-1. [Global properties (XML files)](readme/globalproperties.md)
-1. [Attribute types (CSV files)](readme/atttypes.md)
+1. [Global Properties (XML files)](readme/globalproperties.md)
+1. [Attribute Types (CSV files)](readme/atttypes.md)
 1. [Locations (CSV files)](readme/loc.md)
 1. [Location Tags (CSV files)](readme/loctags.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
-1. [Concept classes (CSV files)](readme/conceptclasses.md)
+1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Programs (CSV files)](readme/prog.md)
-1. [Programs worklows (CSV files)](readme/prog.md)
-1. [Programs worklow states (CSV files)](readme/prog.md)
-1. [Person attribute types (CSV files)](readme/pat.md)
-1. [Identifier sources (CSV files)](readme/idgen.md)
-1. [Auto Generation Options (CSV files)](readme/autogenerationoptions.md)
+1. [Programs Worklows (CSV files)](readme/prog.md)
+1. [Programs Worklow States (CSV files)](readme/prog.md)
+1. [Person Attribute Types (CSV files)](readme/pat.md)
+1. [Identifier Sources (CSV files)](readme/idgen.md)
+1. [Autogeneration Options (CSV files)](readme/autogenerationoptions.md)
 1. [Drugs (CSV files)](readme/drugs.md)
 1. [Order Frequencies (CSV files)](readme/freqs.md)
 1. [Order Types (CSV files)](readme/ordertypes.md)
 1. [Bahmni Appointments Specialities (CSV files)](readme/appointmentsspecialities.md)
 1. [Bahmni Appointments Service Definitions (CSV files)](readme/appointmentsservicesdefinitions.md)
-1. [Data Filter entity-basis mappings (CSV files)](readme/datafiltermappings.md)
+1. [Data Filter Entity-Basis Mappings (CSV files)](readme/datafiltermappings.md)
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
@@ -107,17 +107,35 @@ mvn clean package
 * Data Filter 1.0.0 (*compatible*)
 * Bahmni I.e Apps 1.0.0 (*compatible*)
 
+### How to test out your OpenMRS configs?
+See the [Initializer Validator README page](readme/validator.md).
+
+### Runtime finer controls of domains loading
+See the [documentation on Initializer's runtime properties](readme/rtprops.md).
+
 ### Quick facts
 Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.
 
 ### Get in touch
-Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversation and ping us with the mention `@MekomSolutions` in your message. Or find us on the [Initializer OpenMRS Slack channel](https://openmrs.slack.com/archives/CPC20CBFH).
+* On [OpenMRS Talk](https://talk.openmrs.org/)
+  * Sign up, start a conversation and ping us with the mention `@MekomSolutions` in your message. 
+* On Slack:
+  
+  * Join the [Initializer channel](https://openmrs.slack.com/archives/CPC20CBFH) and ping us with a `@Mekom` mention.
+
+### Report an issue
+https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ----
 
 ### Releases notes
 
 #### Version 2.1.0
+* _Initialize Validator_ a standalone fatjar to make dry runs of OpenMRS configs.
+* Added a runtime property to define an inclusion or exclusion list of domains.
+* Added a runtime property to specify wildcard patterns filters for each domain.
+* Added a runtime property to toggle off the generation of the checksums.
+* Improved logging output with [ASCII Tables for Java](https://github.com/freva/ascii-table).
 * Bulk creation and edition of ID Gen's autogeneration options provided through CSV files in **configuration/autogenerationoptions**.
 * Support associating location tags to locations using boolean `Tag|` headers.
 * Bulk creation and edition of location tags provided through CSV files in **configuration/locationtags**.

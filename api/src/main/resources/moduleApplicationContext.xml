@@ -24,7 +24,7 @@
   		    http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <context:component-scan base-package="org.openmrs.module.initializer" />
-
+    
     <!-- Wraps InitializerService methods in DB transactions and OpenMRS interceptors,
     which set audit info like dateCreated, changedBy, etc.-->
     <bean id="initializer.InitializerService"

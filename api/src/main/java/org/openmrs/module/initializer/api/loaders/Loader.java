@@ -1,5 +1,8 @@
 package org.openmrs.module.initializer.api.loaders;
 
+import java.util.List;
+
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 
 /**
@@ -27,7 +30,15 @@ public interface Loader extends Comparable<Loader> {
 	ConfigDirUtil getDirUtil();
 	
 	/**
-	 * Triggers the loading action for the domain on which the loader is configured.
+	 * Triggers the processing (or "loading") of the domain's files.
+	 * 
+	 * @param wildcardExclusions A list of wildcard patterns to filter out unwanted files.
+	 * @see WildcardFileFilter
+	 */
+	void load(List<String> wildcardExclusions);
+	
+	/**
+	 * @see #load(List)
 	 */
 	void load();
 	

@@ -13,7 +13,7 @@
     <description>API 2.2 project for Initializer</description>
 
     <properties>
-        <openmrsPlatformVersion>2.2.0</openmrsPlatformVersion>
+        <openmrsPlatformVersion>${openmrsVersion2.2}</openmrsPlatformVersion>
     </properties>
 
     <dependencies>

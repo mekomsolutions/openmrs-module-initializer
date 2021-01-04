@@ -3,7 +3,9 @@ package org.openmrs.module.initializer.api;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import org.junit.Assert;
@@ -41,6 +43,84 @@ public class UtilsTest {
 		
 		ConceptService cs = mock(ConceptService.class);
 		when(Context.getConceptService()).thenReturn(cs);
+	}
+	
+	@Test
+	public void prettyPrint_shouldPrettyPrintCsvLines() {
+		// setup
+		List<CsvLine> lines = new ArrayList<>();
+		String[] commonHeader = { "First name", "Last name", "Age" };
+		{
+			String[] line = { "John", "Doe", "40" };
+			lines.add(new CsvLine(commonHeader, line));
+		}
+		{
+			String[] line = { "Paul", "Smith", "20" };
+			lines.add(new CsvLine(commonHeader, line));
+		}
+		
+		// replay
+		Assert.assertEquals("\n" + "+------------+-----------+-----+\n" + "| First name | Last name | Age |\n"
+		        + "+------------+-----------+-----+\n" + "|       John |       Doe |  40 |\n"
+		        + "+------------+-----------+-----+\n" + "|       Paul |     Smith |  20 |\n"
+		        + "+------------+-----------+-----+",
+		    Utils.prettyPrint(lines));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void prettyPrint_shouldThrowWhenCsvLinesHeadersDiffer() {
+		// setup
+		List<CsvLine> lines = new ArrayList<>();
+		{
+			String[] header = { "First name", "Last name", "Age" };
+			String[] line = { "John", "Doe", "40" };
+			lines.add(new CsvLine(header, line));
+		}
+		{
+			String[] header = { "First name", "Last name", "Height" };
+			String[] line = { "Phileas", "Fogg", "1.75" };
+			lines.add(new CsvLine(header, line));
+		}
+		
+		// replay
+		Utils.prettyPrint(lines);
+	}
+	
+	@Test
+	public void pastePrint_shouldPastePrintCsvLines() {
+		// setup
+		List<CsvLine> lines = new ArrayList<>();
+		String[] commonHeader = { "First name", "Last name", "Age" };
+		{
+			String[] line = { "John", "Doe", "40" };
+			lines.add(new CsvLine(commonHeader, line));
+		}
+		{
+			String[] line = { "Paul", "Smith", "20" };
+			lines.add(new CsvLine(commonHeader, line));
+		}
+		
+		// replay
+		Assert.assertEquals("\nFirst name,Last name,Age\n" + "John,Doe,40\n" + "Paul,Smith,20", Utils.pastePrint(lines));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void pastePrint_shouldThrowWhenCsvLinesHeadersDiffer() {
+		// setup
+		List<CsvLine> lines = new ArrayList<>();
+		{
+			String[] header = { "First name", "Last name", "Age" };
+			String[] line = { "John", "Doe", "40" };
+			lines.add(new CsvLine(header, line));
+		}
+		{
+			String[] header = { "First name", "Last name", "Height" };
+			String[] line = { "Phileas", "Fogg", "1.75" };
+			lines.add(new CsvLine(header, line));
+		}
+		
+		// replay
+		Utils.pastePrint(lines);
 	}
 	
 	@Test

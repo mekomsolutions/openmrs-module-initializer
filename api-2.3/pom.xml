@@ -13,11 +13,11 @@
     <description>API 2.3 project for Initializer</description>
 
     <properties>
-        <openmrsPlatformVersion>2.3.0</openmrsPlatformVersion>
+        <openmrsPlatformVersion>${openmrsVersion2.3}</openmrsPlatformVersion>
     </properties>
 
     <dependencies>
-
+        
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>${project.parent.artifactId}-api</artifactId>
@@ -55,12 +55,12 @@
             <scope>provided</scope>
         </dependency>
 
-    <dependency>
-      <groupId>org.openmrs.module</groupId>
-      <artifactId>appframework-api</artifactId>
-      <version>${appframeworkVersion}</version>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>appframework-api</artifactId>
+            <version>${appframeworkVersion}</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 

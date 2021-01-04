@@ -6,16 +6,16 @@ import java.util.Map;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
 import org.openmrs.BaseOpenmrsObject;
-import org.openmrs.module.initializer.InitializerLogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class to any CSV line processor.
  */
 public abstract class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
-	protected final static Log log = InitializerLogFactory.getLog(BaseLineProcessor.class);
+	protected final static Logger log = LoggerFactory.getLogger(BaseLineProcessor.class);
 	
 	final public static String HEADER_UUID = "uuid";
 	
@@ -163,7 +163,7 @@ public abstract class BaseLineProcessor<T extends BaseOpenmrsObject> {
 			order = Integer.parseInt(str);
 		}
 		catch (NumberFormatException e) {
-			log.error("'" + str + "' could not be parsed as a valid integer in header line: " + Arrays.toString(headerLine),
+			log.warn("'" + str + "' could not be parsed as a valid integer in header line: " + Arrays.toString(headerLine),
 			    e);
 		}
 		return order;

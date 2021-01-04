@@ -41,6 +41,7 @@ import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.Verifies;
 import org.openmrs.util.OpenmrsConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Ignore
 public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContextSensitiveTest {
@@ -49,6 +50,9 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 	        + ExtI18nConstants.MODULE_ARTIFACT_ID + ".omod";
 	
 	private InitializerMessageSource inizSrc;
+	
+	@Autowired
+	protected InitializerConfig cfg;
 	
 	@Before
 	public void setup() {
@@ -88,7 +92,7 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 		InitializerService iniz = Context.getService(InitializerService.class);
 		
 		File csvFile = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), iniz.getRejectionsDirPath(),
-		        InitializerConstants.DOMAIN_ADDR)).getConfigFile("addresshierarchy.csv");
+		        InitializerConstants.DOMAIN_ADDR, cfg)).getConfigFile("addresshierarchy.csv");
 		LineNumberReader lnr = new LineNumberReader(new FileReader(csvFile));
 		lnr.skip(Long.MAX_VALUE);
 		int csvLineCount = lnr.getLineNumber() + 1;

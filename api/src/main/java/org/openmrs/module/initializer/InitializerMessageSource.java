@@ -36,13 +36,14 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.messagesource.MutableMessageSource;
 import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.messagesource.PresentationMessageMap;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -60,7 +61,7 @@ import org.springframework.context.support.AbstractMessageSource;
  */
 public class InitializerMessageSource extends AbstractMessageSource implements MutableMessageSource, ApplicationContextAware {
 	
-	protected static final Log log = InitializerLogFactory.getLog(InitializerMessageSource.class);
+	protected static final Logger log = LoggerFactory.getLogger(InitializerMessageSource.class);
 	
 	private Map<Locale, PresentationMessageMap> cache = null;
 	
@@ -68,6 +69,9 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	
 	@Autowired
 	protected InitializerService iniz;
+	
+	@Autowired
+	protected InitializerConfig cfg;
 	
 	protected Map<File, Locale> messagePropertiesMap;
 	
@@ -115,15 +119,14 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 * Refreshes the cache, merged from the custom source and the parent source
 	 */
 	protected synchronized void refreshCache() {
-		
 		cache = new HashMap<Locale, PresentationMessageMap>();
 		setUseCodeAsDefaultMessage(true);
 		
 		ConfigDirUtil ahDir = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
-		        iniz.getRejectionsDirPath(), InitializerConstants.DOMAIN_ADDR));
+		        iniz.getRejectionsDirPath(), InitializerConstants.DOMAIN_ADDR, cfg));
 		addMessageProperties(ahDir.getDomainDirPath());
 		ConfigDirUtil msgDir = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
-		        iniz.getRejectionsDirPath(), InitializerConstants.DOMAIN_MSGPROP));
+		        iniz.getRejectionsDirPath(), InitializerConstants.DOMAIN_MSGPROP, cfg));
 		addMessageProperties(msgDir.getDomainDirPath());
 		
 		if (MapUtils.isEmpty(messagePropertiesMap)) {
@@ -215,7 +218,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 					messagePropertiesMap.put(file, locale);
 				}
 				catch (IllegalArgumentException e) {
-					log.error(e);
+					log.error(null, e);
 				}
 			}
 		}

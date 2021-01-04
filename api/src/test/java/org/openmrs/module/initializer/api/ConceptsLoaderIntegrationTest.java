@@ -69,7 +69,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertEquals(2, c.getSetMembers().size());
 			Assert.assertTrue(c.isSet());
 			c = cs.getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
-			Assert.assertFalse(c.isRetired());
+			Assert.assertFalse(c.getRetired());
 		}
 		
 		// Replay
