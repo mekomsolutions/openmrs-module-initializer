@@ -9,7 +9,7 @@ Defines and inclusion or exclusion list of domains as a CSV string of domain nam
 initializer.domains='concepts,locations'
 ```
 ##### Example of exclusion list:
-Just prefix the list with a negative `!` prefix character:
+Just prefix the list with a negative `!` character:
 ```java
 initializer.domains='!metadatasharing,privileges,roles'
 ```
