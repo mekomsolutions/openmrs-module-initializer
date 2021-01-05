@@ -54,7 +54,7 @@ java -jar validator/target/initializer-validator-2.1.0-SNAPSHOT.jar
 ### Kwown issues
 
 ##### mariaDB4j `"dyld: Library not loaded"` on macOS:
-```bash
+```
 "dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib"
 ```
 This will only clearly come out when runnnig the Initializer Validator in `--verbose` mode.
@@ -79,3 +79,12 @@ This replaces the openssl vesion currently installed with version 1.0.2t. To und
 * '[Mac OS X MariaDB 10.3.13 binaries status unclear - working or not? If NOK, how to fix?](https://github.com/vorburger/MariaDB4j/issues/288)'
   * Specifically [here](https://github.com/vorburger/MariaDB4j/issues/288#issuecomment-552106844). 
 * '[macOS OpenSSL version issue - Homebrew moved it from v1.0 to v1.1 - initial fix](https://github.com/kelaberetiv/TagUI/issues/635#issuecomment-696948461)'
+
+##### mariaDB4j `"error while loading shared libraries: libncurses.so.5"` on Debian:
+```
+mysql: /tmp/MariaDB4j/base/bin/mysql:
+  error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
+```
+This will only clearly come out when runnnig the Initializer Validator in `--verbose` mode.
+
+Try this suggested solution from Stack Overflow: '[error while loading shared libraries: libncurses.so.5:](https://stackoverflow.com/a/17801675/321797)'
