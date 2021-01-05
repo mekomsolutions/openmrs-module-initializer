@@ -41,4 +41,6 @@
     
   <visit_type visit_type_id="15" name="Malnutrition" description="Malnutrition Visit" creator="1" date_created="2020-12-12 00:00:00.0" retired="false" uuid="2bcf7212-d218-4572-8893-25c4pob71934"/>
 
+  <visit_type visit_type_id="16" name="OPD" description="OPD" creator="1" date_created="2020-12-12 00:00:00.0" retired="false" uuid="287463d3-2233-4c69-9851-5841a1f5e109"/>
+
 </dataset>
