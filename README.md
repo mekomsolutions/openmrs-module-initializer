@@ -47,10 +47,11 @@ configuration/
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain. Although several file types are supported for providing metadata, CSV files are the preferred format and all domain should aim at being covered through parsing CSV files.
 
 ### Objectives
-* This module allows to preload an OpenMRS installation with **maintained and versioned metadata**.
+* This module loads an OpenMRS configuration consisting of OpenMRS metadata.
 * CSV files are the preferred format, however a number of metadata domains rely on other file formats. See the list [below](#supported-domains-and-default-loading-order) for details.
 * Initializer processes all configuration files upon starting up.
 * Initializer produces a checksum file for each processed file. A file will never be processed again until its checksum has changed.
+  * See more info [here](readme/checksums.md) about checksums.
 * Each line of those CSV files represents an **OpenMRS object to be created, edited or retired**.
 * Each line of those CSV files follows the WYSIWYG principle.
 
@@ -132,6 +133,8 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 #### Version 2.1.0
 * _Initialize Validator_ a standalone fatjar to make dry runs of OpenMRS configs.
+* Nested structures of configuration files are supported.
+
 * Added a runtime property to define an inclusion or exclusion list of domains.
 * Added a runtime property to specify wildcard patterns filters for each domain.
 * Added a runtime property to toggle off the generation of the checksums.
