@@ -60,8 +60,8 @@ public class HtmlFormsLoader extends BaseLoader {
 		ConfigDirUtil dirUtil = getDirUtil();
 		for (File file : dirUtil.getFiles("xml", wildcardExclusions)) { // processing all the XML files inside the domain
 			
-			String fileName = dirUtil.getFileName(file.getPath());
-			String checksum = dirUtil.getChecksumIfChanged(fileName);
+			//			String fileName = dirUtil.getFileName(file.getPath());
+			String checksum = dirUtil.getChecksumIfChanged(file);
 			if (checksum.isEmpty()) {
 				continue;
 			}
@@ -162,12 +162,12 @@ public class HtmlFormsLoader extends BaseLoader {
 					htmlFormEntryService.saveHtmlForm(htmlForm);
 				}
 				
-				dirUtil.writeChecksum(fileName, checksum); // the updated config. file is marked as processed
-				log.info("The form file has been processed: " + fileName);
+				dirUtil.writeChecksum(file, checksum); // the updated config. file is marked as processed
+				log.info("The HTML form file has been processed: " + file.getPath());
 				
 			}
 			catch (Exception e) {
-				log.error("Could not load the htmlform from: " + file.getPath(), e);
+				log.error("The HTML form could not be imported: " + file.getPath(), e);
 			}
 		}
 	}

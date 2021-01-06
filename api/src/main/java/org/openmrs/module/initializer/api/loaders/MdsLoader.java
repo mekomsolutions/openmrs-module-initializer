@@ -39,8 +39,7 @@ public class MdsLoader extends BaseLoader {
 		
 		for (File file : dirUtil.getFiles("zip", wildcardExclusions)) { // processing all the zip files inside the domain
 			
-			String fileName = dirUtil.getFileName(file.getPath());
-			String checksum = dirUtil.getChecksumIfChanged(fileName);
+			String checksum = dirUtil.getChecksumIfChanged(file);
 			if (checksum.isEmpty()) {
 				continue;
 			}
@@ -51,8 +50,8 @@ public class MdsLoader extends BaseLoader {
 				importer.loadSerializedPackageStream(is);
 				is.close();
 				importer.importPackage();
-				dirUtil.writeChecksum(fileName, checksum); // the updated config. file is marked as processed
-				log.info("The following MDS package was succesfully imported: " + fileName);
+				dirUtil.writeChecksum(file, checksum); // the updated config. file is marked as processed
+				log.info("The following MDS package was succesfully imported: " + file.getPath());
 			}
 			catch (Exception e) {
 				log.error("The MDS package could not be imported: " + file.getPath(), e);

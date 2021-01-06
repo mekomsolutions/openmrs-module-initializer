@@ -35,8 +35,7 @@ public class GlobalPropertiesLoader extends BaseLoader {
 		final List<GlobalProperty> globalProperties = new ArrayList<GlobalProperty>();
 		for (File file : dirUtil.getFiles("xml", wildcardExclusions)) { // processing all the XML files inside the domain
 			
-			String fileName = dirUtil.getFileName(file.getPath());
-			String checksum = dirUtil.getChecksumIfChanged(fileName);
+			String checksum = dirUtil.getChecksumIfChanged(file);
 			if (checksum.isEmpty()) {
 				continue;
 			}
@@ -47,8 +46,8 @@ public class GlobalPropertiesLoader extends BaseLoader {
 				is = new FileInputStream(file);
 				config = InitializerSerializer.getGlobalPropertiesConfig(is);
 				globalProperties.addAll(config.getGlobalProperties());
-				dirUtil.writeChecksum(fileName, checksum); // the updated config. file is marked as processed
-				log.info("The global properties config. file has been processed: " + fileName);
+				dirUtil.writeChecksum(file, checksum); // the updated config. file is marked as processed
+				log.info("The global properties config. file has been processed: " + file.getPath());
 			}
 			catch (Exception e) {
 				log.error("Could not load the global properties from: " + file.getPath(), e);
