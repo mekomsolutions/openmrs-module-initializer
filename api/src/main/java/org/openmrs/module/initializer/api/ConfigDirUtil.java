@@ -325,8 +325,8 @@ public class ConfigDirUtil {
 	/**
 	 * @see #deleteChecksumFile(String, String)
 	 */
-	public void deleteChecksumFile(String checksumFileName) {
-		deleteChecksumFile(domainChecksumsDirPath, checksumFileName);
+	public void deleteChecksumFile(String checksumFilename) {
+		deleteChecksumFile(domainChecksumsDirPath, checksumFilename);
 	}
 	
 	/**

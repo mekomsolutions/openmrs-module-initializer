@@ -80,7 +80,7 @@ public class ConfigDirUtilTest {
 	}
 	
 	@Test
-	public void getFiles_shouldHandleNestedFiles() throws IOException {
+	public void getFiles_shouldHandleChecksumsWhenNestedFiles() throws IOException {
 		// setup
 		String configDirPath = getClass().getClassLoader().getResource("org/openmrs/module/initializer/include").getPath();
 		String checksumsDirPath = Files.createTempDirectory("configuration_checksums").toString();
@@ -101,14 +101,20 @@ public class ConfigDirUtilTest {
 			dirUtil.writeChecksum(file, checksum);
 		}
 		
-		// verify
 		Assert.assertThat(fileContents.size(), is(3));
 		for (String locatedFilename : fileContents.keySet()) {
+			
 			String checksumFilename = locatedFilename + "." + CHECKSUM_FILE_EXT;
+			
+			// verify checksum
 			File checksumFile = new File(Paths.get(checksumsDirPath, "nested_txt_files", checksumFilename).toUri());
 			Assert.assertThat(checksumFile.exists(), is(true));
 			Assert.assertEquals(DigestUtils.md5Hex(fileContents.get(locatedFilename)),
 			    FileUtils.readFileToString(checksumFile, "UTF-8"));
+			
+			// verify deletion
+			dirUtil.deleteChecksumFile(checksumFilename);
+			Assert.assertThat(checksumFile.exists(), is(false));
 		}
 	}
 }
