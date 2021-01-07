@@ -134,7 +134,6 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 #### Version 2.1.0
 * _Initialize Validator_ a standalone fatjar to make dry runs of OpenMRS configs.
 * Nested structures of configuration files are supported.
-
 * Added a runtime property to define an inclusion or exclusion list of domains.
 * Added a runtime property to specify wildcard patterns filters for each domain.
 * Added a runtime property to toggle off the generation of the checksums.
