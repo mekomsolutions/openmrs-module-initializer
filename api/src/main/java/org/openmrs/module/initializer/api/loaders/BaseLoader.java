@@ -27,7 +27,7 @@ public abstract class BaseLoader implements Loader {
 	
 	@Override
 	public ConfigDirUtil getDirUtil() {
-		return new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), getDomainName(), cfg);
+		return new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), getDomainName(), cfg.skipChecksums());
 	}
 	
 	@Override

@@ -23,7 +23,6 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.module.initializer.InitializerConfig;
 
 public class ConfigDirUtilTest {
 	
@@ -88,7 +87,7 @@ public class ConfigDirUtilTest {
 		String domain = "nested_txt_files";
 		
 		// replay
-		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain, new InitializerConfig());
+		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain);
 		
 		Map<String, String> fileContents = new HashMap<>();
 		

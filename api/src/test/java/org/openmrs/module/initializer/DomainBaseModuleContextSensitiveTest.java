@@ -9,6 +9,9 @@
  */
 package org.openmrs.module.initializer;
 
+import static org.openmrs.module.initializer.api.ConfigDirUtil.CHECKSUM_FILE_EXT;
+import static org.openmrs.module.initializer.api.ConfigDirUtil.deleteFilesByExtension;
+
 import java.io.File;
 import java.util.Properties;
 
@@ -17,7 +20,6 @@ import org.junit.Before;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleFactory;
-import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
@@ -103,12 +105,10 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		Properties prop = new Properties();
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
 		Context.setRuntimeProperties(prop);
-		
-		ConfigDirUtil.deleteChecksums(iniz.getChecksumsDirPath(), true);
 	}
 	
 	@After
 	public void tearDown() {
-		ConfigDirUtil.deleteChecksums(iniz.getChecksumsDirPath(), true);
+		deleteFilesByExtension(iniz.getChecksumsDirPath(), CHECKSUM_FILE_EXT);
 	}
 }
