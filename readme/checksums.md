@@ -42,13 +42,13 @@ If a configuration is nested however, the checksum files aren't, they are named 
 │       │   ├── ncd_diagnoses.csv
 │       │   └── oncology_diagnoses.csv
 │       ├── drugs
-│       │   └── drugs.csv
+│       │   └── conceptdrugs.csv
 │       └── program_concepts.csv
 └── configuration_checksums
     └── concepts
         ├── diagnoses_ncd_diagnoses.checksum
         ├── diagnoses_oncology_diagnoses.checksum
-        ├── drugs_drugs.checksum
+        ├── drugs_conceptdrugs.checksum
         └── program_concepts.checksum
 ```
 ### Deleting a checksum file
