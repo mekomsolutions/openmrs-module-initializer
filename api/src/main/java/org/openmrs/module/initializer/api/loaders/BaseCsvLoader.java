@@ -51,8 +51,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		// Selecting the files that havent' been checksum'd yet
 		List<OrderableCsvFile> files = new ArrayList<OrderableCsvFile>();
 		for (File file : dirUtil.getFiles("csv", wildcardExclusions)) {
-			String fileName = dirUtil.getFileName(file.getPath());
-			String checksum = dirUtil.getChecksumIfChanged(fileName);
+			String checksum = dirUtil.getChecksumIfChanged(file);
 			if (!checksum.isEmpty()) {
 				files.add(new OrderableCsvFile(file, checksum));
 			}
@@ -79,7 +78,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 					lines = parser.process(lines);
 				}
 				
-				dirUtil.writeChecksum(file.getFile().getName(), file.getChecksum());
+				dirUtil.writeChecksum(file.getFile(), file.getChecksum());
 				
 				// summary logging
 				if (CollectionUtils.isEmpty(lines)) {

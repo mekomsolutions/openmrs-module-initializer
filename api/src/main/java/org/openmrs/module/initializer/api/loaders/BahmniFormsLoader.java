@@ -48,8 +48,7 @@ public class BahmniFormsLoader extends BaseLoader {
 		ConfigDirUtil dirUtil = getDirUtil();
 		for (File file : dirUtil.getFiles("json", wildcardExclusions)) { // processing all the JSON files inside the domain
 			
-			String fileName = dirUtil.getFileName(file.getPath());
-			String checksum = dirUtil.getChecksumIfChanged(fileName);
+			String checksum = dirUtil.getChecksumIfChanged(file);
 			ObjectMapper mapper = new ObjectMapper();
 			if (checksum.isEmpty()) {
 				continue;
@@ -112,8 +111,8 @@ public class BahmniFormsLoader extends BaseLoader {
 				// publish the form
 				if (published)
 					bahmniFormService.publish(bahmniForm.getUuid());
-				dirUtil.writeChecksum(fileName, checksum); // the updated config. file is marked as processed
-				log.info("The Bahmni form has been processed: " + fileName);
+				dirUtil.writeChecksum(file, checksum); // the updated config. file is marked as processed
+				log.info("The Bahmni form has been processed: " + file.getPath());
 			}
 			catch (Exception e) {
 				log.error("The Bahmni form could not be imported: " + file.getPath(), e);

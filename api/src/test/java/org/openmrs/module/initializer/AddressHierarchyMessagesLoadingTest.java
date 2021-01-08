@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -37,7 +38,6 @@ import org.openmrs.module.addresshierarchy.AddressHierarchyLevel;
 import org.openmrs.module.addresshierarchy.config.AddressConfigurationLoader;
 import org.openmrs.module.addresshierarchy.service.AddressHierarchyService;
 import org.openmrs.module.exti18n.ExtI18nConstants;
-import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.Verifies;
 import org.openmrs.util.OpenmrsConstants;
@@ -91,8 +91,8 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 		ahs.initI18nCache();
 		InitializerService iniz = Context.getService(InitializerService.class);
 		
-		File csvFile = (new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), iniz.getRejectionsDirPath(),
-		        InitializerConstants.DOMAIN_ADDR, cfg)).getConfigFile("addresshierarchy.csv");
+		File csvFile = new File(
+		        Paths.get(iniz.getConfigDirPath(), InitializerConstants.DOMAIN_ADDR, "addresshierarchy.csv").toString());
 		LineNumberReader lnr = new LineNumberReader(new FileReader(csvFile));
 		lnr.skip(Long.MAX_VALUE);
 		int csvLineCount = lnr.getLineNumber() + 1;

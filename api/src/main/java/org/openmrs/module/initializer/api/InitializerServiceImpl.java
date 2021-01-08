@@ -11,7 +11,6 @@ package org.openmrs.module.initializer.api;
 
 import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CHECKSUM;
 import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CONFIG;
-import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_REJECTIONS;
 
 import java.io.File;
 import java.io.InputStream;
@@ -67,11 +66,6 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public String getChecksumsDirPath() {
 		return getBasePath().resolve(DIR_NAME_CHECKSUM).toString();
-	}
-	
-	@Override
-	public String getRejectionsDirPath() {
-		return getBasePath().resolve(DIR_NAME_REJECTIONS).toString();
 	}
 	
 	@Override
