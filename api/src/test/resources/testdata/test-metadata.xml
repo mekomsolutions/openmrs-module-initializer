@@ -37,10 +37,10 @@
   
   <idgen_seq_id_gen id="2" first_identifier_base="1" next_sequence_value="2" base_character_set="0123456789" prefix="" min_length="0" max_length="0" />
   
-  <idgen_auto_generation_option id="1" source="1" identifier_type="1" manual_entry_enabled="false" automatic_generation_enabled="true" uuid="eade77b6-3365-47ed-9ee3-2324598629eb" />
+  <idgen_auto_generation_option id="15000" source="1" identifier_type="1" manual_entry_enabled="false" automatic_generation_enabled="true" uuid="eade77b6-3365-47ed-9ee3-2324598629eb" />
     
-  <visit_type visit_type_id="15" name="Malnutrition" description="Malnutrition Visit" creator="1" date_created="2020-12-12 00:00:00.0" retired="false" uuid="2bcf7212-d218-4572-8893-25c4pob71934"/>
+  <visit_type visit_type_id="15000" name="Malnutrition" description="Malnutrition Visit" creator="1" date_created="2020-12-12 00:00:00.0" retired="false" uuid="2bcf7212-d218-4572-8893-25c4pob71934"/>
 
-  <visit_type visit_type_id="16" name="OPD" description="OPD" creator="1" date_created="2020-12-12 00:00:00.0" retired="false" uuid="287463d3-2233-4c69-9851-5841a1f5e109"/>
+  <visit_type visit_type_id="16000" name="OPD" description="Legacy OPD visit Description" creator="1" date_created="2020-12-12 00:00:00.0" retired="false" uuid="287463d3-2233-4c69-9851-5841a1f5e109"/>
 
 </dataset>
