@@ -9,9 +9,12 @@
  */
 package org.openmrs.module.initializer.api;
 
+import static org.hamcrest.CoreMatchers.is;
+
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.VisitType;
 import org.openmrs.api.VisitService;
@@ -29,58 +32,70 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	@Autowired
 	private VisitTypesLoader loader;
 	
-	@Test
-	public void load_shouldLoadVisitTypeAccordingToCsvFiles() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
+	}
+	
+	@Test
+	public void load_shouldLoadVisitTypeAccordingToCsvFiles() {
+		// Pre-asserts
+		{
+			VisitType vt = vs.getVisitType(16000);
+			Assert.assertEquals("OPD", vt.getName());
+			Assert.assertEquals("Legacy OPD visit Description", vt.getDescription());
+		}
 		
 		// Replay
 		loader.load();
 		
-		// Test to find visitTypes with the phrase TB...
+		// Verify fetch by name
 		{
-			List<VisitType> vts = vs.getVisitTypes("TB");
-			Assert.assertNotNull(vts);
-			Assert.assertEquals(1, vts.size());
-			Assert.assertEquals("Return TB Clinic Visit", vts.get(0).getName());
+			List<VisitType> visitTypes = vs.getVisitTypes("TB");
+			Assert.assertNotNull(visitTypes);
+			Assert.assertThat(visitTypes.size(), is(1));
+			
+			VisitType vt = visitTypes.get(0);
+			Assert.assertEquals("Return TB Clinic Visit", vt.getName());
 		}
-		// Test to confirm the VisitService added new VisitType
+		// Verify fetch by UUID
 		{
 			VisitType vt = vs.getVisitTypeByUuid("2bcf7212-d218-4572-8893-25c4pob71934");
 			Assert.assertNotNull(vt);
 			Assert.assertEquals("Malnutrition", vt.getName());
 			Assert.assertEquals("Malnutrition Visit", vt.getDescription());
 		}
-		
-		// Test to confirm Description is not added when none is given in csv
 		{
 			VisitType vt = vs.getVisitTypeByUuid("abcf7209-d218-4572-8893-25c4b5b71934");
 			Assert.assertEquals("General", vt.getName());
 			Assert.assertNull(vt.getDescription());
 		}
-		// Test to confirm Description is changed when uuid is specified in csv
+		// Verify edition (description)
 		{
 			VisitType vt = vs.getVisitTypeByUuid("287463d3-2233-4c69-9851-5841a1f5e109");
 			Assert.assertEquals("OPD", vt.getName());
 			Assert.assertEquals("OPD Visit", vt.getDescription());
 		}
-		// Test to show that we can override the description using only the Name without
-		// uuid
+		// Verify edition using name as pivot in CSV
 		{
 			VisitType vt = vs.getVisitTypeByUuid("759799ab-c9a5-435e-b671-77773ada74e4");
 			Assert.assertEquals("Return TB Clinic Visit", vt.getName());
-			Assert.assertEquals("TB Description", vt.getDescription());
+			Assert.assertEquals("Edited Return TB Clinic Visit Description", vt.getDescription());
 		}
-		
-		// Test to show that Iniz can retire VisitType using uuid only
+		// Verify retirement using UUID as pivot in CSV
 		{
 			VisitType vt = vs.getVisitTypeByUuid("e1d02b2e-cc85-48ac-a5bd-b0e4beea96e0");
-			Assert.assertEquals(true, vt.isRetired());
+			Assert.assertEquals(true, vt.getRetired());
 		}
 		
-		// Test to show that Iniz can retire VisitType using name only
+		// Verify retirement using name as pivot in CSV
 		{
-			VisitType vt = vs.getVisitTypeByUuid("2bcf7212-d218-4572-88o9-25c4b5b71934");
-			Assert.assertEquals(true, vt.isRetired());
+			List<VisitType> visitTypes = vs.getVisitTypes("Initial HIV");
+			Assert.assertNotNull(visitTypes);
+			Assert.assertThat(visitTypes.size(), is(1));
+			
+			VisitType vt = visitTypes.get(0);
+			Assert.assertTrue(vt.getRetired());
 		}
 		
 	}
