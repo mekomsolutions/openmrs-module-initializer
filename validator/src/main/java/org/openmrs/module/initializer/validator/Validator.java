@@ -31,10 +31,15 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Validator {
+	
+	protected static final Logger log = LoggerFactory.getLogger(Validator.class);
 	
 	public static CommandLine cmdLine;
 	
@@ -131,7 +136,7 @@ public class Validator {
 		return Paths.get(getJarDirPath(), "initializer.log");
 	}
 	
-	public static void main(String[] args) throws URISyntaxException, ParseException {
+	public static Result getJUnitResult(String[] args) throws URISyntaxException, ParseException {
 		// setting up logging
 		{
 			org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
@@ -152,7 +157,7 @@ public class Validator {
 				HelpFormatter f = new HelpFormatter();
 				f.setWidth(f.getWidth() * 2);
 				f.printHelp(getJarFile().getName(), options);
-				return;
+				return new Result();
 			}
 			
 			if (cmdLine.hasOption(ARG_VERBOSE)) {
@@ -161,7 +166,17 @@ public class Validator {
 		}
 		
 		// Testing the config
-		JUnitCore.main(ConfigurationTester.class.getCanonicalName());
-		
+		return JUnitCore.runClasses(ConfigurationTester.class);
+	}
+	
+	public static void main(String[] args) {
+		try {
+			Result result = getJUnitResult(args);
+			System.exit(result.wasSuccessful() ? 0 : 1);
+		}
+		catch (Throwable t) {
+			log.error(t.getMessage(), t);
+			System.exit(1);
+		}
 	}
 }
