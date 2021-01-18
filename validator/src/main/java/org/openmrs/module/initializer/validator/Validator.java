@@ -5,6 +5,8 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.apache.commons.lang.StringUtils.removeEnd;
 import static org.apache.commons.lang.StringUtils.replace;
 import static org.apache.commons.lang.StringUtils.startsWith;
+import static org.apache.log4j.Level.INFO;
+import static org.apache.log4j.Level.WARN;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_EXCLUDE;
 
@@ -29,6 +31,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -53,7 +56,12 @@ public class Validator {
 	
 	public static final String ARG_VERBOSE = "verbose";
 	
-	public static Set<LoggingEvent> errors = new HashSet<>();
+	public static final String ARG_LOGGING_LEVEL = "logging-level";
+	
+	/*
+	 * Keeps an internal count of the logged errors
+	 */
+	static Set<LoggingEvent> errors = new HashSet<>();
 	
 	/**
 	 * Properly escapes the single quotes of a piece of SQL for MySQL. Strings ending with a ";" are
@@ -95,13 +103,19 @@ public class Validator {
 		return new File(codeSource.getLocation().toURI().getPath());
 	}
 	
+	/**
+	 * Convenience method giving the absolute path of the Validator JAR file.
+	 * 
+	 * @return The absolute path of the Validator JAR file.
+	 * @throws URISyntaxException
+	 */
 	public static String getJarDirPath() throws URISyntaxException {
 		File jarFile = getJarFile();
 		String jarDir = jarFile.getParentFile().getPath();
 		return jarDir;
 	}
 	
-	public static Options getCLIOptions() {
+	private static Options getCLIOptions() {
 		final StringBuilder sb = new StringBuilder();
 		Stream.of(Domain.values()).forEach(d -> {
 			sb.append(d.getName() + ",");
@@ -128,7 +142,10 @@ public class Validator {
 		});
 		options.addOption(Option.builder("s").longOpt("checksums")
 		        .desc("Enables writing the checksum files in a checksum folder besides the configuration folder.").build());
-		options.addOption(Option.builder("D").longOpt(ARG_VERBOSE).desc("Enables verbose logging.").build());
+		options.addOption(Option.builder("V").longOpt(ARG_VERBOSE).desc("Enables verbose logging.").build());
+		options.addOption(Option.builder("L").hasArg().longOpt(ARG_LOGGING_LEVEL).argName("ARG")
+		        .desc("The verbose mode logging level: " + Level.TRACE + ", " + Level.DEBUG + " or " + Level.INFO + ".")
+		        .build());
 		return options;
 	}
 	
@@ -136,16 +153,24 @@ public class Validator {
 		return Paths.get(getJarDirPath(), "initializer.log");
 	}
 	
+	/**
+	 * Main API method to execute a dry run of a configuration and collect JUnit {@link Result}.
+	 * 
+	 * @param args The Validator CLI args.
+	 * @return The JUnit Result object.
+	 * @throws URISyntaxException
+	 * @throws ParseException
+	 */
 	public static Result getJUnitResult(String[] args) throws URISyntaxException, ParseException {
 		// setting up logging
 		{
 			org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
 			logger.addAppender(Utils.getFileAppender(getLogFilePath()));
 			logger.addAppender(new ValidatorAppender());
-			logger.setLevel(org.apache.log4j.Level.WARN);
+			logger.setLevel(WARN);
 			
-			org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(org.apache.log4j.Level.INFO);
-			org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(org.apache.log4j.Level.INFO);
+			org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(INFO);
+			org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(INFO);
 		}
 		
 		// processing args
@@ -161,7 +186,11 @@ public class Validator {
 			}
 			
 			if (cmdLine.hasOption(ARG_VERBOSE)) {
-				org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.DEBUG);
+				Level level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL));
+				if (level.isGreaterOrEqual(INFO)) { // verbose means at least INFO level
+					level = INFO;
+				}
+				org.apache.log4j.Logger.getRootLogger().setLevel(level);
 			}
 		}
 		
