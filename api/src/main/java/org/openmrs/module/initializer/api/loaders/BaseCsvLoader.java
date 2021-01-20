@@ -1,14 +1,13 @@
 package org.openmrs.module.initializer.api.loaders;
 
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
@@ -17,9 +16,7 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderedCsvFile;
 import org.openmrs.module.initializer.api.OrderedFile;
-import org.openmrs.module.initializer.api.utils.IgnoreBOMInputStream;
 import org.openmrs.module.initializer.api.utils.Utils;
-import org.springframework.util.CollectionUtils;
 
 /**
  * All CSV loaders should subclass the base CSV loader. This class takes care of loading and sorting
@@ -32,11 +29,6 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 	protected P parser;
 	
 	@Override
-	public void load(List<String> wildcardExclusions) {
-		loadCsvFiles(getDirUtil(), this, wildcardExclusions);
-	}
-	
-	@Override
 	protected Domain getDomain() {
 		return parser.getDomain();
 	}
@@ -44,11 +36,6 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 	@Override
 	protected String getFileExtension() {
 		return "csv";
-	}
-	
-	@Override
-	protected void load(InputStream is) throws Exception {
-		// TODO Auto-generated method stub
 	}
 	
 	@Override
@@ -62,78 +49,52 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		return new OrderedCsvFile(file);
 	}
 	
-	public void loadCsvFiles(ConfigDirUtil dirUtil, CsvLoader csvLoader, List<String> wildcardExclusions) {
+	@Override
+	protected void load(InputStream is) throws Exception {
 		
-		// Selecting the files that havent' been checksum'd yet
-		List<OrderedCsvFile> files = new ArrayList<OrderedCsvFile>();
-		for (File file : dirUtil.getFiles("csv", wildcardExclusions)) {
-			String checksum = dirUtil.getChecksumIfChanged(file);
-			if (!checksum.isEmpty()) {
-				files.add(new OrderedCsvFile(file));
-			}
+		// getting the lines
+		final CsvParser<T, BaseLineProcessor<T>> parser = getParser(is);
+		List<String[]> remainingLines = parser.getLines();
+		int totalCount = remainingLines.size();
+		
+		// processing while possible
+		int lastFailCount = 0;
+		while (!isEmpty(remainingLines) && lastFailCount != remainingLines.size()) {
+			log.info("Attempting to process " + remainingLines.size() + " CSV lines that have not been processed yet...");
+			lastFailCount = remainingLines.size();
+			remainingLines = parser.process(remainingLines);
 		}
 		
-		Collections.sort(files); // sorting based on the CSV order metadata
-		
-		// parsing the CSV files
-		for (OrderedCsvFile file : files) {
-			InputStream is = null;
-			try {
-				
-				// getting the lines
-				is = new IgnoreBOMInputStream(new FileInputStream(file));
-				final CsvParser<T, BaseLineProcessor<T>> parser = csvLoader.getParser(is);
-				List<String[]> lines = parser.getLines();
-				int fileCount = lines.size();
-				
-				// processing while possible
-				int failuresCount = 0;
-				while (!CollectionUtils.isEmpty(lines) && failuresCount != lines.size()) {
-					log.info("Attempting to process " + lines.size() + " CSV lines that have not been processed yet...");
-					failuresCount = lines.size();
-					lines = parser.process(lines);
-				}
-				
-				String checksum = dirUtil.getChecksumIfChanged(file);
-				dirUtil.writeChecksum(file, checksum);
-				
-				// summary logging
-				if (CollectionUtils.isEmpty(lines)) {
-					log.info(
-					    file.getName() + " ('" + dirUtil.getDomain() + "' domain) was entirely successfully processed.");
-					log.info(fileCount + " entities were saved.");
-					
-				} else {
-					final List<CsvLine> csvLines = new ArrayList<>();
-					for (String[] line : lines) {
-						csvLines.add(new CsvLine(parser.getHeaderLine(), line));
-					}
-					
-					StringBuilder sb = new StringBuilder();
-					sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-					sb.append(System.lineSeparator() + "+-+-+-+-- BEGINNING OF CSV FILE ERROR SUMMARY --+-+-+-+");
-					sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-					sb.append(System.lineSeparator());
-					sb.append(file.getName() + " ('" + dirUtil.getDomain() + "' domain) was processed and " + lines.size()
-					        + " out of " + fileCount + " entities were not saved.");
-					sb.append(System.lineSeparator() + "The CSV line(s) corresponding to those entities are listed below:");
-					sb.append(Utils.prettyPrint(csvLines));
-					sb.append(System.lineSeparator());
-					sb.append(System.lineSeparator() + "Paste print for spreadsheets... etc:");
-					sb.append(System.lineSeparator());
-					sb.append(Utils.pastePrint(csvLines));
-					sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-					sb.append(System.lineSeparator() + "+-+-+-+-- END OF CSV FILE ERROR SUMMARY --+-+-+-+");
-					sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-					log.error(sb.toString());
-				}
+		final File file = getLoadedFile();
+		// summary logging
+		if (isEmpty(remainingLines)) {
+			log.info(file.getName() + " ('" + getDomainName() + "' domain) was entirely successfully processed.");
+			log.info(totalCount + " entities were saved.");
+			
+		} else {
+			final List<CsvLine> csvLines = new ArrayList<>();
+			for (String[] line : remainingLines) {
+				csvLines.add(new CsvLine(parser.getHeaderLine(), line));
 			}
-			catch (IOException e) {
-				log.error("Could not parse the '" + dirUtil.getDomain() + "' config file: " + file.getPath(), e);
-			}
-			finally {
-				IOUtils.closeQuietly(is);
-			}
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+			sb.append(System.lineSeparator() + "+-+-+-+-- BEGINNING OF CSV FILE ERROR SUMMARY --+-+-+-+");
+			sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+			sb.append(System.lineSeparator());
+			sb.append(file.getName() + " ('" + getDomainName() + "' domain) was processed and " + remainingLines.size()
+			        + " out of " + totalCount + " entities were not saved.");
+			sb.append(System.lineSeparator() + "The CSV line(s) corresponding to those entities are listed below:");
+			sb.append(Utils.prettyPrint(csvLines));
+			sb.append(System.lineSeparator());
+			sb.append(System.lineSeparator() + "Paste print for spreadsheets... etc:");
+			sb.append(System.lineSeparator());
+			sb.append(Utils.pastePrint(csvLines));
+			sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+			sb.append(System.lineSeparator() + "+-+-+-+-- END OF CSV FILE ERROR SUMMARY --+-+-+-+");
+			sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+			log.error(sb.toString());
 		}
+		
 	}
 }

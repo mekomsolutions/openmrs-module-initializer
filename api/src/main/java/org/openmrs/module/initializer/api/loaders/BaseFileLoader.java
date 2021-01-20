@@ -8,6 +8,10 @@ import org.openmrs.module.initializer.api.OrderedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A base loader to focus the implementation on what to do with the {@link File} for the
+ * configuration file being loaded.
+ */
 public abstract class BaseFileLoader extends BaseLoader {
 	
 	protected final Logger log = LoggerFactory.getLogger(getClass());

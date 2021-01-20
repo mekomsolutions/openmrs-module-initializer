@@ -8,7 +8,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Base class for ordered files. While this class provides the needed structure, it does not provide
- * any implementation to fetch the order information from the file.
+ * any actual implementation to fetch the order information from the file. In other words this base
+ * class doesn't produce any predictable ordering between {@link OrderedFile} instances.
  */
 public class OrderedFile extends File {
 	
@@ -32,6 +33,9 @@ public class OrderedFile extends File {
 		this(file.getAbsolutePath());
 	}
 	
+	/*
+	 * Override this method to actively fetch the order from a given configuration file. 
+	 */
 	protected Integer fetchOrder(File file) throws Exception {
 		throw new NotImplementedException(
 		        getClass().getSimpleName() + " does not provide an implementation to fetch the loading order from files.");
