@@ -153,6 +153,22 @@ public class Validator {
 		return Paths.get(getJarDirPath(), "initializer.log");
 	}
 	
+	public static void setupLog4j(Level level) throws URISyntaxException {
+		org.apache.log4j.Logger.getRootLogger().setLevel(level);
+		
+		org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(level);
+		org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(level);
+		
+		org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
+		logger.addAppender(Utils.getFileAppender(getLogFilePath()));
+		logger.addAppender(new ValidatorAppender());
+		logger.setLevel(WARN);
+	}
+	
+	public static void setupLog4j() throws URISyntaxException {
+		setupLog4j(INFO);
+	}
+	
 	/**
 	 * Main API method to execute a dry run of a configuration and collect JUnit {@link Result}.
 	 * 
@@ -163,15 +179,7 @@ public class Validator {
 	 */
 	public static Result getJUnitResult(String[] args) throws URISyntaxException, ParseException {
 		// setting up logging
-		{
-			org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
-			logger.addAppender(Utils.getFileAppender(getLogFilePath()));
-			logger.addAppender(new ValidatorAppender());
-			logger.setLevel(WARN);
-			
-			org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(INFO);
-			org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(INFO);
-		}
+		setupLog4j();
 		
 		// processing args
 		{
@@ -187,10 +195,9 @@ public class Validator {
 			
 			if (cmdLine.hasOption(ARG_VERBOSE)) {
 				Level level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL));
-				if (level.isGreaterOrEqual(INFO)) { // verbose means at least INFO level
-					level = INFO;
+				if (!level.isGreaterOrEqual(INFO)) { // verbose means at least INFO level
+					setupLog4j(level);
 				}
-				org.apache.log4j.Logger.getRootLogger().setLevel(level);
 			}
 		}
 		
