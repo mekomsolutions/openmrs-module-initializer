@@ -23,6 +23,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.module.initializer.api.c.ConceptsLoader;
 
 public class ConfigDirUtilTest {
 	
@@ -116,5 +117,29 @@ public class ConfigDirUtilTest {
 			dirUtil.deleteChecksumFile(checksumFilename);
 			Assert.assertThat(checksumFile.exists(), is(false));
 		}
+	}
+	
+	/*
+	 * One of the CSV files has a non-parseable _order.
+	 * The resulting exception is logged as an error.
+	 * TODO: Maybe assert the logger?
+	 */
+	@Test
+	public void getOrderedFiles_shouldReturnOrderedCsvFilesWithConceptsLoader() {
+		// Setup
+		String configDirPath = getClass().getClassLoader().getResource("org/openmrs/module/initializer/include/csv")
+		        .getPath();
+		String checksumsDirPath = null;
+		String domain = "orders";
+		
+		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain);
+		
+		// Replay
+		List<File> orderableFiles = dirUtil.getOrderedFiles("csv", null, new ConceptsLoader());
+		
+		// Verif
+		Assert.assertEquals("5_order_500.csv", orderableFiles.get(0).getName());
+		Assert.assertEquals("4_order_1000.csv", orderableFiles.get(1).getName());
+		Assert.assertEquals("1_order_1500.csv", orderableFiles.get(2).getName());
 	}
 }

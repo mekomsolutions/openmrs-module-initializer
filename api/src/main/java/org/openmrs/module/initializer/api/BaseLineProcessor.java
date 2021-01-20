@@ -149,22 +149,22 @@ public abstract class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	 * Returns the CSV order from the header line
 	 * 
 	 * @param headerLine
-	 * @return The order, eg. "100" out of "_order:100", or null if the order could not be parsed as an
-	 *         int.
-	 * @throws IllegalArgumentException
+	 * @return The order, eg. "100" out of "_order:100", or null
+	 * @throws IllegalArgumentException if the order could not be parsed as an integer.
 	 */
 	public static Integer getOrder(String[] headerLine) throws IllegalArgumentException {
 		String str = getMetadataValue(headerLine, ORDER_LHS);
 		if (UNDEFINED_METADATA_VALUE.equals(str)) { // no order means last in line
 			return Integer.MAX_VALUE;
 		}
-		Integer order = null;
+		
+		Integer order = Integer.MAX_VALUE;
 		try {
 			order = Integer.parseInt(str);
 		}
 		catch (NumberFormatException e) {
-			log.warn("'" + str + "' could not be parsed as a valid integer in header line: " + Arrays.toString(headerLine),
-			    e);
+			throw new IllegalArgumentException("'" + str + "' could not be parsed as a valid integer order in header line: "
+			        + Arrays.toString(headerLine), e);
 		}
 		return order;
 	}
