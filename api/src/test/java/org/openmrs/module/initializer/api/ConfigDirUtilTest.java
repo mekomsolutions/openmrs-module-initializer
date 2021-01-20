@@ -1,8 +1,9 @@
 package org.openmrs.module.initializer.api;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.core.Is.is;
 import static org.openmrs.module.initializer.api.ConfigDirUtil.CHECKSUM_FILE_EXT;
 import static org.openmrs.module.initializer.api.ConfigDirUtil.getLocatedFilename;
 
@@ -49,7 +50,7 @@ public class ConfigDirUtilTest {
 			Collection<String> excludedFiles = CollectionUtils.subtract(allFiles, files);
 			
 			// verify
-			Assert.assertThat(excludedFiles, is(empty()));
+			assertThat(excludedFiles, is(empty()));
 		}
 		{
 			// setup
@@ -61,8 +62,8 @@ public class ConfigDirUtilTest {
 			Collection<String> excludedFiles = CollectionUtils.subtract(allFiles, files);
 			
 			// verify
-			Assert.assertThat(excludedFiles.size(), is(3));
-			Assert.assertThat(excludedFiles, containsInAnyOrder("diagnoses.csv", "diagnoses_02.csv", "diagnoses_03.csv"));
+			assertThat(excludedFiles.size(), is(3));
+			assertThat(excludedFiles, containsInAnyOrder("diagnoses.csv", "diagnoses_02.csv", "diagnoses_03.csv"));
 		}
 		{
 			// setup
@@ -74,8 +75,8 @@ public class ConfigDirUtilTest {
 			Collection<String> excludedFiles = CollectionUtils.subtract(allFiles, files);
 			
 			// verify
-			Assert.assertThat(excludedFiles.size(), is(5));
-			Assert.assertThat(excludedFiles, containsInAnyOrder("diagnoses.csv", "diagnoses_02.csv", "diagnoses_03.csv",
+			assertThat(excludedFiles.size(), is(5));
+			assertThat(excludedFiles, containsInAnyOrder("diagnoses.csv", "diagnoses_02.csv", "diagnoses_03.csv",
 			    "newer_diagnoses.csv", "retired_diagnoses.csv"));
 		}
 	}
@@ -102,20 +103,20 @@ public class ConfigDirUtilTest {
 			dirUtil.writeChecksum(file, checksum);
 		}
 		
-		Assert.assertThat(fileContents.size(), is(3));
+		assertThat(fileContents.size(), is(3));
 		for (String locatedFilename : fileContents.keySet()) {
 			
 			String checksumFilename = locatedFilename + "." + CHECKSUM_FILE_EXT;
 			
 			// verify checksum
 			File checksumFile = new File(Paths.get(checksumsDirPath, "nested_txt_files", checksumFilename).toUri());
-			Assert.assertThat(checksumFile.exists(), is(true));
+			assertThat(checksumFile.exists(), is(true));
 			Assert.assertEquals(DigestUtils.md5Hex(fileContents.get(locatedFilename)),
 			    FileUtils.readFileToString(checksumFile, "UTF-8"));
 			
 			// verify deletion
 			dirUtil.deleteChecksumFile(checksumFilename);
-			Assert.assertThat(checksumFile.exists(), is(false));
+			assertThat(checksumFile.exists(), is(false));
 		}
 	}
 	
@@ -135,11 +136,14 @@ public class ConfigDirUtilTest {
 		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain);
 		
 		// Replay
-		List<File> orderableFiles = dirUtil.getOrderedFiles("csv", null, new ConceptsLoader());
+		List<String> orderedFilenames = dirUtil.getOrderedFiles("csv", null, new ConceptsLoader()).stream()
+		        .map(f -> f.getName()).collect(Collectors.toList());
 		
 		// Verif
-		Assert.assertEquals("5_order_500.csv", orderableFiles.get(0).getName());
-		Assert.assertEquals("4_order_1000.csv", orderableFiles.get(1).getName());
-		Assert.assertEquals("1_order_1500.csv", orderableFiles.get(2).getName());
+		assertThat(orderedFilenames.size(), is(5));
+		Assert.assertEquals("5_order_500.csv", orderedFilenames.get(0));
+		Assert.assertEquals("4_order_1000.csv", orderedFilenames.get(1));
+		Assert.assertEquals("1_order_1500.csv", orderedFilenames.get(2));
+		assertThat(orderedFilenames.subList(3, 5), containsInAnyOrder("3_order_missing.csv", "2_order_e00.csv"));
 	}
 }
