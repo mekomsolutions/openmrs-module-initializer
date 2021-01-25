@@ -10,15 +10,16 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A base loader to focus the implementation on what to do with the {@link File} for the
- * configuration file being loaded.
+ * configuration file being loaded. Since virtually all domains process files, this is in practise
+ * the base class to all loaders.
  */
 public abstract class BaseFileLoader extends BaseLoader {
 	
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
-	abstract protected String getFileExtension();
+	protected abstract String getFileExtension();
 	
-	abstract protected void load(File file) throws Exception;
+	protected abstract void load(File file) throws Exception;
 	
 	/*
 	 * Override this method to provide another implementation for an ordered file.
@@ -28,11 +29,11 @@ public abstract class BaseFileLoader extends BaseLoader {
 	}
 	
 	@Override
-	public void load(List<String> wildcardExclusions) {
+	public void loadUnsafe(List<String> wildcardExclusions, boolean doThrow) throws Exception {
 		
 		final ConfigDirUtil dirUtil = getDirUtil();
 		
-		dirUtil.getOrderedFiles(getFileExtension(), wildcardExclusions, this).stream().forEach(file -> {
+		for (File file : dirUtil.getOrderedFiles(getFileExtension(), wildcardExclusions, this)) {
 			
 			try {
 				load(file);
@@ -42,9 +43,12 @@ public abstract class BaseFileLoader extends BaseLoader {
 			}
 			catch (Exception e) {
 				log.error("The '" + getDomainName() + "' configuration file could not be loaded: " + file.getPath(), e);
+				if (doThrow) {
+					throw e;
+				}
 			}
 			
-		});
+		}
 		
 	}
 }

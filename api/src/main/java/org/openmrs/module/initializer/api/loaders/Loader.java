@@ -30,10 +30,21 @@ public interface Loader extends Comparable<Loader> {
 	ConfigDirUtil getDirUtil();
 	
 	/**
-	 * Triggers the processing (or "loading") of the domain's files.
+	 * Triggers the processing (or "loading") of the domain's files. This method is potentially unsafe
+	 * if configured to throw exceptions early.
 	 * 
 	 * @param wildcardExclusions A list of wildcard patterns to filter out unwanted files.
+	 * @param doThrow Set this to true to make this method throw on first error.
 	 * @see WildcardFileFilter
+	 */
+	void loadUnsafe(List<String> wildcardExclusions, boolean doThrow) throws Exception;
+	
+	/**
+	 * Triggers the processing (or "loading") of the domain's files. This method is the exception safe
+	 * version of {@link #loadUnsafe(List, boolean)}.
+	 * 
+	 * @see #loadUnsafe(List, boolean) This variant of the loading routine does not throw checked
+	 *      exceptions, it only logs errors.
 	 */
 	void load(List<String> wildcardExclusions);
 	

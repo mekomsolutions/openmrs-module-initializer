@@ -28,7 +28,7 @@ public abstract class BaseInputStreamLoader extends BaseFileLoader {
 		return loadedFile;
 	}
 	
-	abstract protected void load(InputStream is) throws Exception;
+	protected abstract void load(InputStream is) throws Exception;
 	
 	@Override
 	protected void load(File file) throws Exception {
