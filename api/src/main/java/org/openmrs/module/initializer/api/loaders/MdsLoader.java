@@ -14,6 +14,17 @@ public class MdsLoader extends BaseInputStreamLoader {
 	
 	private PackageImporter importer;
 	
+	private PackageImporter getImporter() {
+		if (importer == null) {
+			importer = MetadataSharing.getInstance().newPackageImporter();
+			ImportConfig importConfig = new ImportConfig();
+			importConfig.setPossibleMatch(ImportType.PREFER_THEIRS);
+			importConfig.setExactMatch(ImportType.PREFER_THEIRS);
+			importer.setImportConfig(importConfig);
+		}
+		return importer;
+	}
+	
 	@Override
 	protected Domain getDomain() {
 		return Domain.MDS;
@@ -30,14 +41,4 @@ public class MdsLoader extends BaseInputStreamLoader {
 		getImporter().importPackage();
 	}
 	
-	private PackageImporter getImporter() {
-		if (importer == null) {
-			importer = MetadataSharing.getInstance().newPackageImporter();
-			ImportConfig importConfig = new ImportConfig();
-			importConfig.setPossibleMatch(ImportType.PREFER_THEIRS);
-			importConfig.setExactMatch(ImportType.PREFER_THEIRS);
-			importer.setImportConfig(importConfig);
-		}
-		return importer;
-	}
 }

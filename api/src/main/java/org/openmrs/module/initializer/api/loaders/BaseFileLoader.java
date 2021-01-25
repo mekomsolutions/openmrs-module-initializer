@@ -39,7 +39,6 @@ public abstract class BaseFileLoader extends BaseLoader {
 				load(file);
 				dirUtil.writeChecksum(file, dirUtil.getChecksumIfChanged(file)); // the updated config. file is marked as processed
 				log.info("The '" + getDomainName() + "' configuration file has been loaded successfuly: " + file.getPath());
-				
 			}
 			catch (Exception e) {
 				log.error("The '" + getDomainName() + "' configuration file could not be loaded: " + file.getPath(), e);

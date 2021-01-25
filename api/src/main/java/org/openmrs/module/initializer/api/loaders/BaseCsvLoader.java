@@ -5,8 +5,8 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.module.initializer.Domain;
@@ -70,31 +70,30 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		if (isEmpty(remainingLines)) {
 			log.info(file.getName() + " ('" + getDomainName() + "' domain) was entirely successfully processed.");
 			log.info(totalCount + " entities were saved.");
-			
-		} else {
-			final List<CsvLine> csvLines = new ArrayList<>();
-			for (String[] line : remainingLines) {
-				csvLines.add(new CsvLine(parser.getHeaderLine(), line));
-			}
-			
-			StringBuilder sb = new StringBuilder();
-			sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-			sb.append(System.lineSeparator() + "+-+-+-+-- BEGINNING OF CSV FILE ERROR SUMMARY --+-+-+-+");
-			sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-			sb.append(System.lineSeparator());
-			sb.append(file.getName() + " ('" + getDomainName() + "' domain) was processed and " + remainingLines.size()
-			        + " out of " + totalCount + " entities were not saved.");
-			sb.append(System.lineSeparator() + "The CSV line(s) corresponding to those entities are listed below:");
-			sb.append(Utils.prettyPrint(csvLines));
-			sb.append(System.lineSeparator());
-			sb.append(System.lineSeparator() + "Paste print for spreadsheets... etc:");
-			sb.append(System.lineSeparator());
-			sb.append(Utils.pastePrint(csvLines));
-			sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-			sb.append(System.lineSeparator() + "+-+-+-+-- END OF CSV FILE ERROR SUMMARY --+-+-+-+");
-			sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-			log.error(sb.toString());
+			return;
 		}
+		
+		// remaining errors
+		final List<CsvLine> errLines = remainingLines.stream().map(line -> new CsvLine(parser.getHeaderLine(), line))
+		        .collect(Collectors.toList());
+		StringBuilder sb = new StringBuilder();
+		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+		sb.append(System.lineSeparator() + "+-+-+-+-- BEGINNING OF CSV FILE ERROR SUMMARY --+-+-+-+");
+		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+		sb.append(System.lineSeparator());
+		sb.append(file.getName() + " ('" + getDomainName() + "' domain) was processed and " + remainingLines.size()
+		        + " out of " + totalCount + " entities were not saved.");
+		sb.append(System.lineSeparator() + "The CSV line(s) corresponding to those entities are listed below:");
+		sb.append(Utils.prettyPrint(errLines));
+		sb.append(System.lineSeparator());
+		sb.append(System.lineSeparator() + "Paste print for spreadsheets... etc:");
+		sb.append(System.lineSeparator());
+		sb.append(Utils.pastePrint(errLines));
+		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+		sb.append(System.lineSeparator() + "+-+-+-+-- END OF CSV FILE ERROR SUMMARY --+-+-+-+");
+		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+		
+		throw new IllegalArgumentException(sb.toString());
 		
 	}
 }

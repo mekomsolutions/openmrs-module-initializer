@@ -44,6 +44,9 @@ public abstract class BaseLoader implements Loader {
 		return getDomain().getOrder();
 	}
 	
+	/*
+	 * This is a mere wrapper of the unsafe version when it doesn't throw anyway.
+	 */
 	@Override
 	public void load(List<String> wildcardExclusions) {
 		try {
