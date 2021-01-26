@@ -25,7 +25,7 @@ java -jar ./validator/target/initializer-validator-2.1.0-SNAPSHOT.jar \
 ```bash
 java -jar ./validator/target/initializer-validator-2.1.0-SNAPSHOT.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration \
-  --ciel-path=/Users/mksd/Downloads/openmrs_concepts_2.2_20200927.sql
+  --ciel-file=/Users/mksd/Downloads/openmrs_concepts_2.2_20200927.sql
 ```
 ##### Skipping some domains
 ```bash

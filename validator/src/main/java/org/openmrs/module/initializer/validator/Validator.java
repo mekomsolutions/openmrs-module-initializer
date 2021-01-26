@@ -46,9 +46,13 @@ public class Validator {
 	
 	public static CommandLine cmdLine;
 	
+	private static Path logFilePath = null;
+	
 	public static final String ARG_CONFIG_DIR = "config-dir";
 	
-	public static final String ARG_CIEL_PATH = "ciel-path";
+	public static final String ARG_CIEL_FILE = "ciel-file";
+	
+	public static final String ARG_LOG_DIR = "log-file";
 	
 	public static final String ARG_HELP = "help";
 	
@@ -108,15 +112,12 @@ public class Validator {
 	}
 	
 	/**
-	 * Convenience method giving the absolute path of the Validator JAR file.
+	 * Convenience method giving the path of the Validator JAR file.
 	 * 
-	 * @return The absolute path of the Validator JAR file.
-	 * @throws URISyntaxException
+	 * @return The path of the Validator JAR file.
 	 */
-	public static String getJarDirPath() throws URISyntaxException {
-		File jarFile = getJarFile();
-		String jarDir = jarFile.getParentFile().getPath();
-		return jarDir;
+	public static Path getJarDirPath() throws Exception {
+		return Paths.get(getJarFile().getParentFile().getPath());
 	}
 	
 	private static Options getCLIOptions() {
@@ -132,8 +133,10 @@ public class Validator {
 		        .desc("Toggles the unsafe mode that fails early as soon as a domain loading error occurs.").build());
 		options.addOption(Option.builder("c").hasArg().longOpt(ARG_CONFIG_DIR).argName("DIR")
 		        .desc("The path to the OpenMRS config directory.").build());
-		options.addOption(Option.builder("l").longOpt(ARG_CIEL_PATH).hasArg().argName("FILE")
+		options.addOption(Option.builder("l").longOpt(ARG_CIEL_FILE).hasArg().argName("FILE")
 		        .desc("The path to the CIEL .sql file.").build());
+		options.addOption(
+		    Option.builder("f").longOpt(ARG_LOG_DIR).hasArg().argName("FILE").desc("The path to output log file.").build());
 		options.addOption(Option.builder("d").longOpt(ARG_DOMAINS).hasArg().argName("CSV")
 		        .desc("A CSV string of selected domains to selectively include, eg.: metadatasharing,concepts,roles ;"
 		                + "\nor to selectively exclude, eg.: '!metadatasharing,concepts,roles' ;"
@@ -155,24 +158,70 @@ public class Validator {
 		return options;
 	}
 	
-	public static Path getLogFilePath() throws URISyntaxException {
-		return Paths.get(getJarDirPath(), "initializer.log");
+	/**
+	 * @return A valid Path object to the log file, or null if no log file could not be written to.
+	 */
+	public static Path getLogFilePath() {
+		return logFilePath;
 	}
 	
-	public static void setupLog4j(Level level) throws URISyntaxException {
+	public static void setupLog4j(Level level, Path logFilePath) {
 		org.apache.log4j.Logger.getRootLogger().setLevel(level);
 		
 		org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(level);
 		org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(level);
 		
 		org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
-		logger.addAppender(Utils.getFileAppender(getLogFilePath()));
+		if (logFilePath != null) {
+			logger.addAppender(Utils.getFileAppender(logFilePath));
+		}
 		logger.addAppender(new ValidatorAppender());
 		logger.setLevel(WARN);
 	}
 	
-	public static void setupLog4j() throws URISyntaxException {
-		setupLog4j(INFO);
+	protected static void initLogFilePath(String logFileDir) {
+		
+		logFilePath = null;
+		
+		Path path = Paths.get(logFileDir);
+		try {
+			if (isEmpty(logFileDir)) {
+				throw new IllegalArgumentException();
+			}
+			if (!Files.exists(path)) {
+				path = Files.createDirectory(path);
+			}
+		}
+		catch (Exception e) {
+			log.error(
+			    "There was an error accessing the specified log file folder.\nFalling back on using the JAR file folder...");
+			try {
+				path = getJarDirPath();
+			}
+			catch (Exception e1) {
+				log.error("There was an error accessing the JAR file folder.\nFalling back on using a temp directory...");
+				try {
+					path = Files.createTempDirectory("");
+				}
+				catch (Exception e2) {
+					log.error(
+					    "There was an error creating the temp directory. No log file will be written, please refer to the console.");
+					return;
+				}
+			}
+		}
+		
+		path = path.resolve("initializer.log");
+		try {
+			Files.deleteIfExists(path);
+			path = Files.createFile(path);
+		}
+		catch (Exception e) {
+			log.error("There was an error creating the log file at " + path
+			        + "\nNo log file will be written, please refer to the console.");
+		}
+		
+		logFilePath = path;
 	}
 	
 	/**
@@ -182,32 +231,31 @@ public class Validator {
 	 * @return The JUnit Result object.
 	 * @throws URISyntaxException
 	 * @throws ParseException
+	 * @throws IOException
 	 */
 	public static Result getJUnitResult(String[] args) throws URISyntaxException, ParseException {
-		// setting up logging
-		setupLog4j();
 		
-		// processing args
-		{
-			Options options = getCLIOptions();
-			cmdLine = new DefaultParser().parse(options, args);
-			
-			if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption(ARG_HELP)) {
-				HelpFormatter f = new HelpFormatter();
-				f.setWidth(f.getWidth() * 2);
-				f.printHelp(getJarFile().getName(), options);
-				return new Result();
-			}
-			
-			if (cmdLine.hasOption(ARG_VERBOSE)) {
-				Level level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL));
-				if (!level.isGreaterOrEqual(INFO)) { // verbose means at least INFO level
-					setupLog4j(level);
-				}
-			}
-			
-			unsafe = cmdLine.hasOption(ARG_UNSAFE) ? true : false;
+		Options options = getCLIOptions();
+		cmdLine = new DefaultParser().parse(options, args);
+		
+		if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption(ARG_HELP)) {
+			HelpFormatter f = new HelpFormatter();
+			f.setWidth(f.getWidth() * 2);
+			f.printHelp(getJarFile().getName(), options);
+			return new Result();
 		}
+		
+		Level level = INFO;
+		if (cmdLine.hasOption(ARG_VERBOSE)) {
+			level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL));
+			level = level.isGreaterOrEqual(INFO) ? INFO : level; // verbose means at least INFO level
+		}
+		
+		// setting up logging
+		initLogFilePath(cmdLine.getOptionValue(ARG_LOG_DIR));
+		setupLog4j(level, getLogFilePath());
+		
+		unsafe = cmdLine.hasOption(ARG_UNSAFE) ? true : false;
 		
 		// Testing the config
 		return JUnitCore.runClasses(ConfigurationTester.class);

@@ -11,7 +11,7 @@ import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_EXCLUDE;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_SKIPCHECKSUMS;
 import static org.openmrs.module.initializer.validator.Validator.ARG_CHECKSUMS;
-import static org.openmrs.module.initializer.validator.Validator.ARG_CIEL_PATH;
+import static org.openmrs.module.initializer.validator.Validator.ARG_CIEL_FILE;
 import static org.openmrs.module.initializer.validator.Validator.ARG_CONFIG_DIR;
 import static org.openmrs.module.initializer.validator.Validator.cmdLine;
 
@@ -133,8 +133,8 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		    is(true));
 		
 		configDirPath = Validator.cmdLine.getOptionValue(ARG_CONFIG_DIR);
-		if (cmdLine.hasOption(ARG_CIEL_PATH)) {
-			cielFilePath = cmdLine.getOptionValue(ARG_CIEL_PATH);
+		if (cmdLine.hasOption(ARG_CIEL_FILE)) {
+			cielFilePath = cmdLine.getOptionValue(ARG_CIEL_FILE);
 		}
 		if (cmdLine.hasOption(ARG_DOMAINS)) {
 			getRuntimeProperties().put(PROPS_DOMAINS, cmdLine.getOptionValue(ARG_DOMAINS));
@@ -173,8 +173,11 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	@After
 	public void conclude() throws URISyntaxException {
-		Assert.assertThat("The Initializer log file is not empty, please check its reported errors and warnings at \n"
-		        + Validator.getLogFilePath().toString(),
-		    Validator.errors, is(empty()));
+		StringBuilder sb = new StringBuilder();
+		sb.append("The validation was not successful and finished with errors.\n");
+		if (Validator.getLogFilePath() != null) {
+			sb.append("Please check the logged errors at " + Validator.getLogFilePath());
+		}
+		Assert.assertThat(sb.toString(), Validator.errors, is(empty()));
 	}
 }

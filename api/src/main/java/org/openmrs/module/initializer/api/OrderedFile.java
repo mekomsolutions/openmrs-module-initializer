@@ -22,6 +22,9 @@ public class OrderedFile extends File {
 		try {
 			order = fetchOrder(this);
 		}
+		catch (NotImplementedException e) {
+			log.warn(e.getMessage());
+		}
 		catch (Exception e) {
 			log.error("There was an error while attempting to read the loading order of a configuration file: "
 			        + this.getAbsolutePath(),
