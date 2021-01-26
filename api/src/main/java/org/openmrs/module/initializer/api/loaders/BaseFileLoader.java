@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
  * configuration file being loaded. Since virtually all domains process files, this is in practise
  * the base class to all loaders. This is the base class that provides the implementation of
  * {@link Loader#loadUnsafe(List, boolean)} with a mechanism to throw exceptions early.
+ * 
+ * @since 2.1.0
  */
 public abstract class BaseFileLoader extends BaseLoader {
 	

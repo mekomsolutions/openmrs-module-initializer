@@ -10,6 +10,8 @@ import org.openmrs.module.initializer.api.utils.IgnoreBOMInputStream;
 /**
  * A base loader to focus the implementation on what to do with the {@link InputStream} for the
  * configuration file being loaded.
+ * 
+ * @since 2.1.0
  */
 public abstract class BaseInputStreamLoader extends BaseFileLoader {
 	
@@ -20,7 +22,7 @@ public abstract class BaseInputStreamLoader extends BaseFileLoader {
 	}
 	
 	/**
-	 * Provides a reference to the file being currently loaded.
+	 * Provides access to the file being currently loaded.
 	 * 
 	 * @return The file being currently loaded.
 	 */

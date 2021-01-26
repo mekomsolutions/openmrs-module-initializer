@@ -168,7 +168,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	@Test
 	public void loadConfiguration() {
-		getService().load(true);
+		getService().load();
 	}
 	
 	@After

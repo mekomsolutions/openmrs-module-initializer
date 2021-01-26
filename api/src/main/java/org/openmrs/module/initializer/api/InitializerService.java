@@ -37,12 +37,25 @@ public interface InitializerService extends OpenmrsService {
 	List<Loader> getLoaders();
 	
 	/**
-	 * Loads all domains based on each domain's order.
+	 * Loads all domains based on their order.
 	 * 
 	 * @param applyFilters Set this to false to ignore the inclusion or exclusion list and the
 	 *            domain-specific file name wildcard filters.
+	 * @param doThrow Set this to true to make this method throw early as soon as the first loading
+	 *            error is encountered.
+	 * @since 2.1.0
 	 */
-	void load(boolean applyFilters);
+	void loadUnsafe(boolean applyFilters, boolean doThrow) throws Exception;
+	
+	/**
+	 * Loads all domains based on their order. This method is the exception safe version of
+	 * {@link #loadUnsafe(boolean, boolean)}.
+	 * 
+	 * @see #loadUnsafe(boolean, boolean) This variant of the loading routine does not throw checked
+	 *      exceptions, it only logs errors.
+	 * @since 2.1.0
+	 */
+	void load();
 	
 	/**
 	 * Add a single key value to the memory store.

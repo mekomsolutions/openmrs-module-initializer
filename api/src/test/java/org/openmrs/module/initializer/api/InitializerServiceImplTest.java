@@ -16,8 +16,8 @@ import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.InitializerConfig;
@@ -35,7 +35,7 @@ public class InitializerServiceImplTest {
 	
 	private InitializerConfig cfg = new InitializerConfig();
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		final List<Loader> loaders = Arrays.asList(conceptsLoader, encounterTypesLoader, drugsLoader);
 		iniz = new InitializerServiceImpl() {
@@ -58,7 +58,7 @@ public class InitializerServiceImplTest {
 		cfg.init();
 		
 		// replay
-		iniz.load(true);
+		iniz.load();
 		
 		// verify
 		verify(conceptsLoader, times(1)).load(any());
@@ -75,7 +75,7 @@ public class InitializerServiceImplTest {
 		cfg.init();
 		
 		// replay
-		iniz.load(true);
+		iniz.load();
 		
 		// verify
 		verify(conceptsLoader, never()).load(any());

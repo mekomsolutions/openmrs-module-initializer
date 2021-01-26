@@ -76,7 +76,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	}
 	
 	@Override
-	public void load(boolean applyFilters) {
+	public void loadUnsafe(boolean applyFilters, boolean doThrow) throws Exception {
 		
 		final Set<String> specifiedDomains = applyFilters ? cfg.getFilteredDomains() : Collections.emptySet();
 		final boolean includeSpecifiedDomains = applyFilters ? cfg.isInclusionList() : true;
@@ -88,10 +88,21 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 				
 				final List<String> wildcardExclusions = applyFilters ? cfg.getWidlcardExclusions(loader.getDomainName())
 				        : Collections.emptyList();
-				loader.load(wildcardExclusions);
+				loader.loadUnsafe(wildcardExclusions, doThrow);
 				
 			}
 		}
+	}
+	
+	/*
+	 * This is a mere wrapper of the unsafe version when it doesn't throw anyway.
+	 */
+	@Override
+	public void load() {
+		try {
+			loadUnsafe(true, false);
+		}
+		catch (Exception e) {}
 	}
 	
 	@Override
