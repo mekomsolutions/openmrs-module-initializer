@@ -10,8 +10,10 @@ import org.openmrs.module.initializer.api.InitializerService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Base class for all loaders.
+ * Base class for all loaders. In all likelihood you should not subclass this class directly, rather
  * 
+ * @see BaseFileLoader
+ * @see BaseInputStreamLoader
  * @see {@link Loader}
  */
 public abstract class BaseLoader implements Loader {
