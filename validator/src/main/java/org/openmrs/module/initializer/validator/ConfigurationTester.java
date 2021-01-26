@@ -167,8 +167,8 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	}
 	
 	@Test
-	public void loadConfiguration() {
-		getService().load();
+	public void loadConfiguration() throws Exception {
+		getService().loadUnsafe(true, Validator.unsafe);
 	}
 	
 	@After

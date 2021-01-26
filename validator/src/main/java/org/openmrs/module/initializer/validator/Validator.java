@@ -58,10 +58,14 @@ public class Validator {
 	
 	public static final String ARG_LOGGING_LEVEL = "logging-level";
 	
+	public static final String ARG_UNSAFE = "unsafe";
+	
 	/*
 	 * Keeps an internal count of the logged errors
 	 */
 	static Set<LoggingEvent> errors = new HashSet<>();
+	
+	static boolean unsafe = false;
 	
 	/**
 	 * Properly escapes the single quotes of a piece of SQL for MySQL. Strings ending with a ";" are
@@ -124,6 +128,8 @@ public class Validator {
 		
 		Options options = new Options();
 		options.addOption(Option.builder("h").longOpt(ARG_HELP).desc("Prints help.").build());
+		options.addOption(Option.builder("u").longOpt(ARG_UNSAFE)
+		        .desc("Toggles the unsafe mode that fails early as soon as a domain loading error occurs.").build());
 		options.addOption(Option.builder("c").hasArg().longOpt(ARG_CONFIG_DIR).argName("DIR")
 		        .desc("The path to the OpenMRS config directory.").build());
 		options.addOption(Option.builder("l").longOpt(ARG_CIEL_PATH).hasArg().argName("FILE")
@@ -199,6 +205,8 @@ public class Validator {
 					setupLog4j(level);
 				}
 			}
+			
+			unsafe = cmdLine.hasOption(ARG_UNSAFE) ? true : false;
 		}
 		
 		// Testing the config
