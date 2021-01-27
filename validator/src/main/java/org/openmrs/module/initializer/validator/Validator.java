@@ -171,15 +171,22 @@ public class Validator {
 		org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(level);
 		org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(level);
 		
-		org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
+		org.apache.log4j.Logger inizLogger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
+		inizLogger.setLevel(WARN); // this is to focus the Inititalizer log file to the most relevant messages
 		if (logFilePath != null) {
-			logger.addAppender(Utils.getFileAppender(logFilePath));
+			inizLogger.addAppender(Utils.getFileAppender(logFilePath));
 		}
-		logger.addAppender(new ValidatorAppender());
-		logger.setLevel(WARN);
+		inizLogger.addAppender(new ValidatorAppender());
 	}
 	
-	protected static void initLogFilePath(String logFileDir) {
+	/**
+	 * Sets the log file path {@link Path} instance based on a suggested log file directory path. If the
+	 * suggested log file dir cannot be used, this will fallback in order to 1) the JAR file folder or
+	 * eventually 2) to a temp folder.
+	 * 
+	 * @param logFileDir The suggested log file directory path.
+	 */
+	protected static void setLogFilePath(String logFileDir) {
 		
 		logFilePath = null;
 		
@@ -205,7 +212,7 @@ public class Validator {
 				}
 				catch (Exception e2) {
 					log.error(
-					    "There was an error creating the temp directory. No log file will be written, please refer to the console.");
+					    "There was an error creating a temp directory. No log file will be written, please refer to the console output log instead.");
 					return;
 				}
 			}
@@ -225,7 +232,7 @@ public class Validator {
 	}
 	
 	/**
-	 * Main API method to execute a dry run of a configuration and collect JUnit {@link Result}.
+	 * Main API method to execute a dry run of a configuration and collect the JUnit {@link Result}.
 	 * 
 	 * @param args The Validator CLI args.
 	 * @return The JUnit Result object.
@@ -252,7 +259,7 @@ public class Validator {
 		}
 		
 		// setting up logging
-		initLogFilePath(cmdLine.getOptionValue(ARG_LOG_DIR));
+		setLogFilePath(cmdLine.getOptionValue(ARG_LOG_DIR));
 		setupLog4j(level, getLogFilePath());
 		
 		unsafe = cmdLine.hasOption(ARG_UNSAFE) ? true : false;
