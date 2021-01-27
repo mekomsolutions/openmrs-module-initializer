@@ -176,7 +176,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		StringBuilder sb = new StringBuilder();
 		sb.append("The validation was not successful and finished with errors.\n");
 		if (Validator.getLogFilePath() != null) {
-			sb.append("Please check the logged errors at " + Validator.getLogFilePath());
+			sb.append("Please check the warnings and errors logged at " + Validator.getLogFilePath());
 		}
 		Assert.assertThat(sb.toString(), Validator.errors, is(empty()));
 	}

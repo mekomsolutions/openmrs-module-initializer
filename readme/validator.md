@@ -46,6 +46,12 @@ java -jar validator/target/initializer-validator-2.1.0-SNAPSHOT.jar \
   --exclude.concepts='*diags*,*interventions*'
 ```
 In the above example all 'concepts' domain files matching the [wildcard patterns](https://docs.oracle.com/cd/E23389_01/doc.11116/e21038/conditions.htm#BABEJGAH) `*diags*` and `*interventions*` will be filtered out.
+##### Unsafe mode
+```bash
+java -jar ./validator/target/initializer-validator-2.1.0-SNAPSHOT.jar \
+  --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration --unsafe
+```
+The unsafe mode will break as soon as the first loading error occurs, triggering the validation to stop short. This mode is particularly suitable for CI processes that just need to fail early.
 ##### CLI arguments
 Just run the fatjar with no arguments (or with the `--help` argument) to get a list of all possible options:
 ```bash

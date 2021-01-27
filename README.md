@@ -120,7 +120,7 @@ Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config f
 
 ### Get in touch
 * On [OpenMRS Talk](https://talk.openmrs.org/)
-  * Sign up, start a conversation and ping us with the mention `@MekomSolutions` in your message. 
+  * Sign up, start a conversation and ping us with the mention [`@MekomSolutions`](https://talk.openmrs.org/g/MekomSolutions) in your post. 
 * On Slack:
   
   * Join the [Initializer channel](https://openmrs.slack.com/archives/CPC20CBFH) and ping us with a `@Mekom` mention.
@@ -133,6 +133,8 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.1.0
+* Introduced safe and unsafe API modes to suit either app runtime loading or early failure loading for CI.
+* (_For devs._) Introduced `BaseFileLoader` and `BaseInputStreamLoader` as part of a better streamlined loading framework.
 * _Initialize Validator_ a standalone fatjar to make dry runs of OpenMRS configs.
 * Nested structures of configuration files are supported.
 * Added a runtime property to define an inclusion or exclusion list of domains.
@@ -146,7 +148,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and edition of htmlforms provided as XML schema definitions in **configuration/htmlforms**.
 
 #### Version 2.0.0
-* Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
+* (_For devs._) Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
 * Bulk creation and edition of programs provided through CSV files in **configuration/programs**.
 * Bulk creation and edition of program workflows provided through CSV files in **configuration/programworkflows**.
 * Bulk creation and edition of program workflow states provided through CSV files in **configuration/programworkflowstates**.

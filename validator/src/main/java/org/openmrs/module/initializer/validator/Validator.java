@@ -190,34 +190,39 @@ public class Validator {
 		
 		logFilePath = null;
 		
-		Path path = Paths.get(logFileDir);
+		// log dir part
+		Path path = null;
 		try {
 			if (isEmpty(logFileDir)) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException(); //this is just to get in the catch
 			}
+			path = Paths.get(logFileDir);
 			if (!Files.exists(path)) {
 				path = Files.createDirectory(path);
 			}
 		}
-		catch (Exception e) {
-			log.error(
-			    "There was an error accessing the specified log file folder.\nFalling back on using the JAR file folder...");
+		catch (Exception e0) {
+			if (!isEmpty(logFileDir)) {
+				log.error("There was an error accessing the specified log file folder " + path
+				        + ".\nFalling back on using the JAR file folder...");
+			}
 			try {
 				path = getJarDirPath();
 			}
 			catch (Exception e1) {
-				log.error("There was an error accessing the JAR file folder.\nFalling back on using a temp directory...");
+				log.warn(
+				    "There was an error accessing the JAR file folder for the log file.\nFalling back on using a temp directory...");
 				try {
 					path = Files.createTempDirectory("");
 				}
 				catch (Exception e2) {
-					log.error(
-					    "There was an error creating a temp directory. No log file will be written, please refer to the console output log instead.");
+					log.warn(
+					    "There was an error creating a temp directory for the log file. No log file will be written, please refer to the console output log instead.");
 					return;
 				}
 			}
 		}
-		
+		// log file part
 		path = path.resolve("initializer.log");
 		try {
 			Files.deleteIfExists(path);
@@ -226,7 +231,10 @@ public class Validator {
 		catch (Exception e) {
 			log.error("There was an error creating the log file at " + path
 			        + "\nNo log file will be written, please refer to the console.");
+			return;
 		}
+		
+		log.info("The log file will be written at " + path);
 		
 		logFilePath = path;
 	}
@@ -236,9 +244,6 @@ public class Validator {
 	 * 
 	 * @param args The Validator CLI args.
 	 * @return The JUnit Result object.
-	 * @throws URISyntaxException
-	 * @throws ParseException
-	 * @throws IOException
 	 */
 	public static Result getJUnitResult(String[] args) throws URISyntaxException, ParseException {
 		
