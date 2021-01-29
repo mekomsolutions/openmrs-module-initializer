@@ -1,15 +1,19 @@
 package org.openmrs.module.initializer.validator;
 
 import static groovy.json.internal.Charsets.UTF_8;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.Assert;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ValidatorTest {
@@ -34,14 +38,44 @@ public class ValidatorTest {
 		String trimmedSql = readFile(trimmedCielFile.getAbsolutePath(), UTF_8);
 		File expectedFile = new File(getClass().getClassLoader().getResource("trimmed_ciel_excerpt.txt").toURI());
 		String expectedSql = readFile(expectedFile.getAbsolutePath(), UTF_8);
-		Assert.assertEquals(expectedSql, trimmedSql);
+		assertEquals(expectedSql, trimmedSql);
 	}
 	
 	@Test
 	public void test_replaceInnerSingleQuotes() {
 		String line = "INSERT INTO `concept_description` VALUES (5350,118409,'Impairment of biliary flow at any level from the hepatocyte to Vater\\'s ampulla.','en',1,'2007-10-18 04:28:24',1,NULL,'5350FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');";
 		String expectedLine = "INSERT INTO `concept_description` VALUES (5350,118409,'Impairment of biliary flow at any level from the hepatocyte to Vater''s ampulla.','en',1,'2007-10-18 04:28:24',1,NULL,'5350FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');";
-		Assert.assertEquals(expectedLine, Validator.escapeSingleQuotes(line));
+		assertEquals(expectedLine, Validator.escapeSingleQuotes(line));
+	}
+	
+	@Ignore
+	//may work locally but will fail on CIs envs such as Travis, etc
+	@Test
+	public void initLogFilePath_shouldCreateLogFileInSpecifiedFolder() throws MalformedURLException {
+		// setup
+		String subDir = RandomStringUtils.random(10, true, false);
+		String dir = Paths.get("target", subDir).toUri().toURL().toString();
+		
+		// replay
+		Validator.setLogFilePath(dir);
+		
+		// verif
+		assertEquals(Paths.get(dir, "initializer.log"), Validator.getLogFilePath());
+		assertTrue(Files.exists(Validator.getLogFilePath()));
+	}
+	
+	@Test
+	//may work locally but will fail on CIs envs such as Travis, etc
+	public void initLogFilePath_shouldCreateLogFileInJarFolderAsFallback() throws Exception {
+		// setup
+		String dir = Paths.get("http://example.com").toString();
+		
+		// replay
+		Validator.setLogFilePath(dir);
+		
+		// verif
+		assertEquals(Validator.getJarDirPath().resolve("initializer.log"), Validator.getLogFilePath());
+		assertTrue(Files.exists(Validator.getLogFilePath()));
 	}
 	
 }

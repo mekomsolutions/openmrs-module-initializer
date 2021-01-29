@@ -46,7 +46,7 @@ public class InitializerActivator extends BaseModuleActivator {
 		
 		log.info("OpenMRS config loading process started...");
 		
-		Context.getService(InitializerService.class).load(true);
+		Context.getService(InitializerService.class).load();
 		
 		log.info("OpenMRS config loading process completed.");
 	}

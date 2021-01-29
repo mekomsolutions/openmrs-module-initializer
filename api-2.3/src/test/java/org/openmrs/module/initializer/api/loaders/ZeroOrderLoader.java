@@ -27,6 +27,11 @@ public class ZeroOrderLoader implements Loader {
 	}
 	
 	@Override
+	public void loadUnsafe(List<String> wildcardExclusions, boolean doThrow) throws Exception {
+		
+	}
+	
+	@Override
 	public void load(List<String> wildcardExclusions) {
 		
 	}

@@ -14,7 +14,7 @@ public class MockLoader extends BaseLoader {
 	}
 	
 	@Override
-	public void load(List<String> wildcardExclusions) {
+	public void loadUnsafe(List<String> wildcardExclusions, boolean doThrow) throws Exception {
 		System.out.println("Method load() invoked on mock loader for domain '" + getDomainName() + "'.");
 	}
 	

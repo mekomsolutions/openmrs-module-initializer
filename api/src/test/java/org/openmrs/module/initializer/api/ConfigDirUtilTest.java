@@ -1,8 +1,9 @@
 package org.openmrs.module.initializer.api;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.core.Is.is;
 import static org.openmrs.module.initializer.api.ConfigDirUtil.CHECKSUM_FILE_EXT;
 import static org.openmrs.module.initializer.api.ConfigDirUtil.getLocatedFilename;
 
@@ -23,6 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.module.initializer.api.c.ConceptsLoader;
 
 public class ConfigDirUtilTest {
 	
@@ -48,7 +50,7 @@ public class ConfigDirUtilTest {
 			Collection<String> excludedFiles = CollectionUtils.subtract(allFiles, files);
 			
 			// verify
-			Assert.assertThat(excludedFiles, is(empty()));
+			assertThat(excludedFiles, is(empty()));
 		}
 		{
 			// setup
@@ -60,8 +62,8 @@ public class ConfigDirUtilTest {
 			Collection<String> excludedFiles = CollectionUtils.subtract(allFiles, files);
 			
 			// verify
-			Assert.assertThat(excludedFiles.size(), is(3));
-			Assert.assertThat(excludedFiles, containsInAnyOrder("diagnoses.csv", "diagnoses_02.csv", "diagnoses_03.csv"));
+			assertThat(excludedFiles.size(), is(3));
+			assertThat(excludedFiles, containsInAnyOrder("diagnoses.csv", "diagnoses_02.csv", "diagnoses_03.csv"));
 		}
 		{
 			// setup
@@ -73,8 +75,8 @@ public class ConfigDirUtilTest {
 			Collection<String> excludedFiles = CollectionUtils.subtract(allFiles, files);
 			
 			// verify
-			Assert.assertThat(excludedFiles.size(), is(5));
-			Assert.assertThat(excludedFiles, containsInAnyOrder("diagnoses.csv", "diagnoses_02.csv", "diagnoses_03.csv",
+			assertThat(excludedFiles.size(), is(5));
+			assertThat(excludedFiles, containsInAnyOrder("diagnoses.csv", "diagnoses_02.csv", "diagnoses_03.csv",
 			    "newer_diagnoses.csv", "retired_diagnoses.csv"));
 		}
 	}
@@ -101,20 +103,47 @@ public class ConfigDirUtilTest {
 			dirUtil.writeChecksum(file, checksum);
 		}
 		
-		Assert.assertThat(fileContents.size(), is(3));
+		assertThat(fileContents.size(), is(3));
 		for (String locatedFilename : fileContents.keySet()) {
 			
 			String checksumFilename = locatedFilename + "." + CHECKSUM_FILE_EXT;
 			
 			// verify checksum
 			File checksumFile = new File(Paths.get(checksumsDirPath, "nested_txt_files", checksumFilename).toUri());
-			Assert.assertThat(checksumFile.exists(), is(true));
+			assertThat(checksumFile.exists(), is(true));
 			Assert.assertEquals(DigestUtils.md5Hex(fileContents.get(locatedFilename)),
 			    FileUtils.readFileToString(checksumFile, "UTF-8"));
 			
 			// verify deletion
 			dirUtil.deleteChecksumFile(checksumFilename);
-			Assert.assertThat(checksumFile.exists(), is(false));
+			assertThat(checksumFile.exists(), is(false));
 		}
+	}
+	
+	/*
+	 * One of the CSV files has a non-parseable _order.
+	 * The resulting exception is logged as an error.
+	 * TODO: Maybe assert the logger?
+	 */
+	@Test
+	public void getOrderedFiles_shouldReturnOrderedCsvFilesWithConceptsLoader() {
+		// Setup
+		String configDirPath = getClass().getClassLoader().getResource("org/openmrs/module/initializer/include/csv")
+		        .getPath();
+		String checksumsDirPath = null;
+		String domain = "orders";
+		
+		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain);
+		
+		// Replay
+		List<String> orderedFilenames = dirUtil.getOrderedFiles("csv", null, new ConceptsLoader()).stream()
+		        .map(f -> f.getName()).collect(Collectors.toList());
+		
+		// Verif
+		assertThat(orderedFilenames.size(), is(5));
+		Assert.assertEquals("5_order_500.csv", orderedFilenames.get(0));
+		Assert.assertEquals("4_order_1000.csv", orderedFilenames.get(1));
+		Assert.assertEquals("1_order_1500.csv", orderedFilenames.get(2));
+		assertThat(orderedFilenames.subList(3, 5), containsInAnyOrder("3_order_missing.csv", "2_order_e00.csv"));
 	}
 }
