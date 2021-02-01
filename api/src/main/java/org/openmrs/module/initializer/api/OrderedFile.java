@@ -2,7 +2,6 @@ package org.openmrs.module.initializer.api;
 
 import java.io.File;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,7 @@ public class OrderedFile extends File {
 		try {
 			order = fetchOrder(this);
 		}
-		catch (NotImplementedException e) {
+		catch (UnsupportedOperationException e) {
 			log.warn(e.getMessage());
 		}
 		catch (Exception e) {
@@ -40,7 +39,7 @@ public class OrderedFile extends File {
 	 * Override this method to actively fetch the order from a given configuration file. 
 	 */
 	protected Integer fetchOrder(File file) throws Exception {
-		throw new NotImplementedException(
+		throw new UnsupportedOperationException(
 		        getClass().getSimpleName() + " does not provide an implementation to fetch the loading order from files.");
 	}
 	
