@@ -39,6 +39,22 @@ public class ConfigDirUtilTest {
 	}
 	
 	@Test
+	public void getLocatedFilename_shouldHandleRootLevelAndSubdirLevelFiles() {
+		// with trailing slashes
+		Assert.assertEquals("cfg", getLocatedFilename("/configuration/domain/", new File("/configuration/domain/cfg.txt")));
+		Assert.assertEquals("subdir_cfg",
+		    getLocatedFilename("/configuration/domain/", new File("/configuration/domain/subdir/cfg.txt")));
+		Assert.assertEquals("subdir_subsubdir_cfg",
+		    getLocatedFilename("/configuration/domain/", new File("/configuration/domain/subdir/subsubdir/cfg.txt")));
+		// without trailing slashes
+		Assert.assertEquals("cfg", getLocatedFilename("/configuration/domain", new File("/configuration/domain/cfg.txt")));
+		Assert.assertEquals("subdir_cfg",
+		    getLocatedFilename("/configuration/domain", new File("/configuration/domain/subdir/cfg.txt")));
+		Assert.assertEquals("subdir_subsubdir_cfg",
+		    getLocatedFilename("/configuration/domain", new File("/configuration/domain/subdir/subsubdir/cfg.txt")));
+	}
+	
+	@Test
 	public void getFiles_shouldFilterOutBasedOnWildCardPattern() {
 		{
 			// setup

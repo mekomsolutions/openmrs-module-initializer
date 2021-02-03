@@ -124,8 +124,8 @@ public class ConfigDirUtil {
 	 * @return The located file name.
 	 */
 	public static String getLocatedFilename(String domainDirPath, File file) {
-		return FilenameUtils.removeExtension(
-		    file.getAbsolutePath().replace(Paths.get(domainDirPath).toString(), "").replace(File.separator, "_"));
+		return FilenameUtils
+		        .removeExtension(Paths.get(domainDirPath).relativize(file.toPath()).toString().replace(File.separator, "_"));
 	}
 	
 	/**
