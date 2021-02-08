@@ -7,10 +7,10 @@ locations/
 ```
 There is currently only one format for the location CSV line, here are the possible headers with a sample data set:
 
-| Uuid                                 | Void/Retire | Name                     | Description | Parent                   | Tag\|Login Location | Tag\|Facility Location | Attribute\|9eca4f4e-707f-4bb8-8289-2f9b6e93803c | Attribute\|Last Audit Date | Address 1       | Address 2 | Address 3 | Address 4 | Address 5 | Address 6 | City/Village | County/District | State/Province | Postal Code | Country  | Tags                              |
+| <sub>Uuid</sub>                                 | <sub>Void/Retire</sub> | <sub>Name</sub>                     | <sub>Description</sub> | <sub>Parent</sub>                   | <sub>Tag\|Login Location</sub> | <sub>Tag\|Facility Location</sub> | <sub>Attribute\|9eca4f4e-707f-4bb8-8289-2f9b6e93803c</sub> | <sub>Attribute\|Last Audit Date</sub> | <sub>Address 1</sub>       | <sub>Address 2</sub> | <sub>Address 3</sub> | <sub>Address 4</sub> | <sub>Address 5</sub> | <sub>Address 6</sub> | <sub>City/Village</sub> | <sub>County/District</sub> | <sub>State/Province</sub> | <sub>Postal Code</sub> | <sub>Country</sub>  | <sub>Tags</sub>                              |
 |--------------------------------------|-------------|--------------------------|-------------|--------------------------|---------------------|------------------------|-------------------------------------------------|----------------------------|-----------------|-----------|-----------|-----------|-----------|-----------|--------------|-----------------|----------------|-------------|----------|-----------------------------------|
-| a03e395c-b881-49b7-b6fc-983f6bddc7fc |             | The Lake Clinic-Cambodia |             |                          | TRUE                | TRUE                   | HQ Facility                                     | 2017-05-15                 | Paradise Street |           |           |           |           |           |              | Siem Reap       | Siem Reap      |             | Cambodia | Login Location; Facility Location |
-|                                      |             | OPD Room                 |             | The Lake Clinic-Cambodia |                     | TRUE                   |                                                 |                            |                 |           |           |           |           |           |              |                 |                |             |          | Consultation Location             |
+| <sub>a03e395c-b881-49b7-b6fc-983f6bddc7fc</sub> |             | <sub>The Lake Clinic-Cambodia</sub> |             |                          | <sub>TRUE</sub>                | <sub>TRUE</sub>                   | <sub>HQ Facility</sub>                                     | <sub>2017-05-15</sub>                 | <sub>Paradise Street</sub> |           |           |           |           |           |              | <sub>Siem Reap</sub>       | <sub>Siem Reap</sub>      |             | <sub>Cambodia</sub> | <sub>Login Location; Facility Location</sub> |
+|                                      |             | <sub>OPD Room</sub>                 |             | <sub>The Lake Clinic-Cambodia</sub> |                     | <sub>TRUE</sub>                   |                                                 |                            |                 |           |           |           |           |           |              |                 |                |             |          | <sub>Consultation Location</sub>             |
 
 <br/>Let's review some important headers.
 
@@ -45,9 +45,9 @@ Locations support *attributes*. The values for those attributes can be set under
 starting with the special prefix `Attribute|`. The value indicated on a CSV line will be resolved 
 to its final value based on the type of the attribute. Let us look at an example:
 
-| Attribute\|Last Audit Date |
+| <sub>Attribute\|Last Audit Date</sub> |
 |----------------------------|
-| 2017-05-15                 |
+| <sub>2017-05-15</sub>                 |
 
 This attribute points to an attribute type identified by "`Last Audit Date`". The attribute type 
 identifier (a name here) suggests that it might be an attribute of custom datatype `Date`. This 
