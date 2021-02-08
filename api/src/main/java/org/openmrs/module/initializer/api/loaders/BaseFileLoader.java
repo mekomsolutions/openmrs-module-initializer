@@ -40,14 +40,19 @@ public abstract class BaseFileLoader extends BaseLoader {
 			
 			try {
 				load(file);
-				dirUtil.writeChecksum(file, dirUtil.getChecksumIfChanged(file)); // the updated config. file is marked as processed
-				log.info("The '" + getDomainName() + "' configuration file has been loaded successfuly: " + file.getPath());
 			}
 			catch (Exception e) {
-				log.error("The '" + getDomainName() + "' configuration file could not be loaded: " + file.getPath(), e);
+				log.error(e.getMessage());
 				if (doThrow) {
+					log.error(
+					    "The loading of the '" + getDomainName() + "' configuration file was aborted:\n" + file.getPath(),
+					    e);
 					throw e;
 				}
+			}
+			finally {
+				dirUtil.writeChecksum(file, dirUtil.getChecksumIfChanged(file)); // the updated config. file is marked as processed
+				log.info("The '" + getDomainName() + "' configuration file has finished loading:\n" + file.getPath());
 			}
 			
 		}
