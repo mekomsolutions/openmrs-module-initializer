@@ -50,10 +50,9 @@ public abstract class BaseFileLoader extends BaseLoader {
 					throw e;
 				}
 			}
-			finally {
-				dirUtil.writeChecksum(file, dirUtil.getChecksumIfChanged(file)); // the updated config. file is marked as processed
-				log.info("The '" + getDomainName() + "' configuration file has finished loading:\n" + file.getPath());
-			}
+			
+			dirUtil.writeChecksum(file, dirUtil.getChecksumIfChanged(file)); // the updated config. file is marked as processed
+			log.info("The '" + getDomainName() + "' configuration file has finished loading:\n" + file.getPath());
 			
 		}
 		

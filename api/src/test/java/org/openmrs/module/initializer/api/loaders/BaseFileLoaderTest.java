@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -71,16 +73,22 @@ public class BaseFileLoaderTest {
 	
 	@Test
 	public void load_shouldLoadSafely() throws Exception {
+		// replay
 		new TestLoader().load();
+		
+		// verify
+		verify(dirUtil, times(3)).writeChecksum(any(), any());
 	}
 	
 	@Test
 	public void loadUnsafe_shouldThrowEarly() throws Exception {
-		
+		// replay
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
 			new TestLoader().loadUnsafe(Collections.emptyList(), true);
 		});
 		
+		// verify
 		Assert.assertEquals("Error right from file 1.", thrown.getMessage());
+		verify(dirUtil, times(0)).writeChecksum(any(), any());
 	}
 }
