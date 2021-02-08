@@ -26,7 +26,7 @@ public enum Domain {
 	ORDER_FREQUENCIES(22, "orderfrequencies"),
 	ORDER_TYPES(23, "ordertypes"),
 	APPOINTMENT_SERVICE_TYPES(24, "appointmentservicetypes"),
-	APPOINTMENTS_SPECIALITIES(25, "appointmentsspecialities"),
+	APPOINTMENT_SPECIALITIES(25, "appointmentspecialities"),
 	APPOINTMENT_SERVICE_DEFINITIONS(26, "appointmentservicedefinitions"),
 	DATAFILTER_MAPPINGS(27, "datafiltermappings"),
 	METADATA_SETS(28, "metadatasets"),

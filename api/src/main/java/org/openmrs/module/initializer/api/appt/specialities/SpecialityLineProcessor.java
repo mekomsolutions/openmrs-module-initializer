@@ -10,7 +10,7 @@ import org.openmrs.module.initializer.api.CsvLine;
  * with the minimal set of required fields.
  */
 @OpenmrsProfile(modules = { "appointments:*" })
-public class AppointmentsSpecialityLineProcessor extends BaseLineProcessor<Speciality> {
+public class SpecialityLineProcessor extends BaseLineProcessor<Speciality> {
 	
 	public Speciality fill(Speciality speciality, CsvLine line) throws IllegalArgumentException {
 		speciality.setName(line.getName(true));

@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentServiceDefinitionsLoader;
 import org.openmrs.module.initializer.api.appt.servicetypes.AppointmentServiceTypesLoader;
-import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
+import org.openmrs.module.initializer.api.appt.specialities.SpecialitiesLoader;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.openmrs.module.initializer.api.c.ConceptClassesLoader;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
@@ -116,7 +116,7 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private AppointmentServiceTypesLoader appointmentServiceTypesLoader;
 	
 	@Autowired
-	private AppointmentsSpecialitiesLoader appointmentsSpecialitiesLoader;
+	private SpecialitiesLoader appointmentsSpecialitiesLoader;
 	
 	@Autowired
 	private AppointmentServiceDefinitionsLoader appointmentsServiceDefinitionsLoader;

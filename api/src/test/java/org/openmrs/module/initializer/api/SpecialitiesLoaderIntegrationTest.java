@@ -14,18 +14,18 @@ import org.junit.Test;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
+import org.openmrs.module.initializer.api.appt.specialities.SpecialitiesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class AppointmentsSpecialitiesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class SpecialitiesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("specialityService")
 	private SpecialityService sps;
 	
 	@Autowired
-	private AppointmentsSpecialitiesLoader loader;
+	private SpecialitiesLoader loader;
 	
 	@Test
 	public void load_shouldLoadAccordingToCsvFiles() {
