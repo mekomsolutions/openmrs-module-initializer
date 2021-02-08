@@ -9,9 +9,11 @@ import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @OpenmrsProfile(modules = { "appointments:*" })
 public class AppointmentServiceTypesCsvParser extends CsvParser<AppointmentServiceType, BaseLineProcessor<AppointmentServiceType>> {
@@ -37,23 +39,20 @@ public class AppointmentServiceTypesCsvParser extends CsvParser<AppointmentServi
 	@Override
 	public AppointmentServiceType bootstrap(CsvLine line) throws IllegalArgumentException {
 		
-		String uuid = line.getUuid();
+		final String uuid = line.getUuid();
 		
-		AppointmentServiceType type = service.getAppointmentServiceTypeByUuid(uuid);
+		AppointmentServiceType type = StringUtils.isEmpty(uuid) ? null : service.getAppointmentServiceTypeByUuid(uuid);
 		
-		//		if (definition == null) {
-		//			String name = line.getName(true); // should fail if name column missing
-		//			definition = Utils.fetchBahmniAppointmentServiceDefinition(name, appointmentServiceService);
-		//		}
-		//		
-		//		if (definition == null) {
-		//			definition = new AppointmentServiceDefinition();
-		//			if (!StringUtils.isEmpty(uuid)) {
-		//				definition.setUuid(uuid);
-		//			}
-		//		}
-		//		
-		//		return definition;
+		if (type == null) {
+			type = Utils.fetchBahmniAppointmentServiceType(line.getName(), service);
+		}
+		
+		if (type == null) {
+			type = new AppointmentServiceType();
+		}
+		
+		type.setUuid(uuid);
+		
 		return type;
 	}
 	

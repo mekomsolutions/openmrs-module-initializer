@@ -45,6 +45,7 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
+import org.openmrs.module.appointments.model.AppointmentServiceType;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
@@ -513,19 +514,34 @@ public class Utils {
 	 */
 	public static AppointmentServiceDefinition fetchBahmniAppointmentServiceDefinition(String id,
 	        AppointmentServiceDefinitionService service) {
-		AppointmentServiceDefinition instance = null;
-		if (instance == null) {
-			instance = service.getAppointmentServiceByUuid(id);
+		AppointmentServiceDefinition def = service.getAppointmentServiceByUuid(id);
+		if (def == null) {
+			def = service.getAllAppointmentServices(false).stream().filter(d -> d.getName().equalsIgnoreCase(id)).findAny()
+			        .orElse(null);
 		}
-		if (instance == null) {
-			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : service
-			        .getAllAppointmentServices(false)) { //Because we don't have #appointmentServiceService.getAppointmentServiceDefinitionByName
-				if (currentAppointmentServiceDefinition.getName().equalsIgnoreCase(id)) {
-					instance = currentAppointmentServiceDefinition;
+		return def;
+	}
+	
+	/**
+	 * Fetches Bahmni appointment service types trying various routes.
+	 * 
+	 * @param id The appointment service type name or UUID.
+	 * @param service
+	 * @return The {@link AppointmentServiceType} instance if found, null otherwise.
+	 * @since 2.1.0
+	 */
+	public static AppointmentServiceType fetchBahmniAppointmentServiceType(String id,
+	        AppointmentServiceDefinitionService service) {
+		AppointmentServiceType type = service.getAppointmentServiceTypeByUuid(id);
+		if (type == null) {
+			for (AppointmentServiceDefinition def : service.getAllAppointmentServices(false)) {
+				type = def.getServiceTypes().stream().filter(t -> t.getName().equalsIgnoreCase(id)).findAny().orElse(null);
+				if (type != null) {
+					break;
 				}
 			}
 		}
-		return instance;
+		return type;
 	}
 	
 	/**
