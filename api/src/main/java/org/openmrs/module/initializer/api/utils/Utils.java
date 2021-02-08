@@ -486,16 +486,16 @@ public class Utils {
 	 * Fetches Bahmni appointment speciality trying various routes.
 	 * 
 	 * @param id The appointment speciality name or UUID.
-	 * @param specialityService
+	 * @param service
 	 * @return The {@link Speciality} instance if found, null otherwise.
 	 */
-	public static Speciality fetchBahmniAppointmentSpeciality(String id, SpecialityService specialityService) {
+	public static Speciality fetchBahmniAppointmentSpeciality(String id, SpecialityService service) {
 		Speciality instance = null;
 		if (instance == null) {
-			instance = specialityService.getSpecialityByUuid(id);
+			instance = service.getSpecialityByUuid(id);
 		}
 		if (instance == null) {
-			for (Speciality currentSpeciality : specialityService.getAllSpecialities()) { //Because we don't have #specialityService.getSpecialityByName
+			for (Speciality currentSpeciality : service.getAllSpecialities()) { //Because we don't have #specialityService.getSpecialityByName
 				if (currentSpeciality.getName().equalsIgnoreCase(id)) {
 					instance = currentSpeciality;
 				}
@@ -508,17 +508,17 @@ public class Utils {
 	 * Fetches Bahmni appointment service definition trying various routes.
 	 * 
 	 * @param id The appointment service definition name or UUID.
-	 * @param appointmentServiceService
+	 * @param service
 	 * @return The {@link AppointmentServiceDefinition} instance if found, null otherwise.
 	 */
 	public static AppointmentServiceDefinition fetchBahmniAppointmentServiceDefinition(String id,
-	        AppointmentServiceDefinitionService appointmentServiceService) {
+	        AppointmentServiceDefinitionService service) {
 		AppointmentServiceDefinition instance = null;
 		if (instance == null) {
-			instance = appointmentServiceService.getAppointmentServiceByUuid(id);
+			instance = service.getAppointmentServiceByUuid(id);
 		}
 		if (instance == null) {
-			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : appointmentServiceService
+			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : service
 			        .getAllAppointmentServices(false)) { //Because we don't have #appointmentServiceService.getAppointmentServiceDefinitionByName
 				if (currentAppointmentServiceDefinition.getName().equalsIgnoreCase(id)) {
 					instance = currentAppointmentServiceDefinition;

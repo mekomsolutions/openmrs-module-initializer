@@ -13,21 +13,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "appointments:*" })
-public class AppointmentsServicesDefinitionsCsvParser extends CsvParser<AppointmentServiceDefinition, BaseLineProcessor<AppointmentServiceDefinition>> {
+public class AppointmentServiceDefinitionsCsvParser extends CsvParser<AppointmentServiceDefinition, BaseLineProcessor<AppointmentServiceDefinition>> {
 	
 	private AppointmentServiceDefinitionService appointmentServiceService;
 	
 	@Autowired
-	public AppointmentsServicesDefinitionsCsvParser(
+	public AppointmentServiceDefinitionsCsvParser(
 	    @Qualifier("appointmentServiceService") AppointmentServiceDefinitionService appointmentServiceService,
-	    AppointmentsServiceDefinitionLineProcessor processor) {
+	    AppointmentServiceDefinitionLineProcessor processor) {
 		super(processor);
 		this.appointmentServiceService = appointmentServiceService;
 	}
 	
 	@Override
 	public Domain getDomain() {
-		return Domain.APPOINTMENTS_SERVICES_DEFINITIONS;
+		return Domain.APPOINTMENT_SERVICE_DEFINITIONS;
 	}
 	
 	@Override

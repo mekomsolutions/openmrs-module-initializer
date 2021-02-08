@@ -1,0 +1,8 @@
+Uuid,Void/Retire,Name,Description,Duration,Start Time,End Time,Max Load,Speciality,Location,Label Colour,_order:1000
+fc46dedf-5e96-44d4-bd99-bec1d80d15d5,,Surgery,Appointment for surgery,,8:00,17:00,,,,,
+762e165a-af27-45fe-ad6e-1fe19db78198,,Casting,,30,,,15,,9356400c-a5a2-4532-8f2b-2361b3446eb8,,
+bfff3484-320a-4c1e-84c8-dbe8f0d44e8b,,Orthopaedic Follow-up,A follow-up appointment at the orthopedic clinic,,,,,,Xanadu,,
+c12829d8-6bdd-426c-a386-104eed0d2c41,,Bracing,,,,,,Orthopaedic,,#8FBC8F,
+b4b96cea-a0ed-4bbc-84f0-6c6b4e79f447,,Tenotomy,,,,,,cf213609-11ab-11ea-a6a0-080027405b36,,,
+6b220700-4ba2-4846-86a7-a2afa5b6f2eb,,Service With Speciality,,,,,,,,,
+a1039051-6f34-420d-9779-24e77eb0ca00,,Service With Location,,,,,,,,,

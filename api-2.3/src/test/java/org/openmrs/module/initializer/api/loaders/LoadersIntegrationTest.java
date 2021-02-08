@@ -14,7 +14,8 @@ import static org.hamcrest.Matchers.greaterThan;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServicesDefinitionsLoader;
+import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentServiceDefinitionsLoader;
+import org.openmrs.module.initializer.api.appt.servicetypes.AppointmentServiceTypesLoader;
 import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.openmrs.module.initializer.api.c.ConceptClassesLoader;
@@ -39,9 +40,9 @@ import org.openmrs.module.initializer.api.programs.ProgramsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkflowStatesLoader;
 import org.openmrs.module.initializer.api.roles.RolesLoader;
+import org.openmrs.module.initializer.api.visittypes.VisitTypesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openmrs.module.initializer.api.visittypes.VisitTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest {
@@ -112,10 +113,13 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private MetadataTermMappingsLoader metadataTermMappingsLoader;
 	
 	@Autowired
+	private AppointmentServiceTypesLoader appointmentServiceTypesLoader;
+	
+	@Autowired
 	private AppointmentsSpecialitiesLoader appointmentsSpecialitiesLoader;
 	
 	@Autowired
-	private AppointmentsServicesDefinitionsLoader appointmentsServiceDefinitionsLoader;
+	private AppointmentServiceDefinitionsLoader appointmentsServiceDefinitionsLoader;
 	
 	@Autowired
 	private OrderTypesLoader orderTypesLoader;
@@ -263,6 +267,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		
 		previousLoader = loader;
 		loader = orderTypesLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = appointmentServiceTypesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		

@@ -8,7 +8,7 @@ import org.openmrs.api.LocationService;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServiceDefinitionLineProcessor;
+import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentServiceDefinitionLineProcessor;
 
 /*
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
@@ -27,7 +27,7 @@ public class AppointmentsServicesDefinitionLineProcessorTest {
 		String[] line = { "X-Ray", "Radiology Service", "30", "50" };
 		
 		// Replay
-		AppointmentsServiceDefinitionLineProcessor p = new AppointmentsServiceDefinitionLineProcessor(ss, ls);
+		AppointmentServiceDefinitionLineProcessor p = new AppointmentServiceDefinitionLineProcessor(ss, ls);
 		AppointmentServiceDefinition definition = p.fill(new AppointmentServiceDefinition(), new CsvLine(headerLine, line));
 		
 		// Verif
