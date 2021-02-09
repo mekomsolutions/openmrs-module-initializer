@@ -41,13 +41,9 @@ import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoa
 import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkflowStatesLoader;
 import org.openmrs.module.initializer.api.roles.RolesLoader;
 import org.openmrs.module.initializer.api.visittypes.VisitTypesLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest {
-	
-	protected final Logger log = LoggerFactory.getLogger(getClass());
+public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private JsonKeyValuesLoader jsonKeyValuesLoader;
@@ -113,13 +109,13 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private MetadataTermMappingsLoader metadataTermMappingsLoader;
 	
 	@Autowired
-	private AppointmentServiceTypesLoader appointmentServiceTypesLoader;
-	
-	@Autowired
 	private SpecialitiesLoader appointmentsSpecialitiesLoader;
 	
 	@Autowired
 	private AppointmentServiceDefinitionsLoader appointmentsServiceDefinitionsLoader;
+	
+	@Autowired
+	private AppointmentServiceTypesLoader appointmentServiceTypesLoader;
 	
 	@Autowired
 	private OrderTypesLoader orderTypesLoader;
@@ -271,17 +267,17 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
 		previousLoader = loader;
-		loader = appointmentServiceTypesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
 		loader = appointmentsSpecialitiesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
 		previousLoader = loader;
 		loader = appointmentsServiceDefinitionsLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = appointmentServiceTypesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
@@ -311,11 +307,6 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
 		Assert.assertEquals(getService().getLoaders().size(), count);
-		
-		// System.out.println("Here is the list of loaders in order:");
-		// for (Loader l : loaders) {
-		// System.out.format("%4d%100s%n", l.getOrder(), l.toString());
-		// }
 		
 	}
 }
