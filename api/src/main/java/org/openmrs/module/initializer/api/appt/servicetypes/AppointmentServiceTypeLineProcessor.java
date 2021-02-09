@@ -1,5 +1,7 @@
 package org.openmrs.module.initializer.api.appt.servicetypes;
 
+import java.util.Set;
+
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.AppointmentServiceType;
@@ -33,9 +35,25 @@ public class AppointmentServiceTypeLineProcessor extends BaseLineProcessor<Appoi
 		
 		type.setName(line.get(HEADER_NAME, true));
 		type.setDuration(line.getInt(HEADER_DURATION));
+		
 		AppointmentServiceDefinition def = Utils
 		        .fetchBahmniAppointmentServiceDefinition(line.getString(HEADER_SERVICE_DEFINITION), service);
-		type.setAppointmentServiceDefinition(def);
+		AppointmentServiceDefinition prevDef = type.getAppointmentServiceDefinition();
+		//		if (!Utils.equals(def, prevDef)) {
+		{
+			//				Set<AppointmentServiceType> types = prevDef.getServiceTypes();
+			//				types.remove(type);
+			//				prevDef.setServiceTypes(types);
+			//				type.setAppointmentServiceDefinition(null);
+			//				service.save(prevDef);
+		}
+		{
+			Set<AppointmentServiceType> types = def.getServiceTypes();
+			types.add(type);
+			def.setServiceTypes(types);
+			type.setAppointmentServiceDefinition(def);
+		}
+		//		}
 		
 		return type;
 	}

@@ -52,6 +52,18 @@ public class AppointmentServiceTypesLoaderIntegrationTest extends DomainBaseModu
 			AppointmentServiceType type = apts.getAppointmentServiceTypeByUuid("4e0f61df-d1f7-4cff-8d69-6264666daf3b");
 			Assert.assertTrue(type.getVoided());
 		}
-		
+		// Verify creations
+		{
+			AppointmentServiceType type = apts.getAppointmentServiceTypeByUuid("ffd7e0f4-33f1-4802-b87a-8d610ba1132d");
+			Assert.assertEquals(Utils.fetchBahmniAppointmentServiceDefinition("Specialized Appointment", apts),
+			    type.getAppointmentServiceDefinition());
+			Assert.assertEquals((Integer) 45, type.getDuration());
+		}
+		{
+			AppointmentServiceType type = Utils.fetchBahmniAppointmentServiceType("Complex Bracing", apts);
+			Assert.assertEquals(apts.getAppointmentServiceByUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb"),
+			    type.getAppointmentServiceDefinition());
+			Assert.assertEquals((Integer) 75, type.getDuration());
+		}
 	}
 }

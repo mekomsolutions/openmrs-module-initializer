@@ -1,7 +1,5 @@
 package org.openmrs.module.initializer.api.appt.servicetypes;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.appointments.model.AppointmentServiceType;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
@@ -12,7 +10,6 @@ import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @OpenmrsProfile(modules = { "appointments:*" })
@@ -20,15 +17,12 @@ public class AppointmentServiceTypesCsvParser extends CsvParser<AppointmentServi
 	
 	private AppointmentServiceDefinitionService service;
 	
-	private SessionFactory sessionFactory;
-	
 	@Autowired
 	public AppointmentServiceTypesCsvParser(
 	    @Qualifier("appointmentServiceService") AppointmentServiceDefinitionService service,
-	    AppointmentServiceTypeLineProcessor processor, SessionFactory sessionFactory) {
+	    AppointmentServiceTypeLineProcessor processor) {
 		super(processor);
 		this.service = service;
-		this.sessionFactory = sessionFactory;
 	}
 	
 	@Override
@@ -58,11 +52,9 @@ public class AppointmentServiceTypesCsvParser extends CsvParser<AppointmentServi
 		return type;
 	}
 	
-	@Transactional
 	@Override
 	public AppointmentServiceType save(AppointmentServiceType instance) {
-		Session currentSession = sessionFactory.getCurrentSession();
-		currentSession.saveOrUpdate(instance);
+		service.save(instance.getAppointmentServiceDefinition());
 		return instance;
 	}
 }
