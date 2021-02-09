@@ -51,7 +51,9 @@ public class AppointmentServiceTypesCsvParser extends CsvParser<AppointmentServi
 			type = new AppointmentServiceType();
 		}
 		
-		type.setUuid(uuid);
+		if (!StringUtils.isEmpty(uuid)) {
+			type.setUuid(uuid);
+		}
 		
 		return type;
 	}

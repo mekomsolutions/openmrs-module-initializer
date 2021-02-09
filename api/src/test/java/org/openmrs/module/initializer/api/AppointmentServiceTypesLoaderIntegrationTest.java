@@ -43,7 +43,7 @@ public class AppointmentServiceTypesLoaderIntegrationTest extends DomainBaseModu
 		// Verify edition
 		{
 			AppointmentServiceType type = Utils.fetchBahmniAppointmentServiceType("Short follow-up", apts);
-			Assert.assertEquals(Utils.fetchBahmniAppointmentServiceDefinition("Service With Location", apts),
+			Assert.assertEquals(Utils.fetchBahmniAppointmentServiceDefinition("On-site Appointment", apts),
 			    type.getAppointmentServiceDefinition());
 			Assert.assertEquals((Integer) 10, type.getDuration());
 		}

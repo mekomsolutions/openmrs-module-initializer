@@ -106,14 +106,14 @@ public class AppointmentServiceDefinitionsLoaderIntegrationTest extends DomainBa
 		// Removing speciality
 		{
 			AppointmentServiceDefinition def = apts.getAppointmentServiceByUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb");
-			Assert.assertEquals("Service With Speciality", def.getName());
+			Assert.assertEquals("Specialized Appointment", def.getName());
 			Assert.assertNull(def.getSpeciality());
 		}
 		
 		// Removing location
 		{
 			AppointmentServiceDefinition def = apts.getAppointmentServiceByUuid("a1039051-6f34-420d-9779-24e77eb0ca00");
-			Assert.assertEquals("Service With Location", def.getName());
+			Assert.assertEquals("On-site Appointment", def.getName());
 			Assert.assertNull(def.getLocation());
 		}
 	}
