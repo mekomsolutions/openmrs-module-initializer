@@ -487,20 +487,14 @@ public class Utils {
 	 * Fetches Bahmni appointment speciality trying various routes.
 	 * 
 	 * @param id The appointment speciality name or UUID.
-	 * @param service
+	 * @param service The {@link SpecialityService}.
 	 * @return The {@link Speciality} instance if found, null otherwise.
 	 */
 	public static Speciality fetchBahmniAppointmentSpeciality(String id, SpecialityService service) {
-		Speciality instance = null;
+		Speciality instance = service.getSpecialityByUuid(id);
 		if (instance == null) {
-			instance = service.getSpecialityByUuid(id);
-		}
-		if (instance == null) {
-			for (Speciality currentSpeciality : service.getAllSpecialities()) { //Because we don't have #specialityService.getSpecialityByName
-				if (currentSpeciality.getName().equalsIgnoreCase(id)) {
-					instance = currentSpeciality;
-				}
-			}
+			instance = service.getAllSpecialities().stream().filter(s -> s.getName().equalsIgnoreCase(id)).findAny()
+			        .orElse(null);
 		}
 		return instance;
 	}
@@ -509,7 +503,7 @@ public class Utils {
 	 * Fetches Bahmni appointment service definition trying various routes.
 	 * 
 	 * @param id The appointment service definition name or UUID.
-	 * @param service
+	 * @param service The {@link AppointmentServiceDefinitionService}.
 	 * @return The {@link AppointmentServiceDefinition} instance if found, null otherwise.
 	 */
 	public static AppointmentServiceDefinition fetchBahmniAppointmentServiceDefinition(String id,
@@ -526,7 +520,7 @@ public class Utils {
 	 * Fetches Bahmni appointment service types trying various routes.
 	 * 
 	 * @param id The appointment service type name or UUID.
-	 * @param service
+	 * @param service The {@link AppointmentServiceDefinitionService}.
 	 * @return The {@link AppointmentServiceType} instance if found, null otherwise.
 	 * @since 2.1.0
 	 */
