@@ -12,20 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "appointments:*" })
-public class AppointmentsSpecialitiesCsvParser extends CsvParser<Speciality, BaseLineProcessor<Speciality>> {
+public class SpecialitiesCsvParser extends CsvParser<Speciality, BaseLineProcessor<Speciality>> {
 	
-	private SpecialityService specialityService;
+	private SpecialityService service;
 	
 	@Autowired
-	public AppointmentsSpecialitiesCsvParser(@Qualifier("specialityService") SpecialityService specialityService,
-	    AppointmentsSpecialityLineProcessor processor) {
+	public SpecialitiesCsvParser(@Qualifier("specialityService") SpecialityService specialityService,
+	    SpecialityLineProcessor processor) {
 		super(processor);
-		this.specialityService = specialityService;
+		this.service = specialityService;
 	}
 	
 	@Override
 	public Domain getDomain() {
-		return Domain.APPOINTMENTS_SPECIALITIES;
+		return Domain.APPOINTMENT_SPECIALITIES;
 	}
 	
 	@Override
@@ -34,10 +34,10 @@ public class AppointmentsSpecialitiesCsvParser extends CsvParser<Speciality, Bas
 		String uuid = line.getUuid();
 		String specialityName = line.getName(true); // should fail is name column missing
 		
-		Speciality speciality = specialityService.getSpecialityByUuid(uuid);
+		Speciality speciality = service.getSpecialityByUuid(uuid);
 		
 		if (speciality == null) {
-			for (Speciality currentSpeciality : specialityService.getAllSpecialities()) {
+			for (Speciality currentSpeciality : service.getAllSpecialities()) {
 				if (currentSpeciality.getName().equalsIgnoreCase(specialityName)) {
 					speciality = currentSpeciality;
 				}
@@ -56,6 +56,6 @@ public class AppointmentsSpecialitiesCsvParser extends CsvParser<Speciality, Bas
 	
 	@Override
 	public Speciality save(Speciality instance) {
-		return specialityService.save(instance);
+		return service.save(instance);
 	}
 }

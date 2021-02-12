@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  * parse and save Appointment Service Definitions with the minimal set of required fields.
  */
 @OpenmrsProfile(modules = { "appointments:*" })
-public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcessor<AppointmentServiceDefinition> {
+public class AppointmentServiceDefinitionLineProcessor extends BaseLineProcessor<AppointmentServiceDefinition> {
 	
 	protected static String HEADER_SPECIALITY = "speciality";
 	
@@ -30,7 +30,7 @@ public class AppointmentsServiceDefinitionLineProcessor extends BaseLineProcesso
 	private LocationService locationService;
 	
 	@Autowired
-	public AppointmentsServiceDefinitionLineProcessor(@Qualifier("specialityService") SpecialityService specialityService,
+	public AppointmentServiceDefinitionLineProcessor(@Qualifier("specialityService") SpecialityService specialityService,
 	    @Qualifier("locationService") LocationService locationService) {
 		super();
 		this.specialityService = specialityService;

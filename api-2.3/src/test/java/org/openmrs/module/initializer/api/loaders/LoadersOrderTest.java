@@ -14,8 +14,9 @@ import static org.hamcrest.Matchers.greaterThan;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentsServicesDefinitionsLoader;
-import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
+import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentServiceDefinitionsLoader;
+import org.openmrs.module.initializer.api.appt.servicetypes.AppointmentServiceTypesLoader;
+import org.openmrs.module.initializer.api.appt.specialities.SpecialitiesLoader;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.openmrs.module.initializer.api.c.ConceptClassesLoader;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
@@ -39,14 +40,10 @@ import org.openmrs.module.initializer.api.programs.ProgramsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkflowStatesLoader;
 import org.openmrs.module.initializer.api.roles.RolesLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.openmrs.module.initializer.api.visittypes.VisitTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest {
-	
-	protected final Logger log = LoggerFactory.getLogger(getClass());
+public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private JsonKeyValuesLoader jsonKeyValuesLoader;
@@ -112,10 +109,13 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 	private MetadataTermMappingsLoader metadataTermMappingsLoader;
 	
 	@Autowired
-	private AppointmentsSpecialitiesLoader appointmentsSpecialitiesLoader;
+	private SpecialitiesLoader appointmentsSpecialitiesLoader;
 	
 	@Autowired
-	private AppointmentsServicesDefinitionsLoader appointmentsServiceDefinitionsLoader;
+	private AppointmentServiceDefinitionsLoader appointmentsServiceDefinitionsLoader;
+	
+	@Autowired
+	private AppointmentServiceTypesLoader appointmentServiceTypesLoader;
 	
 	@Autowired
 	private OrderTypesLoader orderTypesLoader;
@@ -277,6 +277,11 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
 		previousLoader = loader;
+		loader = appointmentServiceTypesLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
 		loader = dataFilterMappingsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
@@ -302,11 +307,6 @@ public class LoadersIntegrationTest extends DomainBaseModuleContextSensitiveTest
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
 		Assert.assertEquals(getService().getLoaders().size(), count);
-		
-		// System.out.println("Here is the list of loaders in order:");
-		// for (Loader l : loaders) {
-		// System.out.format("%4d%100s%n", l.getOrder(), l.toString());
-		// }
 		
 	}
 }

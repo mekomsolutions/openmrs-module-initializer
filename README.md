@@ -14,8 +14,9 @@ The configuration folder is subdivided into _domain_ subfolders:
 ```bash
 configuration/
   ├── addresshierarchy/
-  ├── appointmentsspecialities/
-  ├── appointmentsservicesdefinitions/
+  ├── appointmentspecialities/
+  ├── appointmentservicedefinitions/
+  ├── appointmentservicetypes/
   ├── attributetypes/
   ├── autogenerationoptions/
   ├── bahmniforms/
@@ -84,8 +85,9 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Drugs (CSV files)](readme/drugs.md)
 1. [Order Frequencies (CSV files)](readme/freqs.md)
 1. [Order Types (CSV files)](readme/ordertypes.md)
-1. [Bahmni Appointments Specialities (CSV files)](readme/appointmentsspecialities.md)
-1. [Bahmni Appointments Service Definitions (CSV files)](readme/appointmentsservicesdefinitions.md)
+1. [Bahmni Appointment Specialities (CSV files)](readme/appointmentspecialities.md)
+1. [Bahmni Appointment Service Definitions (CSV files)](readme/appointmentservices.md#domain-appointmentservicedefinitions)
+1. [Bahmni Appointment Service Types (CSV files)](readme/appointmentservices.md#domain-appointmentservicetypes)
 1. [Data Filter Entity-Basis Mappings (CSV files)](readme/datafiltermappings.md)
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
@@ -146,6 +148,9 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and edition of location tags provided through CSV files in **configuration/locationtags**.
 * Bulk creation and edition of Bahmni forms provided as JSON schema definitions in **configuration/bahmniforms**.
 * Bulk creation and edition of htmlforms provided as XML schema definitions in **configuration/htmlforms**.
+* Bulk creation and edition of Bahmni appointment service types provided through CSV files in **configuration/appointmentservicetypes**.
+* Renaming domain: `appointmentsservicesdefinitions` → `appointmentservicedefinitions`.
+* Renaming domain: `appointmentsspecialities` → `appointmentspecialities`.
 
 #### Version 2.0.0
 * (_For devs._) Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
@@ -157,6 +162,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatatermmappings**.
 * Bulk creation and edition of encounter types provided through CSV files in **configuration/encountertypes**.
 * Bulk creation and edition of Bahmni appointments specialities provided through CSV files in **configuration/appointmentsspecialities**.
+* Bulk creation and edition of Bahmni appointments services definitions provided through CSV files in **configuration/appointmentsservicesdefinitions**.
 * Bulk access management of Data Filter entity to basis mappings provided through CSV files in **configuration/datafiltermappings**.
 * Bulk creation and edition of attribute types provided through CSV files in **configuration/attributetypes**.
 * Support location attributes.

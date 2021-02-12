@@ -45,6 +45,7 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
+import org.openmrs.module.appointments.model.AppointmentServiceType;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
@@ -486,20 +487,14 @@ public class Utils {
 	 * Fetches Bahmni appointment speciality trying various routes.
 	 * 
 	 * @param id The appointment speciality name or UUID.
-	 * @param specialityService
+	 * @param service The {@link SpecialityService}.
 	 * @return The {@link Speciality} instance if found, null otherwise.
 	 */
-	public static Speciality fetchBahmniAppointmentSpeciality(String id, SpecialityService specialityService) {
-		Speciality instance = null;
+	public static Speciality fetchBahmniAppointmentSpeciality(String id, SpecialityService service) {
+		Speciality instance = service.getSpecialityByUuid(id);
 		if (instance == null) {
-			instance = specialityService.getSpecialityByUuid(id);
-		}
-		if (instance == null) {
-			for (Speciality currentSpeciality : specialityService.getAllSpecialities()) { //Because we don't have #specialityService.getSpecialityByName
-				if (currentSpeciality.getName().equalsIgnoreCase(id)) {
-					instance = currentSpeciality;
-				}
-			}
+			instance = service.getAllSpecialities().stream().filter(s -> s.getName().equalsIgnoreCase(id)).findAny()
+			        .orElse(null);
 		}
 		return instance;
 	}
@@ -508,24 +503,39 @@ public class Utils {
 	 * Fetches Bahmni appointment service definition trying various routes.
 	 * 
 	 * @param id The appointment service definition name or UUID.
-	 * @param appointmentServiceService
+	 * @param service The {@link AppointmentServiceDefinitionService}.
 	 * @return The {@link AppointmentServiceDefinition} instance if found, null otherwise.
 	 */
 	public static AppointmentServiceDefinition fetchBahmniAppointmentServiceDefinition(String id,
-	        AppointmentServiceDefinitionService appointmentServiceService) {
-		AppointmentServiceDefinition instance = null;
-		if (instance == null) {
-			instance = appointmentServiceService.getAppointmentServiceByUuid(id);
+	        AppointmentServiceDefinitionService service) {
+		AppointmentServiceDefinition def = service.getAppointmentServiceByUuid(id);
+		if (def == null) {
+			def = service.getAllAppointmentServices(false).stream().filter(d -> d.getName().equalsIgnoreCase(id)).findAny()
+			        .orElse(null);
 		}
-		if (instance == null) {
-			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : appointmentServiceService
-			        .getAllAppointmentServices(false)) { //Because we don't have #appointmentServiceService.getAppointmentServiceDefinitionByName
-				if (currentAppointmentServiceDefinition.getName().equalsIgnoreCase(id)) {
-					instance = currentAppointmentServiceDefinition;
+		return def;
+	}
+	
+	/**
+	 * Fetches Bahmni appointment service types trying various routes.
+	 * 
+	 * @param id The appointment service type name or UUID.
+	 * @param service The {@link AppointmentServiceDefinitionService}.
+	 * @return The {@link AppointmentServiceType} instance if found, null otherwise.
+	 * @since 2.1.0
+	 */
+	public static AppointmentServiceType fetchBahmniAppointmentServiceType(String id,
+	        AppointmentServiceDefinitionService service) {
+		AppointmentServiceType type = service.getAppointmentServiceTypeByUuid(id);
+		if (type == null) {
+			for (AppointmentServiceDefinition def : service.getAllAppointmentServices(false)) {
+				type = def.getServiceTypes().stream().filter(t -> t.getName().equalsIgnoreCase(id)).findAny().orElse(null);
+				if (type != null) {
+					break;
 				}
 			}
 		}
-		return instance;
+		return type;
 	}
 	
 	/**

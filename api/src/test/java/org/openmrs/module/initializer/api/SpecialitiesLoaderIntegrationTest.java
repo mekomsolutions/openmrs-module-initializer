@@ -14,18 +14,18 @@ import org.junit.Test;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.appt.specialities.AppointmentsSpecialitiesLoader;
+import org.openmrs.module.initializer.api.appt.specialities.SpecialitiesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class AppointmentsSpecialitiesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class SpecialitiesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("specialityService")
 	private SpecialityService sps;
 	
 	@Autowired
-	private AppointmentsSpecialitiesLoader loader;
+	private SpecialitiesLoader loader;
 	
 	@Test
 	public void load_shouldLoadAccordingToCsvFiles() {
@@ -36,12 +36,12 @@ public class AppointmentsSpecialitiesLoaderIntegrationTest extends DomainBaseMod
 		// Verif speciality name
 		{
 			Speciality speciality = sps.getSpecialityByUuid("21ec1632-420f-473c-b380-31ed45214362");
-			Assert.assertEquals("New speciality", speciality.getName());
+			Assert.assertEquals("Psychiatric", speciality.getName());
 		}
 		// Verif renaming
 		{
-			Speciality speciality = sps.getSpecialityByUuid("c8085c78-e80e-436b-b845-caa3496058a6");
-			Assert.assertEquals("Speciality B", speciality.getName());
+			Speciality speciality = sps.getSpecialityByUuid("65ae95d9-d1a5-4979-a534-dc17671f2469");
+			Assert.assertEquals("Neonatal", speciality.getName());
 		}
 		// Verif creation without UUID
 		{

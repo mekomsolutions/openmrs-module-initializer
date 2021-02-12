@@ -25,13 +25,14 @@ public enum Domain {
 	DRUGS(21, "drugs"),
 	ORDER_FREQUENCIES(22, "orderfrequencies"),
 	ORDER_TYPES(23, "ordertypes"),
-	APPOINTMENTS_SPECIALITIES(24, "appointmentsspecialities"),
-	APPOINTMENTS_SERVICES_DEFINITIONS(25, "appointmentsservicesdefinitions"),
-	DATAFILTER_MAPPINGS(26, "datafiltermappings"),
-	METADATA_SETS(27, "metadatasets"),
-	METADATA_SET_MEMBERS(28, "metadatasetmembers"),
-	METADATA_TERM_MAPPINGS(29, "metadatatermmappings"),
-	HTML_FORMS(30, "htmlforms");
+	APPOINTMENT_SPECIALITIES(24, "appointmentspecialities"),
+	APPOINTMENT_SERVICE_DEFINITIONS(25, "appointmentservicedefinitions"),
+	APPOINTMENT_SERVICE_TYPES(26, "appointmentservicetypes"),
+	DATAFILTER_MAPPINGS(27, "datafiltermappings"),
+	METADATA_SETS(28, "metadatasets"),
+	METADATA_SET_MEMBERS(29, "metadatasetmembers"),
+	METADATA_TERM_MAPPINGS(30, "metadatatermmappings"),
+	HTML_FORMS(31, "htmlforms");
 	
 	private final int order;
 	
