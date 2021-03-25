@@ -41,6 +41,9 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	private PersonService ps;
 	
 	@Autowired
+	protected InitializerService iniz;
+	
+	@Autowired
 	private JsonKeyValuesLoader loader;
 	
 	@Before
@@ -126,5 +129,17 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		for (Concept c : concepts) {
 			Assert.assertNotNull(c);
 		}
+	}
+	
+	@Test
+	public void getDirUtil_shouldConfigureDirUtilToSkipChecksums() {
+		
+		// Replay
+		ConfigDirUtil dirUtil = loader.getDirUtil();
+		
+		// Verif
+		Assert.assertEquals(true, dirUtil.skipChecksums);
+		Assert.assertEquals(iniz.getChecksumsDirPath() + "/" + loader.getDomainName(), dirUtil.getDomainChecksumsDirPath());
+		Assert.assertEquals(iniz.getConfigDirPath() + "/" + loader.getDomainName(), dirUtil.getDomainDirPath());
 	}
 }
