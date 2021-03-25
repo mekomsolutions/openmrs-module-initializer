@@ -3,6 +3,7 @@ package org.openmrs.module.initializer.api.loaders;
 import java.io.InputStream;
 
 import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,5 +22,10 @@ public class JsonKeyValuesLoader extends BaseInputStreamLoader {
 	@Override
 	protected void load(InputStream is) throws Exception {
 		iniz.addKeyValues(is);
+	}
+	
+	@Override
+	public ConfigDirUtil getDirUtil() {
+		return new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), getDomainName(), true);
 	}
 }
