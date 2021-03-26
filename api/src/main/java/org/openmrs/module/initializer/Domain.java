@@ -32,7 +32,8 @@ public enum Domain {
 	METADATA_SETS(28, "metadatasets"),
 	METADATA_SET_MEMBERS(29, "metadatasetmembers"),
 	METADATA_TERM_MAPPINGS(30, "metadatatermmappings"),
-	HTML_FORMS(31, "htmlforms");
+	HTML_FORMS(31, "htmlforms"),
+	OCL(32, "openconceptlab");
 	
 	private final int order;
 	

@@ -61,7 +61,7 @@
         <idgenVersion>4.6.0-SNAPSHOT</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
-
+		<openconceptlabVersion>1.2.6-SNAPSHOT</openconceptlabVersion>
         <!-- Modules compatibility > Core 2.3.0 -->
         <appframeworkVersion>2.14.0</appframeworkVersion>
         <datafilterVersion>1.0.0</datafilterVersion>
@@ -86,7 +86,7 @@
             <type>jar</type>
         </dependency>
 
-        <!-- JUnit, Powermock -->
+        <!-- JUnit, Powermock springframework -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -105,7 +105,11 @@
             <version>1.6.1</version>
             <scope>test</scope>
         </dependency>
-
+ 		<dependency>
+   			<groupId>org.springframework</groupId>
+    		<artifactId>spring-web</artifactId>
+    		<version>5.0.3.RELEASE</version>
+		</dependency>
         <dependency>
             <groupId>org.openmrs.api</groupId>
             <artifactId>openmrs-api</artifactId>
@@ -185,6 +189,12 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>metadatasharing-api</artifactId>
             <version>${metadatasharingVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+           <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>openconceptlab-api</artifactId>
+            <version>${openconceptlabVersion}</version>
             <scope>provided</scope>
         </dependency>
 
