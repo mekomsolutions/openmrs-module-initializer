@@ -35,7 +35,6 @@ public class OpenConceptLabLoader extends BaseFileLoader {
 	protected void load(File file) throws Exception {
 		ZipFile zip = new ZipFile(file);
 		getImporter().run(zip);
-		
 	}
 	
 }
