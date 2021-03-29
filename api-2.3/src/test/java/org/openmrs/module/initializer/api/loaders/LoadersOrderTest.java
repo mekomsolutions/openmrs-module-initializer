@@ -146,6 +146,9 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	@Autowired
 	private HtmlFormsLoader htmlFormsLoader;
 	
+	@Autowired
+	private OpenConceptLabLoader openConceptLabLoader;
+	
 	@Override
 	public void updateSearchIndex() {
 		// to prevent Data Filter's 'Illegal Record Access'
@@ -321,6 +324,11 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		
 		previousLoader = loader;
 		loader = htmlFormsLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = openConceptLabLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
