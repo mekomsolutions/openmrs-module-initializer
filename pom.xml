@@ -86,7 +86,7 @@
             <type>jar</type>
         </dependency>
 
-        <!-- JUnit, Powermock springframework -->
+        <!-- JUnit, Powermock  -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -105,11 +105,6 @@
             <version>1.6.1</version>
             <scope>test</scope>
         </dependency>
- 		<dependency>
-   			<groupId>org.springframework</groupId>
-    		<artifactId>spring-web</artifactId>
-    		<version>5.0.3.RELEASE</version>
-		</dependency>
         <dependency>
             <groupId>org.openmrs.api</groupId>
             <artifactId>openmrs-api</artifactId>
