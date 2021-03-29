@@ -5,7 +5,7 @@ import org.openmrs.module.idgen.AutoGenerationOption;
 import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@OpenmrsProfile(modules = { "idgen:4.6.0-SNAPSHOT" })
+@OpenmrsProfile(modules = { "idgen:4.6.0" })
 public class AutoGenerationOptionsLoader extends BaseCsvLoader<AutoGenerationOption, AutoGenerationOptionsCsvParser> {
 	
 	@Autowired

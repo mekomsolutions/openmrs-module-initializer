@@ -56,12 +56,12 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	public DomainBaseModuleContextSensitiveTest() {
 		super();
 		{
-			Module mod = new Module("", "htmlformentry", "", "", "", "4.0.0-SNAPSHOT");
+			Module mod = new Module("", "htmlformentry", "", "", "", "4.0.0");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
 		{
-			Module mod = new Module("", "idgen", "", "", "", "4.6.0-SNAPSHOT");
+			Module mod = new Module("", "idgen", "", "", "", "4.6.0");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
