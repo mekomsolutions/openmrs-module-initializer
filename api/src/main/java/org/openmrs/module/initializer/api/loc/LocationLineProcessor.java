@@ -67,7 +67,13 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 		loc.setParentLocation(null);
 		String parentId = line.getString(HEADER_PARENT, "");
 		if (!StringUtils.isEmpty(parentId)) {
-			loc.setParentLocation(Utils.fetchLocation(parentId, locationService));
+			Location parentLocation = Utils.fetchLocation(parentId, locationService);
+			if (parentLocation != null) {
+				loc.setParentLocation(parentLocation);
+			} else {
+				throw new IllegalArgumentException(
+				        "Specified parent location with id '" + parentId + "' for '" + loc.getName() + "' not found ");
+			}
 		}
 		
 		loc.setTags(null);

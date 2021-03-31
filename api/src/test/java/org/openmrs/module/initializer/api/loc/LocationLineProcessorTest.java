@@ -15,6 +15,7 @@ import org.mockito.stubbing.Answer;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
+import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.LocationTagListParser;
 
@@ -63,5 +64,32 @@ public class LocationLineProcessorTest {
 		}
 		Assert.assertTrue(names.contains("Login Location"));
 		Assert.assertTrue(names.contains("Visit Location"));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void fill_shouldFailIfParentDoesNotExist() {
+		
+		// Setup
+		String[] headerLine = { BaseLineProcessor.HEADER_NAME, BaseLineProcessor.PARENT };
+		String[] line = { "Test Location", "nonexistent_location" };
+		when(ls.getLocationByUuid("nonexistent_location")).thenReturn(null);
+		
+		LocationLineProcessor locationLineProcessor = new LocationLineProcessor(ls, new LocationTagListParser(ls));
+		locationLineProcessor.fill(new Location(), new CsvLine(headerLine, line));
+	}
+	
+	@Test
+	public void fill_shouldParseIfParentIsNull() {
+		
+		// Setup
+		String[] headerLine = { BaseLineProcessor.HEADER_NAME, BaseLineProcessor.PARENT };
+		String[] line = { "Test Location", null };
+		
+		// Replay
+		LocationLineProcessor locationLineProcessor = new LocationLineProcessor(ls, new LocationTagListParser(ls));
+		Location location = locationLineProcessor.fill(new Location(), new CsvLine(headerLine, line));
+		
+		// Verif
+		Assert.assertTrue(location.getName().equals("Test Location"));
 	}
 }
