@@ -37,22 +37,43 @@
         <module>omod</module>
     </modules>
 
-    <properties>
-        <openmrsPlatformVersion>2.1.1</openmrsPlatformVersion>
-        <addresshierarchyVersion>2.11.0</addresshierarchyVersion>
-        <exti18nVersion>1.0.0</exti18nVersion>
+    <profiles>
+        <profile>
+            <id>validator</id>
+            <modules>
+                <module>validator-first-dependency</module>
+                <module>validator</module>
+            </modules>
+        </profile>
+    </profiles>
 
-        <!-- From Core 2.3.0 -->
-        <appframeworkVersion>2.14.0</appframeworkVersion>
-        <datafilterVersion>1.0.0</datafilterVersion>
+    <properties>
+        <openmrsVersion2.1>2.1.1</openmrsVersion2.1>
+        <openmrsVersion2.2>2.2.0</openmrsVersion2.2>
+        <openmrsVersion2.3>2.3.0</openmrsVersion2.3>
+
+        <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
 
         <!-- Modules compatibility -->
         <appointmentsVersion>1.2.1</appointmentsVersion>
-        <bahmniIeAppsVersion>1.1.0-SNAPSHOT</bahmniIeAppsVersion>
-        <htmlformentryVersion>4.0.0-SNAPSHOT</htmlformentryVersion>
-        <idgenVersion>4.6.0-SNAPSHOT</idgenVersion>
+        <bahmniIeAppsVersion>1.1.0</bahmniIeAppsVersion>
+        <htmlformentryVersion>4.0.0</htmlformentryVersion>
+        <idgenVersion>4.6.0</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
+
+        <!-- Modules compatibility > Core 2.3.0 -->
+        <appframeworkVersion>2.14.0</appframeworkVersion>
+        <datafilterVersion>1.0.0</datafilterVersion>
+
+        <!-- For Validator -->
+        <reportingVersion>1.19.0</reportingVersion>
+        <calculationVersion>1.2</calculationVersion>
+        <serializationVersion>0.2.14</serializationVersion>
+
+        <!-- For tests -->
+        <addresshierarchyVersion>2.11.0</addresshierarchyVersion>
+        <exti18nVersion>1.0.0</exti18nVersion>
     </properties>
 
     <dependencies>
@@ -63,12 +84,26 @@
             <version>${openmrsPlatformVersion}</version>
             <scope>provided</scope>
             <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>javassist</groupId>
-                    <artifactId>javassist</artifactId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+
+        <!-- JUnit, Powermock -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>1.6.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.6.1</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -151,6 +186,42 @@
             <artifactId>metadatasharing-api</artifactId>
             <version>${metadatasharingVersion}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- For Validator -->
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>reporting-api</artifactId>
+            <version>${reportingVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>reporting-api-2.0</artifactId>
+            <version>${reportingVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>calculation-api</artifactId>
+            <version>${calculationVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>serialization.xstream-api</artifactId>
+            <version>${serializationVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>serialization.xstream-api-2.0</artifactId>
+            <version>${serializationVersion}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -240,16 +311,23 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>bahmni-nexus-releases</id>
+            <name>Bahmni Nexus Releases Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/releases</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
             <id>openmrs-repo</id>
-            <name>OpenMRS Nexus Repository</name>
+            <name>OpenMRS Nexus</name>
             <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>openmrs-repo-snapshots</id>
+            <name>OpenMRS Nexus Snapshots</name>
+            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
 

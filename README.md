@@ -14,8 +14,9 @@ The configuration folder is subdivided into _domain_ subfolders:
 ```bash
 configuration/
   ├── addresshierarchy/
-  ├── appointmentsspecialities/
-  ├── appointmentsservicesdefinitions/
+  ├── appointmentspecialities/
+  ├── appointmentservicedefinitions/
+  ├── appointmentservicetypes/
   ├── attributetypes/
   ├── autogenerationoptions/
   ├── bahmniforms/
@@ -47,10 +48,11 @@ configuration/
 Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain. Although several file types are supported for providing metadata, CSV files are the preferred format and all domain should aim at being covered through parsing CSV files.
 
 ### Objectives
-* This module allows to preload an OpenMRS installation with **maintained and versioned metadata**.
+* This module loads an OpenMRS configuration consisting of OpenMRS metadata.
 * CSV files are the preferred format, however a number of metadata domains rely on other file formats. See the list [below](#supported-domains-and-default-loading-order) for details.
 * Initializer processes all configuration files upon starting up.
 * Initializer produces a checksum file for each processed file. A file will never be processed again until its checksum has changed.
+  * See more info [here](readme/checksums.md) about checksums.
 * Each line of those CSV files represents an **OpenMRS object to be created, edited or retired**.
 * Each line of those CSV files follows the WYSIWYG principle.
 
@@ -62,29 +64,31 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Message properties key-values (.properties files)](readme/messageproperties.md)
 1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
 1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
+1. [Visit Types (CSV files)](readme/visittypes.md)
 1. [Patient identifier types (CSV files)](readme/pit.md)
 1. [Privileges (CSV files)](readme/priv.md)
 1. [Encounter Types (CSV files)](readme/et.md)
 1. [Roles (CSV files)](readme/roles.md)
-1. [Global properties (XML files)](readme/globalproperties.md)
-1. [Attribute types (CSV files)](readme/atttypes.md)
+1. [Global Properties (XML files)](readme/globalproperties.md)
+1. [Attribute Types (CSV files)](readme/atttypes.md)
 1. [Locations (CSV files)](readme/loc.md)
 1. [Location Tags (CSV files)](readme/loctags.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
-1. [Concept classes (CSV files)](readme/conceptclasses.md)
+1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Programs (CSV files)](readme/prog.md)
-1. [Programs worklows (CSV files)](readme/prog.md)
-1. [Programs worklow states (CSV files)](readme/prog.md)
-1. [Person attribute types (CSV files)](readme/pat.md)
-1. [Identifier sources (CSV files)](readme/idgen.md)
-1. [Auto Generation Options (CSV files)](readme/autogenerationoptions.md)
+1. [Program Worklows (CSV files)](readme/prog.md)
+1. [Program Worklow States (CSV files)](readme/prog.md)
+1. [Person Attribute Types (CSV files)](readme/pat.md)
+1. [Identifier Sources (CSV files)](readme/idgen.md)
+1. [Autogeneration Options (CSV files)](readme/autogenerationoptions.md)
 1. [Drugs (CSV files)](readme/drugs.md)
 1. [Order Frequencies (CSV files)](readme/freqs.md)
 1. [Order Types (CSV files)](readme/ordertypes.md)
-1. [Bahmni Appointments Specialities (CSV files)](readme/appointmentsspecialities.md)
-1. [Bahmni Appointments Service Definitions (CSV files)](readme/appointmentsservicesdefinitions.md)
-1. [Data Filter entity-basis mappings (CSV files)](readme/datafiltermappings.md)
+1. [Bahmni Appointment Specialities (CSV files)](readme/appointmentspecialities.md)
+1. [Bahmni Appointment Service Definitions (CSV files)](readme/appointmentservices.md#domain-appointmentservicedefinitions)
+1. [Bahmni Appointment Service Types (CSV files)](readme/appointmentservices.md#domain-appointmentservicetypes)
+1. [Data Filter Entity-Basis Mappings (CSV files)](readme/datafiltermappings.md)
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
@@ -107,25 +111,49 @@ mvn clean package
 * Data Filter 1.0.0 (*compatible*)
 * Bahmni I.e Apps 1.0.0 (*compatible*)
 
+### How to test out your OpenMRS configs?
+See the [Initializer Validator README page](readme/validator.md).
+
+### Finer control of domains loading at app runtime
+See the [documentation on Initializer's runtime properties](readme/rtprops.md).
+
 ### Quick facts
 Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.
 
 ### Get in touch
-Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversation and ping us with the mention `@MekomSolutions` in your message. Or find us on the [Initializer OpenMRS Slack channel](https://openmrs.slack.com/archives/CPC20CBFH).
+* On [OpenMRS Talk](https://talk.openmrs.org/)
+  * Sign up, start a conversation and ping us with the mention [`@MekomSolutions`](https://talk.openmrs.org/g/MekomSolutions) in your post. 
+* On Slack:
+  
+  * Join the [Initializer channel](https://openmrs.slack.com/archives/CPC20CBFH) and ping us with a `@Mekom` mention.
+
+### Report an issue
+https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ----
 
 ### Releases notes
 
 #### Version 2.1.0
+* Introduced safe and unsafe API modes to suit either app runtime loading or early failure loading for CI.
+* (_For devs._) Introduced `BaseFileLoader` and `BaseInputStreamLoader` as part of a better streamlined loading framework.
+* _Initialize Validator_ a standalone fatjar to make dry runs of OpenMRS configs.
+* Nested structures of configuration files are supported.
+* Added a runtime property to define an inclusion or exclusion list of domains.
+* Added a runtime property to specify wildcard patterns filters for each domain.
+* Added a runtime property to toggle off the generation of the checksums.
+* Improved logging output with [ASCII Tables for Java](https://github.com/freva/ascii-table).
 * Bulk creation and edition of ID Gen's autogeneration options provided through CSV files in **configuration/autogenerationoptions**.
 * Support associating location tags to locations using boolean `Tag|` headers.
 * Bulk creation and edition of location tags provided through CSV files in **configuration/locationtags**.
 * Bulk creation and edition of Bahmni forms provided as JSON schema definitions in **configuration/bahmniforms**.
 * Bulk creation and edition of htmlforms provided as XML schema definitions in **configuration/htmlforms**.
+* Bulk creation and edition of Bahmni appointment service types provided through CSV files in **configuration/appointmentservicetypes**.
+* Renaming domain: `appointmentsservicesdefinitions` → `appointmentservicedefinitions`.
+* Renaming domain: `appointmentsspecialities` → `appointmentspecialities`.
 
 #### Version 2.0.0
-* Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
+* (_For devs._) Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
 * Bulk creation and edition of programs provided through CSV files in **configuration/programs**.
 * Bulk creation and edition of program workflows provided through CSV files in **configuration/programworkflows**.
 * Bulk creation and edition of program workflow states provided through CSV files in **configuration/programworkflowstates**.
@@ -134,6 +162,7 @@ Find us on [OpenMRS Talk](https://talk.openmrs.org/): sign up, start a conversat
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatatermmappings**.
 * Bulk creation and edition of encounter types provided through CSV files in **configuration/encountertypes**.
 * Bulk creation and edition of Bahmni appointments specialities provided through CSV files in **configuration/appointmentsspecialities**.
+* Bulk creation and edition of Bahmni appointments services definitions provided through CSV files in **configuration/appointmentsservicesdefinitions**.
 * Bulk access management of Data Filter entity to basis mappings provided through CSV files in **configuration/datafiltermappings**.
 * Bulk creation and edition of attribute types provided through CSV files in **configuration/attributetypes**.
 * Support location attributes.

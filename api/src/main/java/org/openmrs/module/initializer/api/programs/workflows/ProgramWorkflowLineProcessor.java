@@ -48,13 +48,12 @@ public class ProgramWorkflowLineProcessor extends BaseLineProcessor<ProgramWorkf
 		
 		// workflows must be bound to a program
 		if (prog == null) {
-			throw new IllegalArgumentException("No program could be fetched from the CSV line: '" + line.toString() + "'.");
+			throw new IllegalArgumentException("No program could be fetched from the CSV line:" + line.toString());
 		}
 		// workflows linked to a program can't be moved to another program
 		if (wf.getProgram() != null && !prog.equals(wf.getProgram())) {
-			throw new IllegalArgumentException(
-			        "A workflow ('" + wf.getName() + "') already linked to a program ('" + wf.getProgram().getName()
-			                + "') cannot be added to another program, CSV line: '" + line.toString() + "'.");
+			throw new IllegalArgumentException("A workflow ('" + wf.getName() + "') already linked to a program ('"
+			        + wf.getProgram().getName() + "') cannot be added to another program, CSV line:" + line.toString());
 		}
 		wf.setProgram(prog);
 		

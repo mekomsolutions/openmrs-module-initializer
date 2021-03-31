@@ -9,6 +9,9 @@
  */
 package org.openmrs.module.initializer.api;
 
+import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CHECKSUM;
+import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CONFIG;
+
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -18,26 +21,35 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Concept;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.InitializerConfig;
 import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class InitializerServiceImpl extends BaseOpenmrsService implements InitializerService {
 	
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
+	
+	private InitializerConfig cfg;
 	
 	private Map<String, Object> keyValueCache = new HashMap<String, Object>();
+	
+	@Autowired
+	public void setConfig(InitializerConfig cfg) {
+		this.cfg = cfg;
+	}
 	
 	public Path getBasePath() {
 		return Paths.get(new File(OpenmrsUtil.getApplicationDataDirectory()).toURI());
@@ -48,17 +60,12 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	@Override
 	public String getConfigDirPath() {
-		return getBasePath().resolve(InitializerConstants.DIR_NAME_CONFIG).toString();
+		return getBasePath().resolve(DIR_NAME_CONFIG).toString();
 	}
 	
 	@Override
 	public String getChecksumsDirPath() {
-		return getBasePath().resolve(InitializerConstants.DIR_NAME_CHECKSUM).toString();
-	}
-	
-	@Override
-	public String getRejectionsDirPath() {
-		return getBasePath().resolve(InitializerConstants.DIR_NAME_REJECTIONS).toString();
+		return getBasePath().resolve(DIR_NAME_CHECKSUM).toString();
 	}
 	
 	@Override
@@ -66,6 +73,36 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		List<Loader> loaders = Context.getRegisteredComponents(Loader.class);
 		Collections.sort(loaders);
 		return loaders;
+	}
+	
+	@Override
+	public void loadUnsafe(boolean applyFilters, boolean doThrow) throws Exception {
+		
+		final Set<String> specifiedDomains = applyFilters ? cfg.getFilteredDomains() : Collections.emptySet();
+		final boolean includeSpecifiedDomains = applyFilters ? cfg.isInclusionList() : true;
+		
+		for (Loader loader : getLoaders()) {
+			boolean domainSpecified = specifiedDomains.contains(loader.getDomainName());
+			if (specifiedDomains.isEmpty()
+			        || ((includeSpecifiedDomains && domainSpecified) || (!includeSpecifiedDomains && !domainSpecified))) {
+				
+				final List<String> wildcardExclusions = applyFilters ? cfg.getWidlcardExclusions(loader.getDomainName())
+				        : Collections.emptyList();
+				loader.loadUnsafe(wildcardExclusions, doThrow);
+				
+			}
+		}
+	}
+	
+	/*
+	 * This is a mere wrapper of the unsafe version when it doesn't throw anyway.
+	 */
+	@Override
+	public void load() {
+		try {
+			loadUnsafe(true, false);
+		}
+		catch (Exception e) {}
 	}
 	
 	@Override
@@ -85,7 +122,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 			return Utils.asString(value);
 		}
 		catch (Exception e) {
-			log.error(e);
+			log.error(null, e);
 		}
 		return "";
 	}

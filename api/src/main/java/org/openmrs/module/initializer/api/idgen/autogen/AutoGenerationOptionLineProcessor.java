@@ -13,7 +13,7 @@ import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@OpenmrsProfile(modules = { "idgen:4.6.0-SNAPSHOT" })
+@OpenmrsProfile(modules = { "idgen:4.6.0" })
 public class AutoGenerationOptionLineProcessor extends BaseLineProcessor<AutoGenerationOption> {
 	
 	final public static String IDENTIFIER_TYPE = "identifier type";

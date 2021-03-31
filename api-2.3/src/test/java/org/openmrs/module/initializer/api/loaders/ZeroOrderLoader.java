@@ -1,5 +1,7 @@
 package org.openmrs.module.initializer.api.loaders;
 
+import java.util.List;
+
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 
 public class ZeroOrderLoader implements Loader {
@@ -25,7 +27,18 @@ public class ZeroOrderLoader implements Loader {
 	}
 	
 	@Override
+	public void loadUnsafe(List<String> wildcardExclusions, boolean doThrow) throws Exception {
+		
+	}
+	
+	@Override
+	public void load(List<String> wildcardExclusions) {
+		
+	}
+	
+	@Override
 	public void load() {
+		
 	}
 	
 }

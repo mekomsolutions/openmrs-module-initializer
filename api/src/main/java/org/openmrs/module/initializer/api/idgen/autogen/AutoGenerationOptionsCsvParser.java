@@ -10,7 +10,7 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@OpenmrsProfile(modules = { "idgen:4.6.0-SNAPSHOT" })
+@OpenmrsProfile(modules = { "idgen:4.6.0" })
 public class AutoGenerationOptionsCsvParser extends CsvParser<AutoGenerationOption, BaseLineProcessor<AutoGenerationOption>> {
 	
 	private IdentifierSourceService service;

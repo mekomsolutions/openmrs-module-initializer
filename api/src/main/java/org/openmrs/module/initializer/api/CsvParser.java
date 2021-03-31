@@ -5,11 +5,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Retireable;
@@ -17,13 +15,14 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerConstants;
-import org.openmrs.module.initializer.InitializerLogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opencsv.CSVReader;
 
 public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineProcessor<T>> {
 	
-	protected final Log log = InitializerLogFactory.getLog(CsvParser.class);
+	protected final Logger log = LoggerFactory.getLogger(CsvParser.class);
 	
 	protected static final String DEFAULT_RETIRE_REASON = "Retired by module " + InitializerConstants.MODULE_NAME;
 	
@@ -150,7 +149,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	/**
 	 * @return The header line of the file that this parser is set on.
 	 */
-	public String[] getHeaderLine() throws IOException {
+	public String[] getHeaderLine() {
 		return headerLine;
 	}
 	
@@ -170,7 +169,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 			}
 			catch (IOException e) {
 				lines.add(new String[0]);
-				log.error(
+				log.warn(
 				    "There was an I/O exception while reading one of the CSV lines. That line will produce an error when it will be processed by the parser.",
 				    e);
 			}
@@ -208,8 +207,8 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 			}
 			catch (Exception e) {
 				failedLines.add(line);
-				log.error("An OpenMRS object could not be constructed or saved from the following CSV line: \n"
-				        + Arrays.toString(line),
+				log.warn("An OpenMRS object could not be constructed or saved from the following CSV line:"
+				        + new CsvLine(getHeaderLine(), line).prettyPrint(),
 				    e);
 			}
 		}

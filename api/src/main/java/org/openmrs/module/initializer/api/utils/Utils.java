@@ -1,16 +1,21 @@
 package org.openmrs.module.initializer.api.utils;
 
+import static org.openmrs.module.initializer.InitializerConstants.MODULE_NAME;
+import static org.openmrs.module.initializer.api.BaseLineProcessor.LIST_SEPARATOR;
+
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Appender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Layout;
+import org.apache.log4j.PatternLayout;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -40,12 +45,88 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
+import org.openmrs.module.appointments.model.AppointmentServiceType;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
+import org.openmrs.module.initializer.api.CsvLine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
+import com.github.freva.asciitable.AsciiTable;
+
 public class Utils {
+	
+	private static Logger log = LoggerFactory.getLogger(Utils.class);
+	
+	/**
+	 * Returns a ready-to-use appender to log to a custom file.
+	 * 
+	 * @param logFilePath The path to the log file.
+	 * @return The appender to be added to any logger.
+	 */
+	public static Appender getFileAppender(Path logFilePath) {
+		
+		Appender defaultAppender = org.apache.log4j.Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
+		Layout layout = defaultAppender == null ? new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n")
+		        : defaultAppender.getLayout();
+		
+		Appender appender = defaultAppender;
+		try {
+			appender = new FileAppender(layout, logFilePath.toString());
+			appender.setName(logFilePath.getFileName().toString());
+		}
+		catch (IOException e) {
+			log.error("The custom log file appender could not be setup for " + MODULE_NAME + ".", e);
+		}
+		
+		return appender;
+	}
+	
+	private static String[] setLineSeparators(String[] strings) {
+		List<String> res = new ArrayList<>();
+		for (String s : strings) {
+			res.add(StringUtils.replace(s, LIST_SEPARATOR, LIST_SEPARATOR + System.lineSeparator()));
+		}
+		return res.toArray(new String[0]);
+	}
+	
+	/**
+	 * Prints as a pretty string a batch of CSV lines that share a common header.
+	 * 
+	 * @return The pretty string of CSV lines.
+	 * @throws IllegalArgumentException as soon as one line has a diverging header from the others.
+	 */
+	public static String prettyPrint(List<CsvLine> lines) throws IllegalArgumentException {
+		String[] prevHeader = null;
+		
+		List<String[]> data = new ArrayList<>();
+		for (CsvLine line : lines) {
+			if (prevHeader != null && !Arrays.equals(line.getHeaderLine(), prevHeader)) {
+				throw new IllegalArgumentException(
+				        "Printing a batch of CSV lines is only supported if they share a common header.");
+			}
+			prevHeader = line.getHeaderLine();
+			data.add(setLineSeparators(line.asLine()));
+		}
+		return System.lineSeparator() + AsciiTable.getTable(prevHeader, data.toArray(new String[0][0]));
+	}
+	
+	public static String pastePrint(List<CsvLine> lines) {
+		StringBuilder sb = new StringBuilder();
+		String[] prevHeader = null;
+		for (CsvLine line : lines) {
+			if (prevHeader != null && !Arrays.equals(line.getHeaderLine(), prevHeader)) {
+				throw new IllegalArgumentException(
+				        "Printing a batch of CSV lines is only supported if they share a common header.");
+			}
+			prevHeader = line.getHeaderLine();
+			sb.append(StringUtils.join(line.asLine(), ",") + "\n");
+		}
+		sb.insert(0, StringUtils.join(prevHeader, ",") + "\n");
+		return System.lineSeparator() + StringUtils.removeEnd(sb.toString(), "\n");
+	}
 	
 	/**
 	 * Helps build a {@link ConceptMap} out the usual string inputs.
@@ -406,20 +487,14 @@ public class Utils {
 	 * Fetches Bahmni appointment speciality trying various routes.
 	 * 
 	 * @param id The appointment speciality name or UUID.
-	 * @param specialityService
+	 * @param service The {@link SpecialityService}.
 	 * @return The {@link Speciality} instance if found, null otherwise.
 	 */
-	public static Speciality fetchBahmniAppointmentSpeciality(String id, SpecialityService specialityService) {
-		Speciality instance = null;
+	public static Speciality fetchBahmniAppointmentSpeciality(String id, SpecialityService service) {
+		Speciality instance = service.getSpecialityByUuid(id);
 		if (instance == null) {
-			instance = specialityService.getSpecialityByUuid(id);
-		}
-		if (instance == null) {
-			for (Speciality currentSpeciality : specialityService.getAllSpecialities()) { //Because we don't have #specialityService.getSpecialityByName
-				if (currentSpeciality.getName().equalsIgnoreCase(id)) {
-					instance = currentSpeciality;
-				}
-			}
+			instance = service.getAllSpecialities().stream().filter(s -> s.getName().equalsIgnoreCase(id)).findAny()
+			        .orElse(null);
 		}
 		return instance;
 	}
@@ -428,24 +503,39 @@ public class Utils {
 	 * Fetches Bahmni appointment service definition trying various routes.
 	 * 
 	 * @param id The appointment service definition name or UUID.
-	 * @param appointmentServiceService
+	 * @param service The {@link AppointmentServiceDefinitionService}.
 	 * @return The {@link AppointmentServiceDefinition} instance if found, null otherwise.
 	 */
 	public static AppointmentServiceDefinition fetchBahmniAppointmentServiceDefinition(String id,
-	        AppointmentServiceDefinitionService appointmentServiceService) {
-		AppointmentServiceDefinition instance = null;
-		if (instance == null) {
-			instance = appointmentServiceService.getAppointmentServiceByUuid(id);
+	        AppointmentServiceDefinitionService service) {
+		AppointmentServiceDefinition def = service.getAppointmentServiceByUuid(id);
+		if (def == null) {
+			def = service.getAllAppointmentServices(false).stream().filter(d -> d.getName().equalsIgnoreCase(id)).findAny()
+			        .orElse(null);
 		}
-		if (instance == null) {
-			for (AppointmentServiceDefinition currentAppointmentServiceDefinition : appointmentServiceService
-			        .getAllAppointmentServices(false)) { //Because we don't have #appointmentServiceService.getAppointmentServiceDefinitionByName
-				if (currentAppointmentServiceDefinition.getName().equalsIgnoreCase(id)) {
-					instance = currentAppointmentServiceDefinition;
+		return def;
+	}
+	
+	/**
+	 * Fetches Bahmni appointment service types trying various routes.
+	 * 
+	 * @param id The appointment service type name or UUID.
+	 * @param service The {@link AppointmentServiceDefinitionService}.
+	 * @return The {@link AppointmentServiceType} instance if found, null otherwise.
+	 * @since 2.1.0
+	 */
+	public static AppointmentServiceType fetchBahmniAppointmentServiceType(String id,
+	        AppointmentServiceDefinitionService service) {
+		AppointmentServiceType type = service.getAppointmentServiceTypeByUuid(id);
+		if (type == null) {
+			for (AppointmentServiceDefinition def : service.getAllAppointmentServices(false)) {
+				type = def.getServiceTypes().stream().filter(t -> t.getName().equalsIgnoreCase(id)).findAny().orElse(null);
+				if (type != null) {
+					break;
 				}
 			}
 		}
-		return instance;
+		return type;
 	}
 	
 	/**

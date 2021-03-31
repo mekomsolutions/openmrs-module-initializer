@@ -1,5 +1,8 @@
 package org.openmrs.module.initializer.api.loaders;
 
+import java.util.List;
+
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 
 /**
@@ -27,7 +30,29 @@ public interface Loader extends Comparable<Loader> {
 	ConfigDirUtil getDirUtil();
 	
 	/**
-	 * Triggers the loading action for the domain on which the loader is configured.
+	 * Triggers the processing (or "loading") of the domain's files. This method is potentially unsafe
+	 * if configured to throw exceptions early.
+	 * 
+	 * @param wildcardExclusions A list of wildcard patterns to filter out unwanted files.
+	 * @param doThrow Set this to true to make this method throw early as soon as the first loading
+	 *            error is encountered.
+	 * @see WildcardFileFilter
+	 * @since 2.1.0
+	 */
+	void loadUnsafe(List<String> wildcardExclusions, boolean doThrow) throws Exception;
+	
+	/**
+	 * Triggers the processing (or "loading") of the domain's files. This method is the exception safe
+	 * version of {@link #loadUnsafe(List, boolean)}.
+	 * 
+	 * @see #loadUnsafe(List, boolean) This variant of the loading routine does not throw checked
+	 *      exceptions, it only logs errors.
+	 * @since 2.1.0
+	 */
+	void load(List<String> wildcardExclusions);
+	
+	/**
+	 * @see #load(List)
 	 */
 	void load();
 	

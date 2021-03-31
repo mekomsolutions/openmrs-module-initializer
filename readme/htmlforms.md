@@ -20,6 +20,8 @@ as follows:
 		formName="Test Form 1"
 		formDescription="Test Form With All Attributes"
 		formVersion="1.3"
+        formPublished="true"
+        formRetired="false"
 		formEncounterType="61ae96f4-6afe-4351-b6f8-cd4fc383cce1"
 		htmlformUuid="26ddfe02-28f3-11eb-bc37-0242ac110002"
 >

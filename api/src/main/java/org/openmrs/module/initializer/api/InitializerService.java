@@ -32,15 +32,30 @@ public interface InitializerService extends OpenmrsService {
 	String getChecksumsDirPath();
 	
 	/**
-	 * @return The path to the checksum folder (with NO trailing forward slash), eg.
-	 *         "/opt/openmrs/configuration_rejections"
-	 */
-	String getRejectionsDirPath();
-	
-	/**
 	 * @return The list of ordered domain loaders.
 	 */
 	List<Loader> getLoaders();
+	
+	/**
+	 * Loads all domains based on their order.
+	 * 
+	 * @param applyFilters Set this to false to ignore the inclusion or exclusion list and the
+	 *            domain-specific file name wildcard filters.
+	 * @param doThrow Set this to true to make this method throw early as soon as the first loading
+	 *            error is encountered.
+	 * @since 2.1.0
+	 */
+	void loadUnsafe(boolean applyFilters, boolean doThrow) throws Exception;
+	
+	/**
+	 * Loads all domains based on their order. This method is the exception safe version of
+	 * {@link #loadUnsafe(boolean, boolean)}.
+	 * 
+	 * @see #loadUnsafe(boolean, boolean) This variant of the loading routine does not throw checked
+	 *      exceptions, it only logs errors.
+	 * @since 2.1.0
+	 */
+	void load();
 	
 	/**
 	 * Add a single key value to the memory store.

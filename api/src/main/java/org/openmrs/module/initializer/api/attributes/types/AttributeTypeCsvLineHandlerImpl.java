@@ -20,7 +20,7 @@ public class AttributeTypeCsvLineHandlerImpl implements AttributeTypeCsvLineHand
 		AttributeTypeEntity type = getType(attributeDomain);
 		if (type == null) {
 			throw new IllegalArgumentException(
-			        "No attribute type domain could be guessed from the CSV line: '" + line.toString() + "'.");
+			        "No attribute type domain could be guessed from the CSV line:" + line.toString());
 		}
 		return type;
 	}
@@ -30,8 +30,7 @@ public class AttributeTypeCsvLineHandlerImpl implements AttributeTypeCsvLineHand
 		AttributeTypeEntity type = getAttributeType(line);
 		BaseAttributeType<?> attType = newType(type);
 		if (attType == null) {
-			throw new IllegalArgumentException(
-			        "No attribute type could be guessed from the CSV line: '" + line.toString() + "'.");
+			throw new IllegalArgumentException("No attribute type could be guessed from the CSV line:" + line.toString());
 		}
 		return attType;
 	}
