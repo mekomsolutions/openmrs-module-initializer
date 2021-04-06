@@ -52,7 +52,7 @@ public class Validator {
 	
 	public static final String ARG_CIEL_FILE = "ciel-file";
 	
-	public static final String ARG_LOG_DIR = "log-file";
+	public static final String ARG_LOG_DIR = "log-dir";
 	
 	public static final String ARG_HELP = "help";
 	
@@ -135,8 +135,8 @@ public class Validator {
 		        .desc("The path to the OpenMRS config directory.").build());
 		options.addOption(Option.builder("l").longOpt(ARG_CIEL_FILE).hasArg().argName("FILE")
 		        .desc("The path to the CIEL .sql file.").build());
-		options.addOption(
-		    Option.builder("f").longOpt(ARG_LOG_DIR).hasArg().argName("FILE").desc("The path to output log file.").build());
+		options.addOption(Option.builder("f").longOpt(ARG_LOG_DIR).hasArg().argName("DIR")
+		        .desc("The path to the log file directory.").build());
 		options.addOption(Option.builder("d").longOpt(ARG_DOMAINS).hasArg().argName("CSV")
 		        .desc("A CSV string of selected domains to selectively include, eg.: metadatasharing,concepts,roles ;"
 		                + "\nor to selectively exclude, eg.: '!metadatasharing,concepts,roles' ;"
