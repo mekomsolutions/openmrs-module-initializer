@@ -71,8 +71,8 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 			if (parentLocation != null) {
 				loc.setParentLocation(parentLocation);
 			} else {
-				throw new IllegalArgumentException(
-				        "Specified parent location with id '" + parentId + "' for '" + loc.getName() + "' not found ");
+				throw new IllegalArgumentException("The parent location for '" + loc.getName() + "' referenced by '"
+				        + parentId + "' does not point to any known location.");
 			}
 		}
 		
