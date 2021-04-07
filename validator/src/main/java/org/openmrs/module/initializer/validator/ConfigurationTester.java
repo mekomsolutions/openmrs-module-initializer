@@ -1,10 +1,7 @@
 package org.openmrs.module.initializer.validator;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_EXCLUDE;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
@@ -135,11 +132,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	public ConfigurationTester() {
 		super();
 		
-		assertThat("No arguments were provided to the configuration validator.", cmdLine.getOptions(), not(emptyArray()));
-		assertThat("The path to an OpenMRS configuration directory should be provided.", cmdLine.hasOption(ARG_CONFIG_DIR),
-		    is(true));
-		
-		configDirPath = Validator.cmdLine.getOptionValue(ARG_CONFIG_DIR);
+		configDirPath = cmdLine.getOptionValue(ARG_CONFIG_DIR);
 		if (cmdLine.hasOption(ARG_CIEL_FILE)) {
 			cielFilePath = cmdLine.getOptionValue(ARG_CIEL_FILE);
 		}
