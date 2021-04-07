@@ -139,5 +139,10 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Location loc = ls.getLocationByUuid("cbaaaab4-d960-4ae9-9b6a-8983fbd947b6");
 			Assert.assertThat(loc.getRetired(), is(true));
 		}
+		// Verify that location with an invalid parent isn't created
+		{
+			Location loc = ls.getLocationByUuid("2b9824a3-92f0-4966-8f34-1b105624b267");
+			Assert.assertNull(loc);
+		}
 	}
 }
