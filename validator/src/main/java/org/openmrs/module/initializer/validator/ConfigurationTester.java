@@ -1,10 +1,7 @@
 package org.openmrs.module.initializer.validator;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_EXCLUDE;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
@@ -26,6 +23,7 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -57,14 +55,20 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		return Paths.get(configDirPath).getParent().toString();
 	}
 	
-	protected void setMariaDB4jProps(Properties props) throws ManagedProcessException {
+	protected void setMariaDB4jProps(Properties props) throws ManagedProcessException, URISyntaxException {
 		DB db = DB.newEmbeddedDB(DBConfigurationBuilder.newBuilder().build());
 		db.start();
 		db.createDB("openmrs");
 		
-		props.setProperty(Environment.DIALECT, MySQLDialect.class.getName());
 		//		props.setProperty(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-		props.setProperty(Environment.URL, db.getConfiguration().getURL("openmrs"));
+		props.setProperty(Environment.DIALECT, MySQLDialect.class.getName());
+		
+		String url = db.getConfiguration().getURL("openmrs");
+		URIBuilder ub = new URIBuilder(StringUtils.substringAfter(url, "jdbc:"));
+		ub.setParameter("serverTimezone", "UTC");
+		url = "jdbc:" + ub.build().toString();
+		props.setProperty(Environment.URL, url);
+		
 		props.setProperty(Environment.USER, "root");
 		props.setProperty(Environment.PASS, "");
 		
@@ -82,8 +86,8 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		try {
 			setMariaDB4jProps(runtimeProperties);
 		}
-		catch (ManagedProcessException e) {
-			log.error("mariaDB4j could not be setup, reverting to defaults.", e);
+		catch (ManagedProcessException | URISyntaxException e) {
+			log.error("mariaDB4j could not be setup properly, reverting to OpenMRS defaults.", e);
 			runtimeProperties = super.getRuntimeProperties();
 		}
 		
@@ -128,11 +132,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	public ConfigurationTester() {
 		super();
 		
-		assertThat("No arguments were provided to the configuration validator.", cmdLine.getOptions(), not(emptyArray()));
-		assertThat("The path to an OpenMRS configuration directory should be provided.", cmdLine.hasOption(ARG_CONFIG_DIR),
-		    is(true));
-		
-		configDirPath = Validator.cmdLine.getOptionValue(ARG_CONFIG_DIR);
+		configDirPath = cmdLine.getOptionValue(ARG_CONFIG_DIR);
 		if (cmdLine.hasOption(ARG_CIEL_FILE)) {
 			cielFilePath = cmdLine.getOptionValue(ARG_CIEL_FILE);
 		}

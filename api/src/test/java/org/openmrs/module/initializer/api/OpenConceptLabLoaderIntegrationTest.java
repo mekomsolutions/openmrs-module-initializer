@@ -29,7 +29,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	
 	@Autowired
 	private OpenConceptLabLoader loader;
-
+	
 	@SuppressWarnings("unchecked")
 	@BeforeClass
 	public static void setupDaemonToken() {
@@ -38,10 +38,11 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Field field = ModuleFactory.class.getDeclaredField("daemonTokens");
 			field.setAccessible(true);
 			daemonTokens = (Map<String, DaemonToken>) field.get(null);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-
+		
 		DaemonToken daemonToken = new DaemonToken("openconceptlab");
 		daemonTokens.put(daemonToken.getId(), daemonToken);
 		new OpenConceptLabActivator().setDaemonToken(daemonToken);
@@ -53,11 +54,11 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Concept c = Context.getConceptService().getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
 			Assert.assertNull(c);
 		}
-
+		
 		loader.load();
 		
 		{
-			Concept c  = Context.getConceptService().getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
+			Concept c = Context.getConceptService().getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
 			Assert.assertEquals(2, c.getSetMembers().size());
 			Assert.assertTrue(c.getSet());
 		}

@@ -52,7 +52,7 @@ public class Validator {
 	
 	public static final String ARG_CIEL_FILE = "ciel-file";
 	
-	public static final String ARG_LOG_DIR = "log-file";
+	public static final String ARG_LOG_DIR = "log-dir";
 	
 	public static final String ARG_HELP = "help";
 	
@@ -135,8 +135,8 @@ public class Validator {
 		        .desc("The path to the OpenMRS config directory.").build());
 		options.addOption(Option.builder("l").longOpt(ARG_CIEL_FILE).hasArg().argName("FILE")
 		        .desc("The path to the CIEL .sql file.").build());
-		options.addOption(
-		    Option.builder("f").longOpt(ARG_LOG_DIR).hasArg().argName("FILE").desc("The path to output log file.").build());
+		options.addOption(Option.builder("f").longOpt(ARG_LOG_DIR).hasArg().argName("DIR")
+		        .desc("The path to the log file directory.").build());
 		options.addOption(Option.builder("d").longOpt(ARG_DOMAINS).hasArg().argName("CSV")
 		        .desc("A CSV string of selected domains to selectively include, eg.: metadatasharing,concepts,roles ;"
 		                + "\nor to selectively exclude, eg.: '!metadatasharing,concepts,roles' ;"
@@ -245,17 +245,12 @@ public class Validator {
 	 * @param args The Validator CLI args.
 	 * @return The JUnit Result object.
 	 */
-	public static Result getJUnitResult(String[] args) throws URISyntaxException, ParseException {
+	public static Result getJUnitResult(String[] args) throws IllegalArgumentException, URISyntaxException, ParseException {
+		// default logging
+		setupLog4j(INFO, null);
 		
 		Options options = getCLIOptions();
 		cmdLine = new DefaultParser().parse(options, args);
-		
-		if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption(ARG_HELP)) {
-			HelpFormatter f = new HelpFormatter();
-			f.setWidth(f.getWidth() * 2);
-			f.printHelp(getJarFile().getName(), options);
-			return new Result();
-		}
 		
 		Level level = INFO;
 		if (cmdLine.hasOption(ARG_VERBOSE)) {
@@ -266,6 +261,17 @@ public class Validator {
 		// setting up logging
 		setLogFilePath(cmdLine.getOptionValue(ARG_LOG_DIR));
 		setupLog4j(level, getLogFilePath());
+		
+		if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption(ARG_HELP)) {
+			HelpFormatter f = new HelpFormatter();
+			f.setWidth(f.getWidth() * 2);
+			f.printHelp(getJarFile().getName(), options);
+			return new Result();
+		}
+		
+		if (!cmdLine.hasOption(ARG_CONFIG_DIR)) {
+			throw new IllegalArgumentException("The path to the configuration directory was not provided.");
+		}
 		
 		unsafe = cmdLine.hasOption(ARG_UNSAFE) ? true : false;
 		
