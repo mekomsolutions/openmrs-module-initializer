@@ -188,11 +188,11 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	 * Saves the instances created out of a list of CSV lines.
 	 * 
 	 * @param lines The CSV lines to process
-	 * @return The failed CSV lines
+	 * @return The resulting CsvParserResult instance.
 	 */
-	public List<String[]> process(List<String[]> lines) {
+	public CsvParserResult process(List<String[]> lines) {
 		
-		final List<String[]> failedLines = new ArrayList<String[]>();
+		CsvParserResult result = new CsvParserResult();
 		
 		int saved = 0;
 		for (String[] line : lines) {
@@ -206,14 +206,12 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 				}
 			}
 			catch (Exception e) {
-				failedLines.add(line);
-				log.warn("An OpenMRS object could not be constructed or saved from the following CSV line:"
-				        + new CsvLine(getHeaderLine(), line).prettyPrint(),
-				    e);
+				result.addRemainingLine(line);
+				result.addError(new CsvLine(getHeaderLine(), line), e);
 			}
 		}
 		
-		return failedLines;
+		return result;
 	}
 	
 	/**

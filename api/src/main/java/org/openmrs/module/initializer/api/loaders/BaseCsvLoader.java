@@ -14,6 +14,7 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
+import org.openmrs.module.initializer.api.CsvParserResult;
 import org.openmrs.module.initializer.api.OrderedCsvFile;
 import org.openmrs.module.initializer.api.OrderedFile;
 import org.openmrs.module.initializer.api.utils.Utils;
@@ -59,21 +60,31 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		
 		// processing while possible
 		int lastFailCount = 0;
+		CsvParserResult result = new CsvParserResult();
 		while (!isEmpty(remainingLines) && lastFailCount != remainingLines.size()) {
 			log.info("Attempting to process " + remainingLines.size() + " CSV lines that have not been processed yet...");
 			lastFailCount = remainingLines.size();
-			remainingLines = parser.process(remainingLines);
+			result = parser.process(remainingLines);
+			remainingLines = result.getRemainingLines();
 		}
 		
 		final File file = getLoadedFile();
-		// summary logging
+		// success logging
 		if (isEmpty(remainingLines)) {
 			log.info(file.getName() + " ('" + getDomainName() + "' domain) was entirely successfully processed.");
 			log.info(totalCount + " entities were saved.");
 			return;
 		}
+		// logging the exceptions collected by the parser
+		else {
+			result.getErrorDetails().forEach(ed -> {
+				log.warn("An OpenMRS object could not be constructed or saved from the following CSV line:"
+				        + ed.getCsvLine().prettyPrint(),
+				    ed.getException());
+			});
+		}
 		
-		// remaining errors
+		// errors logging summary
 		final List<CsvLine> errLines = remainingLines.stream().map(line -> new CsvLine(parser.getHeaderLine(), line))
 		        .collect(Collectors.toList());
 		StringBuilder sb = new StringBuilder();
