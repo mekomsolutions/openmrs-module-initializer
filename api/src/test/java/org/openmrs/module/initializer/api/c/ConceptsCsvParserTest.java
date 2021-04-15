@@ -115,7 +115,7 @@ public class ConceptsCsvParserTest {
 		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)), new ConceptAttributeLineProcessor(cs));
 		parser.setInputStream(is);
 		
-		List<String[]> lines = parser.process(parser.getLines()).getRemainingLines();
+		List<String[]> lines = parser.process(parser.getLines()).getFailingLines();
 		
 		// verif
 		Assert.assertEquals(1, lines.size());
@@ -134,7 +134,7 @@ public class ConceptsCsvParserTest {
 		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)), new ConceptAttributeLineProcessor(cs));
 		parser.setInputStream(is);
 		
-		List<String[]> lines = parser.process(parser.getLines()).getRemainingLines();
+		List<String[]> lines = parser.process(parser.getLines()).getFailingLines();
 		
 		// verify
 		Assert.assertEquals(1, lines.size());
@@ -151,16 +151,16 @@ public class ConceptsCsvParserTest {
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_uuid.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(1, parser.process(parser.getLines()).getRemainingLines().size());
+		Assert.assertEquals(1, parser.process(parser.getLines()).getFailingLines().size());
 		
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_fsn.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(1, parser.process(parser.getLines()).getRemainingLines().size());
+		Assert.assertEquals(1, parser.process(parser.getLines()).getFailingLines().size());
 		
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_shortname.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(1, parser.process(parser.getLines()).getRemainingLines().size());
+		Assert.assertEquals(1, parser.process(parser.getLines()).getFailingLines().size());
 	}
 }

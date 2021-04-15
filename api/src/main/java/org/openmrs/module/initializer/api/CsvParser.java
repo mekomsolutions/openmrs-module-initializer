@@ -190,9 +190,9 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	 * @param lines The CSV lines to process
 	 * @return The resulting CsvParserResult instance.
 	 */
-	public CsvParserResult process(List<String[]> lines) {
+	public CsvFailingLines process(List<String[]> lines) {
 		
-		CsvParserResult result = new CsvParserResult();
+		CsvFailingLines result = new CsvFailingLines();
 		
 		int saved = 0;
 		for (String[] line : lines) {
@@ -206,8 +206,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 				}
 			}
 			catch (Exception e) {
-				result.addRemainingLine(line);
-				result.addError(new CsvLine(getHeaderLine(), line), e);
+				result.addFailingLine(new CsvLine(getHeaderLine(), line), e);
 			}
 		}
 		
