@@ -135,6 +135,8 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.1.0
+* (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.
+* (_For devs._) Introduced `CsvFailingLines` for a better management of the outcome of `CsvParser#process`.
 * Introduced safe and unsafe API modes to suit either app runtime loading or early failure loading for CI.
 * (_For devs._) Introduced `BaseFileLoader` and `BaseInputStreamLoader` as part of a better streamlined loading framework.
 * _Initialize Validator_ a standalone fatjar to make dry runs of OpenMRS configs.
