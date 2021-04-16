@@ -61,7 +61,7 @@
         <idgenVersion>4.6.0</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
-		<openconceptlabVersion>1.2.6-SNAPSHOT</openconceptlabVersion>
+        <openconceptlabVersion>1.2.6-SNAPSHOT</openconceptlabVersion>
         <!-- Modules compatibility > Core 2.3.0 -->
         <appframeworkVersion>2.14.0</appframeworkVersion>
         <datafilterVersion>1.0.0</datafilterVersion>
@@ -186,7 +186,7 @@
             <version>${metadatasharingVersion}</version>
             <scope>provided</scope>
         </dependency>
-           <dependency>
+        <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>openconceptlab-api</artifactId>
             <version>${openconceptlabVersion}</version>

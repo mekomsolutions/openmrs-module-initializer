@@ -19,6 +19,7 @@ public enum Domain {
 	ATTRIBUTE_TYPES,
 	LOCATIONS,
 	BAHMNI_FORMS,
+	OCL,
 	CONCEPTS,
 	PROGRAMS,
 	PROGRAM_WORKFLOWS,
@@ -36,8 +37,7 @@ public enum Domain {
 	METADATA_SETS,
 	METADATA_SET_MEMBERS,
 	METADATA_TERM_MAPPINGS,
-	HTML_FORMS,
-	OCL;
+	HTML_FORMS;
 
 	public int getOrder() {
 		return ArrayUtils.indexOf(values(), this) + 1;

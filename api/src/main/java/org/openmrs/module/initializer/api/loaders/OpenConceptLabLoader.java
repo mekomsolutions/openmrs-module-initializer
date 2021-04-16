@@ -6,10 +6,9 @@ import java.util.zip.ZipFile;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.openconceptlab.importer.Importer;
-
 import org.openmrs.api.context.Context;
 
-@OpenmrsProfile(modules = { "openconceptlab:*" })
+@OpenmrsProfile(modules = { "ocl:*" })
 public class OpenConceptLabLoader extends BaseFileLoader {
 	
 	private Importer importer;

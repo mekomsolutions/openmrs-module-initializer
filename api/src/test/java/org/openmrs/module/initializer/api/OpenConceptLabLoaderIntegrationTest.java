@@ -10,10 +10,9 @@
 package org.openmrs.module.initializer.api;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openmrs.api.context.Context;
+import org.openmrs.api.ConceptService;
 import org.openmrs.module.DaemonToken;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -29,7 +28,10 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	
 	@Autowired
 	private OpenConceptLabLoader loader;
-
+	
+	@Autowired
+	private ConceptService conceptService;
+	
 	@SuppressWarnings("unchecked")
 	@BeforeClass
 	public static void setupDaemonToken() {
@@ -50,16 +52,16 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	@Test
 	public void load_shouldImportOCLPackages() {
 		{
-			Concept c = Context.getConceptService().getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
+			Concept c = conceptService.getConceptByUuid("5821b91383ac240007c3c0f3");
 			Assert.assertNull(c);
 		}
 
 		loader.load();
 		
 		{
-			Concept c  = Context.getConceptService().getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
-			Assert.assertEquals(2, c.getSetMembers().size());
-			Assert.assertTrue(c.getSet());
+			Concept c = conceptService.getConceptByUuid("5821b91383ac240007c3c0f3");
+			Assert.assertEquals("TETANUS BOOSTER", c.getName());
+			Assert.assertEquals("Procedure", c.getConceptClass());
 		}
 	}
 }
