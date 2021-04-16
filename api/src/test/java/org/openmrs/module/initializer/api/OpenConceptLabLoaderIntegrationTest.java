@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.DaemonToken;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -21,6 +22,7 @@ import org.openmrs.module.openconceptlab.OpenConceptLabActivator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
+import java.util.Locale;
 import java.util.Map;
 import org.openmrs.Concept;
 
@@ -31,6 +33,10 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	
 	@Autowired
 	private ConceptService conceptService;
+	
+	private Locale localeEn = Locale.ENGLISH;
+	
+	private Locale localeFr = new Locale("fr");
 	
 	@SuppressWarnings("unchecked")
 	@BeforeClass
@@ -52,17 +58,72 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	
 	@Test
 	public void load_shouldImportOCLPackages() {
+		Concept c = null;
 		{
-			Concept c = conceptService.getConceptByUuid("5821b91383ac240007c3c0f3");
-			Assert.assertNull(c);
+			c = conceptService.getConceptByUuid("db1741f033144371a191649f98454148");
+			Assert.assertEquals("Text", c.getDatatype());
+			Assert.assertFalse(c.getRetired());
 		}
 		
 		loader.load();
-		
 		{
-			Concept c = conceptService.getConceptByUuid("5821b91383ac240007c3c0f3");
-			Assert.assertEquals("TETANUS BOOSTER", c.getName());
-			Assert.assertEquals("Procedure", c.getConceptClass());
+			// Verif by name
+			Context.setLocale(localeEn);
+			c = conceptService.getConceptByName("VACCINE MANUFACTURER");
+			Assert.assertNotNull(c);
+			Assert.assertEquals(0, c.getDescriptions().size());
+			Assert.assertEquals("Finding", c.getConceptClass().getName());
+			Assert.assertEquals("Text", c.getDatatype().getName());
+			
+			// Verify by UUID
+			Context.setLocale(localeEn);
+			c = conceptService.getConceptByUuid("98b5c08e2069432da950878ccea81d19");
+			Assert.assertNotNull(c);
+			Assert.assertEquals("YELLOW FEVER VACCINATION", c.getName(localeEn).getName());
+			Assert.assertEquals("Vaccine given for Yellow Fever.", c.getDescription().toString());
+			Assert.assertEquals("Drug", c.getConceptClass().getName());
+			Assert.assertEquals("N/A", c.getDatatype().getName());
+			
+			// Verify in another locale
+			Context.setLocale(localeFr);
+			c = conceptService.getConceptByName("Fabricant du vaccin");
+			Assert.assertNotNull(c);
+			Assert.assertEquals(0, c.getDescriptions().size());
+			Assert.assertEquals("Finding", c.getConceptClass().getName());
+			Assert.assertEquals("Text", c.getDatatype().getName());
+			
+			// Verify just one name is enough
+			Context.setLocale(localeEn);
+			c = conceptService.getConceptByName("PNEUMOCOCCAL VACCINE");
+			Assert.assertNotNull(c);
+			Assert.assertEquals(3, c.getNames().size());
+			Assert.assertEquals(0, c.getShortNames().size());
+			Assert.assertEquals(0, c.getDescriptions().size());
+			Assert.assertEquals("Drug", c.getConceptClass().getName());
+			Assert.assertEquals("N/A", c.getDatatype().getName());
+			
+			// Failed ones
+			Context.setLocale(localeEn);
+			Assert.assertNull(conceptService.getConceptByUuid("db2f5104-3171-11e7-93ae-92361f002670"));
+			Assert.assertNull(conceptService.getConceptByName("MEASLES VACCINATION"));
+			Assert.assertNull(conceptService.getConceptByName("db2f5460-3171-11e7-93ae-92361f002672"));
+			Assert.assertNull(conceptService.getConceptByName("HEPATITIS B VACCINATION"));
+			Assert.assertNull(conceptService.getConceptByUuid("00b29984-3183-11e7-93ae-92361f002679"));
+			
+			// Retired one
+			c = conceptService.getConceptByUuid("ed92472255674a4095559f2e0daad26d");
+			Assert.assertTrue(c.isRetired());
+			
+			// Un-retire one
+			Context.setLocale(localeEn);
+			c = conceptService.getConceptByUuid("f1f09c2f1e164804bd80f5df9e7f8dac");
+			Assert.assertNotNull(c);
+			Assert.assertFalse(c.getRetired());
+			Assert.assertEquals("DIPTHERIA TETANUS BOOSTER", c.getFullySpecifiedName(localeEn).getName());
+			Assert.assertEquals("Drug", c.getConceptClass().getName());
+			Assert.assertEquals("N/A", c.getDatatype().getName());
+			
 		}
+		
 	}
 }

@@ -6,19 +6,13 @@ import java.util.zip.ZipFile;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.openconceptlab.importer.Importer;
-import org.openmrs.api.context.Context;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @OpenmrsProfile(modules = { "ocl:*" })
 public class OpenConceptLabLoader extends BaseFileLoader {
 	
+	@Autowired
 	private Importer importer;
-	
-	private Importer getImporter() {
-		if (importer == null) {
-			importer = Context.getRegisteredComponent("openconceptlab.importer", Importer.class);
-		}
-		return importer;
-	}
 	
 	@Override
 	protected Domain getDomain() {
@@ -33,7 +27,7 @@ public class OpenConceptLabLoader extends BaseFileLoader {
 	@Override
 	protected void load(File file) throws Exception {
 		ZipFile zip = new ZipFile(file);
-		getImporter().run(zip);
+		importer.run(zip);
 	}
 	
 }
