@@ -8,7 +8,7 @@ import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.openconceptlab.importer.Importer;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@OpenmrsProfile(modules = { "ocl:*" })
+@OpenmrsProfile(modules = { "openconceptlab:1.2.6-SNAPSHOT" })
 public class OpenConceptLabLoader extends BaseFileLoader {
 	
 	@Autowired
