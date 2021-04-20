@@ -57,9 +57,10 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	
 	@Test
 	public void load_shouldImportOCLPackages() {
-		Concept c = null;
+		// Verif setup
+		
 		{
-			c = conceptService.getConceptByUuid("db1741f033144371a191649f98454148");
+			Concept c = conceptService.getConceptByUuid("1419AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			Assert.assertEquals("Text", c.getDatatype());
 			Assert.assertFalse(c.getRetired());
 		}
@@ -68,7 +69,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 		{
 			// Verif by name
 			Context.setLocale(localeEn);
-			c = conceptService.getConceptByName("VACCINE MANUFACTURER");
+			Concept c = conceptService.getConceptByName("VACCINE MANUFACTURER");
 			Assert.assertNotNull(c);
 			Assert.assertEquals(0, c.getDescriptions().size());
 			Assert.assertEquals("Finding", c.getConceptClass().getName());
@@ -76,7 +77,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			
 			// Verify by UUID
 			Context.setLocale(localeEn);
-			c = conceptService.getConceptByUuid("98b5c08e2069432da950878ccea81d19");
+			c = conceptService.getConceptByUuid("3004BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 			Assert.assertNotNull(c);
 			Assert.assertEquals("YELLOW FEVER VACCINATION", c.getName(localeEn).getName());
 			Assert.assertEquals("Vaccine given for Yellow Fever.", c.getDescription().toString());
@@ -110,12 +111,12 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertNull(conceptService.getConceptByUuid("00b29984-3183-11e7-93ae-92361f002679"));
 			
 			// Retired one
-			c = conceptService.getConceptByUuid("ed92472255674a4095559f2e0daad26d");
+			c = conceptService.getConceptByUuid("83531AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			Assert.assertTrue(c.isRetired());
 			
 			// Un-retire one
 			Context.setLocale(localeEn);
-			c = conceptService.getConceptByUuid("f1f09c2f1e164804bd80f5df9e7f8dac");
+			c = conceptService.getConceptByUuid("17AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			Assert.assertNotNull(c);
 			Assert.assertFalse(c.getRetired());
 			Assert.assertEquals("DIPTHERIA TETANUS BOOSTER", c.getFullySpecifiedName(localeEn).getName());
