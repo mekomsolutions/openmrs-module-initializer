@@ -218,6 +218,11 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		loader = conceptClassesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+
+		previousLoader = loader;
+		loader = openConceptLabLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
 		previousLoader = loader;
 		loader = conceptsLoader;
@@ -306,11 +311,6 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		
 		previousLoader = loader;
 		loader = htmlFormsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = openConceptLabLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
