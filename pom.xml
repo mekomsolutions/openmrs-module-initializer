@@ -86,7 +86,7 @@
             <type>jar</type>
         </dependency>
 
-        <!-- JUnit, Powermock  -->
+        <!-- JUnit, Powermock -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
