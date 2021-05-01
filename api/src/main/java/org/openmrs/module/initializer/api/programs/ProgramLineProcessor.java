@@ -1,5 +1,6 @@
 package org.openmrs.module.initializer.api.programs;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Program;
 import org.openmrs.api.ConceptService;
@@ -21,8 +22,7 @@ public class ProgramLineProcessor extends BaseLineProcessor<Program> {
 	private ConceptService conceptService;
 	
 	/**
-	 * @param headerLine The header line the processor will refer to.
-	 * @param service
+	 * @param conceptService
 	 */
 	@Autowired
 	public ProgramLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
@@ -35,9 +35,16 @@ public class ProgramLineProcessor extends BaseLineProcessor<Program> {
 		Concept programConcept = Utils.fetchConcept(line.get(HEADER_CONCEPT_PROGRAM), conceptService);
 		program.setConcept(programConcept);
 		
-		String programName = Utils.getBestMatchName(programConcept, Context.getLocale());
+		String programName = line.getString(HEADER_NAME);
+		if (StringUtils.isBlank(programName)) {
+			programName = Utils.getBestMatchName(programConcept, Context.getLocale());
+		}
 		program.setName(programName);
-		String proDescription = Utils.getBestMatchDescription(programConcept, Context.getLocale());
+		
+		String proDescription = line.getString(HEADER_DESC);
+		if (StringUtils.isBlank(proDescription)) {
+			proDescription = Utils.getBestMatchDescription(programConcept, Context.getLocale());
+		}
 		program.setDescription(proDescription);
 		
 		Concept outcomeConcept = Utils.fetchConcept(line.get(HEADER_OUTCOMES_CONCEPT), conceptService);
