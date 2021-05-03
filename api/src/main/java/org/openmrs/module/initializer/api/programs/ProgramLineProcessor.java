@@ -35,17 +35,17 @@ public class ProgramLineProcessor extends BaseLineProcessor<Program> {
 		Concept programConcept = Utils.fetchConcept(line.get(HEADER_CONCEPT_PROGRAM), conceptService);
 		program.setConcept(programConcept);
 		
-		String programName = line.getString(HEADER_NAME);
-		if (StringUtils.isBlank(programName)) {
-			programName = Utils.getBestMatchName(programConcept, Context.getLocale());
+		String name = line.getString(HEADER_NAME);
+		if (StringUtils.isBlank(name)) {
+			name = Utils.getBestMatchName(programConcept, Context.getLocale());
 		}
-		program.setName(programName);
+		program.setName(name);
 		
-		String proDescription = line.getString(HEADER_DESC);
-		if (StringUtils.isBlank(proDescription)) {
-			proDescription = Utils.getBestMatchDescription(programConcept, Context.getLocale());
+		String description = line.getString(HEADER_DESC);
+		if (StringUtils.isBlank(description)) {
+			description = Utils.getBestMatchDescription(programConcept, Context.getLocale());
 		}
-		program.setDescription(proDescription);
+		program.setDescription(description);
 		
 		Concept outcomeConcept = Utils.fetchConcept(line.get(HEADER_OUTCOMES_CONCEPT), conceptService);
 		program.setOutcomesConcept(outcomeConcept);
