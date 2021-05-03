@@ -15,10 +15,10 @@ There is currently only one format for the program CSV line, here is an example:
 <br/>Let's review the headers.
 
 ###### Header `Name`
-(Optional) If specified, this will be set to the name of the concept, otherwise the name will be inferred from the program concept name
+(Optional) If specified, this will be set as the program name, otherwise the program name will be inferred from the program concept's name
 
 ###### Header `Description`
-(Optional) If specified, this will be set to the description of the concept, otherwise the name will be inferred from the program concept description
+(Optional) If specified, this will be set as the program description, otherwise the program description will be inferred from the program concept's description
 
 ###### Header `Program concept`
 This is a reference (UUID, same as mapping or name) to the underlying concept that defines the program. The program name and description will be inferred from this concept and cannot be provided directly.
