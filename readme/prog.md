@@ -8,12 +8,17 @@ programs/
 ```
 There is currently only one format for the program CSV line, here is an example:
 
-| <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Program concept</sub> | <sub>Outcomes concept</sub> | <sub>_order:1000</sub> |
+| <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Name</sub> | <sub>Description</sub> | <sub>Program concept</sub> | <sub>Outcomes concept</sub> | <sub>_order:1000</sub> |
 | - | - | - | - | - |
-| <sub>eae98b4c-e195-403b-b34a-82d94103b2c0</sub> | | <sub>TB Program</sub> | <sub>TB Program Outcomes</sub> | |
-
+| <sub>eae98b4c-e195-403b-b34a-82d94103b2c0</sub> | | TB Program | Program for tracking TB patients | <sub>Tuberculosis Treatment Program</sub> | <sub>TB Program Outcomes</sub> | |
 
 <br/>Let's review the headers.
+
+###### Header `Name`
+(Optional) If specified, this will be set as the program name, otherwise the program name will be inferred from the program concept's name
+
+###### Header `Description`
+(Optional) If specified, this will be set as the program description, otherwise the program description will be inferred from the program concept's description
 
 ###### Header `Program concept`
 This is a reference (UUID, same as mapping or name) to the underlying concept that defines the program. The program name and description will be inferred from this concept and cannot be provided directly.
