@@ -65,6 +65,53 @@ public class LocationLineProcessorTest {
 		Assert.assertTrue(names.contains("Login Location"));
 		Assert.assertTrue(names.contains("Visit Location"));
 	}
+
+	@Test
+	public void fill_shouldLeaveUnspecifiedTagsIntactWhenUsingTagPrefixHeaders() {
+
+		// Setup
+		String[] headerLine = { "Tag|Visit Location" };
+		String[] line = { "true" };
+		Location loc = new Location();
+		loc.addTag(ls.getLocationTagByName("Login Location"));
+
+		// Replay
+		LocationLineProcessor p = new LocationLineProcessor(ls, new LocationTagListParser(ls));
+		Location c = p.fill(loc, new CsvLine(headerLine, line));
+
+		// Verif
+		Set<LocationTag> tags = c.getTags();
+		Assert.assertEquals(2, tags.size());
+		Set<String> names = new HashSet<String>();
+		for (LocationTag t : tags) {
+			names.add(t.getName());
+		}
+		Assert.assertTrue(names.contains("Login Location"));
+		Assert.assertTrue(names.contains("Visit Location"));
+	}
+
+	@Test
+	public void fill_shouldClearOldTagsWhenUsingTagHeader() {
+		// Setup
+		String[] headerLine = { "Tags" };
+		String[] line = { "Visit Location" };
+		Location loc = new Location();
+		loc.addTag(ls.getLocationTagByName("Login Location"));
+
+		// Replay
+		LocationLineProcessor p = new LocationLineProcessor(ls, new LocationTagListParser(ls));
+		Location c = p.fill(loc, new CsvLine(headerLine, line));
+
+		// Verif
+		Set<LocationTag> tags = c.getTags();
+		Assert.assertEquals(1, tags.size());
+		Set<String> names = new HashSet<String>();
+		for (LocationTag t : tags) {
+			names.add(t.getName());
+		}
+		Assert.assertFalse(names.contains("Login Location"));
+		Assert.assertTrue(names.contains("Visit Location"));
+	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void fill_shouldFailIfParentDoesNotExist() {

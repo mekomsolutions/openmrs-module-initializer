@@ -76,9 +76,9 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 			}
 		}
 		
-		loc.setTags(null);
 		String tags = line.getString(HEADER_TAGS, "");
 		if (!StringUtils.isEmpty(tags)) {
+			loc.setTags(null);
 			loc.setTags(new HashSet<LocationTag>(tagListParser.parseList(tags)));
 		}
 		setLocationTagsFromPrefixHeaders(loc, line);
@@ -100,18 +100,21 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 	
 	private void setLocationTagsFromPrefixHeaders(Location location, CsvLine line) {
 		
-		Consumer<String> processTagData = tagName -> {
-			LocationTag tag = locationService.getLocationTagByName(tagName);
-			if (tag == null) {
-				throw new IllegalArgumentException(
-				        "No location tag '" + tagName + "' exists for header '" + HEADER_TAG_PREFIX + tagName + "'");
+		for (String header : line.getHeaderLine()) {
+			if (StringUtils.startsWithIgnoreCase(header, HEADER_TAG_PREFIX)) {
+				String tagName = StringUtils.removeStartIgnoreCase(header, HEADER_TAG_PREFIX);
+				LocationTag tag = locationService.getLocationTagByName(tagName);
+				if (tag == null) {
+					throw new IllegalArgumentException(
+							"No location tag '" + tagName + "' exists for header '" + HEADER_TAG_PREFIX + tagName + "'");
+				}
+				Boolean value = line.getBool(header);
+				if (Boolean.TRUE.equals(value)) {
+					location.addTag(tag);
+				} else if (Boolean.TRUE.equals(location.hasTag(tagName))) {
+					location.removeTag(tag);
+				}
 			}
-			location.addTag(tag);
-		};
-		
-		// process the value for each tag header
-		Arrays.stream(line.getHeaderLine()).filter(h -> StringUtils.startsWithIgnoreCase(h, HEADER_TAG_PREFIX))
-		        .filter(h -> Boolean.TRUE.equals(line.getBool(h)))
-		        .map(h -> StringUtils.removeStartIgnoreCase(h, HEADER_TAG_PREFIX)).forEach(processTagData);
+		}
 	}
 }
