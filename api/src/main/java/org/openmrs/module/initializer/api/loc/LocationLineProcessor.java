@@ -106,7 +106,7 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 				LocationTag tag = locationService.getLocationTagByName(tagName);
 				if (tag == null) {
 					throw new IllegalArgumentException(
-							"No location tag '" + tagName + "' exists for header '" + HEADER_TAG_PREFIX + tagName + "'");
+					        "No location tag '" + tagName + "' exists for header '" + HEADER_TAG_PREFIX + tagName + "'");
 				}
 				Boolean value = line.getBool(header);
 				if (Boolean.TRUE.equals(value)) {

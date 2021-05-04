@@ -83,8 +83,10 @@ public class LocationAttributeLineProcessorTest {
 		// Verify
 		Collection<LocationAttribute> attributes = loc.getActiveAttributes();
 		Assert.assertEquals(2, attributes.size());
-		Assert.assertTrue("Must have attribute +1 206 555 0100", attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
-		Assert.assertTrue("Must have attribute jdoe@example.com", attributes.removeIf(a -> a.getValue().equals("jdoe@example.com")));
+		Assert.assertTrue("Must have attribute +1 206 555 0100",
+		    attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
+		Assert.assertTrue("Must have attribute jdoe@example.com",
+		    attributes.removeIf(a -> a.getValue().equals("jdoe@example.com")));
 	}
 	
 	@Test
@@ -104,8 +106,10 @@ public class LocationAttributeLineProcessorTest {
 		// Verify
 		Collection<LocationAttribute> attributes = loc.getActiveAttributes();
 		Assert.assertEquals(2, attributes.size());
-		Assert.assertTrue("Must have attribute +1 206 555 0100", attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
-		Assert.assertTrue("Must have attribute janedoe@example.com", attributes.removeIf(a -> a.getValue().equals("janedoe@example.com")));
+		Assert.assertTrue("Must have attribute +1 206 555 0100",
+		    attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
+		Assert.assertTrue("Must have attribute janedoe@example.com",
+		    attributes.removeIf(a -> a.getValue().equals("janedoe@example.com")));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
