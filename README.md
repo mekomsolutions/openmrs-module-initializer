@@ -134,6 +134,9 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ### Releases notes
 
+#### Version 2.2.0
+* 'program' domain to support `Name` and `Description` headers.
+
 #### Version 2.1.0
 * (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.
 * (_For devs._) Introduced `CsvFailingLines` for a better management of the outcome of `CsvParser#process`.
