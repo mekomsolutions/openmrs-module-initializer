@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.openmrs.module.initializer.api.BaseAttributeLineProcessor.HEADER_ATTRIBUTE_PREFIX;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
 
@@ -82,9 +83,29 @@ public class LocationAttributeLineProcessorTest {
 		// Verify
 		Collection<LocationAttribute> attributes = loc.getActiveAttributes();
 		Assert.assertEquals(2, attributes.size());
-		Object[] attributesArray = attributes.toArray();
-		Assert.assertThat(((LocationAttribute) attributesArray[0]).getValue(), is("+1 206 555 0100"));
-		Assert.assertThat(((LocationAttribute) attributesArray[1]).getValue(), is("jdoe@example.com"));
+		Assert.assertTrue("Must have attribute +1 206 555 0100", attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
+		Assert.assertTrue("Must have attribute jdoe@example.com", attributes.removeIf(a -> a.getValue().equals("jdoe@example.com")));
+	}
+	
+	@Test
+	public void fill_shouldLeaveUnspecifiedAttributesIntact() {
+		// Setup
+		String[] headerLine = { HEADER_ATTRIBUTE_PREFIX + PHONE_ATT_TYPE_UUID };
+		String[] line = { "+1 206 555 0100" };
+		Location loc = new Location();
+		LocationAttribute la = new LocationAttribute();
+		la.setAttributeType(ls.getLocationAttributeTypeByName(EMAIL_ATT_TYPE_NAME));
+		la.setValue("janedoe@example.com");
+		loc.addAttribute(la);
+		
+		// Replay
+		loc = processor.fill(loc, new CsvLine(headerLine, line));
+		
+		// Verify
+		Collection<LocationAttribute> attributes = loc.getActiveAttributes();
+		Assert.assertEquals(2, attributes.size());
+		Assert.assertTrue("Must have attribute +1 206 555 0100", attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
+		Assert.assertTrue("Must have attribute janedoe@example.com", attributes.removeIf(a -> a.getValue().equals("janedoe@example.com")));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)

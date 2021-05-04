@@ -3,6 +3,7 @@ package org.openmrs.module.initializer.api;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +27,6 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 	public T fill(T instance, CsvLine line) throws IllegalArgumentException {
 		
 		Customizable<A> attributable = (Customizable<A>) instance;
-		attributable.getAttributes().clear();
 		
 		Consumer<? super SimpleEntry<String, String>> processAttributeData = attData -> {
 			
@@ -36,6 +36,9 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 				        + "') for an attribute type that cannot be resolved by the following identifier: '"
 				        + attData.getKey() + "'");
 			}
+			
+			attributable.getAttributes().removeIf(att -> att.getAttributeType().equals(attType));
+			
 			CustomDatatype<?> datatype = CustomDatatypeUtil.getDatatype(attType.getDatatypeClassname(),
 			    attType.getDatatypeConfig());
 			Object value = datatype.fromReferenceString(attData.getValue());
