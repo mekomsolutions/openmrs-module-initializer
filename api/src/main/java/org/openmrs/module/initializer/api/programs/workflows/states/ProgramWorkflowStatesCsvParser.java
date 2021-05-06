@@ -51,6 +51,7 @@ public class ProgramWorkflowStatesCsvParser extends CsvParser<ProgramWorkflowSta
 			if (!StringUtils.isEmpty(uuid)) {
 				state.setUuid(uuid);
 			}
+			getSingleLineProcessor().fill(state, line);
 		}
 		
 		return state;
