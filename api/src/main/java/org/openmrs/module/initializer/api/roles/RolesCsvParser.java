@@ -1,6 +1,7 @@
 package org.openmrs.module.initializer.api.roles;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Role;
 import org.openmrs.api.UserService;
 import org.openmrs.module.initializer.Domain;
@@ -51,6 +52,23 @@ public class RolesCsvParser extends CsvParser<Role, BaseLineProcessor<Role>> {
 			}
 		}
 		return role;
+	}
+
+	/**
+	 * @see CsvParser#shouldFillInstance(BaseOpenmrsObject, CsvLine)
+	 * Since row does not contain a primary key id, override default behavior
+	 */
+	@Override
+	protected boolean shouldFillInstance(Role instance, CsvLine csvLine) {
+		boolean isVoidedOrRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
+		if (!isVoidedOrRetired) {
+			return true;
+		}
+		Role existingRole = userService.getRoleByUuid(csvLine.getUuid());
+		if (existingRole == null) {
+			existingRole = userService.getRole(csvLine.get(RoleLineProcessor.HEADER_ROLE_NAME, true));
+		}
+		return existingRole == null;
 	}
 	
 	@Override
