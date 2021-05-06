@@ -1,10 +1,5 @@
 package org.openmrs.module.initializer.api.datafilter.mappings;
 
-import static org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingLineProcessor.HEADER_BASIS_CLASS;
-import static org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingLineProcessor.HEADER_BASIS_UUID;
-import static org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingLineProcessor.HEADER_ENTITY_CLASS;
-import static org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingLineProcessor.HEADER_ENTITY_UUID;
-
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -17,6 +12,11 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingLineProcessor.HEADER_BASIS_CLASS;
+import static org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingLineProcessor.HEADER_BASIS_UUID;
+import static org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingLineProcessor.HEADER_ENTITY_CLASS;
+import static org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingLineProcessor.HEADER_ENTITY_UUID;
 
 @OpenmrsProfile(modules = { "datafilter:*" })
 public class DataFilterMappingsCsvParser extends CsvParser<DataFilterMapping, BaseLineProcessor<DataFilterMapping>> {
@@ -63,6 +63,11 @@ public class DataFilterMappingsCsvParser extends CsvParser<DataFilterMapping, Ba
 		}
 		
 		return new DataFilterMapping(entity, basis);
+	}
+	
+	@Override
+	protected boolean shouldFillInstance(DataFilterMapping instance, CsvLine csvLine) {
+		return true;
 	}
 	
 	@Override
