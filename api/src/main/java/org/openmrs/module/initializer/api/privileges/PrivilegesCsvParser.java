@@ -54,10 +54,10 @@ public class PrivilegesCsvParser extends CsvParser<Privilege, BaseLineProcessor<
 		
 		return privilege;
 	}
-
+	
 	/**
-	 * @see CsvParser#shouldFillInstance(BaseOpenmrsObject, CsvLine)
-	 * Since privilege does not contain a primary key id, override default behavior
+	 * @see CsvParser#shouldFillInstance(BaseOpenmrsObject, CsvLine) Since privilege does not contain a
+	 *      primary key id, override default behavior
 	 */
 	@Override
 	protected boolean shouldFillInstance(Privilege instance, CsvLine csvLine) {
