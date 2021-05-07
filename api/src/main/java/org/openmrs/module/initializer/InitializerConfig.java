@@ -9,9 +9,14 @@
  */
 package org.openmrs.module.initializer;
 
-import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
-import static org.openmrs.module.initializer.InitializerConstants.PROPS_EXCLUDE;
-import static org.openmrs.module.initializer.InitializerConstants.PROPS_SKIPCHECKSUMS;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.openmrs.api.context.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,14 +30,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.openmrs.api.context.Context;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_EXCLUDE;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_SKIPCHECKSUMS;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR;
 
 /**
  * Contains module's config.
@@ -49,6 +51,8 @@ public class InitializerConfig implements InitializingBean {
 	private Map<String, List<String>> allWildCardExclusions = new HashMap<>(); // mapped per domain
 	
 	private Boolean skipChecksums = false;
+	
+	private String startupLoadingMode = "";
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -86,6 +90,9 @@ public class InitializerConfig implements InitializingBean {
 		// checksums
 		skipChecksums = BooleanUtils
 		        .toBoolean(Optional.ofNullable(Context.getRuntimeProperties().getProperty(PROPS_SKIPCHECKSUMS)).orElse(""));
+		
+		// Startup Loading Configuration
+		startupLoadingMode = Context.getRuntimeProperties().getProperty(PROPS_STARTUP_LOAD);
 	}
 	
 	/**
@@ -129,5 +136,12 @@ public class InitializerConfig implements InitializingBean {
 	 */
 	public boolean skipChecksums() {
 		return skipChecksums;
+	}
+	
+	/**
+	 * @return how configuration should be loaded in at startup in the module activator
+	 */
+	public String getStartupLoadingMode() {
+		return StringUtils.isBlank(startupLoadingMode) ? PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR : startupLoadingMode;
 	}
 }
