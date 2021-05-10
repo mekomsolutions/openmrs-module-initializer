@@ -236,7 +236,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		//
 		// 2. Fill the instance using all line processors in their specified order, if indicated
 		//
-		if (shouldFillInstance(instance, csvLine)) {
+		if (shouldFill(instance, csvLine)) {
 			for (BaseLineProcessor<T> processor : lineProcessors) {
 				instance = processor.fill(instance, csvLine);
 				if (instance == null) {
@@ -256,11 +256,9 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	}
 	
 	/**
-	 * @return true if a given instance should be filled with the contents of the csvLine By default, if
-	 *         an object is being voided or retired, and is not a new object, it is not filled from the
-	 *         row
+	 * @return true by default, or false for existing instances that are marked to be retired/voided.
 	 */
-	protected boolean shouldFillInstance(T instance, CsvLine csvLine) {
+	protected boolean shouldFill(T instance, CsvLine csvLine) {
 		boolean isVoidedOrRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
 		return !(isVoidedOrRetired && instance.getId() != null);
 	}

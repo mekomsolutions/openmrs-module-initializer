@@ -55,11 +55,11 @@ public class RolesCsvParser extends CsvParser<Role, BaseLineProcessor<Role>> {
 	}
 	
 	/**
-	 * @see CsvParser#shouldFillInstance(BaseOpenmrsObject, CsvLine) Since row does not contain a
-	 *      primary key id, override default behavior
+	 * @see CsvParser#shouldFill(BaseOpenmrsObject, CsvLine) Since row does not contain a primary key
+	 *      id, override default behavior
 	 */
 	@Override
-	protected boolean shouldFillInstance(Role instance, CsvLine csvLine) {
+	protected boolean shouldFill(Role instance, CsvLine csvLine) {
 		boolean isVoidedOrRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
 		if (!isVoidedOrRetired) {
 			return true;

@@ -66,7 +66,7 @@ public class DataFilterMappingsCsvParser extends CsvParser<DataFilterMapping, Ba
 	}
 	
 	@Override
-	protected boolean shouldFillInstance(DataFilterMapping instance, CsvLine csvLine) {
+	protected boolean shouldFill(DataFilterMapping instance, CsvLine csvLine) {
 		return true;
 	}
 	
