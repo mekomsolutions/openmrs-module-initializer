@@ -136,6 +136,8 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 #### Version 2.2.0
 * 'program' domain to support `Name` and `Description` headers.
+* (_Bug fix_) CSV domains can create new objects that are retired
+* Added a runtime property to define the mode in which domains are loaded at startup by the Initializer Activator
 
 #### Version 2.1.0
 * (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.
