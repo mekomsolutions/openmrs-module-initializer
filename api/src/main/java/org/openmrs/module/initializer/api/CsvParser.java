@@ -1,12 +1,6 @@
 package org.openmrs.module.initializer.api;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.opencsv.CSVReader;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsObject;
@@ -18,7 +12,12 @@ import org.openmrs.module.initializer.InitializerConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opencsv.CSVReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineProcessor<T>> {
 	
@@ -235,26 +234,33 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		}
 		
 		//
-		// 2. Retiring & Unretiring
+		// 2. Fill the instance using all line processors in their specified order, if indicated
 		//
-		boolean isRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
-		if (setRetired(instance, isRetired)) {
-			return instance;
-		}
-		
-		//
-		// 3. Filling the instance using all line processors in their specified order
-		//
-		for (BaseLineProcessor<T> processor : lineProcessors) {
-			instance = processor.fill(instance, csvLine);
-			if (instance == null) {
-				throw new APIException(
-				        "An instance came null out of a line processor. Check the implementation of this line processor: "
-				                + processor.getClass().getCanonicalName());
+		if (shouldFill(instance, csvLine)) {
+			for (BaseLineProcessor<T> processor : lineProcessors) {
+				instance = processor.fill(instance, csvLine);
+				if (instance == null) {
+					throw new APIException(
+					        "An instance came null out of a line processor. Check the implementation of this line processor: "
+					                + processor.getClass().getCanonicalName());
+				}
 			}
 		}
 		
+		//
+		// 3. Ensure all retire/void properties are set correctly based on the void/retire column
+		//
+		setRetired(instance, BaseLineProcessor.getVoidOrRetire(csvLine));
+		
 		return instance;
+	}
+	
+	/**
+	 * @return true by default, or false for existing instances that are marked to be retired/voided.
+	 */
+	protected boolean shouldFill(T instance, CsvLine csvLine) {
+		boolean isVoidedOrRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
+		return !(isVoidedOrRetired && instance.getId() != null);
 	}
 	
 	/*

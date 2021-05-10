@@ -131,5 +131,14 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Assert.assertEquals(cs.getConceptByName("d4T"), d.getConcept());
 			Assert.assertEquals("30mg", d.getStrength());
 		}
+		// a new drug that starts out retired
+		{
+			Drug d = cs.getDrugByUuid("6e764d43-ae8b-11eb-8168-0242ac110002");
+			Assert.assertNotNull(d);
+			Assert.assertEquals(cs.getConceptByName("Metronidazole (new)"), d.getConcept());
+			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
+			Assert.assertEquals("250mg", d.getStrength());
+			Assert.assertTrue(d.getRetired());
+		}
 	}
 }
