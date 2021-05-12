@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
+
 @Component("initializer.locationLineProcessor")
 public class LocationLineProcessor extends BaseLineProcessor<Location> {
 	
@@ -99,19 +101,18 @@ public class LocationLineProcessor extends BaseLineProcessor<Location> {
 	}
 	
 	private void setLocationTagsFromPrefixHeaders(Location location, CsvLine line) {
-		
 		for (String header : line.getHeaderLine()) {
 			if (StringUtils.startsWithIgnoreCase(header, HEADER_TAG_PREFIX)) {
 				String tagName = StringUtils.removeStartIgnoreCase(header, HEADER_TAG_PREFIX);
 				LocationTag tag = locationService.getLocationTagByName(tagName);
 				if (tag == null) {
-					throw new IllegalArgumentException(
-					        "No location tag '" + tagName + "' exists for header '" + HEADER_TAG_PREFIX + tagName + "'");
+					throw new IllegalArgumentException("The location tag header '" + header
+					        + "' references a location tag that does not exist: '" + tagName + "'.");
 				}
-				Boolean value = line.getBool(header);
-				if (Boolean.TRUE.equals(value)) {
+				
+				if (isTrue(line.getBool(header))) {
 					location.addTag(tag);
-				} else if (Boolean.TRUE.equals(location.hasTag(tagName))) {
+				} else if (isTrue(location.hasTag(tagName))) {
 					location.removeTag(tag);
 				}
 			}
