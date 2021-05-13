@@ -137,6 +137,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 #### Version 2.2.0
 * 'program' domain to support `Name` and `Description` headers.
 * CSV parsers to actually fill _new_ objects marked to be retired or voided before creating them as retired/voided entities.
+* Existing attributes and location tags which are not specified in CSV headers are no longer removed.  
 
 #### Version 2.1.0
 * (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.
