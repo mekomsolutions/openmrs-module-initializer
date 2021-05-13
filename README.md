@@ -66,13 +66,13 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
 1. [Visit Types (CSV files)](readme/visittypes.md)
 1. [Patient identifier types (CSV files)](readme/pit.md)
+1. [Location Tags (CSV files)](readme/loctags.md)
 1. [Privileges (CSV files)](readme/priv.md)
 1. [Encounter Types (CSV files)](readme/et.md)
 1. [Roles (CSV files)](readme/roles.md)
 1. [Global Properties (XML files)](readme/globalproperties.md)
 1. [Attribute Types (CSV files)](readme/atttypes.md)
 1. [Locations (CSV files)](readme/loc.md)
-1. [Location Tags (CSV files)](readme/loctags.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concepts (CSV files)](readme/concepts.md)
@@ -136,7 +136,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 #### Version 2.2.0
 * 'program' domain to support `Name` and `Description` headers.
-* (_Bug fix_) CSV domains can create new objects that are retired
+* CSV parsers to actually fill _new_ objects marked to be retired or voided before creating them as retired/voided entities.
 * Added a runtime property to define the mode in which domains are loaded at startup by the Initializer Activator
 
 #### Version 2.1.0
