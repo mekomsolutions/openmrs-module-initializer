@@ -47,12 +47,12 @@ public class InitializerActivator extends BaseModuleActivator {
 			logger.setLevel(Level.WARN);
 		}
 		
-		String startingLoadingMode = getInitializerService().getInitializerConfig().getStartupLoadingMode();
+		String startupLoadingMode = getInitializerService().getInitializerConfig().getStartupLoadingMode();
 		
-		if (PROPS_STARTUP_LOAD_DISABLED.equalsIgnoreCase(startingLoadingMode)) {
+		if (PROPS_STARTUP_LOAD_DISABLED.equalsIgnoreCase(startupLoadingMode)) {
 			log.info("OpenMRS config loading process disabled at initializer startup");
 		} else {
-			boolean throwError = PROPS_STARTUP_LOAD_FAIL_ON_ERROR.equalsIgnoreCase(startingLoadingMode);
+			boolean throwError = PROPS_STARTUP_LOAD_FAIL_ON_ERROR.equalsIgnoreCase(startupLoadingMode);
 			log.info("OpenMRS config loading process started...");
 			try {
 				getInitializerService().loadUnsafe(true, throwError);

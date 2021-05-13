@@ -17,6 +17,11 @@ public class MockLoader extends BaseLoader {
 		this.domain = domain;
 	}
 	
+	/**
+	 * @param domain the domain that this loader should represent
+	 * @param throwException set to true to throw an Exception during the loading process, to simulate
+	 *            this behavior
+	 */
 	public MockLoader(Domain domain, boolean throwException) {
 		this(domain);
 		this.throwException = throwException;

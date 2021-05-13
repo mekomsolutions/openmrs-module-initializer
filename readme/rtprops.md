@@ -44,14 +44,3 @@ Valid options are:
 
 * **disabled**.  This mode instructs Initializer to **NOT** load in domains at module startup.  This mode may be 
   useful for distributions that wish more control over the exact order and timing of domain loading.
-
-##### Example of inclusion list:
-```
-initializer.domains=concepts,locations
-```
-##### Example of exclusion list:
-Just prefix the list with a negative `!` character:
-```
-initializer.domains=!metadatasharing,privileges,roles
-```
-This is exactly the same logic as for the Initializer Validator's `--domains` argument.
