@@ -23,12 +23,11 @@ to another location.
 
 #### Tag headers
 There are two ways to assign *location tags* to locations. Choose one or the other.
-Note that tag assignments are processed in the following way:
+If for some reason you use both, note that the `Tags` header is processed first.
 
-1. All tags are cleared from the location.
-2. The location is assigned tags from the `Tags` header. 
-3. Tags are assigned from the `Tag|` headers which are `true`.
-  Setting the header to false has no further effect.
+Note that if the `Tags` header is present, all location tags will be cleared
+before loading. If only the `Tag|` headers are present, then only the corresponding
+location tags will be cleared from locations before loading.
 
 ###### `Tag|` headers
 Tags can be assigned in true/false columns under headers starting with `Tag|`
