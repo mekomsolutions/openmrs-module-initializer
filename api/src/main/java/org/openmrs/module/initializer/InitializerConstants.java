@@ -30,6 +30,17 @@ public class InitializerConstants {
 	public static final String PROPS_SKIPCHECKSUMS = MODULE_ARTIFACT_ID + "." + "skip.checksums";
 	
 	/*
+	 * Startup properties
+	 */
+	public static final String PROPS_STARTUP_LOAD = MODULE_ARTIFACT_ID + "." + "startup.load";
+	
+	public static final String PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR = "continue_on_error";
+	
+	public static final String PROPS_STARTUP_LOAD_FAIL_ON_ERROR = "fail_on_error";
+	
+	public static final String PROPS_STARTUP_LOAD_DISABLED = "disabled";
+	
+	/*
 	 * 
 	 */
 	public static final String DIR_NAME_CONFIG = "configuration";
