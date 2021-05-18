@@ -32,7 +32,7 @@ public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, Ba
 	
 	@Override
 	public Domain getDomain() {
-		return Domain.IDENTIFIER_SOURCES;
+		return Domain.IDGEN;
 	}
 	
 	protected IdentifierSource newIdentifierSource(CsvLine line) throws IllegalArgumentException {

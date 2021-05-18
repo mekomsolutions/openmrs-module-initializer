@@ -27,7 +27,7 @@ public class MdsLoader extends BaseInputStreamLoader {
 	
 	@Override
 	protected Domain getDomain() {
-		return Domain.MDS;
+		return Domain.METADATASHARING;
 	}
 	
 	@Override
