@@ -19,6 +19,7 @@ import org.openmrs.module.initializer.api.appt.servicetypes.AppointmentServiceTy
 import org.openmrs.module.initializer.api.appt.specialities.SpecialitiesLoader;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.openmrs.module.initializer.api.c.ConceptClassesLoader;
+import org.openmrs.module.initializer.api.c.ConceptSourcesLoader;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
@@ -71,6 +72,9 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private ConceptClassesLoader conceptClassesLoader;
+	
+	@Autowired
+	private ConceptSourcesLoader conceptSourcesLoader;
 	
 	@Autowired
 	private ConceptsLoader conceptsLoader;
@@ -213,6 +217,11 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		
 		previousLoader = loader;
 		loader = conceptClassesLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = conceptSourcesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
