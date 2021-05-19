@@ -109,7 +109,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private EncounterRolesLoader encounterRolesLoader;
-
+	
 	@Autowired
 	private RolesLoader rolesLoader;
 	
@@ -208,7 +208,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		loader = encounterRolesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-
+		
 		previousLoader = loader;
 		loader = rolesLoader;
 		count++;
