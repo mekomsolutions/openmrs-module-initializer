@@ -173,7 +173,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		loader = conceptSourcesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-
+		
 		previousLoader = loader;
 		loader = mdsLoader;
 		count++;
