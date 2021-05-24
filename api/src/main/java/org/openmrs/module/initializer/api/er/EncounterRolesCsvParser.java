@@ -33,18 +33,18 @@ public class EncounterRolesCsvParser extends CsvParser<EncounterRole, BaseLinePr
 		
 		String uuid = line.getUuid();
 		
-		EncounterRole type = encounterService.getEncounterRoleByUuid(uuid);
-		if (type == null) {
-			type = encounterService.getEncounterRoleByName(line.getName(true));
+		EncounterRole role = encounterService.getEncounterRoleByUuid(uuid);
+		if (role == null) {
+			role = encounterService.getEncounterRoleByName(line.getName(true));
 		}
-		if (type == null) {
-			type = new EncounterRole();
+		if (role == null) {
+			role = new EncounterRole();
 			if (!StringUtils.isEmpty(uuid)) {
-				type.setUuid(uuid);
+				role.setUuid(uuid);
 			}
 		}
 		
-		return type;
+		return role;
 	}
 	
 	@Override

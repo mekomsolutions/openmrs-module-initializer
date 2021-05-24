@@ -31,14 +31,14 @@ public class EncounterRolesLoaderIntegrationTest extends DomainBaseModuleContext
 	@Before
 	public void setup() {
 		
-		// an encounter type to retire
+		// an encounter role to retire
 		{
 			EncounterRole er = new EncounterRole();
 			er.setUuid("6eb3cf82-cae3-4d50-a31c-90f9230504c8");
 			er.setName("Plague Doctor");
 			es.saveEncounterRole(er);
 		}
-		// an encounter type to edit
+		// an encounter role to edit
 		{
 			EncounterRole er = new EncounterRole();
 			er.setUuid("09a55bcc-2ce2-46a2-836c-4a56dce9d239");
