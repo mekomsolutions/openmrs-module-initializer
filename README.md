@@ -142,7 +142,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Added a runtime property to define the loading startup mode for the activator OpenMRS config loading process.
 * Existing attributes and location tags which are not specified in CSV headers are no longer removed.
 * Bulk creation and editing of concept sources provided as CSV files in **configuration/conceptsources**.
-
+* Simplifying Domain enum to derive domain directory names and loading order from enum properties
 
 #### Version 2.1.0
 * (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.
