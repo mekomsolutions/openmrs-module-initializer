@@ -29,23 +29,8 @@ public class EncounterRolesLoaderIntegrationTest extends DomainBaseModuleContext
 	private EncounterRolesLoader loader;
 	
 	@Before
-	public void setup() {
-		
-		// an encounter role to retire
-		{
-			EncounterRole er = new EncounterRole();
-			er.setUuid("6eb3cf82-cae3-4d50-a31c-90f9230504c8");
-			er.setName("Plague Doctor");
-			es.saveEncounterRole(er);
-		}
-		// an encounter role to edit
-		{
-			EncounterRole er = new EncounterRole();
-			er.setUuid("09a55bcc-2ce2-46a2-836c-4a56dce9d239");
-			er.setName("Phlebotomist");
-			er.setDescription("Treats patients' phlegm");
-			es.saveEncounterRole(er);
-		}
+	public void setup() throws Exception {
+		executeDataSet("testdata/test-metadata.xml");
 	}
 	
 	@Test
