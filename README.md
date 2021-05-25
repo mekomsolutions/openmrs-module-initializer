@@ -21,6 +21,7 @@ configuration/
   ├── autogenerationoptions/
   ├── bahmniforms/
   ├── conceptclasses/
+  ├── conceptsources/
   ├── concepts/
   ├── datafiltermappings/
   ├── drugs/
@@ -75,6 +76,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Locations (CSV files)](readme/loc.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
+1. [Concept Sources (CSV files)](readme/conceptsources.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Programs (CSV files)](readme/prog.md)
 1. [Program Worklows (CSV files)](readme/prog.md)
@@ -138,7 +140,8 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * 'program' domain to support `Name` and `Description` headers.
 * CSV parsers to actually fill _new_ objects marked to be retired or voided before creating them as retired/voided entities.
 * Added a runtime property to define the loading startup mode for the activator OpenMRS config loading process.
-* Existing attributes and location tags which are not specified in CSV headers are no longer removed.  
+* Existing attributes and location tags which are not specified in CSV headers are no longer removed.
+* Bulk creation and editing of concept sources provided as CSV files in **configuration/conceptsources**.
 
 
 #### Version 2.1.0
