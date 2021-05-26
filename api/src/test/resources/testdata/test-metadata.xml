@@ -10,6 +10,9 @@
   <appointment_service_type APPOINTMENT_SERVICE_TYPE_ID="104089" APPOINTMENT_SERVICE_ID="4089" NAME="Short follow-up" DURATION_MINS="30" VOIDED="false" DATE_CREATED="2021-02-08 21:59:46.0" UUID="eb6a436d-f25a-463b-bfd5-b19673770381" CREATOR="1"/>
   <appointment_service_type APPOINTMENT_SERVICE_TYPE_ID="104090" APPOINTMENT_SERVICE_ID="4090" NAME="Long check-up" DURATION_MINS="120" VOIDED="false" DATE_CREATED="2021-02-08 21:59:46.0" UUID="4e0f61df-d1f7-4cff-8d69-6264666daf3b" CREATOR="1"/>
 
+  <encounter_role encounter_role_id="100" name="Plague Doctor" description="Should be retired" creator="1" date_created="2012-08-18 14:00:00.0" retired="false" uuid="6eb3cf82-cae3-4d50-a31c-90f9230504c8"/>
+  <encounter_role encounter_role_id="101" name="Phlebotomist" description="Treats patients' phlegm" creator="1" date_created="2012-08-18 15:00:00.0" retired="false" uuid="09a55bcc-2ce2-46a2-836c-4a56dce9d239"/>
+
   <location_tag LOCATION_TAG_ID="4089" NAME="Facility Location" DATE_CREATED="2019-11-29 20:44:07.0" CREATOR="1" RETIRED="false" UUID="a2327745-2970-4752-ac8a-dd0ba131f40e"/>
   <location_tag LOCATION_TAG_ID="4090" NAME="Shed" DATE_CREATED="2019-11-30 20:44:07.0" CREATOR="1" RETIRED="false" UUID="a1417745-1170-5752-fc8a-dd0ba131f40e"/>
   <location_tag LOCATION_TAG_ID="4091" NAME="Appointment Location" DATE_CREATED="2021-02-08 18:57:06.0" CREATOR="1" RETIRED="false" UUID="a3e05b0e-c70d-11e7-aa2b-8e7070d6a3d1"/>
@@ -36,21 +39,17 @@
   <role ROLE="test-entity-role" UUID="3f8f0ab7-c240-4b68-8951-bb7020be01f6"/>
   
   <patient_identifier_type patient_identifier_type_id="1" name="OpenMRS ID" description="OpenMRS Identification Number" creator="1" date_created="2020-03-1 15:59:20.0" required="false" format="" format_description="" validator="" retired="false" uuid="b0d10dc0-d8ce-11e3-9c1a-0jhg89c9a66" />
-  
   <patient_identifier_type patient_identifier_type_id="2" name="Legacy ID" description="Legacy Identification Number" creator="1" date_created="2020-03-1 15:59:20.0" required="false" format="" format_description="" validator="" retired="false" uuid="8aaacb14-5ac0-4226-9a6e-fee8e9d92aeb" />
   
-  <idgen_identifier_source id="1" name="OpenMRS ID Generator" identifier_type="1" creator="1" date_created="2009-11-30 11:28:30.489" retired="false" uuid="0d47284f-9e9b-4a81-a88b-8bb42bc0a901" />
-  
+  <idgen_identifier_source id="1" name="OpenMRS ID Generator" identifier_type="1" creator="1" date_created="2009-11-30 11:28:30.489" retired="false" uuid="0d47284f-9e9b-4a81-a88b-8bb42bc0a901" />  
   <idgen_seq_id_gen id="1" first_identifier_base="1" next_sequence_value="6" base_character_set="abcdefghijklmnopqrstuvwxyz0123456789" prefix="" min_length="0" max_length="0" />
   
   <idgen_identifier_source id="2" name="Legacy ID Generator" identifier_type="2" creator="1" date_created="2009-11-30 11:28:30.489" retired="false" uuid="9eca4f4e-707f-4lb8-8289-2f9b6e93803f" />
-  
   <idgen_seq_id_gen id="2" first_identifier_base="1" next_sequence_value="2" base_character_set="0123456789" prefix="" min_length="0" max_length="0" />
   
   <idgen_auto_generation_option id="15000" source="1" identifier_type="1" manual_entry_enabled="false" automatic_generation_enabled="true" uuid="eade77b6-3365-47ed-9ee3-2324598629eb" />
     
   <visit_type visit_type_id="15000" name="Malnutrition" description="Malnutrition Visit" creator="1" date_created="2020-12-12 00:00:00.0" retired="false" uuid="2bcf7212-d218-4572-8893-25c4pob71934"/>
-
   <visit_type visit_type_id="16000" name="OPD" description="Legacy OPD visit Description" creator="1" date_created="2020-12-12 00:00:00.0" retired="false" uuid="287463d3-2233-4c69-9851-5841a1f5e109"/>
 
 </dataset>
