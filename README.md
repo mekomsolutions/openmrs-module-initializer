@@ -144,7 +144,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Existing attributes and location tags which are not specified in CSV headers are no longer removed.  
 * Bulk creation and editing of concept sources provided as CSV files in **configuration/conceptsources**.
 * Bulk creation and editing of encounter roles using CSV files in **configuration/encounterroles**.
-
+* (_For devs._) Domain directory names and loading orders are implied from the base `Domain` enum.
 
 #### Version 2.1.0
 * (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.
