@@ -1,7 +1,5 @@
 package org.openmrs.module.initializer.api.ot;
 
-import java.util.HashSet;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.ConceptClass;
 import org.openmrs.Order;
@@ -14,6 +12,8 @@ import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
 
 @Component
 public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
@@ -40,16 +40,7 @@ public class OrderTypeLineProcessor extends BaseLineProcessor<OrderType> {
 		orderType.setDescription(line.getString(HEADER_DESC, ""));
 		
 		String javaClassName = line.getString(JAVA_CLASS_NAME, Order.class.getName());
-		if (!StringUtils.isEmpty(javaClassName)) {
-			try {
-				Class.forName(javaClassName);
-			}
-			catch (ClassNotFoundException e) {
-				throw new IllegalArgumentException(
-				        "'" + javaClassName + "' does not represent a valid Java or OpenMRS class.", e);
-			}
-			orderType.setJavaClassName(javaClassName);
-		}
+		orderType.setJavaClassName(javaClassName);
 		
 		String parentIdentifier = line.getString(PARENT, "");
 		if (!StringUtils.isEmpty(parentIdentifier)) {
