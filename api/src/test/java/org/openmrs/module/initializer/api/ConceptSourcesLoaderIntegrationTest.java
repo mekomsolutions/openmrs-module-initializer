@@ -32,7 +32,7 @@ public class ConceptSourcesLoaderIntegrationTest extends DomainBaseModuleContext
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-concepts.xml");
 	}
-
+	
 	@Test
 	public void load_shouldLoadConceptSourcesAccordingToCsvFiles() {
 		

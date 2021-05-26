@@ -23,6 +23,7 @@ import org.openmrs.module.initializer.api.c.ConceptSourcesLoader;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingsLoader;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
+import org.openmrs.module.initializer.api.er.EncounterRolesLoader;
 import org.openmrs.module.initializer.api.et.EncounterTypesLoader;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
@@ -107,6 +108,9 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	private EncounterTypesLoader encounterTypesLoader;
 	
 	@Autowired
+	private EncounterRolesLoader encounterRolesLoader;
+	
+	@Autowired
 	private RolesLoader rolesLoader;
 	
 	@Autowired
@@ -169,7 +173,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		loader = conceptSourcesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-
+		
 		previousLoader = loader;
 		loader = mdsLoader;
 		count++;
@@ -197,6 +201,11 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		
 		previousLoader = loader;
 		loader = encounterTypesLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = encounterRolesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
