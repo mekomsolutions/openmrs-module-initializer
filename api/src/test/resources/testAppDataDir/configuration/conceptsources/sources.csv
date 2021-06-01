@@ -1,5 +1,7 @@
-UUID,Void/Retire,Name,Description
-adbd4dc1-eb52-4670-8a69-bb646cef9cd7,,Mexico,Reference codes for the Mexican MoH
-,TRUE,Cambodia,Reference terms for Cambodia
-,,Peru,Reference terms for Peru
-,,CIEL,The people's terminology source
+UUID,Void/Retire,Name,Description,HL7 Code,Unique ID
+adbd4dc1-eb52-4670-8a69-bb646cef9cd7,,Mexico,Reference codes for the Mexican MoH,,
+,TRUE,Cambodia,Reference terms for Cambodia,,
+,,Peru,Reference terms for Peru,,
+,,CIEL,The people's terminology source,,
+,,SNOMED CT,SNOMED Preferred mapping,SCT,
+,,RadLex,Radiology Terms,RADLEX,2.16.840.1.113883.6.256

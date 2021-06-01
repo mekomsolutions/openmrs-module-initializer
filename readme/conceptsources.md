@@ -13,11 +13,12 @@ conceptsources/
 The CSV configuration allows to either modify existing concept sources or to
 create new concept sources. Here is a sample CSV:
 
-|<sub>Uuid</sub>                                 | <sub>Void/Retire</sub> | <sub>Name</sub>                      | <sub>Description</sub>  |
-|--------------------------------------|-------------|---------------------------|-------------|
-|                                      | <sub>true</sub>        | <sub>Ministry Code</sub>          | <sub>A source to be retired</sub>
-|                                      |             | <sub>New concept source with random UUID</sub> | <sub>Has some description too</sub>
-| <sub>1dd85dab-f6d6-4bec-bde6-c4cddea92d35</sub> |             | <sub>A concept source with UUID specified</sub>           |
+|<sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Name</sub> | <sub>Description</sub> | <sub>HL7 Code</sub> | <sub>Unique ID</sub> |
+|----------------|------------------------|-----------------|------------------------|---------------------|----------------------|
+|                | <sub>true</sub>        | <sub>Ministry Code</sub> | <sub>A source to be retired</sub> | |
+|                |                        | <sub>New concept source with random UUID</sub> | <sub>Has some description too</sub> | |
+|                |                        | <sub>SNOMED CT</sub> | <sub>SNOMED Preferred mapping</sub> | <sub>SCT</sub> | |
+|                |                        | <sub>RadLex</sub>    | <sub>Radiology Terms</sub> | <sub>RADLEX</sub> | <sub>2.16.840.1.113883.6.256</sub>
 
 Both `name` and `description` are mandatory headers. Neither is localized.
 
