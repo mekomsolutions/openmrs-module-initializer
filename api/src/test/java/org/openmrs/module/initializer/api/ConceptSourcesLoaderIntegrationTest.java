@@ -59,5 +59,20 @@ public class ConceptSourcesLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertEquals("CIEL", c.getName()); // unchanged
 			Assert.assertEquals("The people's terminology source", c.getDescription());
 		}
+		{ // created with HL7 code
+			ConceptSource c = service.getConceptSourceByHL7Code("SCT");
+			Assert.assertNotNull(c);
+			Assert.assertEquals("SNOMED CT", c.getName());
+			Assert.assertEquals("SNOMED Preferred mapping", c.getDescription());
+			Assert.assertEquals("SCT", c.getHl7Code());
+		}
+		{ // created with Unique ID
+			ConceptSource c = service.getConceptSourceByHL7Code("RADLEX");
+			Assert.assertNotNull(c);
+			Assert.assertEquals("RadLex", c.getName());
+			Assert.assertEquals("Radiology Terms", c.getDescription());
+			Assert.assertEquals("RADLEX", c.getHl7Code());
+			Assert.assertEquals("2.16.840.1.113883.6.256", c.getUniqueId());
+		}
 	}
 }
