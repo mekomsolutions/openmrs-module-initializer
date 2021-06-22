@@ -9,20 +9,36 @@
  */
 package org.openmrs.module.initializer.api;
 
-import java.util.Locale;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.DrugOrder;
+import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
+import org.openmrs.FreeTextDosingInstructions;
 import org.openmrs.OrderFrequency;
+import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
+import org.openmrs.PatientIdentifierType;
+import org.openmrs.PersonName;
+import org.openmrs.Provider;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.EncounterService;
+import org.openmrs.api.LocationService;
 import org.openmrs.api.OrderService;
+import org.openmrs.api.PatientService;
+import org.openmrs.api.ProviderService;
+import org.openmrs.api.UserService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class OrderFrequenciesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -33,6 +49,26 @@ public class OrderFrequenciesLoaderIntegrationTest extends DomainBaseModuleConte
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService cs;
+
+	@Autowired
+	@Qualifier("patientService")
+	private PatientService ps;
+
+	@Autowired
+	@Qualifier("encounterService")
+	private EncounterService es;
+
+	@Autowired
+	@Qualifier("locationService")
+	private LocationService ls;
+
+	@Autowired
+	@Qualifier("providerService")
+	private ProviderService providerService;
+
+	@Autowired
+	@Qualifier("userService")
+	private UserService userService;
 	
 	@Autowired
 	private OrderFrequenciesLoader loader;
@@ -88,6 +124,20 @@ public class OrderFrequenciesLoaderIntegrationTest extends DomainBaseModuleConte
 			freq.setFrequencyPerDay(1.0);
 			freq = os.saveOrderFrequency(freq);
 		}
+		// An order frequency that should remain unchanged
+		{
+			Concept freqConcept = new Concept();
+			freqConcept.setShortName(new ConceptName("Every 6 Hours", Locale.ENGLISH));
+			freqConcept.setConceptClass(cs.getConceptClassByName("Frequency"));
+			freqConcept.setDatatype(cs.getConceptDatatypeByName("N/A"));
+			freqConcept = cs.saveConcept(freqConcept);
+
+			OrderFrequency freq = new OrderFrequency();
+			freq.setUuid("b1d7a778-bf25-11eb-8f35-0242ac110002");
+			freq.setConcept(freqConcept);
+			freq.setFrequencyPerDay(4.0);
+			freq = os.saveOrderFrequency(freq);
+		}
 	}
 	
 	@Test
@@ -117,5 +167,51 @@ public class OrderFrequenciesLoaderIntegrationTest extends DomainBaseModuleConte
 			Assert.assertEquals(bidailyConcept, freq.getConcept());
 			Assert.assertEquals(0, Double.compare(0.5, freq.getFrequencyPerDay()));
 		}
+	}
+
+	@Test
+	public void load_shouldNotFailIfFrequenciesAreInUseAndUnchanged() throws Exception {
+
+		// Add in some obs for the frequency that is unchanged by the metadata load
+		OrderFrequency freq = os.getOrderFrequencyByUuid("b1d7a778-bf25-11eb-8f35-0242ac110002");
+
+		PatientIdentifierType pit = new PatientIdentifierType();
+		pit.setName("Test ID");
+		ps.savePatientIdentifierType(pit);
+
+		EncounterType et = new EncounterType();
+		et.setName("Test Encounter Type");
+		es.saveEncounterType(et);
+
+		Provider provider = new Provider();
+		provider.setPerson(userService.getAllUsers().get(0).getPerson());
+		providerService.saveProvider(provider);
+
+		Patient p = new Patient();
+		p.setGender("M");
+		p.setBirthdate(new SimpleDateFormat("yyyy-MM-dd").parse("1985-05-22"));
+		p.addName(new PersonName("John", "Test", "Smith"));
+		p.addIdentifier(new PatientIdentifier("12345", pit, ls.getDefaultLocation()));
+		ps.savePatient(p);
+
+		Encounter e = new Encounter();
+		e.setPatient(p);
+		e.setEncounterType(et);
+		e.setEncounterDatetime(new SimpleDateFormat("yyyy-MM-dd").parse("1995-04-11"));
+
+		DrugOrder drugOrder = new DrugOrder();
+		drugOrder.setCareSetting(os.getCareSettingByName("INPATIENT"));
+		drugOrder.setEncounter(e);
+		drugOrder.setPatient(p);
+		drugOrder.setConcept(hourlyConcept);
+		drugOrder.setOrderer(provider);
+		drugOrder.setDosingType(FreeTextDosingInstructions.class);
+		drugOrder.setDosingInstructions("Test Drug Order");
+		drugOrder.setFrequency(freq);
+		e.addOrder(drugOrder);
+
+		es.saveEncounter(e);
+
+		loader.loadUnsafe(new ArrayList<>(), true);
 	}
 }
