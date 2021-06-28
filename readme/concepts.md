@@ -33,9 +33,9 @@ Here is an example of valid CSV to define basic concepts:
 | <sub>db2f4fc4-..</sub>| <sub>Language</sub> | <sub>Lang.</sub> | <sub>The method of human communication.</sub> | <sub>Question</sub> | <sub>Text</sub> |
 
 ###### Header `Answers` *(optional)*
-To provide a semicolumn-separated list of answer concepts to the concept to be created or edited.
+To provide a semicolon-separated list of answer concepts to the concept to be created or edited.
 ###### Header `Members` *(optional)*
-To provide a semicolumn-separated list of concepts to be members of the concept set to be created or edited. Note that the concept will be marked a being a set as soon as set members are provided.
+To provide a semicolon-separated list of concepts to be members of the concept set to be created or edited. Note that the concept will be marked to be a set as soon as set members are provided.
 
 Here is an example of the 'nested' columns:
 
@@ -44,7 +44,7 @@ Here is an example of the 'nested' columns:
 | ... | <sub>CONCEPT_NAME; source:134; db2f4fc4-..</sub> | | ... |
 | ... | | <sub>CONCEPT_NAME; source:134; db2f4fc4-..</sub> | ... |
 
-As the example suggests, it is possible to provide lists of concepts identifiers to fill the values of the columns 'answers' or 'members' under the form of concept names (eg. "CONCEPT_NAME"), concept mappings (eg. "source:134") and concept UUIDs (eg. "db2f4fc4-.."). The concepts that could not be fetched through their provided identifier will fail the creation of the concept from the CSV line altogether, and the parser will continue to the next CSV line.
+As the example suggests, it is possible to provide lists of concepts identifiers to fill the values of the columns 'answers' or 'members' under the form of concept names in the web application's default locale (eg. "CONCEPT_NAME"), concept mappings (eg. "source:134") and concept UUIDs (eg. "db2f4fc4-.."). The concepts that could not be fetched through their provided identifier will fail the creation of the concept from the CSV line altogether (also true for identifier names that don't exist in the working default locale but could exist in other locales), and the parser will continue to the next CSV line.
 
 **NOTE** In the current implementation the listing order of the concepts in the CSV file does matter since unexisting concepts will fail the CSV line processing. It is recommended to take this into account and to insert CSV lines for concepts with nested lists low enough in the CSV file so that all nested concepts are found when the CSV line is being processed.
 

@@ -60,7 +60,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	}
 	
 	@Test
-	public void load_shouldLoadDrugsAccordingToCsvFiles() {
+	public void load_shouldLoadConceptsAccordingToCsvFiles() {
 		
 		// Verif setup
 		Concept c = null;
