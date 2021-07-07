@@ -64,6 +64,21 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 		Assert.assertEquals("Ceci est la description de la clinique Azul.",
 		    ms.getMessage("metadata.healthcenter.description.named", new Object[] { "Azul" }, Context.getLocale()));
 	}
+
+	@Test
+	public void getCachedMessages_shouldLoadMessagePropertiesWithArgumentsAndApostrophe() {
+
+		// Setup
+		MessageSourceService ms = Context.getMessageSourceService();
+
+		// Replay
+		inizSrc.getCachedMessages();
+
+		Context.setLocale(Locale.FRENCH);
+		Assert.assertEquals("Voici l'exemple d'apostrophe Azul",
+				ms.getMessage("metadata.healthcenter.details", new Object[] { "Azul" }, Context.getLocale()));
+	}
+
 	
 	@Test
 	public void getPresentations_shouldContainParentPresentations() {
