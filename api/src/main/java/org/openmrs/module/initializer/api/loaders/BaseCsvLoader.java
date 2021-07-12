@@ -120,6 +120,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		
 	}
 	
+	@Override
 	public void loadI18nMessages(InputStream is) throws Exception {
 		final CsvParser<T, BaseLineProcessor<T>> parser = getParser(is);
 		
@@ -147,9 +148,17 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 	}
 	
 	private String[] getLocalizationCodes(String shortClassName, String uuid) {
+		// in case this is a hibernate-proxy or javaassist object, strip off anything after an underscore
+		// ie: EncounterType$HibernateProxy$ODcBnusu/EncounterType_$$_javassist_26 needs to be converted to EncounterType
+		
 		int underscoreIndex = shortClassName.indexOf("_$");
 		if (underscoreIndex > 0) {
 			shortClassName = shortClassName.substring(0, underscoreIndex);
+		} else {
+			underscoreIndex = shortClassName.indexOf("$");
+			if (underscoreIndex > 0) {
+				shortClassName = shortClassName.substring(0, underscoreIndex);
+			}
 		}
 		String[] codes = new String[2];
 		codes[0] = "ui.i18n." + shortClassName + ".name." + uuid;

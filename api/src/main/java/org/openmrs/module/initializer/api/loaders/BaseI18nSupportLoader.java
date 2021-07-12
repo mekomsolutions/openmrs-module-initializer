@@ -12,7 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
- *
+ * A loader to focus on internationalization of {@link InputStream} entries through message
+ * properties loaded using {@link InitializerMessageSource}. This logic is executed after files of
+ * the domain have been loaded by {@link BaseFileLoader#loadUnsafe(List, boolean)} implementation.
+ * 
+ * @see {@link BaseInputStreamLoader}
+ * @see {@link BaseFileLoader}
+ * @see {@link Loader}
+ * @since 2.2.0
  */
 public abstract class BaseI18nSupportLoader extends BaseInputStreamLoader {
 	
@@ -20,6 +27,12 @@ public abstract class BaseI18nSupportLoader extends BaseInputStreamLoader {
 	@Qualifier("initializer.InitializerMessageSource")
 	protected InitializerMessageSource initializerMessageSource;
 	
+	/**
+	 * Provides for the processing (or "loading") of internationalization message properties on domain's
+	 * file entries.
+	 * 
+	 * @param is The {@link InputStream} of woking file to process
+	 */
 	protected abstract void loadI18nMessages(InputStream is) throws Exception;
 	
 	@Override
