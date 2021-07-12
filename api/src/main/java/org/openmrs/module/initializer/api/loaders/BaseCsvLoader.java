@@ -6,9 +6,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
@@ -17,6 +20,7 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderedCsvFile;
 import org.openmrs.module.initializer.api.OrderedFile;
+import org.openmrs.module.initializer.api.c.LocalizedHeader;
 import org.openmrs.module.initializer.api.utils.Utils;
 
 /**
@@ -25,7 +29,7 @@ import org.openmrs.module.initializer.api.utils.Utils;
  * 
  * @param <T>
  */
-public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvParser<T, BaseLineProcessor<T>>> extends BaseInputStreamLoader implements CsvLoader/* <P> */ {
+public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvParser<T, BaseLineProcessor<T>>> extends BaseI18nSupportLoader implements CsvLoader/* <P> */ {
 	
 	protected P parser;
 	
@@ -114,5 +118,42 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		
 		throw new IllegalArgumentException(sb.toString());
 		
+	}
+	
+	public void loadI18nMessages(InputStream is) throws Exception {
+		final CsvParser<T, BaseLineProcessor<T>> parser = getParser(is);
+		
+		// load the i18n messages
+		String[] headerLine = parser.getHeaderLine();
+		
+		for (String[] line : parser.getLines()) {
+			final CsvLine csvLine = new CsvLine(headerLine, line);
+			LocalizedHeader lh = LocalizedHeader.getLocalizedHeader(csvLine.getHeaderLine(),
+			    BaseLineProcessor.HEADER_DISPLAY);
+			for (Locale displayLocale : lh.getLocales()) {
+				String display = csvLine.get(lh.getI18nHeader(displayLocale));
+				if (!StringUtils.isEmpty(display)) {
+					T target = parser.bootstrap(csvLine);
+					if (target.getId() != null) {
+						String[] codes = getLocalizationCodes(target.getClass().getSimpleName(), target.getUuid());
+						initializerMessageSource
+						        .addPresentation(new PresentationMessage(codes[0], displayLocale, display, null));
+						initializerMessageSource
+						        .addPresentation(new PresentationMessage(codes[1], displayLocale, display, null));
+					}
+				}
+			}
+		}
+	}
+	
+	private String[] getLocalizationCodes(String shortClassName, String uuid) {
+		int underscoreIndex = shortClassName.indexOf("_$");
+		if (underscoreIndex > 0) {
+			shortClassName = shortClassName.substring(0, underscoreIndex);
+		}
+		String[] codes = new String[2];
+		codes[0] = "ui.i18n." + shortClassName + ".name." + uuid;
+		codes[1] = "org.openmrs." + shortClassName + "." + uuid;
+		return codes;
 	}
 }
