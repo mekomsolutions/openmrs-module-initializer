@@ -1,8 +1,8 @@
-Uuid,Void/Retire,Name,Description,Parent,Tags,Tag|Facility Location,Attribute|9eca4f4e-707f-4bb8-8289-2f9b6e93803c,Attribute|Last Audit Date,Address 1,Address 2,Address 3,Address 4,Address 5,Address 6,City/Village,County/District,State/Province,Postal Code,Country,_order:1000
-,,The Lake Clinic-Cambodia,,,Login Location; Another Location Tag,,CODE-TLC-123,2017-05-15,Paradise Street,,,,,,,Siem Reap,Siem Reap,,Cambodia,
-,,OPD Room,,The Lake Clinic-Cambodia,,TRUE,,,,,,,,,,,,,,
-a03e395c-b881-49b7-b6fc-983f6bddc7fc,,Acme Clinic,This now becomes a child of TLC,The Lake Clinic-Cambodia,Login Location,,,2019-03-13,,,,,,,,,,,,
-cbaaaab4-d960-4ae9-9b6a-8983fbd947b6,TRUE,Legacy Location,Legacy location that must be retired,,,,,,,,,,,,,,,,,
-,,LOCATION_NO_UUID,,,,,,,Main Street,,,,,,,Siem Reap,Siem Reap,,Cambodia,
-1cb58794-3c49-11ea-b3eb-f7801304f314,,New Location,,,,,,,,,,,,,,,,,,
-2b9824a3-92f0-4966-8f34-1b105624b267,,Invalid parent location,This location shouldn not be loaded as it has an invalid parent,Invalid parent,,,,,,,,,,,,,,,,
+Uuid,Void/Retire,Name,Description,Parent,Tags,Tag|Facility Location,Attribute|9eca4f4e-707f-4bb8-8289-2f9b6e93803c,Attribute|Last Audit Date,Address 1,Address 2,Address 3,Address 4,Address 5,Address 6,City/Village,County/District,State/Province,Postal Code,Country,display:en,display:km_KH,_order:1000
+,,The Lake Clinic-Cambodia,,,Login Location; Another Location Tag,,CODE-TLC-123,2017-05-15,Paradise Street,,,,,,,Siem Reap,Siem Reap,,Cambodia,The Lake Clinic-Cambodia (translated),គ្លីនីកគ្លីនិក - ប្រទេសកម្ពុជា,
+,,OPD Room,,The Lake Clinic-Cambodia,,TRUE,,,,,,,,,,,,,,,,
+a03e395c-b881-49b7-b6fc-983f6bddc7fc,,Acme Clinic,This now becomes a child of TLC,The Lake Clinic-Cambodia,Login Location,,,2019-03-13,,,,,,,,,,,,Acme Clinic (translated),គ្លីនិកអាមី,
+cbaaaab4-d960-4ae9-9b6a-8983fbd947b6,TRUE,Legacy Location,Legacy location that must be retired,,,,,,,,,,,,,,,,,,,
+,,LOCATION_NO_UUID,,,,,,,Main Street,,,,,,,Siem Reap,Siem Reap,,Cambodia,,,
+1cb58794-3c49-11ea-b3eb-f7801304f314,,New Location,,,,,,,,,,,,,,,,,,,,
+2b9824a3-92f0-4966-8f34-1b105624b267,,Invalid parent location,This location shouldn not be loaded as it has an invalid parent,Invalid parent,,,,,,,,,,,,,,,,,,

@@ -1,7 +1,7 @@
-Uuid,Void/Retire,Name,Description,View privilege,Edit privilege,_order:1000
-,,Triage Encounter,An encounter for triaging patients.,,,
-aaa1a367-3047-4833-af27-b30e2dac9028,,Medical History Encounter,An interview about the patient medical history.,,,
-439559c2-a3a4-4a25-b4b2-1a0299e287ee,,X-ray Encounter,An encounter during wich X-rays are performed on the patient.,Can: View X-ray encounter,Can: Edit X-ray encounter,
-400d7e07-6de6-40ac-8611-dcce12408e71,,Foo Encounter,An foo encounter that should not be created.,Can: View foo encounter,,
-bed6f0f6-ab07-481f-929f-3d26e6cb1138,TRUE,,,,,
-,,Oncology Encounter,A new description for the oncology encounter.,Can: View oncology encounter,,
+Uuid,Void/Retire,Name,Description,View privilege,Edit privilege,display:en,display:km_KH,_order:1000
+,,Triage Encounter,An encounter for triaging patients.,,,Triage Encounter (translated),ទ្រីយ៉ាហ្គេនស៊ើរ,
+aaa1a367-3047-4833-af27-b30e2dac9028,,Medical History Encounter,An interview about the patient medical history.,,,Medical History Encounter (translated),ប្រវត្តិសាស្រ្តវេជ្ជសាស្រ្ត,
+439559c2-a3a4-4a25-b4b2-1a0299e287ee,,X-ray Encounter,An encounter during wich X-rays are performed on the patient.,Can: View X-ray encounter,Can: Edit X-ray encounter,,,
+400d7e07-6de6-40ac-8611-dcce12408e71,,Foo Encounter,An foo encounter that should not be created.,Can: View foo encounter,,,,
+bed6f0f6-ab07-481f-929f-3d26e6cb1138,TRUE,,,,,,,
+,,Oncology Encounter,A new description for the oncology encounter.,Can: View oncology encounter,,,,
