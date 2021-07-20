@@ -192,16 +192,24 @@ public class Utils {
 	 * @param service
 	 * @return The {@link Concept} instance if found, null otherwise.
 	 */
+	public static Concept fetchConcept(String id, ConceptService service, boolean required) {
+		Concept concept = fetchConcept(id, service);
+		if (required && concept == null) {
+			throw new IllegalArgumentException("Could not find a concept for '" + id + "'");
+		}
+		return concept;
+	}
+	
 	public static Concept fetchConcept(String id, ConceptService service) {
 		Concept instance = null;
 		if (instance == null) {
 			instance = service.getConceptByUuid(id);
 		}
 		if (instance == null) {
-			instance = service.getConceptByName(id);
+			instance = getConceptByMapping(id, service);
 		}
 		if (instance == null) {
-			instance = getConceptByMapping(id, service);
+			instance = service.getConceptByName(id);
 		}
 		return instance;
 	}

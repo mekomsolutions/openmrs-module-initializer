@@ -47,8 +47,11 @@ public class ProgramLineProcessor extends BaseLineProcessor<Program> {
 		}
 		program.setDescription(description);
 		
-		Concept outcomeConcept = Utils.fetchConcept(line.get(HEADER_OUTCOMES_CONCEPT), conceptService);
-		program.setOutcomesConcept(outcomeConcept);
+		String outcomeConceptString = line.get(HEADER_OUTCOMES_CONCEPT);
+		if (StringUtils.isNotBlank(outcomeConceptString)) {
+			Concept outcomeConcept = Utils.fetchConcept(outcomeConceptString, conceptService, true);
+			program.setOutcomesConcept(outcomeConcept);
+		}
 		
 		return program;
 	}
