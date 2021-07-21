@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Appender;
@@ -335,7 +336,8 @@ public class Utils {
 		if (instance == null) {
 			Concept c = Utils.fetchConcept(id, cs);
 			if (c != null) {
-				List<Program> progs = pws.getProgramsByConcept(c);
+				List<Program> progs = pws.getProgramsByConcept(c).stream().filter(program -> !program.getRetired())
+				        .collect(Collectors.toList());
 				if (!CollectionUtils.isEmpty(progs) && progs.size() == 1) {
 					instance = progs.get(0);
 				}
@@ -356,7 +358,8 @@ public class Utils {
 		if (instance == null) {
 			Concept c = Utils.fetchConcept(id, cs);
 			if (c != null) {
-				List<ProgramWorkflow> workflows = pws.getProgramWorkflowsByConcept(c);
+				List<ProgramWorkflow> workflows = pws.getProgramWorkflowsByConcept(c).stream()
+				        .filter(workflow -> !workflow.getRetired()).collect(Collectors.toList());
 				if (!CollectionUtils.isEmpty(workflows) && workflows.size() == 1) {
 					instance = workflows.get(0);
 				}
@@ -377,7 +380,8 @@ public class Utils {
 		if (instance == null) {
 			Concept c = Utils.fetchConcept(id, cs);
 			if (c != null) {
-				List<ProgramWorkflowState> states = pws.getProgramWorkflowStatesByConcept(c);
+				List<ProgramWorkflowState> states = pws.getProgramWorkflowStatesByConcept(c).stream()
+				        .filter(state -> !state.getRetired()).collect(Collectors.toList());
 				if (!CollectionUtils.isEmpty(states) && states.size() == 1) {
 					instance = states.get(0);
 				}

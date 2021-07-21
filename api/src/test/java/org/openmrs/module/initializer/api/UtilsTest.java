@@ -177,11 +177,13 @@ public class UtilsTest {
 		Program prog = new Program();
 		prog.setUuid("program-uuid");
 		prog.setName("Program Name");
+		Program retired = new Program();
+		retired.setRetired(true);
 		
 		when(pws.getProgramByName("Program Name")).thenReturn(prog);
 		when(pws.getProgramByUuid("program-uuid")).thenReturn(prog);
 		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
-		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(prog));
+		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(prog, retired));
 		
 		Assert.assertEquals(prog, Utils.fetchProgram("Program Name", pws, cs));
 		Assert.assertEquals(prog, Utils.fetchProgram("program-uuid", pws, cs));
@@ -209,10 +211,12 @@ public class UtilsTest {
 		c.setUuid("concept-uuid");
 		ProgramWorkflow wf = new ProgramWorkflow();
 		wf.setUuid("workflow-uuid");
+		ProgramWorkflow retired = new ProgramWorkflow();
+		retired.setRetired(true);
 		
 		when(pws.getWorkflowByUuid("workflow-uuid")).thenReturn(wf);
 		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
-		when(pws.getProgramWorkflowsByConcept(c)).thenReturn(Arrays.asList(wf));
+		when(pws.getProgramWorkflowsByConcept(c)).thenReturn(Arrays.asList(wf, retired));
 		
 		Assert.assertEquals(wf, Utils.fetchProgramWorkflow("workflow-uuid", pws, cs));
 		Assert.assertEquals(wf, Utils.fetchProgramWorkflow("concept-uuid", pws, cs));
@@ -239,10 +243,12 @@ public class UtilsTest {
 		c.setUuid("concept-uuid");
 		ProgramWorkflowState state = new ProgramWorkflowState();
 		state.setUuid("state-uuid");
+		ProgramWorkflowState retired = new ProgramWorkflowState();
+		retired.setRetired(true);
 		
 		when(pws.getStateByUuid("state-uuid")).thenReturn(state);
 		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
-		when(pws.getProgramWorkflowStatesByConcept(c)).thenReturn(Arrays.asList(state));
+		when(pws.getProgramWorkflowStatesByConcept(c)).thenReturn(Arrays.asList(state, retired));
 		
 		Assert.assertEquals(state, Utils.fetchProgramWorkflowState("state-uuid", pws, cs));
 		Assert.assertEquals(state, Utils.fetchProgramWorkflowState("concept-uuid", pws, cs));
