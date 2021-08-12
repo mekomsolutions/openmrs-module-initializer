@@ -25,8 +25,6 @@ public abstract class BaseLineProcessor<T extends BaseOpenmrsObject> {
 	
 	final public static String HEADER_DESC = "description";
 	
-	final public static String HEADER_DISPLAY = "display";
-	
 	final public static String HEADER_DURATION = "duration";
 	
 	final public static String HEADER_START_TIME = "start time";
