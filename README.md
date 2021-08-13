@@ -21,6 +21,7 @@ configuration/
   ├── autogenerationoptions/
   ├── bahmniforms/
   ├── conceptclasses/
+  ├── conceptsources/
   ├── concepts/
   ├── datafiltermappings/
   ├── drugs/
@@ -66,15 +67,17 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
 1. [Visit Types (CSV files)](readme/visittypes.md)
 1. [Patient identifier types (CSV files)](readme/pit.md)
+1. [Location Tags (CSV files)](readme/loctags.md)
 1. [Privileges (CSV files)](readme/priv.md)
 1. [Encounter Types (CSV files)](readme/et.md)
+1. [Encounter Roles (CSV files)](readme/encounterroles.md)
 1. [Roles (CSV files)](readme/roles.md)
 1. [Global Properties (XML files)](readme/globalproperties.md)
 1. [Attribute Types (CSV files)](readme/atttypes.md)
 1. [Locations (CSV files)](readme/loc.md)
-1. [Location Tags (CSV files)](readme/loctags.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
+1. [Concept Sources (CSV files)](readme/conceptsources.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Programs (CSV files)](readme/prog.md)
 1. [Program Worklows (CSV files)](readme/prog.md)
@@ -134,7 +137,18 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ### Releases notes
 
+#### Version 2.2.0
+* 'program' domain to support `Name` and `Description` headers.
+* CSV parsers to actually fill _new_ objects marked to be retired or voided before creating them as retired/voided entities.
+* Added a runtime property to define the loading startup mode for the activator OpenMRS config loading process.
+* Existing attributes and location tags which are not specified in CSV headers are no longer removed.  
+* Bulk creation and editing of concept sources provided as CSV files in **configuration/conceptsources**.
+* Bulk creation and editing of encounter roles using CSV files in **configuration/encounterroles**.
+* (_For devs._) Domain directory names and loading orders are implied from the base `Domain` enum.
+
 #### Version 2.1.0
+* (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.
+* (_For devs._) Introduced `CsvFailingLines` for a better management of the outcome of `CsvParser#process`.
 * Introduced safe and unsafe API modes to suit either app runtime loading or early failure loading for CI.
 * (_For devs._) Introduced `BaseFileLoader` and `BaseInputStreamLoader` as part of a better streamlined loading framework.
 * _Initialize Validator_ a standalone fatjar to make dry runs of OpenMRS configs.

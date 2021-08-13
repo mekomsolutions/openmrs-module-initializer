@@ -43,7 +43,7 @@ public class AutoGenerationOptionsCsvParser extends CsvParser<AutoGenerationOpti
 	
 	@Override
 	public Domain getDomain() {
-		return Domain.AUTO_GENERATION_OPTION;
+		return Domain.AUTO_GENERATION_OPTIONS;
 	}
 	
 	@Override

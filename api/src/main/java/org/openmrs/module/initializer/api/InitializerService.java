@@ -15,6 +15,7 @@ import java.util.List;
 import org.openmrs.Concept;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.initializer.InitializerConfig;
 import org.openmrs.module.initializer.api.loaders.Loader;
 
 public interface InitializerService extends OpenmrsService {
@@ -111,4 +112,9 @@ public interface InitializerService extends OpenmrsService {
 	 * Guesses a boolean from the JSON key-value configuration.
 	 */
 	Boolean getBooleanFromKey(String key);
+	
+	/**
+	 * @return the configuration of the Initializer module as defined by the runtime properties
+	 */
+	InitializerConfig getInitializerConfig();
 }

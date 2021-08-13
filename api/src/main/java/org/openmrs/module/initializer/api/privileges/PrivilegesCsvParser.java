@@ -1,6 +1,7 @@
 package org.openmrs.module.initializer.api.privileges;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Privilege;
 import org.openmrs.api.UserService;
 import org.openmrs.module.initializer.Domain;
@@ -52,6 +53,24 @@ public class PrivilegesCsvParser extends CsvParser<Privilege, BaseLineProcessor<
 		}
 		
 		return privilege;
+	}
+	
+	/**
+	 * @see CsvParser#shouldFill(BaseOpenmrsObject, CsvLine) Since privilege does not contain a primary
+	 *      key id, override default behavior
+	 */
+	@Override
+	protected boolean shouldFill(Privilege instance, CsvLine csvLine) {
+		boolean isVoidedOrRetired = BaseLineProcessor.getVoidOrRetire(csvLine);
+		if (!isVoidedOrRetired) {
+			return true;
+		}
+		Privilege existingPrivilege = userService.getPrivilegeByUuid(csvLine.getUuid());
+		if (existingPrivilege == null) {
+			String privilegeName = csvLine.get(PrivilegeLineProcessor.HEADER_PRIVILEGE_NAME, true);
+			existingPrivilege = userService.getPrivilege(privilegeName);
+		}
+		return existingPrivilege == null;
 	}
 	
 	@Override

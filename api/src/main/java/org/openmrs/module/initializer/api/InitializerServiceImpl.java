@@ -201,4 +201,8 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		return getBooleanFromKey(key, null);
 	}
 	
+	@Override
+	public InitializerConfig getInitializerConfig() {
+		return cfg;
+	}
 }

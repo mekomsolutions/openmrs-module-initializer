@@ -12,6 +12,7 @@ import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
+import org.openmrs.module.initializer.api.CsvFailingLines;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderedCsvFile;
@@ -52,46 +53,64 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 	@Override
 	protected void load(InputStream is) throws Exception {
 		
-		// getting the lines
+		//
+		// processing while possible
+		//
+		
 		final CsvParser<T, BaseLineProcessor<T>> parser = getParser(is);
 		List<String[]> remainingLines = parser.getLines();
 		int totalCount = remainingLines.size();
 		
-		// processing while possible
 		int lastFailCount = 0;
+		CsvFailingLines result = new CsvFailingLines();
 		while (!isEmpty(remainingLines) && lastFailCount != remainingLines.size()) {
 			log.info("Attempting to process " + remainingLines.size() + " CSV lines that have not been processed yet...");
 			lastFailCount = remainingLines.size();
-			remainingLines = parser.process(remainingLines);
+			result = parser.process(remainingLines);
+			remainingLines = result.getFailingLines();
 		}
 		
+		//
+		// logging
+		//
+		
 		final File file = getLoadedFile();
-		// summary logging
-		if (isEmpty(remainingLines)) {
+		// success logging
+		if (isEmpty(result.getFailingLines())) {
 			log.info(file.getName() + " ('" + getDomainName() + "' domain) was entirely successfully processed.");
 			log.info(totalCount + " entities were saved.");
 			return;
 		}
+		// logging the exception stack traces collected during CSV processing
+		else {
+			result.getErrorDetails().forEach(ed -> {
+				log.warn("An OpenMRS object could not be constructed or saved from the following CSV line:"
+				        + ed.getCsvLine().prettyPrint(),
+				    ed.getException());
+			});
+		}
 		
-		// remaining errors
-		final List<CsvLine> errLines = remainingLines.stream().map(line -> new CsvLine(parser.getHeaderLine(), line))
+		//
+		// throwing (error summary)
+		//
+		final List<CsvLine> errLines = result.getErrorDetails().stream().map(ed -> ed.getCsvLine())
 		        .collect(Collectors.toList());
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
 		sb.append(System.lineSeparator() + "+-+-+-+-- BEGINNING OF CSV FILE ERROR SUMMARY --+-+-+-+");
 		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
 		sb.append(System.lineSeparator());
-		sb.append(file.getName() + " ('" + getDomainName() + "' domain) was processed and " + remainingLines.size()
-		        + " out of " + totalCount + " entities were not saved.");
+		sb.append(file.getName() + " ('" + getDomainName() + "' domain) was processed and " + errLines.size() + " out of "
+		        + totalCount + " entities were not saved.");
 		sb.append(System.lineSeparator() + "The CSV line(s) corresponding to those entities are listed below:");
 		sb.append(Utils.prettyPrint(errLines));
 		sb.append(System.lineSeparator());
 		sb.append(System.lineSeparator() + "Paste print for spreadsheets... etc:");
 		sb.append(System.lineSeparator());
 		sb.append(Utils.pastePrint(errLines));
-		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-		sb.append(System.lineSeparator() + "+-+-+-+-- END OF CSV FILE ERROR SUMMARY --+-+-+-+");
-		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+		sb.append(System.lineSeparator() + "+-+-+-+-+--  END OF CSV FILE ERROR SUMMARY  --+-+-+-+-+");
+		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
 		
 		throw new IllegalArgumentException(sb.toString());
 		

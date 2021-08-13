@@ -28,3 +28,19 @@ initializer.skip.checksums=true
 ```
 Omit this property or set it to false to let the checksum files be processed as usual.
 <br/>This is the inverse logic as Initializer Validator's `--checksums` argument that _triggers_ the generation of checksums.
+
+### 4) `initializer.startup.load` _(optional)_
+
+Defines the _mode_ by which Initializer should load domains at startup by the Initializer module activator.
+Valid options are:
+
+* **continue_on_error** (default).  This is the default behavior if no option is specified.  It instructs Initializer 
+  to load in domains at module startup.  If any domains throw an Exception during loading, these are logged and 
+  Initializer proceeds to load further domains and complete startup without any startup errors.
+
+* **fail_on_error**.  This mode instructs Initializer to load in domains at module startup.  If any domains throw an 
+  Exception during loading, Initializer will log these errors and immediately throw a fatal exception that results in 
+  the Initializer module and any dependent modules failing to start successfully.
+
+* **disabled**.  This mode instructs Initializer to **NOT** load in domains at module startup.  This mode may be 
+  useful for distributions that wish more control over the exact order and timing of domain loading.
