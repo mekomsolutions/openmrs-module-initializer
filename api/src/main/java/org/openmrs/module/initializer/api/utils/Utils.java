@@ -572,8 +572,8 @@ public class Utils {
 	 * Eg. "EncounterType$HibernateProxy$ODcBnusu" or "EncounterType_$$_javassist_26" → "EncounterType"
 	 */
 	public static String unProxy(String shortClassName) {
-	    shortClassName = StringUtils.substringBefore(shortClassName, "_$");
-	    shortClassName = StringUtils.substringBefore(shortClassName, "$");
-	    return shortClassName;
+		shortClassName = StringUtils.substringBefore(shortClassName, "_$");
+		shortClassName = StringUtils.substringBefore(shortClassName, "$");
+		return shortClassName;
 	}
 }
