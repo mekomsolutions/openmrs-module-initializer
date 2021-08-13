@@ -5,6 +5,7 @@ import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.module.initializer.InitializerMessageSource;
 import org.openmrs.module.initializer.api.c.LocalizedHeader;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,7 @@ public class DisplayLineProcessor extends BaseLineProcessor<BaseOpenmrsObject> {
 		l10nHeader.getLocales().stream().forEach(locale -> {
 			String display = line.get(l10nHeader.getI18nHeader(locale));
 			if (!StringUtils.isEmpty(display)) {
-				String shortClassName = unProxy(instance.getClass().getSimpleName());
+				String shortClassName = Utils.unProxy(instance.getClass().getSimpleName());
 				msgSource.addPresentation(new PresentationMessage(
 				        "ui.i18n." + shortClassName + ".name." + instance.getUuid(), locale, display, null));
 				msgSource.addPresentation(new PresentationMessage("org.openmrs." + shortClassName + "." + instance.getUuid(),
@@ -44,22 +45,5 @@ public class DisplayLineProcessor extends BaseLineProcessor<BaseOpenmrsObject> {
 		});
 		
 		return instance; // returned but wasn't changed anyway
-	}
-	
-	/*
-	 * Turns a proxy short class name into the original short class name.
-	 * Eg. "EncounterType$HibernateProxy$ODcBnusu" or "EncounterType_$$_javassist_26" → "EncounterType"
-	 */
-	private String unProxy(String shortClassName) {
-		int underscoreIndex = shortClassName.indexOf("_$");
-		if (underscoreIndex > 0) {
-			shortClassName = shortClassName.substring(0, underscoreIndex);
-		} else {
-			underscoreIndex = shortClassName.indexOf("$");
-			if (underscoreIndex > 0) {
-				shortClassName = shortClassName.substring(0, underscoreIndex);
-			}
-		}
-		return shortClassName;
 	}
 }
