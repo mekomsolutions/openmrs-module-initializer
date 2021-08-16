@@ -15,6 +15,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -24,6 +25,7 @@ import org.openmrs.Location;
 import org.openmrs.LocationAttribute;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
+import org.openmrs.api.context.Context;
 import org.openmrs.customdatatype.datatype.DateDatatype;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loc.LocationsLoader;
@@ -41,6 +43,10 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	
 	@Autowired
 	private DateDatatype dateDatatype;
+	
+	private Locale localeEn = Locale.ENGLISH;
+	
+	private Locale localeKm = new Locale("km", "KH");
 	
 	@Before
 	public void setup() throws Exception {
@@ -143,6 +149,29 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		{
 			Location loc = ls.getLocationByUuid("2b9824a3-92f0-4966-8f34-1b105624b267");
 			Assert.assertNull(loc);
+		}
+		
+		// verify Locations domain i18n
+		{
+			Location loc = ls.getLocation("The Lake Clinic-Cambodia");
+			String locUuid = loc.getUuid();
+			Assert.assertEquals("The Lake Clinic-Cambodia (translated)",
+			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name." + locUuid, null, localeEn));
+			Assert.assertEquals("គ្លីនីកគ្លីនិក - ប្រទេសកម្ពុជា",
+			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name." + locUuid, null, localeKm));
+			Assert.assertEquals("Acme Clinic (translated)", Context.getMessageSourceService()
+			        .getMessage("ui.i18n.Location.name.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeEn));
+			Assert.assertEquals("គ្លីនិកអាមី", Context.getMessageSourceService()
+			        .getMessage("ui.i18n.Location.name.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeKm));
+			
+			Assert.assertEquals("The Lake Clinic-Cambodia (translated)",
+			    Context.getMessageSourceService().getMessage("org.openmrs.Location." + locUuid, null, localeEn));
+			Assert.assertEquals("គ្លីនីកគ្លីនិក - ប្រទេសកម្ពុជា",
+			    Context.getMessageSourceService().getMessage("org.openmrs.Location." + locUuid, null, localeKm));
+			Assert.assertEquals("Acme Clinic (translated)", Context.getMessageSourceService()
+			        .getMessage("org.openmrs.Location.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeEn));
+			Assert.assertEquals("គ្លីនិកអាមី", Context.getMessageSourceService()
+			        .getMessage("org.openmrs.Location.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeKm));
 		}
 	}
 }

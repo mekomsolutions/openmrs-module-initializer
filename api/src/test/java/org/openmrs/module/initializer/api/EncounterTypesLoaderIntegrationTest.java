@@ -9,6 +9,8 @@
  */
 package org.openmrs.module.initializer.api;
 
+import java.util.Locale;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +18,7 @@ import org.openmrs.EncounterType;
 import org.openmrs.Privilege;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.UserService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.et.EncounterTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,10 @@ public class EncounterTypesLoaderIntegrationTest extends DomainBaseModuleContext
 	
 	@Autowired
 	private EncounterTypesLoader loader;
+	
+	private Locale localeEn = Locale.ENGLISH;
+	
+	private Locale localeKm = new Locale("km", "KH");
 	
 	@Before
 	public void setup() {
@@ -101,6 +108,28 @@ public class EncounterTypesLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertNotNull(et);
 			Assert.assertEquals("A new description for the oncology encounter.", et.getDescription());
 			Assert.assertEquals(us.getPrivilege("Can: View oncology encounter"), et.getViewPrivilege());
+		}
+		// verify EncounterTypes domain i18n
+		{
+			EncounterType et = es.getEncounterType("Triage Encounter");
+			String etUuid = et.getUuid();
+			Assert.assertEquals("Triage Encounter (translated)",
+			    Context.getMessageSourceService().getMessage("ui.i18n.EncounterType.name." + etUuid, null, localeEn));
+			Assert.assertEquals("ទ្រីយ៉ាហ្គេនស៊ើរ",
+			    Context.getMessageSourceService().getMessage("ui.i18n.EncounterType.name." + etUuid, null, localeKm));
+			Assert.assertEquals("Medical History Encounter (translated)", Context.getMessageSourceService()
+			        .getMessage("ui.i18n.EncounterType.name.aaa1a367-3047-4833-af27-b30e2dac9028", null, localeEn));
+			Assert.assertEquals("ប្រវត្តិសាស្រ្តវេជ្ជសាស្រ្ត", Context.getMessageSourceService()
+			        .getMessage("ui.i18n.EncounterType.name.aaa1a367-3047-4833-af27-b30e2dac9028", null, localeKm));
+			
+			Assert.assertEquals("Triage Encounter (translated)",
+			    Context.getMessageSourceService().getMessage("org.openmrs.EncounterType." + etUuid, null, localeEn));
+			Assert.assertEquals("ទ្រីយ៉ាហ្គេនស៊ើរ",
+			    Context.getMessageSourceService().getMessage("org.openmrs.EncounterType." + etUuid, null, localeKm));
+			Assert.assertEquals("Medical History Encounter (translated)", Context.getMessageSourceService()
+			        .getMessage("org.openmrs.EncounterType.aaa1a367-3047-4833-af27-b30e2dac9028", null, localeEn));
+			Assert.assertEquals("ប្រវត្តិសាស្រ្តវេជ្ជសាស្រ្ត", Context.getMessageSourceService()
+			        .getMessage("org.openmrs.EncounterType.aaa1a367-3047-4833-af27-b30e2dac9028", null, localeKm));
 		}
 	}
 }
