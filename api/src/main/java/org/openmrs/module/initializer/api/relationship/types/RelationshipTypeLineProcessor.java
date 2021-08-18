@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.relationships.types;
+package org.openmrs.module.initializer.api.relationship.types;
 
 import org.openmrs.RelationshipType;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
@@ -22,7 +22,11 @@ public class RelationshipTypeLineProcessor extends BaseLineProcessor<Relationshi
 		instance.setDescription(line.get(HEADER_DESC));
 		instance.setaIsToB(line.get(A_IS_TO_B, true));
 		instance.setbIsToA(line.get(B_IS_TO_A, true));
-		instance.setPreferred(line.getBool(PREFERRED));
+		
+		Boolean preferred = line.getBool(PREFERRED);
+		if (preferred != null) {
+			instance.setPreferred(line.getBool(PREFERRED));
+		}
 		Integer weight = line.getInt(WEIGHT);
 		if (weight != null) {
 			instance.setWeight(weight);

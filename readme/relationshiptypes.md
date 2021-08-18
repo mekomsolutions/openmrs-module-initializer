@@ -9,12 +9,15 @@ This is a possible example of how the configuration subfolder may look like:
 relationshiptypes/
   └── relationshiptypes.csv
 ```
-The CSV configuration allows to either modify existing relationshiptypes or to
-create new relationshiptypes. Here is a sample CSV:
+The CSV configuration allows to either modify existing relationship types or to
+create new relationship types. Here is a sample CSV:
 
-| <sub>Uuid</sub>                                   | <sub>Void/Retire</sub>    | <sub>Name</sub>           | <sub>Description</sub>                                | <sub>Weight</sub>     | <sub>Preferred</sub>  | <sub>A is to b</sub>  | <sub>B is to a</sub>  | <sub>_order:2000</sub>    |
+| <sub>Uuid</sub>                                   | <sub>Void/Retire</sub>    | <sub>Name</sub>           | <sub>Description</sub>                                | <sub>A is to B</sub>  | <sub>B is to A</sub>  | <sub>Weight</sub>     | <sub>Preferred</sub>  | <sub>_order:2000</sub>    |
 |-------------------------------------- |-------------  |-------------- |-------------------------------------------    |--------   |-----------    |-----------    |-----------    |-------------  |
-| <sub>c86d9979-b8ac-4d8c-85cf-cc04e7f16315</sub>   |               | <sub>Uncle/Nephew</sub>   | <sub>A relationship of an uncle and his nephew</sub>  |           | <sub>true</sub>       | <sub>Uncle</sub>      | <sub>Nephew</sub>     |               |
+| <sub>c86d9979-b8ac-4d8c-85cf-cc04e7f16315</sub>   |               | <sub>Grandparent/Grandchild</sub>   | <sub>The child of one's child, or parent of one's parent</sub>  | <sub>Grandparent</sub>      | <sub>Grandchild</sub>     | <sub>3</sub> | <sub>true</sub> |               |
+
+Please see the [RelationshipType documentation](https://docs.openmrs.org/doc/org/openmrs/RelationshipType.html)
+for information about how relationship types should be used in OpenMRS.
 
 ###### Header `Name` *(optional)*
 The relationship type name.
@@ -22,17 +25,18 @@ The relationship type name.
 ###### Header `Description` *(mandatory)*
 The relationship type description.
 
+###### Header `A is to B` *(mandatory)*
+The relationship that one person has to the other.
+
+###### Header `B is to A` *(mandatory)*
+The corresponding relationship to `A is to B`.
+
 ###### Header `Weight` *(optional)*
-The relationship type weight.
+An integer. Probably not used for anything.
 
-###### Header `Preferred` *(mandatory)*
-Relationship type preferred?
+###### Header `Preferred` *(optional)*
+A boolean. Probably not used for anything.
 
-###### Header `A is to b` *(mandatory)*
-A is to b.
-
-###### Header `B is to a` *(mandatory)*
-B is to a.
 
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see

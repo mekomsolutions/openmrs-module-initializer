@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.relationships.types;
+package org.openmrs.module.initializer.api.relationship.types;
 
 import org.openmrs.RelationshipType;
 import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;

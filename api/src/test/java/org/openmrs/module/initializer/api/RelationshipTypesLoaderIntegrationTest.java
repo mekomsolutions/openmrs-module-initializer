@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.openmrs.RelationshipType;
 import org.openmrs.api.PersonService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.relationships.types.RelationshipTypesLoader;
+import org.openmrs.module.initializer.api.relationship.types.RelationshipTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -61,7 +61,8 @@ public class RelationshipTypesLoaderIntegrationTest extends DomainBaseModuleCont
 			Assert.assertEquals("A relationship of an uncle and his nephew", rt.getDescription());
 			Assert.assertEquals("Uncle", rt.getaIsToB());
 			Assert.assertEquals("Nephew", rt.getbIsToA());
-			
+			Assert.assertEquals(true, rt.getPreferred());
+			Assert.assertEquals(1, rt.getWeight().intValue());
 		}
 		
 		// verify edited

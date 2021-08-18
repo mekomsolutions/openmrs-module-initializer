@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.relationships.types;
+package org.openmrs.module.initializer.api.relationship.types;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.RelationshipType;
