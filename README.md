@@ -43,6 +43,7 @@ configuration/
   ├── programs/ 
   ├── programworkflows/
   ├── programworkflowstates/
+  ├── relationshiptypes/
   └── roles/
    
 ```  
@@ -67,6 +68,7 @@ This is the list of currently supported domains in respect to their loading orde
 1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
 1. [Visit Types (CSV files)](readme/visittypes.md)
 1. [Patient identifier types (CSV files)](readme/pit.md)
+1. [Relationship types (CSV files)](readme/relationshiptypes.md)
 1. [Location Tags (CSV files)](readme/loctags.md)
 1. [Privileges (CSV files)](readme/priv.md)
 1. [Encounter Types (CSV files)](readme/et.md)
@@ -165,6 +167,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and edition of Bahmni appointment service types provided through CSV files in **configuration/appointmentservicetypes**.
 * Renaming domain: `appointmentsservicesdefinitions` → `appointmentservicedefinitions`.
 * Renaming domain: `appointmentsspecialities` → `appointmentspecialities`.
+* Bulk creation and edition of relationship types provided through CSV files in **configuration/relationshiptypes**.
 
 #### Version 2.0.0
 * (_For devs._) Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
