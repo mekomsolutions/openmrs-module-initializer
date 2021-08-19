@@ -167,7 +167,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and edition of Bahmni appointment service types provided through CSV files in **configuration/appointmentservicetypes**.
 * Renaming domain: `appointmentsservicesdefinitions` → `appointmentservicedefinitions`.
 * Renaming domain: `appointmentsspecialities` → `appointmentspecialities`.
-* Bulk creation and edition of relationship types provided through CSV files in **configuration/relationshiptypes*
+* Bulk creation and edition of relationship types provided through CSV files in **configuration/relationshiptypes**.
 
 #### Version 2.0.0
 * (_For devs._) Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
