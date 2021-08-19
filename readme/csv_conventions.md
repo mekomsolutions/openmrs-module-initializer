@@ -13,6 +13,31 @@ There are a number of conventions that apply to CSV files across all domains, ty
 Set this to **true** to indicate that the OpenMRS object with the provided UUID should be voided or retired.
 <br/>When `Void/Retire` is set to true, the parsing of the remaining of the CSV line is interrupted since the only objective is to retire the concept. And to this end, only the UUID and the retire flag are needed.
 
+###### Localized Header `Display`
+This is a locale specific header that should be used with a locale appended to it, which indicates the locale for the values of it's column. The values are used to internationalize the OpenMRS object through message properties that are UIFR pattern-compliant.
+For example for an entry/object to be internationalized in English (locale 'en') and French (locale 'fr'), simply name the headers Display:en and Display:en.
+
+| UUID | Display:en | Display:fr | Void | ...|
+| --- | --- | --- | --- | --- |
+| eb96c0d4-6248-476b-a079-0aaabfa2f614 | Emergency Room | Salle d'urgences | false | ...|
+
+Message properties loaded in `en` locale
+```bash
+ui.i18n.<OpenmrsObjectShortClassName>.name.eb96c0d4-6248-476b-a079-0aaabfa2f614=Emergency Room
+```
+```bash
+org.openmrs.<OpenmrsObjectShortClassName>.eb96c0d4-6248-476b-a079-0aaabfa2f614=Emergency Room
+```
+
+Message properties loaded in `fr` locale
+```bash
+org.openmrs.<OpenmrsObjectShortClassName>.eb96c0d4-6248-476b-a079-0aaabfa2f614=Salle d'urgences
+```
+```bash
+org.openmrs.<OpenmrsObjectShortClassName>.eb96c0d4-6248-476b-a079-0aaabfa2f614=Salle d'urgences
+```
+Note: `<OpenmrsObjectShortClassName>` is the short class name to the underlying OpenMRS Entity Java object
+
 ###### CSV metadata headers
 Special headers are used to provide metadata information about the CSV file itself.
 <br/>All metadata headers start with an underscore, eg. `_version:1`, `_order:1000`, ... etc.
