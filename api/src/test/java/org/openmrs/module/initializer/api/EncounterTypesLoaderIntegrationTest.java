@@ -109,27 +109,45 @@ public class EncounterTypesLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertEquals("A new description for the oncology encounter.", et.getDescription());
 			Assert.assertEquals(us.getPrivilege("Can: View oncology encounter"), et.getViewPrivilege());
 		}
-		// verify EncounterTypes domain i18n
+		// verify EncounterTypes domain i18n on entries with display:xy fields
 		{
 			EncounterType et = es.getEncounterType("Triage Encounter");
-			String etUuid = et.getUuid();
+			String uuid = et.getUuid();
 			Assert.assertEquals("Triage Encounter (translated)",
-			    Context.getMessageSourceService().getMessage("ui.i18n.EncounterType.name." + etUuid, null, localeEn));
+			    Context.getMessageSourceService().getMessage("ui.i18n.EncounterType.name." + uuid, null, localeEn));
 			Assert.assertEquals("ទ្រីយ៉ាហ្គេនស៊ើរ",
-			    Context.getMessageSourceService().getMessage("ui.i18n.EncounterType.name." + etUuid, null, localeKm));
+			    Context.getMessageSourceService().getMessage("ui.i18n.EncounterType.name." + uuid, null, localeKm));
 			Assert.assertEquals("Medical History Encounter (translated)", Context.getMessageSourceService()
 			        .getMessage("ui.i18n.EncounterType.name.aaa1a367-3047-4833-af27-b30e2dac9028", null, localeEn));
 			Assert.assertEquals("ប្រវត្តិសាស្រ្តវេជ្ជសាស្រ្ត", Context.getMessageSourceService()
 			        .getMessage("ui.i18n.EncounterType.name.aaa1a367-3047-4833-af27-b30e2dac9028", null, localeKm));
 			
 			Assert.assertEquals("Triage Encounter (translated)",
-			    Context.getMessageSourceService().getMessage("org.openmrs.EncounterType." + etUuid, null, localeEn));
+			    Context.getMessageSourceService().getMessage("org.openmrs.EncounterType." + uuid, null, localeEn));
 			Assert.assertEquals("ទ្រីយ៉ាហ្គេនស៊ើរ",
-			    Context.getMessageSourceService().getMessage("org.openmrs.EncounterType." + etUuid, null, localeKm));
+			    Context.getMessageSourceService().getMessage("org.openmrs.EncounterType." + uuid, null, localeKm));
 			Assert.assertEquals("Medical History Encounter (translated)", Context.getMessageSourceService()
 			        .getMessage("org.openmrs.EncounterType.aaa1a367-3047-4833-af27-b30e2dac9028", null, localeEn));
 			Assert.assertEquals("ប្រវត្តិសាស្រ្តវេជ្ជសាស្រ្ត", Context.getMessageSourceService()
 			        .getMessage("org.openmrs.EncounterType.aaa1a367-3047-4833-af27-b30e2dac9028", null, localeKm));
 		}
+		// verify no EncounterTypes domain i18n on entries without display:xy fields
+		{
+			Assert.assertNotNull(es.getEncounterTypeByUuid("439559c2-a3a4-4a25-b4b2-1a0299e287ee"));
+			Assert.assertEquals("ui.i18n.EncounterType.name.439559c2-a3a4-4a25-b4b2-1a0299e287ee",
+			    Context.getMessageSourceService()
+			            .getMessage("ui.i18n.EncounterType.name.439559c2-a3a4-4a25-b4b2-1a0299e287ee", null, localeEn));
+			Assert.assertEquals("ui.i18n.EncounterType.name.439559c2-a3a4-4a25-b4b2-1a0299e287ee",
+			    Context.getMessageSourceService()
+			            .getMessage("ui.i18n.EncounterType.name.439559c2-a3a4-4a25-b4b2-1a0299e287ee", null, localeKm));
+			
+			Assert.assertEquals("org.openmrs.EncounterType.439559c2-a3a4-4a25-b4b2-1a0299e287ee",
+			    Context.getMessageSourceService()
+			            .getMessage("org.openmrs.EncounterType.439559c2-a3a4-4a25-b4b2-1a0299e287ee", null, localeEn));
+			Assert.assertEquals("org.openmrs.EncounterType.439559c2-a3a4-4a25-b4b2-1a0299e287ee",
+			    Context.getMessageSourceService()
+			            .getMessage("org.openmrs.EncounterType.439559c2-a3a4-4a25-b4b2-1a0299e287ee", null, localeKm));
+		}
+		
 	}
 }
