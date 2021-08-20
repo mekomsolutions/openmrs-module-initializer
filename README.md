@@ -147,6 +147,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and editing of concept sources provided as CSV files in **configuration/conceptsources**.
 * Bulk creation and editing of encounter roles using CSV files in **configuration/encounterroles**.
 * (_For devs._) Domain directory names and loading orders are implied from the base `Domain` enum.
+* Bulk creation and edition of relationship types provided through CSV files in **configuration/relationshiptypes**.
 
 #### Version 2.1.0
 * (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.
@@ -167,7 +168,6 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and edition of Bahmni appointment service types provided through CSV files in **configuration/appointmentservicetypes**.
 * Renaming domain: `appointmentsservicesdefinitions` → `appointmentservicedefinitions`.
 * Renaming domain: `appointmentsspecialities` → `appointmentspecialities`.
-* Bulk creation and edition of relationship types provided through CSV files in **configuration/relationshiptypes**.
 
 #### Version 2.0.0
 * (_For devs._) Support for conditional loading of domains based on the runtime availability of OpenMRS modules.
