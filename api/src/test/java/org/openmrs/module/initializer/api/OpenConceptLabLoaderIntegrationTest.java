@@ -58,7 +58,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	
 	@Test
 	public void load_shouldImportOCLPackages() {
-	    // Verif setup
+	    // Verify Setup
 	    {
 	        Concept c = conceptService.getConceptByUuid("1419AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	        Assert.assertEquals("Text", c.getDatatype());
@@ -68,7 +68,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	    // Replay        
 	    loader.load();
 
-	    // Verif by name
+	    // Verify by name
 	    {
 	        Context.setLocale(localeEn);
 	        Concept c = conceptService.getConceptByName("VACCINE MANUFACTURER");
@@ -107,7 +107,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	        Assert.assertEquals("Drug", c.getConceptClass().getName());
 	        Assert.assertEquals("N/A", c.getDatatype().getName());;
 	    }
-	    // Failed ones
+	    // Verify failures
 	    {
 	        Context.setLocale(localeEn);
 	        Assert.assertNull(conceptService.getConceptByUuid("db2f5104-3171-11e7-93ae-92361f002670"));
@@ -116,12 +116,12 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	        Assert.assertNull(conceptService.getConceptByName("HEPATITIS B VACCINATION"));
 	        Assert.assertNull(conceptService.getConceptByUuid("00b29984-3183-11e7-93ae-92361f002679"));;
 	    }
-	    // Retired one
+	    // Verify retirement
 	    {
 	        Concept c = conceptService.getConceptByUuid("83531AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	        Assert.assertTrue(c.isRetired());;
 	    }
-	    // Un-retire one
+	    // Verify un-retirement
 	    {
 	        Context.setLocale(localeEn);
 	        Concept c = conceptService.getConceptByUuid("17AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
