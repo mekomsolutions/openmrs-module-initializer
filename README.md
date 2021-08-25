@@ -148,6 +148,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and editing of encounter roles using CSV files in **configuration/encounterroles**.
 * (_For devs._) Domain directory names and loading orders are implied from the base `Domain` enum.
 * Bulk creation and edition of relationship types provided through CSV files in **configuration/relationshiptypes**.
+* Removed 'name' attribute from relationship types.
 
 #### Version 2.1.0
 * (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.

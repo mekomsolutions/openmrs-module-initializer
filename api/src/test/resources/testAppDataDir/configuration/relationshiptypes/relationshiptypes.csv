@@ -1,4 +1,4 @@
-Uuid,Void/Retire,Name,Description,Weight,Preferred,A is to b,B is to a
-c86d9979-b8ac-4d8c-85cf-cc04e7f16315,,Uncle/Nephew,A relationship of an uncle and his nephew,1,true,Uncle,Nephew
-3982f469-cedc-4b2d-91ea-fe38f881e1a0,true,Aunt/Niece,A relationship of an aunt and her niece,,,Aunt,Niece
-53d8a8f3-0084-4a52-8666-c655f5bd2689,,Supervisor/Supervisee,A new description for supervisor to supervisee relationship,,,Supervisor,Supervisee
+Uuid,Void/Retire,Description,Weight,Preferred,A is to b,B is to a
+c86d9979-b8ac-4d8c-85cf-cc04e7f16315,,A relationship of an uncle and his nephew,1,true,Uncle,Nephew
+3982f469-cedc-4b2d-91ea-fe38f881e1a0,true,A relationship of an aunt and her niece,,,Aunt,Niece
+53d8a8f3-0084-4a52-8666-c655f5bd2689,,A new description for supervisor to supervisee relationship,,,Supervisor,Supervisee
