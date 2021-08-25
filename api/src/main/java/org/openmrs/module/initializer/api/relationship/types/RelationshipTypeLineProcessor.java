@@ -18,7 +18,6 @@ public class RelationshipTypeLineProcessor extends BaseLineProcessor<Relationshi
 	
 	@Override
 	public RelationshipType fill(RelationshipType instance, CsvLine line) throws IllegalArgumentException {
-		instance.setName(line.get(HEADER_NAME));
 		instance.setDescription(line.get(HEADER_DESC));
 		instance.setaIsToB(line.get(A_IS_TO_B, true));
 		instance.setbIsToA(line.get(B_IS_TO_A, true));
