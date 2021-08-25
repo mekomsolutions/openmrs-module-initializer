@@ -12,15 +12,12 @@ relationshiptypes/
 The CSV configuration allows to either modify existing relationship types or to
 create new relationship types. Here is a sample CSV:
 
-| <sub>Uuid</sub>                                   | <sub>Void/Retire</sub>    | <sub>Name</sub>           | <sub>Description</sub>                                | <sub>A is to B</sub>  | <sub>B is to A</sub>  | <sub>Weight</sub>     | <sub>Preferred</sub>  | <sub>_order:2000</sub>    |
+| <sub>Uuid</sub>                                   | <sub>Void/Retire</sub>    | <sub>Description</sub>                                | <sub>A is to B</sub>  | <sub>B is to A</sub>  | <sub>Weight</sub>     | <sub>Preferred</sub>  | <sub>_order:2000</sub>    |
 |-------------------------------------- |-------------  |-------------- |-------------------------------------------    |--------   |-----------    |-----------    |-----------    |-------------  |
-| <sub>c86d9979-b8ac-4d8c-85cf-cc04e7f16315</sub>   |               | <sub>Grandparent/Grandchild</sub>   | <sub>The child of one's child, or parent of one's parent</sub>  | <sub>Grandparent</sub>      | <sub>Grandchild</sub>     | <sub>3</sub> | <sub>true</sub> |               |
+| <sub>c86d9979-b8ac-4d8c-85cf-cc04e7f16315</sub>   |               | <sub>The child of one's child, or parent of one's parent</sub>  | <sub>Grandparent</sub>      | <sub>Grandchild</sub>     | <sub>3</sub> | <sub>true</sub> |               |
 
 Please see the [RelationshipType documentation](https://docs.openmrs.org/doc/org/openmrs/RelationshipType.html)
 for information about how relationship types should be used in OpenMRS.
-
-###### Header `Name` *(optional)*
-The relationship type name.
 
 ###### Header `Description` *(mandatory)*
 The relationship type description.
