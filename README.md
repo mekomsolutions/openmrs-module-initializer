@@ -47,28 +47,28 @@ configuration/
   └── roles/
    
 ```  
-Each domain-specific subfolder contains the metadata and configuration information that is relevant to the subfolder's domain. Although several file types are supported for providing metadata, CSV files are the preferred format and all domain should aim at being covered through parsing CSV files.
+Each domain-specific subfolder contains OpenMRS metadata configuration files that pertains to the domain.
 
 ### Objectives
 * This module loads an OpenMRS configuration consisting of OpenMRS metadata.
 * CSV files are the preferred format, however a number of metadata domains rely on other file formats. See the list [below](#supported-domains-and-default-loading-order) for details.
 * Initializer processes all configuration files upon starting up.
-* Initializer produces a checksum file for each processed file. A file will never be processed again until its checksum has changed.
+* Initializer produces a checksum file for each processed configuration file. A file will never be processed again until its checksum has changed.
   * See more info [here](readme/checksums.md) about checksums.
-* Each line of those CSV files represents an **OpenMRS object to be created, edited or retired**.
+* Each line of those CSV files represents an **OpenMRS metadata entity to be created, edited or retired**.
 * Each line of those CSV files follows the WYSIWYG principle.
 
 ### Supported domains and default loading order
-We suggest to go through the following before looking at specific import domains:
+We suggest to go through the following before looking at the specifics for each supported domain:
 * [Conventions for CSV files](readme/csv_conventions.md)
 
-This is the list of currently supported domains in respect to their loading order:
-1. [Message properties key-values (.properties files)](readme/messageproperties.md)
+This is the list of currently supported domains in their loading order:
+1. [Localization Message Properties (.properties files)](readme/messageproperties.md)
 1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
-1. [Metadata Sharing packages (ZIP files)](readme/mds.md)
+1. [Metadata Sharing Packages (ZIP files)](readme/mds.md)
 1. [Visit Types (CSV files)](readme/visittypes.md)
-1. [Patient identifier types (CSV files)](readme/pit.md)
-1. [Relationship types (CSV files)](readme/relationshiptypes.md)
+1. [Patient Identifier Types (CSV files)](readme/pit.md)
+1. [Relationship Types (CSV files)](readme/relationshiptypes.md)
 1. [Location Tags (CSV files)](readme/loctags.md)
 1. [Privileges (CSV files)](readme/priv.md)
 1. [Encounter Types (CSV files)](readme/et.md)
@@ -106,9 +106,10 @@ git clone https://github.com/mekomsolutions/openmrs-module-initializer/tree/mast
 cd openmrs-module-initializer
 mvn clean package
 ```
+
 ##### Runtime requirements & compatibility
 * OpenMRS Core 2.1.1 (*required*)
-* HTML Form Entry (*compatible*)
+* HTML Form Entry 4.6.0 (*compatible*)
 * ID Gen 4.3 (*compatible*)
 * Metadata Sharing 1.2.2 (*compatible*)
 * Metadata Mapping 1.3.4 (*compatible*)
@@ -122,14 +123,10 @@ See the [Initializer Validator README page](readme/validator.md).
 ### Finer control of domains loading at app runtime
 See the [documentation on Initializer's runtime properties](readme/rtprops.md).
 
-### Quick facts
-Initializer enables to achieve the OpenMRS backend equivalent of Bahmni Config for Bahmni Apps. It facilitates the deployment of implementation-specific configurations without writing any code, by just filling the **configuration** folder with the needed metadata and in accordance to Initializer's available implementations.
-
 ### Get in touch
 * On [OpenMRS Talk](https://talk.openmrs.org/)
   * Sign up, start a conversation and ping us with the mention [`@MekomSolutions`](https://talk.openmrs.org/g/MekomSolutions) in your post. 
-* On Slack:
-  
+* On Slack:  
   * Join the [Initializer channel](https://openmrs.slack.com/archives/CPC20CBFH) and ping us with a `@Mekom` mention.
 
 ### Report an issue
