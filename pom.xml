@@ -32,6 +32,7 @@
 
     <modules>
         <module>api</module>
+        <module>api-bahmni</module>
         <module>api-2.2</module>
         <module>api-2.3</module>
         <module>omod</module>
