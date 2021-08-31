@@ -15,7 +15,6 @@
     <properties>
         <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
         <emrapi-omod.version>1.23.0</emrapi-omod.version>
-        <bahmniVersion>0.94-SNAPSHOT</bahmniVersion>
     </properties>
 
     <dependencies>
@@ -35,7 +34,7 @@
         <dependency>
             <groupId>org.bahmni.module</groupId>
             <artifactId>bahmnicore-api</artifactId>
-            <version>${bahmniVersion}</version>
+            <version>${bahmniCoreVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

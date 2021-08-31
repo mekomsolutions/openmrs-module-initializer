@@ -11,30 +11,14 @@ import org.bahmni.module.bahmnicore.model.bahmniPatientProgram.ProgramAttributeT
 import org.bahmni.module.bahmnicore.service.BahmniProgramWorkflowService;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.api.LocationService;
-import org.openmrs.api.ProviderService;
-import org.openmrs.api.VisitService;
 import org.openmrs.module.initializer.BahmniDomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 public class BahmniAttributeTypesLoaderTest extends BahmniDomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private AttributeTypesLoader loader;
-	
-	@Autowired
-	@Qualifier("locationService")
-	private LocationService ls;
-	
-	@Autowired
-	@Qualifier("visitService")
-	private VisitService vs;
-	
-	@Autowired
-	@Qualifier("providerService")
-	private ProviderService ps;
 	
 	@Autowired
 	BahmniProgramWorkflowService bahmniProgramWorkflowService;
