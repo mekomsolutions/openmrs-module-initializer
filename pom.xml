@@ -61,6 +61,7 @@
         <idgenVersion>4.6.0</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
+        <providermanagementVersion>2.13.0</providermanagementVersion>
 
         <!-- Modules compatibility > Core 2.3.0 -->
         <appframeworkVersion>2.14.0</appframeworkVersion>
@@ -185,6 +186,13 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>metadatasharing-api</artifactId>
             <version>${metadatasharingVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>providermanagement-api</artifactId>
+            <version>${providermanagementVersion}</version>
             <scope>provided</scope>
         </dependency>
 
