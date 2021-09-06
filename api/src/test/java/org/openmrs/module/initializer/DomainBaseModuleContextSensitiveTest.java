@@ -95,6 +95,17 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
+		try {
+			Class.forName("org.bahmni.module.bahmnicore.Activator");
+			{
+				Module mod = new Module("", "bahmnicore", "", "", "", "0.93-SNAPSHOT");
+				mod.setFile(new File(""));
+				ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+			}
+		}
+		catch (Exception e) {
+			// ignore error since bahmnicore packages are not on the class path.
+		}
 	}
 	
 	protected String getAppDataDirPath() {

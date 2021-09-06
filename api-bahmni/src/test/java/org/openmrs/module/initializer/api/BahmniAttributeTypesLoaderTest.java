@@ -11,11 +11,11 @@ import org.bahmni.module.bahmnicore.model.bahmniPatientProgram.ProgramAttributeT
 import org.bahmni.module.bahmnicore.service.BahmniProgramWorkflowService;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.module.initializer.BahmniDomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class BahmniAttributeTypesLoaderTest extends BahmniDomainBaseModuleContextSensitiveTest {
+public class BahmniAttributeTypesLoaderTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private AttributeTypesLoader loader;

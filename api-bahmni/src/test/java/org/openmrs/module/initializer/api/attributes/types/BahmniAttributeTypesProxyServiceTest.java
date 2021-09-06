@@ -12,10 +12,10 @@ import org.bahmni.module.bahmnicore.service.BahmniProgramWorkflowService;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.attribute.BaseAttributeType;
-import org.openmrs.module.initializer.BahmniDomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class BahmniAttributeTypesProxyServiceTest extends BahmniDomainBaseModuleContextSensitiveTest {
+public class BahmniAttributeTypesProxyServiceTest extends DomainBaseModuleContextSensitiveTest {
 	
 	private final static String PROGRAM_ATT_TYPE_UUID = "b1d98f27-c058-46f2-9c12-87dd7c92f7e3";
 	
