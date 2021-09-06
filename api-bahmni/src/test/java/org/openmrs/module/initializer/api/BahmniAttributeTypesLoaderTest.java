@@ -40,6 +40,7 @@ public class BahmniAttributeTypesLoaderTest extends BahmniDomainBaseModuleContex
 			assertEquals("Metric of the program efficiency", attType.getDescription());
 			assertThat(attType.getMinOccurs(), is(0));
 			assertNull(attType.getMaxOccurs());
+			
 		}
 		
 		// Replay
@@ -55,6 +56,16 @@ public class BahmniAttributeTypesLoaderTest extends BahmniDomainBaseModuleContex
 			assertEquals("Program Assessment's description", attType.getDescription());
 			assertThat(attType.getMinOccurs(), is(1));
 			assertNull(attType.getMaxOccurs());
+			
+			ProgramAttributeType attType2 = bahmniProgramWorkflowService
+			        .getProgramAttributeTypeByUuid("9398c839-4f39-428c-9022-e457980ccfa8");
+			assertNotNull(attType2);
+			assertEquals("org.bahmni.module.bahmnicore.customdatatype.datatype.CodedConceptDatatype",
+			    attType2.getDatatypeClassname());
+			assertEquals("CodedConcept attribute type", attType2.getName());
+			assertEquals("This is a Program's CodedConcept attribute type", attType2.getDescription());
+			assertThat(attType2.getMinOccurs(), is(0));
+			assertThat(attType2.getMaxOccurs(), is(1));
 		}
 		
 		// Verify editions

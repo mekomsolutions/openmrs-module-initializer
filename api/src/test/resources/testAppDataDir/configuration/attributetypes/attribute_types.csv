@@ -6,5 +6,6 @@ Uuid,Void/Retire,Entity name,Name,Description,Min occurs,Max occurs,Datatype cla
 ,TRUE,Provider,Provider Rating,,,,,,,,
 7d002484-0fcd-4759-a67a-04dbf8fdaab1,,Concept,Concept Location,,1,1,org.openmrs.customdatatype.datatype.LocationDatatype,,,,
 3884c889-35f5-47b4-a6b7-5b1165cee218,,Program,Program Assessment,Program Assessment's description,1,,org.openmrs.customdatatype.datatype.FreeTextDatatype,,,,
+9398c839-4f39-428c-9022-e457980ccfa8,,Program,CodedConcept attribute type,This is a Program's CodedConcept attribute type,0,1,org.bahmni.module.bahmnicore.customdatatype.datatype.CodedConceptDatatype,,,,
 b1d98f27-c058-46f2-9c12-87dd7c92f7e3,,Program,Program Efficiency Indicator,Metric of the program efficiency,0,1,org.openmrs.customdatatype.datatype.FloatDatatype,,,,
 ,TRUE,Concept,Concept Family,,,,,,,,
