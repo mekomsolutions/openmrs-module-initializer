@@ -41,6 +41,7 @@ import org.openmrs.module.initializer.api.privileges.PrivilegesLoader;
 import org.openmrs.module.initializer.api.programs.ProgramsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkflowStatesLoader;
+import org.openmrs.module.initializer.api.relationship.types.RelationshipTypesLoader;
 import org.openmrs.module.initializer.api.roles.RolesLoader;
 import org.openmrs.module.initializer.api.visittypes.VisitTypesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,7 +148,11 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	private HtmlFormsLoader htmlFormsLoader;
 	
 	@Autowired
+	private RelationshipTypesLoader relationshipTypesLoader;
+
+	@Autowired
 	private OpenConceptLabLoader openConceptLabLoader;
+	
 	
 	@Override
 	public void updateSearchIndex() {
@@ -189,6 +194,11 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		
 		previousLoader = loader;
 		loader = pitLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = relationshipTypesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
