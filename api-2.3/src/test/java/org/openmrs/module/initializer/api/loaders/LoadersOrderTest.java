@@ -153,7 +153,6 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	@Autowired
 	private OpenConceptLabLoader openConceptLabLoader;
 	
-	
 	@Override
 	public void updateSearchIndex() {
 		// to prevent Data Filter's 'Illegal Record Access'
