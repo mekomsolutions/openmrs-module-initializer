@@ -40,7 +40,6 @@ public class BahmniAttributeTypesLoaderTest extends DomainBaseModuleContextSensi
 			assertEquals("Metric of the program efficiency", attType.getDescription());
 			assertThat(attType.getMinOccurs(), is(0));
 			assertNull(attType.getMaxOccurs());
-			
 		}
 		
 		// Replay
@@ -63,6 +62,7 @@ public class BahmniAttributeTypesLoaderTest extends DomainBaseModuleContextSensi
 			assertEquals("org.bahmni.module.bahmnicore.customdatatype.datatype.CodedConceptDatatype",
 			    attType2.getDatatypeClassname());
 			assertEquals("CodedConcept attribute type", attType2.getName());
+			assertEquals("8295308d-e5b2-41c7-adc1-2e0e83f0f16e", attType2.getDatatypeConfig());
 			assertEquals("This is a Program's CodedConcept attribute type", attType2.getDescription());
 			assertThat(attType2.getMinOccurs(), is(0));
 			assertThat(attType2.getMaxOccurs(), is(1));
