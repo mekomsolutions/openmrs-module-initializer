@@ -46,18 +46,11 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Field field = ModuleFactory.class.getDeclaredField("daemonTokens");
 			field.setAccessible(true);
 			daemonTokens = (Map<String, DaemonToken>) field.get(null);
-<<<<<<< HEAD
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
-=======
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		
->>>>>>> 6cadc0cb071b7a85cda86a4f975797cdc47ec5e9
+
 		DaemonToken daemonToken = new DaemonToken("openconceptlab");
 		daemonTokens.put(daemonToken.getId(), daemonToken);
 		new OpenConceptLabActivator().setDaemonToken(daemonToken);
