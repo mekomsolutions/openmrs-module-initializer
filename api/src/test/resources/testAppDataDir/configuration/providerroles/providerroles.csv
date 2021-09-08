@@ -1,0 +1,4 @@
+Uuid,Void/Retire,Name,Supervisee Provider Role 1,Supervisee Provider Role 2,Relationship Type,Provider Attribute Type 1,Provider Attribute Type 2,_order:2000
+68624C4C-9E10-473B-A849-204820D16C45,,CHW,,,53d8a8f3-0084-4a52-8666-c655f5bd2689,c8ef8a16-a8cd-4748-b0ea-e8a1ec503fbb,0c267ae8-f793-4cf8-9b27-93accaa45d86
+11C1A56D-82F7-4269-95E8-2B67B9A3D837,,CHW Supervisor,68624C4C-9E10-473B-A849-204820D16C45,9a4b44b2-8a9f-11e8-9a94-a6cf71072f73,,c8ef8a16-a8cd-4748-b0ea-e8a1ec503fbb,
+9a4b44b2-8a9f-11e8-9a94-a6cf71072f73,,Nurse Accompagnateur,,,53d8a8f3-0084-4a52-8666-c655f5bd2689,c8ef8a16-a8cd-4748-b0ea-e8a1ec503fbb,0c267ae8-f793-4cf8-9b27-93accaa45d86

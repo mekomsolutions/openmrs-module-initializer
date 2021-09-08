@@ -41,6 +41,7 @@ import org.openmrs.module.initializer.api.privileges.PrivilegesLoader;
 import org.openmrs.module.initializer.api.programs.ProgramsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
 import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkflowStatesLoader;
+import org.openmrs.module.initializer.api.providerroles.ProviderRolesLoader;
 import org.openmrs.module.initializer.api.relationship.types.RelationshipTypesLoader;
 import org.openmrs.module.initializer.api.roles.RolesLoader;
 import org.openmrs.module.initializer.api.visittypes.VisitTypesLoader;
@@ -65,6 +66,9 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private AttributeTypesLoader attributeTypesLoader;
+	
+	@Autowired
+	private ProviderRolesLoader providerRolesLoader;
 	
 	@Autowired
 	private LocationTagsLoader locationTagsLoader;
@@ -230,6 +234,11 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		
 		previousLoader = loader;
 		loader = attributeTypesLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = providerRolesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
