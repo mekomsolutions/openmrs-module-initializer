@@ -16,16 +16,21 @@
   <location_tag LOCATION_TAG_ID="4089" NAME="Facility Location" DATE_CREATED="2019-11-29 20:44:07.0" CREATOR="1" RETIRED="false" UUID="a2327745-2970-4752-ac8a-dd0ba131f40e"/>
   <location_tag LOCATION_TAG_ID="4090" NAME="Shed" DATE_CREATED="2019-11-30 20:44:07.0" CREATOR="1" RETIRED="false" UUID="a1417745-1170-5752-fc8a-dd0ba131f40e"/>
   <location_tag LOCATION_TAG_ID="4091" NAME="Appointment Location" DATE_CREATED="2021-02-08 18:57:06.0" CREATOR="1" RETIRED="false" UUID="a3e05b0e-c70d-11e7-aa2b-8e7070d6a3d1"/>
+  <location_tag LOCATION_TAG_ID="4093" NAME="Visit Location" DATE_CREATED="2021-02-08 18:57:06.0" CREATOR="1" RETIRED="false" UUID="0967d73d-f3c9-492b-abed-356478610a94"/>
 
   <location LOCATION_ID="4089" UUID="a03e395c-b881-49b7-b6fc-983f6bddc7fc" NAME="Acme Clinic" DATE_CREATED="2019-11-29 20:41:38.0" CREATOR="1" RETIRED="false"/>
   <location LOCATION_ID="4090" UUID="cbaaaab4-d960-4ae9-9b6a-8983fbd947b6" NAME="Legacy Location" DESCRIPTION="Legacy location that must be retired" DATE_CREATED="2019-11-29 20:41:38.0" CREATOR="1" RETIRED="false"/>
   <location LOCATION_ID="4091" UUID="fdddc31a-3930-11ea-9712-a73c3c19744f" NAME="LOCATION_NO_UUID" DESCRIPTION="Location used to test fetching by name" DATE_CREATED="2019-11-29 20:41:38.0" CREATOR="1" RETIRED="false"/>
+  <location LOCATION_ID="4092" UUID="af939782-898b-409a-99a4-d1653484edbd" NAME="Patient Home" DESCRIPTION="The patients home" DATE_CREATED="2019-11-29 20:41:38.0" CREATOR="1" RETIRED="false"/>
 
   <location_attribute_type LOCATION_ATTRIBUTE_TYPE_ID="1089" NAME="Location Code" DATATYPE="org.openmrs.customdatatype.datatype.FreeTextDatatype" MIN_OCCURS="0" CREATOR="1" DATE_CREATED="2019-12-11 09:31:48.0" RETIRED="false" UUID="9eca4f4e-707f-4bb8-8289-2f9b6e93803c"/>
   <location_attribute_type LOCATION_ATTRIBUTE_TYPE_ID="1090" NAME="Last Audit Date" DATATYPE="org.openmrs.customdatatype.datatype.DateDatatype" CREATOR="1" DATE_CREATED="2005-01-01 00:00:00.0" MIN_OCCURS="0" RETIRED="false" UUID="9516cc50-6f9f-11e0-8414-001e378eb67e"/>
   
   <location_attribute location_attribute_id="1089" location_id="4089" attribute_type_id="1090" value_reference="2016-04-14" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="3a2bdb18-6faa-11e0-8414-001e378eb67e"/>
-  
+
+  <location_tag_map location_id="4092" location_tag_id="4089"/>
+  <location_tag_map location_id="4092" location_tag_id="4093"/>
+
   <provider_attribute_type PROVIDER_ATTRIBUTE_TYPE_ID="1090" NAME="Provider Speciality" DESCRIPTION="Clinical speciality for this provider" DATATYPE="org.openmrs.customdatatype.datatype.FreeTextDatatype" MIN_OCCURS="0" MAX_OCCURS="5" CREATOR="1" DATE_CREATED="2019-12-11 09:31:48.0" RETIRED="false" UUID="bffaaf27-3d3b-4721-8ae4-d6e667ee756a"/>
   <provider_attribute_type PROVIDER_ATTRIBUTE_TYPE_ID="1091" NAME="Provider Rating" DATATYPE="org.openmrs.customdatatype.datatype.FreeTextDatatype" MIN_OCCURS="1" MAX_OCCURS="1" CREATOR="1" DATE_CREATED="2019-12-11 09:31:48.0" RETIRED="false" UUID="bcfe7b26-605f-45f1-ac0e-b5c794b6e0d9"/>
   <provider_attribute_type PROVIDER_ATTRIBUTE_TYPE_ID="1092" NAME="Households" DATATYPE="org.openmrs.customdatatype.datatype.FreeTextDatatype" MIN_OCCURS="0" MAX_OCCURS="1" CREATOR="1" DATE_CREATED="2019-12-11 09:31:48.0" RETIRED="false" UUID="0c267ae8-f793-4cf8-9b27-93accaa45d86"/>
