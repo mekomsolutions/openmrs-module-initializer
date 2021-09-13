@@ -31,11 +31,14 @@ public class DisplaysCsvParser extends CsvParser<OpenmrsObject, BaseLineProcesso
 	}
 	
 	/*
-	 * In case no UUID can be read from the CSV line this will bootstrap into an object without UUID.
-	 * This will result in an error
+	 * In case no UUID can be read from the CSV line or underlying object is being retired/voided this will 
+	 * result in an error this will return null.
 	 */
 	@Override
 	public OpenmrsObject bootstrap(CsvLine line) throws IllegalArgumentException {
+		if (BaseLineProcessor.getVoidOrRetire(line)) {
+			return null;
+		}
 		return isBlank(line.getUuid()) ? null : bootstrapParser.bootstrap(line);
 	}
 	

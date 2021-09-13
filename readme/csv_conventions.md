@@ -16,7 +16,7 @@ Set this to **true** to indicate that the OpenMRS object with the provided UUID 
 ###### Localized Header `Display`
 This is a locale specific header that should not be used as such ;  it should be used with a locale ISO code appended to it, eg: `Display:en` or `Display:fr` or `Display:es` ... etc. The values under those display headers for each locale are used to localise the display string of the OpenMRS metadata entity being defined on the CSV line. Under the hood this sets up Java localization messages that comply to the so-called _UI Framework convention_ (see more on this [here](https://github.com/mekomsolutions/openmrs-module-initializer/issues/95#issue-813691920)).
 
-For example for an OpenMRS metadata entity display string to be localised in English (locale 'en') and French (locale 'fr'), simply name the headers `Display:en` and `Display:fr` and give them the corresponding localised values respectively in English and French:
+For example for an OpenMRS metadata entity display string to be localised in English (locale 'en') and French (locale 'fr'), simply name the headers `Display:en` and `Display:fr` and give them the corresponding localised values respectively in English and French making sure the 'uuid' field is filled and not left blank:
 
 | <sub>UUID</sub> | ... | <sub>Display:en</sub> | <sub>Display:fr</sub> | ... | <sub>Void/Retired</sub> | ...|
 | --- | --- | --- | --- | --- | --- | --- |

@@ -153,27 +153,16 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		
 		// verify Locations domain i18n on entries with display:xy fields
 		{
-			Location loc = ls.getLocation("The Lake Clinic-Cambodia");
-			String uuid = loc.getUuid();
-			Assert.assertEquals("The Lake Clinic-Cambodia (translated)",
-			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name." + uuid, null, localeEn));
-			Assert.assertEquals("គ្លីនីកគ្លីនិក - ប្រទេសកម្ពុជា",
-			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name." + uuid, null, localeKm));
 			Assert.assertEquals("Acme Clinic (translated)", Context.getMessageSourceService()
 			        .getMessage("ui.i18n.Location.name.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeEn));
 			Assert.assertEquals("គ្លីនិកអាមី", Context.getMessageSourceService()
 			        .getMessage("ui.i18n.Location.name.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeKm));
-			
-			Assert.assertEquals("The Lake Clinic-Cambodia (translated)",
-			    Context.getMessageSourceService().getMessage("org.openmrs.Location." + uuid, null, localeEn));
-			Assert.assertEquals("គ្លីនីកគ្លីនិក - ប្រទេសកម្ពុជា",
-			    Context.getMessageSourceService().getMessage("org.openmrs.Location." + uuid, null, localeKm));
 			Assert.assertEquals("Acme Clinic (translated)", Context.getMessageSourceService()
 			        .getMessage("org.openmrs.Location.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeEn));
 			Assert.assertEquals("គ្លីនិកអាមី", Context.getMessageSourceService()
 			        .getMessage("org.openmrs.Location.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeKm));
 		}
-		// verify no Locations domain i18n on entries without display:xy fields
+		// verify no Locations domain i18n on entries without display:xy fields and entries without pre-filled uuids
 		{
 			Assert.assertNotNull(ls.getLocationByUuid("1cb58794-3c49-11ea-b3eb-f7801304f314"));
 			Assert.assertEquals("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314",
@@ -189,6 +178,19 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			Assert.assertEquals("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314",
 			    Context.getMessageSourceService().getMessage("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314",
 			        null, localeKm));
+			
+			Location loc = ls.getLocation("The Lake Clinic-Cambodia");
+			Assert.assertNotNull(loc);
+			
+			String uuid = loc.getUuid();
+			Assert.assertEquals("ui.i18n.Location.name." + uuid,
+			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name." + uuid, null, localeEn));
+			Assert.assertEquals("ui.i18n.Location.name." + uuid,
+			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name." + uuid, null, localeKm));
+			Assert.assertEquals("org.openmrs.Location." + uuid,
+			    Context.getMessageSourceService().getMessage("org.openmrs.Location." + uuid, null, localeEn));
+			Assert.assertEquals("org.openmrs.Location." + uuid,
+			    Context.getMessageSourceService().getMessage("org.openmrs.Location." + uuid, null, localeKm));
 		}
 	}
 }
