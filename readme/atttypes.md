@@ -1,6 +1,8 @@
 ## Domain 'attributetypes'
 Firstly let us be reminded that *person* attribute types are handled separately, see [here](atttypes.md).
 
+Secondly, program attribute types are supported for OpenMRS core versions of `2.2.*` and above or OpenMRS core `2.1.*` with any version of the bahmni-core module loaded. 
+
 The **attributetypes** subfolder contains CSV import files for saving attribute types in bulk. This is a possible example of its content:
 ```bash
 attributetypes/

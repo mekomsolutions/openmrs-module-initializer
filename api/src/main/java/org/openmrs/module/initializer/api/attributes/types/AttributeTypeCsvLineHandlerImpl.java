@@ -11,7 +11,7 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.api.CsvLine;
 
-@OpenmrsProfile(openmrsPlatformVersion = "[2.1.1 - 2.1.*]")
+@OpenmrsProfile(openmrsPlatformVersion = "[2.1.1 - 2.1.*]", modules = { "!bahmnicore" })
 public class AttributeTypeCsvLineHandlerImpl implements AttributeTypeCsvLineHandler {
 	
 	@Override
