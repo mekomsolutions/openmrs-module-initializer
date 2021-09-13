@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
  */
 public class OrderedFile extends File {
 	
+	private static final long serialVersionUID = 1L;
+	
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	protected Integer order = Integer.MAX_VALUE;

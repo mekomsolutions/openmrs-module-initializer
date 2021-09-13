@@ -1,7 +1,6 @@
 package org.openmrs.module.initializer.api.loc;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.initializer.Domain;
@@ -54,11 +53,5 @@ public class LocationTagsCsvParser extends CsvParser<LocationTag, BaseLineProces
 	@Override
 	public LocationTag save(LocationTag instance) {
 		return locationService.saveLocationTag(instance);
-	}
-	
-	@Override
-	protected void setLineProcessors(String version) {
-		lineProcessors.clear();
-		lineProcessors.add(getSingleLineProcessor());
 	}
 }

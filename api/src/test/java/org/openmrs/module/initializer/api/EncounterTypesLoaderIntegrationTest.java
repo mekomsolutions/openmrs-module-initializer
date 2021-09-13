@@ -65,7 +65,7 @@ public class EncounterTypesLoaderIntegrationTest extends DomainBaseModuleContext
 	}
 	
 	@Test
-	public void load_shouldLoadOrderFrequenciesAccordingToCsvFiles() {
+	public void load_shouldLoadEncounterTypesAccordingToCsvFiles() {
 		
 		// Replay
 		loader.load();

@@ -1,9 +1,11 @@
-package org.openmrs.module.initializer.api;
+package org.openmrs.module.initializer.api.display;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.OpenmrsObject;
 import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.module.initializer.InitializerMessageSource;
+import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.c.LocalizedHeader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Component;
  * those headers and the instance being processed.
  */
 @Component
-public class DisplayLineProcessor extends BaseLineProcessor<BaseOpenmrsObject> {
+public class DisplayLineProcessor extends BaseLineProcessor<OpenmrsObject> {
 	
 	final public static String HEADER_DISPLAY = "display";
 	
@@ -29,7 +31,7 @@ public class DisplayLineProcessor extends BaseLineProcessor<BaseOpenmrsObject> {
 	}
 	
 	@Override
-	public BaseOpenmrsObject fill(BaseOpenmrsObject instance, CsvLine line) throws IllegalArgumentException {
+	public OpenmrsObject fill(OpenmrsObject instance, CsvLine line) throws IllegalArgumentException {
 		
 		LocalizedHeader l10nHeader = LocalizedHeader.getLocalizedHeader(line.getHeaderLine(), HEADER_DISPLAY);
 		
@@ -44,6 +46,6 @@ public class DisplayLineProcessor extends BaseLineProcessor<BaseOpenmrsObject> {
 			}
 		});
 		
-		return instance; // returned but wasn't changed anyway
+		return instance;
 	}
 }

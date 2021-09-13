@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.BaseOpenmrsData;
-import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.OpenmrsObject;
 import org.openmrs.Retireable;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
@@ -17,11 +17,10 @@ import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opencsv.CSVReader;
 
-public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineProcessor<T>> {
+public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProcessor<T>> {
 	
 	protected final Logger log = LoggerFactory.getLogger(CsvParser.class);
 	
@@ -37,9 +36,6 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	 * {@link #lineProcessors} and this process happens automatically with single line processors.
 	 */
 	private BaseLineProcessor<T> singleLineProcessor = null;
-	
-	@Autowired
-	private DisplayLineProcessor displayLineProcessor;
 	
 	protected List<BaseLineProcessor<T>> lineProcessors = new ArrayList<BaseLineProcessor<T>>();
 	
@@ -61,10 +57,6 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 	
 	public BaseLineProcessor<T> getSingleLineProcessor() {
 		return singleLineProcessor;
-	}
-	
-	protected void disableDisplayLineProcessor() {
-		displayLineProcessor = null;
 	}
 	
 	/**
@@ -137,7 +129,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		reader = new CSVReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 		headerLine = reader.readNext();
 		
-		String version = P.getVersion(headerLine);
+		String version = LP.getVersion(headerLine);
 		
 		setLineProcessors(version);
 	}
@@ -253,9 +245,6 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 					        "An instance came null out of a line processor. Check the implementation of this line processor: "
 					                + processor.getClass().getCanonicalName());
 				}
-			}
-			if (displayLineProcessor != null) {
-				displayLineProcessor.fill(instance, csvLine);
 			}
 		}
 		

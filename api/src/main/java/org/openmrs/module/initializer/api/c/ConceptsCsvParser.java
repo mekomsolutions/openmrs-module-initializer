@@ -39,7 +39,6 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 	    @Qualifier("initializer.conceptAttributeLineProcessor") ConceptAttributeLineProcessor conceptAttributeLineProcessor) {
 		
 		super(baseProcessor);
-		disableDisplayLineProcessor();
 		this.numericProcessor = numericProcessor;
 		this.complexProcessor = complexProcessor;
 		this.nestedProcessor = nestedProcessor;

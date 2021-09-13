@@ -177,18 +177,18 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		{
 			Assert.assertNotNull(ls.getLocationByUuid("1cb58794-3c49-11ea-b3eb-f7801304f314"));
 			Assert.assertEquals("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314",
-			    Context.getMessageSourceService()
-			            .getMessage("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314", null, localeEn));
+			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			        null, localeEn));
 			Assert.assertEquals("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314",
-			    Context.getMessageSourceService()
-			            .getMessage("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314", null, localeKm));
+			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			        null, localeKm));
 			
 			Assert.assertEquals("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314",
-			    Context.getMessageSourceService()
-			            .getMessage("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314", null, localeEn));
+			    Context.getMessageSourceService().getMessage("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			        null, localeEn));
 			Assert.assertEquals("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314",
-			    Context.getMessageSourceService()
-			            .getMessage("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314", null, localeKm));
+			    Context.getMessageSourceService().getMessage("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			        null, localeKm));
 		}
 	}
 }
