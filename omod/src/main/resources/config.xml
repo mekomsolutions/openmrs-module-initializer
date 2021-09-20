@@ -40,6 +40,9 @@
 		<aware_of_module version="${openconceptlabVersion}">
 			org.openmrs.module.openconceptlab
 		</aware_of_module>
+		<aware_of_module version="${bahmniCoreVersion}">
+			org.bahmni.module.bahmnicore
+		</aware_of_module>
 	</aware_of_modules>
 	
 	<!-- Internationalization -->

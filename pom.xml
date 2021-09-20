@@ -32,6 +32,7 @@
 
     <modules>
         <module>api</module>
+        <module>api-bahmni</module>
         <module>api-2.2</module>
         <module>api-2.3</module>
         <module>omod</module>
@@ -57,11 +58,14 @@
         <!-- Modules compatibility -->
         <appointmentsVersion>1.2.1</appointmentsVersion>
         <bahmniIeAppsVersion>1.1.0</bahmniIeAppsVersion>
+        <bahmniCoreVersion>0.93-1.1.0-SNAPSHOT</bahmniCoreVersion>
         <htmlformentryVersion>4.0.0</htmlformentryVersion>
         <idgenVersion>4.6.0</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
         <openconceptlabVersion>1.2.8</openconceptlabVersion>
+        <providermanagementVersion>2.13.0</providermanagementVersion>
+
         <!-- Modules compatibility > Core 2.3.0 -->
         <appframeworkVersion>2.14.0</appframeworkVersion>
         <datafilterVersion>1.0.0</datafilterVersion>
@@ -190,6 +194,13 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>openconceptlab-api</artifactId>
             <version>${openconceptlabVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>providermanagement-api</artifactId>
+            <version>${providermanagementVersion}</version>
             <scope>provided</scope>
         </dependency>
 

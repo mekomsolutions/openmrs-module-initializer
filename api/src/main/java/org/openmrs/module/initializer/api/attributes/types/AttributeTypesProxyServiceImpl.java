@@ -14,7 +14,7 @@ import org.openmrs.attribute.BaseAttributeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@OpenmrsProfile(openmrsPlatformVersion = "[2.1.1 - 2.1.*]")
+@OpenmrsProfile(openmrsPlatformVersion = "[2.1.1 - 2.1.*]", modules = { "!bahmnicore" })
 public class AttributeTypesProxyServiceImpl implements AttributeTypesProxyService {
 	
 	protected final Logger log = LoggerFactory.getLogger(getClass());

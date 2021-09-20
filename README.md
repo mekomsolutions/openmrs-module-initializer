@@ -43,6 +43,7 @@ configuration/
   ├── programs/ 
   ├── programworkflows/
   ├── programworkflowstates/
+  ├── providerroles/ 
   ├── relationshiptypes/
   └── roles/
    
@@ -76,6 +77,7 @@ This is the list of currently supported domains in their loading order:
 1. [Roles (CSV files)](readme/roles.md)
 1. [Global Properties (XML files)](readme/globalproperties.md)
 1. [Attribute Types (CSV files)](readme/atttypes.md)
+1. [Provider Roles (CSV files)](readme/providerroles.md)
 1. [Locations (CSV files)](readme/loc.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
