@@ -38,7 +38,7 @@ public enum Domain {
 	METADATA_SET_MEMBERS,
 	METADATA_TERM_MAPPINGS,
 	HTML_FORMS;
-
+	
 	public int getOrder() {
 		return ArrayUtils.indexOf(values(), this) + 1;
 	}

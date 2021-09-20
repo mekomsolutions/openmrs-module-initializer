@@ -149,7 +149,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private RelationshipTypesLoader relationshipTypesLoader;
-
+	
 	@Autowired
 	private OpenConceptLabLoader openConceptLabLoader;
 	
@@ -250,7 +250,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		loader = conceptClassesLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-
+		
 		previousLoader = loader;
 		loader = openConceptLabLoader;
 		count++;
