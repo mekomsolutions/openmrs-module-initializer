@@ -118,6 +118,7 @@ mvn clean package
 * Bahmni Appointments 1.2-beta (*compatible*)
 * Data Filter 1.0.0 (*compatible*)
 * Bahmni I.e Apps 1.0.0 (*compatible*)
+* Bahmni Core 0.93 (*compatible*)
 
 ### How to test out your OpenMRS configs?
 See the [Initializer Validator README page](readme/validator.md).
@@ -139,6 +140,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.2.0
+* 'attributetypes' domain to support Bahmni program attribute types.
 * 'program' domain to support `Name` and `Description` headers.
 * CSV parsers to actually fill _new_ objects marked to be retired or voided before creating them as retired/voided entities.
 * Added a runtime property to define the loading startup mode for the activator OpenMRS config loading process.
