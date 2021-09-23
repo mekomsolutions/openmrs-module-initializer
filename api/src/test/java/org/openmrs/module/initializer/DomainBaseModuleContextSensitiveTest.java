@@ -56,7 +56,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	public DomainBaseModuleContextSensitiveTest() {
 		super();
 		{
-			Module mod = new Module("", "openconceptlab", "", "", "", "1.2.6-SNAPSHOT");
+			Module mod = new Module("", "openconceptlab", "", "", "", "1.2.9");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
