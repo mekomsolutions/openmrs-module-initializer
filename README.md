@@ -31,6 +31,7 @@ configuration/
   ├── idgen/
   ├── jsonkeyvalues/
   ├── locations/
+  ├── locationtagmaps/
   ├── locationtags/
   ├── messageproperties/
   ├── metadatasetmembers/ 
@@ -79,6 +80,7 @@ This is the list of currently supported domains in their loading order:
 1. [Attribute Types (CSV files)](readme/atttypes.md)
 1. [Provider Roles (CSV files)](readme/providerroles.md)
 1. [Locations (CSV files)](readme/loc.md)
+1. [Location Tag Maps (CSV files)](readme/loctagmaps.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
@@ -146,7 +148,9 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and editing of concept sources provided as CSV files in **configuration/conceptsources**.
 * Bulk creation and editing of encounter roles using CSV files in **configuration/encounterroles**.
 * (_For devs._) Domain directory names and loading orders are implied from the base `Domain` enum.
-* Bulk creation and edition of relationship types provided through CSV files in **configuration/relationshiptypes**.
+* Bulk creation and editing of relationship types provided through CSV files in **configuration/relationshiptypes**.
+* Bulk creation and editing of provider roles using CSV files in **configuration/providerroles**.
+* Bulk creation and editing of location tag maps using CSV files in **configuration/locationtagmaps**.
 
 #### Version 2.1.0
 * (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.
