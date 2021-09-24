@@ -63,7 +63,7 @@
         <idgenVersion>4.6.0</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
-        <openconceptlabVersion>1.2.8</openconceptlabVersion>
+        <openconceptlabVersion>1.2.9</openconceptlabVersion>
         <providermanagementVersion>2.13.0</providermanagementVersion>
 
         <!-- Modules compatibility > Core 2.3.0 -->
@@ -298,18 +298,18 @@
         <repository>
             <id>openmrs-repo</id>
             <name>OpenMRS Nexus Repository</name>
-            <url>https://openmrs.jfrog.io/artifactory/public</url>
+            <url>https://mavenrepo.openmrs.org/public</url>
         </repository>
         <repository>
             <id>central</id>
             <name>Maven Repository Switchboard</name>
             <layout>default</layout>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2</url>
         </repository>
         <repository>
             <id>repo.mybahmni.org</id>
             <name>bahmni-artifactory-snapshots</name>
-            <url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
+            <url>https://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
             <snapshots>
                 <updatePolicy>always</updatePolicy>
             </snapshots>
@@ -317,7 +317,7 @@
         <repository>
             <id>repo.mybahmni.org-release</id>
             <name>bahmni-artifactory-release</name>
-            <url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
+            <url>https://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
         </repository>
         <repository>
             <id>bahmni-nexus</id>
