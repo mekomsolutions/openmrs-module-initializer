@@ -30,6 +30,8 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	
 	private static final Locale LOCALE_SW = new Locale("sw");
 	
+	private static final Locale LOCALE_HT = new Locale("ht");
+	
 	@Autowired
 	private OpenConceptLabLoader loader;
 	
@@ -73,6 +75,30 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertEquals("Text", c.getDatatype().getName());
 		}
 		
+		// Verify by UUID
+		{
+			Concept c = conceptService.getConceptByUuid("163100AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+			Assert.assertNotNull(c);
+			Assert.assertFalse(c.getRetired());
+			Assert.assertEquals("Procedure received by patient", c.getName(Locale.ENGLISH).getName());
+			Assert.assertEquals("Procédure reçue par le patient", c.getName(Locale.FRENCH).getName());
+			Assert.assertEquals("Pasyan te resevwa pwosedi", c.getName(LOCALE_HT).getName());
+			Assert.assertEquals(1, c.getDescriptions().size());
+			Assert.assertEquals("Question", c.getConceptClass().getName());
+			Assert.assertEquals("Coded", c.getDatatype().getName());
+		}
+		
+		// Verify by UUID
+		{
+			Context.setLocale(Locale.ENGLISH);
+			Concept c = conceptService.getConceptByUuid("3004BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+			Assert.assertNotNull(c);
+			Assert.assertEquals("YELLOW FEVER VACCINATION", c.getName(Locale.ENGLISH).getName());
+			Assert.assertEquals("Vaccine given for Yellow Fever.", c.getDescription().toString());
+			Assert.assertEquals("Drug", c.getConceptClass().getName());
+			Assert.assertEquals("N/A", c.getDatatype().getName());
+		}
+		
 		// Verify by name
 		{
 			Context.setLocale(Locale.ENGLISH);
@@ -86,6 +112,20 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertEquals(0, c.getDescriptions().size());
 			Assert.assertEquals("Finding", c.getConceptClass().getName());
 			Assert.assertEquals("Text", c.getDatatype().getName());
+		}
+		
+		// Verify by name
+		{
+			Context.setLocale(Locale.ENGLISH);
+			Concept c = conceptService.getConceptByName("Procedure received by patient");
+			Assert.assertNotNull(c);
+			Assert.assertFalse(c.getRetired());
+			Assert.assertEquals("Procedure received by patient", c.getName(Locale.ENGLISH).getName());
+			Assert.assertEquals("Procédure reçue par le patient", c.getName(Locale.FRENCH).getName());
+			Assert.assertEquals("Pasyan te resevwa pwosedi", c.getName(LOCALE_HT).getName());
+			Assert.assertEquals(1, c.getDescriptions().size());
+			Assert.assertEquals("Question", c.getConceptClass().getName());
+			Assert.assertEquals("Coded", c.getDatatype().getName());
 		}
 		
 		// Verify by Mapping
@@ -102,16 +142,31 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertEquals("Text", c.getDatatype().getName());
 		}
 		
-		// Verify by UUID
+		// Verify by Mapping
 		{
-			Context.setLocale(Locale.ENGLISH);
-			Concept c = conceptService.getConceptByUuid("3004BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+			Concept c = conceptService.getConceptByMapping("163100", "CIEL");
 			Assert.assertNotNull(c);
-			Assert.assertEquals("YELLOW FEVER VACCINATION", c.getName(Locale.ENGLISH).getName());
-			Assert.assertEquals("Vaccine given for Yellow Fever.", c.getDescription().toString());
-			Assert.assertEquals("Drug", c.getConceptClass().getName());
-			Assert.assertEquals("N/A", c.getDatatype().getName());
+			Assert.assertFalse(c.getRetired());
+			Assert.assertEquals("Procedure received by patient", c.getName(Locale.ENGLISH).getName());
+			Assert.assertEquals("Procédure reçue par le patient", c.getName(Locale.FRENCH).getName());
+			Assert.assertEquals("Pasyan te resevwa pwosedi", c.getName(LOCALE_HT).getName());
+			Assert.assertEquals(1, c.getDescriptions().size());
+			Assert.assertEquals("Question", c.getConceptClass().getName());
+			Assert.assertEquals("Coded", c.getDatatype().getName());
 		}
+		
+		// Verify by Mapping
+		{
+			Concept c = conceptService.getConceptByMapping("166011", "CIEL");
+			Assert.assertNotNull(c);
+			Assert.assertFalse(c.getRetired());
+			Assert.assertEquals("Immunization, non-coded", c.getName(Locale.ENGLISH).getName());
+			Assert.assertEquals("Immunization, non-coded", c.getFullySpecifiedName(Locale.ENGLISH).getName());
+			Assert.assertEquals(0, c.getDescriptions().size());
+			Assert.assertEquals("Question", c.getConceptClass().getName());
+			Assert.assertEquals("Coded", c.getDatatype().getName());
+		}
+		
 		// Verify in another locale
 		{
 			Context.setLocale(Locale.FRENCH);
@@ -121,6 +176,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertEquals("Finding", c.getConceptClass().getName());
 			Assert.assertEquals("Text", c.getDatatype().getName());
 		}
+		
 		// Verify just one name is enough
 		{
 			Context.setLocale(Locale.ENGLISH);
@@ -149,6 +205,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertTrue(c.getRetired());
 			Assert.assertEquals("", c.getRetireReason());
 		}
+		
 		// Verify un-retirement
 		{
 			Context.setLocale(Locale.ENGLISH);
