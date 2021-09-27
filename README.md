@@ -141,6 +141,9 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ### Releases notes
 
+#### Version 2.3.0
+
+
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
 * 'program' domain to support `Name` and `Description` headers.
