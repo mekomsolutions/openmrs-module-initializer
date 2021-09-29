@@ -91,7 +91,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 		// Verify by UUID
 		{
 			Context.setLocale(Locale.ENGLISH);
-			Concept c = conceptService.getConceptByUuid("3004BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+			Concept c = conceptService.getConceptByUuid("5864AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			Assert.assertNotNull(c);
 			Assert.assertEquals("YELLOW FEVER VACCINATION", c.getName(Locale.ENGLISH).getName());
 			Assert.assertEquals("Vaccine given for Yellow Fever.", c.getDescription().toString());
@@ -164,7 +164,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertEquals("Immunization, non-coded", c.getFullySpecifiedName(Locale.ENGLISH).getName());
 			Assert.assertEquals(0, c.getDescriptions().size());
 			Assert.assertEquals("Question", c.getConceptClass().getName());
-			Assert.assertEquals("Coded", c.getDatatype().getName());
+			Assert.assertEquals("Text", c.getDatatype().getName());
 		}
 		
 		// Verify in another locale
@@ -192,20 +192,19 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 		// Verify failures
 		{
 			Context.setLocale(Locale.ENGLISH);
-			Assert.assertNull(conceptService.getConceptByUuid("db2f5104-3171-11e7-93ae-92361f002670"));
-			Assert.assertNull(conceptService.getConceptByName("MEASLES VACCINATION"));
-			Assert.assertNull(conceptService.getConceptByName("db2f5460-3171-11e7-93ae-92361f002672"));
-			Assert.assertNull(conceptService.getConceptByName("HEPATITIS B VACCINATION"));
-			Assert.assertNull(conceptService.getConceptByUuid("00b29984-3183-11e7-93ae-92361f002679"));
+			Assert.assertNull(conceptService.getConceptByUuid("162339AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB"));
+			Assert.assertNull(conceptService.getConceptByName("TETANUS BOOSTERS"));
+			Assert.assertNull(conceptService.getConceptByUuid("162330AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB"));
+			Assert.assertNull(conceptService.getConceptByName("TVACCINE MANUFACTURERS"));
+			Assert.assertNull(conceptService.getConceptByUuid("162337AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB"));
+			Assert.assertNull(conceptService.getConceptByName("DIPTHERIAYY"));
 		}
 		
 		// Verify retirement
 		{
-			Concept c = conceptService.getConceptByUuid("83531AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+			Concept c = conceptService.getConceptByUuid("162339AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			Assert.assertTrue(c.getRetired());
-			Assert.assertEquals("", c.getRetireReason());
 		}
-		
 		// Verify un-retirement
 		{
 			Context.setLocale(Locale.ENGLISH);
@@ -216,6 +215,5 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Assert.assertEquals("Drug", c.getConceptClass().getName());
 			Assert.assertEquals("N/A", c.getDatatype().getName());
 		}
-		
 	}
 }
