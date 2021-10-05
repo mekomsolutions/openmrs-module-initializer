@@ -31,6 +31,7 @@ configuration/
   ├── idgen/
   ├── jsonkeyvalues/
   ├── locations/
+  ├── locationtagmaps/
   ├── locationtags/
   ├── messageproperties/
   ├── metadatasetmembers/ 
@@ -79,6 +80,7 @@ This is the list of currently supported domains in their loading order:
 1. [Attribute Types (CSV files)](readme/atttypes.md)
 1. [Provider Roles (CSV files)](readme/providerroles.md)
 1. [Locations (CSV files)](readme/loc.md)
+1. [Location Tag Maps (CSV files)](readme/loctagmaps.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
@@ -118,6 +120,7 @@ mvn clean package
 * Bahmni Appointments 1.2-beta (*compatible*)
 * Data Filter 1.0.0 (*compatible*)
 * Bahmni I.e Apps 1.0.0 (*compatible*)
+* Bahmni Core 0.93 (*compatible*)
 
 ### How to test out your OpenMRS configs?
 See the [Initializer Validator README page](readme/validator.md).
@@ -138,7 +141,11 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ### Releases notes
 
+#### Version 2.3.0
+
+
 #### Version 2.2.0
+* 'attributetypes' domain to support Bahmni program attribute types.
 * 'program' domain to support `Name` and `Description` headers.
 * CSV parsers to actually fill _new_ objects marked to be retired or voided before creating them as retired/voided entities.
 * Added a runtime property to define the loading startup mode for the activator OpenMRS config loading process.
@@ -146,7 +153,9 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and editing of concept sources provided as CSV files in **configuration/conceptsources**.
 * Bulk creation and editing of encounter roles using CSV files in **configuration/encounterroles**.
 * (_For devs._) Domain directory names and loading orders are implied from the base `Domain` enum.
-* Bulk creation and edition of relationship types provided through CSV files in **configuration/relationshiptypes**.
+* Bulk creation and editing of relationship types provided through CSV files in **configuration/relationshiptypes**.
+* Bulk creation and editing of provider roles using CSV files in **configuration/providerroles**.
+* Bulk creation and editing of location tag maps using CSV files in **configuration/locationtagmaps**.
 
 #### Version 2.1.0
 * (_Bug fix_) Locations with invalid parent references to throw an `IllegalArgumentException`.
