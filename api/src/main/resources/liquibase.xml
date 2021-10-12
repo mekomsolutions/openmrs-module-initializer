@@ -35,5 +35,10 @@
         <addForeignKeyConstraint constraintName="initializer_item_owner_fk" baseTableName="initializer_item" baseColumnNames="owner"  referencedTableName="users"
                                  referencedColumnNames="user_id" />
     </changeSet> -->
+    
+    <changeSet id="delete-concept-checksums" author="iniz" >
+        <comment>Deleting 'concepts' domain checksums</comment>
+        <customChange class="org.openmrs.module.initializer.liquibase.DeleteDomainChecksumsChangeset" domainName="concepts"></customChange>
+    </changeSet>
  
 </databaseChangeLog>
