@@ -38,8 +38,8 @@ public class DisplaysCsvParser extends CsvParser<OpenmrsObject, BaseLineProcesso
 	@Override
 	public OpenmrsObject bootstrap(CsvLine line) throws IllegalArgumentException {
 		if (BaseLineProcessor.getVoidOrRetire(line)) {
-			throw new APIException("A voided or retired object cannot be internationalized "
-			        + "Check the implementation of this parser: " + getClass().getSuperclass().getCanonicalName());
+			throw new APIException("A voided or retired object cannot be internationalized. "
+			        + "Check the implementation of this parser: " + getClass().getCanonicalName());
 		}
 		
 		return isBlank(line.getUuid()) ? null : bootstrapParser.bootstrap(line);
