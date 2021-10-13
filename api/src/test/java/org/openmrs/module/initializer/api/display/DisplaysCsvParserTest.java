@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.openmrs.api.APIException;
 import org.mockito.MockitoAnnotations;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.module.initializer.InitializerMessageSource;
@@ -33,8 +34,8 @@ public class DisplaysCsvParserTest {
 		displayParser.setBootstrapParser(someParser);
 	}
 	
-	@Test
-	public void bootstrap_shouldReturnNullGivenVoidTrue() {
+	@Test(expected = APIException.class)
+	public void bootstrap_shouldFailGivenVoidTrue() {
 		// Setup
 		CsvLine line = new CsvLine(new String[] { "uuid", "void/retire" },
 		        new String[] { "d9e04a9d-d534-4a02-9c40-1c173f3d1d4b", "True" });
@@ -49,7 +50,7 @@ public class DisplaysCsvParserTest {
 	@Test
 	public void bootstrap_shouldReturnNullGivenNoUuid() {
 		// Setup
-		CsvLine line = new CsvLine(new String[] { "uuid", "void/retire" }, new String[] { "", "True" });
+		CsvLine line = new CsvLine(new String[] { "uuid", "void/retire" }, new String[] { "", "False" });
 		
 		// Replay
 		OpenmrsObject obj = displayParser.bootstrap(line);

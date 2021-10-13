@@ -3,6 +3,7 @@ package org.openmrs.module.initializer.api.display;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import org.openmrs.OpenmrsObject;
+import org.openmrs.api.APIException;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
@@ -37,8 +38,10 @@ public class DisplaysCsvParser extends CsvParser<OpenmrsObject, BaseLineProcesso
 	@Override
 	public OpenmrsObject bootstrap(CsvLine line) throws IllegalArgumentException {
 		if (BaseLineProcessor.getVoidOrRetire(line)) {
-			return null;
+			throw new APIException("A voided or retired object cannot be internationalized "
+			        + "Check the implementation of this parser: " + getClass().getSuperclass().getCanonicalName());
 		}
+		
 		return isBlank(line.getUuid()) ? null : bootstrapParser.bootstrap(line);
 	}
 	
