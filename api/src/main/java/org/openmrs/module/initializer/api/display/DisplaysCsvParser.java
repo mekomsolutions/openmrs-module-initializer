@@ -42,7 +42,7 @@ public class DisplaysCsvParser extends CsvParser<OpenmrsObject, BaseLineProcesso
 			        + "Check the implementation of this parser: " + getClass().getCanonicalName());
 		}
 		
-		return isBlank(line.getUuid()) ? null : bootstrapParser.bootstrap(line);
+		return bootstrapParser.bootstrap(line);
 	}
 	
 	@Override

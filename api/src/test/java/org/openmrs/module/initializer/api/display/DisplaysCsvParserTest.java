@@ -48,18 +48,6 @@ public class DisplaysCsvParserTest {
 	}
 	
 	@Test
-	public void bootstrap_shouldReturnNullGivenNoUuid() {
-		// Setup
-		CsvLine line = new CsvLine(new String[] { "uuid", "void/retire" }, new String[] { "", "False" });
-		
-		// Replay
-		OpenmrsObject obj = displayParser.bootstrap(line);
-		
-		// Verify
-		assertEquals(null, obj);
-	}
-	
-	@Test
 	public void bootstrap_shouldBootstrapObjectGivenUuidPresentAndObjectNotVoid() {
 		// Setup
 		CsvLine line = new CsvLine(new String[] { "uuid", "void/retire" },
