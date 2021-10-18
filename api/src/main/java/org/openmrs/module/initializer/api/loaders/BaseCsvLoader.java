@@ -1,5 +1,13 @@
 package org.openmrs.module.initializer.api.loaders;
 
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
@@ -10,14 +18,6 @@ import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderedCsvFile;
 import org.openmrs.module.initializer.api.OrderedFile;
 import org.openmrs.module.initializer.api.utils.Utils;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 /**
  * All CSV loaders should subclass the base CSV loader. This class takes care of loading and sorting
@@ -73,23 +73,29 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		//
 		// logging
 		//
-		
-		StringBuilder sb = new StringBuilder();
-		
+
 		final File file = getLoadedFile();
+		// success logging
 		if (isEmpty(result.getFailingLines())) {
 			log.info(file.getName() + " ('" + getDomainName() + "' domain) was entirely successfully processed.");
 			log.info(totalCount + " entities were saved.");
 			return;
 		}
-		
-		List<CsvLine> errLines = new ArrayList<>();
-		for (CsvFailingLines.ErrorDetails ed : result.getErrorDetails()) {
-			errLines.add(ed.getCsvLine());
-			String msg = "An OpenMRS object could not be constructed or saved from the following CSV line: ";
-			log.error(msg + ed.getCsvLine().prettyPrint(), ed.getException());
+		// logging the exception stack traces collected during CSV processing
+		else {
+			result.getErrorDetails().forEach(ed -> {
+				log.warn("An OpenMRS object could not be constructed or saved from the following CSV line:"
+				        + ed.getCsvLine().prettyPrint(),
+				    ed.getException());
+			});
 		}
 		
+		//
+		// throwing (error summary)
+		//
+		final List<CsvLine> errLines = result.getErrorDetails().stream().map(ed -> ed.getCsvLine())
+		        .collect(Collectors.toList());
+		StringBuilder sb = new StringBuilder();
 		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
 		sb.append(System.lineSeparator() + "+-+-+-+-- BEGINNING OF CSV FILE ERROR SUMMARY --+-+-+-+");
 		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
