@@ -73,7 +73,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		//
 		// logging
 		//
-
+		
 		final File file = getLoadedFile();
 		// success logging
 		if (isEmpty(result.getFailingLines())) {
@@ -84,7 +84,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		// logging the exception stack traces collected during CSV processing
 		else {
 			result.getErrorDetails().forEach(ed -> {
-				log.warn("An OpenMRS object could not be constructed or saved from the following CSV line:"
+				log.error("An OpenMRS object could not be constructed or saved from the following CSV line:"
 				        + ed.getCsvLine().prettyPrint(),
 				    ed.getException());
 			});

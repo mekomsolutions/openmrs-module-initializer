@@ -1,5 +1,6 @@
 package org.openmrs.module.initializer.api.c;
 
+import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
@@ -65,44 +66,42 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		Map<String, ConceptName> conceptNamesToProcess = new LinkedHashMap<>();
 		Map<Locale, ConceptName> localePreferredNames = new HashMap<>();
 		for (String h : line.getHeaderLine()) {
+			String[] headerComponents = h.trim().split(LOCALE_SEPARATOR, 3);
 			h = h.toLowerCase().trim();
 			if (h.startsWith(HEADER_FSNAME) || h.startsWith(HEADER_SHORTNAME) || h.startsWith(HEADER_SYNONYM)) {
-				String[] headerComponents = h.split(LOCALE_SEPARATOR);
 				if (headerComponents.length == 1) {
 					throw new IllegalArgumentException("Concept Name Headers must specify a locale as <name>:<locale>");
 				} else if (headerComponents.length == 2) {
-					LocalizedHeader lh = getLocalizedHeader(line.getHeaderLine(), headerComponents[0]);
-					for (Locale locale : lh.getLocales()) {
-						String name = line.get(lh.getI18nHeader(locale));
-						if (!StringUtils.isEmpty(name)) {
-							ConceptName cn = new ConceptName(name, locale);
-							
-							ConceptNameType nameType = getConceptNameTypeForHeader(h);
-							cn.setConceptNameType(nameType);
-							
-							Boolean localePreferred = line.getBool(h + LOCALE_SEPARATOR + HEADER_PREFERRED);
-							cn.setLocalePreferred(localePreferred == null ? Boolean.FALSE : localePreferred);
-							if (cn.getLocalePreferred()) {
-								if (localePreferredNames.get(locale) != null) {
-									String msg = "Only one name in a locale can be marked as preferred";
-									throw new IllegalArgumentException(msg);
-								} else {
-									localePreferredNames.put(locale, cn);
-								}
+					Locale locale = LocaleUtils.toLocale(headerComponents[1]);
+					String name = line.get(h);
+					if (StringUtils.isNotEmpty(name)) {
+						ConceptName cn = new ConceptName(name, locale);
+						
+						ConceptNameType nameType = getConceptNameTypeForHeader(h);
+						cn.setConceptNameType(nameType);
+						
+						Boolean localePreferred = line.getBool(h + LOCALE_SEPARATOR + HEADER_PREFERRED);
+						cn.setLocalePreferred(localePreferred == null ? Boolean.FALSE : localePreferred);
+						if (cn.getLocalePreferred()) {
+							if (localePreferredNames.get(locale) != null) {
+								String msg = "Only one name in a locale can be marked as preferred";
+								throw new IllegalArgumentException(msg);
 							} else {
-								if (!localePreferredNames.containsKey(locale)) {
-									localePreferredNames.put(locale, null);
-								}
+								localePreferredNames.put(locale, cn);
 							}
-							
-							String uuid = line.get(h + LOCALE_SEPARATOR + HEADER_UUID);
-							if (StringUtils.isBlank(uuid)) {
-								uuid = generateConceptNameUuid(concept.getUuid(), name, nameType, locale);
+						} else {
+							if (!localePreferredNames.containsKey(locale)) {
+								localePreferredNames.put(locale, null);
 							}
-							cn.setUuid(uuid);
-							
-							conceptNamesToProcess.put(uuid, cn);
 						}
+						
+						String uuid = line.get(h + LOCALE_SEPARATOR + HEADER_UUID);
+						if (StringUtils.isBlank(uuid)) {
+							uuid = generateConceptNameUuid(concept.getUuid(), name, nameType, locale);
+						}
+						cn.setUuid(uuid);
+						
+						conceptNamesToProcess.put(uuid, cn);
 					}
 				}
 			}
@@ -123,18 +122,19 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		// Update the concept with the constructed Concept Names
 		
 		// First, remove or update any existing Concept Names
-		for (ConceptName existingName : concept.getNames()) {
+		for (ConceptName existingName : concept.getNames(true)) {
 			ConceptName newName = conceptNamesToProcess.get(existingName.getUuid());
-			if (newName == null) {
-				concept.removeName(existingName);
-			} else {
+			if (newName != null) {
 				existingName.setConceptNameType(newName.getConceptNameType());
 				existingName.setName(newName.getName());
 				existingName.setLocale(newName.getLocale());
 				existingName.setLocalePreferred(newName.getLocalePreferred());
 				conceptNamesToProcess.remove(existingName.getUuid()); // Remove once we have processed it
+			} else {
+				concept.removeName(existingName);
 			}
 		}
+		
 		// Now, add in any new Concept Names
 		for (ConceptName newName : conceptNamesToProcess.values()) {
 			concept.addName(newName);
@@ -201,10 +201,7 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	 *         in a separate ticket #141
 	 */
 	protected String generateConceptNameUuid(Object... args) {
-		if (Arrays.asList(args).stream().anyMatch(arg -> arg == null)) {
-			return null;
-		}
-		String seed = Arrays.asList(args).stream().map(Object::toString).collect(Collectors.joining("_"));
+		String seed = Arrays.stream(args).map(arg -> arg == null ? "null" : arg.toString()).collect(Collectors.joining("_"));
 		String uuid = UUID.nameUUIDFromBytes(seed.getBytes()).toString();
 		return uuid;
 	}

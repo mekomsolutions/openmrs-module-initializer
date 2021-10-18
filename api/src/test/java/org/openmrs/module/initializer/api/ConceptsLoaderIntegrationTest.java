@@ -9,15 +9,6 @@
  */
 package org.openmrs.module.initializer.api;
 
-import static org.hamcrest.CoreMatchers.is;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,8 +18,9 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptAttribute;
 import org.openmrs.ConceptComplex;
 import org.openmrs.ConceptMap;
+import org.openmrs.ConceptName;
 import org.openmrs.ConceptNumeric;
-import org.openmrs.LocationAttribute;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.customdatatype.datatype.DateDatatype;
@@ -36,6 +28,14 @@ import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.is;
 
 public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -286,5 +286,61 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertNotNull(c);
 			Assert.assertEquals("ឈ្មោះខ្លីថ្មី", c.getShortNameInLocale(localeKm).toString());
 		}
+	}
+	
+	@Test
+	public void load_shouldLoadConceptNamesAccordingToCsvFiles() {
+		loader.load();
+		
+		ConceptNameType fsn = ConceptNameType.FULLY_SPECIFIED;
+		ConceptNameType shortName = ConceptNameType.SHORT;
+		Locale localeEs = new Locale("es");
+		
+		// Should load all names specified for a given concept
+		
+		Concept red = cs.getConceptByUuid("58083852-303f-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(5, red.getNames().size());
+		assertName(red, "e91ab3ad-303f-11ec-8d2b-0242ac110002", "Red", localeEn, true, fsn);
+		assertName(red, "Rojo", localeEs, true, fsn);
+		assertName(red, "R", localeEn, false, shortName);
+		assertName(red, "R", localeEs, false, shortName);
+		assertName(red, "Maroon", localeEn, false, null);
+		
+		Concept blue = cs.getConceptByUuid("5dcaf167-303f-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(7, blue.getNames().size());
+		assertName(blue, "fe9c8c03-303f-11ec-8d2b-0242ac110002", "Blue", localeEn, false, fsn);
+		assertName(blue, "Azul", localeEs, true, fsn);
+		assertName(blue, "B", localeEn, false, shortName);
+		assertName(blue, "A", localeEs, false, shortName);
+		assertName(blue, "Navy", localeEn, true, null);
+		assertName(blue, "Azulado", localeEs, false, null);
+		assertName(blue, "Baby Blue", localeEn, false, null);
+		
+		Concept green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(2, green.getNames().size());
+		assertName(green, "Green", localeEn, true, fsn);
+		assertName(green, "Verde", localeEs, true, fsn);
+	}
+	
+	protected ConceptName assertName(Concept concept, String name, Locale locale, boolean preferred, ConceptNameType type) {
+		ConceptName conceptName = null;
+		for (ConceptName cn : concept.getNames()) {
+			if (cn.getName().equals(name) && cn.getConceptNameType() == type) {
+				if (cn.getLocale().equals(locale) && cn.getLocalePreferred() == preferred) {
+					conceptName = cn;
+				}
+			}
+		}
+		if (conceptName == null) {
+			Assert.fail("No concept names found that match");
+		}
+		return conceptName;
+	}
+	
+	protected ConceptName assertName(Concept concept, String uuid, String name, Locale locale, boolean preferred,
+	        ConceptNameType type) {
+		ConceptName cn = assertName(concept, name, locale, preferred, type);
+		Assert.assertEquals(uuid, cn.getUuid());
+		return cn;
 	}
 }
