@@ -73,23 +73,23 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		//
 		// logging
 		//
-
+		
 		StringBuilder sb = new StringBuilder();
-
+		
 		final File file = getLoadedFile();
 		if (isEmpty(result.getFailingLines())) {
 			log.info(file.getName() + " ('" + getDomainName() + "' domain) was entirely successfully processed.");
 			log.info(totalCount + " entities were saved.");
 			return;
 		}
-
+		
 		List<CsvLine> errLines = new ArrayList<>();
 		for (CsvFailingLines.ErrorDetails ed : result.getErrorDetails()) {
 			errLines.add(ed.getCsvLine());
 			String msg = "An OpenMRS object could not be constructed or saved from the following CSV line: ";
 			log.error(msg + ed.getCsvLine().prettyPrint(), ed.getException());
 		}
-
+		
 		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
 		sb.append(System.lineSeparator() + "+-+-+-+-- BEGINNING OF CSV FILE ERROR SUMMARY --+-+-+-+");
 		sb.append(System.lineSeparator() + "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
