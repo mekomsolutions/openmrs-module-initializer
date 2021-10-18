@@ -9,6 +9,7 @@ import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -125,13 +127,32 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		for (ConceptName existingName : concept.getNames(true)) {
 			ConceptName newName = conceptNamesToProcess.get(existingName.getUuid());
 			if (newName != null) {
+				
+				// If this is a change to the name, fail.  The ConceptService has checks in place to determine if a
+				// ConceptName.name has changed, and to automatically void and assign a new random name uuid
+				// If we allow this, it would mean that a uuid specified in the CSV would not reflect the saved UUID
+				// It would also mean that any UUID generation algorithm introduced for ConceptNames would not be respected
+				// We want to prevent this behavior.  Users should instead explicitly void and recreate Concept Names in their CSVs
+				
+				if (!existingName.getName().equals(newName.getName())) {
+					StringBuilder msg = new StringBuilder();
+					msg.append("It is not permitted to change the name property of an existing ConceptName. ");
+					msg.append("Users should instead mark the existing Concept Name as voided, and then ");
+					msg.append("create a new ConceptName with their name of choice.");
+					throw new IllegalArgumentException(msg.toString());
+				}
+				
 				existingName.setConceptNameType(newName.getConceptNameType());
 				existingName.setName(newName.getName());
 				existingName.setLocale(newName.getLocale());
 				existingName.setLocalePreferred(newName.getLocalePreferred());
 				conceptNamesToProcess.remove(existingName.getUuid()); // Remove once we have processed it
 			} else {
-				concept.removeName(existingName);
+				// We void the name rather than removing it as there may be data associated with it
+				existingName.setVoided(true);
+				existingName.setDateVoided(new Date());
+				existingName.setVoidedBy(Context.getAuthenticatedUser());
+				existingName.setVoidReason("Concept.name.voidedByInitializer");
 			}
 		}
 		

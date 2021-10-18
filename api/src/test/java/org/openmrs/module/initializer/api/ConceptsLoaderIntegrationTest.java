@@ -290,16 +290,32 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	
 	@Test
 	public void load_shouldLoadConceptNamesAccordingToCsvFiles() {
-		loader.load();
 		
 		ConceptNameType fsn = ConceptNameType.FULLY_SPECIFIED;
 		ConceptNameType shortName = ConceptNameType.SHORT;
 		Locale localeEs = new Locale("es");
 		
+		String yellowUuid = "c0c238b3-3061-11ec-8d2b-0242ac110002";
+		String lemonUuid = "c4e56850-3061-11ec-8d2b-0242ac110002";
+		
+		// Initial state is that only yellow is in the database, and "Yellow" is the FSN, Lemon is the synonym
+		Concept yellow = cs.getConceptByUuid("4cfe07b0-3061-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(2, yellow.getNames(true).size());
+		assertName(yellow, yellowUuid, "Yellow", localeEn, true, fsn);
+		assertName(yellow, lemonUuid, "Lemon", localeEn, false, null);
+		
+		Assert.assertNull(cs.getConceptByUuid("58083852-303f-11ec-8d2b-0242ac110002")); // red
+		Assert.assertNull(cs.getConceptByUuid("5dcaf167-303f-11ec-8d2b-0242ac110002")); // blue
+		Assert.assertNull(cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002")); // green
+		
+		loader.load();
+		
 		// Should load all names specified for a given concept
 		
+		// These concepts are defined in concepts_names.csv and test-concepts.xml
+		
 		Concept red = cs.getConceptByUuid("58083852-303f-11ec-8d2b-0242ac110002");
-		Assert.assertEquals(5, red.getNames().size());
+		Assert.assertEquals(5, red.getNames(true).size());
 		assertName(red, "e91ab3ad-303f-11ec-8d2b-0242ac110002", "Red", localeEn, true, fsn);
 		assertName(red, "Rojo", localeEs, true, fsn);
 		assertName(red, "R", localeEn, false, shortName);
@@ -307,7 +323,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		assertName(red, "Maroon", localeEn, false, null);
 		
 		Concept blue = cs.getConceptByUuid("5dcaf167-303f-11ec-8d2b-0242ac110002");
-		Assert.assertEquals(7, blue.getNames().size());
+		Assert.assertEquals(7, blue.getNames(true).size());
 		assertName(blue, "fe9c8c03-303f-11ec-8d2b-0242ac110002", "Blue", localeEn, false, fsn);
 		assertName(blue, "Azul", localeEs, true, fsn);
 		assertName(blue, "B", localeEn, false, shortName);
@@ -317,14 +333,22 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		assertName(blue, "Baby Blue", localeEn, false, null);
 		
 		Concept green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
-		Assert.assertEquals(2, green.getNames().size());
+		Assert.assertEquals(2, green.getNames(true).size());
 		assertName(green, "Green", localeEn, true, fsn);
 		assertName(green, "Verde", localeEs, true, fsn);
+		
+		yellow = cs.getConceptByUuid("4cfe07b0-3061-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(4, yellow.getNames(true).size());
+		assertName(yellow, yellowUuid, "Yellow", localeEn, true, null);
+		ConceptName lemon = assertName(yellow, lemonUuid, "Lemon", localeEn, false, null);
+		Assert.assertTrue(lemon.getVoided());
+		assertName(yellow, "Lemon Yellow", localeEn, false, fsn);
+		assertName(yellow, "Y", localeEn, false, shortName);
 	}
 	
-	protected ConceptName assertName(Concept concept, String name, Locale locale, boolean preferred, ConceptNameType type) {
+	protected ConceptName assertName(Concept c, String name, Locale locale, boolean preferred, ConceptNameType type) {
 		ConceptName conceptName = null;
-		for (ConceptName cn : concept.getNames()) {
+		for (ConceptName cn : c.getNames(true)) {
 			if (cn.getName().equals(name) && cn.getConceptNameType() == type) {
 				if (cn.getLocale().equals(locale) && cn.getLocalePreferred() == preferred) {
 					conceptName = cn;
@@ -332,7 +356,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			}
 		}
 		if (conceptName == null) {
-			Assert.fail("No concept names found that match");
+			Assert.fail("No concept names found that match: " + name + "; " + locale + "; " + preferred + "; " + type);
 		}
 		return conceptName;
 	}
