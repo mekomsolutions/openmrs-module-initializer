@@ -136,9 +136,11 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 				
 				if (!existingName.getName().equals(newName.getName())) {
 					StringBuilder msg = new StringBuilder();
-					msg.append("It is not permitted to change the name property of an existing ConceptName. ");
-					msg.append("Users should instead mark the existing Concept Name as voided, and then ");
-					msg.append("create a new ConceptName with their name of choice.");
+					msg.append("It is not permitted to change the name property of an existing ConceptName and ");
+					msg.append("retain the same uuid as the previous name.  Users who wish to explicitly set their ");
+					msg.append("ConceptName uuids should assign a new UUID whenever they change the name, ");
+					msg.append("and either void the previous name or change the Concept Name Type to a Synonym");
+					msg.append("Any name removed from the CSV will result in this name being voided.");
 					throw new IllegalArgumentException(msg.toString());
 				}
 				
