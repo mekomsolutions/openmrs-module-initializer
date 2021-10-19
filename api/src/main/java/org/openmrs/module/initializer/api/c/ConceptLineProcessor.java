@@ -1,5 +1,6 @@
 package org.openmrs.module.initializer.api.c;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
@@ -17,10 +18,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -64,91 +66,50 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		
 		// First handle all Concept Name updates.
 		
-		// Iterate over headers, and for those that denote a Concept Name, add to a collection to process
-		Map<String, ConceptName> conceptNamesToProcess = new LinkedHashMap<>();
-		Map<Locale, ConceptName> localePreferredNames = new HashMap<>();
-		for (String h : line.getHeaderLine()) {
-			String[] headerComponents = h.trim().split(LOCALE_SEPARATOR, 3);
-			h = h.toLowerCase().trim();
-			if (h.startsWith(HEADER_FSNAME) || h.startsWith(HEADER_SHORTNAME) || h.startsWith(HEADER_SYNONYM)) {
-				if (headerComponents.length == 1) {
-					throw new IllegalArgumentException("Concept Name Headers must specify a locale as <name>:<locale>");
-				} else if (headerComponents.length == 2) {
-					Locale locale = LocaleUtils.toLocale(headerComponents[1]);
-					String name = line.get(h);
-					if (StringUtils.isNotEmpty(name)) {
-						ConceptName cn = new ConceptName(name, locale);
-						
-						ConceptNameType nameType = getConceptNameTypeForHeader(h);
-						cn.setConceptNameType(nameType);
-						
-						Boolean localePreferred = line.getBool(h + LOCALE_SEPARATOR + HEADER_PREFERRED);
-						cn.setLocalePreferred(localePreferred == null ? Boolean.FALSE : localePreferred);
-						if (cn.getLocalePreferred()) {
-							if (localePreferredNames.get(locale) != null) {
-								String msg = "Only one name in a locale can be marked as preferred";
-								throw new IllegalArgumentException(msg);
-							} else {
-								localePreferredNames.put(locale, cn);
-							}
-						} else {
-							if (!localePreferredNames.containsKey(locale)) {
-								localePreferredNames.put(locale, null);
-							}
-						}
-						
-						String uuid = line.get(h + LOCALE_SEPARATOR + HEADER_UUID);
-						if (StringUtils.isBlank(uuid)) {
-							uuid = generateConceptNameUuid(concept.getUuid(), name, nameType, locale);
-						}
-						cn.setUuid(uuid);
-						
-						conceptNamesToProcess.put(uuid, cn);
-					}
-				}
+		// Load in all concept names exactly as defined
+		List<String> conceptNameHeaders = getConceptNameHeaders(line);
+		List<ConceptName> namesFromCsv = new ArrayList<>();
+		for (String conceptNameHeader : conceptNameHeaders) {
+			ConceptName conceptName = constructConceptName(line, conceptNameHeader);
+			if (conceptName != null) {
+				namesFromCsv.add(conceptName);
 			}
 		}
 		
-		// Iterate over all of the names to process and set preferred names if necessary
-		for (ConceptName conceptName : conceptNamesToProcess.values()) {
-			if (localePreferredNames.get(conceptName.getLocale()) == null) {
-				ConceptNameType nameType = conceptName.getConceptNameType();
-				// Only synonyms and fully specified names are allowed to be preferred
-				if (nameType == null || nameType == ConceptNameType.FULLY_SPECIFIED) {
-					conceptName.setLocalePreferred(true);
-					localePreferredNames.put(conceptName.getLocale(), conceptName);
-				}
-			}
-		}
+		// Configure Concept Names with defaults
+		ensureLocalPreferredConfigured(namesFromCsv);
 		
 		// Update the concept with the constructed Concept Names
 		
-		// First, remove or update any existing Concept Names
+		/* The ConceptService considers any change to a ConceptName.name as a new ConceptName with a new uuid.  Thus,
+		   we consider an incoming ConceptName to be an update to an existing ConceptName only if the name matches.
+		   If the uuid is specified, it must also match.  If the name matches and the uuid does not, then
+		   processing of the row must fail as this would result in the existing name becoming voided and the new name
+		   being issued a new UUID that does not match the one specified in the CSV.
+		 */
+		
+		// Update any existing Concept Names as appropriate
 		for (ConceptName existingName : concept.getNames(true)) {
-			ConceptName newName = conceptNamesToProcess.get(existingName.getUuid());
+			ConceptName newName = getNameWithUuid(namesFromCsv, existingName.getUuid());
 			if (newName != null) {
-				
-				// If this is a change to the name, fail.  The ConceptService has checks in place to determine if a
-				// ConceptName.name has changed, and to automatically void and assign a new random name uuid
-				// If we allow this, it would mean that a uuid specified in the CSV would not reflect the saved UUID
-				// It would also mean that any UUID generation algorithm introduced for ConceptNames would not be respected
-				// We want to prevent this behavior.  Users should instead explicitly void and recreate Concept Names in their CSVs
-				
 				if (!existingName.getName().equals(newName.getName())) {
 					StringBuilder msg = new StringBuilder();
 					msg.append("It is not permitted to change the name property of an existing ConceptName and ");
 					msg.append("retain the same uuid as the previous name.  Users who wish to explicitly set their ");
 					msg.append("ConceptName uuids should assign a new UUID whenever they change the name, ");
-					msg.append("and either void the previous name or change the Concept Name Type to a Synonym");
+					msg.append("and either void the previous name or change the Concept Name Type to a Synonym. ");
 					msg.append("Any name removed from the CSV will result in this name being voided.");
 					throw new IllegalArgumentException(msg.toString());
 				}
-				
+			} else {
+				newName = getNameWithName(namesFromCsv, existingName.getName(), existingName.getLocale());
+			}
+			if (newName != null) {
 				existingName.setConceptNameType(newName.getConceptNameType());
 				existingName.setName(newName.getName());
 				existingName.setLocale(newName.getLocale());
 				existingName.setLocalePreferred(newName.getLocalePreferred());
-				conceptNamesToProcess.remove(existingName.getUuid()); // Remove once we have processed it
+				namesFromCsv.remove(newName);
 			} else {
 				// We void the name rather than removing it as there may be data associated with it
 				existingName.setVoided(true);
@@ -159,7 +120,11 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		}
 		
 		// Now, add in any new Concept Names
-		for (ConceptName newName : conceptNamesToProcess.values()) {
+		for (ConceptName newName : namesFromCsv) {
+			if (StringUtils.isEmpty(newName.getUuid())) {
+				newName.setUuid(generateConceptNameUuid(concept.getUuid(), newName.getName(), newName.getConceptNameType(),
+				    newName.getLocale()));
+			}
 			concept.addName(newName);
 		}
 		
@@ -202,10 +167,108 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	}
 	
 	/**
+	 * Given a CsvLine, this method returns all of the headers that refer to actual ConceptName.name
+	 * values These are used both to retrieve the text for each ConceptName directly, and as a prefix
+	 * for related attributes.
+	 */
+	protected List<String> getConceptNameHeaders(CsvLine line) {
+		List<String> headers = new ArrayList<>();
+		for (String header : line.getHeaderLine()) {
+			String[] headerComponents = header.split(LOCALE_SEPARATOR, 3);
+			String h = headerComponents[0].trim().toLowerCase();
+			if (h.startsWith(HEADER_FSNAME) || h.startsWith(HEADER_SHORTNAME) || h.startsWith(HEADER_SYNONYM)) {
+				if (headerComponents.length == 1) {
+					throw new IllegalArgumentException("Concept Name Headers must specify a locale as <name>:<locale>");
+				} else if (headerComponents.length == 2) {
+					headers.add(header);
+				}
+			}
+		}
+		return headers;
+	}
+	
+	/**
+	 * @return a new ConceptName instance for the given nameHeader So if the passed nameHeader is "fully
+	 *         specified name:en", this will construct the concept name from fully specified name:en +
+	 *         fully specified name:en:preferred + fully specified name:en:uuid
+	 */
+	protected ConceptName constructConceptName(CsvLine line, String nameHeader) {
+		ConceptName cn = null;
+		String name = line.get(nameHeader);
+		if (StringUtils.isNotEmpty(name)) {
+			Locale locale = LocaleUtils.toLocale(nameHeader.split(LOCALE_SEPARATOR)[1]);
+			cn = new ConceptName(name, locale);
+			
+			ConceptNameType nameType = getConceptNameTypeForHeader(nameHeader);
+			cn.setConceptNameType(nameType);
+			Boolean localePreferred = line.getBool(nameHeader + LOCALE_SEPARATOR + HEADER_PREFERRED);
+			localePreferred = (localePreferred == null ? Boolean.FALSE : localePreferred);
+			cn.setLocalePreferred(localePreferred);
+			
+			String uuid = line.get(nameHeader + LOCALE_SEPARATOR + HEADER_UUID);
+			cn.setUuid(uuid);
+		}
+		return cn;
+	}
+	
+	/**
+	 * Iterates over all specified concept names and ensures that locale preferred is set on one concept
+	 * per locale
+	 */
+	protected void ensureLocalPreferredConfigured(List<ConceptName> conceptNames) {
+		Map<Locale, ConceptName> localePreferredNames = new HashMap<>();
+		for (ConceptName conceptName : conceptNames) {
+			if (BooleanUtils.isTrue(conceptName.getLocalePreferred())) {
+				if (localePreferredNames.get(conceptName.getLocale()) != null) {
+					throw new IllegalArgumentException("Only one name in a locale can be marked as preferred");
+				}
+				localePreferredNames.put(conceptName.getLocale(), conceptName);
+			} else {
+				conceptName.setLocalePreferred(false);
+			}
+		}
+		for (ConceptName conceptName : conceptNames) {
+			if (localePreferredNames.get(conceptName.getLocale()) == null) {
+				ConceptNameType nameType = conceptName.getConceptNameType();
+				// Only synonyms and fully specified names are allowed to be preferred
+				if (nameType == null || nameType == ConceptNameType.FULLY_SPECIFIED) {
+					conceptName.setLocalePreferred(true);
+					localePreferredNames.put(conceptName.getLocale(), conceptName);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * @return the first found name from the passed List whose uuid matches the passed uuid
+	 */
+	protected ConceptName getNameWithUuid(List<ConceptName> names, String uuid) {
+		for (ConceptName name : names) {
+			if (name.getUuid() != null && name.getUuid().equals(uuid)) {
+				return name;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * @return the first found name from the passed List whose uuid matches the passed uuid
+	 */
+	protected ConceptName getNameWithName(List<ConceptName> names, String name, Locale locale) {
+		for (ConceptName nameToCheck : names) {
+			if (nameToCheck.getName().equals(name) && nameToCheck.getLocale().equals(locale)) {
+				return nameToCheck;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * @return the ConceptNameType represented by a given ConceptName component header, or null if
 	 *         header does not represent a component of a ConceptName
 	 */
 	protected ConceptNameType getConceptNameTypeForHeader(String header) {
+		header = header.toLowerCase();
 		if (header.startsWith(HEADER_FSNAME)) {
 			return ConceptNameType.FULLY_SPECIFIED;
 		} else if (header.startsWith(HEADER_SHORTNAME)) {
