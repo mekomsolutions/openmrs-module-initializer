@@ -122,8 +122,10 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		// Now, add in any new Concept Names
 		for (ConceptName newName : namesFromCsv) {
 			if (StringUtils.isEmpty(newName.getUuid())) {
-				newName.setUuid(generateConceptNameUuid(concept.getUuid(), newName.getName(), newName.getConceptNameType(),
-				    newName.getLocale()));
+				String name = newName.getName();
+				ConceptNameType nameType = newName.getConceptNameType();
+				Locale locale = newName.getLocale();
+				newName.setUuid(generateConceptNameUuid(concept.getUuid(), name, nameType, locale));
 			}
 			concept.addName(newName);
 		}
