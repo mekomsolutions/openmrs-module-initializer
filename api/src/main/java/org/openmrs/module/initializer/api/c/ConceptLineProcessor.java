@@ -19,14 +19,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.openmrs.module.initializer.api.c.LocalizedHeader.getLocalizedHeader;
 
@@ -66,11 +64,10 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		
 		// First handle all Concept Name updates.
 		
-		// Load in all concept names exactly as defined
-		List<String> conceptNameHeaders = getConceptNameHeaders(line);
+		// Load in all concept names from the CSV Line
 		List<ConceptName> namesFromCsv = new ArrayList<>();
-		for (String conceptNameHeader : conceptNameHeaders) {
-			ConceptName conceptName = constructConceptName(line, conceptNameHeader);
+		for (String conceptNameHeader : getConceptNameHeaders(line)) {
+			ConceptName conceptName = constructConceptName(concept, line, conceptNameHeader);
 			if (conceptName != null) {
 				namesFromCsv.add(conceptName);
 			}
@@ -79,19 +76,33 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		// Configure Concept Names with defaults
 		ensureLocalPreferredConfigured(namesFromCsv);
 		
-		// Update the concept with the constructed Concept Names
-		
-		/* The ConceptService considers any change to a ConceptName.name as a new ConceptName with a new uuid.  Thus,
-		   we consider an incoming ConceptName to be an update to an existing ConceptName only if the name matches.
-		   If the uuid is specified, it must also match.  If the name matches and the uuid does not, then
-		   processing of the row must fail as this would result in the existing name becoming voided and the new name
-		   being issued a new UUID that does not match the one specified in the CSV.
-		 */
-		
 		// Update any existing Concept Names as appropriate
 		for (ConceptName existingName : concept.getNames(true)) {
-			ConceptName newName = getNameWithUuid(namesFromCsv, existingName.getUuid());
-			if (newName != null) {
+			
+			// Find a matching concept name by uuid
+			List<ConceptName> matchingNames = new ArrayList<>();
+			for (ConceptName nameFromCsv : namesFromCsv) {
+				if (nameFromCsv.getUuid().equals(existingName.getUuid())) {
+					matchingNames.add(nameFromCsv);
+				}
+			}
+			
+			// If there are multiple matches on uuid, fail loading this row
+			if (matchingNames.size() > 1) {
+				StringBuilder msg = new StringBuilder();
+				msg.append("There are ").append(matchingNames.size()).append(" names defined in the CSV ");
+				msg.append("that match the UUID of an existing Concept Name: ").append(existingName);
+				throw new IllegalArgumentException(msg.toString());
+			}
+			// If there is a single match on uuid, update the existing Concept
+			else if (matchingNames.size() == 1) {
+				ConceptName newName = matchingNames.get(0);
+				
+				// Validate and fail if the name has changed from the existing value
+				// This is necessary because if the name matches and the uuid does not, the ConceptServiceImpl
+				// will automatically void the name, clone it, and issue a new random UUID to the new one, which
+				// will result in a state that differs from what was specified in the concepts CSV
+				
 				if (!existingName.getName().equals(newName.getName())) {
 					StringBuilder msg = new StringBuilder();
 					msg.append("It is not permitted to change the name property of an existing ConceptName and ");
@@ -101,17 +112,23 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 					msg.append("Any name removed from the CSV will result in this name being voided.");
 					throw new IllegalArgumentException(msg.toString());
 				}
-			} else {
-				newName = getNameWithName(namesFromCsv, existingName.getName(), existingName.getLocale());
-			}
-			if (newName != null) {
+				
 				existingName.setConceptNameType(newName.getConceptNameType());
 				existingName.setName(newName.getName());
 				existingName.setLocale(newName.getLocale());
 				existingName.setLocalePreferred(newName.getLocalePreferred());
+				
+				// If the matched name was previously voided, un-void it
+				if (BooleanUtils.isTrue(existingName.getVoided())) {
+					existingName.setVoided(false);
+					existingName.setDateVoided(null);
+					existingName.setVoidedBy(null);
+					existingName.setVoidReason(null);
+				}
 				namesFromCsv.remove(newName);
-			} else {
-				// We void the name rather than removing it as there may be data associated with it
+			}
+			// If there is no match found, then void the existing name, as there may be data associated with it
+			else {
 				existingName.setVoided(true);
 				existingName.setDateVoided(new Date());
 				existingName.setVoidedBy(Context.getAuthenticatedUser());
@@ -121,12 +138,6 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		
 		// Now, add in any new Concept Names
 		for (ConceptName newName : namesFromCsv) {
-			if (StringUtils.isEmpty(newName.getUuid())) {
-				String name = newName.getName();
-				ConceptNameType nameType = newName.getConceptNameType();
-				Locale locale = newName.getLocale();
-				newName.setUuid(generateConceptNameUuid(concept.getUuid(), name, nameType, locale));
-			}
 			concept.addName(newName);
 		}
 		
@@ -190,11 +201,14 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	}
 	
 	/**
-	 * @return a new ConceptName instance for the given nameHeader So if the passed nameHeader is "fully
+	 * @return a new ConceptName instance for the given nameHeader If the passed nameHeader is "fully
 	 *         specified name:en", this will construct the concept name from fully specified name:en +
-	 *         fully specified name:en:preferred + fully specified name:en:uuid
+	 *         fully specified name:en:preferred + fully specified name:en:uuid The preferred and uuid
+	 *         values are optional, if not supplied then preferred will default to false, and the uuid
+	 *         will be generated in a deterministic fashion based on name, locale, and type, which
+	 *         enables future updates to concept names to match, even if not explicit uuid is supplied
 	 */
-	protected ConceptName constructConceptName(CsvLine line, String nameHeader) {
+	protected ConceptName constructConceptName(Concept concept, CsvLine line, String nameHeader) {
 		ConceptName cn = null;
 		String name = line.get(nameHeader);
 		if (StringUtils.isNotEmpty(name)) {
@@ -208,6 +222,9 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 			cn.setLocalePreferred(localePreferred);
 			
 			String uuid = line.get(nameHeader + LOCALE_SEPARATOR + HEADER_UUID);
+			if (StringUtils.isEmpty(uuid)) {
+				uuid = generateConceptNameUuid(concept, name, nameType, locale);
+			}
 			cn.setUuid(uuid);
 		}
 		return cn;
@@ -242,30 +259,6 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	}
 	
 	/**
-	 * @return the first found name from the passed List whose uuid matches the passed uuid
-	 */
-	protected ConceptName getNameWithUuid(List<ConceptName> names, String uuid) {
-		for (ConceptName name : names) {
-			if (name.getUuid() != null && name.getUuid().equals(uuid)) {
-				return name;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * @return the first found name from the passed List whose uuid matches the passed uuid
-	 */
-	protected ConceptName getNameWithName(List<ConceptName> names, String name, Locale locale) {
-		for (ConceptName nameToCheck : names) {
-			if (nameToCheck.getName().equals(name) && nameToCheck.getLocale().equals(locale)) {
-				return nameToCheck;
-			}
-		}
-		return null;
-	}
-	
-	/**
 	 * @return the ConceptNameType represented by a given ConceptName component header, or null if
 	 *         header does not represent a component of a ConceptName
 	 */
@@ -288,9 +281,11 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	 * @return a UUID for the given ConceptName TODO: Note, this is here temporarily, and is being added
 	 *         in a separate ticket #141
 	 */
-	protected String generateConceptNameUuid(Object... args) {
-		String seed = Arrays.stream(args).map(arg -> arg == null ? "null" : arg.toString()).collect(Collectors.joining("_"));
-		String uuid = UUID.nameUUIDFromBytes(seed.getBytes()).toString();
+	protected String generateConceptNameUuid(Concept concept, String name, ConceptNameType nameType, Locale locale) {
+		StringBuilder seed = new StringBuilder();
+		seed.append(concept.getUuid()).append("_").append(name).append("_");
+		seed.append(nameType == null ? "null" : nameType.toString()).append("_").append(locale.toString());
+		String uuid = UUID.nameUUIDFromBytes(seed.toString().getBytes()).toString();
 		return uuid;
 	}
 }
