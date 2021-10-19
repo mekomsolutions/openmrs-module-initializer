@@ -1,0 +1,9 @@
+Concept,Member,Member Type,Sort Weight,_version:1,_order:1000
+54014540-311d-11ec-8d2b-0242ac110002,5d1e9aa1-311d-11ec-8d2b-0242ac110002,concept-set,1,,
+Set of senses,Taste,CONCEPT-SET,2.0,,
+CIEL:SENSE_SET,CIEL:TOUCH,,4.0,,
+54014540-311d-11ec-8d2b-0242ac110002,Sight,,3,,
+54014540-311d-11ec-8d2b-0242ac110002,Sound,,50,,
+5a393db9-311d-11ec-8d2b-0242ac110002,CIEL:SMELL,Q-AND-A,"",,
+How did you sense it?,CIEL:SIGHT,q-and-a,200,,
+CIEL:SENSE_QUESTION,CIEL:SOUND,,100,,

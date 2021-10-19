@@ -23,6 +23,7 @@ configuration/
   ├── conceptclasses/
   ├── conceptsources/
   ├── concepts/
+  ├── conceptsets/
   ├── datafiltermappings/
   ├── drugs/
   ├── encountertypes/
@@ -85,6 +86,7 @@ This is the list of currently supported domains in their loading order:
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
 1. [Concepts (CSV files)](readme/concepts.md)
+1. [Concept Sets and Answers (CSV files)](readme/conceptsets.md)
 1. [Programs (CSV files)](readme/prog.md)
 1. [Program Worklows (CSV files)](readme/prog.md)
 1. [Program Worklow States (CSV files)](readme/prog.md)
