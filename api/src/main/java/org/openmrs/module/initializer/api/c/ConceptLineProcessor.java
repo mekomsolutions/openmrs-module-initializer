@@ -1,9 +1,5 @@
 package org.openmrs.module.initializer.api.c;
 
-import static org.openmrs.module.initializer.api.c.LocalizedHeader.getLocalizedHeader;
-
-import java.util.Locale;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
@@ -17,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+
+import java.util.Locale;
+
+import static org.openmrs.module.initializer.api.c.LocalizedHeader.getLocalizedHeader;
 
 /**
  * This is the first level line processor for concepts. It allows to parse and save concepts with
@@ -32,6 +32,8 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	final public static String HEADER_CLASS = "data class";
 	
 	final public static String HEADER_DATATYPE = "data type";
+	
+	final public static String HEADER_VERSION = "version";
 	
 	protected ConceptService conceptService;
 	
@@ -106,6 +108,12 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 				        "Bad concept datatype name '" + conceptTypeName + "' for line:" + line.toString());
 			}
 			concept.setDatatype(conceptDatatype);
+		}
+		
+		// Concept version
+		if (line.containsHeader(HEADER_VERSION)) {
+			String conceptVersion = line.getString(HEADER_VERSION, null);
+			concept.setVersion(conceptVersion);
 		}
 		
 		return concept;

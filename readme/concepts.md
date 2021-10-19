@@ -24,6 +24,7 @@ The fully specified name is a secondary identifier for the concepts domain, it w
 ###### Header `Description` (localized)
 ###### Header `Data class` *(mandatory)*
 ###### Header `Data type` *(mandatory)*
+###### Header `Version` *(optional)*
 
 Here is an example of valid CSV to define basic concepts:
 
