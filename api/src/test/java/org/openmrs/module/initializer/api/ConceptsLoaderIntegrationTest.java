@@ -298,21 +298,26 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		String yellowUuid = "c0c238b3-3061-11ec-8d2b-0242ac110002";
 		String lemonUuid = "c4e56850-3061-11ec-8d2b-0242ac110002";
 		
-		// Initial state is that only yellow is in the database, and "Yellow" is the FSN, Lemon is the synonym
+		// Initial state is that yellow and green are in the database, red and blue are not
+		
 		Concept yellow = cs.getConceptByUuid("4cfe07b0-3061-11ec-8d2b-0242ac110002");
 		Assert.assertEquals(2, yellow.getNames(true).size());
 		assertName(yellow, yellowUuid, "Yellow", localeEn, true, fsn);
 		assertName(yellow, lemonUuid, "Lemon", localeEn, false, null);
 		
+		Concept green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(2, green.getNames(true).size());
+		
 		Assert.assertNull(cs.getConceptByUuid("58083852-303f-11ec-8d2b-0242ac110002")); // red
 		Assert.assertNull(cs.getConceptByUuid("5dcaf167-303f-11ec-8d2b-0242ac110002")); // blue
-		Assert.assertNull(cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002")); // green
 		
+		// Load once and test that all existing concept names are updated by uuid, and all new concept names are created
 		loader.load();
 		
-		// Should load all names specified for a given concept
-		
 		// These concepts are defined in concepts_names.csv and test-concepts.xml
+		
+		// Red and Blue are new Concepts and new Concept Names.
+		// These tests confirm that new names are loaded correctly with a variety of null and not-null fields
 		
 		Concept red = cs.getConceptByUuid("58083852-303f-11ec-8d2b-0242ac110002");
 		Assert.assertEquals(5, red.getNames(true).size());
@@ -332,10 +337,22 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		assertName(blue, "Azulado", localeEs, false, null);
 		assertName(blue, "Baby Blue", localeEn, false, null);
 		
-		Concept green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
+		// Green is an existing Concept
+		// It has two existing names, and no uuids are specified in the CSV.
+		// Since the name, type, and locale are the same in the CSV as in the DB, it should match, and not recreate.
+		
+		green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
 		Assert.assertEquals(2, green.getNames(true).size());
 		assertName(green, "Green", localeEn, true, fsn);
 		assertName(green, "Verde", localeEs, true, fsn);
+		
+		// Yellow is an existing Concept with 2 names, with Yellow as the FSN, and Lemon as a synonym
+		// In the CSV:
+		//   The "Yellow" FSN should be looked up by uuid, and changed to a Synonym
+		//   The "Lemon" Synonym should be voided, it is not matched on uuid, and the name is changed
+		//   The "Lemon Yellow" FSN should be created as a new name
+		//   The "Y" short name should be created as a new name
+		//   The resulting concept should have 3 non-voided, and 1 voided name
 		
 		yellow = cs.getConceptByUuid("4cfe07b0-3061-11ec-8d2b-0242ac110002");
 		Assert.assertEquals(4, yellow.getNames(true).size());

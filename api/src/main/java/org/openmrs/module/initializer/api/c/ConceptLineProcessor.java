@@ -79,11 +79,25 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		// Update any existing Concept Names as appropriate
 		for (ConceptName existingName : concept.getNames(true)) {
 			
-			// Find a matching concept name by uuid
 			List<ConceptName> matchingNames = new ArrayList<>();
+			
+			// Find a matching concept name by uuid
 			for (ConceptName nameFromCsv : namesFromCsv) {
-				if (nameFromCsv.getUuid().equals(existingName.getUuid())) {
+				if (existingName.getUuid().equals(nameFromCsv.getUuid())) {
 					matchingNames.add(nameFromCsv);
+				}
+			}
+			// If no match is found on uuid, match if an existing concept and new concept would share a generated uuid
+			if (matchingNames.isEmpty()) {
+				String existingGeneratedUuid = generateConceptNameUuid(concept, existingName);
+				for (ConceptName nameFromCsv : namesFromCsv) {
+					if (StringUtils.isEmpty(nameFromCsv.getUuid())) {
+						String csvGeneratedUuid = generateConceptNameUuid(concept, nameFromCsv);
+						if (existingGeneratedUuid.equalsIgnoreCase(csvGeneratedUuid)) {
+							matchingNames.add(nameFromCsv);
+							nameFromCsv.setUuid(csvGeneratedUuid);
+						}
+					}
 				}
 			}
 			
@@ -91,7 +105,8 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 			if (matchingNames.size() > 1) {
 				StringBuilder msg = new StringBuilder();
 				msg.append("There are ").append(matchingNames.size()).append(" names defined in the CSV ");
-				msg.append("that match the UUID of an existing Concept Name: ").append(existingName);
+				msg.append("that match the an existing Concept Name: ").append(existingName);
+				msg.append("Names from CSV: " + matchingNames);
 				throw new IllegalArgumentException(msg.toString());
 			}
 			// If there is a single match on uuid, update the existing Concept
@@ -138,6 +153,9 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		
 		// Now, add in any new Concept Names
 		for (ConceptName newName : namesFromCsv) {
+			if (StringUtils.isEmpty(newName.getUuid())) {
+				newName.setUuid(generateConceptNameUuid(concept, newName));
+			}
 			concept.addName(newName);
 		}
 		
@@ -222,9 +240,6 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 			cn.setLocalePreferred(localePreferred);
 			
 			String uuid = line.get(nameHeader + LOCALE_SEPARATOR + HEADER_UUID);
-			if (StringUtils.isEmpty(uuid)) {
-				uuid = generateConceptNameUuid(concept, name, nameType, locale);
-			}
 			cn.setUuid(uuid);
 		}
 		return cn;
@@ -281,11 +296,11 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	 * @return a UUID for the given ConceptName TODO: Note, this is here temporarily, and is being added
 	 *         in a separate ticket #141
 	 */
-	protected String generateConceptNameUuid(Concept concept, String name, ConceptNameType nameType, Locale locale) {
+	protected String generateConceptNameUuid(Concept concept, ConceptName cn) {
 		StringBuilder seed = new StringBuilder();
-		seed.append(concept.getUuid()).append("_").append(name).append("_");
-		seed.append(nameType == null ? "null" : nameType.toString()).append("_").append(locale.toString());
-		String uuid = UUID.nameUUIDFromBytes(seed.toString().getBytes()).toString();
-		return uuid;
+		seed.append(concept.getUuid()).append("_").append(cn.getName()).append("_");
+		seed.append(cn.getConceptNameType() == null ? "null" : cn.getConceptNameType().toString()).append("_");
+		seed.append(cn.getLocale().toString());
+		return UUID.nameUUIDFromBytes(seed.toString().getBytes()).toString();
 	}
 }
