@@ -274,11 +274,11 @@ public class UtilsTest {
 	}
 	
 	@Test
-	public void generateUuidFromObjects_shouldReturnNullGivenInvalidArguments() {
+	public void generateUuidFromObjects_shouldNotFailGivenNullArguments() {
 		// replay
 		String uuid = Utils.generateUuidFromObjects("some-uuid", null, ConceptNameType.SHORT, Locale.ENGLISH);
 		
 		// verify
-		Assert.assertNull(uuid);
+		Assert.assertNotNull(uuid);
 	}
 }

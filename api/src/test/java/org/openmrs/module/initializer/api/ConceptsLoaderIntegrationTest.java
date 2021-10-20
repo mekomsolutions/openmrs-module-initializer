@@ -295,6 +295,21 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertNotNull(c);
 			Assert.assertEquals("New short name", c.getShortNameInLocale(localeEn).toString());
 		}
+		// Verify unvoiding ConceptName(s) if they exist
+		Context.setLocale(localeEn);
+		{
+			c = cs.getConceptByUuid("fda5cc2a-6245-4d91-be17-446d27aab33b");
+			ConceptName shortName = c.getShortNameInLocale(localeEn);
+			ConceptName fullySpecifiedName = c.getFullySpecifiedName(localeEn);
+			Assert.assertNotNull(c);
+			Assert.assertEquals("Testing Short Name", shortName.toString());
+			Assert.assertEquals("Testing Fully Specified Name", fullySpecifiedName.toString());
+			Assert.assertEquals(
+			    Utils.generateUuidFromObjects(c.getUuid(), "Testing Short Name", ConceptNameType.SHORT, localeEn),
+			    shortName.getUuid());
+			Assert.assertEquals(Utils.generateUuidFromObjects(c.getUuid(), "Testing Fully Specified Name",
+			    ConceptNameType.FULLY_SPECIFIED, localeEn), fullySpecifiedName.getUuid());
+		}
 		Context.setLocale(localeKm);
 		{
 			// Verif mappings are added

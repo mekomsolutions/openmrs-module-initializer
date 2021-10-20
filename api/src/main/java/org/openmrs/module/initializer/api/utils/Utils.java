@@ -555,16 +555,14 @@ public class Utils {
 	}
 	
 	/**
-	 * Returns uuid generated from objects. Calls {@link Object#toString()} on each provided argument
+	 * Concatenates the {@link Object#toString()} representation of each object of an array or "null"
+	 * string if object is null, and use it as a seed to generate a UUID.
 	 * 
-	 * @param args The objects to generate uuid from
-	 * @return generated uuid or null if one argument is null
+	 * @param args An array of {@link Object}.
+	 * @return The generated UUID.
 	 */
 	public static String generateUuidFromObjects(Object... args) {
-		if (Arrays.asList(args).stream().anyMatch(arg -> arg == null)) {
-			return null;
-		}
-		String seed = Arrays.asList(args).stream().map(Object::toString).collect(Collectors.joining("_"));
+		String seed = Arrays.stream(args).map(arg -> arg == null ? "null" : arg.toString()).collect(Collectors.joining("_"));
 		String uuid = UUID.nameUUIDFromBytes(seed.getBytes()).toString();
 		return uuid;
 	}

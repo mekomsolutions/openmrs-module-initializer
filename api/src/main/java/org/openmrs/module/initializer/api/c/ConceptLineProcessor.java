@@ -60,10 +60,9 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		for (Locale locale : lh.getLocales()) {
 			String name = line.get(lh.getI18nHeader(locale));
 			if (!StringUtils.isEmpty(name)) {
-				ConceptName conceptName = new ConceptName(name, locale);
-				String uuid = Utils.generateUuidFromObjects(concept.getUuid(), name, ConceptNameType.FULLY_SPECIFIED,
+				String nameUuid = Utils.generateUuidFromObjects(concept.getUuid(), name, ConceptNameType.FULLY_SPECIFIED,
 				    locale);
-				conceptName.setUuid(uuid);
+				ConceptName conceptName = getOrCreateConceptName(nameUuid, name, locale);
 				concept.setFullySpecifiedName(conceptName);
 			}
 		}
@@ -73,9 +72,8 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		for (Locale locale : lh.getLocales()) {
 			String name = line.get(lh.getI18nHeader(locale));
 			if (!StringUtils.isEmpty(name)) {
-				ConceptName conceptName = new ConceptName(name, locale);
-				String uuid = Utils.generateUuidFromObjects(concept.getUuid(), name, ConceptNameType.SHORT, locale);
-				conceptName.setUuid(uuid);
+				String nameUuid = Utils.generateUuidFromObjects(concept.getUuid(), name, ConceptNameType.SHORT, locale);
+				ConceptName conceptName = getOrCreateConceptName(nameUuid, name, locale);
 				concept.setShortName(conceptName);
 			}
 		}
@@ -116,5 +114,19 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		}
 		
 		return concept;
+	}
+	
+	private ConceptName getOrCreateConceptName(String nameUuid, String name, Locale locale) {
+		ConceptName conceptName = conceptService.getConceptNameByUuid(nameUuid);
+		if (conceptName == null) {
+			conceptName = new ConceptName(name, locale);
+			conceptName.setUuid(nameUuid);
+		} else {
+			conceptName.setVoided(false);
+			conceptName.setDateVoided(null);
+			conceptName.setVoidedBy(null);
+			conceptName.setVoidReason(null);
+		}
+		return conceptName;
 	}
 }
