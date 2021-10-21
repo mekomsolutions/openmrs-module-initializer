@@ -17,7 +17,8 @@ import liquibase.exception.ValidationErrors;
 import liquibase.resource.ResourceAccessor;
 
 /**
- * This change set is run to update ConceptNames uuids
+ * This change set is used to delete initializer domain checksums which in turn triggers a reload of
+ * the domain.
  */
 public class DeleteDomainChecksumsChangeset implements CustomTaskChange {
 	
