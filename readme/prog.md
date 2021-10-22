@@ -9,8 +9,8 @@ programs/
 There is currently only one format for the program CSV line, here is an example:
 
 | <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Name</sub> | <sub>Description</sub> | <sub>Program concept</sub> | <sub>Outcomes concept</sub> | <sub>_order:1000</sub> |
-| - | - | - | - | - |
-| <sub>eae98b4c-e195-403b-b34a-82d94103b2c0</sub> | | TB Program | Program for tracking TB patients | <sub>Tuberculosis Treatment Program</sub> | <sub>TB Program Outcomes</sub> | |
+| - | - | - | - | - | - | - |
+| <sub>eae98b4c-e195-403b-b34a-82d94103b2c0</sub> | | <sub>TB Program</sub> | <sub>Program for tracking TB patients</sub> | <sub>Tuberculosis Treatment Program</sub> | <sub>TB Program Outcomes</sub> | |
 
 <br/>Let's review the headers.
 
