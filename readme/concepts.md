@@ -12,7 +12,19 @@ The way those CSV files are processed is controlled by a reserved part of the CS
 | <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Fully specified name:en</sub> | <sub>Short name:en</sub> | <sub>Description:en</sub> | ... | <sub>_version:1</sub> | <sub>_order:1000</sub> |
 | - | - | - | - | - | - | - | - |
 
-<br/>Let's review some important headers.
+
+#### Implicit Handling of Concept Names
+Concept names (whether fully specified names, short names or synonyms) specified through their ad-hoc column on a CSV line that defines a concept end up being saved as their own separate `ConceptName` entities. In other words concept names are treated as second order metadata that is saved along when the concept itself is saved. This means that they have their own UUID assigned behind the scenes _implicitly_.
+
+Each concept name UUID is however univoquely generated from the following seed information:
+1. The concept UUID,
+1. The concept name _value_,
+1. The concept name type (FSN, short name or synonym),
+1. The concept name locale.
+
+Each combination of those four arguments always produce the same concept name UUID.
+
+#### Concept Headers
 
 ##### Localized headers: `Fully specified name`, `Short name` and `Description`
 Those are locale specific headers, they are never used as such because they always need to indicate the locale for the values of their column.
