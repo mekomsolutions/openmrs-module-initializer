@@ -73,7 +73,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertTrue(c.isSet());
 			c = cs.getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
 			Assert.assertFalse(c.getRetired());
-
+			
 			// Verify initial state for version tests
 			Assert.assertNull(cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3").getVersion());
 			assertEquals("1.0", cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0").getVersion());
@@ -174,7 +174,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertThat(attributes.length, is(2));
 			assertEquals("jdoe@example.com", ((ConceptAttribute) attributes[0]).getValue());
 			assertEquals("2020-04-06", dateDatatype.serialize((Date) ((ConceptAttribute) attributes[1]).getValue()));
-
+			
 			// Verify that a concept without a version, can have this version set
 			c = cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3");
 			assertEquals("2.2", c.getVersion());
@@ -182,7 +182,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			// Verify that a concept with a version will retain this version if no version header is present
 			c = cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0");
 			assertEquals("1.0", c.getVersion());
-
+			
 			// Verify that a concept with a version can have this version changed
 			c = cs.getConceptByName("CONCEPT_FETCH_BY_FSN");
 			assertEquals("3.3", c.getVersion());
