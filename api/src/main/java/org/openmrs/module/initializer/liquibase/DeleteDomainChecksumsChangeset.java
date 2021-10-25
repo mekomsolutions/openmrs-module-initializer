@@ -57,7 +57,7 @@ public class DeleteDomainChecksumsChangeset implements CustomTaskChange {
 	 */
 	@Override
 	public String getConfirmationMessage() {
-		return "Finished deleting " + Domain.CONCEPTS.getName() + " domain checksums";
+		return "Finished deleting all checksums files for the " + getDomainName() + " domain.";
 	}
 	
 	/**

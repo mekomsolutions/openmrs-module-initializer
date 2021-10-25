@@ -38,15 +38,14 @@ public class DeleteDomainChecksumsChangesetIntegrationTest extends DomainBaseMod
 	@Test
 	public void shouldSuccessfullyDeleteSpecifiedDomainChecksums() throws Exception {
 		// setup
-		File conceptDomainChecksumsDir = new File(
-		        service.getChecksumsDirPath() + File.separator + Domain.CONCEPTS.getName());
-		assertFalse(Arrays.asList(conceptDomainChecksumsDir.list()).isEmpty());
+		File conceptsChecksumsDir = new File(service.getChecksumsDirPath() + File.separator + Domain.CONCEPTS.getName());
+		assertFalse(Arrays.asList(conceptsChecksumsDir.list()).isEmpty());
 		
 		//replay
 		runLiquibaseChangeset(LIQUIBASE_FILE);
 		
 		// verify
-		assertTrue(Arrays.asList(conceptDomainChecksumsDir.list()).isEmpty());
+		assertTrue(Arrays.asList(conceptsChecksumsDir.list()).isEmpty());
 	}
 	
 	private void runLiquibaseChangeset(String filename) throws Exception {

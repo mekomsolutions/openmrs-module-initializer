@@ -36,7 +36,7 @@
                                  referencedColumnNames="user_id" />
     </changeSet> -->
     
-    <changeSet id="delete-concept-checksums" author="iniz" >
+    <changeSet id="delete-concepts-checksums-20211025" author="iniz" >
         <comment>Deleting 'concepts' domain checksums</comment>
         <customChange class="org.openmrs.module.initializer.liquibase.DeleteDomainChecksumsChangeset" domainName="concepts"></customChange>
     </changeSet>
