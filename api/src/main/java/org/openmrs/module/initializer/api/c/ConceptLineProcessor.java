@@ -13,6 +13,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -293,14 +294,12 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	}
 	
 	/**
-	 * @return a UUID for the given ConceptName TODO: Note, this is here temporarily, and is being added
-	 *         in a separate ticket #141
+	 * @return a UUID for the given ConceptName
 	 */
 	protected String generateConceptNameUuid(Concept concept, ConceptName cn) {
-		StringBuilder seed = new StringBuilder();
-		seed.append(concept.getUuid()).append("_").append(cn.getName()).append("_");
-		seed.append(cn.getConceptNameType() == null ? "null" : cn.getConceptNameType().toString()).append("_");
-		seed.append(cn.getLocale().toString());
-		return UUID.nameUUIDFromBytes(seed.toString().getBytes()).toString();
+		String name = cn.getName();
+		ConceptNameType type = cn.getConceptNameType();
+		Locale locale = cn.getLocale();
+		return Utils.generateUuidFromObjects(concept.getUuid(), name, type, locale);
 	}
 }

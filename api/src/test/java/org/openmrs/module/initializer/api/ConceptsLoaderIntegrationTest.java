@@ -26,6 +26,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.customdatatype.datatype.DateDatatype;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -64,6 +65,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		
 		// Verif setup
 		Concept c = null;
+		ConceptName name = null;
 		{
 			c = cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0");
 			Assert.assertEquals(2, c.getSetMembers().size());
@@ -101,6 +103,12 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertEquals("ចាម", c.getDescription().toString());
 			Assert.assertEquals("Misc", c.getConceptClass().getName());
 			Assert.assertEquals("Text", c.getDatatype().getName());
+			name = c.getFullySpecifiedName(localeKm);
+			Assert.assertEquals(name.getUuid(),
+			    Utils.generateUuidFromObjects(c.getUuid(), name.getName(), ConceptNameType.FULLY_SPECIFIED, localeKm));
+			name = c.getShortNameInLocale(localeKm);
+			Assert.assertEquals(name.getUuid(),
+			    Utils.generateUuidFromObjects(c.getUuid(), name.getName(), ConceptNameType.SHORT, localeKm));
 			
 			// Verif in another locale
 			Context.setLocale(localeKm);
@@ -121,6 +129,9 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertEquals(0, c.getDescriptions().size());
 			Assert.assertEquals("Misc", c.getConceptClass().getName());
 			Assert.assertEquals("Text", c.getDatatype().getName());
+			name = c.getFullySpecifiedName(localeEn);
+			Assert.assertEquals(name.getUuid(),
+			    Utils.generateUuidFromObjects(c.getUuid(), name.getName(), ConceptNameType.FULLY_SPECIFIED, localeEn));
 			
 			// Failed ones
 			Context.setLocale(localeEn);
@@ -147,6 +158,9 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Context.setLocale(localeEn);
 			c = cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3");
 			Assert.assertEquals("New short name", c.getShortNameInLocale(localeEn).getName());
+			name = c.getShortNameInLocale(localeEn);
+			Assert.assertEquals(name.getUuid(),
+			    Utils.generateUuidFromObjects(c.getUuid(), name.getName(), ConceptNameType.SHORT, localeEn));
 			
 			// Concept attributes
 			c = cs.getConceptByUuid("4d3cfdcf-1f3f-4b41-9b31-02dfd951c582");
@@ -278,6 +292,21 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			c = cs.getConceptByName("CONCEPT_FETCH_BY_FSN");
 			Assert.assertNotNull(c);
 			Assert.assertEquals("New short name", c.getShortNameInLocale(localeEn).toString());
+		}
+		// Verify unvoiding ConceptName(s) if they exist
+		Context.setLocale(localeEn);
+		{
+			c = cs.getConceptByUuid("fda5cc2a-6245-4d91-be17-446d27aab33b");
+			ConceptName shortName = c.getShortNameInLocale(localeEn);
+			ConceptName fullySpecifiedName = c.getFullySpecifiedName(localeEn);
+			Assert.assertNotNull(c);
+			Assert.assertEquals("Testing Short Name", shortName.toString());
+			Assert.assertEquals("Testing Fully Specified Name", fullySpecifiedName.toString());
+			Assert.assertEquals(
+			    Utils.generateUuidFromObjects(c.getUuid(), "Testing Short Name", ConceptNameType.SHORT, localeEn),
+			    shortName.getUuid());
+			Assert.assertEquals(Utils.generateUuidFromObjects(c.getUuid(), "Testing Fully Specified Name",
+			    ConceptNameType.FULLY_SPECIFIED, localeEn), fullySpecifiedName.getUuid());
 		}
 		Context.setLocale(localeKm);
 		{
