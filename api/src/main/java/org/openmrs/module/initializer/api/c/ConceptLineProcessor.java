@@ -10,9 +10,11 @@ import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -58,7 +60,9 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		for (Locale locale : lh.getLocales()) {
 			String name = line.get(lh.getI18nHeader(locale));
 			if (!StringUtils.isEmpty(name)) {
-				ConceptName conceptName = new ConceptName(name, locale);
+				String nameUuid = Utils.generateUuidFromObjects(concept.getUuid(), name, ConceptNameType.FULLY_SPECIFIED,
+				    locale);
+				ConceptName conceptName = getOrCreateConceptName(nameUuid, name, locale);
 				concept.setFullySpecifiedName(conceptName);
 			}
 		}
@@ -68,7 +72,8 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		for (Locale locale : lh.getLocales()) {
 			String name = line.get(lh.getI18nHeader(locale));
 			if (!StringUtils.isEmpty(name)) {
-				ConceptName conceptName = new ConceptName(name, locale);
+				String nameUuid = Utils.generateUuidFromObjects(concept.getUuid(), name, ConceptNameType.SHORT, locale);
+				ConceptName conceptName = getOrCreateConceptName(nameUuid, name, locale);
 				concept.setShortName(conceptName);
 			}
 		}
@@ -109,5 +114,19 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		}
 		
 		return concept;
+	}
+	
+	private ConceptName getOrCreateConceptName(String nameUuid, String name, Locale locale) {
+		ConceptName conceptName = conceptService.getConceptNameByUuid(nameUuid);
+		if (conceptName == null) {
+			conceptName = new ConceptName(name, locale);
+			conceptName.setUuid(nameUuid);
+		} else {
+			conceptName.setVoided(false);
+			conceptName.setDateVoided(null);
+			conceptName.setVoidedBy(null);
+			conceptName.setVoidReason(null);
+		}
+		return conceptName;
 	}
 }
