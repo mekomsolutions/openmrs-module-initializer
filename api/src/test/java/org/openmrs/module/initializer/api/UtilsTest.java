@@ -281,7 +281,7 @@ public class UtilsTest {
 		// verify
 		Assert.assertNotNull(uuid);
 	}
-
+	
 	@Test
 	public void unProxy_shouldReturnOriginalClassName() {
 		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType$HibernateProxy$ODcBnusu"));
