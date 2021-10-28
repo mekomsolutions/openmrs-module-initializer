@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api.loc;
 
-import java.util.Arrays;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
+
 import java.util.HashSet;
-import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Location;
@@ -15,8 +15,6 @@ import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 @Component("initializer.locationLineProcessor")
 public class LocationLineProcessor extends BaseLineProcessor<Location> {

@@ -1,9 +1,15 @@
 package org.openmrs.module.initializer.api;
 
-import com.opencsv.CSVReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.BaseOpenmrsData;
-import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.OpenmrsObject;
 import org.openmrs.Retireable;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
@@ -12,14 +18,9 @@ import org.openmrs.module.initializer.InitializerConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import com.opencsv.CSVReader;
 
-public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineProcessor<T>> {
+public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProcessor<T>> {
 	
 	protected final Logger log = LoggerFactory.getLogger(CsvParser.class);
 	
@@ -128,7 +129,7 @@ public abstract class CsvParser<T extends BaseOpenmrsObject, P extends BaseLineP
 		reader = new CSVReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 		headerLine = reader.readNext();
 		
-		String version = P.getVersion(headerLine);
+		String version = LP.getVersion(headerLine);
 		
 		setLineProcessors(version);
 	}
