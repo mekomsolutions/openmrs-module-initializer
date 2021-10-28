@@ -13,8 +13,8 @@ The way those CSV files are processed is controlled by a reserved part of the CS
 | - | - | - | - | - | - | - | - |
 
 
-#### Implicit Handling of Concept Names
-Concept names (whether fully specified names, short names or synonyms) specified through their ad-hoc column on a CSV line that defines a concept end up being saved as their own separate `ConceptName` entities. In other words concept names are treated as second order metadata that is saved along when the concept itself is saved. This means that they have their own UUID assigned behind the scenes _implicitly_.
+### Implicit Handling of Concept Names
+Concept names (whether fully specified names, short names or synonyms) specified through their ad-hoc column on a CSV line that defines a concept end up being saved as their own separate `ConceptName` entities. In other words concept names are treated as second order metadata that is saved along when the concept itself is saved. This means that they have their own UUID assigned behind the scenes _implicitly_ when it is not set explicitly by the appropriate concept name UUID header.
 
 Each concept name UUID is however univoquely generated from the following seed information:
 1. The concept UUID,
@@ -24,22 +24,30 @@ Each concept name UUID is however univoquely generated from the following seed i
 
 Each combination of those four arguments always produce the same concept name UUID.
 
-#### Concept Headers
+### Concept Name Updating vs Concept Name Deleting + Creating
+The concepts domain loader will attempt to match incoming concept names with existing concept names when possible.  It will first try to match on
+the concept name UUID if one is specified.  If no explicit UUID is specified it will try to match on the exact combination of name text, name type and locale.
 
-##### Localized headers: `Fully specified name`, `Short name`, `Index term`, `Synonym`, and `Description`
+If a matching name is found, the loader will update this existing name.  If a matching name is not found, the loader will save a new name.
+Any existing concept names that were not matched are voided in a accordance with the WYSIWYG principle.
+
+NOTE: OpenMRS does not allow changing the name text of an existing `ConceptName` entity.  If a UUID matches and the name does not for an existing concept name, the
+processing will fail for the row.  One should assign a new UUID when changing a concept name, which will result in a new `ConceptName` entity to be created and for the existing `ConceptName` entity to be voided.
+
+### Concept Headers
+
+##### Localized headers: `Fully specified name:<locale>`, `Short name:<locale>`, `Index term <n>:<locale>`, `Synonym <n>:<locale>`, and `Description:<locale>`
 Those are locale specific headers, they are never used as such because they always need to indicate the locale for the values of their column.
 <br/>For example for a column to contain short names in English (locale 'en') simply name the header `Short name:en`. The same logic applies for the other locale specific headers.
 
-##### Concept name headers: `Fully specified name`, `Short name`, `Index term`, `Synonym`
-
-At least 1 Fully Specified Name **must** be specified for a Concept.  All other Concept Names are optional.
+At least one fully specified name per locale **must** be specified for a concept.  All other concept names are optional.
 The fully specified name is a secondary identifier for the concepts domain, it will be used to attempt fetching the concept if no UUID is provided.
+A concept may contain one short name per Locale. A concept may contain more than one index term and synonym per Locale.
 
-**Concept Name Types**
-The Concept Name Type to associate with a given name is inferred from the Concept Name header.
-A Concept may contain 1 `Fully specified name` and one `Short name` per Locale.  However, a Concept may contain more than one `Index term` and `Synonym` per Locale.
-To allow for more than one `Index term` and `Synonym` while maintaining unique column headers, one simply needs to add a suffix to the header prior to the locale.
-Examples:
+The **concept name type** to associate with a given name is inferred from the concept name header, namely either `FULLY_SPECIFIED`, `SHORT`, `INDEX_TERM` or _none_ (which implicitly means that the name is a synonym.)
+
+To allow for more than one `Index term` and `Synonym` while maintaining unique column headers, one simply needs to add an indexing suffix `<n>` to the header prior to the locale.
+Some examples:
 
 * `Fully specified name:en`
 * `Fully specified name:fr`
@@ -48,30 +56,24 @@ Examples:
 * `Synonym 1:en`
 * `Synonym 2:en`
 
-**Locale Preferred**
-By default, the first name found in a given Locale in a particular CSV row will be marked as Locale preferred.
-If one wants to indicate that a different localized name should be locale preferred, this can be done via a `preferred` column associated with the name column.
-For example, to indicate that the Concept Name added as `Synonym 1:en` should be locale preferred, you should add with a value of TRUE:
+##### Localized headers: `Fully specified name:<locale>:Preferred`, `Short name:<locale>:Preferred`, `Index term <n>:<locale>:Preferred` and `Synonym <n>:<locale>:Preferred`
 
-* `Synonym 1:en:preferred`
+By default, the first name found for a given locale in a particular CSV row will be marked as being **locale preferred**.
+If one wants to indicate that a different localized name should be locale preferred, this can be done via a `preferred` (case insensitive) column associated with the name column.
+For example, to indicate that the concept name added as `Synonym 1:en` should be locale preferred, one should set a truthy value:
 
-**Uuid**
-One may specify the uuid to associate with a given Concept Name in order to have more control over this value.  
-This is done by adding a a `uuid` column associated with the name column. For example, to associate a fixed UUId with
+| <sub>Synonym 1:en</sub> | <sub>Synonym 1:en:Preferred</sub> |
+|--------------|------------------------|
+| <sub>Diabetes</sub>     | <sub>TRUE</sub>                   |
+
+##### Localized headers: `Fully specified name:<locale>:Uuid`, `Short name:<locale>:Uuid`, `Index term <n>:<locale>:Uuid` and `Synonym <n>:<locale>:Uuid`
+One may specify the uuid to associate with a given concept name in order to fully control references to this concept name.
+This is done by adding a a `uuid` column associated with the name column. For example, to associate a fixed UUID with
 the `Synonym 1:en` name, one would add a column with the uuid as a value named:
 
-* `Synonym 1:en:uuid`
-
-**Identifying Concept Name updates vs deleting and adding**
-The Concept loader will attempt to match incoming Concept Names with existing Concept Names if possible.  It will first try to match on
-`uuid` if one is specified for a given Concept Name.  If no explicit uuid is specified it will try to match on exact name text and Locale.
-
-If a matching name is found, the loader will update this existing name.  If a matching name is not found, the loader will save a new name.
-Any existing concept names that were not matched are voided.
-
-NOTE: OpenMRS does not allow changing the name text of an existing Concept Name.  If a uuid matches and the name does not, for an existing Concept Name,
-processing will fail for the row.  One should choose a new uuid for the changed concept name, which will result in a new Concept Name created and the 
-existing Concept Name getting voided during processing.
+| <sub>Synonym 1:en</sub> | <sub>Synonym 1:en:Uuid</sub> |
+|--------------|------------------------|
+| <sub>Diabetes</sub>     | <sub>d4bce1d7-1a1b-4108-b87f-e630e43c7374</sub>                   |
 
 ###### Header `Description` (localized)
 ###### Header `Data class` *(mandatory)*
