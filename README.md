@@ -143,6 +143,10 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 #### Version 2.3.0
 * (_Enhancement_) Concept name UUIDs are univoquely seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.
+* (_Enhancement_) Support for explicitly associating a specific Uuid with a given Concept name and updating Concept names based on uuid
+* (_Enhancement_) Support for adding one or more _Index Term_ Concept Names to a given row in the concepts domain
+* (_Enhancement_) Support for adding one or more _Synonym_ Concept Names to a given row in the concepts domain
+* (_Enhancement_) Support for setting a specific Concept Name in each locale as _locale preferred_
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
