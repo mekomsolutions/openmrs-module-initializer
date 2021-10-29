@@ -41,4 +41,9 @@ public class ZeroOrderLoader implements Loader {
 		
 	}
 	
+	@Override
+	public boolean isPreLoader() {
+		return false;
+	}
+	
 }
