@@ -148,6 +148,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Backward-compatible overhaul of the concepts domain that provides full flexibility for managing concept names.
 * Bulk loading of metadata entities i18n display messages specified under `display:xy` headers.
 * (_For devs._) Introduced a pre-loading mechanism to `BaseFileLoader` that allows checksums-independent loading of transient information out of the config files before the actual metadata are loaded.
+* Bulk creation and editing of concept set members and concept answers using CSV files in **configuration/conceptsets**.
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
