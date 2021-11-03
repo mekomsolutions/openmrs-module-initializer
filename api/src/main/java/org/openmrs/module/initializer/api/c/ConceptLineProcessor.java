@@ -51,6 +51,8 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	
 	final public static String HEADER_DATATYPE = "data type";
 	
+	final public static String HEADER_VERSION = "version";
+	
 	protected ConceptService conceptService;
 	
 	@Autowired
@@ -194,6 +196,12 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 				        "Bad concept datatype name '" + conceptTypeName + "' for line:" + line.toString());
 			}
 			concept.setDatatype(conceptDatatype);
+		}
+		
+		// Concept version
+		if (line.containsHeader(HEADER_VERSION)) {
+			String conceptVersion = line.getString(HEADER_VERSION, null);
+			concept.setVersion(conceptVersion);
 		}
 		
 		return concept;
