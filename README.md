@@ -23,6 +23,7 @@ configuration/
   ├── conceptclasses/
   ├── conceptsources/
   ├── concepts/
+  ├── conceptsets/
   ├── datafiltermappings/
   ├── drugs/
   ├── encountertypes/
@@ -85,6 +86,7 @@ This is the list of currently supported domains in their loading order:
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
 1. [Concepts (CSV files)](readme/concepts.md)
+1. [Concept Sets and Answers (CSV files)](readme/conceptsets.md)
 1. [Programs (CSV files)](readme/prog.md)
 1. [Program Worklows (CSV files)](readme/prog.md)
 1. [Program Worklow States (CSV files)](readme/prog.md)
@@ -147,6 +149,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk loading of metadata entities i18n display messages specified under `display:xy` headers.
 * (_For devs._) Introduced a pre-loading mechanism to `BaseFileLoader` that allows checksums-independent loading of transient information out of the config files before the actual metadata are loaded.
 * Added support for setting a Concept version property in the concepts domain
+* Bulk creation and editing of concept set members and concept answers using CSV files in **configuration/conceptsets**.
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
