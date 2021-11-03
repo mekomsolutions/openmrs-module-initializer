@@ -57,4 +57,10 @@ public class InitializerConstants {
 	
 	public static final String DOMAIN_MSGPROP = "messageproperties";
 	
+	/* 
+	 * Default metadata
+	 */
+	public static final String DEFAULT_RETIRE_REASON = "Retired by module " + InitializerConstants.MODULE_NAME;
+	
+	public static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
 }
