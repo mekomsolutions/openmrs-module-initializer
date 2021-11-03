@@ -24,11 +24,42 @@ public abstract class BaseFileLoader extends BaseLoader {
 	
 	protected abstract void load(File file) throws Exception;
 	
-	/*
-	 * Override this method to provide another implementation for an ordered file.
+	/**
+	 * Turns the File instance into an OrderedFile instance.
+	 * 
+	 * @param file The file to a file that can be ordered.
+	 * @return
 	 */
-	public OrderedFile newOrderedFile(File file) {
+	public OrderedFile toOrderedFile(File file) {
 		return new OrderedFile(file);
+	}
+	
+	/**
+	 * Performs pre-loading operations with the file, such as extracting or computing data from the file
+	 * that needs to be stored in memory rather than being persisted. IMPORTANT: this method will run on
+	 * the file even if its checksum file says that the file should not be processed anymore. This is
+	 * because the outcome of the pre-loader is transient by design.
+	 * 
+	 * @param file The file to be pre-loaded.
+	 * @return The original file, untouched.
+	 */
+	protected void preload(final File file) throws Exception {
+	}
+	
+	private File preload(final File file, boolean doThrow) {
+		try {
+			preload(file);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage());
+			if (doThrow) {
+				log.error(
+				    "The pre-loading of the '" + getDomainName() + "' configuration file was aborted:\n" + file.getPath(),
+				    e);
+				throw new RuntimeException(e);
+			}
+		}
+		return file;
 	}
 	
 	@Override
@@ -36,25 +67,25 @@ public abstract class BaseFileLoader extends BaseLoader {
 		
 		final ConfigDirUtil dirUtil = getDirUtil();
 		
-		for (File file : dirUtil.getOrderedFiles(getFileExtension(), wildcardExclusions, this)) {
-			
-			try {
-				load(file);
-			}
-			catch (Exception e) {
-				log.error(e.getMessage());
-				if (doThrow) {
-					log.error(
-					    "The loading of the '" + getDomainName() + "' configuration file was aborted:\n" + file.getPath(),
-					    e);
-					throw e;
-				}
-			}
-			
-			dirUtil.writeChecksum(file, dirUtil.getChecksumIfChanged(file)); // the updated config. file is marked as processed
-			log.info("The '" + getDomainName() + "' configuration file has finished loading:\n" + file.getPath());
-			
-		}
+		dirUtil.getFiles(getFileExtension(), wildcardExclusions).stream().map(f -> toOrderedFile(f)).sorted()
+		        .map(f -> preload(f, doThrow)).filter(f -> !dirUtil.getChecksumIfChanged(f).isEmpty()).forEach(file -> {
+			        
+			        try {
+				        load(file);
+			        }
+			        catch (Exception e) {
+				        log.error(e.getMessage());
+				        if (doThrow) {
+					        log.error("The loading of the '" + getDomainName() + "' configuration file was aborted:\n"
+					                + file.getPath(),
+					            e);
+					        throw new RuntimeException(e);
+				        }
+			        }
+			        
+			        dirUtil.writeChecksum(file, dirUtil.getChecksumIfChanged(file)); // the config file is marked as processed
+			        log.info("The '" + getDomainName() + "' configuration file has finished loading:\n" + file.getPath());
+		        });
 		
 	}
 }

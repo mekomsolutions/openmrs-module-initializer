@@ -6,14 +6,14 @@ import java.util.Map;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.OpenmrsObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Base class to any CSV line processor.
  */
-public abstract class BaseLineProcessor<T extends BaseOpenmrsObject> {
+public abstract class BaseLineProcessor<T extends OpenmrsObject> {
 	
 	protected final static Logger log = LoggerFactory.getLogger(BaseLineProcessor.class);
 	

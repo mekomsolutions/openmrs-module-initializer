@@ -73,7 +73,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertTrue(c.isSet());
 			c = cs.getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
 			Assert.assertFalse(c.getRetired());
-			
+
 			// Verify initial state for version tests
 			Assert.assertNull(cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3").getVersion());
 			assertEquals("1.0", cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0").getVersion());
@@ -174,7 +174,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertThat(attributes.length, is(2));
 			assertEquals("jdoe@example.com", ((ConceptAttribute) attributes[0]).getValue());
 			assertEquals("2020-04-06", dateDatatype.serialize((Date) ((ConceptAttribute) attributes[1]).getValue()));
-			
+
 			// Verify that a concept without a version, can have this version set
 			c = cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3");
 			assertEquals("2.2", c.getVersion());
@@ -182,7 +182,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			// Verify that a concept with a version will retain this version if no version header is present
 			c = cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0");
 			assertEquals("1.0", c.getVersion());
-			
+
 			// Verify that a concept with a version can have this version changed
 			c = cs.getConceptByName("CONCEPT_FETCH_BY_FSN");
 			assertEquals("3.3", c.getVersion());
@@ -332,5 +332,102 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertNotNull(c);
 			assertEquals("ឈ្មោះខ្លីថ្មី", c.getShortNameInLocale(localeKm).toString());
 		}
+	}
+
+	@Test
+	public void load_shouldLoadConceptNamesAccordingToCsvFiles() {
+
+		ConceptNameType fsn = ConceptNameType.FULLY_SPECIFIED;
+		ConceptNameType shortName = ConceptNameType.SHORT;
+		Locale localeEs = new Locale("es");
+
+		String yellowUuid = "c0c238b3-3061-11ec-8d2b-0242ac110002";
+		String lemonUuid = "c4e56850-3061-11ec-8d2b-0242ac110002";
+
+		// Initial state is that yellow and green are in the database, red and blue are not
+
+		Concept yellow = cs.getConceptByUuid("4cfe07b0-3061-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(2, yellow.getNames(true).size());
+		assertName(yellow, yellowUuid, "Yellow", localeEn, true, fsn);
+		assertName(yellow, lemonUuid, "Lemon", localeEn, false, null);
+
+		Concept green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(2, green.getNames(true).size());
+
+		Assert.assertNull(cs.getConceptByUuid("58083852-303f-11ec-8d2b-0242ac110002")); // red
+		Assert.assertNull(cs.getConceptByUuid("5dcaf167-303f-11ec-8d2b-0242ac110002")); // blue
+
+		// Load once and test that all existing concept names are updated by uuid, and all new concept names are created
+		loader.load();
+
+		// These concepts are defined in concepts_names.csv and test-concepts.xml
+
+		// Red and Blue are new Concepts and new Concept Names.
+		// These tests confirm that new names are loaded correctly with a variety of null and not-null fields
+
+		Concept red = cs.getConceptByUuid("58083852-303f-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(5, red.getNames(true).size());
+		assertName(red, "e91ab3ad-303f-11ec-8d2b-0242ac110002", "Red", localeEn, true, fsn);
+		assertName(red, "Rojo", localeEs, true, fsn);
+		assertName(red, "R", localeEn, false, shortName);
+		assertName(red, "R", localeEs, false, shortName);
+		assertName(red, "Maroon", localeEn, false, null);
+
+		Concept blue = cs.getConceptByUuid("5dcaf167-303f-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(7, blue.getNames(true).size());
+		assertName(blue, "fe9c8c03-303f-11ec-8d2b-0242ac110002", "Blue", localeEn, false, fsn);
+		assertName(blue, "Azul", localeEs, true, fsn);
+		assertName(blue, "B", localeEn, false, shortName);
+		assertName(blue, "A", localeEs, false, shortName);
+		assertName(blue, "Navy", localeEn, true, null);
+		assertName(blue, "Azulado", localeEs, false, null);
+		assertName(blue, "Baby Blue", localeEn, false, null);
+
+		// Green is an existing Concept
+		// It has two existing names, and no uuids are specified in the CSV.
+		// Since the name, type, and locale are the same in the CSV as in the DB, it should match, and not recreate.
+
+		green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(2, green.getNames(true).size());
+		assertName(green, "Green", localeEn, true, fsn);
+		assertName(green, "Verde", localeEs, true, fsn);
+
+		// Yellow is an existing Concept with 2 names, with Yellow as the FSN, and Lemon as a synonym
+		// In the CSV:
+		//   The "Yellow" FSN should be looked up by uuid, and changed to a Synonym
+		//   The "Lemon" Synonym should be voided, it is not matched on uuid, and the name is changed
+		//   The "Lemon Yellow" FSN should be created as a new name
+		//   The "Y" short name should be created as a new name
+		//   The resulting concept should have 3 non-voided, and 1 voided name
+
+		yellow = cs.getConceptByUuid("4cfe07b0-3061-11ec-8d2b-0242ac110002");
+		Assert.assertEquals(4, yellow.getNames(true).size());
+		assertName(yellow, yellowUuid, "Yellow", localeEn, true, null);
+		ConceptName lemon = assertName(yellow, lemonUuid, "Lemon", localeEn, false, null);
+		Assert.assertTrue(lemon.getVoided());
+		assertName(yellow, "Lemon Yellow", localeEn, false, fsn);
+		assertName(yellow, "Y", localeEn, false, shortName);
+	}
+
+	protected ConceptName assertName(Concept c, String name, Locale locale, boolean preferred, ConceptNameType type) {
+		ConceptName conceptName = null;
+		for (ConceptName cn : c.getNames(true)) {
+			if (cn.getName().equals(name) && cn.getConceptNameType() == type) {
+				if (cn.getLocale().equals(locale) && cn.getLocalePreferred() == preferred) {
+					conceptName = cn;
+				}
+			}
+		}
+		if (conceptName == null) {
+			Assert.fail("No concept names found that match: " + name + "; " + locale + "; " + preferred + "; " + type);
+		}
+		return conceptName;
+	}
+
+	protected ConceptName assertName(Concept concept, String uuid, String name, Locale locale, boolean preferred,
+	        ConceptNameType type) {
+		ConceptName cn = assertName(concept, name, locale, preferred, type);
+		Assert.assertEquals(uuid, cn.getUuid());
+		return cn;
 	}
 }
