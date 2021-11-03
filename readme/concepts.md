@@ -78,6 +78,7 @@ the `Synonym 1:en` name, one would add a column with the uuid as a value named:
 Similarly as with concept names the description is localised.
 ###### Header `Data class` *(mandatory)*
 ###### Header `Data type` *(mandatory)*
+###### Header `Version` *(optional)*
 
 Here is an example of valid CSV to define basic concepts:
 

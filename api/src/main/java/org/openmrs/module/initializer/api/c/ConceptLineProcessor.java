@@ -11,6 +11,7 @@ import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.Utils;
@@ -49,6 +50,8 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	final public static String HEADER_CLASS = "data class";
 	
 	final public static String HEADER_DATATYPE = "data type";
+	
+	final public static String HEADER_VERSION = "version";
 	
 	protected ConceptService conceptService;
 	
@@ -148,7 +151,7 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 				existingName.setVoided(true);
 				existingName.setDateVoided(new Date());
 				existingName.setVoidedBy(Context.getAuthenticatedUser());
-				existingName.setVoidReason("Concept.name.voidedByInitializer");
+				existingName.setVoidReason(InitializerConstants.DEFAULT_VOID_REASON);
 			}
 		}
 		
@@ -193,6 +196,12 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 				        "Bad concept datatype name '" + conceptTypeName + "' for line:" + line.toString());
 			}
 			concept.setDatatype(conceptDatatype);
+		}
+		
+		// Concept version
+		if (line.containsHeader(HEADER_VERSION)) {
+			String conceptVersion = line.getString(HEADER_VERSION, null);
+			concept.setVersion(conceptVersion);
 		}
 		
 		return concept;

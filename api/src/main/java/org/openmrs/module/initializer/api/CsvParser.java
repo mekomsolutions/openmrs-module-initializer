@@ -24,10 +24,6 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	
 	protected final Logger log = LoggerFactory.getLogger(CsvParser.class);
 	
-	protected static final String DEFAULT_RETIRE_REASON = "Retired by module " + InitializerConstants.MODULE_NAME;
-	
-	protected static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
-	
 	protected CSVReader reader;
 	
 	/**
@@ -87,7 +83,7 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 			Retireable metadataInstance = (Retireable) instance;
 			metadataInstance.setRetired(retired);
 			if (retired) {
-				metadataInstance.setRetireReason(DEFAULT_RETIRE_REASON);
+				metadataInstance.setRetireReason(InitializerConstants.DEFAULT_RETIRE_REASON);
 			} else {
 				metadataInstance.setRetireReason("");
 			}
@@ -96,7 +92,7 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 			BaseOpenmrsData dataInstance = (BaseOpenmrsData) instance;
 			dataInstance.setVoided(retired);
 			if (retired) {
-				dataInstance.setVoidReason(DEFAULT_VOID_REASON);
+				dataInstance.setVoidReason(InitializerConstants.DEFAULT_VOID_REASON);
 			} else {
 				dataInstance.setVoidReason("");
 			}
