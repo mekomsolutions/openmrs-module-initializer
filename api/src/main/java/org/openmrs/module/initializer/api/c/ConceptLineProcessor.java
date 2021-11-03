@@ -11,6 +11,7 @@ import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.Utils;
@@ -148,7 +149,7 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 				existingName.setVoided(true);
 				existingName.setDateVoided(new Date());
 				existingName.setVoidedBy(Context.getAuthenticatedUser());
-				existingName.setVoidReason("Concept.name.voidedByInitializer");
+				existingName.setVoidReason(InitializerConstants.DEFAULT_VOID_REASON);
 			}
 		}
 		
