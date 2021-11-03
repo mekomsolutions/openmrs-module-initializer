@@ -7,7 +7,18 @@ conceptsets/
   └── ...
 ```
 Each CSV line maps an association between a `Concept` that is the Set or Question, and the `Member` which is either
-the Set Member or the Concept Answer.  Both types support associating a specific `Sort Weight` for ordering.
+the Set Member or the Concept Answer.  Both types support associating a specific `Sort Weight` for ordering.  
+
+Note that this domain does not affect existing Concept Answers or Set Members that are not directly referenced.
+The domain does not remove existing Concept Answers and Set Members if they are not present in the conceptsets csv. 
+Rather, the domain only acts upon each Concept Answer or Set Member that is directly referenced.
+So if the concepts domain first associates 3 answers with a Concept, and the conceptsets domain subsequently
+includes a single concept answer row for this same concept, the existing answers that are not related to 
+this row are left unaffected.  The following are possible results:
+
+* The resulting concept has 2 answers - if the conceptsets row voids an existing answer
+* The resulting concept has 3 answers - if the conceptsets row updates the sort weight of an existing answer
+* The resulting concept has 3 answers - if the conceptsets row adds a new answer
 
 ###### Header `Concept` *(mandatory)*
 This uniquely identifies the Concept which should contain the member, either as a Set Member or as an Answer.
