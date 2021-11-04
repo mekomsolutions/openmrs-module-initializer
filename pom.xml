@@ -292,18 +292,18 @@
         <repository>
             <id>openmrs-repo</id>
             <name>OpenMRS Nexus Repository</name>
-            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
         </repository>
         <repository>
             <id>central</id>
             <name>Maven Repository Switchboard</name>
             <layout>default</layout>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2</url>
         </repository>
         <repository>
             <id>repo.mybahmni.org</id>
             <name>bahmni-artifactory-snapshots</name>
-            <url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
+            <url>https://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
             <snapshots>
                 <updatePolicy>always</updatePolicy>
             </snapshots>
@@ -311,7 +311,7 @@
         <repository>
             <id>repo.mybahmni.org-release</id>
             <name>bahmni-artifactory-release</name>
-            <url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
+            <url>https://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
         </repository>
         <repository>
             <id>bahmni-nexus</id>
@@ -332,12 +332,12 @@
         <pluginRepository>
             <id>openmrs-repo</id>
             <name>OpenMRS Nexus</name>
-            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
         </pluginRepository>
         <pluginRepository>
             <id>openmrs-repo-snapshots</id>
             <name>OpenMRS Nexus Snapshots</name>
-            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/snapshots</url>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
 
