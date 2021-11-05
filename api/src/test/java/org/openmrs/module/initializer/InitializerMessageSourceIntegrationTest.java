@@ -18,24 +18,31 @@ import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.messagesource.PresentationMessage;
+import org.openmrs.messagesource.impl.CachedMessageSource;
 
 public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
+	protected MessageSourceService ms;
+	
 	protected InitializerMessageSource inizSrc;
+	
+	protected CachedMessageSource parentSrc;
 	
 	@Before
 	public void setup() {
-		inizSrc = (InitializerMessageSource) Context.getMessageSourceService().getActiveMessageSource();
+		ms = Context.getMessageSourceService();
+		parentSrc = new CachedMessageSource();
+		inizSrc = (InitializerMessageSource) ms.getActiveMessageSource();
+		inizSrc.setParentMessageSource(parentSrc);
+		inizSrc.refreshCache();
+	}
+	
+	protected void addToParent(Locale locale, String key, String value) {
+		parentSrc.addPresentation(new PresentationMessage(key, locale, value, ""));
 	}
 	
 	@Test
 	public void getCachedMessages_shouldLoadMessageProperties() {
-		
-		// Setup
-		MessageSourceService ms = Context.getMessageSourceService();
-		
-		// Replay
-		inizSrc.getCachedMessages();
 		
 		// Working in fr
 		Context.setLocale(Locale.FRENCH);
@@ -53,12 +60,6 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 	
 	@Test
 	public void getCachedMessages_shouldLoadMessagePropertiesWithArguments() {
-		
-		// Setup
-		MessageSourceService ms = Context.getMessageSourceService();
-		
-		// Replay
-		inizSrc.getCachedMessages();
 		
 		Context.setLocale(Locale.FRENCH);
 		Assert.assertEquals("Ceci est la description de la clinique Azul.",
@@ -83,5 +84,33 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 		    Context.getMessageSourceService().getMessage("helloWorld.692af26f1c07", null, Locale.ENGLISH));
 		Assert.assertEquals("Bonjour le Monde !",
 		    Context.getMessageSourceService().getMessage("helloWorld.692af26f1c07", null, Locale.FRENCH));
+	}
+	
+	@Test
+	public void shouldLoadFromParent() {
+		addToParent(Locale.FRENCH, "greeting", "bonjour");
+		Context.setLocale(Locale.FRENCH);
+		Assert.assertEquals("bonjour", ms.getMessage("greeting"));
+	}
+	
+	@Test
+	public void shouldOverrideParentIfCodesAreTheSame() {
+		addToParent(Locale.FRENCH, "metadata.healthcenter", "Centre de Sante");
+		Context.setLocale(Locale.FRENCH);
+		Assert.assertEquals("Clinique", ms.getMessage("metadata.healthcenter"));
+	}
+	
+	@Test
+	public void parentShouldOverrideInizIfMatchesAMoreSpecificLocale() {
+		addToParent(Locale.FRANCE, "metadata.healthcenter", "Centre de Sante");
+		Context.setLocale(Locale.FRANCE);
+		Assert.assertEquals("Centre de Sante", ms.getMessage("metadata.healthcenter"));
+	}
+	
+	@Test
+	public void shouldDefaultToSystemLocaleIfNoMessageFoundInLocale() {
+		Locale.setDefault(Locale.ENGLISH);
+		Context.setLocale(Locale.FRANCE);
+		Assert.assertEquals("Only defined in English", ms.getMessage("metadata.healthcenter.onlyInEnglish"));
 	}
 }
