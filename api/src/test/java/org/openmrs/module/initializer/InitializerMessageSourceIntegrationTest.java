@@ -35,7 +35,7 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 		MessageSourceService ms = Context.getMessageSourceService();
 		
 		// Replay
-		inizSrc.getCachedMessages();
+		inizSrc.refreshCache();
 		
 		// Working in fr
 		Context.setLocale(Locale.FRENCH);
@@ -58,7 +58,7 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 		MessageSourceService ms = Context.getMessageSourceService();
 		
 		// Replay
-		inizSrc.getCachedMessages();
+		inizSrc.refreshCache();
 		
 		Context.setLocale(Locale.FRENCH);
 		Assert.assertEquals("Ceci est la description de la clinique Azul.",
