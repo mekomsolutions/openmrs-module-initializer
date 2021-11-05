@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.messagesource.MutableMessageSource;
 import org.openmrs.messagesource.PresentationMessage;
-import org.openmrs.messagesource.PresentationMessageMap;
+import org.openmrs.messagesource.impl.CachedMessageSource;
 import org.openmrs.messagesource.impl.MutableResourceBundleMessageSource;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleClassLoader;
@@ -40,7 +40,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -74,7 +73,7 @@ public class InitializerMessageSource extends ReloadableResourceBundleMessageSou
 	
 	protected Map<Locale, Map<String, Properties>> resourcesByLocale = new ConcurrentHashMap<>();
 	
-	protected Map<Locale, PresentationMessageMap> presentationCache = new ConcurrentHashMap<>();
+	protected CachedMessageSource presentationCache = new CachedMessageSource();
 	
 	/**
 	 * @see ApplicationContextAware#setApplicationContext(ApplicationContext)
@@ -220,9 +219,7 @@ public class InitializerMessageSource extends ReloadableResourceBundleMessageSou
 	 */
 	@Override
 	public void addPresentation(PresentationMessage message) {
-		Locale locale = message.getLocale();
-		PresentationMessageMap pmm = presentationCache.computeIfAbsent(locale, k -> new PresentationMessageMap(locale));
-		pmm.put(message.getCode(), message);
+		presentationCache.addPresentation(message);
 	}
 	
 	/**
@@ -231,10 +228,7 @@ public class InitializerMessageSource extends ReloadableResourceBundleMessageSou
 	 */
 	@Override
 	public void removePresentation(PresentationMessage message) {
-		PresentationMessageMap pmm = presentationCache.get(message.getLocale());
-		if (pmm != null) {
-			pmm.remove(message.getCode());
-		}
+		presentationCache.removePresentation(message);
 	}
 	
 	/**
@@ -242,11 +236,7 @@ public class InitializerMessageSource extends ReloadableResourceBundleMessageSou
 	 */
 	@Override
 	public Collection<PresentationMessage> getPresentations() {
-		Set<PresentationMessage> ret = new HashSet<>();
-		for (PresentationMessageMap m : presentationCache.values()) {
-			ret.addAll(m.values());
-		}
-		return ret;
+		return presentationCache.getPresentations();
 	}
 	
 	/**
@@ -254,11 +244,7 @@ public class InitializerMessageSource extends ReloadableResourceBundleMessageSou
 	 */
 	@Override
 	public PresentationMessage getPresentation(String key, Locale locale) {
-		PresentationMessageMap m = presentationCache.get(locale);
-		if (m != null) {
-			return m.get(key);
-		}
-		return null;
+		return presentationCache.getPresentation(key, locale);
 	}
 	
 	/**
@@ -266,11 +252,7 @@ public class InitializerMessageSource extends ReloadableResourceBundleMessageSou
 	 */
 	@Override
 	public Collection<PresentationMessage> getPresentationsInLocale(Locale locale) {
-		PresentationMessageMap m = presentationCache.get(locale);
-		if (m != null) {
-			return m.values();
-		}
-		return new HashSet<>();
+		return presentationCache.getPresentationsInLocale(locale);
 	}
 	
 	/**
@@ -278,6 +260,6 @@ public class InitializerMessageSource extends ReloadableResourceBundleMessageSou
 	 */
 	@Override
 	public void merge(MutableMessageSource fromSource, boolean overwrite) {
-		throw new RuntimeException("Merging into this message source is not supported");
+		presentationCache.merge(fromSource, overwrite);
 	}
 }
