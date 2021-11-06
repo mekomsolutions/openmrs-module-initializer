@@ -50,8 +50,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Custom Message Source that is intended to replace the OpenMRS core message source and provide
- * enhanced capabilities This message source loads in messages from OpenMRS core, followed by those
- * defined in each module in the order in which each is started, and finally by those defined in
+ * enhanced capabilities. This message source loads in messages from OpenMRS core, followed by those
+ * defined in each module in the order in which each is started, and finally by those defined in configured
  * Initializer domains. Messages are loaded in this order to enable predictable and expected
  * overrides. Thus, messages defined with the same code and Locale in Initializer domains will take
  * first precedence, followed by those in modules, and finally by those in OpenMRS core. Ultimately,
@@ -63,7 +63,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * match in the System Locale. If no match is found in the System Locale, then the message code
  * itself is returned as a final fallback. This source allows for supporting additional fallback
  * languages, as well as defining additional classpath patterns and domains to search for message
- * property files.
+ * property files. See method javadoc for further details.
  * 
  * @see <a href=
  *      "https://talk.openmrs.org/t/address-hierarchy-support-for-i18n/10415/19?u=mksd">...</a>
@@ -151,8 +151,8 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			} else if (StringUtils.isNotEmpty(locale.getCountry())) {
 				Locale languageLocale = new Locale(locale.getLanguage());
 				return resolveCodeWithoutArguments(code, languageLocale, fallbackToSystemLocale);
-			} else if (fallbackLanguages.containsKey(locale.getLanguage())) {
-				Locale fallbackLanguage = new Locale(fallbackLanguages.get(locale.getLanguage()));
+			} else if (getFallbackLanguages().containsKey(locale.getLanguage())) {
+				Locale fallbackLanguage = new Locale(getFallbackLanguages().get(locale.getLanguage()));
 				return resolveCodeWithoutArguments(code, fallbackLanguage, fallbackToSystemLocale);
 			}
 		}
@@ -238,6 +238,8 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 					rpr = new PathMatchingResourcePatternResolver(moduleClassLoader);
 					Resource[] moduleResources = rpr.getResources(pattern);
 					for (Resource resource : moduleResources) {
+						// Module classpath entries contain other modules and core version libraries.
+						// We need to limit the resources processed to just those defined by this specific module
 						if (resource.getURI().toString().contains("/" + module.getModuleId() + "/")) {
 							Properties properties = new Properties();
 							OpenmrsUtil.loadProperties(properties, resource.getInputStream());
@@ -339,11 +341,19 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	public List<String> getClasspathPatternsToScan() {
 		return classpathPatternsToScan;
 	}
-	
+
+	/**
+	 * One can use this method to add additional classpath resource patterns to scan, if necessary
+	 * Note, that one will need to ensure that the refreshCache() method is invoked after adding additional patterns
+	 */
 	public void addClasspathPatternToScan(String classpathPatternToScan) {
 		classpathPatternsToScan.add(classpathPatternToScan);
 	}
-	
+
+	/**
+	 * One can use this method to add additional classpath initializer domains to scan, if necessary
+	 * Note, that one will need to ensure that the refreshCache() method is invoked after adding additional domains
+	 */
 	public List<String> getDomainsToScan() {
 		return domainsToScan;
 	}
@@ -355,7 +365,13 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	public Map<String, String> getFallbackLanguages() {
 		return fallbackLanguages;
 	}
-	
+
+	/**
+	 * One can use this method to add a fallback language for a particular language
+	 * For example, to indicae that Haitian Kreyol (ht) should fallback to French prior to falling back to the
+	 * System locale, you would use this method to indicate that.
+	 * This does not require refreshCache() to be called, but will take immediate effect.
+	 */
 	public void addFallbackLanguage(String language, String fallbackLanguage) {
 		fallbackLanguages.put(language, fallbackLanguage);
 	}
