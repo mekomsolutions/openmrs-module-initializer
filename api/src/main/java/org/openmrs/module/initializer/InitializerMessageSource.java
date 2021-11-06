@@ -10,13 +10,13 @@
 package org.openmrs.module.initializer;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.messagesource.MutableMessageSource;
 import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.messagesource.impl.CachedMessageSource;
-import org.openmrs.messagesource.impl.MutableResourceBundleMessageSource;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleClassLoader;
 import org.openmrs.module.ModuleFactory;
@@ -39,33 +39,46 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
-import static org.openmrs.module.initializer.InitializerConstants.DOMAIN_ADDR;
-import static org.openmrs.module.initializer.InitializerConstants.DOMAIN_MSGPROP;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * ResourceBundleMessageSource extends ReloadableResourceBundleMessageSource to provide the
- * additional features of a MutableMessageSource.
+ * Custom Message Source that is intended to replace the OpenMRS core message source and provide
+ * enhanced capabilities This message source loads in messages from OpenMRS core, followed by those
+ * defined in each module in the order in which each is started, and finally by those defined in
+ * Initializer domains. Messages are loaded in this order to enable predictable and expected
+ * overrides. Thus, messages defined with the same code and Locale in Initializer domains will take
+ * first precedence, followed by those in modules, and finally by those in OpenMRS core. Ultimately,
+ * a Map backs this source, with Locale and message code as keys to the Map, and thus values loaded
+ * later will replace those loaded earlier in the process. The requested Locale always takes
+ * precedence over the order of sources. For example, if a message is requested for Locale 'fr_FR',
+ * all sources are first searched for a match to 'fr_FR' prior to then searching for 'fr' across all
+ * sources. If no match is found in a given Locale, then the fallback is to search for the best
+ * match in the System Locale. If no match is found in the System Locale, then the message code
+ * itself is returned as a final fallback. This source allows for supporting additional fallback
+ * languages, as well as defining additional classpath patterns and domains to search for message
+ * property files.
  * 
  * @see <a href=
  *      "https://talk.openmrs.org/t/address-hierarchy-support-for-i18n/10415/19?u=mksd">...</a>
  */
 public class InitializerMessageSource extends AbstractMessageSource implements MutableMessageSource, ApplicationContextAware {
 	
-	private static final Logger log = LoggerFactory.getLogger(MutableResourceBundleMessageSource.class);
-	
-	private final List<String> classpathPatternsToScan = Arrays.asList("classpath*:messages*.properties");
-	
-	private final List<String> domainsToScan = Arrays.asList(DOMAIN_ADDR, DOMAIN_MSGPROP);
+	private static final Logger log = LoggerFactory.getLogger(InitializerMessageSource.class);
 	
 	public static final String PROPERTIES_EXTENSION = "properties";
+	
+	private final List<String> classpathPatternsToScan = new ArrayList<>();
+	
+	private final List<String> domainsToScan = new ArrayList<>();
+	
+	private final Map<String, String> fallbackLanguages = new ConcurrentHashMap<>();
 	
 	@Autowired
 	protected InitializerService iniz;
@@ -87,11 +100,15 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	}
 	
 	/**
-	 * This method is called automatically by Spring when this Bean is wired in. See application context
-	 * xml
+	 * This method is called automatically by Spring when this Bean is instantiated in the context See
+	 * moduleApplicationContext.xml
 	 */
 	public void initialize() {
 		setUseCodeAsDefaultMessage(true);
+		addClasspathPatternToScan("classpath*:messages*.properties");
+		addDomainToScan(InitializerConstants.DOMAIN_ADDR);
+		addDomainToScan(InitializerConstants.DOMAIN_MSGPROP);
+		addFallbackLanguage("ht", "fr");
 		refreshCache();
 	}
 	
@@ -107,26 +124,40 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		return null;
 	}
 	
+	/**
+	 * @see AbstractMessageSource#resolveCodeWithoutArguments(String, Locale)
+	 */
 	@Override
 	protected String resolveCodeWithoutArguments(String code, Locale locale) {
-		if (locale == null) {
-			return resolveCodeWithoutArguments(code, Locale.getDefault());
-		}
-		// If an exact match is found in the requested locale, return it
-		PresentationMessage pm = getPresentation(code, locale);
-		if (pm != null) {
-			return pm.getMessage();
-		}
-		// Otherwise, try to find the best matching locale with a message
-		if (StringUtils.isNotEmpty(locale.getVariant())) {
-			return resolveCodeWithoutArguments(code, new Locale(locale.getLanguage(), locale.getCountry()));
-		} else if (StringUtils.isNotEmpty(locale.getCountry())) {
-			return resolveCodeWithoutArguments(code, new Locale(locale.getLanguage()));
-		} else {
-			pm = getPresentation(code, Locale.getDefault());
+		return resolveCodeWithoutArguments(code, locale, true);
+	}
+	
+	/**
+	 * Implementation of the resolveCodeWithoutArguments method that allows recursion into less specific
+	 * variants of the given locale, and then further recursion into the defined fallback locales and
+	 * ultimately into the system locale if appropriate without resulting in infinite recursion
+	 */
+	protected String resolveCodeWithoutArguments(String code, Locale locale, boolean fallbackToSystemLocale) {
+		if (locale != null) {
+			// If an exact match is found in the requested locale, return it
+			PresentationMessage pm = getPresentation(code, locale);
 			if (pm != null) {
 				return pm.getMessage();
 			}
+			// Otherwise, try to find the best matching locale with a message
+			if (StringUtils.isNotEmpty(locale.getVariant())) {
+				Locale countryLocale = new Locale(locale.getLanguage(), locale.getCountry());
+				return resolveCodeWithoutArguments(code, countryLocale, fallbackToSystemLocale);
+			} else if (StringUtils.isNotEmpty(locale.getCountry())) {
+				Locale languageLocale = new Locale(locale.getLanguage());
+				return resolveCodeWithoutArguments(code, languageLocale, fallbackToSystemLocale);
+			} else if (fallbackLanguages.containsKey(locale.getLanguage())) {
+				Locale fallbackLanguage = new Locale(fallbackLanguages.get(locale.getLanguage()));
+				return resolveCodeWithoutArguments(code, fallbackLanguage, fallbackToSystemLocale);
+			}
+		}
+		if (fallbackToSystemLocale) {
+			return resolveCodeWithoutArguments(code, Locale.getDefault(), false);
 		}
 		return null;
 	}
@@ -140,6 +171,9 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 * started Messages defined in Initializer domains
 	 */
 	protected synchronized void refreshCache() {
+		log.info("Refreshing message cache in InitializerMessageSource");
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
 		Map<String, Properties> resources = new LinkedHashMap<>();
 		resources.putAll(getMessagePropertyResourcesFromClasspath());
 		resources.putAll(getMessagePropertyResourcesFromFilesystem()); // Filesystem takes precedence
@@ -149,13 +183,16 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			String nameWithoutExtension = FilenameUtils.removeExtension(resourceName);
 			Locale locale = getLocaleFromFileBaseName(nameWithoutExtension);
 			String baseName = StringUtils.removeEnd(nameWithoutExtension, "_" + locale.toString());
-			log.trace("Added message properties file: " + resourceName + " (" + baseName + " : " + locale + ")");
+			log.trace("Adding " + properties.size() + " messages from " + baseName + " in locale: " + locale);
 			for (Object property : properties.keySet()) {
 				String key = property.toString();
 				String value = properties.getProperty(key);
 				addPresentation(new PresentationMessage(key, locale, value, ""));
 			}
 		}
+		stopWatch.stop();
+		log.info("InitializerMessageSource loaded " + presentationCache.getPresentations().size() + " messages " + " for "
+		        + presentationCache.getLocales().size() + " locales in " + stopWatch);
 	}
 	
 	/**
@@ -186,7 +223,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 				Resource[] coreResources = rpr.getResources(pattern);
 				
 				// Load core first as the initial set of message codes
-				log.trace("Adding openmrs core message properties");
+				log.debug("Adding openmrs core message properties");
 				for (Resource resource : coreResources) {
 					Properties properties = new Properties();
 					OpenmrsUtil.loadProperties(properties, resource.getInputStream());
@@ -197,7 +234,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 				// Load modules in their startup order, so these can overwrite each other where appropriate
 				for (Module module : ModuleFactory.getStartedModulesInOrder()) {
 					ModuleClassLoader moduleClassLoader = ModuleFactory.getModuleClassLoader(module);
-					log.trace("Adding module message properties: " + module.getModuleId());
+					log.debug("Adding module message properties: " + module.getModuleId());
 					rpr = new PathMatchingResourcePatternResolver(moduleClassLoader);
 					Resource[] moduleResources = rpr.getResources(pattern);
 					for (Resource resource : moduleResources) {
@@ -313,5 +350,13 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	
 	public void addDomainToScan(String domainToScan) {
 		domainsToScan.add(domainToScan);
+	}
+	
+	public Map<String, String> getFallbackLanguages() {
+		return fallbackLanguages;
+	}
+	
+	public void addFallbackLanguage(String language, String fallbackLanguage) {
+		fallbackLanguages.put(language, fallbackLanguage);
 	}
 }
