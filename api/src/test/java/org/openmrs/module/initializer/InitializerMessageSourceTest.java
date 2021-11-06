@@ -9,56 +9,42 @@
  */
 package org.openmrs.module.initializer;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.Locale;
 
+import static org.junit.Assert.assertEquals;
+
 public class InitializerMessageSourceTest {
+	
+	InitializerMessageSource src = new InitializerMessageSource();
 	
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Test
 	public void getLocaleFromFileBaseName_shouldInferValidLocale() {
-		
-		InitializerMessageSource src = new InitializerMessageSource();
-		
-		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("basename_fr"));
-		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("my_base_name_fr"));
-		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr"));
-		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr_"));
-		Assert.assertEquals(new Locale("fr", "FR"), src.getLocaleFromFileBaseName("my_base_name_fr_FR"));
-		Assert.assertEquals(new Locale("fr", "BE"), src.getLocaleFromFileBaseName("my_base_name_fr_BE"));
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("basename_fr"));
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("my_base_name_fr"));
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr"));
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr_"));
+		assertEquals(new Locale("fr", "FR"), src.getLocaleFromFileBaseName("my_base_name_fr_FR"));
+		assertEquals(new Locale("fr", "BE"), src.getLocaleFromFileBaseName("my_base_name_fr_BE"));
 	}
 	
 	@Test
 	public void getLocaleFromFileBaseName_shouldThrowIfNoValidLocaleAsSuffixToFileBaseName() {
-		
-		InitializerMessageSource src = new InitializerMessageSource();
-		
-		try {
-			src.getLocaleFromFileBaseName("my_base_name");
-		}
-		catch (IllegalArgumentException e) {
-			Assert.assertTrue(e.getMessage()
-			        .equals("No valid locale could be inferred from the following file base name: 'my_base_name'."));
-		}
+		expectedException.expect(IllegalArgumentException.class);
+		src.getLocaleFromFileBaseName("my_base_name");
 	}
 	
 	@Test
-	public void getLocaleFromFileBaseName_shouldThrowIfNoSuffixInFileBaseName() {
-		
-		InitializerMessageSource src = new InitializerMessageSource();
-		
-		try {
-			src.getLocaleFromFileBaseName("my-base-name");
-		}
-		catch (IllegalArgumentException e) {
-			Assert.assertTrue(
-			    e.getMessage().equals("'my-base-name' is not suffixed with the string representation of a locale."));
-		}
+	public void getLocaleFromFileBaseName_shouldAssumeSystemLocaleLanguageIfNoLocaleSuffixProvided() {
+		Locale.setDefault(Locale.US);
+		assertEquals(Locale.ENGLISH, src.getLocaleFromFileBaseName("my-base-name"));
+		Locale.setDefault(Locale.FRENCH);
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("my-base-name"));
 	}
 }

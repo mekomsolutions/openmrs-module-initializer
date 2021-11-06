@@ -9,7 +9,7 @@
  */
 package org.openmrs.module.initializer;
 
-import org.junit.Assert;
+import org.apache.commons.lang3.LocaleUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
@@ -18,7 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Locale;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+	
+	public static final Locale HAITIAN_KREYOL = LocaleUtils.toLocale("ht");
+	
+	public static final Locale CAMBODIA_KHMER = LocaleUtils.toLocale("km_KH");
 	
 	@Autowired
 	MessageSourceService messageSourceService;
@@ -28,64 +35,102 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 	@Before
 	public void setup() {
 		inizSrc = (InitializerMessageSource) messageSourceService.getActiveMessageSource();
+		if (inizSrc.getPresentations().isEmpty()) {
+			inizSrc.initialize();
+		}
+		Locale.setDefault(Locale.ENGLISH);
 	}
 	
 	@Test
-	public void getCachedMessages_shouldLoadMessageProperties() {
-		
-		inizSrc.initialize();
-		
-		// Working in fr
-		Context.setLocale(Locale.FRENCH);
-		testMessage("Clinique", "metadata.healthcenter");
-		testMessage("Ceci est la description d'une clinique.", "metadata.healthcenter.description");
-		
-		// Working in en
+	public void shouldConfigureActiveMessageSource() {
+		assertEquals(InitializerMessageSource.class, messageSourceService.getActiveMessageSource().getClass());
+		assertNull(messageSourceService.getActiveMessageSource().getParentMessageSource());
+	}
+	
+	@Test
+	public void shouldIncludeMessagesInAddressHierarchyDomain() {
+		Context.setLocale(Locale.ENGLISH);
+		testMessage("Kingdom of Cambodia", "addresshierarchy.cambodia");
+		Context.setLocale(CAMBODIA_KHMER);
+		testMessage("ព្រះរាជាណាចក្រកម្ពុជា", "addresshierarchy.cambodia");
+	}
+	
+	@Test
+	public void shouldIncludeMessagesInMessagePropertiesDomain() {
 		Context.setLocale(Locale.ENGLISH);
 		testMessage("Health center", "metadata.healthcenter");
 		testMessage("This is the description of a health centre.", "metadata.healthcenter.description");
-		
-		testMessage("Kingdom of Cambodia", "addresshierarchy.cambodia");
+		Context.setLocale(Locale.FRENCH);
+		testMessage("Clinique", "metadata.healthcenter");
+		testMessage("Ceci est la description d'une clinique.", "metadata.healthcenter.description");
+	}
+	
+	@Test
+	public void shouldIncludeMessagesOnClasspath() {
+		Context.setLocale(Locale.getDefault());
+		testMessage("Default", "messageFileLocale");
+		Context.setLocale(Locale.FRENCH);
+		testMessage("fr", "messageFileLocale");
+		Context.setLocale(Locale.FRANCE);
+		testMessage("fr_FR", "messageFileLocale");
+		Context.setLocale(HAITIAN_KREYOL);
+		testMessage("ht", "messageFileLocale");
 	}
 	
 	@Test
 	public void getCachedMessages_shouldLoadMessagePropertiesWithArguments() {
-		inizSrc.initialize();
 		Context.setLocale(Locale.FRENCH);
 		String code = "metadata.healthcenter.description.named";
 		String msg = messageSourceService.getMessage(code, new Object[] { "Azul" }, Context.getLocale());
-		Assert.assertEquals("Ceci est la description de la clinique Azul.", msg);
+		assertEquals("Ceci est la description de la clinique Azul.", msg);
 	}
 	
 	@Test
-	public void shouldLoadMoreSpecificTranslationFromClasspath() {
-		inizSrc.initialize();
+	public void shouldLoadTranslationsWithAppropriateFallbacks() {
+		Context.setLocale(HAITIAN_KREYOL);
+		testMessage("Only In ht", "messageOnlyInHt"); // Direct match
+		testMessage("messageOnlyInFrFr", "messageOnlyInFrFr"); // Fallback to message code
+		testMessage("Only In fr", "messageOnlyInFr"); // Fallback to explicit added fallback
+		testMessage("Only In Default", "messageOnlyInDefault"); // Fallback to system default locale
+		
 		Context.setLocale(Locale.FRANCE);
-		// Defined in classpath fr as "Bonjour"
-		// Defined in classpath fr_FR as "Bonjour from France"
-		// Defined in Iniz fr as "Bonjour from Iniz"
-		testMessage("Bonjour from France", "greeting");
+		testMessage("messageOnlyInHt", "messageOnlyInHt"); // Fallback to message code
+		testMessage("Only In fr FR", "messageOnlyInFrFr"); // Direct match
+		testMessage("Only In fr", "messageOnlyInFr"); // Fallback to language fallback
+		testMessage("Only In Default", "messageOnlyInDefault"); // Fallback to system default locale
+		
+		Context.setLocale(Locale.FRENCH);
+		testMessage("messageOnlyInHt", "messageOnlyInHt"); // Fallback to message code
+		testMessage("messageOnlyInFrFr", "messageOnlyInFrFr"); // Fallback to message code
+		testMessage("Only In fr", "messageOnlyInFr"); // Direct match
+		testMessage("Only In Default", "messageOnlyInDefault"); // Fallback to system default locale
 	}
 	
 	@Test
-	public void filesShouldOverrideClasspathIfTheyMatch() {
-		inizSrc.initialize();
-		// Defined in classpath fr as "Bonjour"
-		// Defined in classpath fr_FR as "Bonjour from France"
-		// Defined in Iniz fr as "Bonjour from Iniz"
+	public void shouldOverrideMessagesFromClasspathWithMessagesFromInitializer() {
+		Context.setLocale(HAITIAN_KREYOL);
+		testMessage("Bonjou", "greeting"); // Only in classpath
+		Context.setLocale(Locale.FRANCE);
+		testMessage("Bonjour from France", "greeting"); // Specific version on classpath over less specific in domain
 		Context.setLocale(Locale.FRENCH);
-		testMessage("Bonjour from Iniz", "greeting");
+		testMessage("Bonjour from Iniz", "greeting"); // Version in Iniz overrides version on classpath
+		Context.setLocale(Locale.ENGLISH);
+		testMessage("Hello", "greeting");
 	}
 	
 	@Test
 	public void shouldDefaultToSystemLocaleIfNoMessageFoundInLocale() {
-		inizSrc.initialize();
-		Locale.setDefault(Locale.ENGLISH);
 		Context.setLocale(Locale.FRANCE);
 		testMessage("Only defined in English", "metadata.healthcenter.onlyInEnglish");
 	}
 	
+	@Test
+	public void shouldDefaultToMessageCodeIfNoMessageFound() {
+		Context.setLocale(Locale.FRANCE);
+		testMessage("invalid.code", "invalid.code");
+	}
+	
 	protected void testMessage(String message, String code) {
-		Assert.assertEquals(message, messageSourceService.getMessage(code));
+		assertEquals(message, messageSourceService.getMessage(code));
 	}
 }
