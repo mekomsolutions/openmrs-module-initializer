@@ -51,19 +51,19 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Custom Message Source that is intended to replace the OpenMRS core message source and provide
  * enhanced capabilities. This message source loads in messages from OpenMRS core, followed by those
- * defined in each module in the order in which each is started, and finally by those defined in configured
- * Initializer domains. Messages are loaded in this order to enable predictable and expected
- * overrides. Thus, messages defined with the same code and Locale in Initializer domains will take
- * first precedence, followed by those in modules, and finally by those in OpenMRS core. Ultimately,
- * a Map backs this source, with Locale and message code as keys to the Map, and thus values loaded
- * later will replace those loaded earlier in the process. The requested Locale always takes
- * precedence over the order of sources. For example, if a message is requested for Locale 'fr_FR',
- * all sources are first searched for a match to 'fr_FR' prior to then searching for 'fr' across all
- * sources. If no match is found in a given Locale, then the fallback is to search for the best
- * match in the System Locale. If no match is found in the System Locale, then the message code
- * itself is returned as a final fallback. This source allows for supporting additional fallback
- * languages, as well as defining additional classpath patterns and domains to search for message
- * property files. See method javadoc for further details.
+ * defined in each module in the order in which each is started, and finally by those defined in
+ * configured Initializer domains. Messages are loaded in this order to enable predictable and
+ * expected overrides. Thus, messages defined with the same code and Locale in Initializer domains
+ * will take first precedence, followed by those in modules, and finally by those in OpenMRS core.
+ * Ultimately, a Map backs this source, with Locale and message code as keys to the Map, and thus
+ * values loaded later will replace those loaded earlier in the process. The requested Locale always
+ * takes precedence over the order of sources. For example, if a message is requested for Locale
+ * 'fr_FR', all sources are first searched for a match to 'fr_FR' prior to then searching for 'fr'
+ * across all sources. If no match is found in a given Locale, then the fallback is to search for
+ * the best match in the System Locale. If no match is found in the System Locale, then the message
+ * code itself is returned as a final fallback. This source allows for supporting additional
+ * fallback languages, as well as defining additional classpath patterns and domains to search for
+ * message property files. See method javadoc for further details.
  * 
  * @see <a href=
  *      "https://talk.openmrs.org/t/address-hierarchy-support-for-i18n/10415/19?u=mksd">...</a>
@@ -182,8 +182,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			Properties properties = resources.get(resourceName);
 			String nameWithoutExtension = FilenameUtils.removeExtension(resourceName);
 			Locale locale = getLocaleFromFileBaseName(nameWithoutExtension);
-			String baseName = StringUtils.removeEnd(nameWithoutExtension, "_" + locale.toString());
-			log.trace("Adding " + properties.size() + " messages from " + baseName + " in locale: " + locale);
+			log.trace("Adding " + properties.size() + " messages from " + resourceName + " in locale: " + locale);
 			for (Object property : properties.keySet()) {
 				String key = property.toString();
 				String value = properties.getProperty(key);
@@ -341,18 +340,20 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	public List<String> getClasspathPatternsToScan() {
 		return classpathPatternsToScan;
 	}
-
+	
 	/**
-	 * One can use this method to add additional classpath resource patterns to scan, if necessary
-	 * Note, that one will need to ensure that the refreshCache() method is invoked after adding additional patterns
+	 * One can use this method to add additional classpath resource patterns to scan, if necessary Note,
+	 * that one will need to ensure that the refreshCache() method is invoked after adding additional
+	 * patterns
 	 */
 	public void addClasspathPatternToScan(String classpathPatternToScan) {
 		classpathPatternsToScan.add(classpathPatternToScan);
 	}
-
+	
 	/**
 	 * One can use this method to add additional classpath initializer domains to scan, if necessary
-	 * Note, that one will need to ensure that the refreshCache() method is invoked after adding additional domains
+	 * Note, that one will need to ensure that the refreshCache() method is invoked after adding
+	 * additional domains
 	 */
 	public List<String> getDomainsToScan() {
 		return domainsToScan;
@@ -365,12 +366,12 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	public Map<String, String> getFallbackLanguages() {
 		return fallbackLanguages;
 	}
-
+	
 	/**
-	 * One can use this method to add a fallback language for a particular language
-	 * For example, to indicae that Haitian Kreyol (ht) should fallback to French prior to falling back to the
-	 * System locale, you would use this method to indicate that.
-	 * This does not require refreshCache() to be called, but will take immediate effect.
+	 * One can use this method to add a fallback language for a particular language For example, to
+	 * indicae that Haitian Kreyol (ht) should fallback to French prior to falling back to the System
+	 * locale, you would use this method to indicate that. This does not require refreshCache() to be
+	 * called, but will take immediate effect.
 	 */
 	public void addFallbackLanguage(String language, String fallbackLanguage) {
 		fallbackLanguages.put(language, fallbackLanguage);
