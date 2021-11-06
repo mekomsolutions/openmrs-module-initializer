@@ -23,9 +23,11 @@ import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
+import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * This allows to perform context sensitive tests on a specific domain inside the test app data
@@ -40,6 +42,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	private InitializerService iniz;
 	
 	@Autowired
+	@Qualifier("initializer.InitializerService")
 	public void setService(InitializerService iniz) {
 		this.iniz = iniz;
 	}
@@ -112,11 +115,17 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		return getClass().getClassLoader().getResource(appDataTestDir).getPath() + File.separator;
 	}
 	
+	@Override
+	public Properties getRuntimeProperties() {
+		Properties p = super.getRuntimeProperties();
+		p.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, getAppDataDirPath());
+		OpenmrsUtil.setApplicationDataDirectory(getAppDataDirPath());
+		return p;
+	}
+	
 	@Before
 	public void setupAppDataDir() {
-		
 		String path = getAppDataDirPath();
-		
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
 		Properties prop = new Properties();
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);

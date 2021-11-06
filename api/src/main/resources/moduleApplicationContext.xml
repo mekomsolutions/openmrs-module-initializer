@@ -55,6 +55,6 @@
         </property>
     </bean>
 
-    <bean id="initializer.InitializerMessageSource" class="org.openmrs.module.initializer.InitializerMessageSource" init-method="refreshCache"/>
+    <bean id="initializer.InitializerMessageSource" class="org.openmrs.module.initializer.InitializerMessageSource" init-method="initialize"/>
 
 </beans>

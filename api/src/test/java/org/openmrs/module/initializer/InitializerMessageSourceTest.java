@@ -9,54 +9,17 @@
  */
 package org.openmrs.module.initializer;
 
-import java.io.File;
-import java.util.Locale;
-import java.util.Map;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Locale;
+
 public class InitializerMessageSourceTest {
-	
-	private String dirPath = "";
 	
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
-	
-	@Before
-	public void setup() {
-		StringBuilder pathBuilder = new StringBuilder();
-		pathBuilder
-		        .append(
-		            getClass().getClassLoader().getResource(DomainBaseModuleContextSensitiveTest.appDataTestDir).getPath())
-		        .append(File.separator).append(InitializerConstants.DIR_NAME_CONFIG).append(File.separator)
-		        .append(InitializerConstants.DOMAIN_MSGPROP);
-		dirPath = pathBuilder.toString();
-	}
-	
-	@Test
-	public void getMessageProperties_shouldScanMessagesFiles() {
-		
-		InitializerMessageSource src = new InitializerMessageSource();
-		src.addMessageProperties(dirPath);
-		
-		File propFile;
-		Locale locale;
-		
-		propFile = new File((new StringBuilder(dirPath)).append(File.separator).append("metadata_en.properties").toString());
-		Map<File, Locale> msgPropMap = src.getMessagePropertiesMap();
-		Assert.assertTrue(msgPropMap.containsKey(propFile));
-		locale = msgPropMap.get(propFile);
-		Assert.assertEquals(new Locale("en"), locale);
-		
-		propFile = new File((new StringBuilder(dirPath)).append(File.separator).append("metadata_fr.properties").toString());
-		Assert.assertTrue(msgPropMap.containsKey(propFile));
-		locale = msgPropMap.get(propFile);
-		Assert.assertEquals(new Locale("fr"), locale);
-	}
 	
 	@Test
 	public void getLocaleFromFileBaseName_shouldInferValidLocale() {

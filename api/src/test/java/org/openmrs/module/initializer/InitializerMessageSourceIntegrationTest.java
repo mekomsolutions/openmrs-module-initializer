@@ -9,108 +9,83 @@
  */
 package org.openmrs.module.initializer;
 
-import java.util.Collection;
-import java.util.Locale;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.messagesource.PresentationMessage;
-import org.openmrs.messagesource.impl.CachedMessageSource;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Locale;
 
 public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
-	protected MessageSourceService ms;
+	@Autowired
+	MessageSourceService messageSourceService;
 	
 	protected InitializerMessageSource inizSrc;
 	
-	protected CachedMessageSource parentSrc;
-	
 	@Before
 	public void setup() {
-		ms = Context.getMessageSourceService();
-		parentSrc = new CachedMessageSource();
-		inizSrc = (InitializerMessageSource) ms.getActiveMessageSource();
-		inizSrc.setParentMessageSource(parentSrc);
-		inizSrc.refreshCache();
-	}
-	
-	protected void addToParent(Locale locale, String key, String value) {
-		parentSrc.addPresentation(new PresentationMessage(key, locale, value, ""));
+		inizSrc = (InitializerMessageSource) messageSourceService.getActiveMessageSource();
 	}
 	
 	@Test
 	public void getCachedMessages_shouldLoadMessageProperties() {
 		
+		inizSrc.initialize();
+		
 		// Working in fr
 		Context.setLocale(Locale.FRENCH);
-		Assert.assertEquals("Clinique", ms.getMessage("metadata.healthcenter"));
-		Assert.assertEquals("Ceci est la description d'une clinique.", ms.getMessage("metadata.healthcenter.description"));
+		testMessage("Clinique", "metadata.healthcenter");
+		testMessage("Ceci est la description d'une clinique.", "metadata.healthcenter.description");
 		
 		// Working in en
 		Context.setLocale(Locale.ENGLISH);
-		Assert.assertEquals("Health center", ms.getMessage("metadata.healthcenter"));
-		Assert.assertEquals("This is the description of a health centre.",
-		    ms.getMessage("metadata.healthcenter.description"));
+		testMessage("Health center", "metadata.healthcenter");
+		testMessage("This is the description of a health centre.", "metadata.healthcenter.description");
 		
-		Assert.assertEquals("Kingdom of Cambodia", ms.getMessage("addresshierarchy.cambodia"));
+		testMessage("Kingdom of Cambodia", "addresshierarchy.cambodia");
 	}
 	
 	@Test
 	public void getCachedMessages_shouldLoadMessagePropertiesWithArguments() {
-		
+		inizSrc.initialize();
 		Context.setLocale(Locale.FRENCH);
-		Assert.assertEquals("Ceci est la description de la clinique Azul.",
-		    ms.getMessage("metadata.healthcenter.description.named", new Object[] { "Azul" }, Context.getLocale()));
+		String code = "metadata.healthcenter.description.named";
+		String msg = messageSourceService.getMessage(code, new Object[] { "Azul" }, Context.getLocale());
+		Assert.assertEquals("Ceci est la description de la clinique Azul.", msg);
 	}
 	
 	@Test
-	public void getPresentations_shouldContainParentPresentations() {
-		// setup
-		int initSize = inizSrc.getPresentations().size();
-		MessageSourceService coreSrc = (MessageSourceService) applicationContext.getBean("messageSourceServiceTarget");
-		coreSrc.addPresentation(new PresentationMessage("helloWorld.692af26f1c07", Locale.ENGLISH, "Hello World!", null));
-		coreSrc.addPresentation(
-		    new PresentationMessage("helloWorld.692af26f1c07", Locale.FRENCH, "Bonjour le Monde !", null));
-		
-		// replay
-		Collection<PresentationMessage> allPres = inizSrc.getPresentations();
-		
-		// verify
-		Assert.assertEquals(initSize + 2, allPres.size());
-		Assert.assertEquals("Hello World!",
-		    Context.getMessageSourceService().getMessage("helloWorld.692af26f1c07", null, Locale.ENGLISH));
-		Assert.assertEquals("Bonjour le Monde !",
-		    Context.getMessageSourceService().getMessage("helloWorld.692af26f1c07", null, Locale.FRENCH));
-	}
-	
-	@Test
-	public void shouldLoadFromParent() {
-		addToParent(Locale.FRENCH, "greeting", "bonjour");
-		Context.setLocale(Locale.FRENCH);
-		Assert.assertEquals("bonjour", ms.getMessage("greeting"));
-	}
-	
-	@Test
-	public void shouldOverrideParentIfCodesAreTheSame() {
-		addToParent(Locale.FRENCH, "metadata.healthcenter", "Centre de Sante");
-		Context.setLocale(Locale.FRENCH);
-		Assert.assertEquals("Clinique", ms.getMessage("metadata.healthcenter"));
-	}
-	
-	@Test
-	public void parentShouldOverrideInizIfMatchesAMoreSpecificLocale() {
-		addToParent(Locale.FRANCE, "metadata.healthcenter", "Centre de Sante");
+	public void shouldLoadMoreSpecificTranslationFromClasspath() {
+		inizSrc.initialize();
 		Context.setLocale(Locale.FRANCE);
-		Assert.assertEquals("Centre de Sante", ms.getMessage("metadata.healthcenter"));
+		// Defined in classpath fr as "Bonjour"
+		// Defined in classpath fr_FR as "Bonjour from France"
+		// Defined in Iniz fr as "Bonjour from Iniz"
+		testMessage("Bonjour from France", "greeting");
+	}
+	
+	@Test
+	public void filesShouldOverrideClasspathIfTheyMatch() {
+		inizSrc.initialize();
+		// Defined in classpath fr as "Bonjour"
+		// Defined in classpath fr_FR as "Bonjour from France"
+		// Defined in Iniz fr as "Bonjour from Iniz"
+		Context.setLocale(Locale.FRENCH);
+		testMessage("Bonjour from Iniz", "greeting");
 	}
 	
 	@Test
 	public void shouldDefaultToSystemLocaleIfNoMessageFoundInLocale() {
+		inizSrc.initialize();
 		Locale.setDefault(Locale.ENGLISH);
 		Context.setLocale(Locale.FRANCE);
-		Assert.assertEquals("Only defined in English", ms.getMessage("metadata.healthcenter.onlyInEnglish"));
+		testMessage("Only defined in English", "metadata.healthcenter.onlyInEnglish");
+	}
+	
+	protected void testMessage(String message, String code) {
+		Assert.assertEquals(message, messageSourceService.getMessage(code));
 	}
 }
