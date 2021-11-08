@@ -171,7 +171,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 * started Messages defined in Initializer domains
 	 */
 	protected synchronized void refreshCache() {
-		log.info("Refreshing message cache in InitializerMessageSource");
+		log.info("Refreshing message cache");
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		Map<String, Properties> resources = new LinkedHashMap<>();
@@ -190,7 +190,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			}
 		}
 		stopWatch.stop();
-		log.info("InitializerMessageSource loaded " + presentationCache.getPresentations().size() + " messages " + " for "
+		log.info("Refreshing message cache completed. " + presentationCache.getPresentations().size() + " messages in" +
 		        + presentationCache.getLocales().size() + " locales in " + stopWatch);
 	}
 	
