@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
+import org.openmrs.util.LocaleUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Locale;
@@ -89,7 +90,7 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 	public void shouldLoadTranslationsWithAppropriateFallbacks() {
 		Context.setLocale(HAITIAN_KREYOL);
 		testMessage("Only In ht", "messageOnlyInHt"); // Direct match
-		testMessage("messageOnlyInFrFr", "messageOnlyInFrFr"); // Fallback to message code
+		testMessage("messageOnlyInFrFr", "messageOnlyInFrFr"); // No match, fallback to message code
 		testMessage("Only In fr", "messageOnlyInFr"); // Fallback to explicit added fallback
 		testMessage("Only In Default", "messageOnlyInDefault"); // Fallback to system default locale
 		
@@ -100,8 +101,8 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 		testMessage("Only In Default", "messageOnlyInDefault"); // Fallback to system default locale
 		
 		Context.setLocale(Locale.FRENCH);
-		testMessage("messageOnlyInHt", "messageOnlyInHt"); // Fallback to message code
-		testMessage("messageOnlyInFrFr", "messageOnlyInFrFr"); // Fallback to message code
+		testMessage("messageOnlyInHt", "messageOnlyInHt"); // No match, fallback to message code
+		testMessage("messageOnlyInFrFr", "messageOnlyInFrFr"); // No match, fallback to message code
 		testMessage("Only In fr", "messageOnlyInFr"); // Direct match
 		testMessage("Only In Default", "messageOnlyInDefault"); // Fallback to system default locale
 	}
@@ -116,6 +117,18 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 		testMessage("Bonjour from Iniz", "greeting"); // Version in Iniz overrides version on classpath
 		Context.setLocale(Locale.ENGLISH);
 		testMessage("Hello", "greeting");
+	}
+	
+	@Test
+	public void shouldDefaultToDefaultLocaleSettingIfNoMessageFoundInLocale() {
+		Locale startingDefaultLocale = LocaleUtility.getDefaultLocale();
+		LocaleUtility.setDefaultLocaleCache(LocaleUtils.toLocale("es"));
+		Context.setLocale(Locale.FRANCE);
+		testMessage("Spanish", "englishAndSpanishOnly");
+		LocaleUtility.setDefaultLocaleCache(Locale.ENGLISH);
+		testMessage("English", "englishAndSpanishOnly");
+		LocaleUtility.setDefaultLocaleCache(startingDefaultLocale);
+		testMessage("English", "englishAndSpanishOnly");
 	}
 	
 	@Test

@@ -22,6 +22,7 @@ import org.openmrs.module.ModuleClassLoader;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
+import org.openmrs.util.LocaleUtility;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
@@ -41,11 +42,13 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -63,7 +66,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * the best match in the System Locale. If no match is found in the System Locale, then the message
  * code itself is returned as a final fallback. This source allows for supporting additional
  * fallback languages, as well as defining additional classpath patterns and domains to search for
- * message property files. See method javadoc for further details.
+ * message property files. See method javadoc for addClasspathPatternToScan, addDomainToScan, and
+ * addFallbackLanguage for further details.
  * 
  * @see <a href=
  *      "https://talk.openmrs.org/t/address-hierarchy-support-for-i18n/10415/19?u=mksd">...</a>
@@ -129,16 +133,27 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 */
 	@Override
 	protected String resolveCodeWithoutArguments(String code, Locale locale) {
-		return resolveCodeWithoutArguments(code, locale, true);
+		Set<Locale> localesAttempted = new HashSet<>();
+		String message = resolveCodeWithoutArguments(code, locale, localesAttempted);
+		if (message != null) {
+			return message;
+		}
+		for (Locale fallbackLocale : LocaleUtility.getLocalesInOrder()) {
+			message = resolveCodeWithoutArguments(code, fallbackLocale, localesAttempted);
+			if (message != null) {
+				return message;
+			}
+		}
+		return resolveCodeWithoutArguments(code, Locale.getDefault(), localesAttempted);
 	}
 	
 	/**
 	 * Implementation of the resolveCodeWithoutArguments method that allows recursion into less specific
-	 * variants of the given locale, and then further recursion into the defined fallback locales and
-	 * ultimately into the system locale if appropriate without resulting in infinite recursion
+	 * variants of the given locale, while not checking any locales that have already been attempted
 	 */
-	protected String resolveCodeWithoutArguments(String code, Locale locale, boolean fallbackToSystemLocale) {
-		if (locale != null) {
+	protected String resolveCodeWithoutArguments(String code, Locale locale, Set<Locale> localesAttempted) {
+		if (locale != null && !localesAttempted.contains(locale)) {
+			localesAttempted.add(locale);
 			// If an exact match is found in the requested locale, return it
 			PresentationMessage pm = getPresentation(code, locale);
 			if (pm != null) {
@@ -147,17 +162,14 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			// Otherwise, try to find the best matching locale with a message
 			if (StringUtils.isNotEmpty(locale.getVariant())) {
 				Locale countryLocale = new Locale(locale.getLanguage(), locale.getCountry());
-				return resolveCodeWithoutArguments(code, countryLocale, fallbackToSystemLocale);
+				return resolveCodeWithoutArguments(code, countryLocale, localesAttempted);
 			} else if (StringUtils.isNotEmpty(locale.getCountry())) {
 				Locale languageLocale = new Locale(locale.getLanguage());
-				return resolveCodeWithoutArguments(code, languageLocale, fallbackToSystemLocale);
+				return resolveCodeWithoutArguments(code, languageLocale, localesAttempted);
 			} else if (getFallbackLanguages().containsKey(locale.getLanguage())) {
 				Locale fallbackLanguage = new Locale(getFallbackLanguages().get(locale.getLanguage()));
-				return resolveCodeWithoutArguments(code, fallbackLanguage, fallbackToSystemLocale);
+				return resolveCodeWithoutArguments(code, fallbackLanguage, localesAttempted);
 			}
-		}
-		if (fallbackToSystemLocale) {
-			return resolveCodeWithoutArguments(code, Locale.getDefault(), false);
 		}
 		return null;
 	}
@@ -190,8 +202,8 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			}
 		}
 		stopWatch.stop();
-		log.info("Refreshing message cache completed. " + presentationCache.getPresentations().size() + " messages in" +
-		        + presentationCache.getLocales().size() + " locales in " + stopWatch);
+		log.info("Refreshing message cache completed. " + presentationCache.getPresentations().size() + " messages in"
+		        + +presentationCache.getLocales().size() + " locales in " + stopWatch);
 	}
 	
 	/**
@@ -351,15 +363,15 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		classpathPatternsToScan.add(classpathPatternToScan);
 	}
 	
+	public List<String> getDomainsToScan() {
+		return domainsToScan;
+	}
+	
 	/**
 	 * One can use this method to add additional classpath initializer domains to scan, if necessary
 	 * Note, that one will need to ensure that the refreshCache() method is invoked after adding
 	 * additional domains
 	 */
-	public List<String> getDomainsToScan() {
-		return domainsToScan;
-	}
-	
 	public void addDomainToScan(String domainToScan) {
 		domainsToScan.add(domainToScan);
 	}
