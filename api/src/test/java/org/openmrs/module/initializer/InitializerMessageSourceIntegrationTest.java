@@ -39,6 +39,9 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 		if (inizSrc.getPresentations().isEmpty()) {
 			inizSrc.initialize();
 		}
+		if (!inizSrc.getFallbackLanguages().containsKey("ht")) {
+			inizSrc.addFallbackLanguage("ht", "fr");
+		}
 		Locale.setDefault(Locale.ENGLISH);
 	}
 	

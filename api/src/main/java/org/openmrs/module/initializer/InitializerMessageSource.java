@@ -112,7 +112,6 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		addClasspathPatternToScan("classpath*:messages*.properties");
 		addDomainToScan(InitializerConstants.DOMAIN_ADDR);
 		addDomainToScan(InitializerConstants.DOMAIN_MSGPROP);
-		addFallbackLanguage("ht", "fr");
 		refreshCache();
 	}
 	
