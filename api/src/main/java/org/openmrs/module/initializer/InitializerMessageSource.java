@@ -137,11 +137,9 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		if (message != null) {
 			return message;
 		}
-		for (Locale fallbackLocale : LocaleUtility.getLocalesInOrder()) {
-			message = resolveCodeWithoutArguments(code, fallbackLocale, localesAttempted);
-			if (message != null) {
-				return message;
-			}
+		message = resolveCodeWithoutArguments(code, LocaleUtility.getDefaultLocale(), localesAttempted);
+		if (message != null) {
+			return message;
 		}
 		return resolveCodeWithoutArguments(code, Locale.getDefault(), localesAttempted);
 	}
