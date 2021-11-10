@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.initializer.api;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -54,6 +55,12 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 		DaemonToken daemonToken = new DaemonToken("openconceptlab");
 		daemonTokens.put(daemonToken.getId(), daemonToken);
 		new OpenConceptLabActivator().setDaemonToken(daemonToken);
+	}
+	
+	@After
+	public void deleteAllData() throws Exception {
+		// this is necessary or else future test cases will fail because of two sources named CIEL
+		super.deleteAllData();
 	}
 	
 	@Test

@@ -190,12 +190,6 @@
             <version>${metadatasharingVersion}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>openconceptlab-api</artifactId>
-            <version>${openconceptlabVersion}</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
@@ -241,6 +235,17 @@
         </dependency>
 
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>openconceptlab-api</artifactId>
+                <version>${openconceptlabVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
