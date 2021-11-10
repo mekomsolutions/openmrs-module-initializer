@@ -39,14 +39,13 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 	    @Qualifier("initializer.conceptAttributeLineProcessor") ConceptAttributeLineProcessor conceptAttributeLineProcessor) {
 		
 		super(baseProcessor);
-		
-		this.conceptService = conceptService;
-		
 		this.numericProcessor = numericProcessor;
 		this.complexProcessor = complexProcessor;
 		this.nestedProcessor = nestedProcessor;
 		this.mappingsProcessor = mappingsProcessor;
 		this.conceptAttributeLineProcessor = conceptAttributeLineProcessor;
+		
+		this.conceptService = conceptService;
 	}
 	
 	@Override

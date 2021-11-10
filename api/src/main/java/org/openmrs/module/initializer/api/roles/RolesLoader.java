@@ -1,5 +1,7 @@
 package org.openmrs.module.initializer.api.roles;
 
+import java.io.File;
+
 import org.openmrs.Role;
 import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,5 +13,9 @@ public class RolesLoader extends BaseCsvLoader<Role, RolesCsvParser> {
 	@Autowired
 	public void setParser(RolesCsvParser parser) {
 		this.parser = parser;
+	}
+	
+	@Override
+	protected void preload(File file) {
 	}
 }

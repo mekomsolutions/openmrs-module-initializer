@@ -1,0 +1,8 @@
+Uuid,Fully specified name:en,Same as mappings,Description:en,Data class,Data type,Answers,Members,_version:1,_order:1000
+54014540-311d-11ec-8d2b-0242ac110002,Set of senses,CIEL:SENSE_SET,Set of all available senses,ConvSet,N/A,,,,
+5a393db9-311d-11ec-8d2b-0242ac110002,How did you sense it?,CIEL:SENSE_QUESTION,Question about sense,Question,Coded,,,,
+5d1e9aa1-311d-11ec-8d2b-0242ac110002,Smell,CIEL:SMELL,Smell,Misc,N/A,,,,
+6878804b-311d-11ec-8d2b-0242ac110002,Taste,CIEL:TASTE,Taste,Misc,N/A,,,,
+6b29ee43-311d-11ec-8d2b-0242ac110002,Touch,CIEL:TOUCH,Touch,Misc,N/A,,,,
+6da4eb30-311d-11ec-8d2b-0242ac110002,Sight,CIEL:SIGHT,Sight,Misc,N/A,,,,
+703404f7-311d-11ec-8d2b-0242ac110002,Sound,CIEL:SOUND,Sound,Misc,N/A,,,,

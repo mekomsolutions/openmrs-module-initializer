@@ -3,7 +3,6 @@ package org.openmrs.module.initializer.api.loaders;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
+import org.openmrs.module.initializer.api.OrderedFile;
 
 public class BaseFileLoaderTest {
 	
@@ -32,10 +32,26 @@ public class BaseFileLoaderTest {
 		
 		List<File> files = Arrays.asList(new File("test1.txt"), new File("test2.txt"), new File("test3.txt"));
 		
-		when(dirUtil.getOrderedFiles(eq("txt"), any(List.class), isA(TestLoader.class))).thenReturn(files);
+		when(dirUtil.getFiles(eq("txt"), any(List.class))).thenReturn(files);
+		when(dirUtil.getChecksumIfChanged(any(File.class))).thenReturn("2b2f585d-checksum");
 	}
 	
-	protected class TestLoader extends BaseFileLoader {
+	private class TestLoader extends BaseFileLoader {
+		
+		private class TestOrderedFile extends OrderedFile {
+			
+			private static final long serialVersionUID = 1L;
+			
+			public TestOrderedFile(File file) {
+				super(file);
+			}
+			
+			@Override
+			protected Integer fetchOrder(File file) throws Exception {
+				return order;
+			}
+			
+		}
 		
 		@Override
 		protected String getFileExtension() {
@@ -45,6 +61,11 @@ public class BaseFileLoaderTest {
 		@Override
 		public ConfigDirUtil getDirUtil() {
 			return dirUtil;
+		}
+		
+		@Override
+		public OrderedFile toOrderedFile(File file) {
+			return new TestOrderedFile(file);
 		}
 		
 		@Override
@@ -83,12 +104,12 @@ public class BaseFileLoaderTest {
 	@Test
 	public void loadUnsafe_shouldThrowEarly() throws Exception {
 		// replay
-		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+		RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
 			new TestLoader().loadUnsafe(Collections.emptyList(), true);
 		});
 		
 		// verify
-		Assert.assertEquals("Error right from file 1.", thrown.getMessage());
+		Assert.assertTrue(thrown.getMessage().endsWith("Error right from file 1."));
 		verify(dirUtil, times(0)).writeChecksum(any(), any());
 	}
 }

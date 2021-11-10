@@ -142,7 +142,7 @@ public class ConfigDirUtilTest {
 	 * TODO: Maybe assert the logger?
 	 */
 	@Test
-	public void getOrderedFiles_shouldReturnOrderedCsvFilesWithConceptsLoader() {
+	public void getFiles_shouldAllowToOrderCsvFilesWithConceptsLoader() {
 		// Setup
 		String configDirPath = getClass().getClassLoader().getResource("org/openmrs/module/initializer/include/csv")
 		        .getPath();
@@ -152,8 +152,8 @@ public class ConfigDirUtilTest {
 		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain);
 		
 		// Replay
-		List<String> orderedFilenames = dirUtil.getOrderedFiles("csv", null, new ConceptsLoader()).stream()
-		        .map(f -> f.getName()).collect(Collectors.toList());
+		List<String> orderedFilenames = dirUtil.getFiles("csv", null).stream()
+		        .map(f -> new ConceptsLoader().toOrderedFile(f)).sorted().map(f -> f.getName()).collect(Collectors.toList());
 		
 		// Verif
 		assertThat(orderedFilenames.size(), is(5));

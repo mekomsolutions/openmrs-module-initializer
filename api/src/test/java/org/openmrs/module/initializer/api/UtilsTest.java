@@ -18,6 +18,7 @@ import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.AdministrationService;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
@@ -259,5 +260,32 @@ public class UtilsTest {
 		        .thenReturn(Arrays.asList(new ProgramWorkflowState(), new ProgramWorkflowState()));
 		
 		Assert.assertNull(Utils.fetchProgramWorkflowState("concept-uuid", pws, cs));
+	}
+	
+	@Test
+	public void generateUuidFromObjects_shouldReturnUuidGivenValidArguments() {
+		// replay
+		String uuid = Utils.generateUuidFromObjects("edaef9f4-2b5b-4b71-9019-74f1d40ad4d7", "Oedema",
+		    ConceptNameType.FULLY_SPECIFIED, Locale.ENGLISH);
+		
+		// verify
+		Assert.assertNotNull(uuid);
+		Assert.assertEquals("f6fa2a4e-78a3-3378-a30a-c27c67f5734e", uuid);
+	}
+	
+	@Test
+	public void generateUuidFromObjects_shouldNotFailGivenNullArguments() {
+		// replay
+		String uuid = Utils.generateUuidFromObjects("some-uuid", null, ConceptNameType.SHORT, Locale.ENGLISH);
+		
+		// verify
+		Assert.assertNotNull(uuid);
+	}
+	
+	@Test
+	public void unProxy_shouldReturnOriginalClassName() {
+		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType$HibernateProxy$ODcBnusu"));
+		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType_$$_javassist_26"));
+		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType"));
 	}
 }
