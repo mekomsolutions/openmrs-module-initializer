@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.OpenmrsObject;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
@@ -17,17 +17,30 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.openmrs.module.initializer.api.OrderedCsvFile;
 import org.openmrs.module.initializer.api.OrderedFile;
+import org.openmrs.module.initializer.api.display.DisplaysPreLoader;
 import org.openmrs.module.initializer.api.utils.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * All CSV loaders should subclass the base CSV loader. This class takes care of loading and sorting
  * all CSV files configured through a {@link ConfigDirUtil} instance.
  * 
- * @param <T>
+ * @param <T> A subclass of OpenmrsObject
+ * @param <P> A subclass of CsvParser
  */
-public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvParser<T, BaseLineProcessor<T>>> extends BaseInputStreamLoader implements CsvLoader/* <P> */ {
+public abstract class BaseCsvLoader<T extends OpenmrsObject, P extends CsvParser<T, BaseLineProcessor<T>>> extends BaseInputStreamLoader implements CsvLoader<P> {
 	
 	protected P parser;
+	
+	private DisplaysPreLoader displaysLoader;
+	
+	/**
+	 * @param displaysLoader
+	 */
+	@Autowired
+	public void setDisplaysPreLoader(DisplaysPreLoader displaysLoader) {
+		this.displaysLoader = displaysLoader;
+	}
 	
 	@Override
 	protected Domain getDomain() {
@@ -46,8 +59,17 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 	}
 	
 	@Override
-	public OrderedFile newOrderedFile(File file) {
+	public OrderedFile toOrderedFile(File file) {
 		return new OrderedCsvFile(file);
+	}
+	
+	/**
+	 * By default all CSV loaders run the displays pre-loader in their pre-loading phase.
+	 */
+	@Override
+	protected void preload(final File file) throws Exception {
+		displaysLoader.setBootstrapParser(parser);
+		displaysLoader.load(file);
 	}
 	
 	@Override
@@ -84,7 +106,7 @@ public abstract class BaseCsvLoader<T extends BaseOpenmrsObject, P extends CsvPa
 		// logging the exception stack traces collected during CSV processing
 		else {
 			result.getErrorDetails().forEach(ed -> {
-				log.warn("An OpenMRS object could not be constructed or saved from the following CSV line:"
+				log.error("An OpenMRS object could not be constructed or saved from the following CSV line:"
 				        + ed.getCsvLine().prettyPrint(),
 				    ed.getException());
 			});

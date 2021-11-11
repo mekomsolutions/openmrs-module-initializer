@@ -15,6 +15,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -24,6 +25,7 @@ import org.openmrs.Location;
 import org.openmrs.LocationAttribute;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
+import org.openmrs.api.context.Context;
 import org.openmrs.customdatatype.datatype.DateDatatype;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loc.LocationsLoader;
@@ -41,6 +43,10 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	
 	@Autowired
 	private DateDatatype dateDatatype;
+	
+	private Locale localeEn = Locale.ENGLISH;
+	
+	private Locale localeKm = new Locale("km", "KH");
 	
 	@Before
 	public void setup() throws Exception {
@@ -143,6 +149,48 @@ public class LocationsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		{
 			Location loc = ls.getLocationByUuid("2b9824a3-92f0-4966-8f34-1b105624b267");
 			Assert.assertNull(loc);
+		}
+		
+		// verify Locations domain i18n on entries with display:xy fields
+		{
+			Assert.assertEquals("Acme Clinic (translated)", Context.getMessageSourceService()
+			        .getMessage("ui.i18n.Location.name.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeEn));
+			Assert.assertEquals("គ្លីនិកអាមី", Context.getMessageSourceService()
+			        .getMessage("ui.i18n.Location.name.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeKm));
+			Assert.assertEquals("Acme Clinic (translated)", Context.getMessageSourceService()
+			        .getMessage("org.openmrs.Location.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeEn));
+			Assert.assertEquals("គ្លីនិកអាមី", Context.getMessageSourceService()
+			        .getMessage("org.openmrs.Location.a03e395c-b881-49b7-b6fc-983f6bddc7fc", null, localeKm));
+		}
+		// verify no Locations domain i18n on entries without display:xy fields and entries without pre-filled uuids
+		{
+			Assert.assertNotNull(ls.getLocationByUuid("1cb58794-3c49-11ea-b3eb-f7801304f314"));
+			Assert.assertEquals("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			        null, localeEn));
+			Assert.assertEquals("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			        null, localeKm));
+			
+			Assert.assertEquals("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			    Context.getMessageSourceService().getMessage("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			        null, localeEn));
+			Assert.assertEquals("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			    Context.getMessageSourceService().getMessage("org.openmrs.Location.1cb58794-3c49-11ea-b3eb-f7801304f314",
+			        null, localeKm));
+			
+			Location loc = ls.getLocation("The Lake Clinic-Cambodia");
+			Assert.assertNotNull(loc);
+			
+			String uuid = loc.getUuid();
+			Assert.assertEquals("ui.i18n.Location.name." + uuid,
+			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name." + uuid, null, localeEn));
+			Assert.assertEquals("ui.i18n.Location.name." + uuid,
+			    Context.getMessageSourceService().getMessage("ui.i18n.Location.name." + uuid, null, localeKm));
+			Assert.assertEquals("org.openmrs.Location." + uuid,
+			    Context.getMessageSourceService().getMessage("org.openmrs.Location." + uuid, null, localeEn));
+			Assert.assertEquals("org.openmrs.Location." + uuid,
+			    Context.getMessageSourceService().getMessage("org.openmrs.Location." + uuid, null, localeKm));
 		}
 	}
 }

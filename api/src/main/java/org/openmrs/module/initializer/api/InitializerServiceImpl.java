@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -70,9 +71,8 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	@Override
 	public List<Loader> getLoaders() {
-		List<Loader> loaders = Context.getRegisteredComponents(Loader.class);
-		Collections.sort(loaders);
-		return loaders;
+		return Context.getRegisteredComponents(Loader.class).stream().filter(l -> !l.isPreLoader()).sorted()
+		        .collect(Collectors.toList());
 	}
 	
 	@Override

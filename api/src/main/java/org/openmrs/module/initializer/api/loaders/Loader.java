@@ -15,6 +15,11 @@ import org.openmrs.module.initializer.api.ConfigDirUtil;
 public interface Loader extends Comparable<Loader> {
 	
 	/**
+	 * @return true if this is a pre-loader that should be excluded from the domain-connected loaders.
+	 */
+	boolean isPreLoader();
+	
+	/**
 	 * @return The domain name for the domain covered by the loader.
 	 */
 	String getDomainName();

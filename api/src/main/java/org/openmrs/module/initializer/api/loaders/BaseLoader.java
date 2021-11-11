@@ -25,6 +25,11 @@ public abstract class BaseLoader implements Loader {
 	protected InitializerConfig cfg;
 	
 	@Override
+	public boolean isPreLoader() {
+		return false;
+	}
+	
+	@Override
 	public ConfigDirUtil getDirUtil() {
 		return new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), getDomainName(), cfg.skipChecksums());
 	}

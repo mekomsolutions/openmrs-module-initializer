@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Appender;
@@ -551,5 +552,28 @@ public class Utils {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Concatenates the {@link Object#toString()} representation of each object of an array or "null"
+	 * string if object is null, and use it as a seed to generate a UUID.
+	 * 
+	 * @param args An array of {@link Object}.
+	 * @return The generated UUID.
+	 */
+	public static String generateUuidFromObjects(Object... args) {
+		String seed = Arrays.stream(args).map(arg -> arg == null ? "null" : arg.toString()).collect(Collectors.joining("_"));
+		String uuid = UUID.nameUUIDFromBytes(seed.getBytes()).toString();
+		return uuid;
+	}
+	
+	/*
+	 * Turns a proxy short class name into the original short class name.
+	 * Eg. "EncounterType$HibernateProxy$ODcBnusu" or "EncounterType_$$_javassist_26" → "EncounterType"
+	 */
+	public static String unProxy(String shortClassName) {
+		shortClassName = StringUtils.substringBefore(shortClassName, "_$");
+		shortClassName = StringUtils.substringBefore(shortClassName, "$");
+		return shortClassName;
 	}
 }

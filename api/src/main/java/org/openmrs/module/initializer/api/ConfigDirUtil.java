@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -23,7 +22,6 @@ import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.module.initializer.api.loaders.BaseFileLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -191,19 +189,6 @@ public class ConfigDirUtil {
 		        });
 		
 		return allFiles;
-	}
-	
-	/**
-	 * Gets the files whose checksum has changed, in order of loading.
-	 * 
-	 * @see #getFiles(String, List<String>)
-	 * @param loader The loader provides the instantiation mechanism for the target ordered file.
-	 * @return The ordered list of {@link File} instances found recursively inside the folder.
-	 * @since 2.1.0
-	 */
-	public List<File> getOrderedFiles(String extension, List<String> wildcardExclusions, BaseFileLoader loader) {
-		return getFiles(extension, wildcardExclusions).stream().filter(f -> !getChecksumIfChanged(f).isEmpty())
-		        .map(f -> loader.newOrderedFile(f)).sorted().collect(Collectors.toList());
 	}
 	
 	/**

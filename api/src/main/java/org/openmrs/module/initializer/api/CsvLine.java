@@ -1,11 +1,11 @@
 package org.openmrs.module.initializer.api;
 
-import java.sql.Time;
-import java.util.Arrays;
-
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.module.initializer.api.utils.Utils;
+
+import java.sql.Time;
+import java.util.Arrays;
 
 public class CsvLine {
 	
@@ -29,6 +29,15 @@ public class CsvLine {
 	
 	public String[] asLine() {
 		return line;
+	}
+	
+	public boolean containsHeader(String header) {
+		for (String h : headerLine) {
+			if (h.trim().equalsIgnoreCase(header)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public String get(String header, boolean canThrowException) throws IllegalArgumentException {
