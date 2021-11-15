@@ -14,6 +14,7 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.db.ClobDatatypeStorage;
 import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,33 +22,35 @@ import java.util.UUID;
 
 @Component
 public class AmpathFormsLoader extends BaseFileLoader {
-	
+
+	public static final String AMPATH_FORMS_UUID = "794c4598-ab82-47ca-8d18-483a8abe6f4f";
+
 	@Autowired
 	private DatatypeService datatypeService;
-	
+
 	@Autowired
 	private EncounterService encounterService;
-	
+
 	@Autowired
 	private FormService formService;
-	
+
 	@Override
 	protected Domain getDomain() {
 		return Domain.AMPATH_FORMS;
 	}
-	
+
 	@Override
 	protected String getFileExtension() {
 		return "json";
 	}
-	
+
 	@Override
 	protected void load(File file) throws Exception {
 		String jsonString = FileUtils.readFileToString(file, "UTF-8");
 		Map jsonFile = new ObjectMapper().readValue(jsonString, Map.class);
-		
+
 		String formName = (String) jsonFile.get("name");
-		if (formName == null) {
+		if (StringUtils.isBlank(formName)) {
 			throw new IllegalArgumentException("Form Name is required");
 		}
 		String formDescription = (String) jsonFile.get("description");
@@ -65,32 +68,34 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		if (formVersion == null) {
 			throw new IllegalArgumentException("Form Version is required");
 		}
+		String uuid = (String) jsonFile.get("uuid");
+		if (StringUtils.isBlank(uuid) || uuid.equals("xxxx")) {
+			uuid = Utils.generateUuidFromObjects(AMPATH_FORMS_UUID, formName, formVersion);
+		}
 		// Add Form
 		Form form = formService.getForm(formName);
-		
+
 		if (form != null) {
-			
-			if (OpenmrsUtil.nullSafeEquals(form.getVersion(), formVersion)) {
-				ClobDatatypeStorage clobData;
-				
-				clobData = datatypeService
-				        .getClobDatatypeStorageByUuid(formService.getFormResource(form, "JSON schema").getValueReference());
+
+			if (OpenmrsUtil.nullSafeEquals(form.getUuid(), uuid)) {
+				ClobDatatypeStorage clobData = datatypeService.getClobDatatypeStorageByUuid(
+						formService.getFormResource(form, "JSON schema").getValueReference());
 				clobData.setValue(jsonString);
 				clobData = datatypeService.saveClobDatatypeStorage(clobData);
-				
+
 				boolean needToSaveForm = false;
 				// Description
 				if (!OpenmrsUtil.nullSafeEquals(form.getDescription(), formDescription)) {
 					form.setDescription(formDescription);
 					needToSaveForm = true;
 				}
-				
+
 				// Add in schema
 				// Published
 				if (!OpenmrsUtil.nullSafeEquals(form.getPublished(), formPublished)) {
 					form.setPublished((Boolean) formPublished);
 					needToSaveForm = true;
-					
+
 				}
 				// Add to schema
 				// Retired
@@ -101,63 +106,63 @@ public class AmpathFormsLoader extends BaseFileLoader {
 					}
 					needToSaveForm = true;
 				}
-				
+
 				// Add encounter to schema
 				if (encounterType != null && !OpenmrsUtil.nullSafeEquals(form.getEncounterType(), encounterType)) {
 					form.setEncounterType(encounterType);
 					needToSaveForm = true;
 				}
-				
+
 				if (needToSaveForm) {
 					form = formService.saveForm(form);
-					
+
 				}
 			} else {
-				if (formVersion.compareTo(form.getVersion()) < 0) {
-					// Fix comparator or consider having ints rather than Strings for version
-					// control
-					throw new IllegalArgumentException(
-					        "Form Version can not be less than the current version in the system");
+				// check if form with same name and version exists
+				// We may not want to unretire form and just update its clob since it takes away
+				// back-ward compatibility if data was already captured with this form
+				if (formService.getFormByUuid(uuid) != null) {
+					throw new IllegalArgumentException("Retired Form with same name and version exists");
+
 				}
-				formService.retireForm(form, "Retired by Iniz for new version");
-				
-				createNewForm(formName, formDescription, formPublished, formRetired, encounterType, formVersion, jsonString);
-				
+				formService.retireForm(form, "Replaced with new version by Iniz");
+
+				createNewForm(uuid, formName, formDescription, formPublished, formRetired, encounterType, formVersion,
+						jsonString);
+
 			}
-			
+
 		} else {
-			createNewForm(formName, formDescription, formPublished, formRetired, encounterType, formVersion, jsonString);
-			
+			createNewForm(uuid, formName, formDescription, formPublished, formRetired, encounterType, formVersion,
+					jsonString);
+
 		}
-		
+
 	}
-	
-	private void createNewForm(String formName, String formDescription, Boolean formPublished, Boolean formRetired,
-	        EncounterType encounterType, String formVersion, String jsonString) {
-		
+
+	private void createNewForm(String uuid, String formName, String formDescription, Boolean formPublished,
+			Boolean formRetired, EncounterType encounterType, String formVersion, String jsonString) {
+		String clobUuid = UUID.randomUUID().toString();
 		Form newForm = new Form();
 		newForm.setName(formName);
 		newForm.setVersion(formVersion);
-		UUID randomUUID = UUID.randomUUID();
-		String uuidAsString = randomUUID.toString();
-		newForm.setUuid(uuidAsString);
+		newForm.setUuid(uuid);
 		newForm.setDescription(formDescription);
 		newForm.setRetired(formRetired);
 		newForm.setPublished(formPublished);
 		newForm.setEncounterType(encounterType);
-		
+
 		newForm = formService.saveForm(newForm);
 		FormResource formResource;
 		formResource = new FormResource();
 		formResource.setName("JSON schema");
 		formResource.setForm(newForm);
-		formResource.setUuid(uuidAsString);
-		formResource.setValueReferenceInternal(uuidAsString);
+		formResource.setValueReferenceInternal(clobUuid);
 		formResource.setDatatypeClassname("AmpathJsonSchema");
 		formResource = formService.saveFormResource(formResource);
-		
+
 		ClobDatatypeStorage clobData = new ClobDatatypeStorage();
-		clobData.setUuid(uuidAsString);
+		clobData.setUuid(clobUuid);
 		clobData.setValue(jsonString);
 		clobData = datatypeService.saveClobDatatypeStorage(clobData);
 	}
