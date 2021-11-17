@@ -17,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.OrderedFile;
@@ -208,7 +207,7 @@ public class BaseFileLoaderTest {
 				throw new RuntimeException("Faild to preload from file 1.");
 			}
 			
-			// throwingOnPreload overridden to always not throw
+			// throwingOnPreload overridden to always not throw on pre-loading
 			@Override
 			protected boolean throwingOnPreload(boolean doThrow) {
 				return false;
