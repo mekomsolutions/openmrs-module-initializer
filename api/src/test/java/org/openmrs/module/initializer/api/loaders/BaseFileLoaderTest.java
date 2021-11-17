@@ -23,12 +23,15 @@ import org.openmrs.module.initializer.api.OrderedFile;
 
 public class BaseFileLoaderTest {
 	
+	private TestLoader testLoader;
+	
 	@Mock
 	private ConfigDirUtil dirUtil;
 	
 	@BeforeEach
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		testLoader = new TestLoader();
 		
 		List<File> files = Arrays.asList(new File("test1.txt"), new File("test2.txt"), new File("test3.txt"));
 		
@@ -95,7 +98,7 @@ public class BaseFileLoaderTest {
 	@Test
 	public void load_shouldLoadSafely() throws Exception {
 		// replay
-		new TestLoader().load();
+		testLoader.load();
 		
 		// verify
 		verify(dirUtil, times(3)).writeChecksum(any(), any());
@@ -105,7 +108,7 @@ public class BaseFileLoaderTest {
 	public void loadUnsafe_shouldThrowEarly() throws Exception {
 		// replay
 		RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-			new TestLoader().loadUnsafe(Collections.emptyList(), true);
+			testLoader.loadUnsafe(Collections.emptyList(), true);
 		});
 		
 		// verify
@@ -118,41 +121,39 @@ public class BaseFileLoaderTest {
 		// setup
 		BaseFileLoader fl = new BaseFileLoader() {
 			
-			TestLoader test = new TestLoader();
-			
 			@Override
 			protected String getFileExtension() {
-				return test.getFileExtension();
+				return testLoader.getFileExtension();
 			}
 			
 			@Override
 			public ConfigDirUtil getDirUtil() {
-				return test.getDirUtil();
+				return testLoader.getDirUtil();
 			}
 			
 			@Override
 			public OrderedFile toOrderedFile(File file) {
-				return test.toOrderedFile(file);
+				return testLoader.toOrderedFile(file);
 			}
 			
 			@Override
 			protected void load(File file) throws Exception {
-				test.load(file);
+				testLoader.load(file);
 			}
 			
 			@Override
 			protected Domain getDomain() {
-				return test.getDomain();
+				return testLoader.getDomain();
 			}
 			
 			@Override
 			public String getDomainName() {
-				return test.getDomainName();
+				return testLoader.getDomainName();
 			}
 			
 			@Override
 			protected void preload(final File file) throws Exception {
-				throw new RuntimeException("Faild to preload from file 1.");
+				throw new RuntimeException("Failed to preload from file 1.");
 			}
 		};
 		
@@ -162,49 +163,47 @@ public class BaseFileLoaderTest {
 		});
 		
 		// verify
-		Assert.assertTrue(thrown.getMessage().endsWith("Faild to preload from file 1."));
+		Assert.assertTrue(thrown.getMessage().endsWith("Failed to preload from file 1."));
 	}
 	
 	@Test
-	public void loadUnsafe_shouldNotThrowOnPreloadAs() throws Exception {
+	public void loadUnsafe_shouldNotThrowOnPreloadException() throws Exception {
 		// setup
 		BaseFileLoader fl = new BaseFileLoader() {
 			
-			TestLoader test = new TestLoader();
-			
 			@Override
 			protected String getFileExtension() {
-				return test.getFileExtension();
+				return testLoader.getFileExtension();
 			}
 			
 			@Override
 			public ConfigDirUtil getDirUtil() {
-				return test.getDirUtil();
+				return testLoader.getDirUtil();
 			}
 			
 			@Override
 			public OrderedFile toOrderedFile(File file) {
-				return test.toOrderedFile(file);
+				return testLoader.toOrderedFile(file);
 			}
 			
 			@Override
 			protected void load(File file) throws Exception {
-				test.load(file);
+				testLoader.load(file);
 			}
 			
 			@Override
 			protected Domain getDomain() {
-				return test.getDomain();
+				return testLoader.getDomain();
 			}
 			
 			@Override
 			public String getDomainName() {
-				return test.getDomainName();
+				return testLoader.getDomainName();
 			}
 			
 			@Override
 			protected void preload(final File file) throws Exception {
-				throw new RuntimeException("Faild to preload from file 1.");
+				throw new RuntimeException("Failed to preload from file 1.");
 			}
 			
 			// throwingOnPreload overridden to always not throw on pre-loading
@@ -220,6 +219,6 @@ public class BaseFileLoaderTest {
 		});
 		
 		// verify
-		Assert.assertNull(null);
+		Assert.assertFalse(thrown.getMessage().endsWith("Failed to preload from file 1."));
 	}
 }

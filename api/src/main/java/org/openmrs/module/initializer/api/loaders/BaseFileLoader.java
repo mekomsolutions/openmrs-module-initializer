@@ -63,12 +63,12 @@ public abstract class BaseFileLoader extends BaseLoader {
 	}
 	
 	/**
-	 * During pre-loading of a domain file, an exception may occur preventing its actual loading in
-	 * strict mode(i.e doThrow is true). Loaders that do not have to fail loading given an exception
-	 * occurred when pre-loading would have to override this function to return false.
+	 * If the loader is fitted with a pre-loader, this method provides control on whether the pre-loader
+	 * should throw on error or is allowed to fail.
 	 * 
-	 * @param doThrow whether to throw exception on not
-	 * @return true or false.
+	 * @param doThrow Says whether Initializer is configured to throw on error or not.
+	 * @return true if the loader's pre-loader should throw on error, false if the loader's pre-loader
+	 *         is allowed to fail.
 	 */
 	protected boolean throwingOnPreload(boolean doThrow) {
 		return doThrow;
