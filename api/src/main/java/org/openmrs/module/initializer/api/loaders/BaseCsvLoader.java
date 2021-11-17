@@ -72,6 +72,14 @@ public abstract class BaseCsvLoader<T extends OpenmrsObject, P extends CsvParser
 		displaysLoader.load(file);
 	}
 	
+	/**
+	 * By default CSV loaders do not allow their pre-loader to throw.
+	 */
+	@Override
+	protected boolean throwingOnPreload(boolean doThrow) {
+		return false;
+	}
+	
 	@Override
 	protected void load(InputStream is) throws Exception {
 		

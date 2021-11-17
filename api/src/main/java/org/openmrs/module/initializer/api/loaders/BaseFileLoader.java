@@ -62,13 +62,26 @@ public abstract class BaseFileLoader extends BaseLoader {
 		return file;
 	}
 	
+	/**
+	 * If the loader is fitted with a pre-loader, this method provides control on whether the pre-loader
+	 * should throw on error or is allowed to fail.
+	 * 
+	 * @param doThrow Says whether Initializer is configured to throw on error or not.
+	 * @return true if the loader's pre-loader should throw on error, false if the loader's pre-loader
+	 *         is allowed to fail.
+	 */
+	protected boolean throwingOnPreload(boolean doThrow) {
+		return doThrow;
+	}
+	
 	@Override
 	public void loadUnsafe(List<String> wildcardExclusions, boolean doThrow) throws Exception {
 		
 		final ConfigDirUtil dirUtil = getDirUtil();
 		
 		dirUtil.getFiles(getFileExtension(), wildcardExclusions).stream().map(f -> toOrderedFile(f)).sorted()
-		        .map(f -> preload(f, doThrow)).filter(f -> !dirUtil.getChecksumIfChanged(f).isEmpty()).forEach(file -> {
+		        .map(f -> preload(f, throwingOnPreload(doThrow))).filter(f -> !dirUtil.getChecksumIfChanged(f).isEmpty())
+		        .forEach(file -> {
 			        
 			        try {
 				        load(file);
