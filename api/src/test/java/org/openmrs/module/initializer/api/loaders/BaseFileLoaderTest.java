@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.OrderedFile;
@@ -111,5 +112,115 @@ public class BaseFileLoaderTest {
 		// verify
 		Assert.assertTrue(thrown.getMessage().endsWith("Error right from file 1."));
 		verify(dirUtil, times(0)).writeChecksum(any(), any());
+	}
+	
+	@Test
+	public void loadUnsafe_shouldThrowOnPreloadAsDefaultGivenDoThrowTrue() throws Exception {
+		// setup
+		BaseFileLoader fl = new BaseFileLoader() {
+			
+			TestLoader test = new TestLoader();
+			
+			@Override
+			protected String getFileExtension() {
+				return test.getFileExtension();
+			}
+			
+			@Override
+			public ConfigDirUtil getDirUtil() {
+				return test.getDirUtil();
+			}
+			
+			@Override
+			public OrderedFile toOrderedFile(File file) {
+				return test.toOrderedFile(file);
+			}
+			
+			@Override
+			protected void load(File file) throws Exception {
+				test.load(file);
+			}
+			
+			@Override
+			protected Domain getDomain() {
+				return test.getDomain();
+			}
+			
+			@Override
+			public String getDomainName() {
+				return test.getDomainName();
+			}
+			
+			@Override
+			protected void preload(final File file) throws Exception {
+				throw new RuntimeException("Faild to preload from file 1.");
+			}
+		};
+		
+		// replay
+		RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+			fl.loadUnsafe(Collections.emptyList(), true);
+		});
+		
+		// verify
+		Assert.assertTrue(thrown.getMessage().endsWith("Faild to preload from file 1."));
+	}
+	
+	@Test
+	public void loadUnsafe_shouldNotThrowOnPreloadAs() throws Exception {
+		// setup
+		BaseFileLoader fl = new BaseFileLoader() {
+			
+			TestLoader test = new TestLoader();
+			
+			@Override
+			protected String getFileExtension() {
+				return test.getFileExtension();
+			}
+			
+			@Override
+			public ConfigDirUtil getDirUtil() {
+				return test.getDirUtil();
+			}
+			
+			@Override
+			public OrderedFile toOrderedFile(File file) {
+				return test.toOrderedFile(file);
+			}
+			
+			@Override
+			protected void load(File file) throws Exception {
+				test.load(file);
+			}
+			
+			@Override
+			protected Domain getDomain() {
+				return test.getDomain();
+			}
+			
+			@Override
+			public String getDomainName() {
+				return test.getDomainName();
+			}
+			
+			@Override
+			protected void preload(final File file) throws Exception {
+				throw new RuntimeException("Faild to preload from file 1.");
+			}
+			
+			// throwingOnPreload overridden to always not throw
+			@Override
+			protected boolean throwingOnPreload(boolean doThrow) {
+				return false;
+			}
+		};
+		
+		// replay
+		RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+			fl.loadUnsafe(Collections.emptyList(), true);
+		});
+		
+		// verify
+		Assert.assertNull(null);
 	}
 }

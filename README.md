@@ -147,7 +147,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * (_Enhancement_) Concept name UUIDs are univoquely seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.
 * Backward-compatible overhaul of the concepts domain that provides full flexibility for managing concept names.
 * Bulk loading of metadata entities i18n display messages specified under `display:xy` headers.
-* (_For devs._) Introduced a pre-loading mechanism to `BaseFileLoader` that allows checksums-independent loading of transient information out of the config files before the actual metadata are loaded.
+* (_For devs._) Introduced a pre-loading mechanism to `BaseFileLoader` that allows checksums-independent loading of transient information out of the config files before the actual metadata are loaded. The behavior of all sub classes not overriding `throwingOnPreload` to return false, will always, as the default, throw exceptions early and intercept the actual loading of the files given the runtime setting of `initializer.startup.load = fail_on_error` configured.
 * Added support for setting a Concept version property in the concepts domain
 * Bulk creation and editing of concept set members and concept answers using CSV files in **configuration/conceptsets**.
 

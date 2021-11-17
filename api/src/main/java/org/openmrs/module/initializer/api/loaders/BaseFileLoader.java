@@ -63,13 +63,14 @@ public abstract class BaseFileLoader extends BaseLoader {
 	}
 	
 	/**
-	 * Provides control on the behavior to throw exceptions or not when pre-load errors happen. It
-	 * should be overridden by subclasses to determine the desired behavior.
+	 * During preloading of domain file, an exception may occur preventing its actual loading in strict
+	 * mode(i.e doThrowis true). Loaders that do not have to fail loading given an exception occurred
+	 * when preloading would have to override this function to return false.
 	 * 
 	 * @param doThrow whether to throw exception on not
 	 * @return true or false.
 	 */
-	public boolean failOnPreLoadError(boolean doThrow) {
+	protected boolean throwingOnPreload(boolean doThrow) {
 		return doThrow;
 	}
 	
@@ -79,7 +80,7 @@ public abstract class BaseFileLoader extends BaseLoader {
 		final ConfigDirUtil dirUtil = getDirUtil();
 		
 		dirUtil.getFiles(getFileExtension(), wildcardExclusions).stream().map(f -> toOrderedFile(f)).sorted()
-		        .map(f -> preload(f, failOnPreLoadError(false))).filter(f -> !dirUtil.getChecksumIfChanged(f).isEmpty())
+		        .map(f -> preload(f, throwingOnPreload(doThrow))).filter(f -> !dirUtil.getChecksumIfChanged(f).isEmpty())
 		        .forEach(file -> {
 			        
 			        try {
