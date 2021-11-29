@@ -68,18 +68,16 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		if (formVersion == null) {
 			throw new IllegalArgumentException("Form Version is required");
 		}
-		String uuid = (String) jsonFile.get("uuid");
-		if (StringUtils.isBlank(uuid) || uuid.equals("xxxx")) {
-			uuid = Utils.generateUuidFromObjects(AMPATH_FORMS_UUID, formName, formVersion);
-		}
-		// Add Form
-		Form form = formService.getForm(formName);
-
-		if (form != null) {
+		String uuid = Utils.generateUuidFromObjects(AMPATH_FORMS_UUID, formName, formVersion);
+		// Process Form
+		// ISSUE-150 If form with uuid present then update it
+		if (formService.getFormByUuid(uuid) != null) {
+			Form form = formService.getFormByUuid(uuid);
 
 			if (OpenmrsUtil.nullSafeEquals(form.getUuid(), uuid)) {
-				ClobDatatypeStorage clobData = datatypeService.getClobDatatypeStorageByUuid(
-						formService.getFormResource(form, "JSON schema").getValueReference());
+				ClobDatatypeStorage clobData = datatypeService
+						.getClobDatatypeStorageByUuid(
+								formService.getFormResource(form, "JSON schema").getValueReference());
 				clobData.setValue(jsonString);
 				clobData = datatypeService.saveClobDatatypeStorage(clobData);
 
@@ -89,7 +87,11 @@ public class AmpathFormsLoader extends BaseFileLoader {
 					form.setDescription(formDescription);
 					needToSaveForm = true;
 				}
-
+				// Version
+				if (!OpenmrsUtil.nullSafeEquals(form.getVersion(), formVersion)) {
+					form.setVersion(formVersion);
+					needToSaveForm = true;
+				}
 				// Add in schema
 				// Published
 				if (!OpenmrsUtil.nullSafeEquals(form.getPublished(), formPublished)) {
@@ -106,38 +108,28 @@ public class AmpathFormsLoader extends BaseFileLoader {
 					}
 					needToSaveForm = true;
 				}
-
 				// Add encounter to schema
 				if (encounterType != null && !OpenmrsUtil.nullSafeEquals(form.getEncounterType(), encounterType)) {
 					form.setEncounterType(encounterType);
 					needToSaveForm = true;
 				}
-
 				if (needToSaveForm) {
 					form = formService.saveForm(form);
 
 				}
-			} else {
-				// check if form with same name and version exists
-				// We may not want to unretire form and just update its clob since it takes away
-				// back-ward compatibility if data was already captured with this form
-				if (formService.getFormByUuid(uuid) != null) {
-					throw new IllegalArgumentException("Retired Form with same name and version exists");
-
-				}
-				formService.retireForm(form, "Replaced with new version by Iniz");
-
-				createNewForm(uuid, formName, formDescription, formPublished, formRetired, encounterType, formVersion,
-						jsonString);
-
 			}
 
-		} else {
+		} else if (formService.getForm(formName) != null) { // ISSUE-150 If form with name present then retire it and
+															// create a new one
+
+			Form form = formService.getForm(formName);
+			formService.retireForm(form, "Replaced with new version by Iniz");
 			createNewForm(uuid, formName, formDescription, formPublished, formRetired, encounterType, formVersion,
 					jsonString);
-
+		} else {// ISSUE-150 Create new form
+			createNewForm(uuid, formName, formDescription, formPublished, formRetired, encounterType, formVersion,
+					jsonString);
 		}
-
 	}
 
 	private void createNewForm(String uuid, String formName, String formDescription, Boolean formPublished,
