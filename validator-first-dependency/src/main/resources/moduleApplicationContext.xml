@@ -19,7 +19,11 @@
             http://www.springframework.org/schema/aop
             http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
             http://www.springframework.org/schema/util
-            http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+            http://www.springframework.org/schema/util/spring-util-3.0.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task-3.0.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
       
       <!-- leave this file empty -->
