@@ -36,7 +36,7 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	
 	@After
 	public void clean() throws IOException {
-		
+
 		// Delete created form files
 		FileUtils.deleteDirectory(new File(formFolderPath));
 		FileUtils
@@ -150,7 +150,6 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		String test_file_updated = "src/test/resources/testdata/testAmpathforms/test_form_new_version.json";
 		File srcFile = new File(test_file_updated);
 		File dstFile = new File(ampathFormsLoader.getDirUtil().getDomainDirPath() + "/test_form_new_version.json");
-		
 		FileUtils.copyFile(srcFile, dstFile);
 		
 		// Test that new version loads in with expected values

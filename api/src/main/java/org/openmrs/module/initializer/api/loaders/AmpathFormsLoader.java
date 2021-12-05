@@ -22,33 +22,33 @@ import java.util.UUID;
 
 @Component
 public class AmpathFormsLoader extends BaseFileLoader {
-
+	
 	public static final String AMPATH_FORMS_UUID = "794c4598-ab82-47ca-8d18-483a8abe6f4f";
-
+	
 	@Autowired
 	private DatatypeService datatypeService;
-
+	
 	@Autowired
 	private EncounterService encounterService;
-
+	
 	@Autowired
 	private FormService formService;
-
+	
 	@Override
 	protected Domain getDomain() {
 		return Domain.AMPATH_FORMS;
 	}
-
+	
 	@Override
 	protected String getFileExtension() {
 		return "json";
 	}
-
+	
 	@Override
 	protected void load(File file) throws Exception {
 		String jsonString = FileUtils.readFileToString(file, "UTF-8");
 		Map jsonFile = new ObjectMapper().readValue(jsonString, Map.class);
-
+		
 		String formName = (String) jsonFile.get("name");
 		if (StringUtils.isBlank(formName)) {
 			throw new IllegalArgumentException("Form Name is required");
@@ -73,14 +73,13 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		// ISSUE-150 If form with uuid present then update it
 		if (formService.getFormByUuid(uuid) != null) {
 			Form form = formService.getFormByUuid(uuid);
-
+			
 			if (OpenmrsUtil.nullSafeEquals(form.getUuid(), uuid)) {
 				ClobDatatypeStorage clobData = datatypeService
-						.getClobDatatypeStorageByUuid(
-								formService.getFormResource(form, "JSON schema").getValueReference());
+				        .getClobDatatypeStorageByUuid(formService.getFormResource(form, "JSON schema").getValueReference());
 				clobData.setValue(jsonString);
 				clobData = datatypeService.saveClobDatatypeStorage(clobData);
-
+				
 				boolean needToSaveForm = false;
 				// Description
 				if (!OpenmrsUtil.nullSafeEquals(form.getDescription(), formDescription)) {
@@ -97,7 +96,6 @@ public class AmpathFormsLoader extends BaseFileLoader {
 				if (!OpenmrsUtil.nullSafeEquals(form.getPublished(), formPublished)) {
 					form.setPublished((Boolean) formPublished);
 					needToSaveForm = true;
-
 				}
 				// Add to schema
 				// Retired
@@ -115,25 +113,23 @@ public class AmpathFormsLoader extends BaseFileLoader {
 				}
 				if (needToSaveForm) {
 					form = formService.saveForm(form);
-
 				}
 			}
-
+			
 		} else if (formService.getForm(formName) != null) { // ISSUE-150 If form with name present then retire it and
-															// create a new one
-
+		                                                    // create a new one
 			Form form = formService.getForm(formName);
 			formService.retireForm(form, "Replaced with new version by Iniz");
 			createNewForm(uuid, formName, formDescription, formPublished, formRetired, encounterType, formVersion,
-					jsonString);
+			    jsonString);
 		} else {// ISSUE-150 Create new form
 			createNewForm(uuid, formName, formDescription, formPublished, formRetired, encounterType, formVersion,
-					jsonString);
+			    jsonString);
 		}
 	}
-
+	
 	private void createNewForm(String uuid, String formName, String formDescription, Boolean formPublished,
-			Boolean formRetired, EncounterType encounterType, String formVersion, String jsonString) {
+	        Boolean formRetired, EncounterType encounterType, String formVersion, String jsonString) {
 		String clobUuid = UUID.randomUUID().toString();
 		Form newForm = new Form();
 		newForm.setName(formName);
@@ -143,7 +139,7 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		newForm.setRetired(formRetired);
 		newForm.setPublished(formPublished);
 		newForm.setEncounterType(encounterType);
-
+		
 		newForm = formService.saveForm(newForm);
 		FormResource formResource;
 		formResource = new FormResource();
@@ -152,7 +148,7 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		formResource.setValueReferenceInternal(clobUuid);
 		formResource.setDatatypeClassname("AmpathJsonSchema");
 		formResource = formService.saveFormResource(formResource);
-
+		
 		ClobDatatypeStorage clobData = new ClobDatatypeStorage();
 		clobData.setUuid(clobUuid);
 		clobData.setValue(jsonString);
