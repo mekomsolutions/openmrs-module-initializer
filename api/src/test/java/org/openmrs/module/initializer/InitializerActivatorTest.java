@@ -46,6 +46,8 @@ public class InitializerActivatorTest {
 	
 	private InitializerConfig cfg = new InitializerConfig();
 	
+	private Properties props;
+	
 	private Exception exceptionThrown;
 	
 	@BeforeEach
@@ -66,12 +68,21 @@ public class InitializerActivatorTest {
 				return iniz;
 			}
 		};
+		props = new Properties();
+		System.clearProperty(PROPS_STARTUP_LOAD);
 	}
 	
 	protected void startActivator(String startupLoadConfiguration) {
-		Properties props = new Properties();
+		startActivator(startupLoadConfiguration, false);
+	}
+	
+	protected void startActivator(String startupLoadConfiguration, boolean useSystemProperty) {
 		if (startupLoadConfiguration != null) {
-			props.put(PROPS_STARTUP_LOAD, startupLoadConfiguration);
+			if (useSystemProperty) {
+				System.setProperty(PROPS_STARTUP_LOAD, startupLoadConfiguration);
+			} else {
+				props.put(PROPS_STARTUP_LOAD, startupLoadConfiguration);
+			}
 		}
 		Context.setRuntimeProperties(props);
 		cfg.init();
@@ -88,6 +99,8 @@ public class InitializerActivatorTest {
 	public void started_shouldLoadAllDomainsEvenIfOneThrowsAnErrorByDefault() {
 		
 		startActivator(null);
+		Assertions.assertNull(System.getProperty(PROPS_STARTUP_LOAD));
+		Assertions.assertNull(props.get(PROPS_STARTUP_LOAD));
 		
 		Assertions.assertEquals(1, conceptsLoader.getNumberOfTimesLoadUnsafeCompleted());
 		Assertions.assertEquals(1, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
@@ -99,6 +112,8 @@ public class InitializerActivatorTest {
 	public void started_shouldLoadAllDomainsEvenIfOneThrowsAnErrorIfConfigured() {
 		
 		startActivator(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR);
+		Assertions.assertNull(System.getProperty(PROPS_STARTUP_LOAD));
+		Assertions.assertEquals(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, props.get(PROPS_STARTUP_LOAD));
 		
 		Assertions.assertEquals(1, conceptsLoader.getNumberOfTimesLoadUnsafeCompleted());
 		Assertions.assertEquals(1, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
@@ -110,6 +125,8 @@ public class InitializerActivatorTest {
 	public void started_shouldStopLoadingDomainsOnFailureIfConfigured() {
 		
 		startActivator(PROPS_STARTUP_LOAD_FAIL_ON_ERROR);
+		Assertions.assertNull(System.getProperty(PROPS_STARTUP_LOAD));
+		Assertions.assertEquals(PROPS_STARTUP_LOAD_FAIL_ON_ERROR, props.get(PROPS_STARTUP_LOAD));
 		
 		Assertions.assertEquals(1, conceptsLoader.getNumberOfTimesLoadUnsafeCompleted());
 		Assertions.assertEquals(0, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
@@ -122,6 +139,34 @@ public class InitializerActivatorTest {
 	public void started_shouldNotLoadAnyDomainsIfConfigured() {
 		
 		startActivator(PROPS_STARTUP_LOAD_DISABLED);
+		Assertions.assertNull(System.getProperty(PROPS_STARTUP_LOAD));
+		Assertions.assertEquals(PROPS_STARTUP_LOAD_DISABLED, props.get(PROPS_STARTUP_LOAD));
+		
+		Assertions.assertEquals(0, conceptsLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertEquals(0, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertEquals(0, drugsLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertNull(exceptionThrown);
+	}
+	
+	@Test
+	public void started_shouldLoadAllDomainsEvenIfOneThrowsAnErrorIfConfiguredWithSystemProperty() {
+		
+		startActivator(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, true);
+		Assertions.assertEquals(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, System.getProperty(PROPS_STARTUP_LOAD));
+		Assertions.assertNull(props.get(PROPS_STARTUP_LOAD));
+		
+		Assertions.assertEquals(1, conceptsLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertEquals(1, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertEquals(1, drugsLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertNull(exceptionThrown);
+	}
+	
+	@Test
+	public void started_shouldNotLoadAnyDomainsIfConfiguredWithSystemProperty() {
+		
+		startActivator(PROPS_STARTUP_LOAD_DISABLED, true);
+		Assertions.assertEquals(PROPS_STARTUP_LOAD_DISABLED, System.getProperty(PROPS_STARTUP_LOAD));
+		Assertions.assertNull(props.get(PROPS_STARTUP_LOAD));
 		
 		Assertions.assertEquals(0, conceptsLoader.getNumberOfTimesLoadUnsafeCompleted());
 		Assertions.assertEquals(0, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
