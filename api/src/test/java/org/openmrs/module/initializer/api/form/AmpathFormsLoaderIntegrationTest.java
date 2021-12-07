@@ -36,7 +36,7 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	
 	@After
 	public void clean() throws IOException {
-
+		
 		// Delete created form files
 		FileUtils.deleteDirectory(new File(formFolderPath));
 		FileUtils
