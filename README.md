@@ -150,6 +150,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * (_For devs._) Introduced a pre-loading mechanism to `BaseFileLoader` that allows checksums-independent loading of transient information out of the config files before the actual metadata are loaded. Each loader controls whether its pre-loader throws on error or is allowed to fail. By default pre-loaders are allowed to fail.
 * Added support for setting a Concept version property in the concepts domain
 * Bulk creation and editing of concept set members and concept answers using CSV files in **configuration/conceptsets**.
+* Added support enabling any Initializer runtime property value to also be specified from a system property
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
