@@ -22,7 +22,10 @@ import org.openmrs.module.idgen.SequentialIdentifierGenerator;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
+import org.openmrs.util.OpenmrsConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Properties;
 
 public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -90,10 +93,10 @@ public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleCont
 	}
 	
 	@Test
-	public void load_shouldModifyExistingIdentifierSources() {
+	public void load_shouldModifyExistingIdentifierSources() throws Exception {
 		
 		// Replay
-		loader.load();
+		loader.loadUnsafe(null, true);
 		
 		// Verify that existing sources are appropriately edited
 		{
@@ -136,10 +139,10 @@ public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleCont
 	}
 	
 	@Test
-	public void load_shouldCreateNewIdentifierSources() {
+	public void load_shouldCreateNewIdentifierSources() throws Exception {
 		
 		// Replay
-		loader.load();
+		loader.loadUnsafe(null, true);
 		
 		// Verify that existing sources are appropriately edited
 		{
@@ -163,8 +166,8 @@ public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleCont
 			Assert.assertEquals("New remote description", remoteSource.getDescription());
 			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", remoteSource.getIdentifierType().getName());
 			Assert.assertEquals("http://localhost", remoteSource.getUrl());
-			Assert.assertEquals("user", remoteSource.getUser());
-			Assert.assertEquals("pass", remoteSource.getPassword());
+			Assert.assertEquals("value-from-runtime-property", remoteSource.getUser());
+			Assert.assertEquals("value-from-system-property", remoteSource.getPassword());
 			Assert.assertFalse(BooleanUtils.isTrue(remoteSource.getRetired()));
 		}
 		{
@@ -180,5 +183,19 @@ public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleCont
 			Assert.assertTrue(pool.getSequential());
 			Assert.assertFalse(BooleanUtils.isTrue(pool.getRetired()));
 		}
+	}
+	
+	@Before
+	@Override
+	public void setupAppDataDir() {
+		
+		String path = getAppDataDirPath();
+		
+		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
+		System.setProperty("idgen_remote_password", "value-from-system-property");
+		Properties prop = new Properties();
+		prop.setProperty("idgen_remote_user", "value-from-runtime-property");
+		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
+		Context.setRuntimeProperties(prop);
 	}
 }
