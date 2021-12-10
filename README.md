@@ -151,6 +151,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Added support for setting a Concept version property in the concepts domain
 * Bulk creation and editing of concept set members and concept answers using CSV files in **configuration/conceptsets**.
 * Added support enabling any Initializer runtime property value to also be specified from a system property
+* Added support for remote sources and identifier pools to the idgen domain
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
