@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
+	private static final String FORM_FOLDER_PATH = "src/test/resources/forms/";
+	
 	@Autowired
 	private AmpathFormsLoader ampathFormsLoader;
 	
@@ -32,13 +34,11 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	@Autowired
 	private FormService formService;
 	
-	private String formFolderPath = "src/test/resources/forms/";
-	
 	@After
 	public void clean() throws IOException {
 		
 		// Delete created form files
-		FileUtils.deleteDirectory(new File(formFolderPath));
+		FileUtils.deleteDirectory(new File(FORM_FOLDER_PATH));
 		FileUtils
 		        .deleteQuietly(new File(ampathFormsLoader.getDirUtil().getDomainDirPath() + "/test_form_clob_changed.json"));
 		FileUtils.deleteQuietly(new File(ampathFormsLoader.getDirUtil().getDomainDirPath() + "/test_form_new_version.json"));
