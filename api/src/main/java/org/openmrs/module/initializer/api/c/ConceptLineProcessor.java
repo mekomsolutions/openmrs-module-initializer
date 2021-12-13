@@ -134,6 +134,7 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 				
 				existingName.setConceptNameType(newName.getConceptNameType());
 				existingName.setName(newName.getName());
+				existingName.setUuid(newName.getUuid());
 				existingName.setLocale(newName.getLocale());
 				existingName.setLocalePreferred(newName.getLocalePreferred());
 				
