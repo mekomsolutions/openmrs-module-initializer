@@ -14,6 +14,7 @@ The configuration folder is subdivided into _domain_ subfolders:
 ```bash
 configuration/
   ├── addresshierarchy/
+  ├── ampathforms/
   ├── appointmentspecialities/
   ├── appointmentservicedefinitions/
   ├── appointmentservicetypes/
@@ -103,6 +104,7 @@ This is the list of currently supported domains in their loading order:
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
+1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
 
 ### How to try it out?
