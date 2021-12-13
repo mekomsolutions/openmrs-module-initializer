@@ -1,6 +1,7 @@
 package org.openmrs.module.initializer.liquibase;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerConstants;
@@ -45,8 +46,8 @@ public class DeleteDomainChecksumsChangeset implements CustomTaskChange {
 		catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("'" + getDomainName() + "' is not a valid domain name.", e);
 		}
-		String appDataDirPath = OpenmrsUtil.getApplicationDataDirectory();
-		String checksumsDirPath = appDataDirPath + File.separator + InitializerConstants.DIR_NAME_CHECKSUM;
+		String checksumsDirPath = Paths
+		        .get(OpenmrsUtil.getApplicationDataDirectory(), InitializerConstants.DIR_NAME_CHECKSUM).toString();
 		
 		ConfigDirUtil util = new ConfigDirUtil(null, checksumsDirPath, domain.getName());
 		util.deleteChecksums();
