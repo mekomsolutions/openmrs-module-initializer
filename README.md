@@ -145,9 +145,6 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ### Releases notes
 
-#### Next Version
-* Added 'ampathforms' domain to support loading AMPATH forms.
-
 #### Version 2.3.0
 * (_Enhancement_) Concept name UUIDs are seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.
 * Backward-compatible overhaul of the concepts domain that provides full flexibility for managing concept names.
@@ -156,6 +153,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Added support for setting a Concept version property in the concepts domain
 * Bulk creation and editing of concept set members and concept answers using CSV files in **configuration/conceptsets**.
 * Added support enabling any Initializer runtime property value to also be specified from a system property
+* Bulk creation and edition of AMPATH forms provided as JSON schema definitions in **configuration/ampathforms**.
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
