@@ -335,6 +335,26 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	}
 	
 	@Test
+	public void load_shouldLoadConceptNamesUpdatingUuidsAccordingToCsvFiles() {
+		// setup
+		// Note: The concept name's uuid is not defined so will change to a default seeded uuid from the concept.
+		String existingConceptUuid = "814f7569-9023-469d-afd2-585415e5c608";
+		String nameString = "Sky blue";
+		String originalConceptNameUuid = cs.getConceptByUuid(existingConceptUuid).getName(localeEn).getUuid();
+		
+		// replay
+		Context.setLocale(localeEn);
+		loader.load();
+		
+		// verify
+		Assert.assertNotEquals(originalConceptNameUuid,
+		    cs.getConceptByUuid(existingConceptUuid).getName(localeEn).getUuid());
+		Assert.assertEquals(
+		    Utils.generateUuidFromObjects(existingConceptUuid, nameString, ConceptNameType.FULLY_SPECIFIED, Locale.ENGLISH),
+		    cs.getConceptByUuid(existingConceptUuid).getName(localeEn).getUuid());
+	}
+	
+	@Test
 	public void load_shouldLoadConceptNamesAccordingToCsvFiles() {
 		
 		ConceptNameType fsn = ConceptNameType.FULLY_SPECIFIED;
