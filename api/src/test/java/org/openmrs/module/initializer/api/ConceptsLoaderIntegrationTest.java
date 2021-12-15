@@ -335,26 +335,6 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	}
 	
 	@Test
-	public void load_shouldLoadConceptNamesUpdatingUuidsAccordingToCsvFiles() {
-		// setup
-		// Note: The concept name's uuid is not defined so will change to a default seeded uuid from the concept.
-		String existingConceptUuid = "814f7569-9023-469d-afd2-585415e5c608";
-		String nameString = "Sky blue";
-		String originalConceptNameUuid = cs.getConceptByUuid(existingConceptUuid).getName(localeEn).getUuid();
-		
-		// replay
-		Context.setLocale(localeEn);
-		loader.load();
-		
-		// verify
-		Assert.assertNotEquals(originalConceptNameUuid,
-		    cs.getConceptByUuid(existingConceptUuid).getName(localeEn).getUuid());
-		Assert.assertEquals(
-		    Utils.generateUuidFromObjects(existingConceptUuid, nameString, ConceptNameType.FULLY_SPECIFIED, Locale.ENGLISH),
-		    cs.getConceptByUuid(existingConceptUuid).getName(localeEn).getUuid());
-	}
-	
-	@Test
 	public void load_shouldLoadConceptNamesAccordingToCsvFiles() {
 		
 		ConceptNameType fsn = ConceptNameType.FULLY_SPECIFIED;
@@ -405,12 +385,19 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		
 		// Green is an existing Concept
 		// It has two existing names, and no uuids are specified in the CSV.
-		// Since the name, type, and locale are the same in the CSV as in the DB, it should match, and not recreate.
+		// Even if the name, type, and locale are the same in the CSV as in the DB, it should not match
+		// but recreate new names with seeded uuids.
 		
 		green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
-		Assert.assertEquals(2, green.getNames(true).size());
+		Assert.assertEquals(4, green.getNames(true).size());
 		assertName(green, "Green", localeEn, true, fsn);
+		Assert.assertEquals(
+		    Utils.generateUuidFromObjects(green.getUuid(), "Green", ConceptNameType.FULLY_SPECIFIED, localeEn),
+		    green.getName(localeEn).getUuid());
 		assertName(green, "Verde", localeEs, true, fsn);
+		Assert.assertEquals(
+		    Utils.generateUuidFromObjects(green.getUuid(), "Verde", ConceptNameType.FULLY_SPECIFIED, localeEs),
+		    green.getName(localeEs).getUuid());
 		
 		// Yellow is an existing Concept with 2 names, with Yellow as the FSN, and Lemon as a synonym
 		// In the CSV:
