@@ -383,11 +383,11 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		assertName(blue, "Azulado", localeEs, false, null);
 		assertName(blue, "Baby Blue", localeEn, false, null);
 		
-		// Green is an existing Concept
-		// It has two existing names prior to loading  (FSN "green" and FSN "verde"). And no uuids are specified in 
-		// the CSV loaded concept names(UUIDs will default to generated/seeded UUIDs from their associated concept UUIDs).
-		// Consequently 4 concept names will exist(including FSN "green" again, FSN "verde" again but with seeded UUIDs).
-		// The existing concept names will be voided because they donot have same UUIDs as the loaded names.
+		// Green is an existing Concept.
+		// It has two existing names prior to loading (FSN "green" and FSN "verde"). No UUIDs are specified in 
+		// the CSV file for those two names, therefore their UUIDs will default to generated/seeded UUIDs.
+		// Consequently 4 concept names will exist (a newer FSN "green" and a newer FSN "verde" now with seeded UUIDs).
+		// The original two names will be voided because they do not match the generated/seeded UUIDs.
 		
 		green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
 		Assert.assertEquals(4, green.getNames(true).size());
