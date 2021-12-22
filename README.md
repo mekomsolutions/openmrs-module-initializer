@@ -146,6 +146,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.3.0
+* (_Breaking change_) Use a CSV parser that satisfies the [RFC standard](https://datatracker.ietf.org/doc/html/rfc4180). This means that *backslashes must no longer be escaped*.
 * (_Enhancement_) Concept name UUIDs are seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.
 * Backward-compatible overhaul of the concepts domain that provides full flexibility for managing concept names.
 * Bulk loading of metadata entities i18n display messages specified under `display:xy` headers.
