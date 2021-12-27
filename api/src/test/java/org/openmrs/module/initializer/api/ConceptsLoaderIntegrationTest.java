@@ -383,14 +383,20 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		assertName(blue, "Azulado", localeEs, false, null);
 		assertName(blue, "Baby Blue", localeEn, false, null);
 		
-		// Green is an existing Concept
-		// It has two existing names, and no uuids are specified in the CSV.
-		// Since the name, type, and locale are the same in the CSV as in the DB, it should match, and not recreate.
+		// Green is an existing Concept.
+		// It has two existing names prior to loading (FSN "green" and FSN "verde"). No UUIDs are specified in 
+		// the CSV file for those two names, therefore their UUIDs will default to generated/seeded UUIDs.
+		// Consequently 4 concept names will exist (a newer FSN "green" and a newer FSN "verde" now with seeded UUIDs).
+		// The original two names will be voided because they do not match the generated/seeded UUIDs.
 		
 		green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
-		Assert.assertEquals(2, green.getNames(true).size());
+		Assert.assertEquals(4, green.getNames(true).size());
 		assertName(green, "Green", localeEn, true, fsn);
+		Assert.assertEquals(Utils.generateUuidFromObjects(green.getUuid(), "Green", fsn, localeEn),
+		    green.getName(localeEn).getUuid());
 		assertName(green, "Verde", localeEs, true, fsn);
+		Assert.assertEquals(Utils.generateUuidFromObjects(green.getUuid(), "Verde", fsn, localeEs),
+		    green.getName(localeEs).getUuid());
 		
 		// Yellow is an existing Concept with 2 names, with Yellow as the FSN, and Lemon as a synonym
 		// In the CSV:
