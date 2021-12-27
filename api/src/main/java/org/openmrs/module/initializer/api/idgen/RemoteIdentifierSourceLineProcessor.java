@@ -36,12 +36,12 @@ public class RemoteIdentifierSourceLineProcessor extends IdentifierSourceLinePro
 		
 		return instance;
 	}
-
+	
 	/**
 	 * Attempts to read the value from the CSV line as usual or falls back to reading the specified
-	 * system or runtime property. Eg "property:foo" will attempt to read first the system property named "foo"
-	 * or eventually the runtime property named "foo".
-	 * If the value is null / not defined, then this will throw an exception
+	 * system or runtime property. Eg "property:foo" will attempt to read first the system property
+	 * named "foo" or eventually the runtime property named "foo". If the value is null / not defined,
+	 * then this will throw an exception
 	 */
 	protected String getRequiredProperty(CsvLine line, String header) {
 		String val = line.get(header, true);
