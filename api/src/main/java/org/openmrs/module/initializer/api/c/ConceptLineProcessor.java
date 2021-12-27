@@ -93,11 +93,10 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 			}
 			// If no match is found on uuid, match if an existing concept and new concept would share a generated uuid
 			if (matchingNames.isEmpty()) {
-				String existingGeneratedUuid = generateConceptNameUuid(concept, existingName);
 				for (ConceptName nameFromCsv : namesFromCsv) {
 					if (StringUtils.isEmpty(nameFromCsv.getUuid())) {
 						String csvGeneratedUuid = generateConceptNameUuid(concept, nameFromCsv);
-						if (existingGeneratedUuid.equalsIgnoreCase(csvGeneratedUuid)) {
+						if (existingName.getUuid().equalsIgnoreCase(csvGeneratedUuid)) {
 							matchingNames.add(nameFromCsv);
 							nameFromCsv.setUuid(csvGeneratedUuid);
 						}
