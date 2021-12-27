@@ -69,6 +69,26 @@ The username to authenticate with the remote source
 ###### Header `Password` (required)
 The password to authenticate with the remote source
 
+NOTE: Remote Identifier Sources have properties that contain sensitive information.  For this reason, we enable the ability 
+to for these properties to be specified either as fixed values in the CSV or as values defined in runtime or system 
+properties.  All three properties - `Url`, `User`, and `Password` can be specified in this way.  In order to indicate
+that a property should be loaded from a runtime or system property, one should specify the property value in the form
+of `property:name_of_property`.
+
+For example, one could add properties to their openmrs-runtime.properties file as such:
+
+```properties
+myRemoteUrl=http://localhost:8080/openmrs/module/idgen/exportIdentifiers.form?source=3
+myRemoteUser=admin
+myRemotePassword=Admin123
+```
+
+Then, in the idgen domain CSV, one could indicate that these should be used to populate a particular source as:
+
+| Uuid                                 | Name      | Url                  | User                 | Password                  |
+|--------------------------------------|-----------|----------------------|----------------------|---------------------------|
+| 1dd85dab-f6d6-4bec-bde6-c4cddeaaad35 | My Remote | property:myRemoteUrl | property:myRemoteUrl | property:myRemotePassword |
+
 #### Identifier Pools
 
 ###### Header `Pool identifier source` (required)

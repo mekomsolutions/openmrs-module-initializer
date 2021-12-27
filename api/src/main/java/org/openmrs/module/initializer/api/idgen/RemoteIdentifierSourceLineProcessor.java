@@ -38,9 +38,10 @@ public class RemoteIdentifierSourceLineProcessor extends IdentifierSourceLinePro
 	}
 
 	/**
-	 * Remote Identifier Sources have properties that contain sensitive information
-	 * For this reason, we enable the ability to specify that these properties should
-	 * be read from runtime or system properties, rather than fixed values in the CSV
+	 * Attempts to read the value from the CSV line as usual or falls back to reading the specified
+	 * system or runtime property. Eg "property:foo" will attempt to read first the system property named "foo"
+	 * or eventually the runtime property named "foo".
+	 * If the value is null / not defined, then this will throw an exception
 	 */
 	protected String getRequiredProperty(CsvLine line, String header) {
 		String val = line.get(header, true);
@@ -55,7 +56,7 @@ public class RemoteIdentifierSourceLineProcessor extends IdentifierSourceLinePro
 				val = Context.getRuntimeProperties().getProperty(property);
 			}
 			if (val == null) {
-				throw new IllegalArgumentException(header + " is required but property " + property + " is not found");
+				throw new IllegalArgumentException(header + " is required but property '" + property + "' is not found.");
 			}
 		}
 		return val;
