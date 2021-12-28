@@ -13,11 +13,13 @@ import static org.openmrs.module.initializer.api.ConfigDirUtil.CHECKSUM_FILE_EXT
 import static org.openmrs.module.initializer.api.ConfigDirUtil.deleteFilesByExtension;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Before;
 import org.openmrs.api.context.Context;
+import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.api.InitializerService;
@@ -40,6 +42,12 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	public static final String appDataTestDir = "testAppDataDir";
 	
 	private InitializerService iniz;
+	
+	@Autowired
+	MessageSourceService messageSourceService;
+	
+	@Autowired
+	InitializerMessageSource initializerMessageSource;
 	
 	@Autowired
 	@Qualifier("initializer.InitializerService")
@@ -130,6 +138,14 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		Properties prop = new Properties();
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
 		Context.setRuntimeProperties(prop);
+		messageSourceService.setActiveMessageSource(initializerMessageSource);
+		if (initializerMessageSource.getPresentations().isEmpty()) {
+			initializerMessageSource.initialize();
+		}
+		if (!initializerMessageSource.getFallbackLanguages().containsKey("ht")) {
+			initializerMessageSource.addFallbackLanguage("ht", "fr");
+		}
+		Locale.setDefault(Locale.ENGLISH);
 	}
 	
 	@After

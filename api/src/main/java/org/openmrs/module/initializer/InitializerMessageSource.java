@@ -13,7 +13,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.messagesource.MutableMessageSource;
 import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.messagesource.impl.CachedMessageSource;
@@ -27,16 +26,14 @@ import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.MessageSource;
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -72,9 +69,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see <a href=
  *      "https://talk.openmrs.org/t/address-hierarchy-support-for-i18n/10415/19?u=mksd">...</a>
  */
-public class InitializerMessageSource extends AbstractMessageSource implements MutableMessageSource, ApplicationContextAware {
+@Component("initializer.InitializerMessageSource")
+public class InitializerMessageSource extends AbstractMessageSource implements MutableMessageSource {
 	
-	private static final Logger log = LoggerFactory.getLogger(InitializerMessageSource.class);
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	
 	public static final String PROPERTIES_EXTENSION = "properties";
 	
@@ -87,26 +85,9 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	@Autowired
 	protected InitializerService iniz;
 	
-	@Autowired
-	protected InitializerConfig cfg;
-	
 	protected CachedMessageSource presentationCache = new CachedMessageSource();
 	
-	/**
-	 * @see ApplicationContextAware#setApplicationContext(ApplicationContext)
-	 */
-	@Override
-	public void setApplicationContext(ApplicationContext context) throws BeansException {
-		MessageSourceService svc = (MessageSourceService) context.getBean("messageSourceServiceTarget");
-		MessageSource parentSource = svc.getActiveMessageSource().getParentMessageSource();
-		setParentMessageSource(parentSource);
-		svc.setActiveMessageSource(this);
-	}
-	
-	/**
-	 * This method is called automatically by Spring when this Bean is instantiated in the context See
-	 * moduleApplicationContext.xml
-	 */
+	@PostConstruct
 	public void initialize() {
 		setUseCodeAsDefaultMessage(true);
 		addClasspathPatternToScan("classpath*:messages*.properties");
@@ -179,7 +160,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 * Messages from OpenMRS core Messages from OpenMRS modules, added in the order in which the modules
 	 * started Messages defined in Initializer domains
 	 */
-	protected synchronized void refreshCache() {
+	public synchronized void refreshCache() {
 		log.info("Refreshing message cache");
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();

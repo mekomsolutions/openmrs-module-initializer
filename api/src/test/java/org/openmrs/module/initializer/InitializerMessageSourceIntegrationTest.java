@@ -10,10 +10,8 @@
 package org.openmrs.module.initializer;
 
 import org.apache.commons.lang3.LocaleUtils;
-import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
-import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.util.LocaleUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,21 +27,7 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 	public static final Locale CAMBODIA_KHMER = LocaleUtils.toLocale("km_KH");
 	
 	@Autowired
-	MessageSourceService messageSourceService;
-	
-	protected InitializerMessageSource inizSrc;
-	
-	@Before
-	public void setup() {
-		inizSrc = (InitializerMessageSource) messageSourceService.getActiveMessageSource();
-		if (inizSrc.getPresentations().isEmpty()) {
-			inizSrc.initialize();
-		}
-		if (!inizSrc.getFallbackLanguages().containsKey("ht")) {
-			inizSrc.addFallbackLanguage("ht", "fr");
-		}
-		Locale.setDefault(Locale.ENGLISH);
-	}
+	InitializerMessageSource initializerMessageSource;
 	
 	@Test
 	public void shouldConfigureActiveMessageSource() {
