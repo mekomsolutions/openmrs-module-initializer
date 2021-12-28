@@ -9,93 +9,42 @@
  */
 package org.openmrs.module.initializer;
 
-import java.io.File;
-import java.util.Locale;
-import java.util.Map;
-
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
+
 public class InitializerMessageSourceTest {
 	
-	private String dirPath = "";
+	InitializerMessageSource src = new InitializerMessageSource();
 	
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 	
-	@Before
-	public void setup() {
-		StringBuilder pathBuilder = new StringBuilder();
-		pathBuilder
-		        .append(
-		            getClass().getClassLoader().getResource(DomainBaseModuleContextSensitiveTest.appDataTestDir).getPath())
-		        .append(File.separator).append(InitializerConstants.DIR_NAME_CONFIG).append(File.separator)
-		        .append(InitializerConstants.DOMAIN_MSGPROP);
-		dirPath = pathBuilder.toString();
-	}
-	
-	@Test
-	public void getMessageProperties_shouldScanMessagesFiles() {
-		
-		InitializerMessageSource src = new InitializerMessageSource();
-		src.addMessageProperties(dirPath);
-		
-		File propFile;
-		Locale locale;
-		
-		propFile = new File((new StringBuilder(dirPath)).append(File.separator).append("metadata_en.properties").toString());
-		Map<File, Locale> msgPropMap = src.getMessagePropertiesMap();
-		Assert.assertTrue(msgPropMap.containsKey(propFile));
-		locale = msgPropMap.get(propFile);
-		Assert.assertEquals(new Locale("en"), locale);
-		
-		propFile = new File((new StringBuilder(dirPath)).append(File.separator).append("metadata_fr.properties").toString());
-		Assert.assertTrue(msgPropMap.containsKey(propFile));
-		locale = msgPropMap.get(propFile);
-		Assert.assertEquals(new Locale("fr"), locale);
-	}
-	
 	@Test
 	public void getLocaleFromFileBaseName_shouldInferValidLocale() {
-		
-		InitializerMessageSource src = new InitializerMessageSource();
-		
-		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("basename_fr"));
-		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("my_base_name_fr"));
-		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr"));
-		Assert.assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr_"));
-		Assert.assertEquals(new Locale("fr", "FR"), src.getLocaleFromFileBaseName("my_base_name_fr_FR"));
-		Assert.assertEquals(new Locale("fr", "BE"), src.getLocaleFromFileBaseName("my_base_name_fr_BE"));
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("basename_fr"));
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("my_base_name_fr"));
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr"));
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("_my_base_name_fr_"));
+		assertEquals(new Locale("fr", "FR"), src.getLocaleFromFileBaseName("my_base_name_fr_FR"));
+		assertEquals(new Locale("fr", "BE"), src.getLocaleFromFileBaseName("my_base_name_fr_BE"));
 	}
 	
 	@Test
 	public void getLocaleFromFileBaseName_shouldThrowIfNoValidLocaleAsSuffixToFileBaseName() {
-		
-		InitializerMessageSource src = new InitializerMessageSource();
-		
-		try {
-			src.getLocaleFromFileBaseName("my_base_name");
-		}
-		catch (IllegalArgumentException e) {
-			Assert.assertTrue(e.getMessage()
-			        .equals("No valid locale could be inferred from the following file base name: 'my_base_name'."));
-		}
+		expectedException.expect(IllegalArgumentException.class);
+		src.getLocaleFromFileBaseName("my_base_name");
 	}
 	
 	@Test
-	public void getLocaleFromFileBaseName_shouldThrowIfNoSuffixInFileBaseName() {
-		
-		InitializerMessageSource src = new InitializerMessageSource();
-		
-		try {
-			src.getLocaleFromFileBaseName("my-base-name");
-		}
-		catch (IllegalArgumentException e) {
-			Assert.assertTrue(
-			    e.getMessage().equals("'my-base-name' is not suffixed with the string representation of a locale."));
-		}
+	public void getLocaleFromFileBaseName_shouldAssumeSystemLocaleLanguageIfNoLocaleSuffixProvided() {
+		Locale.setDefault(Locale.US);
+		assertEquals(Locale.ENGLISH, src.getLocaleFromFileBaseName("my-base-name"));
+		Locale.setDefault(Locale.FRENCH);
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("my-base-name"));
 	}
 }

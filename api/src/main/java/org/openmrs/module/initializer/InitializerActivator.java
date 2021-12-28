@@ -39,6 +39,10 @@ public class InitializerActivator extends BaseModuleActivator {
 		
 		log.info("Start of " + MODULE_ARTIFACT_ID + " module.");
 		
+		// Set active message source
+		InitializerMessageSource messageSource = Context.getRegisteredComponents(InitializerMessageSource.class).get(0);
+		Context.getMessageSourceService().setActiveMessageSource(messageSource);
+		
 		{
 			org.apache.log4j.Logger logger = org.apache.log4j.Logger
 			        .getLogger(InitializerActivator.class.getPackage().getName());
