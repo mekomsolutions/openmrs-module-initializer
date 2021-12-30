@@ -154,6 +154,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and editing of concept set members and concept answers using CSV files in **configuration/conceptsets**.
 * Added support enabling any Initializer runtime property value to also be specified from a system property
 * Bulk creation and edition of AMPATH forms provided as JSON schema definitions in **configuration/ampathforms**.
+* Enhancement to custom message source to support improved handling of fallback locales and overrides between core, modules, and initializer messageproperties
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
