@@ -3,6 +3,7 @@ package org.openmrs.module.initializer.api.c;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
@@ -92,13 +93,12 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 	
 	@Override
 	public Concept save(Concept instance) {
-		List<ConceptName> newConceptNames = new ArrayList<ConceptName>();
-		for (ConceptName name : instance.getNames(true)) {
-			if (name.getId() == null) {
-				newConceptNames.add(name);
-			}
-		}
-		if (newConceptNames.size() == instance.getNames(true).size()) {
+		List<ConceptName> newConceptNames = instance.getNames(true).stream().filter(cn -> cn.getId() == null)
+		        .collect(Collectors.toList());
+		List<ConceptName> allConceptNames = instance.getNames(true).stream().collect(Collectors.toList());
+		
+		if ((newConceptNames.containsAll(allConceptNames) && allConceptNames.containsAll(newConceptNames))
+		        && (newConceptNames.size() == allConceptNames.size())) {
 			return conceptService.saveConcept(instance);
 		} else {
 			// First update existing names before saving new ones
