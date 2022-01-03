@@ -97,8 +97,7 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 		        .collect(Collectors.toList());
 		List<ConceptName> allConceptNames = instance.getNames(true).stream().collect(Collectors.toList());
 		
-		if ((newConceptNames.containsAll(allConceptNames) && allConceptNames.containsAll(newConceptNames))
-		        && (newConceptNames.size() == allConceptNames.size())) {
+		if (newConceptNames.containsAll(allConceptNames) && (newConceptNames.size() == allConceptNames.size())) {
 			return conceptService.saveConcept(instance);
 		} else {
 			// First update existing names before saving new ones
