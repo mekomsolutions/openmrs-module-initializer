@@ -253,7 +253,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 * @throws IllegalArgumentException when no locale could be inferred
 	 */
 	protected Locale getLocaleFromFileBaseName(String baseName) throws IllegalArgumentException {
-		String[] parts = baseName.split("_");
+		String[] parts = FilenameUtils.getName(baseName).split("_");
 		if (parts.length == 1) {
 			// If no locale is specified, assume the default locale is intended, at only the language level
 			return LocaleUtils.toLocale(Locale.getDefault().getLanguage());

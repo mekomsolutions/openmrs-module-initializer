@@ -47,4 +47,11 @@ public class InitializerMessageSourceTest {
 		Locale.setDefault(Locale.FRENCH);
 		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("my-base-name"));
 	}
+	
+	@Test
+	public void getLocaleFromFileBaseName_shouldAllowUnderscoresInDirectory() {
+		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("/tmp/test_dir/basename_fr"));
+		Locale.setDefault(Locale.US);
+		assertEquals(Locale.ENGLISH, src.getLocaleFromFileBaseName("/tmp/test_dir/basename"));
+	}
 }
