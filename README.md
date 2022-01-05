@@ -39,7 +39,9 @@ configuration/
   ├── metadatasetmembers/ 
   ├── metadatasets/ 
   ├── metadatasharing/ 
-  ├── metadatatermmappings/ 
+  ├── metadatatermmappings/
+  ├── orderfrequencies/
+  ├── ordertypes/
   ├── patientidentifiertypes/ 
   ├── personattributetypes/ 
   ├── privileges/ 
