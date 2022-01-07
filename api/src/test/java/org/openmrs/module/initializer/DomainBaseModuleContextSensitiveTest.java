@@ -13,19 +13,23 @@ import static org.openmrs.module.initializer.api.ConfigDirUtil.CHECKSUM_FILE_EXT
 import static org.openmrs.module.initializer.api.ConfigDirUtil.deleteFilesByExtension;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Before;
 import org.openmrs.api.context.Context;
+import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
+import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * This allows to perform context sensitive tests on a specific domain inside the test app data
@@ -40,6 +44,13 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	private InitializerService iniz;
 	
 	@Autowired
+	MessageSourceService messageSourceService;
+	
+	@Autowired
+	InitializerMessageSource initializerMessageSource;
+	
+	@Autowired
+	@Qualifier("initializer.InitializerService")
 	public void setService(InitializerService iniz) {
 		this.iniz = iniz;
 	}
@@ -117,15 +128,29 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		return getClass().getClassLoader().getResource(appDataTestDir).getPath() + File.separator;
 	}
 	
+	@Override
+	public Properties getRuntimeProperties() {
+		Properties p = super.getRuntimeProperties();
+		p.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, getAppDataDirPath());
+		OpenmrsUtil.setApplicationDataDirectory(getAppDataDirPath());
+		return p;
+	}
+	
 	@Before
 	public void setupAppDataDir() {
-		
 		String path = getAppDataDirPath();
-		
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
 		Properties prop = new Properties();
 		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
 		Context.setRuntimeProperties(prop);
+		messageSourceService.setActiveMessageSource(initializerMessageSource);
+		if (initializerMessageSource.getPresentations().isEmpty()) {
+			initializerMessageSource.initialize();
+		}
+		if (!initializerMessageSource.getFallbackLanguages().containsKey("ht")) {
+			initializerMessageSource.addFallbackLanguage("ht", "fr");
+		}
+		Locale.setDefault(Locale.ENGLISH);
 	}
 	
 	@After

@@ -2,6 +2,13 @@
 
 The runtime behaviour of Initializer can to a certain extent be controlled by a handful of [OpenMRS runtime properties](https://wiki.openmrs.org/x/zhAz).
 
+As an alternative or complement to runtime properties, any property may also be specified as a system property.
+The order of precedence if both are used on the same system is that any property set via a system property will override any value set as a runtime property.
+If a system property is specified with an empty value, this will also override the runtime property with this empty value.
+
+Runtime properties can be specified at server startup with -DpropertyName=propertyValue.  They can also be specified in SDK environments by adding these
+properties to one's openmrs-server.properties file.
+
 ### 1) `initializer.domains` _(optional)_
 Defines and inclusion or exclusion list of domains as a CSV string of domain names. If this property is unspecified all domains are being processed.
 ##### Example of inclusion list:

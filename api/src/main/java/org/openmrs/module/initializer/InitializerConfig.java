@@ -60,11 +60,11 @@ public class InitializerConfig implements InitializingBean {
 	}
 	
 	/**
-	 * Initializes the configuration from the runtime properties.
+	 * Initializes the configuration from system properties and runtime properties.
 	 */
 	public void init() {
 		// Inclusion or exclusion list of domains
-		String domainsCsv = Optional.ofNullable(Context.getRuntimeProperties().getProperty(PROPS_DOMAINS)).orElse("");
+		String domainsCsv = Optional.ofNullable(getPropertyValue(PROPS_DOMAINS)).orElse("");
 		if (StringUtils.startsWith(domainsCsv, "!")) {
 			isInclusionList = false;
 			domainsCsv = StringUtils.removeStart(domainsCsv, "!");
@@ -76,23 +76,22 @@ public class InitializerConfig implements InitializingBean {
 		    Stream.of(Domain.values()).map(d -> d.getName()).collect(Collectors.toSet()));
 		if (CollectionUtils.isNotEmpty(unsupportedDomains)) {
 			log.warn("Those domains are unknown and are not supported, however they are mentioned in the "
-			        + (isInclusionList ? "inclusion" : "exclusion") + " list of domains: " + unsupportedDomains.toString());
+			        + (isInclusionList ? "inclusion" : "exclusion") + " list of domains: " + unsupportedDomains);
 		}
 		
 		// Per-domain wildcard exclusion patterns
 		Stream.of(Domain.values()).forEach(d -> {
-			String exclusionsCsv = Context.getRuntimeProperties().getProperty(PROPS_EXCLUDE + "." + d.getName());
+			String exclusionsCsv = getPropertyValue(PROPS_EXCLUDE + "." + d.getName());
 			if (!StringUtils.isEmpty(exclusionsCsv)) {
 				allWildCardExclusions.put(d.getName(), Arrays.asList(StringUtils.split(exclusionsCsv, ",")));
 			}
 		});
 		
 		// checksums
-		skipChecksums = BooleanUtils
-		        .toBoolean(Optional.ofNullable(Context.getRuntimeProperties().getProperty(PROPS_SKIPCHECKSUMS)).orElse(""));
+		skipChecksums = BooleanUtils.toBoolean(Optional.ofNullable(getPropertyValue(PROPS_SKIPCHECKSUMS)).orElse(""));
 		
 		// Startup Loading Configuration
-		startupLoadingMode = Context.getRuntimeProperties().getProperty(PROPS_STARTUP_LOAD);
+		startupLoadingMode = getPropertyValue(PROPS_STARTUP_LOAD);
 	}
 	
 	/**
@@ -143,5 +142,17 @@ public class InitializerConfig implements InitializingBean {
 	 */
 	public String getStartupLoadingMode() {
 		return StringUtils.isBlank(startupLoadingMode) ? PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR : startupLoadingMode;
+	}
+	
+	/**
+	 * @param property the system property or runtime property to lookup
+	 * @return the system property value if a system property with the passed property name exists, the
+	 *         runtime property value otherwise
+	 */
+	private String getPropertyValue(String property) {
+		if (System.getProperties().containsKey(property)) {
+			return System.getProperty(property);
+		}
+		return Context.getRuntimeProperties().getProperty(property);
 	}
 }

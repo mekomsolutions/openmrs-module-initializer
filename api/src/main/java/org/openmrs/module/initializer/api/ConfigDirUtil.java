@@ -159,7 +159,7 @@ public class ConfigDirUtil {
 	 * @param wildcardExclusions A list of wildcard exclusion patterns, eg. "*test*.java~*~".
 	 * @return The list of {@link File} instances found recursively inside the folder.
 	 */
-	protected static List<File> getFiles(String domainDirPath, String extension, List<String> wildcardExclusions) {
+	public static List<File> getFiles(String domainDirPath, String extension, List<String> wildcardExclusions) {
 		
 		final List<File> allFiles = new ArrayList<File>();
 		

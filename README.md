@@ -14,6 +14,7 @@ The configuration folder is subdivided into _domain_ subfolders:
 ```bash
 configuration/
   ├── addresshierarchy/
+  ├── ampathforms/
   ├── appointmentspecialities/
   ├── appointmentservicedefinitions/
   ├── appointmentservicetypes/
@@ -40,6 +41,8 @@ configuration/
   ├── metadatasharing/ 
   ├── metadatatermmappings/
   ├── ocl/
+  ├── orderfrequencies/
+  ├── ordertypes/
   ├── patientidentifiertypes/ 
   ├── personattributetypes/ 
   ├── privileges/ 
@@ -105,6 +108,7 @@ This is the list of currently supported domains in their loading order:
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
+1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
 
 ### How to try it out?
@@ -147,12 +151,15 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 #### Version 2.3.0
 * 'ocl' domain to support loading concepts, concept sets, and answers from OCL export files using the openmrs-module-openconceptlab
-* (_Enhancement_) Concept name UUIDs are univoquely seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.
+* (_Enhancement_) Concept name UUIDs are seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.
 * Backward-compatible overhaul of the concepts domain that provides full flexibility for managing concept names.
 * Bulk loading of metadata entities i18n display messages specified under `display:xy` headers.
 * (_For devs._) Introduced a pre-loading mechanism to `BaseFileLoader` that allows checksums-independent loading of transient information out of the config files before the actual metadata are loaded. Each loader controls whether its pre-loader throws on error or is allowed to fail. By default pre-loaders are allowed to fail.
 * Added support for setting a Concept version property in the concepts domain
 * Bulk creation and editing of concept set members and concept answers using CSV files in **configuration/conceptsets**.
+* Added support enabling any Initializer runtime property value to also be specified from a system property
+* Bulk creation and edition of AMPATH forms provided as JSON schema definitions in **configuration/ampathforms**.
+* Enhancement to custom message source to support improved handling of fallback locales and overrides between core, modules, and initializer messageproperties
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
