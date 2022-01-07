@@ -185,7 +185,7 @@
       <groupId>org.openmrs.module</groupId>
       <artifactId>openconceptlab-api</artifactId>
       <version>${openconceptlabVersion}</version>
-      <scope>runtime</scope>
+      <scope>provided</scope>
       <type>jar</type>
     </dependency>
 
