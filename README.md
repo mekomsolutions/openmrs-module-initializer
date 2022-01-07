@@ -38,7 +38,8 @@ configuration/
   ├── metadatasetmembers/ 
   ├── metadatasets/ 
   ├── metadatasharing/ 
-  ├── metadatatermmappings/ 
+  ├── metadatatermmappings/
+  ├── ocl/
   ├── patientidentifiertypes/ 
   ├── personattributetypes/ 
   ├── privileges/ 
@@ -85,6 +86,7 @@ This is the list of currently supported domains in their loading order:
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
+1. [Open Concept Lab (ZIP Files)](readme/ocl.md)
 1. [Concepts (CSV files)](readme/concepts.md)
 1. [Concept Sets and Answers (CSV files)](readme/conceptsets.md)
 1. [Programs (CSV files)](readme/prog.md)
@@ -144,6 +146,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.3.0
+* 'ocl' domain to support loading concepts, concept sets, and answers from OCL export files using the openmrs-module-openconceptlab
 * (_Enhancement_) Concept name UUIDs are univoquely seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.
 * Backward-compatible overhaul of the concepts domain that provides full flexibility for managing concept names.
 * Bulk loading of metadata entities i18n display messages specified under `display:xy` headers.
