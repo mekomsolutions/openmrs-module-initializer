@@ -57,7 +57,7 @@ Just run the fatjar with no arguments (or with the `--help` argument) to get a l
 ```bash
 java -jar validator/target/initializer-validator-2.2.0.jar
 ```
-### Kwown issues
+### Known issues
 
 ##### mariaDB4j `"dyld: Library not loaded"` on macOS:
 ```
