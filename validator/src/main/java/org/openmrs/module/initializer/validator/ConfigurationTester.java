@@ -177,9 +177,14 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	public void prepareOcl() {
 		// The OCL domains needs a DaemonToken so here we provide one if it's loaded
 		List<InitializerConfig> configs = Context.getRegisteredComponents(InitializerConfig.class);
+		
 		if (configs != null && configs.size() > 1) {
-			InitializerConfig config = configs.get(0);
-			if (config.getFilteredDomains().contains("ocl")) {
+			final InitializerConfig config = configs.get(0);
+			final boolean domainSpecified = config.getFilteredDomains().contains("ocl");
+			final boolean includeSpecifiedDomains = config.isInclusionList();
+			
+			if ((includeSpecifiedDomains && domainSpecified) ||
+					(!includeSpecifiedDomains && !domainSpecified)) {
 				Map<String, DaemonToken> daemonTokens;
 				try {
 					Field field = ModuleFactory.class.getDeclaredField("daemonTokens");
