@@ -159,7 +159,10 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 			if (StringUtils.isEmpty(newName.getUuid())) {
 				newName.setUuid(generateConceptNameUuid(concept, newName));
 			}
+			ConceptNameType type = newName.getConceptNameType() == null ? null
+			        : ConceptNameType.valueOf(newName.getConceptNameType().toString());
 			concept.addName(newName);
+			newName.setConceptNameType(type);
 		}
 		
 		// Descriptions
