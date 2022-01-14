@@ -3,7 +3,6 @@ package org.openmrs.module.initializer;
 import org.apache.commons.lang.ArrayUtils;
 
 public enum Domain {
-	
 	JSON_KEY_VALUES,
 	CONCEPT_CLASSES,
 	CONCEPT_SOURCES,
@@ -22,6 +21,7 @@ public enum Domain {
 	LOCATIONS,
 	LOCATION_TAG_MAPS,
 	BAHMNI_FORMS,
+	OCL,
 	CONCEPTS,
 	CONCEPT_SETS,
 	PROGRAMS,

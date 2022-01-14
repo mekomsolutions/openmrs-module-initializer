@@ -13,11 +13,14 @@ import static org.openmrs.module.initializer.validator.Validator.ARG_CONFIG_DIR;
 import static org.openmrs.module.initializer.validator.Validator.cmdLine;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Stream;
@@ -37,8 +40,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.DaemonToken;
+import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.InitializerConfig;
+import org.openmrs.module.openconceptlab.OpenConceptLabActivator;
 import org.openmrs.test.TestUtil;
 
 import ch.vorburger.exec.ManagedProcessException;
@@ -164,6 +171,35 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		Properties props = Optional.ofNullable(Context.getRuntimeProperties()).orElse(new Properties());
 		props.putAll(getRuntimeProperties());
 		Context.setRuntimeProperties(props);
+	}
+	
+	@Before
+	public void prepareOcl() {
+		// The OCL domains needs a DaemonToken so here we provide one if it's loaded
+		List<InitializerConfig> configs = Context.getRegisteredComponents(InitializerConfig.class);
+		
+		if (configs != null && configs.size() > 1) {
+			final InitializerConfig config = configs.get(0);
+			final boolean domainSpecified = config.getFilteredDomains().contains("ocl");
+			final boolean includeSpecifiedDomains = config.isInclusionList();
+			
+			if ((includeSpecifiedDomains && domainSpecified) ||
+					(!includeSpecifiedDomains && !domainSpecified)) {
+				Map<String, DaemonToken> daemonTokens;
+				try {
+					Field field = ModuleFactory.class.getDeclaredField("daemonTokens");
+					field.setAccessible(true);
+					daemonTokens = (Map<String, DaemonToken>) field.get(null);
+				}
+				catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+				
+				DaemonToken daemonToken = new DaemonToken("openconceptlab");
+				daemonTokens.put(daemonToken.getId(), daemonToken);
+				new OpenConceptLabActivator().setDaemonToken(daemonToken);
+			}
+		}
 	}
 	
 	@Test

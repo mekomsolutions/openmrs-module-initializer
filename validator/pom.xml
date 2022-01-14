@@ -180,6 +180,14 @@
       <scope>runtime</scope>
       <type>jar</type>
     </dependency>
+    
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>openconceptlab-api</artifactId>
+      <version>${openconceptlabVersion}</version>
+      <scope>provided</scope>
+      <type>jar</type>
+    </dependency>
 
     <dependency>
       <groupId>org.openmrs.module</groupId>
