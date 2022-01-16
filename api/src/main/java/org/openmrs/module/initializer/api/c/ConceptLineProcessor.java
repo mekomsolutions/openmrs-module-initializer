@@ -159,6 +159,10 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 			if (StringUtils.isEmpty(newName.getUuid())) {
 				newName.setUuid(generateConceptNameUuid(concept, newName));
 			}
+			// When adding names to concept, their name types may unexpectedly be changed to null/synonym
+			// which is undesired if its desired to maintain them.
+			// The name type is therefore reset after adding the name to the concept as a hack to maintain it 
+			// before it is saved later
 			ConceptNameType type = newName.getConceptNameType() == null ? null
 			        : ConceptNameType.valueOf(newName.getConceptNameType().toString());
 			concept.addName(newName);
