@@ -38,6 +38,7 @@ import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.openmrs.module.initializer.InitializerConstants.CONCEPT_NAME_NAMESPACE_UUID;
 
 public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
@@ -79,6 +80,28 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertNull(cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3").getVersion());
 			assertEquals("1.0", cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0").getVersion());
 			assertEquals("1.7", cs.getConceptByName("CONCEPT_FETCH_BY_FSN").getVersion());
+			
+			// Verify initial state for replaced names
+			c = cs.getConceptByUuid("1ddb8255-00d5-45e8-8830-f9567919a382");
+			Assert.assertNotNull(c);
+			assertEquals(3, c.getNames(localeEn).size());
+			
+			ConceptName cn = c.getName(localeEn);
+			assertEquals("Replaced Fully Specified Name", cn.getName());
+			assertEquals("8d09f38c-6ecb-4e3d-8a25-5cd204c43390", cn.getUuid());
+			
+			cn = c.getFullySpecifiedName(localeEn);
+			assertEquals("Replaced Fully Specified Name", cn.getName());
+			assertEquals("8d09f38c-6ecb-4e3d-8a25-5cd204c43390", cn.getUuid());
+			
+			cn = c.getNames(localeEn).stream().filter(cname -> cname.getConceptNameType() == null).findFirst()
+			        .orElseThrow(() -> new AssertionError("Expected at least one synonym but found none"));
+			assertEquals("Replaced Synonym", cn.getName());
+			assertEquals("05dfba65-0590-4886-ac50-8c3f69a8ea2e", cn.getUuid());
+			
+			cn = c.getShortNameInLocale(localeEn);
+			assertEquals("Rpl SN", cn.getName());
+			assertEquals("ff688089-4385-4d6c-9435-523506eda50e", cn.getUuid());
 		}
 		
 		// Replay
@@ -139,6 +162,42 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			name = c.getFullySpecifiedName(localeEn);
 			Assert.assertEquals(name.getUuid(), Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(),
 			    name.getName(), ConceptNameType.FULLY_SPECIFIED, localeEn));
+			
+			// Replaced names with updated UUIDs
+			{
+				c = cs.getConceptByUuid("1ddb8255-00d5-45e8-8830-f9567919a382");
+				Assert.assertNotNull(c);
+				assertEquals(3, c.getNames(localeEn).size());
+				
+				ConceptName cn = c.getName(localeEn);
+				assertEquals("Replaced Fully Specified Name", cn.getName());
+				assertNotEquals("8d09f38c-6ecb-4e3d-8a25-5cd204c43390", cn.getUuid());
+				assertEquals(Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(), cn.getName(),
+				    cn.getConceptNameType(), localeEn), cn.getUuid());
+				
+				cn = c.getFullySpecifiedName(localeEn);
+				assertEquals("Replaced Fully Specified Name", cn.getName());
+				assertNotEquals("8d09f38c-6ecb-4e3d-8a25-5cd204c43390", cn.getUuid());
+				assertEquals(Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(), cn.getName(),
+				    cn.getConceptNameType(), localeEn), cn.getUuid());
+				Assert.assertTrue(cs.getConceptNameByUuid("8d09f38c-6ecb-4e3d-8a25-5cd204c43390").getVoided());
+				
+				cn = c.getNames(localeEn).stream().filter(cname -> cname.getConceptNameType() == null).findFirst()
+				        .orElseThrow(() -> new AssertionError("Expected at least one synonym but found none"));
+				assertEquals("Replaced Synonym", cn.getName());
+				assertNotEquals("05dfba65-0590-4886-ac50-8c3f69a8ea2e", cn.getUuid());
+				assertEquals(Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(), cn.getName(),
+				    cn.getConceptNameType(), localeEn), cn.getUuid());
+				Assert.assertTrue(cs.getConceptNameByUuid("05dfba65-0590-4886-ac50-8c3f69a8ea2e").getVoided());
+				
+				cn = c.getShortNameInLocale(localeEn);
+				assertEquals("Rpl SN", cn.getName());
+				assertNotEquals("ff688089-4385-4d6c-9435-523506eda50e", cn.getUuid());
+				assertEquals(Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(), cn.getName(),
+				    cn.getConceptNameType(), localeEn), cn.getUuid());
+				Assert.assertTrue(cs.getConceptNameByUuid("ff688089-4385-4d6c-9435-523506eda50e").getVoided());
+				
+			}
 			
 			// Failed ones
 			Context.setLocale(localeEn);
