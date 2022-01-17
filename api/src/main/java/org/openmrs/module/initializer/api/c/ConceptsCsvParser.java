@@ -1,14 +1,8 @@
 package org.openmrs.module.initializer.api.c;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
-import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
@@ -94,20 +88,7 @@ public class ConceptsCsvParser extends CsvParser<Concept, BaseLineProcessor<Conc
 	
 	@Override
 	public Concept save(Concept instance) {
-		List<ConceptName> newConceptNames = instance.getNames(true).stream().filter(cn -> cn.getId() == null)
-		        .sorted(Comparator.comparing(ConceptName::getName)).collect(Collectors.toList());
-		
-		if (!newConceptNames.equals(instance.getNames(true).stream().sorted(Comparator.comparing(ConceptName::getName))
-		        .collect(Collectors.toList()))) {
-			// First update existing names before saving new ones
-			// This is to prevent possible DuplicateConceptNameException because ConceptName comparison happens with names existing in the database
-			// See https://github.com/openmrs/openmrs-core/blob/2.1.0/api/src/main/java/org/openmrs/validator/ConceptValidator.java#L175
-			instance.getNames(true).removeAll(newConceptNames);
-			instance = conceptService.saveConcept(instance);
-			instance.getNames(true).addAll(newConceptNames);
-		}
 		return conceptService.saveConcept(instance);
-		
 	}
 	
 	@Override
