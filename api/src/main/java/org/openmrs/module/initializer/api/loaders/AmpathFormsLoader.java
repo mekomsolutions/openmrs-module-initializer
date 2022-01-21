@@ -69,14 +69,14 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		if (formEncounterType != null) {
 			encounterType = encounterService.getEncounterType(formEncounterType);
 			if (encounterType == null) {
-				throw new Exception("Form Encounter type not found");
+				throw new Exception("Form Encounter type " + formEncounterType + " could not be found. Please ensure that "
+						+ "this encountertype is either loaded by Iniz or loaded in the system before Iniz runs.");
 			}
 		}
 		
 		if (isEncounterForm && encounterType == null) {
-			throw new Exception("You must specify an encounter for form " + file + ". "
-			        + "You should have an \"encounter\" entry whose value is the name of the encounter type to use for this "
-			        + "form, e.g., \"encounter\": \"Emergency\".");
+			throw new Exception("No encounter was found for this form. You should have an \"encounter\" entry whose value "
+					+ "is the id of the encounter type to use for this form, e.g., \"encounter\": \"Emergency\".");
 		}
 		
 		String formVersion = (String) jsonFile.get("version");
