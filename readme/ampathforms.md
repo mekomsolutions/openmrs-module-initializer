@@ -62,6 +62,8 @@ ampathforms/
 
 The JSON source for these forms can be obtained from [AMPATH Form Builder](https://openmrs-spa.org/formbuilder/) by downloading the form, although it can also be written by hand.
 
+**Note** The [AMPATH Form Builder](https://openmrs-spa.org/formbuilder/) does not include a reference to the encounter type by default. For encounter-based forms, you must ensure that you specify an `"encounter"` field with the name of the encounter type for this form or else Initializer will not be able to properly load the form.
+
 **Note** Like other form engines (and as a result of the form tooling), the unique identifier for a form is its name. As a result, the `uuid` field provided by the Form Builder is usually "xxxx" and not used. Instead, the form UUID is determined based on the form name and the form version. Any previous version of the form with the same name, however, will also be replaced with whatever form is loaded by initializer. It is therefore not recommended to combine Initializer with another mechanism for loading forms into the system, e.g., by using the Form Builder directly.
 
 #### Further examples:
