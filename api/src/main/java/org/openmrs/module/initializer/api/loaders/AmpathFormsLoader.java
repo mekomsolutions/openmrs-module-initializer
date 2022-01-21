@@ -61,7 +61,7 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		
 		String formProcessor = (String) jsonFile.get("processor");
 		boolean isEncounterForm = formProcessor == null ||
-				formProcessor.trim().isEmpty() ||
+				StringUtils.isBlank(formProcessor) ||
 				formProcessor.equalsIgnoreCase("EncounterFormProcessor");
 		
 		EncounterType encounterType = null;
