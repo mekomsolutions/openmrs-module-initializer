@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 
+import static org.openmrs.module.initializer.InitializerConstants.CONCEPT_NAME_NAMESPACE_UUID;
 import static org.openmrs.module.initializer.api.c.LocalizedHeader.getLocalizedHeader;
 
 /**
@@ -106,11 +106,9 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 			
 			// If there are multiple matches on uuid, fail loading this row
 			if (matchingNames.size() > 1) {
-				StringBuilder msg = new StringBuilder();
-				msg.append("There are ").append(matchingNames.size()).append(" names defined in the CSV ");
-				msg.append("that match the an existing Concept Name: ").append(existingName);
-				msg.append("Names from CSV: " + matchingNames);
-				throw new IllegalArgumentException(msg.toString());
+				String msg = "There are " + matchingNames.size() + " names defined in the CSV "
+				        + "that match the an existing Concept Name: " + existingName + "Names from CSV: " + matchingNames;
+				throw new IllegalArgumentException(msg);
 			}
 			// If there is a single match on uuid, update the existing Concept
 			else if (matchingNames.size() == 1) {
@@ -122,13 +120,12 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 				// will result in a state that differs from what was specified in the concepts CSV
 				
 				if (!existingName.getName().equals(newName.getName())) {
-					StringBuilder msg = new StringBuilder();
-					msg.append("It is not permitted to change the name property of an existing ConceptName and ");
-					msg.append("retain the same uuid as the previous name.  Users who wish to explicitly set their ");
-					msg.append("ConceptName uuids should assign a new UUID whenever they change the name, ");
-					msg.append("and either void the previous name or change the Concept Name Type to a Synonym. ");
-					msg.append("Any name removed from the CSV will result in this name being voided.");
-					throw new IllegalArgumentException(msg.toString());
+					String msg = "It is not permitted to change the name property of an existing ConceptName and "
+					        + "retain the same uuid as the previous name.  Users who wish to explicitly set their "
+					        + "ConceptName uuids should assign a new UUID whenever they change the name, "
+					        + "and either void the previous name or change the Concept Name Type to a Synonym. "
+					        + "Any name removed from the CSV will result in this name being voided.";
+					throw new IllegalArgumentException(msg);
 				}
 				
 				existingName.setConceptNameType(newName.getConceptNameType());
@@ -159,7 +156,14 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 			if (StringUtils.isEmpty(newName.getUuid())) {
 				newName.setUuid(generateConceptNameUuid(concept, newName));
 			}
+			// When adding names to concept, their name types may unexpectedly be changed to null/synonym
+			// which is undesired if its desired to maintain them.
+			// The name type is therefore reset after adding the name to the concept as a hack to maintain it 
+			// before it is saved later
+			ConceptNameType type = newName.getConceptNameType() == null ? null
+			        : ConceptNameType.valueOf(newName.getConceptNameType().toString());
 			concept.addName(newName);
+			newName.setConceptNameType(type);
 		}
 		
 		// Descriptions
@@ -308,6 +312,6 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 		String name = cn.getName();
 		ConceptNameType type = cn.getConceptNameType();
 		Locale locale = cn.getLocale();
-		return Utils.generateUuidFromObjects(concept.getUuid(), name, type, locale);
+		return Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, concept.getUuid(), name, type, locale);
 	}
 }

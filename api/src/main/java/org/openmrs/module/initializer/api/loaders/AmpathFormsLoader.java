@@ -52,24 +52,36 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		
 		String formName = (String) jsonFile.get("name");
 		if (StringUtils.isBlank(formName)) {
-			throw new IllegalArgumentException("Form Name is required");
+			throw new Exception("Form Name is required");
 		}
 		
 		String formDescription = (String) jsonFile.get("description");
 		boolean formPublished = (Boolean) jsonFile.get("published");
 		boolean formRetired = (Boolean) jsonFile.get("retired");
-		String formEncounterType = (String) jsonFile.get("encounter");
+		
+		String formProcessor = (String) jsonFile.get("processor");
+		boolean isEncounterForm = formProcessor == null ||
+				StringUtils.isBlank(formProcessor) ||
+				formProcessor.equalsIgnoreCase("EncounterFormProcessor");
+		
 		EncounterType encounterType = null;
+		String formEncounterType = (String) jsonFile.get("encounter");
 		if (formEncounterType != null) {
 			encounterType = encounterService.getEncounterType(formEncounterType);
 			if (encounterType == null) {
-				throw new IllegalArgumentException("Form Encounter type not found");
+				throw new Exception("Form Encounter type " + formEncounterType + " could not be found. Please ensure that "
+						+ "this encountertype is either loaded by Iniz or loaded in the system before Iniz runs.");
 			}
+		}
+		
+		if (isEncounterForm && encounterType == null) {
+			throw new Exception("No encounter was found for this form. You should have an \"encounter\" entry whose value "
+					+ "is the id of the encounter type to use for this form, e.g., \"encounter\": \"Emergency\".");
 		}
 		
 		String formVersion = (String) jsonFile.get("version");
 		if (formVersion == null) {
-			throw new IllegalArgumentException("Form Version is required");
+			throw new Exception("Form Version is required");
 		}
 		
 		String uuid = Utils.generateUuidFromObjects(AMPATH_FORMS_UUID, formName, formVersion);
