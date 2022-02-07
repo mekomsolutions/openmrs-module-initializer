@@ -31,8 +31,4 @@
 		<!--  default properties must be set in the hibernate.default.properties -->
 	</bean>
 
-	<!-- For testing we wire the message source WITHOUT the 'init-method' -->
-	<!-- And so we also ID it differently to achieve an override within context sensitive tests. -->
-	<bean id="testInitializerMessageSource" class="org.openmrs.module.initializer.InitializerMessageSource"/>
-	
 </beans>
