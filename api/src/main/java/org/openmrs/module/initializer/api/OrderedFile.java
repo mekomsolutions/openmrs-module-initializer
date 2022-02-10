@@ -1,9 +1,9 @@
 package org.openmrs.module.initializer.api;
 
-import java.io.File;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 /**
  * Base class for ordered files. While this class provides the needed structure, it does not provide
@@ -51,12 +51,18 @@ public class OrderedFile extends File {
 	
 	@Override
 	public int compareTo(File that) {
+		int result = 0;
 		if (that instanceof OrderedFile) {
-			return this.getOrder().compareTo(((OrderedFile) that).getOrder());
+			result = this.getOrder().compareTo(((OrderedFile) that).getOrder());
 		} else {
 			// if 'that' is not ordered then it is assumed to be last
-			return this.getOrder().compareTo(Integer.MAX_VALUE);
+			result = this.getOrder().compareTo(Integer.MAX_VALUE);
 		}
+		// If neither ordered file has an explicit order defined, default to ordering by filename
+		if (result == 0) {
+			result = this.getAbsolutePath().compareTo(that.getAbsolutePath());
+		}
+		return result;
 	}
 	
 }
