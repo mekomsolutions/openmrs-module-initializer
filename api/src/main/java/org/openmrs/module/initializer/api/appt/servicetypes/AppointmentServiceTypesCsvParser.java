@@ -36,11 +36,7 @@ public class AppointmentServiceTypesCsvParser extends CsvParser<AppointmentServi
 		final String uuid = line.getUuid();
 		
 		AppointmentServiceType type = StringUtils.isEmpty(uuid) ? null : service.getAppointmentServiceTypeByUuid(uuid);
-		
-		if (type == null) {
-			type = Utils.fetchBahmniAppointmentServiceType(line.getName(), service);
-		}
-		
+
 		if (type == null) {
 			type = new AppointmentServiceType();
 		}

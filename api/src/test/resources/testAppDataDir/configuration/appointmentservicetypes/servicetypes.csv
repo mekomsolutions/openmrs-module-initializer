@@ -1,5 +1,6 @@
 Void/Retire,UUID,Name,Service definition,Duration,_order:1000
-,,Short follow-up,On-site Appointment,10,
+,f378bec4-2d0d-4509-a56e-b709e0a53700,Short follow-up,On-site Appointment,10,
 TRUE,4e0f61df-d1f7-4cff-8d69-6264666daf3b,,,,
 ,ffd7e0f4-33f1-4802-b87a-8d610ba1132d,Simple Bracing,Specialized Appointment,45,
+,0a4624a6-ca81-42e2-a1ab-8f8dca033b83,Short follow-up,Specialized Appointment,45,
 ,,Complex Bracing,6b220700-4ba2-4846-86a7-a2afa5b6f2eb,75,
