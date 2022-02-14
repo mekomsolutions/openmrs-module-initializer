@@ -160,6 +160,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Added support enabling any Initializer runtime property value to also be specified from a system property
 * Bulk creation and edition of AMPATH forms provided as JSON schema definitions in **configuration/ampathforms**.
 * Enhancement to custom message source to support improved handling of fallback locales and overrides between core, modules, and initializer messageproperties
+* Enhancement to ensure predictable loading order of files within a domain if no explicit order is specified, based on alphabetical ordering of filenames
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
