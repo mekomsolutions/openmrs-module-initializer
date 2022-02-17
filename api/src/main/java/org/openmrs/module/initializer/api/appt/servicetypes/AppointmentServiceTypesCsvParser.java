@@ -34,14 +34,14 @@ public class AppointmentServiceTypesCsvParser extends CsvParser<AppointmentServi
 	public AppointmentServiceType bootstrap(CsvLine line) throws IllegalArgumentException {
 		
 		final String uuid = line.getUuid();
-		
-		AppointmentServiceType type = StringUtils.isEmpty(uuid) ? null : service.getAppointmentServiceTypeByUuid(uuid);
-
-		if (type == null) {
-			type = new AppointmentServiceType();
+		if (StringUtils.isEmpty(uuid)) {
+			throw new IllegalArgumentException("Uuid should be set");
 		}
 		
-		if (!StringUtils.isEmpty(uuid)) {
+		AppointmentServiceType type = service.getAppointmentServiceTypeByUuid(uuid);
+		
+		if (type == null) {
+			type = new AppointmentServiceType();
 			type.setUuid(uuid);
 		}
 		
