@@ -35,7 +35,7 @@ public class AppointmentServiceTypesCsvParser extends CsvParser<AppointmentServi
 		
 		final String uuid = line.getUuid();
 		if (StringUtils.isEmpty(uuid)) {
-			throw new IllegalArgumentException("Uuid should be set");
+			throw new IllegalArgumentException("uuid is required for appointment service types");
 		}
 		
 		AppointmentServiceType type = service.getAppointmentServiceTypeByUuid(uuid);
