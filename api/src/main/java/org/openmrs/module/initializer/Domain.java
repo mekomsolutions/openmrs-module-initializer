@@ -3,6 +3,7 @@ package org.openmrs.module.initializer;
 import org.apache.commons.lang.ArrayUtils;
 
 public enum Domain {
+	LIQUIBASE,
 	JSON_KEY_VALUES,
 	CONCEPT_CLASSES,
 	CONCEPT_SOURCES,

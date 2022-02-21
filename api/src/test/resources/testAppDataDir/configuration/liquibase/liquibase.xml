@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+	<!-- Concepts -->
+	<include file="concepts.xml" relativeToChangelogFile="true"/>
+
+	<!-- Encounter Types -->
+	<changeSet id="jUnit-2022-02-22-12-51" author="test">
+		<comment>
+			Set encounter type 'Scheduled' UUID
+		</comment>
+		<update tableName="encounter_type">
+			<column name="uuid" value="13c7556b-e868-4612-a631-bfdbed24c9f0" />
+			<where>name='Scheduled'</where>
+		</update>
+	</changeSet>
+	<changeSet id="jUnit-2022-02-22-12-52" author="test">
+		<comment>
+			Set encounter type 'Emergency' UUID
+		</comment>
+		<update tableName="encounter_type">
+			<column name="uuid" value="4c384d33-6fc4-4b99-a3b3-efc285409e7f" />
+			<where>name='Emergency'</where>
+		</update>
+	</changeSet>
+	<changeSet id="jUnit-2022-02-22-12-53" author="test">
+		<comment>
+			Set encounter type 'Laboratory' UUID
+		</comment>
+		<update tableName="encounter_type">
+			<column name="uuid" value="4bf982f0-8053-4757-a45e-5da777ffe0f6" />
+			<where>name='Laboratory'</where>
+		</update>
+	</changeSet>
+
+</databaseChangeLog>

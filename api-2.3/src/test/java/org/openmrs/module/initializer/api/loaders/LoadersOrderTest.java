@@ -168,6 +168,9 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	@Autowired
 	private OpenConceptLabLoader openConceptLabLoader;
 	
+	@Autowired
+	private LiquibaseLoader liquibaseLoader;
+	
 	@Override
 	public void updateSearchIndex() {
 		// to prevent Data Filter's 'Illegal Record Access'
@@ -180,6 +183,11 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		
 		Loader previousLoader = null;
 		Loader loader = new ZeroOrderLoader();
+		
+		previousLoader = loader;
+		loader = liquibaseLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
 		previousLoader = loader;
 		loader = jsonKeyValuesLoader;
