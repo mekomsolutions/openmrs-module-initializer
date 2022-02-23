@@ -22,9 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class LiquibaseLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
-	protected InitializerService iniz;
-	
-	@Autowired
 	private LiquibaseLoader loader;
 	
 	@Before
