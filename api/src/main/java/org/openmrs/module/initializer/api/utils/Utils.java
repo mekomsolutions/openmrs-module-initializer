@@ -59,32 +59,6 @@ import com.github.freva.asciitable.AsciiTable;
 
 public class Utils {
 	
-	private static Logger log = LoggerFactory.getLogger(Utils.class);
-	
-	/**
-	 * Returns a ready-to-use appender to log to a custom file.
-	 * 
-	 * @param logFilePath The path to the log file.
-	 * @return The appender to be added to any logger.
-	 */
-	public static Appender getFileAppender(Path logFilePath) {
-		
-		Appender defaultAppender = org.apache.log4j.Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
-		Layout layout = defaultAppender == null ? new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n")
-		        : defaultAppender.getLayout();
-		
-		Appender appender = defaultAppender;
-		try {
-			appender = new FileAppender(layout, logFilePath.toString());
-			appender.setName(logFilePath.getFileName().toString());
-		}
-		catch (IOException e) {
-			log.error("The custom log file appender could not be setup for " + MODULE_NAME + ".", e);
-		}
-		
-		return appender;
-	}
-	
 	private static String[] setLineSeparators(String[] strings) {
 		List<String> res = new ArrayList<>();
 		for (String s : strings) {

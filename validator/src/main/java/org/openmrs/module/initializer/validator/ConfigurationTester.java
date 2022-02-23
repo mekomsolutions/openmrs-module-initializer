@@ -183,8 +183,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 			final boolean domainSpecified = config.getFilteredDomains().contains("ocl");
 			final boolean includeSpecifiedDomains = config.isInclusionList();
 			
-			if ((includeSpecifiedDomains && domainSpecified) ||
-					(!includeSpecifiedDomains && !domainSpecified)) {
+			if ((includeSpecifiedDomains && domainSpecified) || (!includeSpecifiedDomains && !domainSpecified)) {
 				Map<String, DaemonToken> daemonTokens;
 				try {
 					Field field = ModuleFactory.class.getDeclaredField("daemonTokens");

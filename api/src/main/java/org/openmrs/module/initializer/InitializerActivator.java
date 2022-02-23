@@ -9,17 +9,15 @@
  */
 package org.openmrs.module.initializer;
 
-import org.apache.log4j.Level;
+import java.util.List;
+
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.ModuleException;
 import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.module.initializer.api.utils.Utils;
-import org.openmrs.util.OpenmrsUtil;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.nio.file.Paths;
 
 import static org.openmrs.module.initializer.InitializerConstants.MODULE_ARTIFACT_ID;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_DISABLED;
@@ -36,20 +34,16 @@ public class InitializerActivator extends BaseModuleActivator {
 	 * @see #started()
 	 */
 	public void started() {
+		log.info("Start of {} module.", MODULE_ARTIFACT_ID);
 		
-		log.info("Start of " + MODULE_ARTIFACT_ID + " module.");
+		List<InitializerLogConfigurator> logConfigurators = Context.getRegisteredComponents(InitializerLogConfigurator.class);
+		if (logConfigurators != null && logConfigurators.size() > 0) {
+			logConfigurators.get(0).setupLogging();
+		}
 		
 		// Set active message source
 		InitializerMessageSource messageSource = Context.getRegisteredComponents(InitializerMessageSource.class).get(0);
 		Context.getMessageSourceService().setActiveMessageSource(messageSource);
-		
-		{
-			org.apache.log4j.Logger logger = org.apache.log4j.Logger
-			        .getLogger(InitializerActivator.class.getPackage().getName());
-			logger.addAppender(
-			    Utils.getFileAppender(Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log")));
-			logger.setLevel(Level.WARN);
-		}
 		
 		String startupLoadingMode = getInitializerService().getInitializerConfig().getStartupLoadingMode();
 		

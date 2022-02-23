@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -35,8 +36,9 @@ import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.api.utils.Utils;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -166,17 +168,10 @@ public class Validator {
 	}
 	
 	public static void setupLog4j(Level level, Path logFilePath) {
-		org.apache.log4j.Logger.getRootLogger().setLevel(level);
-		
-		org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(level);
-		org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(level);
-		
-		org.apache.log4j.Logger inizLogger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
-		inizLogger.setLevel(WARN); // this is to focus the Inititalizer log file to the most relevant messages
-		if (logFilePath != null) {
-			inizLogger.addAppender(Utils.getFileAppender(logFilePath));
+		List<InitializerLogConfigurator> logConfigurators =  Context.getRegisteredComponents(InitializerLogConfigurator.class);
+		if (logConfigurators != null && logConfigurators.size() > 0) {
+			logConfigurators.get(0).setupLogging(level, logFilePath);
 		}
-		inizLogger.addAppender(new ValidatorAppender());
 	}
 	
 	/**
@@ -247,7 +242,7 @@ public class Validator {
 	 */
 	public static Result getJUnitResult(String[] args) throws IllegalArgumentException, URISyntaxException, ParseException {
 		// default logging
-		setupLog4j(INFO, null);
+		setupLog4j(WARN, null);
 		
 		Options options = getCLIOptions();
 		cmdLine = new DefaultParser().parse(options, args);
@@ -273,7 +268,7 @@ public class Validator {
 			throw new IllegalArgumentException("The path to the configuration directory was not provided.");
 		}
 		
-		unsafe = cmdLine.hasOption(ARG_UNSAFE) ? true : false;
+		unsafe = cmdLine.hasOption(ARG_UNSAFE);
 		
 		// Testing the config
 		return JUnitCore.runClasses(ConfigurationTester.class);
