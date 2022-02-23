@@ -2,7 +2,6 @@ package org.openmrs.module.initializer.api.logging;
 
 import java.io.Serializable;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -13,10 +12,7 @@ import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.InitializerActivator;
-import org.openmrs.util.OpenmrsUtil;
 import org.springframework.stereotype.Component;
-
-import static org.openmrs.module.initializer.InitializerConstants.MODULE_ARTIFACT_ID;
 
 @Component
 @OpenmrsProfile(openmrsPlatformVersion = "2.4.* - 2.*")
@@ -44,18 +40,13 @@ public class InitializerLoggingConfigurator2_4 extends InitializerLogConfigurato
 	}
 	
 	@Override
-	public void setupLogging() {
-		setupLogging(Level.WARN, Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log"));
-	}
-	
-	@Override
 	public void setupLogging(org.apache.log4j.Level level, Path logFilePath) {
 		setupLogging(Level.toLevel(level.toString()), logFilePath);
 	}
 	
 	public void setupLogging(Level level, Path logFilePath) {
 		if (logFilePath == null) {
-			logFilePath = Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log");
+			logFilePath = getDefaultLogFile();
 		}
 		
 		Logger logger = (Logger) LogManager.getLogger(InitializerActivator.class.getPackage().getName());

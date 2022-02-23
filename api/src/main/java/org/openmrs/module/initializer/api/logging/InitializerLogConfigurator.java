@@ -11,7 +11,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.InitializerActivator;
-import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,19 +48,19 @@ public class InitializerLogConfigurator {
 		return appender;
 	}
 	
-	public void setupLogging() {
-		setupLogging(Level.WARN, Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log"));
-	}
-	
 	public void setupLogging(Level level, Path logFilePath) {
 		if (logFilePath == null) {
-			logFilePath = Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log");
+			logFilePath = getDefaultLogFile();
 		}
 		
 		org.apache.log4j.Logger logger = org.apache.log4j.Logger
 		        .getLogger(InitializerActivator.class.getPackage().getName());
 		logger.addAppender(getFileAppender(logFilePath));
 		logger.setLevel(level);
+	}
+	
+	protected Path getDefaultLogFile() {
+		return Paths.get(OpenmrsUtil.getApplicationDataDirectory(), MODULE_ARTIFACT_ID + ".log");
 	}
 	
 }

@@ -241,15 +241,11 @@ public class Validator {
 	 * @return The JUnit Result object.
 	 */
 	public static Result getJUnitResult(String[] args) throws IllegalArgumentException, URISyntaxException, ParseException {
-		// default logging
-		setupLog4j(WARN, null);
-		
 		Options options = getCLIOptions();
 		cmdLine = new DefaultParser().parse(options, args);
 		
-		Level level = INFO;
+		Level level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL), WARN);
 		if (cmdLine.hasOption(ARG_VERBOSE)) {
-			level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL));
 			level = level.isGreaterOrEqual(INFO) ? INFO : level; // verbose means at least INFO level
 		}
 		

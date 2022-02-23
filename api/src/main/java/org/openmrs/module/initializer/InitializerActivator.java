@@ -9,13 +9,19 @@
  */
 package org.openmrs.module.initializer;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Properties;
 
+import org.apache.log4j.Level;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.ModuleException;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
+import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +44,31 @@ public class InitializerActivator extends BaseModuleActivator {
 		
 		List<InitializerLogConfigurator> logConfigurators = Context.getRegisteredComponents(InitializerLogConfigurator.class);
 		if (logConfigurators != null && logConfigurators.size() > 0) {
-			logConfigurators.get(0).setupLogging();
+			Properties runtimeProperties = Context.getRuntimeProperties();
+			
+			Path logFilePath = null;
+			String logFileLocation = runtimeProperties.getProperty("initializer.log.location");
+			if (logFileLocation != null) {
+				logFilePath = Paths.get(logFileLocation);
+				
+				Path applicationDataDirectory = Paths.get(OpenmrsUtil.getApplicationDataDirectory());
+				if (!logFilePath.isAbsolute()) {
+					logFilePath = applicationDataDirectory.resolve(logFilePath);
+				} else {
+					try {
+						logFilePath = logFilePath.toRealPath();
+						if (!logFilePath.startsWith(applicationDataDirectory)) {
+							logFilePath = null;
+						}
+					} catch (IOException e) {
+						logFilePath = null;
+					}
+				}
+			}
+			
+			Level level = Level.toLevel(runtimeProperties.getProperty("initializer.log.level"), Level.WARN);
+			
+			logConfigurators.get(0).setupLogging(level, logFilePath);
 		}
 		
 		// Set active message source
