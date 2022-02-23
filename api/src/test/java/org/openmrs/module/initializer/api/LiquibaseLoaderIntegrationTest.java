@@ -33,7 +33,7 @@ public class LiquibaseLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	public void load_shouldLoadStructuredLiquibaseChangesets() throws Exception {
 		// Replay
 		loader.load();
-
+		
 		// Verif
 		Assert.assertNotNull(Context.getConceptService().getConceptByUuid("fbb05a72-b923-4b35-bbb6-5cbcfdc295ed"));
 		Assert.assertNotNull(Context.getConceptService().getConceptByUuid("ae848d15-6a04-4ad5-b711-a4cf711a566e"));
