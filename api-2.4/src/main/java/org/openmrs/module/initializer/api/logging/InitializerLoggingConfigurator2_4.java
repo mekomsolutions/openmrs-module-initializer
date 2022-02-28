@@ -17,29 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @OpenmrsProfile(openmrsPlatformVersion = "2.1.5 - 2.1.*, 2.4.* - 2.*")
-public class InitializerLoggingConfigurator2_4 extends InitializerLogConfigurator {
-	
-	/**
-	 * Returns a ready-to-use appender to log to a custom file.
-	 *
-	 * @param logFilePath The path to the log file.
-	 * @return The appender to be added to any logger.
-	 */
-	private static Appender getFileAppender(Level level, Path logFilePath) {
-		Logger rootLogger = (Logger) LogManager.getRootLogger();
-		Appender defaultAppender = rootLogger.getAppenders().values().iterator().next();
-		Layout<? extends Serializable> layout = defaultAppender == null
-				? PatternLayout.newBuilder().withPattern("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n").build()
-				: defaultAppender.getLayout();
-		
-		Appender appender = FileAppender.newBuilder().setName(logFilePath.getFileName().toString())
-				.withFileName(logFilePath.toString()).setLayout(layout)
-				.setFilter(LevelMatchFilter.newBuilder().setLevel(level).build()).build();
-		
-		appender.start();
-		
-		return appender;
-	}
+public class InitializerLoggingConfigurator2_4 implements InitializerLogConfigurator {
 	
 	@Override
 	public void setupLogging(org.apache.log4j.Level level, Path logFilePath) {
@@ -53,5 +31,21 @@ public class InitializerLoggingConfigurator2_4 extends InitializerLogConfigurato
 		
 		Logger logger = (Logger) LogManager.getLogger(InitializerActivator.class.getPackage().getName());
 		logger.addAppender(getFileAppender(level, logFilePath));
+	}
+	
+	private Appender getFileAppender(Level level, Path logFilePath) {
+		Logger rootLogger = (Logger) LogManager.getRootLogger();
+		Appender defaultAppender = rootLogger.getAppenders().values().iterator().next();
+		Layout<? extends Serializable> layout = defaultAppender == null
+		        ? PatternLayout.newBuilder().withPattern("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n").build()
+		        : defaultAppender.getLayout();
+		
+		Appender appender = FileAppender.newBuilder().setName(logFilePath.getFileName().toString())
+		        .withFileName(logFilePath.toString()).setLayout(layout)
+		        .setFilter(LevelMatchFilter.newBuilder().setLevel(level).build()).build();
+		
+		appender.start();
+		
+		return appender;
 	}
 }
