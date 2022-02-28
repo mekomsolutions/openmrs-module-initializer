@@ -39,6 +39,7 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.AppointmentServiceType;
 import org.openmrs.module.appointments.model.Speciality;
@@ -518,6 +519,28 @@ public class Utils {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * @param property the system property or runtime property to lookup
+	 * @return the system property value if a system property with the passed property name exists, the
+	 *         runtime property value otherwise
+	 */
+	public static String getPropertyValue(String property) {
+		return getPropertyValue(property, null);
+	}
+	
+	/**
+	 * @param property the system property or runtime property to lookup
+	 * @param defaultValue the default value to return if the property is not set
+	 * @return the system property value if a system property with the passed property name exists, the
+	 *         runtime property value otherwise
+	 */
+	public static String getPropertyValue(String property, String defaultValue) {
+		if (System.getProperties().containsKey(property)) {
+			return System.getProperty(property);
+		}
+		return Context.getRuntimeProperties().getProperty(property, defaultValue);
 	}
 	
 	/**

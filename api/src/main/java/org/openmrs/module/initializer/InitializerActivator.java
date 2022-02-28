@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.log4j.Level;
 import org.openmrs.api.context.Context;
@@ -26,8 +25,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.openmrs.module.initializer.InitializerConstants.MODULE_ARTIFACT_ID;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_LOGGING_ENABLED;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_LOGGING_LEVEL;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_LOGGING_LOCATION;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_DISABLED;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_FAIL_ON_ERROR;
+import static org.openmrs.module.initializer.api.utils.Utils.getPropertyValue;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -42,13 +45,12 @@ public class InitializerActivator extends BaseModuleActivator {
 	public void started() {
 		log.info("Start of {} module.", MODULE_ARTIFACT_ID);
 		
-		Properties runtimeProperties = Context.getRuntimeProperties();
-		if (Boolean.parseBoolean(runtimeProperties.getProperty("initializer.log.enabled", "true"))) {
-			List<InitializerLogConfigurator> logConfigurators = Context.getRegisteredComponents(
-					InitializerLogConfigurator.class);
+		if (Boolean.parseBoolean(getPropertyValue(PROPS_LOGGING_ENABLED, "true"))) {
+			List<InitializerLogConfigurator> logConfigurators = Context
+			        .getRegisteredComponents(InitializerLogConfigurator.class);
 			if (logConfigurators != null && logConfigurators.size() > 0) {
 				Path logFilePath = null;
-				String logFileLocation = runtimeProperties.getProperty("initializer.log.location");
+				String logFileLocation = getPropertyValue(PROPS_LOGGING_LOCATION);
 				if (logFileLocation != null) {
 					logFilePath = Paths.get(logFileLocation);
 					
@@ -68,7 +70,7 @@ public class InitializerActivator extends BaseModuleActivator {
 					}
 				}
 				
-				Level level = Level.toLevel(runtimeProperties.getProperty("initializer.log.level"), Level.WARN);
+				Level level = Level.toLevel(getPropertyValue(PROPS_LOGGING_LEVEL), Level.WARN);
 				
 				logConfigurators.get(0).setupLogging(level, logFilePath);
 			}

@@ -5,8 +5,6 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.apache.commons.lang.StringUtils.removeEnd;
 import static org.apache.commons.lang.StringUtils.replace;
 import static org.apache.commons.lang.StringUtils.startsWith;
-import static org.apache.log4j.Level.INFO;
-import static org.apache.log4j.Level.WARN;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_EXCLUDE;
 
@@ -76,7 +74,7 @@ public class Validator {
 	/**
 	 * Properly escapes the single quotes of a piece of SQL for MySQL. Strings ending with a ";" are
 	 * assumed to be the last piece of a SQL instruction.
-	 * 
+	 *
 	 * @param sqlPiece A whole SQL instruction or a piece of SQL instruction
 	 * @return The piece of SQL with single quotes properly escaped
 	 * @see https://stackoverflow.com/a/64878054/321797
@@ -115,7 +113,7 @@ public class Validator {
 	
 	/**
 	 * Convenience method giving the path of the Validator JAR file.
-	 * 
+	 *
 	 * @return The path of the Validator JAR file.
 	 */
 	public static Path getJarDirPath() throws Exception {
@@ -155,7 +153,9 @@ public class Validator {
 		        .desc("Enables writing the checksum files in a checksum folder besides the configuration folder.").build());
 		options.addOption(Option.builder("V").longOpt(ARG_VERBOSE).desc("Enables verbose logging.").build());
 		options.addOption(Option.builder("L").hasArg().longOpt(ARG_LOGGING_LEVEL).argName("ARG")
-		        .desc("The verbose mode logging level: " + Level.TRACE + ", " + Level.DEBUG + " or " + Level.INFO + ".")
+		        .desc("The logging level, e.g., " + Level.TRACE + ", " + Level.DEBUG + ", " + Level.INFO + ", " + Level.WARN
+		                + ", " + Level.ERROR + ", " + Level.FATAL + "."
+		                + " Note that if running in verbose mode, the level must be " + Level.INFO + " or lower.")
 		        .build());
 		return options;
 	}
@@ -168,7 +168,8 @@ public class Validator {
 	}
 	
 	public static void setupLog4j(Level level, Path logFilePath) {
-		List<InitializerLogConfigurator> logConfigurators =  Context.getRegisteredComponents(InitializerLogConfigurator.class);
+		List<InitializerLogConfigurator> logConfigurators = Context
+		        .getRegisteredComponents(InitializerLogConfigurator.class);
 		if (logConfigurators != null && logConfigurators.size() > 0) {
 			logConfigurators.get(0).setupLogging(level, logFilePath);
 		}
@@ -178,7 +179,7 @@ public class Validator {
 	 * Sets the log file path {@link Path} instance based on a suggested log file directory path. If the
 	 * suggested log file dir cannot be used, this will fallback in order to 1) the JAR file folder or
 	 * eventually 2) to a temp folder.
-	 * 
+	 *
 	 * @param logFileDir The suggested log file directory path.
 	 */
 	protected static void setLogFilePath(String logFileDir) {
@@ -236,7 +237,7 @@ public class Validator {
 	
 	/**
 	 * Main API method to execute a dry run of a configuration and collect the JUnit {@link Result}.
-	 * 
+	 *
 	 * @param args The Validator CLI args.
 	 * @return The JUnit Result object.
 	 */
@@ -244,9 +245,9 @@ public class Validator {
 		Options options = getCLIOptions();
 		cmdLine = new DefaultParser().parse(options, args);
 		
-		Level level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL), WARN);
+		Level level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL), Level.WARN);
 		if (cmdLine.hasOption(ARG_VERBOSE)) {
-			level = level.isGreaterOrEqual(INFO) ? INFO : level; // verbose means at least INFO level
+			level = level.isGreaterOrEqual(Level.INFO) ? Level.INFO : level; // verbose means at least INFO level
 		}
 		
 		// setting up logging
