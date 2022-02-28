@@ -9,6 +9,7 @@ import org.apache.log4j.FileAppender;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
+import org.apache.log4j.varia.LevelMatchFilter;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.InitializerActivator;
 import org.openmrs.util.OpenmrsUtil;
@@ -31,7 +32,7 @@ public class InitializerLogConfigurator {
 	 * @param logFilePath The path to the log file.
 	 * @return The appender to be added to any logger.
 	 */
-	private static Appender getFileAppender(Path logFilePath) {
+	private static Appender getFileAppender(Level level, Path logFilePath) {
 		Appender defaultAppender = org.apache.log4j.Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
 		Layout layout = defaultAppender == null ? new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n")
 		        : defaultAppender.getLayout();
@@ -40,6 +41,9 @@ public class InitializerLogConfigurator {
 		try {
 			appender = new FileAppender(layout, logFilePath.toString());
 			appender.setName(logFilePath.getFileName().toString());
+			LevelMatchFilter levelMatchFilter = new LevelMatchFilter();
+			levelMatchFilter.setLevelToMatch(level.toString());
+			appender.addFilter(levelMatchFilter);
 		}
 		catch (IOException e) {
 			log.error("The custom log file appender could not be setup for {}.", MODULE_NAME, e);
@@ -55,8 +59,7 @@ public class InitializerLogConfigurator {
 		
 		org.apache.log4j.Logger logger = org.apache.log4j.Logger
 		        .getLogger(InitializerActivator.class.getPackage().getName());
-		logger.addAppender(getFileAppender(logFilePath));
-		logger.setLevel(level);
+		logger.addAppender(getFileAppender(level, logFilePath));
 	}
 	
 	protected Path getDefaultLogFile() {

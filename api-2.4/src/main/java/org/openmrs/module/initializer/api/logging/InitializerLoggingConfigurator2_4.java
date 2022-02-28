@@ -9,6 +9,7 @@ import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.filter.LevelMatchFilter;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.InitializerActivator;
@@ -20,19 +21,20 @@ public class InitializerLoggingConfigurator2_4 extends InitializerLogConfigurato
 	
 	/**
 	 * Returns a ready-to-use appender to log to a custom file.
-	 * 
+	 *
 	 * @param logFilePath The path to the log file.
 	 * @return The appender to be added to any logger.
 	 */
-	private static Appender getFileAppender(Path logFilePath) {
+	private static Appender getFileAppender(Level level, Path logFilePath) {
 		Logger rootLogger = (Logger) LogManager.getRootLogger();
 		Appender defaultAppender = rootLogger.getAppenders().values().iterator().next();
 		Layout<? extends Serializable> layout = defaultAppender == null
-		        ? PatternLayout.newBuilder().withPattern("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n").build()
-		        : defaultAppender.getLayout();
+				? PatternLayout.newBuilder().withPattern("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n").build()
+				: defaultAppender.getLayout();
 		
 		Appender appender = FileAppender.newBuilder().setName(logFilePath.getFileName().toString())
-		        .withFileName(logFilePath.toString()).setLayout(layout).build();
+				.withFileName(logFilePath.toString()).setLayout(layout)
+				.setFilter(LevelMatchFilter.newBuilder().setLevel(level).build()).build();
 		
 		appender.start();
 		
@@ -50,7 +52,6 @@ public class InitializerLoggingConfigurator2_4 extends InitializerLogConfigurato
 		}
 		
 		Logger logger = (Logger) LogManager.getLogger(InitializerActivator.class.getPackage().getName());
-		logger.addAppender(getFileAppender(logFilePath));
-		logger.setLevel(level);
+		logger.addAppender(getFileAppender(level, logFilePath));
 	}
 }
