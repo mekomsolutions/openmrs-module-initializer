@@ -15,7 +15,7 @@ import org.openmrs.module.initializer.InitializerActivator;
 import org.springframework.stereotype.Component;
 
 @Component
-@OpenmrsProfile(openmrsPlatformVersion = "2.4.* - 2.*")
+@OpenmrsProfile(openmrsPlatformVersion = "2.1.5 - 2.1.*, 2.4.* - 2.*")
 public class InitializerLoggingConfigurator2_4 extends InitializerLogConfigurator {
 	
 	/**

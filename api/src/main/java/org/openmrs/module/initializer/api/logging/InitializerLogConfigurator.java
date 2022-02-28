@@ -20,7 +20,7 @@ import static org.openmrs.module.initializer.InitializerConstants.MODULE_ARTIFAC
 import static org.openmrs.module.initializer.InitializerConstants.MODULE_NAME;
 
 @Component
-@OpenmrsProfile(openmrsPlatformVersion = "1.* - 2.3.*")
+@OpenmrsProfile(openmrsPlatformVersion = "1.* - 2.1.4, 2.2.* - 2.3.*")
 public class InitializerLogConfigurator {
 	
 	private static final Logger log = LoggerFactory.getLogger(InitializerLogConfigurator.class);
