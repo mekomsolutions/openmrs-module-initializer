@@ -42,33 +42,36 @@ public class InitializerActivator extends BaseModuleActivator {
 	public void started() {
 		log.info("Start of {} module.", MODULE_ARTIFACT_ID);
 		
-		List<InitializerLogConfigurator> logConfigurators = Context.getRegisteredComponents(InitializerLogConfigurator.class);
-		if (logConfigurators != null && logConfigurators.size() > 0) {
-			Properties runtimeProperties = Context.getRuntimeProperties();
-			
-			Path logFilePath = null;
-			String logFileLocation = runtimeProperties.getProperty("initializer.log.location");
-			if (logFileLocation != null) {
-				logFilePath = Paths.get(logFileLocation);
-				
-				Path applicationDataDirectory = Paths.get(OpenmrsUtil.getApplicationDataDirectory());
-				if (!logFilePath.isAbsolute()) {
-					logFilePath = applicationDataDirectory.resolve(logFilePath);
-				} else {
-					try {
-						logFilePath = logFilePath.toRealPath();
-						if (!logFilePath.startsWith(applicationDataDirectory)) {
+		Properties runtimeProperties = Context.getRuntimeProperties();
+		if (Boolean.parseBoolean(runtimeProperties.getProperty("initializer.log.enabled", "true"))) {
+			List<InitializerLogConfigurator> logConfigurators = Context.getRegisteredComponents(
+					InitializerLogConfigurator.class);
+			if (logConfigurators != null && logConfigurators.size() > 0) {
+				Path logFilePath = null;
+				String logFileLocation = runtimeProperties.getProperty("initializer.log.location");
+				if (logFileLocation != null) {
+					logFilePath = Paths.get(logFileLocation);
+					
+					Path applicationDataDirectory = Paths.get(OpenmrsUtil.getApplicationDataDirectory());
+					if (!logFilePath.isAbsolute()) {
+						logFilePath = applicationDataDirectory.resolve(logFilePath);
+					} else {
+						try {
+							logFilePath = logFilePath.toRealPath();
+							if (!logFilePath.startsWith(applicationDataDirectory)) {
+								logFilePath = null;
+							}
+						}
+						catch (IOException e) {
 							logFilePath = null;
 						}
-					} catch (IOException e) {
-						logFilePath = null;
 					}
 				}
+				
+				Level level = Level.toLevel(runtimeProperties.getProperty("initializer.log.level"), Level.WARN);
+				
+				logConfigurators.get(0).setupLogging(level, logFilePath);
 			}
-			
-			Level level = Level.toLevel(runtimeProperties.getProperty("initializer.log.level"), Level.WARN);
-			
-			logConfigurators.get(0).setupLogging(level, logFilePath);
 		}
 		
 		// Set active message source
