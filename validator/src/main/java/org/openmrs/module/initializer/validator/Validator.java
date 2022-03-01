@@ -48,6 +48,8 @@ public class Validator {
 	
 	private static Path logFilePath = null;
 	
+	private static Level level;
+	
 	public static final String ARG_CONFIG_DIR = "config-dir";
 	
 	public static final String ARG_CIEL_FILE = "ciel-file";
@@ -167,7 +169,7 @@ public class Validator {
 		return logFilePath;
 	}
 	
-	public static void setupLog4j(Level level, Path logFilePath) {
+	public static void setupLog4j() {
 		List<InitializerLogConfigurator> logConfigurators = Context
 		        .getRegisteredComponents(InitializerLogConfigurator.class);
 		if (logConfigurators != null && logConfigurators.size() > 0) {
@@ -245,14 +247,13 @@ public class Validator {
 		Options options = getCLIOptions();
 		cmdLine = new DefaultParser().parse(options, args);
 		
-		Level level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL), Level.WARN);
+		level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL), Level.WARN);
 		if (cmdLine.hasOption(ARG_VERBOSE)) {
 			level = level.isGreaterOrEqual(Level.INFO) ? Level.INFO : level; // verbose means at least INFO level
 		}
 		
 		// setting up logging
 		setLogFilePath(cmdLine.getOptionValue(ARG_LOG_DIR));
-		setupLog4j(level, getLogFilePath());
 		
 		if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption(ARG_HELP)) {
 			HelpFormatter f = new HelpFormatter();
