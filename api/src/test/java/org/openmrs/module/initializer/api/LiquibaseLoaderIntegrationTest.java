@@ -34,7 +34,7 @@ public class LiquibaseLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		// Replay
 		loader.load();
 		
-		// Verif
+		// Verify
 		Assert.assertNotNull(Context.getConceptService().getConceptByUuid("fbb05a72-b923-4b35-bbb6-5cbcfdc295ed"));
 		Assert.assertNotNull(Context.getConceptService().getConceptByUuid("ae848d15-6a04-4ad5-b711-a4cf711a566e"));
 		Assert.assertNotNull(Context.getEncounterService().getEncounterTypeByUuid("13c7556b-e868-4612-a631-bfdbed24c9f0"));
