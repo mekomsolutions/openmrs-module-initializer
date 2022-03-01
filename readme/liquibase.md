@@ -5,6 +5,7 @@ The **liquibase** subfolder contains Liquibase changelog files for the purpose o
 liquibase/
   └── liquibase.xml
   └── concepts.xml
+  └── encounterTypes.sql
 ```
 The purpose for this domain is to provide updates on metadata and not any database schema. This for example, could be used to ensure all desired metadata is deterministic in nature with known `id`s/`uuid`s before it's/they are usable/reference-able.
 
@@ -27,7 +28,7 @@ The purpose for this domain is to provide updates on metadata and not any databa
 	</changeSet>
 </databaseChangeLog>
 ```
-The above changelog illustrates a typical use-case, where Liquibase changesets could be defined in the main `liquibase.xml` file and other files changelog files referenced from this **main** file using the `<include file="[otherLiquibaseFileName].xml" relativeToChangelogFile="true"/>`. Notice that all referenced files in this way should have `relativeToChangelogFile` set to `true` otherwise the Liquibase changesets would fail to load. Changelog files can be further organized in sub-folders and referenced/included accordingly.
+The above changelog illustrates a typical use-case, where Liquibase changesets could be defined in the main `liquibase.xml` file and other files changelog files referenced from this **main** file using the `<include file="[otherLiquibaseFileName].xml" relativeToChangelogFile="true"/>`. Notice that all referenced files in this way should have `relativeToChangelogFile` set to `true` otherwise the Liquibase changesets would fail to load. Changelog files can be further organized in sub-folders and referenced/included accordingly. Please refer to the [Liquibase documentation](https://docs.liquibase.com/concepts/changelogs/working-with-changelogs.html) for further configuration and usage.
 
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).
