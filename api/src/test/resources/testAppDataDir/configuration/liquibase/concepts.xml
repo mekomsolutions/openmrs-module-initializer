@@ -4,7 +4,7 @@
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
 
 	<!-- Concepts -->
-	<changeSet id='jUnit-2022-02-22-12-40' author='test'>
+	<changeSet id='ensure_affirmative_concept_uuid-202202221240' author='test'>
 		<comment>
 			Set concept 'Affirmative' UUID
 		</comment>
@@ -13,7 +13,7 @@
 			<where>concept_id='7'</where>
 		</update>
 	</changeSet>
-	<changeSet id='jUnit-2022-02-07-12-41' author='test'>
+	<changeSet id='ensure_negative_concept_uuid-202202071241' author='test'>
 		<comment>
 			Set concept 'Negative' UUID
 		</comment>

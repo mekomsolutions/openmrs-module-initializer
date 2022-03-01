@@ -7,7 +7,7 @@
 	<include file="concepts.xml" relativeToChangelogFile="true"/>
 
 	<!-- Encounter Types -->
-	<changeSet id="jUnit-2022-02-22-12-51" author="test">
+	<changeSet id="ensure_scheduled_encountertype_uuid-202202221251" author="test">
 		<comment>
 			Set encounter type 'Scheduled' UUID
 		</comment>
@@ -16,7 +16,7 @@
 			<where>name='Scheduled'</where>
 		</update>
 	</changeSet>
-	<changeSet id="jUnit-2022-02-22-12-52" author="test">
+	<changeSet id="ensure_emergency_encountertype_uuid-202202221252" author="test">
 		<comment>
 			Set encounter type 'Emergency' UUID
 		</comment>
@@ -25,7 +25,7 @@
 			<where>name='Emergency'</where>
 		</update>
 	</changeSet>
-	<changeSet id="jUnit-2022-02-22-12-53" author="test">
+	<changeSet id="ensure_laboratory_encountertype_uuid-202202221253" author="test">
 		<comment>
 			Set encounter type 'Laboratory' UUID
 		</comment>
@@ -34,5 +34,4 @@
 			<where>name='Laboratory'</where>
 		</update>
 	</changeSet>
-
 </databaseChangeLog>

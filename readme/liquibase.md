@@ -17,7 +17,7 @@ The purpose for this domain is to provide updates on metadata and not any databa
 	<include file="concepts.xml" relativeToChangelogFile="true"/>
 
 	<!-- Encounter Types -->
-	<changeSet id="jUnit-2022-02-22-12-51" author="test">
+	<changeSet id="ensure_admission_encountertype_uuid-202202221251" author="test">
 		<comment>
 			Set encounter type 'Admission' UUID
 		</comment>
