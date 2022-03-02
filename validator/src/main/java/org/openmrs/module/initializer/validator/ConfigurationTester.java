@@ -11,7 +11,6 @@ import static org.openmrs.module.initializer.validator.Validator.ARG_CHECKSUMS;
 import static org.openmrs.module.initializer.validator.Validator.ARG_CIEL_FILE;
 import static org.openmrs.module.initializer.validator.Validator.ARG_CONFIG_DIR;
 import static org.openmrs.module.initializer.validator.Validator.cmdLine;
-import static org.openmrs.module.initializer.validator.Validator.setupLog4j;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -86,7 +85,6 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	@Override
 	public Properties getRuntimeProperties() {
-		
 		if (runtimeProperties == null) {
 			runtimeProperties = TestUtil.getRuntimeProperties(getWebappName());
 		}
@@ -161,8 +159,6 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	@Before
 	public void prepare() throws Exception {
-		setupLog4j();
-		
 		if (!StringUtils.isEmpty(cielFilePath)) {
 			Connection connection = getConnection();
 			SqlFile sqlFile = new SqlFile(Validator.trimCielSqlFile(new File(cielFilePath)));

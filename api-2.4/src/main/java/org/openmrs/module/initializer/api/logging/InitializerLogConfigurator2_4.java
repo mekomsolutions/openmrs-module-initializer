@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @OpenmrsProfile(openmrsPlatformVersion = "2.1.5 - 2.1.*, 2.4.* - 2.*")
-public class InitializerLoggingConfigurator2_4 implements InitializerLogConfigurator {
+public class InitializerLogConfigurator2_4 implements InitializerLogConfigurator {
 	
 	@Override
 	public void setupLogging(org.apache.log4j.Level level, Path logFilePath) {

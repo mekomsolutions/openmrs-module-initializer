@@ -18,7 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -34,9 +33,12 @@ import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
-import org.openmrs.api.context.Context;
+import org.openmrs.module.ModuleUtil;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator2_0;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator2_4;
+import org.openmrs.util.OpenmrsConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,11 +172,14 @@ public class Validator {
 	}
 	
 	public static void setupLog4j() {
-		List<InitializerLogConfigurator> logConfigurators = Context
-		        .getRegisteredComponents(InitializerLogConfigurator.class);
-		if (logConfigurators != null && logConfigurators.size() > 0) {
-			logConfigurators.get(0).setupLogging(level, logFilePath);
+		InitializerLogConfigurator logConfigurator;
+		if (ModuleUtil.matchRequiredVersions(OpenmrsConstants.OPENMRS_VERSION_SHORT, "1.* - 2.1.4, 2.2.0 - 2.3.*")) {
+			logConfigurator = new InitializerLogConfigurator2_0();
+		} else {
+			logConfigurator = new InitializerLogConfigurator2_4();
 		}
+		
+		logConfigurator.setupLogging(level, logFilePath);
 	}
 	
 	/**
@@ -254,6 +259,7 @@ public class Validator {
 		
 		// setting up logging
 		setLogFilePath(cmdLine.getOptionValue(ARG_LOG_DIR));
+		setupLog4j();
 		
 		if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption(ARG_HELP)) {
 			HelpFormatter f = new HelpFormatter();
