@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+	<!-- Concepts -->
+	<changeSet id='ensure_affirmative_concept_uuid-202202221240' author='test'>
+		<comment>
+			Set concept 'Affirmative' UUID
+		</comment>
+		<update tableName="concept">
+			<column name="uuid" value="fbb05a72-b923-4b35-bbb6-5cbcfdc295ed" />
+			<where>concept_id='7'</where>
+		</update>
+	</changeSet>
+	<changeSet id='ensure_negative_concept_uuid-202202071241' author='test'>
+		<comment>
+			Set concept 'Negative' UUID
+		</comment>
+		<update tableName="concept">
+			<column name="uuid" value="ae848d15-6a04-4ad5-b711-a4cf711a566e" />
+			<where>concept_id='8'</where>
+		</update>
+	</changeSet>
+</databaseChangeLog>

@@ -49,6 +49,8 @@ The CSV configuration allows to either modify exisiting appointment service type
 
 **NOTE:** Service types are somewhat misnamed, they rather represent a **duration override** to a service definition.
 
+###### Header `Uuid` *(mandatory)*
+
 ###### Header `Name` *(mandatory)*
 
 ###### Header `Service definition` *(mandatory)*
