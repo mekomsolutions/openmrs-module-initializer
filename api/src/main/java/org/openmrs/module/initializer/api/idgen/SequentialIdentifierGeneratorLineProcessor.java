@@ -26,12 +26,12 @@ public class SequentialIdentifierGeneratorLineProcessor extends IdentifierSource
 		
 		SequentialIdentifierGenerator source = (SequentialIdentifierGenerator) instance.getIdentifierSource();
 		
-		source.setFirstIdentifierBase(line.get(HEADER_FIRST_ID_BASE));
+		source.setBaseCharacterSet(line.get(HEADER_BASE_CHAR_SET, true));
+		source.setFirstIdentifierBase(line.get(HEADER_FIRST_ID_BASE, true));
 		source.setPrefix(line.getString(HEADER_PREFIX, ""));
 		source.setSuffix(line.getString(HEADER_SUFFIX, ""));
 		source.setMinLength(line.getInt(HEADER_MIN_LENGTH));
 		source.setMaxLength(line.getInt(HEADER_MAX_LENGTH));
-		source.setBaseCharacterSet(line.get(HEADER_BASE_CHAR_SET));
 		
 		instance.setIdentifierSource(source);
 		

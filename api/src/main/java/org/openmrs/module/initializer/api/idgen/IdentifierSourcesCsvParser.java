@@ -20,14 +20,19 @@ public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, Ba
 	
 	private SequentialIdentifierGeneratorLineProcessor seqProcessor;
 	
+	private RemoteIdentifierSourceLineProcessor remoteProcessor;
+	
+	private IdentifierPoolLineProcessor poolProcessor;
+	
 	@Autowired
 	public IdentifierSourcesCsvParser(IdentifierSourceService idgenService, CommonIdentifierSourceLineProcessor processor,
-	    SequentialIdentifierGeneratorLineProcessor seqProcessor) {
+	    SequentialIdentifierGeneratorLineProcessor seqProcessor, RemoteIdentifierSourceLineProcessor remoteProcessor,
+	    IdentifierPoolLineProcessor poolProcessor) {
 		super(processor);
-		
 		this.idgenService = idgenService;
-		
 		this.seqProcessor = seqProcessor;
+		this.remoteProcessor = remoteProcessor;
+		this.poolProcessor = poolProcessor;
 	}
 	
 	@Override
@@ -79,5 +84,7 @@ public class IdentifierSourcesCsvParser extends CsvParser<IdgenSourceWrapper, Ba
 		lineProcessors.clear();
 		lineProcessors.add(getSingleLineProcessor());
 		lineProcessors.add(seqProcessor);
+		lineProcessors.add(remoteProcessor);
+		lineProcessors.add(poolProcessor);
 	}
 }

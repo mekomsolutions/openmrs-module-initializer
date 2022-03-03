@@ -1,0 +1,3 @@
+Uuid,Void/Retire,Identifier type,Name,Description,Url,User,Password,_version:1,_order:2000
+d2a10e86-59ce-11ec-8885-0242ac110002,,PATIENTIDENTIFIERTYPE_1_OPENMRS_ID,New remote name,New remote description,http://localhost,property:idgen_remote_user,property:idgen_remote_password,,
+c1d90956-3f10-11e4-adec-0800271c1b75,,PATIENTIDENTIFIERTYPE_1_OPENMRS_ID,Edited remote name,Edited remote description,http://example.com/edit,editUser,editPass,,
