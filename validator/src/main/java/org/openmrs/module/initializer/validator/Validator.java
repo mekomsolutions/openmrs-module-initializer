@@ -173,10 +173,12 @@ public class Validator {
 	
 	public static void setupLog4j() {
 		InitializerLogConfigurator logConfigurator;
-		if (ModuleUtil.matchRequiredVersions(OpenmrsConstants.OPENMRS_VERSION_SHORT, "1.* - 2.1.4, 2.2.0 - 2.3.*")) {
-			logConfigurator = new InitializerLogConfigurator2_0();
-		} else {
+		try {
+			Class.forName("org.apache.logging.log4j.LogManager");
 			logConfigurator = new InitializerLogConfigurator2_4();
+		}
+		catch (ClassNotFoundException | LinkageError e) {
+			logConfigurator = new InitializerLogConfigurator2_0();
 		}
 		
 		logConfigurator.setupLogging(level, logFilePath);

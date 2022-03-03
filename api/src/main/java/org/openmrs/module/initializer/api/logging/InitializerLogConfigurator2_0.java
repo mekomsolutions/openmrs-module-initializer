@@ -49,8 +49,8 @@ public class InitializerLogConfigurator2_0 implements InitializerLogConfigurator
 			// so this class only has a runtime dependency on the LevelMatchFilter
 			Filter levelMatchFilter = (Filter) Class.forName("org.apache.log4j.varia.LevelMatchFilter").getConstructor()
 			        .newInstance();
-			Method levelMatchSetter = levelMatchFilter.getClass().getMethod("setLevelToMatch", Level.class);
-			levelMatchSetter.invoke(levelMatchFilter, level);
+			Method levelMatchSetter = levelMatchFilter.getClass().getMethod("setLevelToMatch", String.class);
+			levelMatchSetter.invoke(levelMatchFilter, level.toString());
 			
 			appender.addFilter(levelMatchFilter);
 		}
