@@ -1,0 +1,3 @@
+Uuid,Void/Retire,Identifier type,Name,Description,Pool Identifier Source,Pool refill batch size,Pool minimum size,Pool refill with task,Pool sequential allocation,_version:1,_order:3000
+30799e8f-59cf-11ec-8885-0242ac110002,,PATIENTIDENTIFIERTYPE_1_OPENMRS_ID,New pool name,New pool description,1af1422c-8c65-438d-9770-cbb723821bc8,20,60,true,true,,
+ef35fb58-6618-411a-a331-bff960a29d40,,PATIENTIDENTIFIERTYPE_1_OPENMRS_ID,Edited pool name,Edited pool description,d2a10e86-59ce-11ec-8885-0242ac110002,10,40,false,false,,

@@ -63,4 +63,11 @@ public class InitializerConstants {
 	public static final String DEFAULT_RETIRE_REASON = "Retired by module " + InitializerConstants.MODULE_NAME;
 	
 	public static final String DEFAULT_VOID_REASON = "Voided by module " + InitializerConstants.MODULE_NAME;
+	
+	/*
+	 * UUID Namespacing
+	 *
+	 * Used to ensure that type 3 UUIDs are properly namespaced for a domain
+	 */
+	public static final String CONCEPT_NAME_NAMESPACE_UUID = "103e0f29-b7a3-4382-bfdc-449068e9d436";
 }

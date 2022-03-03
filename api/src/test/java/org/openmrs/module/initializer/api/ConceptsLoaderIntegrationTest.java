@@ -38,6 +38,8 @@ import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.openmrs.module.initializer.InitializerConstants.CONCEPT_NAME_NAMESPACE_UUID;
 
 public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -64,7 +66,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	@Test
 	public void load_shouldLoadConceptsAccordingToCsvFiles() {
 		
-		// Verif setup
+		// Verify setup
 		Concept c = null;
 		ConceptName name = null;
 		{
@@ -78,14 +80,36 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertNull(cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3").getVersion());
 			assertEquals("1.0", cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0").getVersion());
 			assertEquals("1.7", cs.getConceptByName("CONCEPT_FETCH_BY_FSN").getVersion());
+			
+			// Verify initial state for replaced names
+			c = cs.getConceptByUuid("1ddb8255-00d5-45e8-8830-f9567919a382");
+			Assert.assertNotNull(c);
+			assertEquals(3, c.getNames(localeEn).size());
+			
+			ConceptName cn = c.getName(localeEn);
+			assertEquals("Replaced Fully Specified Name", cn.getName());
+			assertEquals("8d09f38c-6ecb-4e3d-8a25-5cd204c43390", cn.getUuid());
+			
+			cn = c.getFullySpecifiedName(localeEn);
+			assertEquals("Replaced Fully Specified Name", cn.getName());
+			assertEquals("8d09f38c-6ecb-4e3d-8a25-5cd204c43390", cn.getUuid());
+			
+			cn = c.getNames(localeEn).stream().filter(cname -> cname.getConceptNameType() == null).findFirst()
+			        .orElseThrow(() -> new AssertionError("Expected at least one synonym but found none"));
+			assertEquals("Replaced Synonym", cn.getName());
+			assertEquals("05dfba65-0590-4886-ac50-8c3f69a8ea2e", cn.getUuid());
+			
+			cn = c.getShortNameInLocale(localeEn);
+			assertEquals("Rpl SN", cn.getName());
+			assertEquals("ff688089-4385-4d6c-9435-523506eda50e", cn.getUuid());
 		}
 		
 		// Replay
 		loader.load();
 		
-		// Verif 'base' CSV loading
+		// Verify 'base' CSV loading
 		{
-			// Verif by name
+			// Verify by name
 			Context.setLocale(localeEn);
 			c = cs.getConceptByName("Cambodia_Nationality");
 			Assert.assertNotNull(c);
@@ -93,7 +117,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			assertEquals("Question", c.getConceptClass().getName());
 			assertEquals("Coded", c.getDatatype().getName());
 			
-			// Verif by UUID
+			// Verify by UUID
 			Context.setLocale(localeEn);
 			c = cs.getConceptByUuid("db2f4fc4-3171-11e7-93ae-92361f002671");
 			Assert.assertNotNull(c);
@@ -102,7 +126,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			assertEquals("Misc", c.getConceptClass().getName());
 			assertEquals("Text", c.getDatatype().getName());
 			
-			// Verif in another locale
+			// Verify in another locale
 			Context.setLocale(localeKm);
 			c = cs.getConceptByName("កម្ពុជា_ចាម");
 			Assert.assertNotNull(c);
@@ -110,13 +134,13 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertEquals("Misc", c.getConceptClass().getName());
 			Assert.assertEquals("Text", c.getDatatype().getName());
 			name = c.getFullySpecifiedName(localeKm);
-			Assert.assertEquals(name.getUuid(),
-			    Utils.generateUuidFromObjects(c.getUuid(), name.getName(), ConceptNameType.FULLY_SPECIFIED, localeKm));
+			Assert.assertEquals(name.getUuid(), Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(),
+			    name.getName(), ConceptNameType.FULLY_SPECIFIED, localeKm));
 			name = c.getShortNameInLocale(localeKm);
-			Assert.assertEquals(name.getUuid(),
-			    Utils.generateUuidFromObjects(c.getUuid(), name.getName(), ConceptNameType.SHORT, localeKm));
+			Assert.assertEquals(name.getUuid(), Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(),
+			    name.getName(), ConceptNameType.SHORT, localeKm));
 			
-			// Verif in another locale
+			// Verify in another locale
 			Context.setLocale(localeKm);
 			c = cs.getConceptByName("កម្ពុជា_កួយ");
 			Assert.assertNotNull(c);
@@ -126,7 +150,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			assertEquals("Misc", c.getConceptClass().getName());
 			assertEquals("Text", c.getDatatype().getName());
 			
-			// Verif just one name is enough
+			// Verify just one name is enough
 			Context.setLocale(localeEn);
 			c = cs.getConceptByName("Cambodia_Kavet");
 			Assert.assertNotNull(c);
@@ -136,8 +160,44 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertEquals("Misc", c.getConceptClass().getName());
 			Assert.assertEquals("Text", c.getDatatype().getName());
 			name = c.getFullySpecifiedName(localeEn);
-			Assert.assertEquals(name.getUuid(),
-			    Utils.generateUuidFromObjects(c.getUuid(), name.getName(), ConceptNameType.FULLY_SPECIFIED, localeEn));
+			Assert.assertEquals(name.getUuid(), Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(),
+			    name.getName(), ConceptNameType.FULLY_SPECIFIED, localeEn));
+			
+			// Replaced names with updated UUIDs
+			{
+				c = cs.getConceptByUuid("1ddb8255-00d5-45e8-8830-f9567919a382");
+				Assert.assertNotNull(c);
+				assertEquals(3, c.getNames(localeEn).size());
+				
+				ConceptName cn = c.getName(localeEn);
+				assertEquals("Replaced Fully Specified Name", cn.getName());
+				assertNotEquals("8d09f38c-6ecb-4e3d-8a25-5cd204c43390", cn.getUuid());
+				assertEquals(Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(), cn.getName(),
+				    cn.getConceptNameType(), localeEn), cn.getUuid());
+				
+				cn = c.getFullySpecifiedName(localeEn);
+				assertEquals("Replaced Fully Specified Name", cn.getName());
+				assertNotEquals("8d09f38c-6ecb-4e3d-8a25-5cd204c43390", cn.getUuid());
+				assertEquals(Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(), cn.getName(),
+				    cn.getConceptNameType(), localeEn), cn.getUuid());
+				Assert.assertTrue(cs.getConceptNameByUuid("8d09f38c-6ecb-4e3d-8a25-5cd204c43390").getVoided());
+				
+				cn = c.getNames(localeEn).stream().filter(cname -> cname.getConceptNameType() == null).findFirst()
+				        .orElseThrow(() -> new AssertionError("Expected at least one synonym but found none"));
+				assertEquals("Replaced Synonym", cn.getName());
+				assertNotEquals("05dfba65-0590-4886-ac50-8c3f69a8ea2e", cn.getUuid());
+				assertEquals(Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(), cn.getName(),
+				    cn.getConceptNameType(), localeEn), cn.getUuid());
+				Assert.assertTrue(cs.getConceptNameByUuid("05dfba65-0590-4886-ac50-8c3f69a8ea2e").getVoided());
+				
+				cn = c.getShortNameInLocale(localeEn);
+				assertEquals("Rpl SN", cn.getName());
+				assertNotEquals("ff688089-4385-4d6c-9435-523506eda50e", cn.getUuid());
+				assertEquals(Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(), cn.getName(),
+				    cn.getConceptNameType(), localeEn), cn.getUuid());
+				Assert.assertTrue(cs.getConceptNameByUuid("ff688089-4385-4d6c-9435-523506eda50e").getVoided());
+				
+			}
 			
 			// Failed ones
 			Context.setLocale(localeEn);
@@ -165,8 +225,8 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			c = cs.getConceptByUuid("276c5861-cd46-429f-9665-e067ddeca8e3");
 			Assert.assertEquals("New short name", c.getShortNameInLocale(localeEn).getName());
 			name = c.getShortNameInLocale(localeEn);
-			Assert.assertEquals(name.getUuid(),
-			    Utils.generateUuidFromObjects(c.getUuid(), name.getName(), ConceptNameType.SHORT, localeEn));
+			Assert.assertEquals(name.getUuid(), Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(),
+			    name.getName(), ConceptNameType.SHORT, localeEn));
 			
 			// Concept attributes
 			c = cs.getConceptByUuid("4d3cfdcf-1f3f-4b41-9b31-02dfd951c582");
@@ -190,12 +250,12 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		
 		Context.setLocale(localeEn);
 		
-		// Verif 'nested' CSV loading
+		// Verify 'nested' CSV loading
 		{
 			Set<String> nestedUuids = new HashSet<String>(Arrays.asList(
 			    new String[] { "8bc5043c-3221-11e7-93ae-92361f002671", "8bc506bc-3221-11e7-93ae-92361f002671" }));
 			
-			// Verif question
+			// Verify question
 			c = cs.getConceptByUuid("8bc50946-3221-11e7-93ae-92361f002671");
 			Assert.assertNotNull(c);
 			Assert.assertFalse(c.isSet());
@@ -205,7 +265,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 				Assert.assertTrue(nestedUuids.contains(nested.getAnswerConcept().getUuid()));
 			}
 			
-			// Verif set
+			// Verify set
 			c = cs.getConceptByUuid("c84c3f88-3221-11e7-93ae-92361f002671");
 			Assert.assertNotNull(c);
 			Assert.assertTrue(c.isSet());
@@ -215,19 +275,19 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 				Assert.assertTrue(nestedUuids.contains(nested.getUuid()));
 			}
 			
-			// Verif not saved with missing answer(s) or member(s)
+			// Verify not saved with missing answer(s) or member(s)
 			Assert.assertNull(cs.getConceptByName("Unexisting concept answer"));
 			Assert.assertNull(cs.getConceptByName("Unexisting set member"));
 			
-			// Verif modified
+			// Verify modified
 			c = cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0");
 			Assert.assertTrue(CollectionUtils.isEmpty(c.getSetMembers()));
 			Assert.assertFalse(c.isSet());
 		}
 		
-		// Verif. 'mappings' CSV loading
+		// Verify. 'mappings' CSV loading
 		{
-			// Verif mappings are added
+			// Verify mappings are added
 			c = cs.getConceptByUuid("2c4da504-33d4-11e7-a919-92ebcb67fe33");
 			Assert.assertNotNull(c);
 			assertEquals(2, c.getConceptMappings().size());
@@ -240,17 +300,17 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertTrue(names.contains("Cambodia:1234"));
 			Assert.assertTrue(names.contains("CIEL:159392"));
 			
-			// Verif not saved with missing mapping(s)
+			// Verify not saved with missing mapping(s)
 			Assert.assertNull(cs.getConceptByName("Unexisting mapping"));
 			
-			// Verif the mapping used with a now retired concept is the mapping of a new
+			// Verify the mapping used with a now retired concept is the mapping of a new
 			// concept
 			c = cs.getConceptByMapping("foo12bar", "Cambodia");
 			Assert.assertNotNull(c);
 			assertEquals("NEW_CONCEPT_REUSING_MAPPING", c.getFullySpecifiedName(localeEn).getName());
 		}
 		
-		// Verif. 'numerics' CSV loading
+		// Verify. 'numerics' CSV loading
 		{
 			ConceptNumeric cn = null;
 			
@@ -279,7 +339,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertNull(cs.getConceptByName("CN_3_ERROR"));
 		}
 		
-		// Verif. 'concepts complex' CSV loading
+		// Verify. 'concepts complex' CSV loading
 		{
 			ConceptComplex cc = null;
 			
@@ -302,10 +362,10 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertNull(cs.getConceptByName("CN_3_ERROR"));
 		}
 		
-		// Verif. fetching and editing by FSN
+		// Verify. fetching and editing by FSN
 		Context.setLocale(localeEn);
 		{
-			// Verif mappings are added
+			// Verify mappings are added
 			c = cs.getConceptByName("CONCEPT_FETCH_BY_FSN");
 			Assert.assertNotNull(c);
 			assertEquals("New short name", c.getShortNameInLocale(localeEn).toString());
@@ -319,15 +379,14 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertNotNull(c);
 			Assert.assertEquals("Testing Short Name", shortName.toString());
 			Assert.assertEquals("Testing Fully Specified Name", fullySpecifiedName.toString());
-			Assert.assertEquals(
-			    Utils.generateUuidFromObjects(c.getUuid(), "Testing Short Name", ConceptNameType.SHORT, localeEn),
-			    shortName.getUuid());
-			Assert.assertEquals(Utils.generateUuidFromObjects(c.getUuid(), "Testing Fully Specified Name",
-			    ConceptNameType.FULLY_SPECIFIED, localeEn), fullySpecifiedName.getUuid());
+			Assert.assertEquals(Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(), "Testing Short Name",
+			    ConceptNameType.SHORT, localeEn), shortName.getUuid());
+			Assert.assertEquals(Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, c.getUuid(),
+			    "Testing Fully Specified Name", ConceptNameType.FULLY_SPECIFIED, localeEn), fullySpecifiedName.getUuid());
 		}
 		Context.setLocale(localeKm);
 		{
-			// Verif mappings are added
+			// Verify mappings are added
 			c = cs.getConceptByName("គំនិត_ដោយ_FSN");
 			Assert.assertNotNull(c);
 			assertEquals("ឈ្មោះខ្លីថ្មី", c.getShortNameInLocale(localeKm).toString());
@@ -392,10 +451,12 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		green = cs.getConceptByUuid("61214827-303f-11ec-8d2b-0242ac110002");
 		Assert.assertEquals(4, green.getNames(true).size());
 		assertName(green, "Green", localeEn, true, fsn);
-		Assert.assertEquals(Utils.generateUuidFromObjects(green.getUuid(), "Green", fsn, localeEn),
+		Assert.assertEquals(
+		    Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, green.getUuid(), "Green", fsn, localeEn),
 		    green.getName(localeEn).getUuid());
 		assertName(green, "Verde", localeEs, true, fsn);
-		Assert.assertEquals(Utils.generateUuidFromObjects(green.getUuid(), "Verde", fsn, localeEs),
+		Assert.assertEquals(
+		    Utils.generateUuidFromObjects(CONCEPT_NAME_NAMESPACE_UUID, green.getUuid(), "Verde", fsn, localeEs),
 		    green.getName(localeEs).getUuid());
 		
 		// Yellow is an existing Concept with 2 names, with Yellow as the FSN, and Lemon as a synonym
