@@ -32,6 +32,7 @@ configuration/
   ├── htmlforms/
   ├── idgen/
   ├── jsonkeyvalues/
+  ├── liquibase/
   ├── locations/
   ├── locationtagmaps/
   ├── locationtags/
@@ -70,6 +71,7 @@ We suggest to go through the following before looking at the specifics for each 
 * [Conventions for CSV files](readme/csv_conventions.md)
 
 This is the list of currently supported domains in their loading order:
+1. [Liquibase Changelog (XML file)](readme/liquibase.md)
 1. [Localization Message Properties (.properties files)](readme/messageproperties.md)
 1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
 1. [Metadata Sharing Packages (ZIP files)](readme/mds.md)
@@ -150,6 +152,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.3.0
+* Added support for a liquibase domain to support loading custom changesets.
 * 'ocl' domain to support loading concepts, concept sets, and answers from OCL export files using the openmrs-module-openconceptlab
 * (_Enhancement_) Concept name UUIDs are seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.
 * Backward-compatible overhaul of the concepts domain that provides full flexibility for managing concept names.
