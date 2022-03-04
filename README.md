@@ -131,6 +131,7 @@ mvn clean package
 * Data Filter 1.0.0 (*compatible*)
 * Bahmni I.e Apps 1.0.0 (*compatible*)
 * Bahmni Core 0.93 (*compatible*)
+* Open Concept Lab 1.3.0 (*compatible*)
 
 ### How to test out your OpenMRS configs?
 See the [Initializer Validator README page](readme/validator.md).
