@@ -9,6 +9,10 @@
  */
 package org.openmrs.module.initializer.api;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,8 +31,23 @@ public class LiquibaseLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		System.setProperty("useInMemoryDatabase", "true");
 	}
 	
+	@Before
+	public void ensureChangeLogLock() {
+		try {
+			PreparedStatement statement = getConnection().prepareStatement(
+					"insert into LIQUIBASECHANGELOGLOCK (ID, LOCKED, LOCKEDBY, LOCKGRANTED) values (?, ?, ?, ?)");
+			statement.setInt(1, 1);
+			statement.setBoolean(2, false);
+			statement.setNull(3, Types.VARCHAR);
+			statement.setNull(4, Types.TIMESTAMP);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			log.info("Exception caught while trying to create CHANGELOGLOCK");
+		}
+	}
+	
 	@Test
-	public void load_shouldLoadStructuredLiquibaseChangesets() throws Exception {
+	public void load_shouldLoadStructuredLiquibaseChangesets() {
 		// Replay
 		loader.load();
 		
