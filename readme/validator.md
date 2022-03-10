@@ -91,6 +91,6 @@ This replaces the openssl vesion currently installed with version 1.0.2t. To und
 mysql: /tmp/MariaDB4j/base/bin/mysql:
   error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
 ```
-This will only clearly come out when runnnig the Initializer Validator in `--verbose` mode.
+This will only clearly come out when runnig the Initializer Validator in `--verbose` mode.
 
 Try this suggested solution from Stack Overflow: '[error while loading shared libraries: libncurses.so.5:](https://stackoverflow.com/a/17801675/321797)'

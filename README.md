@@ -139,6 +139,9 @@ See the [Initializer Validator README page](readme/validator.md).
 ### Finer control of domains loading at app runtime
 See the [documentation on Initializer's runtime properties](readme/rtprops.md).
 
+### Control of logging setup
+See the [documentation on Initializer's runtime properties](readme/rtprops.md).
+
 ### Get in touch
 * On [OpenMRS Talk](https://talk.openmrs.org/)
   * Sign up, start a conversation and ping us with the mention [`@MekomSolutions`](https://talk.openmrs.org/g/MekomSolutions) in your post. 
@@ -153,6 +156,8 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.3.0
+* Added configuration options for logging
+* Add support for OpenMRS 2.4.0+
 * Added support for a liquibase domain to support loading custom changesets.
 * 'ocl' domain to support loading concepts, concept sets, and answers from OCL export files using the openmrs-module-openconceptlab
 * (_Enhancement_) Concept name UUIDs are seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.

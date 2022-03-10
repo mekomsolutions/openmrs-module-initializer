@@ -1,10 +1,8 @@
 package org.openmrs.module.initializer.api.utils;
 
-import static org.openmrs.module.initializer.InitializerConstants.MODULE_NAME;
 import static org.openmrs.module.initializer.api.BaseLineProcessor.LIST_SEPARATOR;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,10 +11,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Appender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Layout;
-import org.apache.log4j.PatternLayout;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -45,45 +39,18 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.AppointmentServiceType;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import com.github.freva.asciitable.AsciiTable;
 
 public class Utils {
-	
-	private static Logger log = LoggerFactory.getLogger(Utils.class);
-	
-	/**
-	 * Returns a ready-to-use appender to log to a custom file.
-	 * 
-	 * @param logFilePath The path to the log file.
-	 * @return The appender to be added to any logger.
-	 */
-	public static Appender getFileAppender(Path logFilePath) {
-		
-		Appender defaultAppender = org.apache.log4j.Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
-		Layout layout = defaultAppender == null ? new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n")
-		        : defaultAppender.getLayout();
-		
-		Appender appender = defaultAppender;
-		try {
-			appender = new FileAppender(layout, logFilePath.toString());
-			appender.setName(logFilePath.getFileName().toString());
-		}
-		catch (IOException e) {
-			log.error("The custom log file appender could not be setup for " + MODULE_NAME + ".", e);
-		}
-		
-		return appender;
-	}
 	
 	private static String[] setLineSeparators(String[] strings) {
 		List<String> res = new ArrayList<>();
@@ -552,6 +519,28 @@ public class Utils {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * @param property the system property or runtime property to lookup
+	 * @return the system property value if a system property with the passed property name exists, the
+	 *         runtime property value otherwise
+	 */
+	public static String getPropertyValue(String property) {
+		return getPropertyValue(property, null);
+	}
+	
+	/**
+	 * @param property the system property or runtime property to lookup
+	 * @param defaultValue the default value to return if the property is not set
+	 * @return the system property value if a system property with the passed property name exists, the
+	 *         runtime property value otherwise
+	 */
+	public static String getPropertyValue(String property, String defaultValue) {
+		if (System.getProperties().containsKey(property)) {
+			return System.getProperty(property);
+		}
+		return Context.getRuntimeProperties().getProperty(property, defaultValue);
 	}
 	
 	/**
