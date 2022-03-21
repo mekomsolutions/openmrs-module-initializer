@@ -171,6 +171,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Enhancement to custom message source to support improved handling of fallback locales and overrides between core, modules, and initializer messageproperties
 * Added support for remote sources and identifier pools to the idgen domain
 * Enhancement to ensure predictable loading order of files within a domain if no explicit order is specified, based on alphabetical ordering of filenames
+* Enhancement to the messageproperties domain to enable specifying the order in which two files in the same locale should be loaded
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
