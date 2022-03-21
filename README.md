@@ -32,6 +32,7 @@ configuration/
   ├── htmlforms/
   ├── idgen/
   ├── jsonkeyvalues/
+  ├── liquibase/
   ├── locations/
   ├── locationtagmaps/
   ├── locationtags/
@@ -70,6 +71,7 @@ We suggest to go through the following before looking at the specifics for each 
 * [Conventions for CSV files](readme/csv_conventions.md)
 
 This is the list of currently supported domains in their loading order:
+1. [Liquibase Changelog (XML file)](readme/liquibase.md)
 1. [Localization Message Properties (.properties files)](readme/messageproperties.md)
 1. [Generic JSON key-values (JSON files)](readme/jsonkeyvalues.md)
 1. [Metadata Sharing Packages (ZIP files)](readme/mds.md)
@@ -129,11 +131,15 @@ mvn clean package
 * Data Filter 1.0.0 (*compatible*)
 * Bahmni I.e Apps 1.0.0 (*compatible*)
 * Bahmni Core 0.93 (*compatible*)
+* Open Concept Lab 1.3.0 (*compatible*)
 
 ### How to test out your OpenMRS configs?
 See the [Initializer Validator README page](readme/validator.md).
 
 ### Finer control of domains loading at app runtime
+See the [documentation on Initializer's runtime properties](readme/rtprops.md).
+
+### Control of logging setup
 See the [documentation on Initializer's runtime properties](readme/rtprops.md).
 
 ### Get in touch
@@ -150,6 +156,9 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.3.0
+* Added configuration options for logging
+* Add support for OpenMRS 2.4.0+
+* Added support for a liquibase domain to support loading custom changesets.
 * 'ocl' domain to support loading concepts, concept sets, and answers from OCL export files using the openmrs-module-openconceptlab
 * (_Enhancement_) Concept name UUIDs are seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.
 * Backward-compatible overhaul of the concepts domain that provides full flexibility for managing concept names.
@@ -160,6 +169,8 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Added support enabling any Initializer runtime property value to also be specified from a system property
 * Bulk creation and edition of AMPATH forms provided as JSON schema definitions in **configuration/ampathforms**.
 * Enhancement to custom message source to support improved handling of fallback locales and overrides between core, modules, and initializer messageproperties
+* Added support for remote sources and identifier pools to the idgen domain
+* Enhancement to ensure predictable loading order of files within a domain if no explicit order is specified, based on alphabetical ordering of filenames
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.

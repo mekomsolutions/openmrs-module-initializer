@@ -22,7 +22,15 @@ public abstract class IdentifierSourceLineProcessor extends BaseLineProcessor<Id
 	/*
 	 * headers specific to IdentifierPool
 	 */
-	// TODO Add IdentifierPool-specific headers
+	protected static String HEADER_POOL_IDENTIFIER_SOURCE = "pool identifier source";
+	
+	protected static String HEADER_POOL_BATCH_SIZE = "pool refill batch size";
+	
+	protected static String HEADER_POOL_MINIMUM_SIZE = "pool minimum size";
+	
+	protected static String HEADER_POOL_REFILL_WITH_TASK = "pool refill with task";
+	
+	protected static String HEADER_POOL_SEQUENTIAL_ALLOCATION = "pool sequential allocation";
 	
 	/*
 	 * headers specific to RemoteIdentifierSource
@@ -77,7 +85,9 @@ public abstract class IdentifierSourceLineProcessor extends BaseLineProcessor<Id
 	 */
 	public static IdentifierSourceType getIdentifierSourceType(CsvLine line) throws IllegalArgumentException {
 		
-		if (false) { // TODO implement the IdentifierPool case
+		if (line.get(HEADER_POOL_IDENTIFIER_SOURCE) != null || line.get(HEADER_POOL_BATCH_SIZE) != null
+		        || line.get(HEADER_POOL_MINIMUM_SIZE) != null || line.get(HEADER_POOL_REFILL_WITH_TASK) != null
+		        || line.get(HEADER_POOL_SEQUENTIAL_ALLOCATION) != null) {
 			return IdentifierSourceType.POOL;
 		}
 		if (line.get(HEADER_PREFIX) != null || line.get(HEADER_SUFFIX) != null || line.get(HEADER_FIRST_ID_BASE) != null
@@ -89,8 +99,7 @@ public abstract class IdentifierSourceLineProcessor extends BaseLineProcessor<Id
 			return IdentifierSourceType.REMOTE;
 		}
 		
-		throw new IllegalArgumentException(
-		        "No identifier source type could be guessed from the CSV line: '" + line.toString() + "'.");
+		throw new IllegalArgumentException("No identifier source type could be guessed from the CSV line: '" + line + "'.");
 	}
 	
 	/**

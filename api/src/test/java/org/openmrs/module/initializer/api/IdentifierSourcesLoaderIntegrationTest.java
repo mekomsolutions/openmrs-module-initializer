@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.initializer.api;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +22,10 @@ import org.openmrs.module.idgen.SequentialIdentifierGenerator;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
+import org.openmrs.util.OpenmrsConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Properties;
 
 public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -31,79 +35,167 @@ public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleCont
 	@Autowired
 	private IdentifierSourcesLoader loader;
 	
+	public static final String EXISTING_SEQ = "c1d8a345-3f10-11e4-adec-0800271c1b75";
+	
+	public static final String EXISTING_REMOTE = "c1d90956-3f10-11e4-adec-0800271c1b75";
+	
+	public static final String EXISTING_POOL = "ef35fb58-6618-411a-a331-bff960a29d40";
+	
+	public static final String NEW_SEQ = "1af1422c-8c65-438d-9770-cbb723821bc8";
+	
+	public static final String NEW_REMOTE = "d2a10e86-59ce-11ec-8885-0242ac110002";
+	
+	public static final String NEW_POOL = "30799e8f-59cf-11ec-8885-0242ac110002";
+	
 	@Before
 	public void setup() {
 		
-		PatientIdentifierType type = Context.getPatientService().getPatientIdentifierType(1);
-		type = new PatientIdentifierType();
+		PatientIdentifierType type = new PatientIdentifierType();
 		type.setName("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID");
 		Context.getPatientService().savePatientIdentifierType(type);
 		
+		SequentialIdentifierGenerator seqSrc = new SequentialIdentifierGenerator();
 		{
-			IdentifierPool src = new IdentifierPool();
-			src.setName("Test identifier pool source");
-			src.setUuid("c1d8a345-3f10-11e4-adec-0800271c1b75");
-			src.setRetired(false);
-			src.setIdentifierType(type);
-			idgenService.saveIdentifierSource(src);
+			seqSrc.setName("Test sequential identifier generator");
+			seqSrc.setUuid(EXISTING_SEQ);
+			seqSrc.setIdentifierType(type);
+			seqSrc.setBaseCharacterSet("ACDEFGHJKLMNPRTUVWXY1234567890");
+			seqSrc.setMaxLength(6);
+			seqSrc.setMinLength(6);
+			seqSrc.setPrefix("Y");
+			seqSrc.setFirstIdentifierBase("1000");
+			idgenService.saveIdentifierSource(seqSrc);
 		}
 		
 		{
 			RemoteIdentifierSource src = new RemoteIdentifierSource();
 			src.setName("Test remote identifier source");
-			src.setUuid("c1d90956-3f10-11e4-adec-0800271c1b75");
-			src.setRetired(false);
+			src.setUuid(EXISTING_REMOTE);
 			src.setIdentifierType(type);
 			src.setUrl("http://example.com");
+			src.setUser("testUser");
+			src.setPassword("Testing123");
 			idgenService.saveIdentifierSource(src);
 		}
 		
 		{
 			IdentifierPool src = new IdentifierPool();
-			src.setName("Test identifier pool source 2");
-			src.setUuid("ef35fb58-6618-411a-a331-bff960a29d40");
-			src.setRetired(false);
+			src.setName("Test identifier pool");
+			src.setUuid(EXISTING_POOL);
 			src.setIdentifierType(type);
+			src.setSource(seqSrc);
+			src.setBatchSize(500);
+			src.setMinPoolSize(100);
+			src.setRefillWithScheduledTask(true);
+			src.setSequential(true);
 			idgenService.saveIdentifierSource(src);
 		}
 	}
 	
 	@Test
-	public void load_shouldModifyAndCreateIdentifierSources() {
+	public void load_shouldModifyExistingIdentifierSources() throws Exception {
 		
 		// Replay
-		loader.load();
+		loader.loadUnsafe(null, true);
 		
-		// Verif sources marked for retirement
-		Assert.assertTrue(idgenService.getIdentifierSourceByUuid("c1d8a345-3f10-11e4-adec-0800271c1b75").isRetired());
-		Assert.assertTrue(idgenService.getIdentifierSourceByUuid("c1d90956-3f10-11e4-adec-0800271c1b75").isRetired());
-		
-		// Verif the source marked for creation
+		// Verify that existing sources are appropriately edited
 		{
-			IdentifierSource source = idgenService.getIdentifierSourceByUuid("1af1422c-8c65-438d-9770-cbb723821bc8");
-			Assert.assertNotNull(source);
-			Assert.assertTrue(source instanceof SequentialIdentifierGenerator);
-			SequentialIdentifierGenerator src = (SequentialIdentifierGenerator) source;
-			
-			Assert.assertEquals("Test sequential source #1", src.getName());
-			Assert.assertEquals("Test sequential source description #1", src.getDescription());
-			Assert.assertEquals("001000", src.getFirstIdentifierBase());
-			Assert.assertTrue(7 == src.getMinLength());
-			Assert.assertTrue(7 == src.getMaxLength());
-			Assert.assertEquals("0123456789", src.getBaseCharacterSet());
-			Assert.assertFalse(src.isRetired());
+			IdentifierSource source = idgenService.getIdentifierSourceByUuid(EXISTING_SEQ);
+			SequentialIdentifierGenerator generator = (SequentialIdentifierGenerator) source;
+			Assert.assertEquals("Edited sequential name", generator.getName());
+			Assert.assertEquals("Edited sequential description", generator.getDescription());
+			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", generator.getIdentifierType().getName());
+			Assert.assertEquals("ACDEFGHJKLMNPRTUVWXY1234567890", generator.getBaseCharacterSet());
+			Assert.assertEquals(6, generator.getMinLength().intValue());
+			Assert.assertEquals(6, generator.getMaxLength().intValue());
+			Assert.assertEquals("Y", generator.getPrefix());
+			Assert.assertEquals("", generator.getSuffix());
+			Assert.assertEquals("1000", generator.getFirstIdentifierBase());
+			Assert.assertFalse(BooleanUtils.isTrue(generator.getRetired()));
 		}
-		
-		// Verif the source marked for edition
 		{
-			IdentifierSource source = idgenService.getIdentifierSourceByUuid("ef35fb58-6618-411a-a331-bff960a29d40");
-			Assert.assertNotNull(source);
-			Assert.assertTrue(source instanceof IdentifierPool);
-			IdentifierPool src = (IdentifierPool) source;
-			
-			Assert.assertEquals("RENAMED Identifier Pool", src.getName());
-			Assert.assertEquals("RENAMED Identifier Pool description", src.getDescription());
-			Assert.assertFalse(src.isRetired());
+			IdentifierSource source = idgenService.getIdentifierSourceByUuid(EXISTING_REMOTE);
+			RemoteIdentifierSource remoteSource = (RemoteIdentifierSource) source;
+			Assert.assertEquals("Edited remote name", remoteSource.getName());
+			Assert.assertEquals("Edited remote description", remoteSource.getDescription());
+			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", remoteSource.getIdentifierType().getName());
+			Assert.assertEquals("http://example.com/edit", remoteSource.getUrl());
+			Assert.assertEquals("editUser", remoteSource.getUser());
+			Assert.assertEquals("editPass", remoteSource.getPassword());
+			Assert.assertFalse(BooleanUtils.isTrue(remoteSource.getRetired()));
 		}
+		{
+			IdentifierSource source = idgenService.getIdentifierSourceByUuid(EXISTING_POOL);
+			IdentifierPool pool = (IdentifierPool) source;
+			Assert.assertEquals("Edited pool name", pool.getName());
+			Assert.assertEquals("Edited pool description", pool.getDescription());
+			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", pool.getIdentifierType().getName());
+			Assert.assertEquals(10, pool.getBatchSize().intValue());
+			Assert.assertEquals(40, pool.getMinPoolSize().intValue());
+			Assert.assertFalse(pool.getRefillWithScheduledTask());
+			Assert.assertFalse(pool.getSequential());
+			Assert.assertFalse(BooleanUtils.isTrue(pool.getRetired()));
+		}
+	}
+	
+	@Test
+	public void load_shouldCreateNewIdentifierSources() throws Exception {
+		
+		// Replay
+		loader.loadUnsafe(null, true);
+		
+		// Verify that existing sources are appropriately edited
+		{
+			IdentifierSource source = idgenService.getIdentifierSourceByUuid(NEW_SEQ);
+			SequentialIdentifierGenerator generator = (SequentialIdentifierGenerator) source;
+			Assert.assertEquals("New sequential name", generator.getName());
+			Assert.assertEquals("New sequential description", generator.getDescription());
+			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", generator.getIdentifierType().getName());
+			Assert.assertEquals("0123456789", generator.getBaseCharacterSet());
+			Assert.assertEquals(5, generator.getMinLength().intValue());
+			Assert.assertEquals(7, generator.getMaxLength().intValue());
+			Assert.assertEquals("A", generator.getPrefix());
+			Assert.assertEquals("Z", generator.getSuffix());
+			Assert.assertEquals("001", generator.getFirstIdentifierBase());
+			Assert.assertFalse(BooleanUtils.isTrue(generator.getRetired()));
+		}
+		{
+			IdentifierSource source = idgenService.getIdentifierSourceByUuid(NEW_REMOTE);
+			RemoteIdentifierSource remoteSource = (RemoteIdentifierSource) source;
+			Assert.assertEquals("New remote name", remoteSource.getName());
+			Assert.assertEquals("New remote description", remoteSource.getDescription());
+			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", remoteSource.getIdentifierType().getName());
+			Assert.assertEquals("http://localhost", remoteSource.getUrl());
+			Assert.assertEquals("value-from-runtime-property", remoteSource.getUser());
+			Assert.assertEquals("value-from-system-property", remoteSource.getPassword());
+			Assert.assertFalse(BooleanUtils.isTrue(remoteSource.getRetired()));
+		}
+		{
+			IdentifierSource source = idgenService.getIdentifierSourceByUuid(NEW_POOL);
+			IdentifierPool pool = (IdentifierPool) source;
+			Assert.assertEquals("New pool name", pool.getName());
+			Assert.assertEquals("New pool description", pool.getDescription());
+			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", pool.getIdentifierType().getName());
+			Assert.assertEquals(NEW_SEQ, pool.getSource().getUuid());
+			Assert.assertEquals(20, pool.getBatchSize().intValue());
+			Assert.assertEquals(60, pool.getMinPoolSize().intValue());
+			Assert.assertTrue(pool.getRefillWithScheduledTask());
+			Assert.assertTrue(pool.getSequential());
+			Assert.assertFalse(BooleanUtils.isTrue(pool.getRetired()));
+		}
+	}
+	
+	@Before
+	@Override
+	public void setupAppDataDir() {
+		
+		String path = getAppDataDirPath();
+		
+		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
+		System.setProperty("idgen_remote_password", "value-from-system-property");
+		Properties prop = new Properties();
+		prop.setProperty("idgen_remote_user", "value-from-runtime-property");
+		prop.setProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY, path);
+		Context.setRuntimeProperties(prop);
 	}
 }

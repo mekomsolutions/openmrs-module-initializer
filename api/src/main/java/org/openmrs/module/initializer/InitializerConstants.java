@@ -41,6 +41,17 @@ public class InitializerConstants {
 	public static final String PROPS_STARTUP_LOAD_DISABLED = "disabled";
 	
 	/*
+	 * Logging properties
+	 */
+	private static final String PROPS_LOGGING_PREFIX = MODULE_ARTIFACT_ID + ".logging.";
+	
+	public static final String PROPS_LOGGING_ENABLED = PROPS_LOGGING_PREFIX + "enabled";
+	
+	public static final String PROPS_LOGGING_LOCATION = PROPS_LOGGING_PREFIX + "location";
+	
+	public static final String PROPS_LOGGING_LEVEL = PROPS_LOGGING_PREFIX + "level";
+	
+	/*
 	 * 
 	 */
 	public static final String DIR_NAME_CONFIG = "configuration";
