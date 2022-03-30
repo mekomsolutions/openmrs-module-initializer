@@ -1,6 +1,7 @@
 ## About
 The JSON file inside .zip file loads all the concepts exported from OCL.
-<br/>The OCL package is a convenient way to load all your concepts into your EMR's dictionary. Advantages: 
+
+The OCL package is a convenient way to load all your concepts into your EMR's dictionary. Advantages: 
 * Offline: Helpful for sites without an active internet connection at the time of set-up
 * Support More Sites: Having your collection(s) without having to create the concepts manually, .
 * Multiple Collections: There is no limit to the number of collections you can import using the /ocl config file (Just be mindful of potential clashes if the same concepts exist in multiple collections - e.g. a situation where a Question concept comes from 2 collections, but each have different Answer options) 
