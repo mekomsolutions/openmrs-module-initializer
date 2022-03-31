@@ -28,6 +28,8 @@ configuration/
   ├── datafiltermappings/
   ├── drugs/
   ├── encountertypes/
+  ├── fhirconceptsources/
+  ├── fhirpatientidentifiersystems/
   ├── globalproperties/
   ├── htmlforms/
   ├── idgen/
@@ -110,6 +112,8 @@ This is the list of currently supported domains in their loading order:
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
+1. [FHIR Concept Sources (CSV files)](readme/fhir.md#domain-fhirconceptsources)
+1. [FHIR Patient Identifier Systems (CSV Files)](readme/fhir.md#domain-fhirpatientidentifiersystems)
 1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
 
