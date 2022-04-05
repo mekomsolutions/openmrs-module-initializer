@@ -26,13 +26,13 @@ public class FhirPatientIdentifierSystemLineProcessor extends BaseLineProcessor<
 	
 	@Override
 	public FhirPatientIdentifierSystem fill(FhirPatientIdentifierSystem instance, CsvLine line)
-			throws IllegalArgumentException {
+	        throws IllegalArgumentException {
 		String patientIdentifierTypeName = line.get(PATIENT_IDENTIFIER_TYPE_HEADER, true);
 		
 		instance.setName(patientIdentifierTypeName);
 		
-		PatientIdentifierType patientIdentifierType = patientService.getPatientIdentifierTypeByName(
-				patientIdentifierTypeName);
+		PatientIdentifierType patientIdentifierType = patientService
+		        .getPatientIdentifierTypeByName(patientIdentifierTypeName);
 		
 		if (patientIdentifierType == null) {
 			throw new IllegalStateException("Could not find a patient identifier type named " + patientIdentifierTypeName);
@@ -42,8 +42,8 @@ public class FhirPatientIdentifierSystemLineProcessor extends BaseLineProcessor<
 		
 		String url = line.get(URL_HEADER, true);
 		
-		if ((instance.getId() == null || !BaseLineProcessor.getVoidOrRetire(line)) && (instance.getUrl() == null
-				|| instance.getUrl().isEmpty()) && (url == null || url.isEmpty())) {
+		if ((instance.getId() == null || !BaseLineProcessor.getVoidOrRetire(line))
+		        && (instance.getUrl() == null || instance.getUrl().isEmpty()) && (url == null || url.isEmpty())) {
 			throw new IllegalStateException("URL must be supplied");
 		}
 		

@@ -79,9 +79,8 @@ public class FhirPatientIdentifierSystemIntegrationTest extends DomainBaseModule
 		{
 			PatientIdentifierType identifierType = patientService.getPatientIdentifierTypeByName("My Third OpenMRS ID");
 			FhirPatientIdentifierSystem identifierSystem = (FhirPatientIdentifierSystem) sessionFactory.getCurrentSession()
-					.createQuery("from FhirPatientIdentifierSystem where patientIdentifierType = :patientIdentifierType")
-					.setParameter("patientIdentifierType", identifierType)
-					.uniqueResult();
+			        .createQuery("from FhirPatientIdentifierSystem where patientIdentifierType = :patientIdentifierType")
+			        .setParameter("patientIdentifierType", identifierType).uniqueResult();
 			
 			assertThat(identifierSystem, notNullValue());
 			assertThat(identifierSystem.getRetired(), is(true));

@@ -50,7 +50,8 @@ public class FhirConceptSourceLineProcessor extends BaseLineProcessor<FhirConcep
 		}
 		
 		String conceptSourceUrl = line.get(URL_HEADER, true);
-		if (StringUtils.isBlank(conceptSourceUrl) && (instance.getId() == null || !BaseLineProcessor.getVoidOrRetire(line))) {
+		if (StringUtils.isBlank(conceptSourceUrl)
+		        && (instance.getId() == null || !BaseLineProcessor.getVoidOrRetire(line))) {
 			throw new IllegalArgumentException(
 			        "FHIR concept source " + instance.getUuid() + " does not define a URL for " + conceptSourceName);
 		}

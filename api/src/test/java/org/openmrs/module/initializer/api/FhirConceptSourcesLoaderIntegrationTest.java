@@ -91,9 +91,8 @@ public class FhirConceptSourcesLoaderIntegrationTest extends DomainBaseModuleCon
 		}
 		{
 			FhirConceptSource conceptSource = (FhirConceptSource) sessionFactory.getCurrentSession()
-					.createQuery("from FhirConceptSource where name = :name")
-							.setParameter("name", TEST_CONCEPT_SOURCE_NAME)
-									.uniqueResult();
+			        .createQuery("from FhirConceptSource where name = :name").setParameter("name", TEST_CONCEPT_SOURCE_NAME)
+			        .uniqueResult();
 			
 			assertThat(conceptSource, notNullValue());
 			assertThat(conceptSource.getRetired(), is(true));

@@ -20,7 +20,8 @@ public class FhirPatientIdentifierSystemCsvParser extends CsvParser<FhirPatientI
 	private final SessionFactory sessionFactory;
 	
 	@Autowired
-	protected FhirPatientIdentifierSystemCsvParser(@Qualifier("sessionFactory") SessionFactory sessionFactory, BaseLineProcessor<FhirPatientIdentifierSystem> lineProcessor) {
+	protected FhirPatientIdentifierSystemCsvParser(@Qualifier("sessionFactory") SessionFactory sessionFactory,
+	    BaseLineProcessor<FhirPatientIdentifierSystem> lineProcessor) {
 		super(lineProcessor);
 		this.sessionFactory = sessionFactory;
 	}
@@ -36,9 +37,9 @@ public class FhirPatientIdentifierSystemCsvParser extends CsvParser<FhirPatientI
 			return new FhirPatientIdentifierSystem();
 		}
 		
-		FhirPatientIdentifierSystem result = (FhirPatientIdentifierSystem) sessionFactory.getCurrentSession().createQuery("from " + FhirPatientIdentifierSystem.class.getSimpleName() + " where uuid = :uuid")
-				.setParameter("uuid", line.getUuid())
-				.uniqueResult();
+		FhirPatientIdentifierSystem result = (FhirPatientIdentifierSystem) sessionFactory.getCurrentSession()
+		        .createQuery("from " + FhirPatientIdentifierSystem.class.getSimpleName() + " where uuid = :uuid")
+		        .setParameter("uuid", line.getUuid()).uniqueResult();
 		
 		if (result == null) {
 			result = new FhirPatientIdentifierSystem();
