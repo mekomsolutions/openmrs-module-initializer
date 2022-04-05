@@ -10,7 +10,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.module.fhir2.api.dao.FhirConceptSourceDao;
 import org.openmrs.module.fhir2.model.FhirConceptSource;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.fhir.cs.FhirConceptSourceLoader;
+import org.openmrs.module.initializer.api.fhir.cs.FhirConceptSourcesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -38,7 +38,7 @@ public class FhirConceptSourcesLoaderIntegrationTest extends DomainBaseModuleCon
 	private ConceptService conceptService;
 	
 	@Autowired
-	private FhirConceptSourceLoader loader;
+	private FhirConceptSourcesLoader loader;
 	
 	@Before
 	public void setup() {

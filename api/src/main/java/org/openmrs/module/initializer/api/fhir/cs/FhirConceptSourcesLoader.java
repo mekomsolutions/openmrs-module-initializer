@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @OpenmrsProfile(modules = { "fhir2:1.*" })
-public class FhirConceptSourceLoader extends BaseCsvLoader<FhirConceptSource, FhirConceptSourceCsvParser> {
+public class FhirConceptSourcesLoader extends BaseCsvLoader<FhirConceptSource, FhirConceptSourceCsvParser> {
 	
 	@Autowired
 	public void setParser(FhirConceptSourceCsvParser parser) {
