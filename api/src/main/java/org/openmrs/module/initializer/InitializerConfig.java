@@ -35,6 +35,7 @@ import static org.openmrs.module.initializer.InitializerConstants.PROPS_EXCLUDE;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_SKIPCHECKSUMS;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR;
+import static org.openmrs.module.initializer.api.utils.Utils.getPropertyValue;
 
 /**
  * Contains module's config.
@@ -142,17 +143,5 @@ public class InitializerConfig implements InitializingBean {
 	 */
 	public String getStartupLoadingMode() {
 		return StringUtils.isBlank(startupLoadingMode) ? PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR : startupLoadingMode;
-	}
-	
-	/**
-	 * @param property the system property or runtime property to lookup
-	 * @return the system property value if a system property with the passed property name exists, the
-	 *         runtime property value otherwise
-	 */
-	private String getPropertyValue(String property) {
-		if (System.getProperties().containsKey(property)) {
-			return System.getProperty(property);
-		}
-		return Context.getRuntimeProperties().getProperty(property);
 	}
 }

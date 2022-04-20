@@ -21,6 +21,7 @@ import org.openmrs.module.ModuleClassLoader;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.InitializerService;
+import org.openmrs.module.initializer.api.OrderedPropertiesFile;
 import org.openmrs.util.LocaleUtility;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsUtil;
@@ -39,6 +40,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -188,15 +190,18 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	 * @return an array of message property resource file names found on the filesystem
 	 */
 	protected Map<String, Properties> getMessagePropertyResourcesFromFilesystem() {
-		Map<String, Properties> ret = new LinkedHashMap<>();
+		List<OrderedPropertiesFile> messagePropertyFiles = new ArrayList<>();
 		for (String domain : getDomainsToScan()) {
 			ConfigDirUtil dirUtil = new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), domain, true);
 			List<File> propFiles = dirUtil.getFiles(PROPERTIES_EXTENSION);
 			for (File file : propFiles) {
-				Properties properties = new Properties();
-				OpenmrsUtil.loadProperties(properties, file);
-				ret.put("file:" + file.getAbsolutePath(), properties);
+				messagePropertyFiles.add(new OrderedPropertiesFile(file));
 			}
+		}
+		Collections.sort(messagePropertyFiles);
+		Map<String, Properties> ret = new LinkedHashMap<>();
+		for (OrderedPropertiesFile opf : messagePropertyFiles) {
+			ret.put("file:" + opf.getAbsolutePath(), opf.getProperties());
 		}
 		return ret;
 	}

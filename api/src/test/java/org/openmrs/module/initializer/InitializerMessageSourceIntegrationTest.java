@@ -107,6 +107,13 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 	}
 	
 	@Test
+	public void shouldOverrideMessagesInInitializerBasedOnOrderProperty() {
+		Context.setLocale(Locale.ENGLISH);
+		testMessage("Hello", "greeting");
+		testMessage("Overridden", "shouldOverride");
+	}
+	
+	@Test
 	public void shouldDefaultToDefaultLocaleSettingIfNoMessageFoundInLocale() {
 		Locale startingDefaultLocale = LocaleUtility.getDefaultLocale();
 		LocaleUtility.setDefaultLocaleCache(LocaleUtils.toLocale("es"));

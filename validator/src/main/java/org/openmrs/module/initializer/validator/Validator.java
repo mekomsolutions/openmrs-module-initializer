@@ -5,8 +5,6 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.apache.commons.lang.StringUtils.removeEnd;
 import static org.apache.commons.lang.StringUtils.replace;
 import static org.apache.commons.lang.StringUtils.startsWith;
-import static org.apache.log4j.Level.INFO;
-import static org.apache.log4j.Level.WARN;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_EXCLUDE;
 
@@ -35,8 +33,12 @@ import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
+import org.openmrs.module.ModuleUtil;
 import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.api.utils.Utils;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator2_0;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator2_4;
+import org.openmrs.util.OpenmrsConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +49,8 @@ public class Validator {
 	public static CommandLine cmdLine;
 	
 	private static Path logFilePath = null;
+	
+	private static Level level;
 	
 	public static final String ARG_CONFIG_DIR = "config-dir";
 	
@@ -74,7 +78,7 @@ public class Validator {
 	/**
 	 * Properly escapes the single quotes of a piece of SQL for MySQL. Strings ending with a ";" are
 	 * assumed to be the last piece of a SQL instruction.
-	 * 
+	 *
 	 * @param sqlPiece A whole SQL instruction or a piece of SQL instruction
 	 * @return The piece of SQL with single quotes properly escaped
 	 * @see https://stackoverflow.com/a/64878054/321797
@@ -113,7 +117,7 @@ public class Validator {
 	
 	/**
 	 * Convenience method giving the path of the Validator JAR file.
-	 * 
+	 *
 	 * @return The path of the Validator JAR file.
 	 */
 	public static Path getJarDirPath() throws Exception {
@@ -153,7 +157,9 @@ public class Validator {
 		        .desc("Enables writing the checksum files in a checksum folder besides the configuration folder.").build());
 		options.addOption(Option.builder("V").longOpt(ARG_VERBOSE).desc("Enables verbose logging.").build());
 		options.addOption(Option.builder("L").hasArg().longOpt(ARG_LOGGING_LEVEL).argName("ARG")
-		        .desc("The verbose mode logging level: " + Level.TRACE + ", " + Level.DEBUG + " or " + Level.INFO + ".")
+		        .desc("The logging level, e.g., " + Level.TRACE + ", " + Level.DEBUG + ", " + Level.INFO + ", " + Level.WARN
+		                + ", " + Level.ERROR + ", " + Level.FATAL + "."
+		                + " Note that if running in verbose mode, the level must be " + Level.INFO + " or lower.")
 		        .build());
 		return options;
 	}
@@ -165,25 +171,24 @@ public class Validator {
 		return logFilePath;
 	}
 	
-	public static void setupLog4j(Level level, Path logFilePath) {
-		org.apache.log4j.Logger.getRootLogger().setLevel(level);
-		
-		org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(level);
-		org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(level);
-		
-		org.apache.log4j.Logger inizLogger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
-		inizLogger.setLevel(WARN); // this is to focus the Inititalizer log file to the most relevant messages
-		if (logFilePath != null) {
-			inizLogger.addAppender(Utils.getFileAppender(logFilePath));
+	public static void setupLog4j() {
+		InitializerLogConfigurator logConfigurator;
+		try {
+			Class.forName("org.apache.logging.log4j.LogManager");
+			logConfigurator = new InitializerLogConfigurator2_4();
 		}
-		inizLogger.addAppender(new ValidatorAppender());
+		catch (ClassNotFoundException | LinkageError e) {
+			logConfigurator = new InitializerLogConfigurator2_0();
+		}
+		
+		logConfigurator.setupLogging(level, logFilePath);
 	}
 	
 	/**
 	 * Sets the log file path {@link Path} instance based on a suggested log file directory path. If the
 	 * suggested log file dir cannot be used, this will fallback in order to 1) the JAR file folder or
 	 * eventually 2) to a temp folder.
-	 * 
+	 *
 	 * @param logFileDir The suggested log file directory path.
 	 */
 	protected static void setLogFilePath(String logFileDir) {
@@ -241,26 +246,22 @@ public class Validator {
 	
 	/**
 	 * Main API method to execute a dry run of a configuration and collect the JUnit {@link Result}.
-	 * 
+	 *
 	 * @param args The Validator CLI args.
 	 * @return The JUnit Result object.
 	 */
 	public static Result getJUnitResult(String[] args) throws IllegalArgumentException, URISyntaxException, ParseException {
-		// default logging
-		setupLog4j(INFO, null);
-		
 		Options options = getCLIOptions();
 		cmdLine = new DefaultParser().parse(options, args);
 		
-		Level level = INFO;
+		level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL), Level.WARN);
 		if (cmdLine.hasOption(ARG_VERBOSE)) {
-			level = Level.toLevel(cmdLine.getOptionValue(ARG_LOGGING_LEVEL));
-			level = level.isGreaterOrEqual(INFO) ? INFO : level; // verbose means at least INFO level
+			level = level.isGreaterOrEqual(Level.INFO) ? Level.INFO : level; // verbose means at least INFO level
 		}
 		
 		// setting up logging
 		setLogFilePath(cmdLine.getOptionValue(ARG_LOG_DIR));
-		setupLog4j(level, getLogFilePath());
+		setupLog4j();
 		
 		if (ArrayUtils.isEmpty(cmdLine.getOptions()) || cmdLine.hasOption(ARG_HELP)) {
 			HelpFormatter f = new HelpFormatter();
@@ -273,7 +274,7 @@ public class Validator {
 			throw new IllegalArgumentException("The path to the configuration directory was not provided.");
 		}
 		
-		unsafe = cmdLine.hasOption(ARG_UNSAFE) ? true : false;
+		unsafe = cmdLine.hasOption(ARG_UNSAFE);
 		
 		// Testing the config
 		return JUnitCore.runClasses(ConfigurationTester.class);

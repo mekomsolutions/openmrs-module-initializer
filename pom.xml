@@ -35,6 +35,7 @@
         <module>api-bahmni</module>
         <module>api-2.2</module>
         <module>api-2.3</module>
+        <module>api-2.4</module>
         <module>omod</module>
     </modules>
 
@@ -52,6 +53,7 @@
         <openmrsVersion2.1>2.1.1</openmrsVersion2.1>
         <openmrsVersion2.2>2.2.0</openmrsVersion2.2>
         <openmrsVersion2.3>2.3.0</openmrsVersion2.3>
+        <openmrsVersion2.4>2.4.0</openmrsVersion2.4>
 
         <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
 
@@ -351,5 +353,18 @@
             <url>https://mavenrepo.openmrs.org/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
+
+    <distributionManagement>
+      <repository>
+        <id>mks-repo</id>
+        <name>Mekom Solutions Nexus Releases</name>
+        <url>https://nexus.mekomsolutions.net/repository/maven-releases</url>
+      </repository>
+      <snapshotRepository>
+        <id>mks-repo-snapshots</id>
+        <name>Mekom Solutions Nexus Snapshots</name>
+        <url>https://nexus.mekomsolutions.net/repository/maven-snapshots</url>
+      </snapshotRepository>
+    </distributionManagement>
 
 </project>
