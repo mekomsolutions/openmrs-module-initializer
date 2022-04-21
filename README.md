@@ -123,15 +123,15 @@ mvn clean package
 
 ##### Runtime requirements & compatibility
 * OpenMRS Core 2.1.1 (*required*)
-* HTML Form Entry 4.6.0 (*compatible*)
+* Bahmni Appointments 1.2.1 (*compatible*)
+* Bahmni Core 0.93 (*compatible*)
+* Bahmni I.e Apps 1.1.0 (*compatible*)
+* Data Filter 1.0.0 (*compatible*)
+* HTML Form Entry 4.0.0 (*compatible*)
 * ID Gen 4.3 (*compatible*)
 * Metadata Sharing 1.2.2 (*compatible*)
 * Metadata Mapping 1.3.4 (*compatible*)
-* Bahmni Appointments 1.2-beta (*compatible*)
-* Data Filter 1.0.0 (*compatible*)
-* Bahmni I.e Apps 1.0.0 (*compatible*)
-* Bahmni Core 0.93 (*compatible*)
-* Open Concept Lab 1.3.0 (*compatible*)
+* Open Concept Lab 1.2.9 (*compatible*)
 
 ### How to test out your OpenMRS configs?
 See the [Initializer Validator README page](readme/validator.md).
