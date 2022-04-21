@@ -156,22 +156,22 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.3.0
-* Added configuration options for logging
-* Add support for OpenMRS 2.4.0+
-* Added support for a liquibase domain to support loading custom changesets.
-* 'ocl' domain to support loading concepts, concept sets, and answers from OCL export files using the openmrs-module-openconceptlab
+* Added configuration options for logging.
+* Added support for OpenMRS 2.4.0+
+* Added support for a 'liquibase' domain to support loading custom changesets.
+* 'ocl' domain to support loading concepts, concept sets and answers from OCL export files in **configuration/ocl**.
 * (_Enhancement_) Concept name UUIDs are seeded from 1) the concept UUID and 2) the concept name information, see [here](readme/concepts.md#implicit-handling-of-concept-names). This version runs a Liquibase changeset that forces a reload of the concept domain in order to update concept names accordingly.
 * Backward-compatible overhaul of the concepts domain that provides full flexibility for managing concept names.
 * Bulk loading of metadata entities i18n display messages specified under `display:xy` headers.
 * (_For devs._) Introduced a pre-loading mechanism to `BaseFileLoader` that allows checksums-independent loading of transient information out of the config files before the actual metadata are loaded. Each loader controls whether its pre-loader throws on error or is allowed to fail. By default pre-loaders are allowed to fail.
-* Added support for setting a Concept version property in the concepts domain
+* Added support for setting the version property in the 'concepts' domain.
 * Bulk creation and editing of concept set members and concept answers using CSV files in **configuration/conceptsets**.
-* Added support enabling any Initializer runtime property value to also be specified from a system property
+* Added support enabling any Initializer runtime property value to also be specified from a system property.
 * Bulk creation and edition of AMPATH forms provided as JSON schema definitions in **configuration/ampathforms**.
-* Enhancement to custom message source to support improved handling of fallback locales and overrides between core, modules, and initializer messageproperties
-* Added support for remote sources and identifier pools to the idgen domain
-* Enhancement to ensure predictable loading order of files within a domain if no explicit order is specified, based on alphabetical ordering of filenames
-* Enhancement to the messageproperties domain to enable specifying the order in which two files in the same locale should be loaded
+* Enhancement to Initializer's custom message source to support improved handling of fallback locales and overrides between messages properties file from core, modules, and Initializer 'messageproperties' domain files.
+* Added support for remote sources and identifier pools to the 'idgen' domain.
+* Enhancement to ensure predictable loading order of files within a domain if no explicit order is specified, based on alphabetical ordering of filenames.
+* Enhancement to the 'messageproperties' domain to enable specifying the order in which two files in the same locale should be loaded.
 
 #### Version 2.2.0
 * 'attributetypes' domain to support Bahmni program attribute types.
