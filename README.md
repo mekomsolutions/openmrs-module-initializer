@@ -155,6 +155,9 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ### Releases notes
 
+#### Version 2.4.0
+* ...
+
 #### Version 2.3.0
 * Added configuration options for logging.
 * Added support for OpenMRS 2.4.0+
