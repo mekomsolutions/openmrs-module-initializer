@@ -66,10 +66,8 @@
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
         <openconceptlabVersion>1.2.9</openconceptlabVersion>
-        <providermanagementVersion>2.13.0</providermanagementVersion>
 
         <!-- Modules compatibility > Core 2.3.0 -->
-        <appframeworkVersion>2.14.0</appframeworkVersion>
         <datafilterVersion>1.0.0</datafilterVersion>
 
         <!-- For Validator -->
@@ -80,6 +78,8 @@
         <!-- For tests -->
         <addresshierarchyVersion>2.11.0</addresshierarchyVersion>
         <exti18nVersion>1.0.0</exti18nVersion>
+        <appframeworkVersion>2.14.0</appframeworkVersion>
+        <providermanagementVersion>2.13.0</providermanagementVersion>
     </properties>
 
     <dependencies>
