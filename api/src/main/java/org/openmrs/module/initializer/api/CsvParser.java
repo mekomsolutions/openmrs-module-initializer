@@ -7,9 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.RFC4180Parser;
-import com.opencsv.RFC4180ParserBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.OpenmrsObject;
@@ -125,9 +122,11 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	}
 	
 	public void setInputStream(InputStream is) throws IOException {
-		reader = getCSVReader(is);
+		reader = new CSVReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 		headerLine = reader.readNext();
+		
 		String version = LP.getVersion(headerLine);
+		
 		setLineProcessors(version);
 	}
 	
@@ -137,17 +136,10 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	 * @throws IOException
 	 */
 	public static String[] getHeaderLine(InputStream is) throws IOException {
-		CSVReader reader = getCSVReader(is);
+		CSVReader reader = new CSVReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 		String[] headerLine = reader.readNext();
 		reader.close();
 		return headerLine;
-	}
-	
-	public static CSVReader getCSVReader(InputStream is) {
-		RFC4180Parser rfc4180Parser = new RFC4180ParserBuilder().build();
-		CSVReaderBuilder csvReaderBuilder = new CSVReaderBuilder(new InputStreamReader(is, StandardCharsets.UTF_8))
-		        .withCSVParser(rfc4180Parser);
-		return csvReaderBuilder.build();
 	}
 	
 	/**
