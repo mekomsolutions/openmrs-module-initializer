@@ -156,7 +156,6 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.3.0
-* (_Breaking change_) Use a CSV parser that satisfies the [RFC standard](https://datatracker.ietf.org/doc/html/rfc4180). This means that *backslashes must not be escaped*, i.e., if you have `\\text` in one of your files this will be interpreted as the literal `\\text` and not `\text` as before. This is most notable when using regular expressions.
 * Added configuration options for logging
 * Add support for OpenMRS 2.4.0+
 * Added support for a liquibase domain to support loading custom changesets.
