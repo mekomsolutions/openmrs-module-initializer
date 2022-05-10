@@ -113,6 +113,9 @@ This is the list of currently supported domains in their loading order:
 1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
 
+#### Note about Address Hierarchy (addresshierarchy/):
+Yes, you should package your addresshierarchy config within configuration/addresshierarchy. However, it is actually still the [Address Hierarchy module](https://addons.openmrs.org/show/org.openmrs.module.addresshierarchy) itself that loads the content of /addresshierarchy. This is an exception today, due to a historical approach where each module would take care of its own metadat. This has not yet been migrated to Iniz and has remained in the AH module.
+
 ### How to try it out?
 Build the master branch and install the built OMOD to your OpenMRS instance:
 ```bash
