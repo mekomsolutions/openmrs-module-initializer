@@ -42,6 +42,7 @@ public enum Domain {
 	METADATA_SET_MEMBERS,
 	METADATA_TERM_MAPPINGS,
 	AMPATH_FORMS,
+	AMPATH_TRANSLATIONS,
 	HTML_FORMS;
 	
 	public int getOrder() {

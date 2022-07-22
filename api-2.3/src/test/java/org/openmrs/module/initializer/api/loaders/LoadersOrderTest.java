@@ -171,6 +171,9 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	@Autowired
 	private LiquibaseLoader liquibaseLoader;
 	
+	@Autowired
+	private AmpathTranslationsLoader ampathTranslationsLoader;
+	
 	@Override
 	public void updateSearchIndex() {
 		// to prevent Data Filter's 'Illegal Record Access'
@@ -376,6 +379,11 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 		
 		previousLoader = loader;
 		loader = ampathFormsLoader;
+		count++;
+		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		
+		previousLoader = loader;
+		loader = ampathTranslationsLoader;
 		count++;
 		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
 		
