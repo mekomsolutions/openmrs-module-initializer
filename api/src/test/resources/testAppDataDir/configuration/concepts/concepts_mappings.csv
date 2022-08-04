@@ -1,5 +1,5 @@
-Uuid,Void/Retire,Same as mappings,Fully specified name:en,Data class,Data type,_version:1,_order:3000
-2c4da504-33d4-11e7-a919-92ebcb67fe33,,Cambodia:1234; CIEL:159392,CONFIRMED DIAGNOSIS,Misc,N/A,,
-,,foobar:456,Unexisting mapping,Misc,Text,,
-,TRUE,Cambodia:foo12bar,CONCEPT_WITH_MAPPING_TO_RETIRE,,,,
-,,Cambodia:foo12bar,NEW_CONCEPT_REUSING_MAPPING,Misc,Text,,
+Uuid,Void/Retire,Same as mappings,mapping|broader-than|CIEL,Fully specified name:en,Data class,Data type,_version:1,_order:3000
+2c4da504-33d4-11e7-a919-92ebcb67fe33,,Cambodia:1234; CIEL:159392,broader-test-1,CONFIRMED DIAGNOSIS,Misc,N/A,,
+,,foobar:456,,Unexisting mapping,Misc,Text,,
+,TRUE,Cambodia:foo12bar,,CONCEPT_WITH_MAPPING_TO_RETIRE,,,,
+,,Cambodia:foo12bar,broader-test-2a; broader-test-2b,NEW_CONCEPT_REUSING_MAPPING,Misc,Text,,

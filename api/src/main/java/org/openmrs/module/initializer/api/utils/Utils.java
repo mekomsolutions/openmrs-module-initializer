@@ -1,15 +1,6 @@
 package org.openmrs.module.initializer.api.utils;
 
-import static org.openmrs.module.initializer.api.BaseLineProcessor.LIST_SEPARATOR;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import com.github.freva.asciitable.AsciiTable;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -48,7 +39,15 @@ import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.util.CollectionUtils;
 
-import com.github.freva.asciitable.AsciiTable;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static org.openmrs.module.initializer.api.BaseLineProcessor.LIST_SEPARATOR;
 
 public class Utils {
 	
@@ -170,6 +169,21 @@ public class Utils {
 		}
 		if (instance == null) {
 			instance = getConceptByMapping(id, service);
+		}
+		return instance;
+	}
+	
+	/**
+	 * Fetches a ConceptMapType trying various routes for its "id".
+	 * 
+	 * @param id The ConceptMapType name or UUID.
+	 * @param service
+	 * @return The {@link ConceptMapType} instance if found, null otherwise.
+	 */
+	public static ConceptMapType fetchConceptMapType(String id, ConceptService service) {
+		ConceptMapType instance = service.getConceptMapTypeByUuid(id);
+		if (instance == null) {
+			instance = service.getConceptMapTypeByName(id);
 		}
 		return instance;
 	}

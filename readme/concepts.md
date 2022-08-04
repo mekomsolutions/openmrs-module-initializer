@@ -106,14 +106,26 @@ This also the case for concepts referenced by names that do not exist in the def
 
 **NOTE** In the current implementation the listing order of the concepts in the CSV file does matter since unexisting concepts will fail the CSV line processing. It is recommended to take this into account and to insert CSV lines for concepts with nested lists low enough in the CSV file so that all nested concepts are found when the CSV line is being processed.
 
-###### Header `Same as mappings`
-To provide a semicolumn-separated list of concept mappings for the concept to be created or edited.
+###### Same as mappings
 
-Here is an example of the 'mappings' columns:
+See `Mapping headers` section below
 
-| ... | <sub>Same as mappings</sub> | ... |
+###### Mapping headers
+Concepts support one or more mappings to concept reference terms.  Each of these mappings are configurable with a mapping type, a source, and a code.  In order to specify mappings on a given concept, the values for those mappings can be set under ad-hoc headers starting with the special prefix `Mapping|`.  Mapping headers should be specified in the following format:
+
+Option 1:  Column header specifies the mapping type, but not the source.  In this case, the column values must be one or more source:code pairs.  If specifying multiple source:code pairs, these must be separated by semi-colons.  Example:
+
+| ... | <sub>Mapping|SAME-AS</sub> | <sub>Mapping|NARROWER-THAN</sub> |
 | - | - | - |
-| ... | <sub>ICD-10-WHO:T45.9; CIEL:122226; Cambodia:115</sub> | ... |
+| ... | <sub>CIEL:5089; SNOMED CT:27113001</sub> | <sub>LOINC:3141-9</sub> |
+
+NOTE:  One may also use the column header `Same as mappings` as an alternative to `Mapping:SAME-AS` for backwards-compatibility with earlier versions.
+
+Option 2:  Column header specifies both the mapping type and the source.  In this case, the column values must only be the codes.  If specifiying multiple codes for the same mapping type and source, these must be separated by semi-colons, or they can alternatively be added as separate columns.  In the case of adding them as separate columns, and additional suffix is supported on the header to enable each column header to be unique.  Example:
+
+| ... | <sub>Mapping|SAME-AS:CIEL</sub> | <sub>Mapping|SAME-AS|SNOMED CT</sub> | <sub>Mapping|SAME-AS|PIH|Code</sub> | <sub>Mapping|SAME-AS|PIH|Name</sub> |
+| - | - | - | - | - |
+| ... | <sub>5089</sub> | <sub>27113001</sub> | <sub>5089</sub> | <sub>WEIGHT (KG)</sub> |
 
 ###### Attribute headers
 Concepts support *attributes*. The values for those attributes can be set under ad-hoc headers starting with the special prefix `Attribute|`. The value indicated on a CSV line will be resolved to its final value based on the type of the attribute. Let us look at an example:
