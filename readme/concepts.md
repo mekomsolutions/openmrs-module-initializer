@@ -108,22 +108,23 @@ This also the case for concepts referenced by names that do not exist in the def
 
 ###### Same as mappings
 
-See `Mapping headers` section below
+As of version 2.4 the header `Same as mappings` is discouraged in favour of the newer `Mapping|SAME-AS`.
+See `Mapping headers` section below:
 
 ###### Mapping headers
 Concepts support one or more mappings to concept reference terms.  Each of these mappings are configurable with a mapping type, a source, and a code.  In order to specify mappings on a given concept, the values for those mappings can be set under ad-hoc headers starting with the special prefix `Mapping|`.  Mapping headers should be specified in the following format:
 
-Option 1:  Column header specifies the mapping type, but not the source.  In this case, the column values must be one or more source:code pairs.  If specifying multiple source:code pairs, these must be separated by semi-colons.  Example:
+**Option 1:**  Column header specifies the mapping type, but not the source.  In this case, the column values must be one or more source:code pairs.  If specifying multiple source:code pairs, these must be separated by semi-colons.  Example:
 
-| ... | <sub>Mapping|SAME-AS</sub> | <sub>Mapping|NARROWER-THAN</sub> |
+| ... | <sub>Mapping\|SAME-AS</sub> | <sub>Mapping\|NARROWER-THAN</sub> |
 | - | - | - |
 | ... | <sub>CIEL:5089; SNOMED CT:27113001</sub> | <sub>LOINC:3141-9</sub> |
 
 NOTE:  One may also use the column header `Same as mappings` as an alternative to `Mapping:SAME-AS` for backwards-compatibility with earlier versions.
 
-Option 2:  Column header specifies both the mapping type and the source.  In this case, the column values must only be the codes.  If specifiying multiple codes for the same mapping type and source, these must be separated by semi-colons, or they can alternatively be added as separate columns.  In the case of adding them as separate columns, and additional suffix is supported on the header to enable each column header to be unique.  Example:
+**Option 2:**  Column header specifies both the mapping type and the source.  In this case, the column values must only be the codes.  If specifiying multiple codes for the same mapping type and source, these must be separated by semi-colons, or they can alternatively be added as separate columns.  In the case of adding them as separate columns, and additional suffix is supported on the header to enable each column header to be unique.  Example:
 
-| ... | <sub>Mapping|SAME-AS:CIEL</sub> | <sub>Mapping|SAME-AS|SNOMED CT</sub> | <sub>Mapping|SAME-AS|PIH|Code</sub> | <sub>Mapping|SAME-AS|PIH|Name</sub> |
+| ... | <sub>Mapping\|SAME-AS\|CIEL</sub> | <sub>Mapping\|SAME-AS\|SNOMED CT</sub> | <sub>Mapping\|SAME-AS\|PIH\|Code</sub> | <sub>Mapping\|SAME-AS\|PIH\|Name</sub> |
 | - | - | - | - | - |
 | ... | <sub>5089</sub> | <sub>27113001</sub> | <sub>5089</sub> | <sub>WEIGHT (KG)</sub> |
 
