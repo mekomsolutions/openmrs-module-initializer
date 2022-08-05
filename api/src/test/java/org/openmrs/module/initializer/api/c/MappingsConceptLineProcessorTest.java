@@ -101,8 +101,8 @@ public class MappingsConceptLineProcessorTest {
 	public void fill_shouldParseMappingsForTypeAndSourceInHeader() {
 		
 		// Setup
-		String[] headerLine = { "mapping|same-as|cambodia", "mapping|broader-than|foo", "mapping|related-to",
-		        "mapping|same-as|pih|code", "mapping|same-as|pih|name" };
+		String[] headerLine = { "mappings|same-as|cambodia", "mappings|broader-than|foo", "mappings|related-to",
+		        "mappings|same-as|pih|code", "mappings|same-as|pih|name" };
 		String[] line = { "123", "456", "cambodia:789; foo:abc", "5089", "weight" };
 		
 		// Replay

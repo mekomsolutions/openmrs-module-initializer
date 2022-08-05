@@ -20,7 +20,7 @@ public class MappingsConceptLineProcessor extends ConceptLineProcessor {
 	
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
-	public static final String MAPPING_HEADER_PREFIX = "mapping";
+	public static final String MAPPING_HEADER_PREFIX = "mappings";
 	
 	public static final String MAPPING_HEADER_SEPARATOR = "|";
 	
@@ -49,7 +49,8 @@ public class MappingsConceptLineProcessor extends ConceptLineProcessor {
 					header = MAPPING_HEADER_PREFIX + MAPPING_HEADER_SEPARATOR + ConceptMapType.SAME_AS_MAP_TYPE_UUID;
 				}
 				
-				String[] headerComponents = header.split(MAPPING_HEADER_SEPARATOR_REGEX);
+				// There are up to 4 components.  Mappings|Type|Source|Suffix, where only the first 2 are required
+				String[] headerComponents = header.split(MAPPING_HEADER_SEPARATOR_REGEX, 4);
 				
 				if (headerComponents[0].equalsIgnoreCase(MAPPING_HEADER_PREFIX)) {
 					
