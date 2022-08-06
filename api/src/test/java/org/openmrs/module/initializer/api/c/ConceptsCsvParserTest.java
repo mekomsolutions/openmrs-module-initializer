@@ -27,7 +27,6 @@ import org.openmrs.customdatatype.CustomDatatypeUtil;
 import org.openmrs.customdatatype.datatype.DateDatatype;
 import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.module.initializer.api.utils.ConceptListParser;
-import org.openmrs.module.initializer.api.utils.ConceptMapListParser;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -111,8 +110,8 @@ public class ConceptsCsvParserTest {
 		// replay
 		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs),
 		        new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
-		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
-		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)), new ConceptAttributeLineProcessor(cs));
+		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)), new MappingsConceptLineProcessor(cs),
+		        new ConceptAttributeLineProcessor(cs));
 		parser.setInputStream(is);
 		
 		List<String[]> lines = parser.process(parser.getLines()).getFailingLines();
@@ -130,8 +129,8 @@ public class ConceptsCsvParserTest {
 		// replay
 		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs),
 		        new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
-		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
-		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)), new ConceptAttributeLineProcessor(cs));
+		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)), new MappingsConceptLineProcessor(cs),
+		        new ConceptAttributeLineProcessor(cs));
 		parser.setInputStream(is);
 		
 		List<String[]> lines = parser.process(parser.getLines()).getFailingLines();
@@ -144,8 +143,8 @@ public class ConceptsCsvParserTest {
 	public void process_shouldFailOnMisformattedCsv() throws IOException {
 		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs),
 		        new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
-		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
-		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)), new ConceptAttributeLineProcessor(cs));
+		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)), new MappingsConceptLineProcessor(cs),
+		        new ConceptAttributeLineProcessor(cs));
 		InputStream is = null;
 		
 		is = getClass().getClassLoader()
