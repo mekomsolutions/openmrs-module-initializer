@@ -156,7 +156,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.4.0
-* 'concepts' domain to support a new expandable 'MAPPINGS' header, thereby discouraging the older 'Same as mappings'.
+* 'concepts' domain to support a new expandable `MAPPINGS` header, thereby discouraging the older `Same as mappings`.
 
 #### Version 2.3.0
 * Added configuration options for logging.
