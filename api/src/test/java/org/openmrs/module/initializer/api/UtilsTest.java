@@ -1,13 +1,5 @@
 package org.openmrs.module.initializer.api;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +18,14 @@ import org.openmrs.module.initializer.api.utils.Utils;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
@@ -181,7 +181,7 @@ public class UtilsTest {
 		
 		when(pws.getProgramByName("Program Name")).thenReturn(prog);
 		when(pws.getProgramByUuid("program-uuid")).thenReturn(prog);
-		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
+		when(cs.getConceptByUuid("concept-uuid")).thenReturn(c);
 		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(prog));
 		
 		Assert.assertEquals(prog, Utils.fetchProgram("Program Name", pws, cs));
@@ -212,7 +212,7 @@ public class UtilsTest {
 		wf.setUuid("workflow-uuid");
 		
 		when(pws.getWorkflowByUuid("workflow-uuid")).thenReturn(wf);
-		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
+		when(cs.getConceptByUuid("concept-uuid")).thenReturn(c);
 		when(pws.getProgramWorkflowsByConcept(c)).thenReturn(Arrays.asList(wf));
 		
 		Assert.assertEquals(wf, Utils.fetchProgramWorkflow("workflow-uuid", pws, cs));
@@ -242,7 +242,7 @@ public class UtilsTest {
 		state.setUuid("state-uuid");
 		
 		when(pws.getStateByUuid("state-uuid")).thenReturn(state);
-		when(Utils.fetchConcept("concept-uuid", cs)).thenReturn(c);
+		when(cs.getConceptByUuid("concept-uuid")).thenReturn(c);
 		when(pws.getProgramWorkflowStatesByConcept(c)).thenReturn(Arrays.asList(state));
 		
 		Assert.assertEquals(state, Utils.fetchProgramWorkflowState("state-uuid", pws, cs));
@@ -287,5 +287,38 @@ public class UtilsTest {
 		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType$HibernateProxy$ODcBnusu"));
 		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType_$$_javassist_26"));
 		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType"));
+	}
+
+	@Test
+	public void fetchConcept_shouldFetchConceptByUuid() {
+		ConceptService cs = mock(ConceptService.class);
+		Concept uuidConcept = new Concept();
+		when(cs.getConceptByUuid("concept:lookup")).thenReturn(uuidConcept);
+		Concept mappingConcept = new Concept();
+		when(cs.getConceptByMapping("lookup", "concept")).thenReturn(mappingConcept);
+		Concept nameConcept = new Concept();
+		when(cs.getConceptByName("concept:lookup")).thenReturn(nameConcept);
+		Assert.assertEquals(uuidConcept, Utils.fetchConcept("concept:lookup", cs));
+	}
+
+	@Test
+	public void fetchConcept_shouldFetchConceptByMapping() {
+		ConceptService cs = mock(ConceptService.class);
+		when(cs.getConceptByUuid("concept:lookup")).thenReturn(null);
+		Concept mappingConcept = new Concept();
+		when(cs.getConceptByMapping("lookup", "concept")).thenReturn(mappingConcept);
+		Concept nameConcept = new Concept();
+		when(cs.getConceptByName("concept:lookup")).thenReturn(nameConcept);
+		Assert.assertEquals(mappingConcept, Utils.fetchConcept("concept:lookup", cs));
+	}
+
+	@Test
+	public void fetchConcept_shouldFetchConceptByName() {
+		ConceptService cs = mock(ConceptService.class);
+		when(cs.getConceptByUuid("concept:lookup")).thenReturn(null);
+		when(cs.getConceptByMapping("lookup", "concept")).thenReturn(null);
+		Concept nameConcept = new Concept();
+		when(cs.getConceptByName("concept:lookup")).thenReturn(nameConcept);
+		Assert.assertEquals(nameConcept, Utils.fetchConcept("concept:lookup", cs));
 	}
 }

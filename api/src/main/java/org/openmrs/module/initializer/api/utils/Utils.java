@@ -37,6 +37,9 @@ import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.util.LocaleUtility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
@@ -50,6 +53,8 @@ import java.util.stream.Collectors;
 import static org.openmrs.module.initializer.api.BaseLineProcessor.LIST_SEPARATOR;
 
 public class Utils {
+	
+	protected final static Logger log = LoggerFactory.getLogger(Utils.class);
 	
 	private static String[] setLineSeparators(String[] strings) {
 		List<String> res = new ArrayList<>();
@@ -160,17 +165,31 @@ public class Utils {
 	 * @return The {@link Concept} instance if found, null otherwise.
 	 */
 	public static Concept fetchConcept(String id, ConceptService service) {
-		Concept instance = null;
-		if (instance == null) {
-			instance = service.getConceptByUuid(id);
+		Concept instance = service.getConceptByUuid(id);
+		if (instance != null) {
+			return instance;
 		}
-		if (instance == null) {
-			instance = service.getConceptByName(id);
+		instance = getConceptByMapping(id, service);
+		if (instance != null) {
+			return instance;
 		}
-		if (instance == null) {
-			instance = getConceptByMapping(id, service);
+		Locale originalLocale = Context.getLocale();
+		try {
+			for (Locale locale : LocaleUtility.getLocalesInOrder()) {
+				Context.setLocale(locale);
+				Concept concept = service.getConceptByName(id);
+				if (concept != null) {
+					if (!originalLocale.equals(locale)) {
+						log.warn("Found '" + id + "' in locale '" + locale + "', not in '" + originalLocale + "'");
+					}
+					return concept;
+				}
+			}
 		}
-		return instance;
+		finally {
+			Context.setLocale(originalLocale);
+		}
+		return null;
 	}
 	
 	/**
