@@ -180,7 +180,7 @@ public class Utils {
 				Concept concept = service.getConceptByName(id);
 				if (concept != null) {
 					if (!originalLocale.equals(locale)) {
-						log.warn("Found '{}' in locale '{}', not in '{}'", id, locale, originalLocale);
+						log.warn("Found '{}' in locale '{}', not in '{}'", new Object[] { id, locale, originalLocale });
 					}
 					return concept;
 				}
