@@ -290,15 +290,17 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			// Verify mappings are added
 			c = cs.getConceptByUuid("2c4da504-33d4-11e7-a919-92ebcb67fe33");
 			Assert.assertNotNull(c);
-			assertEquals(2, c.getConceptMappings().size());
+			assertEquals(3, c.getConceptMappings().size());
 			Set<String> names = new HashSet<String>();
 			for (ConceptMap m : c.getConceptMappings()) {
+				String mapType = m.getConceptMapType().getName();
 				String source = m.getConceptReferenceTerm().getConceptSource().getName();
 				String code = m.getConceptReferenceTerm().getCode();
-				names.add(source + ":" + code);
+				names.add(mapType + ":" + source + ":" + code);
 			}
-			Assert.assertTrue(names.contains("Cambodia:1234"));
-			Assert.assertTrue(names.contains("CIEL:159392"));
+			Assert.assertTrue(names.contains("same-as:Cambodia:1234"));
+			Assert.assertTrue(names.contains("same-as:CIEL:159392"));
+			Assert.assertTrue(names.contains("broader-than:CIEL:broader-test-1"));
 			
 			// Verify not saved with missing mapping(s)
 			Assert.assertNull(cs.getConceptByName("Unexisting mapping"));
@@ -308,6 +310,18 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			c = cs.getConceptByMapping("foo12bar", "Cambodia");
 			Assert.assertNotNull(c);
 			assertEquals("NEW_CONCEPT_REUSING_MAPPING", c.getFullySpecifiedName(localeEn).getName());
+			
+			// Verify new mappings are added that are broader-than CIEL
+			assertEquals(3, c.getConceptMappings().size());
+			for (ConceptMap m : c.getConceptMappings()) {
+				String mapType = m.getConceptMapType().getName();
+				String source = m.getConceptReferenceTerm().getConceptSource().getName();
+				String code = m.getConceptReferenceTerm().getCode();
+				names.add(mapType + ":" + source + ":" + code);
+			}
+			Assert.assertTrue(names.contains("same-as:Cambodia:foo12bar"));
+			Assert.assertTrue(names.contains("broader-than:CIEL:broader-test-2a"));
+			Assert.assertTrue(names.contains("broader-than:CIEL:broader-test-2b"));
 		}
 		
 		// Verify. 'numerics' CSV loading

@@ -9,7 +9,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>initializer</artifactId>
-    <version>2.3.0-SNAPSHOT</version>
+    <version>2.4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Initializer</name>
     <description>The OpenMRS Initializer module is an API-only module that processes the content of the configuration folder when it is found inside OpenMRS' application data directory.</description>
@@ -66,11 +66,9 @@
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
         <openconceptlabVersion>1.2.9</openconceptlabVersion>
-        <providermanagementVersion>2.13.0</providermanagementVersion>
         <fhir2Version>1.2.0</fhir2Version>
 
         <!-- Modules compatibility > Core 2.3.0 -->
-        <appframeworkVersion>2.14.0</appframeworkVersion>
         <datafilterVersion>1.0.0</datafilterVersion>
 
         <!-- For Validator -->
@@ -81,6 +79,8 @@
         <!-- For tests -->
         <addresshierarchyVersion>2.11.0</addresshierarchyVersion>
         <exti18nVersion>1.0.0</exti18nVersion>
+        <appframeworkVersion>2.14.0</appframeworkVersion>
+        <providermanagementVersion>2.13.0</providermanagementVersion>
     </properties>
 
     <dependencies>
@@ -379,5 +379,18 @@
             <url>https://mavenrepo.openmrs.org/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
+
+    <distributionManagement>
+      <repository>
+        <id>mks-repo</id>
+        <name>Mekom Solutions Nexus Releases</name>
+        <url>https://nexus.mekomsolutions.net/repository/maven-releases</url>
+      </repository>
+      <snapshotRepository>
+        <id>mks-repo-snapshots</id>
+        <name>Mekom Solutions Nexus Snapshots</name>
+        <url>https://nexus.mekomsolutions.net/repository/maven-snapshots</url>
+      </snapshotRepository>
+    </distributionManagement>
 
 </project>

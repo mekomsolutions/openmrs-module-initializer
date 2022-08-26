@@ -1,15 +1,6 @@
 package org.openmrs.module.initializer.api.utils;
 
-import static org.openmrs.module.initializer.api.BaseLineProcessor.LIST_SEPARATOR;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import com.github.freva.asciitable.AsciiTable;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -46,11 +37,24 @@ import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.util.LocaleUtility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
-import com.github.freva.asciitable.AsciiTable;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static org.openmrs.module.initializer.api.BaseLineProcessor.LIST_SEPARATOR;
 
 public class Utils {
+	
+	protected final static Logger log = LoggerFactory.getLogger(Utils.class);
 	
 	private static String[] setLineSeparators(String[] strings) {
 		List<String> res = new ArrayList<>();
@@ -161,15 +165,44 @@ public class Utils {
 	 * @return The {@link Concept} instance if found, null otherwise.
 	 */
 	public static Concept fetchConcept(String id, ConceptService service) {
-		Concept instance = null;
-		if (instance == null) {
-			instance = service.getConceptByUuid(id);
+		Concept instance = service.getConceptByUuid(id);
+		if (instance != null) {
+			return instance;
 		}
-		if (instance == null) {
-			instance = service.getConceptByName(id);
+		instance = getConceptByMapping(id, service);
+		if (instance != null) {
+			return instance;
 		}
+		Locale originalLocale = Context.getLocale();
+		try {
+			for (Locale locale : LocaleUtility.getLocalesInOrder()) {
+				Context.setLocale(locale);
+				Concept concept = service.getConceptByName(id);
+				if (concept != null) {
+					if (!originalLocale.equals(locale)) {
+						log.warn("Found '{}' in locale '{}', not in '{}'", new Object[] { id, locale, originalLocale });
+					}
+					return concept;
+				}
+			}
+		}
+		finally {
+			Context.setLocale(originalLocale);
+		}
+		return null;
+	}
+	
+	/**
+	 * Fetches a ConceptMapType trying various routes for its "id".
+	 * 
+	 * @param id The ConceptMapType name or UUID.
+	 * @param service
+	 * @return The {@link ConceptMapType} instance if found, null otherwise.
+	 */
+	public static ConceptMapType fetchConceptMapType(String id, ConceptService service) {
+		ConceptMapType instance = service.getConceptMapTypeByUuid(id);
 		if (instance == null) {
-			instance = getConceptByMapping(id, service);
+			instance = service.getConceptMapTypeByName(id);
 		}
 		return instance;
 	}

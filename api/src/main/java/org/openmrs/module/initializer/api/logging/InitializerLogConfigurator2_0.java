@@ -1,12 +1,10 @@
 package org.openmrs.module.initializer.api.logging;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 
 import org.apache.log4j.Appender;
-import org.apache.log4j.FileAppender;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
@@ -42,7 +40,8 @@ public class InitializerLogConfigurator2_0 implements InitializerLogConfigurator
 		
 		Appender appender = defaultAppender;
 		try {
-			appender = new FileAppender(layout, logFilePath.toString());
+			appender = (Appender) Class.forName("org.apache.log4j.FileAppender").getConstructor(Layout.class, String.class)
+			        .newInstance(layout, logFilePath.toString());
 			appender.setName(logFilePath.getFileName().toString());
 			
 			// since the org.apache.log4j.varia package doesn't exist in the log4j2 bridge, we need to use reflection
@@ -54,8 +53,8 @@ public class InitializerLogConfigurator2_0 implements InitializerLogConfigurator
 			
 			appender.addFilter(levelMatchFilter);
 		}
-		catch (IOException | ClassCastException | ClassNotFoundException | InvocationTargetException | IllegalAccessException
-		        | NoSuchMethodException | InstantiationException e) {
+		catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException
+		        | InstantiationException | RuntimeException e) {
 			log.error("The custom log file appender could not be setup for {}.", MODULE_NAME, e);
 		}
 		
