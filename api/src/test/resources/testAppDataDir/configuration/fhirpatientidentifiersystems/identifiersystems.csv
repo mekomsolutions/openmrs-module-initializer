@@ -1,0 +1,4 @@
+Uuid,Void/Retire,Patient identifier type name,Url,_order:1000
+87c87473-b394-430b-93d3-b46d0faca26e,,My OpenMRS ID,http://openmrs.org/identifier,
+,,My Second OpenMRS ID,http://openmrs.org/identifier/2
+ed2571ad-6a0b-413d-8506-362266c7595e,true,My Third OpenMRS ID,,

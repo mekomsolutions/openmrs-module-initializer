@@ -9,167 +9,23 @@
  */
 package org.openmrs.module.initializer.api.loaders;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.greaterThan;
 
-import org.junit.Assert;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.appt.servicedefinitions.AppointmentServiceDefinitionsLoader;
-import org.openmrs.module.initializer.api.appt.servicetypes.AppointmentServiceTypesLoader;
-import org.openmrs.module.initializer.api.appt.specialities.SpecialitiesLoader;
-import org.openmrs.module.initializer.api.attributes.types.AttributeTypesLoader;
-import org.openmrs.module.initializer.api.c.ConceptClassesLoader;
-import org.openmrs.module.initializer.api.c.ConceptSetsLoader;
-import org.openmrs.module.initializer.api.c.ConceptSourcesLoader;
-import org.openmrs.module.initializer.api.c.ConceptsLoader;
-import org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingsLoader;
-import org.openmrs.module.initializer.api.drugs.DrugsLoader;
-import org.openmrs.module.initializer.api.er.EncounterRolesLoader;
-import org.openmrs.module.initializer.api.et.EncounterTypesLoader;
-import org.openmrs.module.initializer.api.freq.OrderFrequenciesLoader;
-import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
-import org.openmrs.module.initializer.api.idgen.IdentifierSourcesLoader;
-import org.openmrs.module.initializer.api.idgen.autogen.AutoGenerationOptionsLoader;
-import org.openmrs.module.initializer.api.loc.LocationTagMapsLoader;
-import org.openmrs.module.initializer.api.loc.LocationTagsLoader;
-import org.openmrs.module.initializer.api.loc.LocationsLoader;
-import org.openmrs.module.initializer.api.mdm.MetadataTermMappingsLoader;
-import org.openmrs.module.initializer.api.mds.MetadataSetMembersLoader;
-import org.openmrs.module.initializer.api.mds.MetadataSetsLoader;
-import org.openmrs.module.initializer.api.ot.OrderTypesLoader;
-import org.openmrs.module.initializer.api.pat.PersonAttributeTypesLoader;
-import org.openmrs.module.initializer.api.pit.PatientIdentifierTypesLoader;
-import org.openmrs.module.initializer.api.privileges.PrivilegesLoader;
-import org.openmrs.module.initializer.api.programs.ProgramsLoader;
-import org.openmrs.module.initializer.api.programs.workflows.ProgramWorkflowsLoader;
-import org.openmrs.module.initializer.api.programs.workflows.states.ProgramWorkflowStatesLoader;
-import org.openmrs.module.initializer.api.providerroles.ProviderRolesLoader;
-import org.openmrs.module.initializer.api.relationship.types.RelationshipTypesLoader;
-import org.openmrs.module.initializer.api.roles.RolesLoader;
-import org.openmrs.module.initializer.api.visittypes.VisitTypesLoader;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
-	
-	@Autowired
-	private JsonKeyValuesLoader jsonKeyValuesLoader;
-	
-	@Autowired
-	private MdsLoader mdsLoader;
-	
-	@Autowired
-	private VisitTypesLoader visitTypesLoader;
-	
-	@Autowired
-	private PatientIdentifierTypesLoader pitLoader;
-	
-	@Autowired
-	private GlobalPropertiesLoader globalPropertiesLoader;
-	
-	@Autowired
-	private AttributeTypesLoader attributeTypesLoader;
-	
-	@Autowired
-	private ProviderRolesLoader providerRolesLoader;
-	
-	@Autowired
-	private LocationTagsLoader locationTagsLoader;
-	
-	@Autowired
-	private LocationsLoader locationsLoader;
-	
-	@Autowired
-	private LocationTagMapsLoader locationTagMapsLoader;
-	
-	@Autowired
-	private ConceptClassesLoader conceptClassesLoader;
-	
-	@Autowired
-	private ConceptSourcesLoader conceptSourcesLoader;
-	
-	@Autowired
-	private ConceptsLoader conceptsLoader;
-	
-	@Autowired
-	private ConceptSetsLoader conceptSetsLoader;
-	
-	@Autowired
-	private ProgramsLoader programsLoader;
-	
-	@Autowired
-	private ProgramWorkflowsLoader programWorkflowsLoader;
-	
-	@Autowired
-	private ProgramWorkflowStatesLoader programWorkflowStatesLoader;
-	
-	@Autowired
-	private PersonAttributeTypesLoader personAttributeTypesLoader;
-	
-	@Autowired
-	private IdentifierSourcesLoader identifierSourcesLoader;
-	
-	@Autowired
-	private DrugsLoader drugsLoader;
-	
-	@Autowired
-	private OrderFrequenciesLoader orderFrequenciesLoader;
-	
-	@Autowired
-	private PrivilegesLoader privilegesLoader;
-	
-	@Autowired
-	private EncounterTypesLoader encounterTypesLoader;
-	
-	@Autowired
-	private EncounterRolesLoader encounterRolesLoader;
-	
-	@Autowired
-	private RolesLoader rolesLoader;
-	
-	@Autowired
-	private MetadataTermMappingsLoader metadataTermMappingsLoader;
-	
-	@Autowired
-	private SpecialitiesLoader appointmentsSpecialitiesLoader;
-	
-	@Autowired
-	private AppointmentServiceDefinitionsLoader appointmentsServiceDefinitionsLoader;
-	
-	@Autowired
-	private AppointmentServiceTypesLoader appointmentServiceTypesLoader;
-	
-	@Autowired
-	private OrderTypesLoader orderTypesLoader;
-	
-	@Autowired
-	private DataFilterMappingsLoader dataFilterMappingsLoader;
-	
-	@Autowired
-	private AmpathFormsLoader ampathFormsLoader;
-	
-	@Autowired
-	private BahmniFormsLoader bahmniFormsLoader;
-	
-	@Autowired
-	private MetadataSetsLoader metadataSetLoader;
-	
-	@Autowired
-	private MetadataSetMembersLoader metadataSetMemberLoader;
-	
-	@Autowired
-	private AutoGenerationOptionsLoader autoGenerationOptionsLoader;
-	
-	@Autowired
-	private HtmlFormsLoader htmlFormsLoader;
-	
-	@Autowired
-	private RelationshipTypesLoader relationshipTypesLoader;
-	
-	@Autowired
-	private OpenConceptLabLoader openConceptLabLoader;
-	
-	@Autowired
-	private LiquibaseLoader liquibaseLoader;
 	
 	@Override
 	public void updateSearchIndex() {
@@ -177,214 +33,85 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
 	}
 	
 	@Test
-	public void getLoaders_shouldBeUnivoquelyOrdered() {
-		
-		int count = 0;
-		
+	public void getLoaders_shouldBeUnequivocallyOrdered() {
 		Loader previousLoader = null;
-		Loader loader = new ZeroOrderLoader();
 		
-		previousLoader = loader;
-		loader = liquibaseLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		List<Loader> loaders = applicationContext.getBeansOfType(Loader.class).values().stream().sorted()
+		        .collect(Collectors.toList());
 		
-		previousLoader = loader;
-		loader = jsonKeyValuesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		for (Loader loader : loaders) {
+			if (previousLoader == null) {
+				previousLoader = loader;
+				continue;
+			}
+			
+			previousLoader = assertLoaderOrder(previousLoader, loader);
+		}
 		
-		previousLoader = loader;
-		loader = conceptClassesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		List<Loader> runtimeLoaders = getService().getLoaders();
+		assertThat(runtimeLoaders, everyItem(hasExpectedDomain()));
+		assertThat(runtimeLoaders, coversAllDomains());
+	}
+	
+	private Loader assertLoaderOrder(Loader previousLoader, Loader currentLoader) {
+		assertThat("Expected " + currentLoader + " to have an order value greater than " + previousLoader
+		        + " but the current loader order is " + currentLoader.getOrder() + " and the previous loader had order "
+		        + previousLoader.getOrder(),
+		    currentLoader.getOrder(), greaterThan(previousLoader.getOrder()));
+		return currentLoader;
+	}
+	
+	private static Matcher<List<Loader>> coversAllDomains() {
+		return new AllDomainsMatcher();
+	}
+	
+	private static Matcher<Loader> hasExpectedDomain() {
+		return new ExpectedDomainMatcher();
+	}
+	
+	private static class AllDomainsMatcher extends TypeSafeDiagnosingMatcher<List<Loader>> {
 		
-		previousLoader = loader;
-		loader = conceptSourcesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		@Override
+		protected boolean matchesSafely(List<Loader> loaders, Description mismatchDescription) {
+			boolean result = true;
+			Set<String> loaderDomains = loaders.stream().map(Loader::getDomainName).collect(Collectors.toSet());
+			for (Domain domain : Domain.values()) {
+				if (!loaderDomains.contains(domain.getName())) {
+					mismatchDescription.appendText("no loader for domain ").appendText(domain.toString())
+					        .appendText(" was found");
+					result = false;
+				}
+			}
+			
+			return result;
+		}
 		
-		previousLoader = loader;
-		loader = mdsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		@Override
+		public void describeTo(Description description) {
+			
+		}
+	}
+	
+	private static class ExpectedDomainMatcher extends TypeSafeDiagnosingMatcher<Loader> {
 		
-		previousLoader = loader;
-		loader = visitTypesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
+		@Override
+		protected boolean matchesSafely(Loader item, Description mismatchDescription) {
+			try {
+				Arrays.stream(Domain.values()).filter(d -> d.getName().equals(item.getDomainName())).findFirst()
+				        .orElseThrow(IllegalArgumentException::new);
+			}
+			catch (IllegalArgumentException e) {
+				mismatchDescription.appendText("has a domain name ").appendValue(item.getDomainName())
+				        .appendText(" that is not a recognised domain name");
+				return false;
+			}
+			
+			return true;
+		}
 		
-		previousLoader = loader;
-		loader = pitLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = relationshipTypesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = locationTagsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = privilegesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = encounterTypesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = encounterRolesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = rolesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = globalPropertiesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = attributeTypesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = providerRolesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = locationsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = locationTagMapsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = bahmniFormsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = openConceptLabLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = conceptsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = conceptSetsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = programsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = programWorkflowsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = programWorkflowStatesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = personAttributeTypesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = identifierSourcesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = autoGenerationOptionsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = drugsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = orderFrequenciesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = orderTypesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = appointmentsSpecialitiesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = appointmentsServiceDefinitionsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = appointmentServiceTypesLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = dataFilterMappingsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = metadataSetLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = metadataSetMemberLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = metadataTermMappingsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = ampathFormsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		previousLoader = loader;
-		loader = htmlFormsLoader;
-		count++;
-		Assert.assertThat(loader.getOrder(), greaterThan(previousLoader.getOrder()));
-		
-		Assert.assertEquals(getService().getLoaders().size(), count);
-		
+		@Override
+		public void describeTo(Description description) {
+			description.appendText("the domain is a valid domain");
+		}
 	}
 }

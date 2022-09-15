@@ -66,6 +66,7 @@
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
         <openconceptlabVersion>1.2.9</openconceptlabVersion>
+        <fhir2Version>1.2.0</fhir2Version>
 
         <!-- Modules compatibility > Core 2.3.0 -->
         <datafilterVersion>1.0.0</datafilterVersion>
@@ -135,6 +136,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>uk.co.probablyfine</groupId>
+            <artifactId>java-8-matchers</artifactId>
+            <version>1.9</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Supported aware-of module dependencies, sorted alphabetically -->
 
         <dependency>
@@ -177,6 +185,17 @@
             <artifactId>idgen-api</artifactId>
             <version>${idgenVersion}</version>
             <scope>provided</scope>
+            <exclusions>
+                <!-- These are provided by FHIR2 -->
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -197,6 +216,13 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>providermanagement-api</artifactId>
             <version>${providermanagementVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>fhir2-api</artifactId>
+            <version>${fhir2Version}</version>
             <scope>provided</scope>
         </dependency>
 
