@@ -58,8 +58,8 @@ public class DeleteDomainChecksumsChangesetIntegrationTest extends DomainBaseMod
 		Database liquibaseConnection = DatabaseFactory.getInstance()
 		        .findCorrectDatabaseImplementation(new JdbcConnection(getConnection()));
 		
-		liquibaseConnection.setDatabaseChangeLogTableName("LIQUIBASECHANGELOG");
-		liquibaseConnection.setDatabaseChangeLogLockTableName("LIQUIBASECHANGELOGLOCK");
+		liquibaseConnection.setDatabaseChangeLogTableName("LIQUIBASECHANGELOG_TEST");
+		liquibaseConnection.setDatabaseChangeLogLockTableName("LIQUIBASECHANGELOGLOCK_TEST");
 		
 		return new Liquibase(filename, new ClassLoaderResourceAccessor(getClass().getClassLoader()), liquibaseConnection);
 	}
