@@ -1,0 +1,4 @@
+Uuid,Void/Retire,Fhir observation category,Concept class,_order:1000
+e518de2a-be31-4202-9772-cc65c3ef7227,,laboratory,Test,
+5f8e2dd2-ce1f-42d3-bb34-55acb3f58c5d,,exam,Finding,
+2374215a-8808-4eee-b5a5-9190423862a0,,laboratory,LabSet,

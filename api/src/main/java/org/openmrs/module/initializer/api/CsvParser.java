@@ -220,7 +220,7 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 		final CsvLine csvLine = new CsvLine(headerLine, line);
 		
 		//
-		// 1. Boostrapping
+		// 1. Bootstrapping
 		//
 		T instance = bootstrap(csvLine);
 		
