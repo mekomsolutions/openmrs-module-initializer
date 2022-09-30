@@ -1,36 +1,38 @@
 package org.openmrs.module.initializer.api.fhir.cs;
 
-import org.hibernate.SessionFactory;
+import org.apache.commons.lang.StringUtils;
+import org.openmrs.ConceptSource;
 import org.openmrs.annotation.OpenmrsProfile;
-import org.openmrs.module.fhir2.api.dao.FhirConceptSourceDao;
+import org.openmrs.api.ConceptService;
+import org.openmrs.module.fhir2.api.FhirConceptSourceService;
 import org.openmrs.module.fhir2.model.FhirConceptSource;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import static org.openmrs.module.initializer.Domain.FHIR_CONCEPT_SOURCES;
 
 @Component
-@OpenmrsProfile(modules = { "fhir2:1.*" })
+@OpenmrsProfile(modules = { "fhir2:1.6.*" })
 public class FhirConceptSourceCsvParser extends CsvParser<FhirConceptSource, BaseLineProcessor<FhirConceptSource>> {
+	
+	public static final String CONCEPT_SOURCE_HEADER = "Concept source";
 	
 	public static final String CONCEPT_SOURCE_NAME_HEADER = "Concept source name";
 	
-	private final FhirConceptSourceDao dao;
+	private final ConceptService conceptService;
 	
-	private final SessionFactory sessionFactory;
+	private final FhirConceptSourceService fhirConceptSourceService;
 	
 	@Autowired
-	protected FhirConceptSourceCsvParser(FhirConceptSourceDao dao,
-	    @Qualifier("sessionFactory") SessionFactory sessionFactory, BaseLineProcessor<FhirConceptSource> lineProcessor) {
+	protected FhirConceptSourceCsvParser(ConceptService conceptService, FhirConceptSourceService fhirConceptSourceService,
+	    BaseLineProcessor<FhirConceptSource> lineProcessor) {
 		super(lineProcessor);
-		
-		this.dao = dao;
-		this.sessionFactory = sessionFactory;
+		this.conceptService = conceptService;
+		this.fhirConceptSourceService = fhirConceptSourceService;
 	}
 	
 	@Override
@@ -40,23 +42,49 @@ public class FhirConceptSourceCsvParser extends CsvParser<FhirConceptSource, Bas
 	
 	@Override
 	public FhirConceptSource bootstrap(CsvLine line) throws IllegalArgumentException {
+		ConceptSource conceptSource;
+		String ref = line.getString(CONCEPT_SOURCE_HEADER);
 		String name = line.getString(CONCEPT_SOURCE_NAME_HEADER);
 		
-		if (name == null || name.isEmpty()) {
-			throw new IllegalArgumentException(
-			        "'concept source name' was not found for FHIR concept source " + line.getUuid());
+		if (StringUtils.isNotBlank(ref)) {
+			conceptSource = conceptService.getConceptSourceByUuid(ref);
+			if (conceptSource == null) {
+				conceptSource = conceptService.getConceptSourceByName(ref);
+			}
+			if (conceptSource == null) {
+				conceptSource = conceptService.getConceptSourceByHL7Code(ref);
+			}
+			if (conceptSource == null) {
+				conceptSource = conceptService.getConceptSourceByUniqueId(ref);
+			}
+			if (conceptSource == null) {
+				throw new IllegalArgumentException(
+				        "'concept source '" + ref + "' not found for FHIR concept source " + line.getUuid());
+			}
+		} else if (StringUtils.isNotBlank(name)) {
+			conceptSource = conceptService.getConceptSourceByName(name);
+			if (conceptSource == null) {
+				throw new IllegalArgumentException(
+				        "'concept source '" + name + "' not found for FHIR concept source " + line.getUuid());
+			}
+		} else {
+			throw new IllegalArgumentException("'concept source is missing from FHIR concept source CSV" + line.getUuid());
 		}
 		
-		return dao.getFhirConceptSourceByConceptSourceName(name).orElseGet(() -> {
-			FhirConceptSource newConceptSource = new FhirConceptSource();
-			newConceptSource.setName(name);
-			return newConceptSource;
-		});
+		for (FhirConceptSource fhirConceptSource : fhirConceptSourceService.getFhirConceptSources()) {
+			if (fhirConceptSource.getConceptSource().equals(conceptSource)) {
+				return fhirConceptSource;
+			}
+		}
+		
+		FhirConceptSource newConceptSource = new FhirConceptSource();
+		newConceptSource.setName(conceptSource.getName());
+		newConceptSource.setConceptSource(conceptSource);
+		return newConceptSource;
 	}
 	
 	@Override
 	public FhirConceptSource save(FhirConceptSource instance) {
-		sessionFactory.getCurrentSession().saveOrUpdate(instance);
-		return instance;
+		return fhirConceptSourceService.saveFhirConceptSource(instance);
 	}
 }
