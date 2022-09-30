@@ -84,7 +84,7 @@ public class FhirConceptSourcesLoaderIntegrationTest extends DomainBaseModuleCon
 			assertThat(maybeConceptSource, contains(hasProperty("url", equalTo("http://snomed.info/sct/"))));
 			assertThat(maybeConceptSource, contains(hasProperty("uuid", equalTo("befca738-1704-4a47-9f6a-0fcacf786061"))));
 		}
-
+		
 		int numFound = 0;
 		for (FhirConceptSource fhirConceptSource : service.getFhirConceptSources()) {
 			if (fhirConceptSource.getName().equalsIgnoreCase(TEST_CONCEPT_SOURCE_NAME)) {
