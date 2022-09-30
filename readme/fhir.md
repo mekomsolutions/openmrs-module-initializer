@@ -24,17 +24,15 @@ fhirconceptsources/
 
 The format of this CSV should be as follows:
 
-| <sub>Uuid</sub> |<sub>Void/Retire</sub> | <sub>Concept source name</sub> | <sub>Url</sub> | <sub>_order:1000</sub> |
+| <sub>Uuid</sub> |<sub>Void/Retire</sub> | <sub>Concept source</sub> | <sub>Url</sub> | <sub>_order:1000</sub> |
 | - | - | - | - | - |
 | <sub>befca738-1704-4a47-9f6a-0fcacf786061</sub> | | <sub>CIEL</sub> | <sub>https://api.openconceptlab.org/orgs/CIEL/sources/CIEL</sub> | |
 
 Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
 
-###### Header `Concept source name`
+###### Header `Concept source`
 
-This is the name of the concept source (and also the name of the entry in the fhir_concept_source table). It's usually just
-the human-readable name of the concept source. This is the unique identifier for the FHIR concept source and is *required*
-for every entry.
+This is *required* for every entry and is what is used to identify the underlying concept source.  This can refer to the name (if unique), hl7Code, uniqueId, or uuid of the concept source that this entry refers to. This must refer to an existing Concept source entry, added via the conceptsources domain.  This will not create or modify the underlying concept source. The name of this underlying concept source will be used as the name of the FHIR concept source.
 
 ###### Header `Url`
 

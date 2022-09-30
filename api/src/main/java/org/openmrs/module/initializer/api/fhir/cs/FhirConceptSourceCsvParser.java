@@ -21,8 +21,6 @@ public class FhirConceptSourceCsvParser extends CsvParser<FhirConceptSource, Bas
 	
 	public static final String CONCEPT_SOURCE_HEADER = "Concept source";
 	
-	public static final String CONCEPT_SOURCE_NAME_HEADER = "Concept source name";
-	
 	private final ConceptService conceptService;
 	
 	private final FhirConceptSourceService fhirConceptSourceService;
@@ -44,7 +42,6 @@ public class FhirConceptSourceCsvParser extends CsvParser<FhirConceptSource, Bas
 	public FhirConceptSource bootstrap(CsvLine line) throws IllegalArgumentException {
 		ConceptSource conceptSource;
 		String ref = line.getString(CONCEPT_SOURCE_HEADER);
-		String name = line.getString(CONCEPT_SOURCE_NAME_HEADER);
 		
 		if (StringUtils.isNotBlank(ref)) {
 			conceptSource = conceptService.getConceptSourceByUuid(ref);
@@ -61,14 +58,9 @@ public class FhirConceptSourceCsvParser extends CsvParser<FhirConceptSource, Bas
 				throw new IllegalArgumentException(
 				        "'concept source '" + ref + "' not found for FHIR concept source " + line.getUuid());
 			}
-		} else if (StringUtils.isNotBlank(name)) {
-			conceptSource = conceptService.getConceptSourceByName(name);
-			if (conceptSource == null) {
-				throw new IllegalArgumentException(
-				        "'concept source '" + name + "' not found for FHIR concept source " + line.getUuid());
-			}
 		} else {
-			throw new IllegalArgumentException("'concept source is missing from FHIR concept source CSV" + line.getUuid());
+			throw new IllegalArgumentException(
+			        "'" + CONCEPT_SOURCE_HEADER + "' is missing from FHIR concept source CSV" + line.getUuid());
 		}
 		
 		for (FhirConceptSource fhirConceptSource : fhirConceptSourceService.getFhirConceptSources()) {
