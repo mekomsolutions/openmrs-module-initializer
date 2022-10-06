@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer.api.fhir.pis;
 
-import org.openmrs.PatientIdentifierType;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.PatientService;
 import org.openmrs.module.fhir2.model.FhirPatientIdentifierSystem;
@@ -10,46 +10,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@OpenmrsProfile(modules = { "fhir2:1.*" })
+@OpenmrsProfile(modules = { "fhir2:1.6.*" })
 public class FhirPatientIdentifierSystemLineProcessor extends BaseLineProcessor<FhirPatientIdentifierSystem> {
-	
-	private static final String PATIENT_IDENTIFIER_TYPE_HEADER = "Patient identifier type name";
 	
 	private static final String URL_HEADER = "url";
 	
-	private final PatientService patientService;
-	
-	@Autowired
-	public FhirPatientIdentifierSystemLineProcessor(PatientService patientService) {
-		this.patientService = patientService;
+	public FhirPatientIdentifierSystemLineProcessor() {
 	}
 	
 	@Override
 	public FhirPatientIdentifierSystem fill(FhirPatientIdentifierSystem instance, CsvLine line)
 	        throws IllegalArgumentException {
-		String patientIdentifierTypeName = line.get(PATIENT_IDENTIFIER_TYPE_HEADER, true);
 		
-		instance.setName(patientIdentifierTypeName);
+		String uuid = line.getUuid();
 		
-		PatientIdentifierType patientIdentifierType = patientService
-		        .getPatientIdentifierTypeByName(patientIdentifierTypeName);
-		
-		if (patientIdentifierType == null) {
-			throw new IllegalStateException("Could not find a patient identifier type named " + patientIdentifierTypeName);
+		if (StringUtils.isNotBlank(uuid)) {
+			instance.setUuid(line.getUuid());
 		}
 		
-		instance.setPatientIdentifierType(patientIdentifierType);
+		// The Bootstrap method of the FhirPatientIdentifierSystemCsvParser should set the Identifier Type.
+		// If this has not happened, throw an exception
+		if (instance.getPatientIdentifierType() == null) {
+			throw new IllegalArgumentException(
+			        "patient identifier type is missing from FHIR concept source " + instance.getUuid());
+		}
+		instance.setName(instance.getPatientIdentifierType().getName());
 		
+		// Require a url unless it already exists and is being retired
 		String url = line.get(URL_HEADER, true);
-		
-		if ((instance.getId() == null || !BaseLineProcessor.getVoidOrRetire(line))
-		        && (instance.getUrl() == null || instance.getUrl().isEmpty()) && (url == null || url.isEmpty())) {
+		boolean requiresUrl = (instance.getId() == null || !BaseLineProcessor.getVoidOrRetire(line));
+		if (requiresUrl && StringUtils.isBlank(url)) {
 			throw new IllegalStateException("URL must be supplied");
 		}
-		
-		if (url != null && !url.isEmpty()) {
-			instance.setUrl(url);
-		}
+		instance.setUrl(url);
 		
 		return instance;
 	}

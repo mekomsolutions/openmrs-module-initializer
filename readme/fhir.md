@@ -57,9 +57,20 @@ fhirpatientidentifiersystems/
 
 The format of this CSV should be as follows:
 
-| <sub>Uuid</sub> |<sub>Void/Retire</sub> | <sub>Patient identifier type name</sub> | <sub>Url</sub> | <sub>_order:1000</sub> |
+| <sub>Uuid</sub> |<sub>Void/Retire</sub> | <sub>Patient identifier type</sub> | <sub>Url</sub> | <sub>_order:1000</sub> |
 | - | - | - | - | - |
 | <sub>87c87473-b394-430b-93d3-b46d0faca26e</sub> | | <sub>OpenMRS ID</sub> | <sub>http://openmrs.org/identifier</sub> | |
 
 Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
 
+###### Header `Patient identifier type`
+
+This is *required* for every entry and is what is used to identify the underlying patient identifier type.  This can refer to the name (if unique) or uuid of the patient identifier type that this entry refers to. This must refer to an existing Patient Identifier Type, added via the patientidentifiertypes domain.  This will not create or modify the underlying patient identifier types. The name of this underlying patient identifier type will be used as the name of the FHIR patient identifier system.
+
+###### Header `Url`
+
+This is the URL of the code system in FHIR. For terminologies identified
+[in the FHIR CodeSystem registry](https://www.hl7.org/fhir/terminologies-systems.html), this should be the preferred URL for
+that code system, e.g. SNOMED CT is "http://snomed.info/sct". If the code system is not defined by HL7 or that table, then
+the code systems own preferred URL should be used, e.g., for CIEL we tend to use
+"https://api.openconceptlab.org/orgs/CIEL/sources/CIEL".

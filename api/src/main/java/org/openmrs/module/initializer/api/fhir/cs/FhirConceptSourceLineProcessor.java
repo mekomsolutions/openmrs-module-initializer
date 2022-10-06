@@ -2,11 +2,9 @@ package org.openmrs.module.initializer.api.fhir.cs;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.annotation.OpenmrsProfile;
-import org.openmrs.api.ConceptService;
 import org.openmrs.module.fhir2.model.FhirConceptSource;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,11 +13,7 @@ public class FhirConceptSourceLineProcessor extends BaseLineProcessor<FhirConcep
 	
 	private static final String URL_HEADER = "url";
 	
-	private final ConceptService conceptService;
-	
-	@Autowired
-	public FhirConceptSourceLineProcessor(ConceptService conceptService) {
-		this.conceptService = conceptService;
+	public FhirConceptSourceLineProcessor() {
 	}
 	
 	@Override
