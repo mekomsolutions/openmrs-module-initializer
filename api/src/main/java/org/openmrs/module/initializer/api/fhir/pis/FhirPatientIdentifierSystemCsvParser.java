@@ -58,7 +58,7 @@ public class FhirPatientIdentifierSystemCsvParser extends CsvParser<FhirPatientI
 			}
 		} else {
 			throw new IllegalArgumentException("'" + PATIENT_IDENTIFIER_TYPE_HEADER
-			        + "' is missing from FHIR patient identifier system CSV" + line.getUuid());
+			        + "' is missing from FHIR patient identifier system CSV: " + line.getUuid());
 		}
 		
 		Optional<FhirPatientIdentifierSystem> system = fhirPatientIdentifierSystemService

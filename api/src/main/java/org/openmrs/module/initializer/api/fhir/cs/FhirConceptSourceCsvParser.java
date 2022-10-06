@@ -60,7 +60,7 @@ public class FhirConceptSourceCsvParser extends CsvParser<FhirConceptSource, Bas
 			}
 		} else {
 			throw new IllegalArgumentException(
-			        "'" + CONCEPT_SOURCE_HEADER + "' is missing from FHIR concept source CSV" + line.getUuid());
+			        "'" + CONCEPT_SOURCE_HEADER + "' is missing from FHIR concept source CSV: " + line.getUuid());
 		}
 		
 		for (FhirConceptSource fhirConceptSource : fhirConceptSourceService.getFhirConceptSources()) {
