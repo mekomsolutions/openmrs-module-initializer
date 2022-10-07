@@ -1,7 +1,10 @@
 package org.openmrs.module.initializer.api.fhir.pis;
 
-import org.hibernate.SessionFactory;
+import org.apache.commons.lang.StringUtils;
+import org.openmrs.PatientIdentifierType;
 import org.openmrs.annotation.OpenmrsProfile;
+import org.openmrs.api.PatientService;
+import org.openmrs.module.fhir2.api.FhirPatientIdentifierSystemService;
 import org.openmrs.module.fhir2.model.FhirPatientIdentifierSystem;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
@@ -11,19 +14,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 import static org.openmrs.module.initializer.Domain.FHIR_PATIENT_IDENTIFIER_SYSTEMS;
 
 @Component
-@OpenmrsProfile(modules = { "fhir2:1.*" })
+@OpenmrsProfile(modules = { "fhir2:1.6.*" })
 public class FhirPatientIdentifierSystemCsvParser extends CsvParser<FhirPatientIdentifierSystem, BaseLineProcessor<FhirPatientIdentifierSystem>> {
 	
-	private final SessionFactory sessionFactory;
+	private static final String PATIENT_IDENTIFIER_TYPE_HEADER = "Patient identifier type";
+	
+	private final PatientService patientService;
+	
+	private final FhirPatientIdentifierSystemService fhirPatientIdentifierSystemService;
 	
 	@Autowired
-	protected FhirPatientIdentifierSystemCsvParser(@Qualifier("sessionFactory") SessionFactory sessionFactory,
+	protected FhirPatientIdentifierSystemCsvParser(@Qualifier("patientService") PatientService patientService,
+	    FhirPatientIdentifierSystemService fhirPatientIdentifierSystemService,
 	    BaseLineProcessor<FhirPatientIdentifierSystem> lineProcessor) {
 		super(lineProcessor);
-		this.sessionFactory = sessionFactory;
+		this.patientService = patientService;
+		this.fhirPatientIdentifierSystemService = fhirPatientIdentifierSystemService;
 	}
 	
 	@Override
@@ -33,25 +44,38 @@ public class FhirPatientIdentifierSystemCsvParser extends CsvParser<FhirPatientI
 	
 	@Override
 	public FhirPatientIdentifierSystem bootstrap(CsvLine line) throws IllegalArgumentException {
-		if (line.getUuid() == null || line.getUuid().isEmpty()) {
-			return new FhirPatientIdentifierSystem();
+		PatientIdentifierType identifierType;
+		String ref = line.getString(PATIENT_IDENTIFIER_TYPE_HEADER);
+		
+		if (StringUtils.isNotBlank(ref)) {
+			identifierType = patientService.getPatientIdentifierTypeByUuid(ref);
+			if (identifierType == null) {
+				identifierType = patientService.getPatientIdentifierTypeByName(ref);
+			}
+			if (identifierType == null) {
+				throw new IllegalArgumentException("'Patient Identifier Type '" + ref
+				        + "' not found for FHIR patient identifier system " + line.getUuid());
+			}
+		} else {
+			throw new IllegalArgumentException("'" + PATIENT_IDENTIFIER_TYPE_HEADER
+			        + "' is missing from FHIR patient identifier system CSV: " + line.getUuid());
 		}
 		
-		FhirPatientIdentifierSystem result = (FhirPatientIdentifierSystem) sessionFactory.getCurrentSession()
-		        .createQuery("from " + FhirPatientIdentifierSystem.class.getSimpleName() + " where uuid = :uuid")
-		        .setParameter("uuid", line.getUuid()).uniqueResult();
+		Optional<FhirPatientIdentifierSystem> system = fhirPatientIdentifierSystemService
+		        .getFhirPatientIdentifierSystem(identifierType);
 		
-		if (result == null) {
-			result = new FhirPatientIdentifierSystem();
-			result.setUuid(line.getUuid());
+		if (system.isPresent()) {
+			return system.get();
 		}
 		
-		return result;
+		FhirPatientIdentifierSystem newSystem = new FhirPatientIdentifierSystem();
+		newSystem.setName(identifierType.getName());
+		newSystem.setPatientIdentifierType(identifierType);
+		return newSystem;
 	}
 	
 	@Override
 	public FhirPatientIdentifierSystem save(FhirPatientIdentifierSystem instance) {
-		sessionFactory.getCurrentSession().saveOrUpdate(instance);
-		return instance;
+		return fhirPatientIdentifierSystemService.saveFhirPatientIdentifierSystem(instance);
 	}
 }

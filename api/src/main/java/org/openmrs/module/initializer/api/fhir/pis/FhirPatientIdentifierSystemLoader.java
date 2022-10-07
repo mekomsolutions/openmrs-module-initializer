@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@OpenmrsProfile(modules = { "fhir2:1.*" })
+@OpenmrsProfile(modules = { "fhir2:1.6.*" })
 public class FhirPatientIdentifierSystemLoader extends BaseCsvLoader<FhirPatientIdentifierSystem, FhirPatientIdentifierSystemCsvParser> {
 	
 	@Autowired

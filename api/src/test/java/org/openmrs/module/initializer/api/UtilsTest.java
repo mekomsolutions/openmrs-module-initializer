@@ -288,7 +288,7 @@ public class UtilsTest {
 		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType_$$_javassist_26"));
 		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType"));
 	}
-
+	
 	@Test
 	public void fetchConcept_shouldFetchConceptByUuid() {
 		ConceptService cs = mock(ConceptService.class);
@@ -300,7 +300,7 @@ public class UtilsTest {
 		when(cs.getConceptByName("concept:lookup")).thenReturn(nameConcept);
 		Assert.assertEquals(uuidConcept, Utils.fetchConcept("concept:lookup", cs));
 	}
-
+	
 	@Test
 	public void fetchConcept_shouldFetchConceptByMapping() {
 		ConceptService cs = mock(ConceptService.class);
@@ -311,7 +311,7 @@ public class UtilsTest {
 		when(cs.getConceptByName("concept:lookup")).thenReturn(nameConcept);
 		Assert.assertEquals(mappingConcept, Utils.fetchConcept("concept:lookup", cs));
 	}
-
+	
 	@Test
 	public void fetchConcept_shouldFetchConceptByName() {
 		ConceptService cs = mock(ConceptService.class);

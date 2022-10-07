@@ -66,7 +66,7 @@
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
         <openconceptlabVersion>1.2.9</openconceptlabVersion>
-        <fhir2Version>1.2.0</fhir2Version>
+        <fhir2Version>1.6.0-SNAPSHOT</fhir2Version>
 
         <!-- Modules compatibility > Core 2.3.0 -->
         <datafilterVersion>1.0.0</datafilterVersion>
@@ -222,6 +222,20 @@
         <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>fhir2-api</artifactId>
+            <version>${fhir2Version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>fhir2-api-2.1</artifactId>
+            <version>${fhir2Version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>fhir2-api-2.2</artifactId>
             <version>${fhir2Version}</version>
             <scope>provided</scope>
         </dependency>
