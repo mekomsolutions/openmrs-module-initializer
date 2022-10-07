@@ -89,8 +89,13 @@ Here is an example of valid CSV to define basic concepts:
 
 ###### Header `Answers` *(optional)*
 To provide a semicolon-separated list of answer concepts to the concept to be created or edited.
+Note that if this header/column is present, when processing an existing concept, all answers *not* specified here will be removed.
+If the column is *not* present, any existing answers will be preserved (allowing answers to be managed via the conceptsets domain).
+
 ###### Header `Members` *(optional)*
 To provide a semicolon-separated list of concepts to be members of the concept set to be created or edited. Note that the concept will be marked to be a set as soon as set members are provided.
+Note that if this header/column is present, when processing an existing concept, all members *not* specified here will be removed. 
+If the column is *not* present, any existing members will be preserved (allowing members to be managed via the conceptsets domain).
 
 Here is an example of the 'nested' columns:
 
