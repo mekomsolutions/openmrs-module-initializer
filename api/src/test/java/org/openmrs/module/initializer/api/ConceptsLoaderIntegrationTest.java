@@ -250,7 +250,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		
 		Context.setLocale(localeEn);
 		
-		// Verify 'nested' CSV loading
+		// Verify 'nested' and 'without_members_column' CSV loading
 		{
 			Set<String> nestedUuids = new HashSet<String>(Arrays.asList(
 			    new String[] { "8bc5043c-3221-11e7-93ae-92361f002671", "8bc506bc-3221-11e7-93ae-92361f002671" }));
@@ -258,6 +258,9 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			// Verify question
 			c = cs.getConceptByUuid("8bc50946-3221-11e7-93ae-92361f002671");
 			Assert.assertNotNull(c);
+			// name should have been updated in concepts_set_without_members_or_answers_columns.csv
+			assertEquals("Update concept name but do not remove answers", c.getFullySpecifiedName(localeEn).getName());
+			// but answers should still be as defined in concepts_nested
 			Assert.assertFalse(c.isSet());
 			Assert.assertFalse(CollectionUtils.isEmpty(c.getAnswers()));
 			assertEquals(2, c.getAnswers().size());
@@ -268,6 +271,9 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			// Verify set
 			c = cs.getConceptByUuid("c84c3f88-3221-11e7-93ae-92361f002671");
 			Assert.assertNotNull(c);
+			// name should have been updated in concepts_set_without_members_or_answers_columns.csv
+			assertEquals("Update concept name but do not remove members", c.getFullySpecifiedName(localeEn).getName());
+			// but set should still be as defined in concepts_nested
 			Assert.assertTrue(c.isSet());
 			Assert.assertFalse(CollectionUtils.isEmpty(c.getSetMembers()));
 			assertEquals(2, c.getSetMembers().size());
@@ -279,7 +285,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertNull(cs.getConceptByName("Unexisting concept answer"));
 			Assert.assertNull(cs.getConceptByName("Unexisting set member"));
 			
-			// Verify modified
+			// Verify modified (set members removed)
 			c = cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0");
 			Assert.assertTrue(CollectionUtils.isEmpty(c.getSetMembers()));
 			Assert.assertFalse(c.isSet());
