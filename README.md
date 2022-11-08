@@ -159,6 +159,8 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ### Releases notes
 
+#### Version 2.4.1
+
 #### Version 2.4.0
 * Added support for 'fhirconceptsources' domain.
 * Added support for 'fhirpatientidentifiersystems' domain.
