@@ -160,6 +160,9 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.4.0
+* Added support for 'fhirconceptsources' domain
+* Added support for 'fhirpatientidentifiersystems' domain
+* Enhancement to ensure that reloading Concept CSVs does not clear Members/Answers if those columns aren't part of CSV file.
 * 'concepts' domain to support a new expandable `MAPPINGS` header, thereby discouraging the older `Same as mappings`.
 * Concept references expanded to allow use of concept names in locales other than the default system locale
 
