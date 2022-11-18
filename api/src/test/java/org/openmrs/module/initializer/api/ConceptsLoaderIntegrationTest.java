@@ -250,7 +250,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		
 		Context.setLocale(localeEn);
 		
-		// Verify 'nested' CSV loading
+		// Verify 'nested' and 'without_members_column' CSV loading
 		{
 			Set<String> nestedUuids = new HashSet<String>(Arrays.asList(
 			    new String[] { "8bc5043c-3221-11e7-93ae-92361f002671", "8bc506bc-3221-11e7-93ae-92361f002671" }));
@@ -258,6 +258,9 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			// Verify question
 			c = cs.getConceptByUuid("8bc50946-3221-11e7-93ae-92361f002671");
 			Assert.assertNotNull(c);
+			// name should have been updated in concepts_set_without_members_or_answers_columns.csv
+			assertEquals("Update concept name but do not remove answers", c.getFullySpecifiedName(localeEn).getName());
+			// but answers should still be as defined in concepts_nested
 			Assert.assertFalse(c.isSet());
 			Assert.assertFalse(CollectionUtils.isEmpty(c.getAnswers()));
 			assertEquals(2, c.getAnswers().size());
@@ -268,6 +271,9 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			// Verify set
 			c = cs.getConceptByUuid("c84c3f88-3221-11e7-93ae-92361f002671");
 			Assert.assertNotNull(c);
+			// name should have been updated in concepts_set_without_members_or_answers_columns.csv
+			assertEquals("Update concept name but do not remove members", c.getFullySpecifiedName(localeEn).getName());
+			// but set should still be as defined in concepts_nested
 			Assert.assertTrue(c.isSet());
 			Assert.assertFalse(CollectionUtils.isEmpty(c.getSetMembers()));
 			assertEquals(2, c.getSetMembers().size());
@@ -279,7 +285,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			Assert.assertNull(cs.getConceptByName("Unexisting concept answer"));
 			Assert.assertNull(cs.getConceptByName("Unexisting set member"));
 			
-			// Verify modified
+			// Verify modified (set members removed)
 			c = cs.getConceptByUuid("d803e973-1010-4415-8659-c011dec707c0");
 			Assert.assertTrue(CollectionUtils.isEmpty(c.getSetMembers()));
 			Assert.assertFalse(c.isSet());
@@ -290,15 +296,17 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			// Verify mappings are added
 			c = cs.getConceptByUuid("2c4da504-33d4-11e7-a919-92ebcb67fe33");
 			Assert.assertNotNull(c);
-			assertEquals(2, c.getConceptMappings().size());
+			assertEquals(3, c.getConceptMappings().size());
 			Set<String> names = new HashSet<String>();
 			for (ConceptMap m : c.getConceptMappings()) {
+				String mapType = m.getConceptMapType().getName();
 				String source = m.getConceptReferenceTerm().getConceptSource().getName();
 				String code = m.getConceptReferenceTerm().getCode();
-				names.add(source + ":" + code);
+				names.add(mapType + ":" + source + ":" + code);
 			}
-			Assert.assertTrue(names.contains("Cambodia:1234"));
-			Assert.assertTrue(names.contains("CIEL:159392"));
+			Assert.assertTrue(names.contains("same-as:Cambodia:1234"));
+			Assert.assertTrue(names.contains("same-as:CIEL:159392"));
+			Assert.assertTrue(names.contains("broader-than:CIEL:broader-test-1"));
 			
 			// Verify not saved with missing mapping(s)
 			Assert.assertNull(cs.getConceptByName("Unexisting mapping"));
@@ -308,6 +316,18 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 			c = cs.getConceptByMapping("foo12bar", "Cambodia");
 			Assert.assertNotNull(c);
 			assertEquals("NEW_CONCEPT_REUSING_MAPPING", c.getFullySpecifiedName(localeEn).getName());
+			
+			// Verify new mappings are added that are broader-than CIEL
+			assertEquals(3, c.getConceptMappings().size());
+			for (ConceptMap m : c.getConceptMappings()) {
+				String mapType = m.getConceptMapType().getName();
+				String source = m.getConceptReferenceTerm().getConceptSource().getName();
+				String code = m.getConceptReferenceTerm().getCode();
+				names.add(mapType + ":" + source + ":" + code);
+			}
+			Assert.assertTrue(names.contains("same-as:Cambodia:foo12bar"));
+			Assert.assertTrue(names.contains("broader-than:CIEL:broader-test-2a"));
+			Assert.assertTrue(names.contains("broader-than:CIEL:broader-test-2b"));
 		}
 		
 		// Verify. 'numerics' CSV loading
