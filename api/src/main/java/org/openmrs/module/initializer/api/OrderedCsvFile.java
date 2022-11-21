@@ -19,9 +19,10 @@ public class OrderedCsvFile extends OrderedFile {
 	
 	@Override
 	protected Integer fetchOrder(File file) throws Exception {
-		InputStream is = new IgnoreBOMInputStream(new FileInputStream(file));
-		String[] headerLine = CsvParser.getHeaderLine(is);
-		IOUtils.closeQuietly(is);
+		String[] headerLine;
+		try (InputStream is = new IgnoreBOMInputStream(new FileInputStream(file))) {
+			headerLine = CsvParser.getHeaderLine(is);
+		}
 		return BaseLineProcessor.getOrder(headerLine);
 	}
 }
