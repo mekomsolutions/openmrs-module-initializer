@@ -28,6 +28,8 @@ configuration/
   ├── datafiltermappings/
   ├── drugs/
   ├── encountertypes/
+  ├── fhirconceptsources/
+  ├── fhirpatientidentifiersystems/
   ├── globalproperties/
   ├── htmlforms/
   ├── idgen/
@@ -110,6 +112,8 @@ This is the list of currently supported domains in their loading order:
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
+1. [FHIR Concept Sources (CSV files)](readme/fhir.md#domain-fhirconceptsources)
+1. [FHIR Patient Identifier Systems (CSV Files)](readme/fhir.md#domain-fhirpatientidentifiersystems)
 1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
 
@@ -155,8 +159,14 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ### Releases notes
 
+#### Version 2.4.1
+
 #### Version 2.4.0
-* ...
+* Added support for 'fhirconceptsources' domain.
+* Added support for 'fhirpatientidentifiersystems' domain.
+* Enhancement to ensure that reloading Concept CSVs does not clear Members/Answers if those columns aren't part of CSV file.
+* 'concepts' domain to support a new expandable `MAPPINGS` header, thereby discouraging the older `Same as mappings`.
+* Concept references expanded to allow use of concept names in locales other than the default system locale
 
 #### Version 2.3.0
 * Added configuration options for logging.

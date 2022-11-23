@@ -37,7 +37,6 @@ public abstract class BaseInputStreamLoader extends BaseFileLoader {
 		setLoadedFile(file);
 		try (InputStream is = new IgnoreBOMInputStream(new FileInputStream(file));) {
 			load(is);
-			IOUtils.closeQuietly(is);
 		}
 		finally {
 			setLoadedFile(null);

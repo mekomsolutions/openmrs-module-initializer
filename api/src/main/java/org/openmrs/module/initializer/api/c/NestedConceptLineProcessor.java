@@ -29,7 +29,7 @@ public class NestedConceptLineProcessor extends ConceptLineProcessor {
 	
 	public Concept fill(Concept concept, CsvLine line) throws IllegalArgumentException {
 		
-		if (!CollectionUtils.isEmpty(concept.getAnswers())) {
+		if (line.containsHeader(HEADER_ANSWERS) && !CollectionUtils.isEmpty(concept.getAnswers())) {
 			concept.getAnswers().clear();
 		}
 		String childrenStr;
@@ -40,7 +40,7 @@ public class NestedConceptLineProcessor extends ConceptLineProcessor {
 			}
 		}
 		
-		if (!CollectionUtils.isEmpty(concept.getConceptSets())) {
+		if (line.containsHeader(HEADER_MEMBERS) && !CollectionUtils.isEmpty(concept.getConceptSets())) {
 			concept.getConceptSets().clear();
 			concept.setSet(false);
 		}
