@@ -12,17 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 
-import static org.openmrs.module.initializer.Domain.AMPATH_TRANSLATIONS;
-
 @Component
-public class AmpathTranslationsLoader extends BaseFileLoader {
+public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 	
 	@Autowired
 	private DatatypeService datatypeService;
 	
 	@Override
 	protected Domain getDomain() {
-		return AMPATH_TRANSLATIONS;
+		return Domain.AMPATH_FORMS_TRANSLATIONS;
 	}
 	
 	@Override
@@ -37,12 +35,12 @@ public class AmpathTranslationsLoader extends BaseFileLoader {
 		
 		String clobUuid = (String) jsonTranslationsFile.get("uuid");
 		if (StringUtils.isBlank(clobUuid)) {
-			throw new Exception("Uuid is required for AMPATH translations loader");
+			throw new Exception("Uuid is required for AMPATH forms translations loader");
 		}
 		
 		String language = (String) jsonTranslationsFile.get("language");
 		if (StringUtils.isBlank(language)) {
-			throw new Exception("language is required for AMPATH translations loader");
+			throw new Exception("Language is required for AMPATH forms translations loader");
 		}
 		
 		ClobDatatypeStorage clobTranslationsData = datatypeService.getClobDatatypeStorageByUuid(clobUuid);

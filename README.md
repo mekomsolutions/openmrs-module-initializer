@@ -15,6 +15,7 @@ The configuration folder is subdivided into _domain_ subfolders:
 configuration/
   ├── addresshierarchy/
   ├── ampathforms/
+  ├── ampathformstranslations/
   ├── appointmentspecialities/
   ├── appointmentservicedefinitions/
   ├── appointmentservicetypes/
@@ -115,6 +116,7 @@ This is the list of currently supported domains in their loading order:
 1. [FHIR Concept Sources (CSV files)](readme/fhir.md#domain-fhirconceptsources)
 1. [FHIR Patient Identifier Systems (CSV Files)](readme/fhir.md#domain-fhirpatientidentifiersystems)
 1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
+1. [AMPATH Forms Translations (JSON files)](readme/ampathformstranslations.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
 
 ### How to try it out?

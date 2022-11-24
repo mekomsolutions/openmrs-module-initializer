@@ -8,55 +8,60 @@ ampathforms/
 ```
 
 ###### JSON file example:
+
 ```json
 {
-    "name" : "Test Form 1",
-    "description" : "Test 1 Description",
-    "version" : "1",
-    "published" : true,
-    "retired" : false,
-    "encounter" : "Emergency",
-    "pages" : [
+  "name": "Test Form 1",
+  "description": "Test 1 Description",
+  "version": "1",
+  "published": true,
+  "retired": false,
+  "encounter": "Emergency",
+  "translations": {
+    "en": ["global-uuid-resource-en", "test-form-en"],
+    "fr": ["global-fr-uuid-resource", "test-form-fr"]
+  },
+  "pages": [
+    {
+      "label": "Page 1",
+      "sections": [
         {
-            "label" : "Page 1",
-            "sections" : [
-                {
-                    "label" : "Section 1",
-                    "isExpanded" : "true",
-                    "questions" : [
-                        {
-                            "label" : "Height",
-                            "type" : "obs",
-                            "questionOptions" : {
-                                "rendering" : "number",
-                                "concept" : "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                                "max" : "",
-                                "min" : "",
-                                "showDate" : "",
-                                "conceptMappings" : [
-                                    {
-                                        "type" : "CIEL",
-                                        "value" : "5090"
-                                    },
-                                    {
-                                        "type" : "AMPATH",
-                                        "value" : "5090"
-                                    },
-                                    {
-                                        "type" : "PIH",
-                                        "value" : "5090"
-                                    }
-                                ]
-                            },
-                            "id" : "Ht"
-                        }
-                    ]
-                }
-            ]
+          "label": "Section 1",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Height",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "",
+                "min": "",
+                "showDate": "",
+                "conceptMappings": [
+                  {
+                    "type": "CIEL",
+                    "value": "5090"
+                  },
+                  {
+                    "type": "AMPATH",
+                    "value": "5090"
+                  },
+                  {
+                    "type": "PIH",
+                    "value": "5090"
+                  }
+                ]
+              },
+              "id": "Ht"
+            }
+          ]
         }
-    ],
-    "processor" : "EncounterFormProcessor",
-    "referencedForms" : [ ]
+      ]
+    }
+  ],
+  "processor": "EncounterFormProcessor",
+  "referencedForms": []
 }
 ```
 

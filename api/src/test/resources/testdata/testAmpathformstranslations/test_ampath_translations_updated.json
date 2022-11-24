@@ -1,0 +1,10 @@
+{
+    "uuid" : "c5bf3efe-3798-4052-8dcb-09aacfcbabdc",
+    "description" : "French Translations Updated",
+    "language" : "fr",
+    "translations" : {
+        "Aunt" : "Tante",
+        "Uncle" : "Oncle",
+        "Nephew" : "Neveu"
+    }
+}
