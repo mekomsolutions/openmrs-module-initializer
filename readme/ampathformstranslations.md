@@ -3,15 +3,15 @@ The **ampathtranslationsforms** subfolder contains AMPATH Translation Forms JSON
 
 ```bash
 ampathformstranslations/
-  ├── global-fr.json
-  ├── form1-fr.json
-  └── form2-es.json
+  ├── form1_translations_fr.json
+  └── form2_translations_en.json
 ```
 
 ###### JSON file example:
 ```json
 {
     "uuid": "c5bf3efe-3798-4052-8dcb-09aacfcbabdc",
+    "form": "Form 1",
     "description": "French Translations for Form 1",
     "language": "fr",
     "translations": {
@@ -22,11 +22,13 @@ ampathformstranslations/
 }
 ```
 
-**NOTE:** The UUID must match the identifiers specified in the form's schema, as shown [here](../readme/ampathforms.md) in the translations property, eg:
+**NOTE:** 
+* The `form` attribute must be provided with an existing form name for the translations to load successfully. The translations form resources get names following the following pattern `<form_name>_translations_<locale>`.
+* The UUID must match the identifiers specified in the form's schema, as shown [here](../readme/ampathforms.md) in the translations property, eg:
 ```json
 "translations": {
   "en": ["global-uuid-resource-en", "test-form-en"],
-  "fr": ["global-fr-uuid-resource", "test-form-fr"]
+  "fr": ["global-fr-uuid-resource-fr", "test-form-fr"]
 }
 ```
 
