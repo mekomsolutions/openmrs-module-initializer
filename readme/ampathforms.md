@@ -17,10 +17,6 @@ ampathforms/
   "published": true,
   "retired": false,
   "encounter": "Emergency",
-  "translations": {
-    "en": ["global-uuid-resource-en", "test-form-en"],
-    "fr": ["global-fr-uuid-resource", "test-form-fr"]
-  },
   "pages": [
     {
       "label": "Page 1",

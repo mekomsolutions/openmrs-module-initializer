@@ -24,13 +24,6 @@ ampathformstranslations/
 
 **NOTE:** 
 * The `form` attribute must be provided with an existing form name for the translations to load successfully. The translations form resources get names following the following pattern `<form_name>_translations_<locale>`.
-* The UUID must match the identifiers specified in the form's schema, as shown [here](../readme/ampathforms.md) in the translations property, eg:
-```json
-"translations": {
-  "en": ["global-uuid-resource-en", "test-form-en"],
-  "fr": ["global-fr-uuid-resource-fr", "test-form-fr"]
-}
-```
 
-#### Further examples:
+###### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).
