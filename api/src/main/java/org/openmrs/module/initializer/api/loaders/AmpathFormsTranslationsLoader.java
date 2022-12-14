@@ -47,7 +47,7 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 		if (StringUtils.isBlank(language)
 		        && !language.equalsIgnoreCase(jsonTranlsationsFileName.split("_translations_")[1])) {
 			throw new Exception(
-			        "'language' is required for AMPATH forms translations loader and should align with locale appended to the file name. File names should be of the format '<form_name>_translations_<locale>'");
+			        "'language' property is required for AMPATH forms translations loader and should align with locale appended to the file name.");
 		}
 		
 		Form form = null;
@@ -60,10 +60,11 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 		}
 		
 		if (form == null) {
-			form = formService.getForm(jsonTranlsationsFileName.split("_translations_")[0]);
+			String formName = (String) jsonTranslationsDefinition.get("form");
+			form = formService.getForm(formName);
 			if (form == null) {
 				throw new RuntimeException("No AMPATH form exists for AMPATH form tranlsations file: " + file.getName()
-				        + ". File names should be of the format '<form_name>_translations_<locale>'");
+				        + ". An existing form name should be specified on the 'form' property");
 			}
 		}
 		
