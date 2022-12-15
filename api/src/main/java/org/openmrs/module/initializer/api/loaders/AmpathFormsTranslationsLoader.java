@@ -38,15 +38,14 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 		
 		String formResourceUuid = (String) jsonTranslationsDefinition.get("uuid");
 		if (StringUtils.isBlank(formResourceUuid)) {
-			throw new Exception("Uuid is required for AMPATH forms translations loader");
+			throw new IllegalArgumentException("Uuid is required for AMPATH forms translations loader.");
 		}
 		
 		String jsonTranlsationsFileName = FilenameUtils.removeExtension(file.getName());
 		
 		String language = (String) jsonTranslationsDefinition.get("language");
-		if (StringUtils.isBlank(language)
-		        && !language.equalsIgnoreCase(jsonTranlsationsFileName.split("_translations_")[1])) {
-			throw new Exception(
+		if (StringUtils.isBlank(language)) {
+			throw new IllegalArgumentException(
 			        "'language' property is required for AMPATH forms translations loader and should align with locale appended to the file name.");
 		}
 		
@@ -63,8 +62,8 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 			String formName = (String) jsonTranslationsDefinition.get("form");
 			form = formService.getForm(formName);
 			if (form == null) {
-				throw new RuntimeException("No AMPATH form exists for AMPATH form tranlsations file: " + file.getName()
-				        + ". An existing form name should be specified on the 'form' property");
+				throw new IllegalArgumentException("No AMPATH form exists for AMPATH form tranlsations file: "
+				        + file.getName() + ". An existing form name should be specified on the 'form' property.");
 			}
 		}
 		

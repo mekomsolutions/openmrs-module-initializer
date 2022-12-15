@@ -1,0 +1,10 @@
+{
+    "form" : "Test Form 1",
+    "description" : "French Translations",
+    "language" : "fr",
+    "translations" : {
+        "Encounter" : "Encontre",
+        "Other" : "Autre",
+        "Child" : "Enfant"
+    }
+}
