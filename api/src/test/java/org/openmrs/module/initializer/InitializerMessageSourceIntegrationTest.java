@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.initializer;
 
+import net.sf.cglib.core.Local;
 import org.apache.commons.lang3.LocaleUtils;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
@@ -127,10 +128,12 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 	
 	@Test
 	public void shouldReturnEnglishIfNoOtherMatchesFound() {
-		Locale.setDefault(Locale.FRANCE);
+		Locale startingDefaultLocale = LocaleUtility.getDefaultLocale();
 		LocaleUtility.setDefaultLocaleCache(LocaleUtils.toLocale("fr"));
+		Locale.setDefault(Locale.FRANCE);
 		Context.setLocale(Locale.FRANCE);
 		testMessage("Only defined in English", "metadata.healthcenter.onlyInEnglish");
+		LocaleUtility.setDefaultLocaleCache(startingDefaultLocale);
 	}
 	
 	@Test
