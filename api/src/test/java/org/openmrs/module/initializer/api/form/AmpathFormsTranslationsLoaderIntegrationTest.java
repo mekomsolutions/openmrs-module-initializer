@@ -25,7 +25,7 @@ import java.util.Collections;
 public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Rule
-    public ExpectedException thrown = ExpectedException.none();
+	public ExpectedException thrown = ExpectedException.none();
 	
 	private static final String FORM_TRANSLATIONS_FOLDER_PATH = "src/test/resources/ampathformstranslations/";
 	
@@ -42,7 +42,7 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 	
 	@After
 	public void clean() throws IOException {
-
+		
 		// Delete created form files
 		FileUtils.deleteDirectory(new File(FORM_TRANSLATIONS_FOLDER_PATH));
 		FileUtils.deleteQuietly(new File(
@@ -57,20 +57,19 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		// Replay
 		ampathFormsTranslationsLoader.load();
 		
-		FormResource formResource = formService.getFormResourceByUuid(RESOURCE_UUID);
-		
 		// Verify
+		FormResource formResource = formService.getFormResourceByUuid(RESOURCE_UUID);
 		Assert.assertNotNull(formResource);
 		Assert.assertEquals("c5bf3efe-3798-4052-8dcb-09aacfcbabdc", formResource.getUuid());
 		
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode actualObj = mapper.readTree((String) formResource.getValue());
-		Assert.assertEquals("\"c5bf3efe-3798-4052-8dcb-09aacfcbabdc\"", actualObj.get("uuid").toString());
-		Assert.assertEquals("\"French Translations\"", actualObj.get("description").toString());
-		Assert.assertEquals("\"fr\"", actualObj.get("language").toString());
-		Assert.assertEquals("\"Encontre\"", actualObj.get("translations").get("Encounter").toString());
-		Assert.assertEquals("\"Autre\"", actualObj.get("translations").get("Other").toString());
-		Assert.assertEquals("\"Enfant\"", actualObj.get("translations").get("Child").toString());
+		Assert.assertEquals("c5bf3efe-3798-4052-8dcb-09aacfcbabdc", actualObj.get("uuid").getTextValue());
+		Assert.assertEquals("French Translations", actualObj.get("description").getTextValue());
+		Assert.assertEquals("fr", actualObj.get("language").getTextValue());
+		Assert.assertEquals("Encontre", actualObj.get("translations").get("Encounter").getTextValue());
+		Assert.assertEquals("Autre", actualObj.get("translations").get("Other").getTextValue());
+		Assert.assertEquals("Enfant", actualObj.get("translations").get("Child").getTextValue());
 		
 	}
 	
@@ -79,8 +78,8 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		// Setup
 		ampathFormsLoader.load();
 		
-		// Test that initial version loads in with expected values
 		// Replay
+		// Test that initial version loads in with expected values
 		ampathFormsTranslationsLoader.load();
 		
 		FormResource formResource = formService.getFormResourceByUuid(RESOURCE_UUID);
@@ -91,12 +90,12 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode ampathTranslations = mapper.readTree((String) formResource.getValue());
-		Assert.assertEquals("\"c5bf3efe-3798-4052-8dcb-09aacfcbabdc\"", ampathTranslations.get("uuid").toString());
-		Assert.assertEquals("\"French Translations\"", ampathTranslations.get("description").toString());
-		Assert.assertEquals("\"fr\"", ampathTranslations.get("language").toString());
-		Assert.assertEquals("\"Encontre\"", ampathTranslations.get("translations").get("Encounter").toString());
-		Assert.assertEquals("\"Autre\"", ampathTranslations.get("translations").get("Other").toString());
-		Assert.assertEquals("\"Enfant\"", ampathTranslations.get("translations").get("Child").toString());
+		Assert.assertEquals("c5bf3efe-3798-4052-8dcb-09aacfcbabdc", ampathTranslations.get("uuid").getTextValue());
+		Assert.assertEquals("French Translations", ampathTranslations.get("description").getTextValue());
+		Assert.assertEquals("fr", ampathTranslations.get("language").getTextValue());
+		Assert.assertEquals("Encontre", ampathTranslations.get("translations").get("Encounter").getTextValue());
+		Assert.assertEquals("Autre", ampathTranslations.get("translations").get("Other").getTextValue());
+		Assert.assertEquals("Enfant", ampathTranslations.get("translations").get("Child").getTextValue());
 		
 		String test_file_updated = "src/test/resources/testdata/testAmpathformstranslations/test_form_updated_translations_fr.json";
 		File srcFile = new File(test_file_updated);
@@ -106,25 +105,27 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		FileUtils.copyFile(srcFile, dstFile);
 		
 		// Replay
+		// Now load updated values
 		ampathFormsTranslationsLoader.load();
 		FormResource formResourceUpdated = formService.getFormResourceByUuid(RESOURCE_UUID);
 		
-		// Verify clob changed
+		// Verify
 		Assert.assertNotNull(formResourceUpdated);
 		ObjectMapper mapperUpdated = new ObjectMapper();
 		JsonNode ampathTranslationsUpdated = mapperUpdated.readTree((String) formResourceUpdated.getValue());
-		Assert.assertEquals("\"c5bf3efe-3798-4052-8dcb-09aacfcbabdc\"", ampathTranslationsUpdated.get("uuid").toString());
-		Assert.assertEquals("\"French Translations Updated\"", ampathTranslationsUpdated.get("description").toString());
-		Assert.assertEquals("\"fr\"", ampathTranslationsUpdated.get("language").toString());
-		Assert.assertEquals("\"Tante\"", ampathTranslationsUpdated.get("translations").get("Aunt").toString());
-		Assert.assertEquals("\"Oncle\"", ampathTranslationsUpdated.get("translations").get("Uncle").toString());
-		Assert.assertEquals("\"Neveu\"", ampathTranslationsUpdated.get("translations").get("Nephew").toString());
+		Assert.assertEquals("c5bf3efe-3798-4052-8dcb-09aacfcbabdc", ampathTranslationsUpdated.get("uuid").getTextValue());
+		Assert.assertEquals("French Translations Updated", ampathTranslationsUpdated.get("description").getTextValue());
+		Assert.assertEquals("fr", ampathTranslationsUpdated.get("language").getTextValue());
+		Assert.assertEquals("Tante", ampathTranslationsUpdated.get("translations").get("Aunt").getTextValue());
+		Assert.assertEquals("Oncle", ampathTranslationsUpdated.get("translations").get("Uncle").getTextValue());
+		Assert.assertEquals("Neveu", ampathTranslationsUpdated.get("translations").get("Nephew").getTextValue());
 	}
 	
 	@Test
 	public void load_shouldThrowGivenInvalidFormAssociatedWithFormTranslations() throws Exception {
 		// Setup
-		thrown.expectMessage("IllegalArgumentException: No AMPATH form exists for AMPATH form tranlsations file: test_form_translations_fr.json. An existing form name should be specified on the 'form' property");
+		thrown.expectMessage(
+		    "IllegalArgumentException: Could not find a form named 'Test Form 1'. Please ensure an existing form is configured.");
 		
 		// Replay
 		ampathFormsTranslationsLoader.loadUnsafe(Collections.emptyList(), true);
@@ -151,7 +152,7 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 	@Test
 	public void load_shouldThrowGivenMissingFormFieldInFormTranslationsDef() throws Exception {
 		// Setup
-		thrown.expectMessage("IllegalArgumentException: No AMPATH form exists for AMPATH form tranlsations file: test_form_translations_fr.json. An existing form name should be specified on the 'form' property.");
+		thrown.expectMessage("IllegalArgumentException: 'form' property is required for AMPATH forms translations loader.");
 		
 		String missingUuidTranslationDefFile = "src/test/resources/testdata/testAmpathformstranslations/invalid_form_missing_formName_translations_fr.json";
 		File srcFile = new File(missingUuidTranslationDefFile);
@@ -168,7 +169,8 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 	@Test
 	public void load_shouldThrowGivenMissingLanguageFieldInFormTranslationsDef() throws Exception {
 		// Setup
-		thrown.expectMessage("IllegalArgumentException: 'language' property is required for AMPATH forms translations loader and should align with locale appended to the file name.");
+		thrown.expectMessage(
+		    "IllegalArgumentException: 'language' property is required for AMPATH forms translations loader.");
 		
 		String missingUuidTranslationDefFile = "src/test/resources/testdata/testAmpathformstranslations/invalid_form_missing_language_translations_fr.json";
 		File srcFile = new File(missingUuidTranslationDefFile);
