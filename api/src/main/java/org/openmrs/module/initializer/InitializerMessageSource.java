@@ -124,7 +124,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		if (message != null) {
 			return message;
 		}
-		return resolveCodeWithoutArguments(code, Locale.getDefault(), localesAttempted);
+		return resolveCodeWithoutArguments(code, Locale.ENGLISH, localesAttempted);
 	}
 	
 	/**
@@ -149,8 +149,6 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			} else if (getFallbackLanguages().containsKey(locale.getLanguage())) {
 				Locale fallbackLanguage = new Locale(getFallbackLanguages().get(locale.getLanguage()));
 				return resolveCodeWithoutArguments(code, fallbackLanguage, localesAttempted);
-			} else {
-				return resolveCodeWithoutArguments(code, Locale.ENGLISH, localesAttempted);
 			}
 		}
 		return null;
