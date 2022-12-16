@@ -85,7 +85,7 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		
 		FormResource formResource = formService.getFormResourceByUuid(RESOURCE_UUID);
 		
-		// Verify clob
+		// Verify
 		Assert.assertNotNull(formResource);
 		Assert.assertEquals("c5bf3efe-3798-4052-8dcb-09aacfcbabdc", formResource.getUuid());
 		
