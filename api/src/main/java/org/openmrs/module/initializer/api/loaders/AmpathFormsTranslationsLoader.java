@@ -62,7 +62,7 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 			String formName = (String) jsonTranslationsDefinition.get("form");
 			form = formService.getForm(formName);
 			if (form == null) {
-				throw new IllegalArgumentException("No AMPATH form exists for AMPATH form tranlsations file: "
+				throw new IllegalArgumentException("Could not find a form named '" + formName + "'. Please ensure a form of this name exists in your configuration.");
 				        + file.getName() + ". An existing form name should be specified on the 'form' property.");
 			}
 		}
