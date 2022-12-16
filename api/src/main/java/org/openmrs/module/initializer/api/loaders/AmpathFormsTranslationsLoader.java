@@ -46,7 +46,7 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 		String language = (String) jsonTranslationsDefinition.get("language");
 		if (StringUtils.isBlank(language)) {
 			throw new IllegalArgumentException(
-			        "'language' property is required for AMPATH forms translations loader and should align with locale appended to the file name.");
+			        "'language' property is required for AMPATH forms translations loader");
 		}
 		
 		Form form = null;
