@@ -41,11 +41,8 @@ public class InitializerMessageSourceTest {
 	}
 	
 	@Test
-	public void getLocaleFromFileBaseName_shouldAssumeSystemLocaleLanguageIfNoLocaleSuffixProvided() {
-		Locale.setDefault(Locale.US);
+	public void getLocaleFromFileBaseName_shouldAssumeEnglishLocaleLanguageIfNoLocaleSuffixProvided() {
 		assertEquals(Locale.ENGLISH, src.getLocaleFromFileBaseName("my-base-name"));
-		Locale.setDefault(Locale.FRENCH);
-		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("my-base-name"));
 	}
 	
 	@Test
