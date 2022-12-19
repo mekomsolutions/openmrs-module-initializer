@@ -9,7 +9,6 @@
  */
 package org.openmrs.module.initializer;
 
-import net.sf.cglib.core.Local;
 import org.apache.commons.lang3.LocaleUtils;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
