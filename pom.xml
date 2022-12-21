@@ -379,6 +379,11 @@
             <name>Bahmni Nexus Releases Repository</name>
             <url>https://oss.sonatype.org/content/repositories/releases</url>
         </repository>
+        <repository>
+            <id>mks-repo</id>
+            <name>Mekom Solutions Maven repository</name>
+            <url>https://nexus.mekomsolutions.net/repository/maven-public</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
