@@ -160,6 +160,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 ### Releases notes
 
 #### Version 2.4.1
+* Fix for Message Source when system default language is not English: https://github.com/mekomsolutions/openmrs-module-initializer/issues/212
 
 #### Version 2.4.0
 * Added support for 'fhirconceptsources' domain.

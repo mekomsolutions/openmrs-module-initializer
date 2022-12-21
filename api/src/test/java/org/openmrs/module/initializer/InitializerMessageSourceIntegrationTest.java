@@ -126,9 +126,13 @@ public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleCon
 	}
 	
 	@Test
-	public void shouldDefaultToSystemLocaleIfNoMessageFoundInLocale() {
+	public void shouldReturnEnglishIfNoOtherMatchesFound() {
+		Locale startingDefaultLocale = LocaleUtility.getDefaultLocale();
+		LocaleUtility.setDefaultLocaleCache(LocaleUtils.toLocale("fr"));
+		Locale.setDefault(Locale.FRANCE);
 		Context.setLocale(Locale.FRANCE);
 		testMessage("Only defined in English", "metadata.healthcenter.onlyInEnglish");
+		LocaleUtility.setDefaultLocaleCache(startingDefaultLocale);
 	}
 	
 	@Test

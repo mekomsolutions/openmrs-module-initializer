@@ -124,7 +124,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		if (message != null) {
 			return message;
 		}
-		return resolveCodeWithoutArguments(code, Locale.getDefault(), localesAttempted);
+		return resolveCodeWithoutArguments(code, Locale.ENGLISH, localesAttempted);
 	}
 	
 	/**
@@ -260,8 +260,8 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	protected Locale getLocaleFromFileBaseName(String baseName) throws IllegalArgumentException {
 		String[] parts = FilenameUtils.getName(baseName).split("_");
 		if (parts.length == 1) {
-			// If no locale is specified, assume the default locale is intended, at only the language level
-			return LocaleUtils.toLocale(Locale.getDefault().getLanguage());
+			// If no locale is specified, assume English is intended, at only the language level
+			return Locale.ENGLISH;
 		}
 		String candidate = null;
 		for (int i = parts.length - 1; i > 0; i--) {
