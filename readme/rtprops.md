@@ -61,18 +61,18 @@ logging. By default, Initializer logs all messages at the level `WARN` or greate
 to a separate logging file called `initializer.log` in the OpenMRS Application Directory. This can be controlled by several
 settings:
 
-#### 1) `initializer.log.enabled` _(optional)_
+#### 1) `initializer.logging.enabled` _(optional)_
 
 Determines whether to use Initializer's logging setup at all. Set to `false` to disable any Initializer-specific logging
 configuration. Initializer logging messages will still appear in the OpenMRS log in the normal way.
 
-#### 2) `initializer.log.location` _(optional)_
+#### 2) `initializer.logging.location` _(optional)_
 
 Determines the location and name of the logging file where the Initializer logs will be written. Defaults to `initializer.log`
 in the OpenMRS Application Directory. Relative paths are resolved relative to the OpenMRS Application
 Directory and the location will be rejected if it is not under the main OpenMRS Application Directory.
 
-#### 3) `initializer.log.level` _(optional)_
+#### 3) `initializer.logging.level` _(optional)_
 
 This is used to control the level of the logger for `org.openmrs.module.initializer`. It defaults to `WARN` but can be set to
 any Log4J level desired.
