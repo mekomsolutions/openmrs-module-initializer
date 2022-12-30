@@ -3,13 +3,16 @@ package org.openmrs.module.initializer.api.logging;
 import java.io.Serializable;
 import java.nio.file.Path;
 
+import org.apache.log4j.builders.filter.LevelRangeFilterBuilder;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.logging.log4j.core.filter.LevelMatchFilter;
+import org.apache.logging.log4j.core.filter.LevelRangeFilter;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.InitializerActivator;
@@ -42,7 +45,7 @@ public class InitializerLogConfigurator2_4 implements InitializerLogConfigurator
 		
 		Appender appender = FileAppender.newBuilder().setName(logFilePath.getFileName().toString())
 		        .withFileName(logFilePath.toString()).setLayout(layout)
-		        .setFilter(LevelMatchFilter.newBuilder().setLevel(level).build()).build();
+		        .setFilter(LevelRangeFilter.createFilter(null, level, Filter.Result.ACCEPT, null)).build();
 		
 		appender.start();
 		

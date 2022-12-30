@@ -11,6 +11,7 @@ package org.openmrs.module.initializer.api;
 
 import static org.hamcrest.CoreMatchers.is;
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -139,7 +140,8 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		
 		// Verif
 		Assert.assertEquals(true, dirUtil.skipChecksums);
-		Assert.assertEquals(iniz.getChecksumsDirPath() + "/" + loader.getDomainName(), dirUtil.getDomainChecksumsDirPath());
-		Assert.assertEquals(iniz.getConfigDirPath() + "/" + loader.getDomainName(), dirUtil.getDomainDirPath());
+		Assert.assertEquals(iniz.getChecksumsDirPath() + File.separator + loader.getDomainName(),
+		    dirUtil.getDomainChecksumsDirPath());
+		Assert.assertEquals(iniz.getConfigDirPath() + File.separator + loader.getDomainName(), dirUtil.getDomainDirPath());
 	}
 }
