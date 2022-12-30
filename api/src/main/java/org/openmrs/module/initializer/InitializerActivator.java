@@ -60,6 +60,7 @@ public class InitializerActivator extends BaseModuleActivator {
 					} else {
 						try {
 							logFilePath = logFilePath.toRealPath();
+							//Why ? the log file can be in /var/log for instance
 							if (!logFilePath.startsWith(applicationDataDirectory)) {
 								logFilePath = null;
 							}
