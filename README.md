@@ -161,7 +161,8 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ### Releases notes
 
-#### Version 2.4.1
+#### Version 2.5.0
+* Added support for AMPATH Forms translations: https://github.com/mekomsolutions/openmrs-module-initializer/issues/180
 * Fix for Message Source when system default language is not English: https://github.com/mekomsolutions/openmrs-module-initializer/issues/212
 
 #### Version 2.4.0
