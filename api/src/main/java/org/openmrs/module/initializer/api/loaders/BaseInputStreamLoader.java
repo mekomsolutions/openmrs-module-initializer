@@ -34,7 +34,7 @@ public abstract class BaseInputStreamLoader extends BaseFileLoader {
 	
 	@Override
 	protected void load(File file) throws Exception {
-		log.info("Load file {}",file.getAbsolutePath());
+		log.info("Load file {}", file.getAbsolutePath());
 		setLoadedFile(file);
 		try (InputStream is = new IgnoreBOMInputStream(new FileInputStream(file));) {
 			load(is);
