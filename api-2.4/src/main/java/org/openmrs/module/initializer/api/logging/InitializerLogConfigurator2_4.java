@@ -43,7 +43,7 @@ public class InitializerLogConfigurator2_4 implements InitializerLogConfigurator
 		
 		Appender appender = FileAppender.newBuilder().setName(logFilePath.getFileName().toString())
 		        .withFileName(logFilePath.toString()).setLayout(layout)
-		        .setFilter(LevelRangeFilter.createFilter(null, level, Filter.Result.ACCEPT, null)).build();
+		        .setFilter(LevelRangeFilter.createFilter(Level.FATAL, level, Filter.Result.ACCEPT, null)).build();
 		
 		appender.start();
 		
