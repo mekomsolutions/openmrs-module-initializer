@@ -60,9 +60,6 @@ public class InitializerActivator extends BaseModuleActivator {
 					} else {
 						try {
 							logFilePath = logFilePath.toRealPath();
-							if (!logFilePath.startsWith(applicationDataDirectory)) {
-								logFilePath = null;
-							}
 						}
 						catch (IOException e) {
 							logFilePath = null;

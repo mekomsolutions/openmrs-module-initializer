@@ -46,12 +46,12 @@ public class InitializerLogConfigurator2_0 implements InitializerLogConfigurator
 			
 			// since the org.apache.log4j.varia package doesn't exist in the log4j2 bridge, we need to use reflection
 			// so this class only has a runtime dependency on the LevelMatchFilter
-			Filter levelMatchFilter = (Filter) Class.forName("org.apache.log4j.varia.LevelMatchFilter").getConstructor()
+			Filter levelRangeFilter = (Filter) Class.forName("org.apache.log4j.varia.LevelRangeFilter").getConstructor()
 			        .newInstance();
-			Method levelMatchSetter = levelMatchFilter.getClass().getMethod("setLevelToMatch", String.class);
-			levelMatchSetter.invoke(levelMatchFilter, level.toString());
+			Method levelMatchSetter = levelRangeFilter.getClass().getMethod("setLevelMax", String.class);
+			levelMatchSetter.invoke(levelRangeFilter, level.toString());
 			
-			appender.addFilter(levelMatchFilter);
+			appender.addFilter(levelRangeFilter);
 		}
 		catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException
 		        | InstantiationException | RuntimeException e) {
