@@ -11,7 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 public class InitializerLogConfigurator2_0Test {
 	
 	@Test
-	public void create_shouldLoadAccordingToCsvFiles() throws ClassNotFoundException, InvocationTargetException,
+	public void createLevelRangeFilter_shouldCreateLevelWithMaxValue() throws ClassNotFoundException, InvocationTargetException,
 	        InstantiationException, IllegalAccessException, NoSuchMethodException {
 		InitializerLogConfigurator2_0 logConfigurator20 = new InitializerLogConfigurator2_0();
 		Level level = Level.WARN;
