@@ -44,12 +44,7 @@ public class InitializerLogConfigurator2_0 implements InitializerLogConfigurator
 			        .newInstance(layout, logFilePath.toString());
 			appender.setName(logFilePath.getFileName().toString());
 			
-			// since the org.apache.log4j.varia package doesn't exist in the log4j2 bridge, we need to use reflection
-			// so this class only has a runtime dependency on the LevelMatchFilter
-			Filter levelRangeFilter = (Filter) Class.forName("org.apache.log4j.varia.LevelRangeFilter").getConstructor()
-			        .newInstance();
-			Method levelMatchSetter = levelRangeFilter.getClass().getMethod("setLevelMax", String.class);
-			levelMatchSetter.invoke(levelRangeFilter, level.toString());
+			Filter levelRangeFilter = createLevelRangeFilter(level);
 			
 			appender.addFilter(levelRangeFilter);
 		}
@@ -59,5 +54,16 @@ public class InitializerLogConfigurator2_0 implements InitializerLogConfigurator
 		}
 		
 		return appender;
+	}
+	
+	Filter createLevelRangeFilter(Level level) throws InstantiationException, IllegalAccessException,
+	        InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
+		// since the org.apache.log4j.varia package doesn't exist in the log4j2 bridge, we need to use reflection
+		// so this class only has a runtime dependency on the LevelMatchFilter
+		Filter levelRangeFilter = (Filter) Class.forName("org.apache.log4j.varia.LevelRangeFilter").getConstructor()
+		        .newInstance();
+		Method levelMatchSetter = levelRangeFilter.getClass().getMethod("setLevelMax", Level.class);
+		levelMatchSetter.invoke(levelRangeFilter, level);
+		return levelRangeFilter;
 	}
 }
