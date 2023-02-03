@@ -13,11 +13,14 @@ public class InitializerLogConfigurator2_0Test {
 	@Test
 	public void createLevelRangeFilter_shouldCreateLevelWithMaxValue() throws ClassNotFoundException, InvocationTargetException,
 	        InstantiationException, IllegalAccessException, NoSuchMethodException {
-		InitializerLogConfigurator2_0 logConfigurator20 = new InitializerLogConfigurator2_0();
+		// setup
 		Level level = Level.WARN;
-		
+		InitializerLogConfigurator2_0 logConfigurator20 = new InitializerLogConfigurator2_0();
+
+		// replay
 		Filter levelRangeFilter = logConfigurator20.createLevelRangeFilter(level);
-		
+
+		// verif
 		Assert.assertEquals(level, ((LevelRangeFilter) levelRangeFilter).getLevelMax());
 		
 	}
