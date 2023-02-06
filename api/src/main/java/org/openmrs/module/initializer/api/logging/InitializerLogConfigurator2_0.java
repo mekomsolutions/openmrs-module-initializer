@@ -30,10 +30,11 @@ public class InitializerLogConfigurator2_0 implements InitializerLogConfigurator
 		
 		org.apache.log4j.Logger logger = org.apache.log4j.Logger
 		        .getLogger(InitializerActivator.class.getPackage().getName());
-		logger.addAppender(getFileAppender(level, logFilePath));
+		logger.addAppender(getFileAppender(logFilePath));
+		logger.setLevel(level);
 	}
 	
-	private Appender getFileAppender(Level level, Path logFilePath) {
+	private Appender getFileAppender(Path logFilePath) {
 		Appender defaultAppender = org.apache.log4j.Logger.getRootLogger().getAppender("DEBUGGING_FILE_APPENDER");
 		Layout layout = defaultAppender == null ? new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n")
 		        : defaultAppender.getLayout();
@@ -43,10 +44,6 @@ public class InitializerLogConfigurator2_0 implements InitializerLogConfigurator
 			appender = (Appender) Class.forName("org.apache.log4j.FileAppender").getConstructor(Layout.class, String.class)
 			        .newInstance(layout, logFilePath.toString());
 			appender.setName(logFilePath.getFileName().toString());
-			
-			Filter levelRangeFilter = createLevelRangeFilter(level);
-			
-			appender.addFilter(levelRangeFilter);
 		}
 		catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException
 		        | InstantiationException | RuntimeException e) {
@@ -54,16 +51,5 @@ public class InitializerLogConfigurator2_0 implements InitializerLogConfigurator
 		}
 		
 		return appender;
-	}
-	
-	Filter createLevelRangeFilter(Level level) throws InstantiationException, IllegalAccessException,
-	        InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
-		// since the org.apache.log4j.varia package doesn't exist in the log4j2 bridge, we need to use reflection
-		// so this class only has a runtime dependency on the LevelMatchFilter
-		Filter levelRangeFilter = (Filter) Class.forName("org.apache.log4j.varia.LevelRangeFilter").getConstructor()
-		        .newInstance();
-		Method levelMatchSetter = levelRangeFilter.getClass().getMethod("setLevelMax", Level.class);
-		levelMatchSetter.invoke(levelRangeFilter, level);
-		return levelRangeFilter;
 	}
 }
