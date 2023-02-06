@@ -31,10 +31,11 @@ public class InitializerLogConfigurator2_4 implements InitializerLogConfigurator
 		}
 		
 		Logger logger = (Logger) LogManager.getLogger(InitializerActivator.class.getPackage().getName());
-		logger.addAppender(getFileAppender(level, logFilePath));
+		logger.addAppender(getFileAppender(logFilePath));
+		logger.setLevel(level);
 	}
 	
-	private Appender getFileAppender(Level level, Path logFilePath) {
+	private Appender getFileAppender(Path logFilePath) {
 		Logger rootLogger = (Logger) LogManager.getRootLogger();
 		Appender defaultAppender = rootLogger.getAppenders().values().iterator().next();
 		Layout<? extends Serializable> layout = defaultAppender == null
@@ -42,8 +43,7 @@ public class InitializerLogConfigurator2_4 implements InitializerLogConfigurator
 		        : defaultAppender.getLayout();
 		
 		Appender appender = FileAppender.newBuilder().setName(logFilePath.getFileName().toString())
-		        .withFileName(logFilePath.toString()).setLayout(layout)
-		        .setFilter(LevelRangeFilter.createFilter(Level.FATAL, level, Filter.Result.ACCEPT, null)).build();
+		        .withFileName(logFilePath.toString()).setLayout(layout).build();
 		
 		appender.start();
 		
