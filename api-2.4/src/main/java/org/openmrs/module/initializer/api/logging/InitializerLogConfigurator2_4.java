@@ -14,9 +14,7 @@ import org.apache.logging.log4j.core.filter.LevelRangeFilter;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.InitializerActivator;
-import org.springframework.stereotype.Component;
 
-@Component
 @OpenmrsProfile(openmrsPlatformVersion = "2.1.5 - 2.1.*, 2.4.* - 2.*")
 public class InitializerLogConfigurator2_4 implements InitializerLogConfigurator {
 	

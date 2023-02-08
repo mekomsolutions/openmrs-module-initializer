@@ -13,20 +13,19 @@ import static org.openmrs.module.initializer.validator.Validator.ARG_CONFIG_DIR;
 import static org.openmrs.module.initializer.validator.Validator.cmdLine;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.client.utils.URIBuilder;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -38,21 +37,30 @@ import org.hsqldb.cmdline.SqlFile;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.DaemonToken;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.InitializerConfig;
 import org.openmrs.module.openconceptlab.OpenConceptLabActivator;
 import org.openmrs.test.TestUtil;
-
+import org.openmrs.util.DatabaseUpdateException;
+import org.openmrs.util.DatabaseUpdater;
+import org.openmrs.util.DatabaseUpdater.ChangeSetExecutorCallback;
+import org.openmrs.util.InputRequiredException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testcontainers.containers.MySQLContainer;
 import ch.vorburger.exec.ManagedProcessException;
-import ch.vorburger.mariadb4j.DB;
-import ch.vorburger.mariadb4j.DBConfigurationBuilder;
+import liquibase.changelog.ChangeSet;
 
 public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
+	
+	protected static final Logger log = LoggerFactory.getLogger(ConfigurationTester.class);
+	
+	private static MySQLContainer mysqlContainer = new MySQLContainer("mysql:5.7.31");
 	
 	private String configDirPath;
 	
@@ -62,25 +70,26 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		return Paths.get(configDirPath).getParent().toString();
 	}
 	
-	protected void setMariaDB4jProps(Properties props) throws ManagedProcessException, URISyntaxException {
-		DB db = DB.newEmbeddedDB(DBConfigurationBuilder.newBuilder().build());
-		db.start();
-		db.createDB("openmrs");
-		
-		//		props.setProperty(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
+	@BeforeClass
+	public static void setupMySqlDb() throws IOException {
+		mysqlContainer.withDatabaseName("openmrs");
+		mysqlContainer.withUsername("root");
+		mysqlContainer.withPassword("");
+		mysqlContainer.start();
+	}
+	
+	protected void setupDatabaseProps(Properties props) throws ManagedProcessException, URISyntaxException {
 		props.setProperty(Environment.DIALECT, MySQLDialect.class.getName());
-		
-		String url = db.getConfiguration().getURL("openmrs");
-		URIBuilder ub = new URIBuilder(StringUtils.substringAfter(url, "jdbc:"));
-		ub.setParameter("serverTimezone", "UTC");
-		url = "jdbc:" + ub.build().toString();
+		String url = "jdbc:mysql://localhost:DATABASE_PORT/openmrs?autoReconnect=true&sessionVariables=default_storage_engine%3DInnoDB&useUnicode=true&characterEncoding=UTF-8";
+		url = url.replaceAll("DATABASE_PORT", String.valueOf(mysqlContainer.getMappedPort(3306)));
 		props.setProperty(Environment.URL, url);
 		
 		props.setProperty(Environment.USER, "root");
 		props.setProperty(Environment.PASS, "");
+		props.setProperty("initializer.log.enabled", "true");
 		
 		// automatically create the tables defined in the hbm files
-		props.setProperty(Environment.HBM2DDL_AUTO, "create-drop");
+		props.setProperty(Environment.HBM2DDL_AUTO, "update");
 	}
 	
 	@Override
@@ -90,23 +99,18 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		}
 		
 		try {
-			setMariaDB4jProps(runtimeProperties);
+			setupDatabaseProps(runtimeProperties);
 		}
 		catch (ManagedProcessException | URISyntaxException e) {
 			log.error("mariaDB4j could not be setup properly, reverting to OpenMRS defaults.", e);
 			runtimeProperties = super.getRuntimeProperties();
 		}
-		
 		return runtimeProperties;
 	}
 	
 	@Override
 	public void updateSearchIndex() {
 		// to prevent Data Filter's 'Illegal Record Access'
-	}
-	
-	@Override
-	public void setAutoIncrementOnTablesWithNativeIfNotAssignedIdentityGenerator() {
 	}
 	
 	@Override
@@ -133,9 +137,14 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	@Override
 	public void deleteAllData() {
+		
 	}
 	
-	public ConfigurationTester() {
+	@Override
+	public void clearSessionAfterEachTest() {
+	}
+	
+	public ConfigurationTester() throws Exception {
 		super();
 		
 		configDirPath = cmdLine.getOptionValue(ARG_CONFIG_DIR);
@@ -154,7 +163,11 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		if (!cmdLine.hasOption(ARG_CHECKSUMS)) {
 			getRuntimeProperties().put(PROPS_SKIPCHECKSUMS, "true");
 		}
-		
+		// Setting up initial core database
+		DatabaseUpdater.executeChangelog("liquibase-schema-only.xml", null,
+		    new PrintingChangeSetExecutorCallback("OpenMRS core schema file"));
+		DatabaseUpdater.executeChangelog("liquibase-core-data.xml", null,
+		    new PrintingChangeSetExecutorCallback("OpenMRS core data file"));
 	}
 	
 	@Before
@@ -174,35 +187,38 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	@Before
 	public void prepareOcl() {
-		// The OCL domains needs a DaemonToken so here we provide one if it's loaded
-		List<InitializerConfig> configs = Context.getRegisteredComponents(InitializerConfig.class);
-		
-		if (configs != null && configs.size() > 1) {
-			final InitializerConfig config = configs.get(0);
-			final boolean domainSpecified = config.getFilteredDomains().contains("ocl");
-			final boolean includeSpecifiedDomains = config.isInclusionList();
-			
-			if ((includeSpecifiedDomains && domainSpecified) || (!includeSpecifiedDomains && !domainSpecified)) {
-				Map<String, DaemonToken> daemonTokens;
-				try {
-					Field field = ModuleFactory.class.getDeclaredField("daemonTokens");
-					field.setAccessible(true);
-					daemonTokens = (Map<String, DaemonToken>) field.get(null);
-				}
-				catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-				
-				DaemonToken daemonToken = new DaemonToken("openconceptlab");
-				daemonTokens.put(daemonToken.getId(), daemonToken);
-				new OpenConceptLabActivator().setDaemonToken(daemonToken);
-			}
+		// The OCL domains needs a DaemonToken so here we provide one
+		Map<String, DaemonToken> daemonTokens;
+		try {
+			Field field = ModuleFactory.class.getDeclaredField("daemonTokens");
+			field.setAccessible(true);
+			daemonTokens = (Map<String, DaemonToken>) field.get(null);
 		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		DaemonToken daemonToken = new DaemonToken("openconceptlab");
+		daemonTokens.put(daemonToken.getId(), daemonToken);
+		new OpenConceptLabActivator().setDaemonToken(daemonToken);
+	}
+	
+	@Override
+	public void baseSetupWithStandardDataAndAuthentication() throws SQLException {
+		// Open a session if needed
+		if (!Context.isSessionOpen()) {
+			Context.openSession();
+		}
+		authenticate();
+		Context.clearSession();
 	}
 	
 	@Test
 	public void loadConfiguration() throws Exception {
+		super.getConnection().setAutoCommit(true);
 		getService().loadUnsafe(true, Validator.unsafe);
+		Context.flushSession();
+		Context.clearSession();
 	}
 	
 	@After
@@ -213,5 +229,26 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 			sb.append("Please check the warnings and errors logged at " + Validator.getLogFilePath());
 		}
 		Assert.assertThat(sb.toString(), Validator.errors, is(empty()));
+		super.getConnection();
+	}
+	
+	private static class PrintingChangeSetExecutorCallback implements ChangeSetExecutorCallback {
+		
+		private int i = 1;
+		
+		private String message;
+		
+		public PrintingChangeSetExecutorCallback(String message) {
+			this.message = message;
+		}
+		
+		/**
+		 * @see ChangeSetExecutorCallback#executing(liquibase.changelog.ChangeSet, int)
+		 */
+		@Override
+		public void executing(ChangeSet changeSet, int numChangeSetsToRun) {
+			log.info(message + " (" + i++ + "/" + numChangeSetsToRun + "): Author: " + changeSet.getAuthor() + " Comments: "
+			        + changeSet.getComments() + " Description: " + changeSet.getDescription());
+		}
 	}
 }
