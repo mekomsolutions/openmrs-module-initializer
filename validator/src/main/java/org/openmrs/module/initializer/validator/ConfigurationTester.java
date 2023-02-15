@@ -75,6 +75,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		mysqlContainer.withDatabaseName("openmrs");
 		mysqlContainer.withUsername("root");
 		mysqlContainer.withPassword("");
+		mysqlContainer.withCommand("mysqld --character-set-server=utf8 --collation-server=utf8_general_ci");
 		mysqlContainer.start();
 	}
 	
