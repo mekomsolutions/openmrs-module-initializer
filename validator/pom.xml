@@ -16,7 +16,7 @@
   <properties>
     <springVersion>4.1.4.RELEASE</springVersion>
     <!-- OpenMRS Core and modules -->
-    <openmrsPlatformVersion>2.3.3</openmrsPlatformVersion>
+    <openmrsPlatformVersion>2.3.6-SNAPSHOT</openmrsPlatformVersion>
     <reportingCompatibilityVersion>2.0.6</reportingCompatibilityVersion>
     <htmlwidgetsVersion>1.7.2</htmlwidgetsVersion>
     <mysqlTestContainerVersion>1.15.3</mysqlTestContainerVersion>

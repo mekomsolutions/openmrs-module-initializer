@@ -165,9 +165,9 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 			getRuntimeProperties().put(PROPS_SKIPCHECKSUMS, "true");
 		}
 		// Setting up initial core database
-		DatabaseUpdater.executeChangelog("liquibase-schema-only.xml", null,
+		DatabaseUpdater.executeChangelog("org/openmrs/liquibase/snapshots/schema-only/liquibase-schema-only-2.3.x.xml", null,
 		    new PrintingChangeSetExecutorCallback("OpenMRS core schema file"));
-		DatabaseUpdater.executeChangelog("liquibase-core-data.xml", null,
+		DatabaseUpdater.executeChangelog("org/openmrs/liquibase/snapshots/core-data/liquibase-core-data-2.3.x.xml", null,
 		    new PrintingChangeSetExecutorCallback("OpenMRS core data file"));
 	}
 	
