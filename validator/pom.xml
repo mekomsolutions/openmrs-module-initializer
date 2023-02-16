@@ -348,7 +348,6 @@
       <scope>runtime</scope>
       <type>jar</type>
     </dependency>
-	<!-- Thanks for using https://jar-download.com -->
     
     <dependency>
         <groupId>org.testcontainers</groupId>
