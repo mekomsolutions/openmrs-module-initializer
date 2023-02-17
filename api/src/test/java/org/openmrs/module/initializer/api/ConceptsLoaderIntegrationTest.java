@@ -496,6 +496,21 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		assertName(yellow, "Y", localeEn, false, shortName);
 	}
 	
+	@Test
+	public void load_shouldLoadConceptIncorrectly() {
+		// Setup
+		Context.setLocale(localeEn);
+		// Replay
+		loader.load();
+		
+		// Verify
+		// Retrieving the 'Overall vital signs' set concept that should have the actual 'Vital signs' concept 
+		// and not the 'False vital signs' concept
+		Concept actualVitalSigns = cs.getConceptByUuid("23542fd3-4315-4e51-b68e-bce887331c0a").getSetMembers().get(0);
+		Assert.assertNotNull(actualVitalSigns);
+		assertName(actualVitalSigns, "False vital signs", localeEn, true, ConceptNameType.FULLY_SPECIFIED);
+	}
+	
 	protected ConceptName assertName(Concept c, String name, Locale locale, boolean preferred, ConceptNameType type) {
 		ConceptName conceptName = null;
 		for (ConceptName cn : c.getNames(true)) {

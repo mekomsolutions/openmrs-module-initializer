@@ -1,0 +1,4 @@
+Uuid,Void/Retire,Fully specified name:en,Fully specified name:km_KH,Short name:en,Short name:km_KH,Synonym:en,Description:en,Description:km_KH,Data class,Data type,Members,Version,Attribute|Email Address,Attribute|Audit Date,_version:1,_order:10000
+835c8868-4608-454c-8ede-f1789d9de28e,,False vital signs,VSFM-KH,,VSFM,Vital signs,,,Misc,Text,,,,,,
+71ef16f7-6250-440b-be0d-62b8c75fe860,,Vital signs,VS-KH,Vital signs short,,,Actual vital signs,,Misc,Text,,,vitalsigns@short.example.com,2020-04-06,,
+23542fd3-4315-4e51-b68e-bce887331c0a,,Overall signs set,,Overall signs,,,,,ConvSet,N/A,Vital signs,,,,,
