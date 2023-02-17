@@ -75,7 +75,8 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		mysqlContainer.withDatabaseName("openmrs");
 		mysqlContainer.withUsername("root");
 		mysqlContainer.withPassword("");
-		mysqlContainer.withCommand("mysqld --character-set-server=utf8 --collation-server=utf8_general_ci");
+		mysqlContainer.withCommand(
+		    "mysqld --character-set-server=utf8 --collation-server=utf8_general_ci");
 		mysqlContainer.start();
 	}
 	
@@ -165,14 +166,14 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 			getRuntimeProperties().put(PROPS_SKIPCHECKSUMS, "true");
 		}
 		// Setting up initial core database
-		DatabaseUpdater.executeChangelog("org/openmrs/liquibase/snapshots/schema-only/liquibase-schema-only-2.3.x.xml", null,
-		    new PrintingChangeSetExecutorCallback("OpenMRS core schema file"));
-		DatabaseUpdater.executeChangelog("org/openmrs/liquibase/snapshots/core-data/liquibase-core-data-2.3.x.xml", null,
-		    new PrintingChangeSetExecutorCallback("OpenMRS core data file"));
+		DatabaseUpdater.executeChangelog("liquibase-schema-only.xml", null);
+		DatabaseUpdater.executeChangelog("liquibase-core-data.xml", null);
+		DatabaseUpdater.executeChangelog("liquibase-update-to-latest.xml", null);
 	}
 	
 	@Before
 	public void prepare() throws Exception {
+		Context.checkCoreDataset();
 		if (!StringUtils.isEmpty(cielFilePath)) {
 			Connection connection = getConnection();
 			SqlFile sqlFile = new SqlFile(Validator.trimCielSqlFile(new File(cielFilePath)));
@@ -231,25 +232,5 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		}
 		Assert.assertThat(sb.toString(), Validator.errors, is(empty()));
 		super.getConnection();
-	}
-	
-	private static class PrintingChangeSetExecutorCallback implements ChangeSetExecutorCallback {
-		
-		private int i = 1;
-		
-		private String message;
-		
-		public PrintingChangeSetExecutorCallback(String message) {
-			this.message = message;
-		}
-		
-		/**
-		 * @see ChangeSetExecutorCallback#executing(liquibase.changelog.ChangeSet, int)
-		 */
-		@Override
-		public void executing(ChangeSet changeSet, int numChangeSetsToRun) {
-			log.info(message + " (" + i++ + "/" + numChangeSetsToRun + "): Author: " + changeSet.getAuthor() + " Comments: "
-			        + changeSet.getComments() + " Description: " + changeSet.getDescription());
-		}
 	}
 }
