@@ -30,9 +30,12 @@ public class HibernateInitializerConceptDAO implements InitializerConceptDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
-
+	
 	@Override
 	public Concept getConceptByName(String name) {
+		if (name == null) {
+			return null;
+		}
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ConceptName.class);
 		
 		Locale locale = Context.getLocale();

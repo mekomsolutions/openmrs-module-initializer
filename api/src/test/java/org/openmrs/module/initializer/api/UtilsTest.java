@@ -17,6 +17,7 @@ import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.initializer.api.c.InitializerConceptService;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -49,6 +50,9 @@ public class UtilsTest {
 		
 		ConceptService cs = mock(ConceptService.class);
 		when(Context.getConceptService()).thenReturn(cs);
+		
+		InitializerConceptService ics = mock(InitializerConceptService.class);
+		when(Context.getService(InitializerConceptService.class)).thenReturn(ics);
 	}
 	
 	@Test
@@ -323,7 +327,10 @@ public class UtilsTest {
 		when(cs.getConceptByUuid("concept:lookup")).thenReturn(null);
 		when(cs.getConceptByMapping("lookup", "concept")).thenReturn(null);
 		Concept nameConcept = new Concept();
-		when(cs.getConceptByName("concept:lookup")).thenReturn(nameConcept);
+		
+		InitializerConceptService ics = mock(InitializerConceptService.class);
+		when(Context.getService(InitializerConceptService.class)).thenReturn(ics);
+		when(ics.getConceptByName("concept:lookup")).thenReturn(nameConcept);
 		Assert.assertEquals(nameConcept, Utils.fetchConcept("concept:lookup", cs));
 	}
 	

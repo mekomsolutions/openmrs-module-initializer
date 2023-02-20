@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component("initializer.ConceptService")
 public class InitializerConceptServiceImpl implements InitializerConceptService {
-
+	
 	private static final Logger log = LoggerFactory.getLogger(HibernateInitializerConceptDAO.class);
 	
 	@Autowired
