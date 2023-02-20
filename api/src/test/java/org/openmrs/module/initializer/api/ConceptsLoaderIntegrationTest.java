@@ -26,6 +26,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.customdatatype.datatype.DateDatatype;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
+import org.openmrs.module.initializer.api.c.InitializerConceptService;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -500,6 +501,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	public void load_shouldLoadConceptIncorrectly() {
 		// Setup
 		Context.setLocale(localeEn);
+		
 		// Replay
 		loader.load();
 		
@@ -508,7 +510,7 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		// and not the 'False vital signs' concept
 		Concept actualVitalSigns = cs.getConceptByUuid("23542fd3-4315-4e51-b68e-bce887331c0a").getSetMembers().get(0);
 		Assert.assertNotNull(actualVitalSigns);
-		assertName(actualVitalSigns, "False vital signs", localeEn, true, ConceptNameType.FULLY_SPECIFIED);
+		assertName(actualVitalSigns, "Vital signs", localeEn, true, ConceptNameType.FULLY_SPECIFIED);
 	}
 	
 	protected ConceptName assertName(Concept c, String name, Locale locale, boolean preferred, ConceptNameType type) {

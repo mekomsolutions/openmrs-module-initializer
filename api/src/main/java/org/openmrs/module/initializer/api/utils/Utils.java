@@ -38,6 +38,7 @@ import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.c.InitializerConceptService;
 import org.openmrs.util.LocaleUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -233,7 +234,7 @@ public class Utils {
 		try {
 			for (Locale locale : LocaleUtility.getLocalesInOrder()) {
 				Context.setLocale(locale);
-				Concept concept = service.getConceptByName(id);
+				Concept concept = Context.getService(InitializerConceptService.class).getConceptByName(id);
 				if (concept != null) {
 					if (!originalLocale.equals(locale)) {
 						log.warn("Found '{}' in locale '{}', not in '{}'", new Object[] { id, locale, originalLocale });

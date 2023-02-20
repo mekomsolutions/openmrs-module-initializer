@@ -54,5 +54,16 @@
             </list>
         </property>
     </bean>
+    
+    <!-- Adds InitializerService to OpenMRS context so it can be accessed
+    calling Context.getService(InitializerService.class) -->
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>org.openmrs.module.initializer.api.c.InitializerConceptService</value>
+                <ref bean="initializer.ConceptService" />
+            </list>
+        </property>
+    </bean>
 
 </beans>
