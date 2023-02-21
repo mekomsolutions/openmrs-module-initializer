@@ -7,6 +7,7 @@ import static org.apache.commons.lang.StringUtils.replace;
 import static org.apache.commons.lang.StringUtils.startsWith;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_EXCLUDE;
+import static org.openmrs.module.initializer.InitializerConstants.MODULE_NAME;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,9 +37,6 @@ import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
-import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator2_0;
-import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator2_4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -178,15 +176,14 @@ public class Validator {
 		org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(level);
 		
 		org.apache.log4j.Logger inizLogger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
-		inizLogger.setLevel(org.apache.log4j.Level.WARN); // this is to focus the Inititalizer log file to the most relevant messages
+		inizLogger.setLevel(org.apache.log4j.Level.INFO); // this is to focus the Inititalizer log file to the most relevant messages
 		if (logFilePath != null) {
 			try {
 				inizLogger.addAppender(new org.apache.log4j.FileAppender(
 				        new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n"), logFilePath.toString()));
 			}
 			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("The validator log file appender could not be setup because of: ", e);
 			}
 		}
 	}

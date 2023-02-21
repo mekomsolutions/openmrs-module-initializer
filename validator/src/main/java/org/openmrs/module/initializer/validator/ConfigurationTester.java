@@ -46,15 +46,11 @@ import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.openconceptlab.OpenConceptLabActivator;
 import org.openmrs.test.TestUtil;
-import org.openmrs.util.DatabaseUpdateException;
 import org.openmrs.util.DatabaseUpdater;
-import org.openmrs.util.DatabaseUpdater.ChangeSetExecutorCallback;
-import org.openmrs.util.InputRequiredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.MySQLContainer;
 import ch.vorburger.exec.ManagedProcessException;
-import liquibase.changelog.ChangeSet;
 
 public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
@@ -75,8 +71,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		mysqlContainer.withDatabaseName("openmrs");
 		mysqlContainer.withUsername("root");
 		mysqlContainer.withPassword("");
-		mysqlContainer.withCommand(
-		    "mysqld --character-set-server=utf8 --collation-server=utf8_general_ci");
+		mysqlContainer.withCommand("mysqld --character-set-server=utf8 --collation-server=utf8_general_ci");
 		mysqlContainer.start();
 	}
 	
