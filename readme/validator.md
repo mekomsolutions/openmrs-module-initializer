@@ -12,9 +12,10 @@ The Initializer Validator replays OpenMRS configs in a Spring context-sensitive 
 mvn clean package -P validator
 ```
 2) Locate a config that you want to validate, eg. at **/Users/mksd/repos/openmrs-config-acme/configuration**.
-3) Run it (use absolute paths for arguments):
+3) Run it (use absolute paths for arguments and replace `<initializer_validator_version>` with the actual initializer version being used starting from version 2.5.0):
+
 ```bash
-java -jar ./validator/target/initializer-validator-2.2.0.jar \
+java -jar ./validator/target/initializer-validator-<initializer_validator_version>.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration
 ```
 4) That's it! The dry run will either pass or fail.
@@ -23,39 +24,40 @@ java -jar ./validator/target/initializer-validator-2.2.0.jar \
 ### Dry run examples
 ##### On top of CIEL
 ```bash
-java -jar ./validator/target/initializer-validator-2.2.0.jar \
+java -jar ./validator/target/initializer-validator-<initializer_validator_version>.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration \
   --ciel-file=/Users/mksd/Downloads/openmrs_concepts_2.2_20200927.sql
 ```
 ##### Skipping some domains
 ```bash
-java -jar validator/target/initializer-validator-2.2.0.jar \
+java -jar validator/target/initializer-validator-<initializer_validator_version>.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration \
   --domains='!metadatasharing,privileges,roles'
 ```
 ##### Including only some domains
 ```bash
-java -jar validator/target/initializer-validator-2.2.0.jar \
+java -jar validator/target/initializer-validator-<initializer_validator_version>.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration \
   --domains='concepts,locations'
 ```
 ##### Excluding some files in a domain
 ```bash
-java -jar validator/target/initializer-validator-2.2.0.jar \
+java -jar validator/target/initializer-validator-<initializer_validator_version>.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration \
   --exclude.concepts='*diags*,*interventions*'
 ```
 In the above example all 'concepts' domain files matching the [wildcard patterns](https://docs.oracle.com/cd/E23389_01/doc.11116/e21038/conditions.htm#BABEJGAH) `*diags*` and `*interventions*` will be filtered out.
 ##### Unsafe mode
 ```bash
-java -jar ./validator/target/initializer-validator-2.2.0.jar \
+java -jar ./validator/target/initializer-validator-<initializer_validator_version>.jar \
   --config-dir=/Users/mksd/repos/openmrs-config-acme/configuration --unsafe
 ```
 The unsafe mode will break as soon as the first loading error occurs, triggering the validation to stop short. This mode is particularly suitable for CI processes that just need to fail early.
 ##### CLI arguments
 Just run the fatjar with no arguments (or with the `--help` argument) to get a list of all possible options:
+
 ```bash
-java -jar validator/target/initializer-validator-2.2.0.jar
+java -jar validator/target/initializer-validator-<initializer_validator_version>.jar
 ```
 ### Known issues
 
