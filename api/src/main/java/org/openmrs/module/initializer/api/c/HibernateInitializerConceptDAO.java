@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -33,7 +34,7 @@ public class HibernateInitializerConceptDAO implements InitializerConceptDAO {
 	
 	@Override
 	public Concept getConceptByName(String name) {
-		if (name == null) {
+		if (StringUtils.isBlank(name)) {
 			return null;
 		}
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ConceptName.class);
