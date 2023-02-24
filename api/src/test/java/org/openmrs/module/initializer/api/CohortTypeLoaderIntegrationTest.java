@@ -26,7 +26,7 @@ public class CohortTypeLoaderIntegrationTest extends DomainBaseModuleContextSens
 	private CohortTypeLoader loader;
 	
 	@Test
-	public void loader_shouldLoadCohortTypesAccordingToCsvFiles() throws Exception {
+	public void loader_shouldLoadCohortTypesAccordingToCsvFiles() {
 		// setup
 		{
 			CohortType cohortType = new CohortType();

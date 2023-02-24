@@ -5,9 +5,8 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.cohort.CohortType;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.springframework.stereotype.Component;
 
-@OpenmrsProfile(modules = { "cohort:3.2.*" })
+@OpenmrsProfile(modules = { "cohort:3.2.* - 9.*" })
 public class CohortTypeLineProcessor extends BaseLineProcessor<CohortType> {
 	
 	@Override

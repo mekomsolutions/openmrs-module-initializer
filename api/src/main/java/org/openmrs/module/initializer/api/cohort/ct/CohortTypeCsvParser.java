@@ -10,9 +10,8 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
-@OpenmrsProfile(modules = { "cohort:3.2.*" })
+@OpenmrsProfile(modules = { "cohort:3.2.* - 9.*" })
 public class CohortTypeCsvParser extends CsvParser<CohortType, BaseLineProcessor<CohortType>> {
 	
 	private CohortTypeService cohortTypeService;
