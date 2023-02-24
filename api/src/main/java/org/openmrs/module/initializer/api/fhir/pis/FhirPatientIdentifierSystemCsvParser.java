@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.openmrs.module.initializer.Domain.FHIR_PATIENT_IDENTIFIER_SYSTEMS;
 
 @Component
-@OpenmrsProfile(modules = { "fhir2:1.6.*" })
+@OpenmrsProfile(modules = { "fhir2:1.6.* - 9.*" })
 public class FhirPatientIdentifierSystemCsvParser extends CsvParser<FhirPatientIdentifierSystem, BaseLineProcessor<FhirPatientIdentifierSystem>> {
 	
 	private static final String PATIENT_IDENTIFIER_TYPE_HEADER = "Patient identifier type";

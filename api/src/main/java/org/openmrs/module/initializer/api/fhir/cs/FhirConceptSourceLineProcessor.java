@@ -5,10 +5,8 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.fhir2.model.FhirConceptSource;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.springframework.stereotype.Component;
 
-@Component
-@OpenmrsProfile(modules = { "fhir2:1.6.*" })
+@OpenmrsProfile(modules = { "fhir2:1.6.* - 9.*" })
 public class FhirConceptSourceLineProcessor extends BaseLineProcessor<FhirConceptSource> {
 	
 	private static final String URL_HEADER = "url";

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@OpenmrsProfile(modules = { "fhir2:1.6.*" })
+@OpenmrsProfile(modules = { "fhir2:1.6.* - 9.*" })
 public class FhirPatientIdentifierSystemLineProcessor extends BaseLineProcessor<FhirPatientIdentifierSystem> {
 	
 	private static final String URL_HEADER = "url";

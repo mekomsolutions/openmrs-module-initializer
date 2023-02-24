@@ -11,12 +11,10 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import static org.openmrs.module.initializer.Domain.FHIR_CONCEPT_SOURCES;
 
-@Component
-@OpenmrsProfile(modules = { "fhir2:1.6.*" })
+@OpenmrsProfile(modules = { "fhir2:1.6.* - 9.*" })
 public class FhirConceptSourceCsvParser extends CsvParser<FhirConceptSource, BaseLineProcessor<FhirConceptSource>> {
 	
 	public static final String CONCEPT_SOURCE_HEADER = "Concept source";
