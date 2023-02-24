@@ -2,21 +2,16 @@ package org.openmrs.module.initializer.api.fhir.ocm;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.ConceptClass;
-import org.openmrs.ConceptSource;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.fhir2.model.FhirConceptSource;
 import org.openmrs.module.fhir2.model.FhirObservationCategoryMap;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import static org.openmrs.module.initializer.api.fhir.cs.FhirConceptSourceCsvParser.CONCEPT_SOURCE_NAME_HEADER;
 import static org.openmrs.module.initializer.api.fhir.ocm.FhirObservationCategoryMapCsvParser.CONCEPT_CLASS_HEADER;
 import static org.openmrs.module.initializer.api.fhir.ocm.FhirObservationCategoryMapCsvParser.FHIR_OBS_CATEGORY_HEADER;
 
-@Component
 @OpenmrsProfile(modules = { "fhir2:1.*" })
 public class FhirObservationCategoryMapLineProcessor extends BaseLineProcessor<FhirObservationCategoryMap> {
 	

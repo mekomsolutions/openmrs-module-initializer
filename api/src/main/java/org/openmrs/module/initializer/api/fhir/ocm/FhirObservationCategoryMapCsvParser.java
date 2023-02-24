@@ -10,11 +10,9 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import static org.openmrs.module.initializer.Domain.FHIR_OBSERVATION_CATEGORY_MAPS;
 
-@Component
 @OpenmrsProfile(modules = { "fhir2:1.*" })
 public class FhirObservationCategoryMapCsvParser extends CsvParser<FhirObservationCategoryMap, BaseLineProcessor<FhirObservationCategoryMap>> {
 	
@@ -48,8 +46,8 @@ public class FhirObservationCategoryMapCsvParser extends CsvParser<FhirObservati
 			result = (FhirObservationCategoryMap) sessionFactory.getCurrentSession()
 			        .createQuery("from " + FhirObservationCategoryMap.class.getSimpleName()
 			                + " where observationCategory = :fhirObsCategory and conceptClass = (" + "select cc from "
-			                + ConceptClass.class.getSimpleName() + " cc where cc.name = :conceptClassName" + ")")
-			        .setParameter("fhirObsCategory", fhirObsCategory).setParameter("conceptClassName", conceptClass)
+			                + ConceptClass.class.getSimpleName() + " cc where cc.name = :conceptClass or cc.uuid = :conceptClass" + ")")
+			        .setParameter("fhirObsCategory", fhirObsCategory).setParameter("conceptClass", conceptClass)
 			        .uniqueResult();
 		}
 		
