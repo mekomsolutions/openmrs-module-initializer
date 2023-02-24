@@ -7,7 +7,6 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.stereotype.Component;
 
-@Component
 @OpenmrsProfile(modules = { "cohort:3.2.*" })
 public class CohortTypeLineProcessor extends BaseLineProcessor<CohortType> {
 	
