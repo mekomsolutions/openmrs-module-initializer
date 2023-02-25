@@ -50,6 +50,9 @@
 		<aware_of_module version="${bahmniCoreVersion}">
 			org.bahmni.module.bahmnicore
 		</aware_of_module>
+		<aware_of_module version="${cohortModuleVersion}">
+			org.openmrs.module.cohort
+		</aware_of_module>
 		<aware_of_module version="${fhir2Version}">
 			org.openmrs.module.fhir2
 		</aware_of_module>
