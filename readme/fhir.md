@@ -63,14 +63,32 @@ The format of this CSV should be as follows:
 
 Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
 
-###### Header `Patient identifier type`
+## Domain 'fhirobservationcategorymaps'
 
-This is *required* for every entry and is what is used to identify the underlying patient identifier type.  This can refer to the name (if unique) or uuid of the patient identifier type that this entry refers to. This must refer to an existing Patient Identifier Type, added via the patientidentifiertypes domain.  This will not create or modify the underlying patient identifier types. The name of this underlying patient identifier type will be used as the name of the FHIR patient identifier system.
+The **fhirobservationcategorymaps** subfolder contains CSV import files for defining mappings between [FHIR Observation category
+values](https://www.hl7.org/fhir/valueset-observation-category.html) and OpenMRS ConceptClasses. When configured, this ensures
+that the `Observation.category` field on a FHIR Observation will have the value specified by the mapping and the ConceptClass.
 
-###### Header `Url`
+`ConceptClass`es referenced in this domain must exist before a category map can be created. However, arbitrary strings can
+be used for the category name. However, it is recommended to use strings in the
+[FHIR ValueSet for Observation category](https://www.hl7.org/fhir/valueset-observation-category.html) wherever possible to
+ensure maximum compatibility.
 
-This is the URL of the code system in FHIR. For terminologies identified
-[in the FHIR CodeSystem registry](https://www.hl7.org/fhir/terminologies-systems.html), this should be the preferred URL for
-that code system, e.g. SNOMED CT is "http://snomed.info/sct". If the code system is not defined by HL7 or that table, then
-the code systems own preferred URL should be used, e.g., for CIEL we tend to use
-"https://api.openconceptlab.org/orgs/CIEL/sources/CIEL".
+Please note that the ability to map OpenMRS ConceptClasses to FHIR Observation categories should be regarded as an experimental
+feature and may be subject to change in the future.
+
+This is a possible example of its contents:
+```bash
+fhirobservationcategorymaps/
+  ├──categorymaps.csv
+  └── ...
+```
+
+The format of this CSV should be as follows:
+
+| <sub>Uuid</sub> |<sub>Void/Retire</sub> | <sub>Fhir observation category</sub> | <sub>Concept class</sub> | <sub>_order:1000</sub> |
+| - | - | - | - | - |
+| <sub>e518de2a-be31-4202-9772-cc65c3ef7227</sub> | | <sub>laboratory</sub> | <sub>Test</sub> | |
+
+Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
+
