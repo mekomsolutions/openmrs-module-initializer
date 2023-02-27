@@ -1,10 +1,6 @@
-package org.openmrs.module.initializer.api.c;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package org.openmrs.module.initializer.api;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
@@ -14,20 +10,22 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
  * The Hibernate class for Concepts <br>
  * <br>
- * Use {@link InitializerConceptService} to access these methods
+ * Use {@link InitializerService} to access these methods
  * 
  * @see InitializerConceptService
  */
 @Component
-public class HibernateInitializerConceptDAO implements InitializerConceptDAO {
+public class HibernateInitializerDAO implements InitializerDAO {
 	
-	private static final Logger log = LoggerFactory.getLogger(HibernateInitializerConceptDAO.class);
+	private static final Logger log = LoggerFactory.getLogger(HibernateInitializerDAO.class);
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -38,10 +36,6 @@ public class HibernateInitializerConceptDAO implements InitializerConceptDAO {
 			return null;
 		}
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ConceptName.class);
-		
-		Locale locale = Context.getLocale();
-		Locale language = new Locale(locale.getLanguage() + "%");
-		criteria.add(Restrictions.or(Restrictions.eq("locale", locale), Restrictions.like("locale", language)));
 		
 		if (Context.getAdministrationService().isDatabaseStringComparisonCaseSensitive()) {
 			criteria.add(Restrictions.ilike("name", name));

@@ -117,4 +117,12 @@ public interface InitializerService extends OpenmrsService {
 	 * @return the configuration of the Initializer module as defined by the runtime properties
 	 */
 	InitializerConfig getInitializerConfig();
+	
+	/**
+	 * Return a Concept that matches the exact fully specified name
+	 * 
+	 * @param name The search string
+	 * @return the found Concept
+	 */
+	Concept getConceptByName(String name);
 }

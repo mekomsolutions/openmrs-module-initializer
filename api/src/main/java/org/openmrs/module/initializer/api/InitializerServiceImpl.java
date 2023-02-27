@@ -48,6 +48,9 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	private Map<String, Object> keyValueCache = new HashMap<String, Object>();
 	
 	@Autowired
+	private InitializerDAO dao;
+	
+	@Autowired
 	public void setConfig(InitializerConfig cfg) {
 		this.cfg = cfg;
 	}
@@ -204,5 +207,9 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public InitializerConfig getInitializerConfig() {
 		return cfg;
+	}
+	
+	public Concept getConceptByName(String name) {
+		return dao.getConceptByName(name);
 	}
 }
