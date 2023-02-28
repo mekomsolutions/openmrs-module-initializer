@@ -46,7 +46,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	private InitializerConfig cfg;
 	
 	private Map<String, Object> keyValueCache = new HashMap<String, Object>();
-
+	
 	private InitializerDAO initializerDAO;
 	
 	@Autowired
@@ -55,8 +55,8 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	}
 	
 	/**
-	 * Sets the data access object. The initializerDao is used for saving and getting entities
-	 * to/from the database
+	 * Sets the data access object. The initializerDao is used for saving and getting entities to/from
+	 * the database
 	 * 
 	 * @param initializerDAO The data access object to use
 	 */

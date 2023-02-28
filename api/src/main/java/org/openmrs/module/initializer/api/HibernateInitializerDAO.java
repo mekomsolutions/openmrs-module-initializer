@@ -69,7 +69,8 @@ public class HibernateInitializerDAO implements InitializerDAO {
 			log.warn("No concept found for '" + name + "'");
 		} else {
 			List<Concept> concepts = list.stream().map(ConceptName::getConcept).collect(Collectors.toList());
-			throw new RuntimeException("Multiple concepts with the same fully specified name found for '" + name + "':\n" + concepts.stream().map(Concept::getUuid).collect(Collectors.joining("\n")));
+			throw new RuntimeException("Multiple concepts with the same fully specified name found for '" + name + "':\n"
+			        + concepts.stream().map(Concept::getUuid).collect(Collectors.joining("\n")));
 		}
 		return null;
 	}
