@@ -498,9 +498,6 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	
 	@Test
 	public void load_shouldLoadConceptSetMembersByFullySpecifiedNameSearch() {
-		// Setup
-		Context.setLocale(localeEn);
-		
 		// Replay
 		loader.load();
 		

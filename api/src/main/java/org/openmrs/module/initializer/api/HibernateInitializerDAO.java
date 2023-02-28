@@ -1,6 +1,7 @@
 package org.openmrs.module.initializer.api;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
@@ -16,22 +17,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * The Hibernate class for Concepts <br>
+ * The Hibernate class for database related functions <br>
  * <br>
  * Use {@link InitializerService} to access these methods
  * 
- * @see InitializerConceptService
+ * @see InitializerService
  */
-@Component
 public class HibernateInitializerDAO implements InitializerDAO {
 	
 	private static final Logger log = LoggerFactory.getLogger(HibernateInitializerDAO.class);
 	
-	@Autowired
 	private SessionFactory sessionFactory;
 	
+	/**
+	 * Sets the session factory
+	 * 
+	 * @param sessionFactory
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
+	/**
+	 * @see org.openmrs.module.initializer.api.InitializerService#getUnretiredConceptByFullySpecifiedName(String)
+	 */
 	@Override
-	public Concept getConceptByName(String name) {
+	public Concept getUnretiredConceptByFullySpecifiedName(String name) {
 		if (StringUtils.isBlank(name)) {
 			return null;
 		}
@@ -57,7 +68,8 @@ public class HibernateInitializerDAO implements InitializerDAO {
 		} else if (list.isEmpty()) {
 			log.warn("No concept found for '" + name + "'");
 		} else {
-			throw new RuntimeException("Multiple concepts with the same fully specified name found for '" + name + "'");
+			List<Concept> concepts = list.stream().map(ConceptName::getConcept).collect(Collectors.toList());
+			throw new RuntimeException("Multiple concepts with the same fully specified name found for '" + name + "':\n" + concepts.stream().map(Concept::getUuid).collect(Collectors.joining("\n")));
 		}
 		return null;
 	}

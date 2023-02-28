@@ -230,23 +230,8 @@ public class Utils {
 		if (instance != null) {
 			return instance;
 		}
-		Locale originalLocale = Context.getLocale();
-		try {
-			for (Locale locale : LocaleUtility.getLocalesInOrder()) {
-				Context.setLocale(locale);
-				Concept concept = Context.getService(InitializerService.class).getConceptByName(id);
-				if (concept != null) {
-					if (!originalLocale.equals(locale)) {
-						log.warn("Found '{}' in locale '{}', not in '{}'", new Object[] { id, locale, originalLocale });
-					}
-					return concept;
-				}
-			}
-		}
-		finally {
-			Context.setLocale(originalLocale);
-		}
-		return null;
+		Concept concept = Context.getService(InitializerService.class).getUnretiredConceptByFullySpecifiedName(id);
+		return concept;
 	}
 	
 	/**

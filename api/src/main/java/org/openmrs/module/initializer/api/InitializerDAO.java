@@ -10,7 +10,7 @@ import org.openmrs.Concept;
 public interface InitializerDAO {
 	
 	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#getConceptByName(String)
+	 * @see org.openmrs.module.initializer.api.InitializerService#getUnretiredConceptByFullySpecifiedName(String)
 	 */
-	public Concept getConceptByName(String name);
+	public Concept getUnretiredConceptByFullySpecifiedName(String name);
 }

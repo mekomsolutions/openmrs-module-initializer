@@ -46,13 +46,22 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	private InitializerConfig cfg;
 	
 	private Map<String, Object> keyValueCache = new HashMap<String, Object>();
-	
-	@Autowired
-	private InitializerDAO dao;
+
+	private InitializerDAO initializerDAO;
 	
 	@Autowired
 	public void setConfig(InitializerConfig cfg) {
 		this.cfg = cfg;
+	}
+	
+	/**
+	 * Sets the data access object. The initializerDao is used for saving and getting entities
+	 * to/from the database
+	 * 
+	 * @param initializerDAO The data access object to use
+	 */
+	public void setInitializerDAO(InitializerDAO initializerDAO) {
+		this.initializerDAO = initializerDAO;
 	}
 	
 	public Path getBasePath() {
@@ -209,7 +218,11 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		return cfg;
 	}
 	
-	public Concept getConceptByName(String name) {
-		return dao.getConceptByName(name);
+	/**
+	 * @see org.openmrs.module.initializer.api.InitializerService#getUnretiredConceptByFullySpecifiedName(String)
+	 */
+	@Override
+	public Concept getUnretiredConceptByFullySpecifiedName(String name) {
+		return initializerDAO.getUnretiredConceptByFullySpecifiedName(name);
 	}
 }

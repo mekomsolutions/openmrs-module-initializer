@@ -329,7 +329,7 @@ public class UtilsTest {
 		
 		InitializerService ics = mock(InitializerService.class);
 		when(Context.getService(InitializerService.class)).thenReturn(ics);
-		when(ics.getConceptByName("concept:lookup")).thenReturn(nameConcept);
+		when(ics.getUnretiredConceptByFullySpecifiedName("concept:lookup")).thenReturn(nameConcept);
 		Assert.assertEquals(nameConcept, Utils.fetchConcept("concept:lookup", cs));
 	}
 	
