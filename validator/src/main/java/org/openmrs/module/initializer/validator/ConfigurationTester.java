@@ -77,7 +77,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	protected void setupDatabaseProps(Properties props) throws ManagedProcessException, URISyntaxException {
 		props.setProperty(Environment.DIALECT, MySQLDialect.class.getName());
-		String url = "jdbc:mysql://localhost:DATABASE_PORT/openmrs?autoReconnect=true&sessionVariables=default_storage_engine%3DInnoDB&useUnicode=true&characterEncoding=UTF-8";
+		String url = "jdbc:mysql://localhost:DATABASE_PORT/openmrs?autoReconnect=true&sessionVariables=default_storage_engine%3DInnoDB&useUnicode=true&characterEncoding=UTF-8&useSSL=false";
 		url = url.replaceAll("DATABASE_PORT", String.valueOf(mysqlContainer.getMappedPort(3306)));
 		props.setProperty(Environment.URL, url);
 		
