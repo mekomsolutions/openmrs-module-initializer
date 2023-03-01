@@ -9,19 +9,21 @@
  */
 package org.openmrs.module.initializer.api;
 
-import java.util.Locale;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptSource;
 import org.openmrs.Drug;
+import org.openmrs.DrugReferenceMap;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.util.Locale;
 
 public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -93,6 +95,19 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			d.setStrength("100mg");
 			d = cs.saveDrug(d);
 		}
+		// Concept Sources and Concept Map Types to use for mappings
+		{
+			ConceptSource source = new ConceptSource();
+			source.setName("CS1");
+			source.setDescription("Concept Source 1");
+			cs.saveConceptSource(source);
+		}
+		{
+			ConceptSource source = new ConceptSource();
+			source.setName("CS2");
+			source.setDescription("Concept Source 2");
+			cs.saveConceptSource(source);
+		}
 	}
 	
 	@Test
@@ -107,6 +122,7 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Assert.assertNotNull(d);
 			Assert.assertEquals(cs.getConceptByName("Cetirizine"), d.getConcept());
 			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
+			assertMappings(d, "SAME-AS:CS1:M1");
 		}
 		
 		// a drug without dosage form
@@ -115,6 +131,7 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Assert.assertNotNull(d);
 			Assert.assertEquals(cs.getConceptByName("Erythromycine"), d.getConcept());
 			Assert.assertNull(d.getDosageForm());
+			assertMappings(d, "SAME-AS:CS1:M2", "SAME-AS:CS1:M3");
 		}
 		
 		// an edited drug
@@ -123,6 +140,7 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Assert.assertNotNull(d);
 			Assert.assertEquals(cs.getConceptByName("Metronidazole (new)"), d.getConcept());
 			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
+			assertMappings(d, "broader-than:CS2:M4");
 		}
 		// an edited drug fetched by name
 		{
@@ -130,6 +148,7 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Assert.assertNotNull(d);
 			Assert.assertEquals(cs.getConceptByName("d4T"), d.getConcept());
 			Assert.assertEquals("30mg", d.getStrength());
+			assertMappings(d, "broader-than:CS1:M5", "broader-than:CS2:M6");
 		}
 		// a new drug that starts out retired
 		{
@@ -139,6 +158,30 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
 			Assert.assertEquals("250mg", d.getStrength());
 			Assert.assertTrue(d.getRetired());
+			assertMappings(d);
+		}
+	}
+	
+	protected void assertMappings(Drug d, String... mappings) {
+		Assert.assertEquals(d.getDrugReferenceMaps().size(), mappings.length);
+		for (String mapping : mappings) {
+			String[] components = mapping.split(":");
+			String mapTypeName = components[0];
+			String sourceName = components[1];
+			String code = components[2];
+			boolean found = false;
+			for (DrugReferenceMap m : d.getDrugReferenceMaps()) {
+				if (m.getConceptMapType().getName().equalsIgnoreCase(mapTypeName)) {
+					if (m.getConceptReferenceTerm().getConceptSource().getName().equalsIgnoreCase(sourceName)) {
+						if (m.getConceptReferenceTerm().getCode().equalsIgnoreCase(code)) {
+							found = true;
+						}
+					}
+				}
+			}
+			if (!found) {
+				Assert.fail("Mapping " + mapping + " not found.");
+			}
 		}
 	}
 }
