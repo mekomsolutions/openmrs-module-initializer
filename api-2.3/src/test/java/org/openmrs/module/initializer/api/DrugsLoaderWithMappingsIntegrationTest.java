@@ -67,6 +67,13 @@ public class DrugsLoaderWithMappingsIntegrationTest extends DomainBaseModuleCont
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c = cs.saveConcept(c);
 		}
+		{
+			Concept c = new Concept();
+			c.setShortName(new ConceptName("Albendazole", Locale.ENGLISH));
+			c.setConceptClass(cs.getConceptClassByName("Drug"));
+			c.setDatatype(cs.getConceptDatatypeByName("Text"));
+			c = cs.saveConcept(c);
+		}
 		// drugs to be edited
 		{
 			Concept c = new Concept();
@@ -159,6 +166,13 @@ public class DrugsLoaderWithMappingsIntegrationTest extends DomainBaseModuleCont
 			Assert.assertEquals("250mg", d.getStrength());
 			Assert.assertTrue(d.getRetired());
 			assertMappings(d);
+		}
+		{
+			Drug d = cs.getDrug("Albendazole 200mg Tablet");
+			Assert.assertNotNull(d);
+			Assert.assertEquals(cs.getConceptByName("Albendazole"), d.getConcept());
+			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
+			assertMappings(d, "SAME-AS:CS1:M7", "SAME-AS:CS1:M8");
 		}
 	}
 	

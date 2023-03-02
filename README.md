@@ -167,6 +167,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Added support for AMPATH Forms translations: https://github.com/mekomsolutions/openmrs-module-initializer/issues/180
 * Fix for Message Source when system default language is not English: https://github.com/mekomsolutions/openmrs-module-initializer/issues/212
 * Logging now uses the configured level as a minimum.
+* Added support for [Drug Reference Maps](https://github.com/mekomsolutions/openmrs-module-initializer/issues/219) on the drugs domain
 
 #### Version 2.4.0
 * Added support for 'fhirconceptsources' domain.

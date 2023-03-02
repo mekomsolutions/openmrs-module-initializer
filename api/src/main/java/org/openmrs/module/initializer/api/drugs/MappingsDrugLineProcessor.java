@@ -42,8 +42,8 @@ public class MappingsDrugLineProcessor extends DrugLineProcessor {
 			String lineValue = line.get(header);
 			if (!StringUtils.isEmpty(lineValue)) {
 				
-				// There are up to 3 components.  Mappings|Type|Source, where only the first 2 are required
-				String[] headerComponents = header.split(MAPPING_HEADER_SEPARATOR_REGEX, 3);
+				// There are up to 4 components.  Mappings|Type|Source|Suffix, where only the first 2 are required
+				String[] headerComponents = header.split(MAPPING_HEADER_SEPARATOR_REGEX, 4);
 				
 				if (headerComponents[0].equalsIgnoreCase(MAPPING_HEADER_PREFIX)) {
 					
@@ -60,7 +60,7 @@ public class MappingsDrugLineProcessor extends DrugLineProcessor {
 					
 					// Next, if the source prefix is specified in the header, rather than in the value, retrieve it
 					ConceptSource conceptSource = null;
-					if (headerComponents.length == 3) {
+					if (headerComponents.length > 2) {
 						String source = headerComponents[2].trim();
 						conceptSource = Utils.fetchConceptSource(source, conceptService);
 						if (conceptSource == null) {
