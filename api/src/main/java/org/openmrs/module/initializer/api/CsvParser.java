@@ -191,12 +191,12 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	public CsvFailingLines process(List<String[]> lines) {
 		
 		CsvFailingLines result = new CsvFailingLines();
-		
 		int saved = 0;
 		for (String[] line : lines) {
+			T instance = null;
 			try {
-				save(initialize(line));
-				
+				instance = initialize(line);
+				save(instance);
 				saved++;
 				if (saved > 250) { // TODO make this configurable
 					Context.flushSession();
@@ -205,6 +205,9 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 			}
 			catch (Exception e) {
 				result.addFailingLine(new CsvLine(getHeaderLine(), line), e);
+				if (instance != null) {
+					Context.evictFromSession(instance);
+				}
 			}
 		}
 		
