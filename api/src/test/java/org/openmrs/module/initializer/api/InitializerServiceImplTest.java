@@ -1,6 +1,8 @@
 package org.openmrs.module.initializer.api;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -61,9 +63,9 @@ public class InitializerServiceImplTest {
 		iniz.load();
 		
 		// verify
-		verify(conceptsLoader, times(1)).load(any());
-		verify(encounterTypesLoader, times(1)).load(any());
-		verify(drugsLoader, never()).load(any());
+		verify(conceptsLoader, times(1)).loadUnsafe(anyListOf(String.class), anyBoolean());
+		verify(encounterTypesLoader, times(1)).loadUnsafe(anyListOf(String.class), anyBoolean());
+		verify(drugsLoader, never()).loadUnsafe(anyListOf(String.class), anyBoolean());
 	}
 	
 	@Test
@@ -78,9 +80,9 @@ public class InitializerServiceImplTest {
 		iniz.load();
 		
 		// verify
-		verify(conceptsLoader, never()).load(any());
-		verify(encounterTypesLoader, times(1)).load(any());
-		verify(drugsLoader, never()).load(any());
+		verify(conceptsLoader, never()).loadUnsafe(anyListOf(String.class), anyBoolean());
+		verify(encounterTypesLoader, times(1)).loadUnsafe(anyListOf(String.class), anyBoolean());
+		verify(drugsLoader, never()).loadUnsafe(anyListOf(String.class), anyBoolean());
 	}
 	
 	@Test

@@ -22,6 +22,7 @@ import org.openmrs.ConceptAttributeType;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.context.Context;
 import org.openmrs.customdatatype.CustomDatatype;
 import org.openmrs.customdatatype.CustomDatatypeUtil;
 import org.openmrs.customdatatype.datatype.DateDatatype;
@@ -35,7 +36,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(CustomDatatypeUtil.class)
+@PrepareForTest({ CustomDatatypeUtil.class, Context.class })
 public class ConceptsCsvParserTest {
 	
 	private ConceptService cs;
@@ -43,6 +44,7 @@ public class ConceptsCsvParserTest {
 	@Before
 	public void setup() {
 		PowerMockito.mockStatic(CustomDatatypeUtil.class);
+		PowerMockito.mockStatic(Context.class);
 		cs = mock(ConceptService.class);
 		
 		ConceptClass classQuestion = new ConceptClass();
