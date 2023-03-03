@@ -13,6 +13,7 @@ import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptReferenceTerm;
 import org.openmrs.ConceptSource;
+import org.openmrs.Drug;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.OrderType;
@@ -45,6 +46,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -124,7 +126,7 @@ public class Utils {
 		}
 		
 		public ConceptMappingWrapper(String mappingStr, ConceptService cs) {
-			this(mappingStr, cs.getConceptMapTypeByUuid(ConceptMapType.SAME_AS_MAP_TYPE_UUID), cs);
+			this(mappingStr, getSameAsConceptMapType(cs), cs);
 		}
 		
 		public ConceptMap getConceptMapping() {
@@ -153,6 +155,60 @@ public class Utils {
 		String[] parts = mapping.split(":");
 		if (parts.length == 2) {
 			instance = service.getConceptByMapping(parts[1].trim(), parts[0].trim());
+		}
+		return instance;
+	}
+	
+	/**
+	 * @param mapping The drug mapping, eg. "cambodia:123"
+	 * @param service
+	 * @return The {@link org.openmrs.Drug} instance that has a SAME-AS mapping to the given source nad
+	 *         code, or null. This will return null if the reference source is not found, and the
+	 *         SAME-AS concept map type is not found
+	 */
+	public static Drug getDrugByMapping(String mapping, ConceptService service) {
+		Drug instance = null;
+		if (StringUtils.isEmpty(mapping)) {
+			return instance;
+		}
+		String[] parts = mapping.split(":");
+		if (parts.length == 2) {
+			ConceptSource source = fetchConceptSource(parts[0].trim(), service);
+			if (source != null) {
+				ConceptMapType sameAs = getSameAsConceptMapType(service);
+				if (sameAs != null) {
+					instance = service.getDrugByMapping(parts[1].trim(), source, Collections.singletonList(sameAs));
+				}
+			}
+		}
+		return instance;
+	}
+	
+	/**
+	 * @param conceptService the ConceptService
+	 * @return the ConceptMapType that represents the SAME-AS mapping
+	 */
+	public static ConceptMapType getSameAsConceptMapType(ConceptService conceptService) {
+		return conceptService.getConceptMapTypeByUuid(ConceptMapType.SAME_AS_MAP_TYPE_UUID);
+	}
+	
+	/**
+	 * Fetches a ConceptSource, trying to match "id" on name, then hl7Code, then uniqueId, then uuid,
+	 * 
+	 * @param id the source lookup
+	 * @param service the ConceptService
+	 * @return The {@link ConceptSource} instance if found, null otherwise.
+	 */
+	public static ConceptSource fetchConceptSource(String id, ConceptService service) {
+		ConceptSource instance = service.getConceptSourceByName(id);
+		if (instance == null) {
+			instance = service.getConceptSourceByHL7Code(id);
+		}
+		if (instance == null) {
+			instance = service.getConceptSourceByUniqueId(id);
+		}
+		if (instance == null) {
+			instance = service.getConceptSourceByUuid(id);
 		}
 		return instance;
 	}

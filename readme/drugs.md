@@ -36,5 +36,29 @@ Here is an example of valid basic CSV line to defining a drug:
 
 In this example both `"Cetirizine"` and `"Tablet"` are assumed to be names of _existing_ concepts.
 
+###### Mappings headers
+Drugs support one or more mappings to concept reference terms, which are created as DrugReferenceMaps. Each of these mappings are configurable with a mapping type, a source, and a code.  
+
+Important note:  Due to a bug in OpenMRS core, use of Mappings headers will fail if your core version does not meet one of the following minimum versions:
+* 2.7.0+
+* 2.6.1+
+* 2.5.11+
+* 2.4.6+
+* 2.3.6+
+
+In order to specify mappings on a given concept, the values for those mappings can be set under ad-hoc headers starting with the special prefix `Mappings|`.  Mappings headers should be specified in the following format:
+
+**Option 1:**  Column header specifies the mapping type, but not the source.  In this case, the column values must be one or more source:code pairs.  If specifying multiple source:code pairs, these must be separated by semi-colons.  Example:
+
+| ... | <sub>Mappings\|SAME-AS</sub> | <sub>Mappings\|NARROWER-THAN</sub> |
+| - | - | - |
+| ... | <sub>CIEL:5089; SNOMED CT:27113001</sub> | <sub>LOINC:3141-9</sub> |
+
+**Option 2:**  Column header specifies both the mapping type and the source.  In this case, the column values must only be the codes.  If specifiying multiple codes for the same mapping type and source, these must be separated by semi-colons, or they can alternatively be added as separate columns.  In the case of adding them as separate columns, and additional suffix is supported on the header to enable each column header to be unique.  Example:
+
+| ... | <sub>Mappings\|SAME-AS\|CIEL</sub> | <sub>Mappings\|SAME-AS\|SNOMED CT</sub> | <sub>Mappings\|SAME-AS\|PIH\|Code</sub> | <sub>Mappings\|SAME-AS\|PIH\|Name</sub> |
+| - | - | - | - | - |
+| ... | <sub>5089</sub> | <sub>27113001</sub> | <sub>5089</sub> | <sub>WEIGHT (KG)</sub> |
+
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).

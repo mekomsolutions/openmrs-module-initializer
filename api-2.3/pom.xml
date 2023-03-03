@@ -73,6 +73,12 @@
         <testResources>
             <testResource>
                 <directory>../api/src/test/resources</directory>
+                <excludes>
+                    <exclude>**/*/drugs.csv</exclude>
+                </excludes>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
             </testResource>
         </testResources>
     </build>
