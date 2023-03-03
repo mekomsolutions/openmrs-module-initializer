@@ -19,7 +19,7 @@ import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.InitializerServiceImpl;
 import org.openmrs.module.initializer.api.MockLoader;
 import org.openmrs.module.initializer.api.loaders.Loader;
-
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -66,6 +66,16 @@ public class InitializerActivatorTest {
 			@Override
 			protected InitializerService getInitializerService() {
 				return iniz;
+			}
+			
+			@Override
+			protected List<InitializerLogConfigurator> getInitializerLogConfigurator() {
+				return null;
+			}
+			
+			@Override
+			protected InitializerMessageSource getInitializerMessageSource() {
+				return new InitializerMessageSource();
 			}
 		};
 		props = new Properties();

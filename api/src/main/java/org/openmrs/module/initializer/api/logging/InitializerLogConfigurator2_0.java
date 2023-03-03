@@ -13,11 +13,8 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.InitializerActivator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import static org.openmrs.module.initializer.InitializerConstants.MODULE_NAME;
 
-@Component
 @OpenmrsProfile(openmrsPlatformVersion = "1.* - 2.1.4, 2.2.* - 2.3.*")
 public class InitializerLogConfigurator2_0 implements InitializerLogConfigurator {
 	

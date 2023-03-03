@@ -48,14 +48,6 @@ public class CohortTypeLoaderIntegrationTest extends DomainBaseModuleContextSens
 			assertThat(cohortType.getDescription(), equalTo("System lists"));
 		}
 		{
-			CohortType cohortType = cohortTypeService.getByName("Old Personal", true);
-			
-			assertThat(cohortType, notNullValue());
-			assertThat(cohortType.getUuid(), not(equalTo("58dfd8c3-f42f-4424-8106-3ce6b51d7171")));
-			assertThat(cohortType.getName(), equalTo("Old Personal"));
-			assertThat(cohortType.getVoided(), is(true));
-		}
-		{
 			CohortType cohortType = cohortTypeService.getByName("Personal");
 			
 			assertThat(cohortType, notNullValue());

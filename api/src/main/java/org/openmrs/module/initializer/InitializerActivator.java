@@ -46,8 +46,7 @@ public class InitializerActivator extends BaseModuleActivator {
 		log.info("Start of {} module.", MODULE_ARTIFACT_ID);
 		
 		if (Boolean.parseBoolean(getPropertyValue(PROPS_LOGGING_ENABLED, "true"))) {
-			List<InitializerLogConfigurator> logConfigurators = Context
-			        .getRegisteredComponents(InitializerLogConfigurator.class);
+			List<InitializerLogConfigurator> logConfigurators = getInitializerLogConfigurator();
 			if (logConfigurators != null && logConfigurators.size() > 0) {
 				Path logFilePath = null;
 				String logFileLocation = getPropertyValue(PROPS_LOGGING_LOCATION);
@@ -74,7 +73,7 @@ public class InitializerActivator extends BaseModuleActivator {
 		}
 		
 		// Set active message source
-		InitializerMessageSource messageSource = Context.getRegisteredComponents(InitializerMessageSource.class).get(0);
+		InitializerMessageSource messageSource = getInitializerMessageSource();
 		Context.getMessageSourceService().setActiveMessageSource(messageSource);
 		
 		String startupLoadingMode = getInitializerService().getInitializerConfig().getStartupLoadingMode();
@@ -96,6 +95,14 @@ public class InitializerActivator extends BaseModuleActivator {
 	
 	protected InitializerService getInitializerService() {
 		return Context.getService(InitializerService.class);
+	}
+	
+	protected List<InitializerLogConfigurator> getInitializerLogConfigurator() {
+		return Context.getRegisteredComponents(InitializerLogConfigurator.class);
+	}
+	
+	protected InitializerMessageSource getInitializerMessageSource() {
+		return Context.getRegisteredComponents(InitializerMessageSource.class).get(0);
 	}
 	
 	/**
