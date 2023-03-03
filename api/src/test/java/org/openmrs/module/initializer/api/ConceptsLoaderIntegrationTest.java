@@ -520,17 +520,27 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 	@Test
 	public void load_shouldFailToLoadConceptSetMembersByFullySpecifiedNameSearchGivenMoreThanOneConceptExists() {
 		// Setup
-		ConceptName name = new ConceptName();
-		name.setConceptNameType(ConceptNameType.FULLY_SPECIFIED);
-		name.setName("Vital signs");
-		name.setLocale(localeKm);
-		name.setLocalePreferred(true);
-		Concept concept = new Concept();
-		concept.addName(name);
-		concept.addDescription(new ConceptDescription("Duplicate concept in another locale", localeKm));
-		concept.setDatatype(cs.getConceptDatatypeByName("Text"));
-		concept.setConceptClass(cs.getConceptClassByName("Misc"));
-		cs.saveConcept(concept);
+		{
+			Locale localeEs = new Locale("es");
+			ConceptName name = new ConceptName();
+			name.setConceptNameType(ConceptNameType.FULLY_SPECIFIED);
+			name.setName("Vital signs");
+			name.setLocale(localeKm);
+			name.setLocalePreferred(true);
+			ConceptName name2 = new ConceptName();
+			name2.setConceptNameType(ConceptNameType.FULLY_SPECIFIED);
+			name2.setName("Vital signs");
+			name2.setLocale(localeEs);
+			name2.setLocalePreferred(false);
+			
+			Concept concept = new Concept();
+			concept.addName(name);
+			concept.addName(name2);
+			concept.addDescription(new ConceptDescription("Duplicate concept in another locale", localeEs));
+			concept.setDatatype(cs.getConceptDatatypeByName("Text"));
+			concept.setConceptClass(cs.getConceptClassByName("Misc"));
+			cs.saveConcept(concept);
+		}
 		
 		// Replay
 		loader.load();
@@ -538,15 +548,15 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		// Verify fail
 		Concept actualVitalSigns = cs.getConceptByUuid("23542fd3-4315-4e51-b68e-bce887331c0a");
 		Assert.assertNull(actualVitalSigns);
-		Assert.assertThrows(RuntimeException.class, () -> inizService.getUnretiredConceptByFullySpecifiedName("Vital signs"));
+		Assert.assertEquals(2, inizService.getUnretiredConceptsByFullySpecifiedName("Vital signs").size());
 	}
 	
 	@Test
-	public void getUnretiredConceptByFullySpecifiedName_shouldReturnNullGivenBlankNameStringOrConceptNotFound() {
+	public void getUnretiredConceptsByFullySpecifiedName_shouldReturnNullGivenBlankNameStringOrConceptNotFound() {
 		// Verify
-		Assert.assertNull(inizService.getUnretiredConceptByFullySpecifiedName(" "));
-		Assert.assertNull(inizService.getUnretiredConceptByFullySpecifiedName(null));
-		Assert.assertNull(inizService.getUnretiredConceptByFullySpecifiedName("Missing Concept"));
+		Assert.assertTrue(inizService.getUnretiredConceptsByFullySpecifiedName(" ").size() == 0);
+		Assert.assertTrue(inizService.getUnretiredConceptsByFullySpecifiedName(null).size() == 0);
+		Assert.assertTrue(inizService.getUnretiredConceptsByFullySpecifiedName("Missing Concept").size() == 0);
 	}
 	
 	protected ConceptName assertName(Concept c, String name, Locale locale, boolean preferred, ConceptNameType type) {

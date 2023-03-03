@@ -124,5 +124,5 @@ public interface InitializerService extends OpenmrsService {
 	 * @param name The search string
 	 * @return the found Concept
 	 */
-	Concept getUnretiredConceptByFullySpecifiedName(String name);
+	List<Concept> getUnretiredConceptsByFullySpecifiedName(String name);
 }

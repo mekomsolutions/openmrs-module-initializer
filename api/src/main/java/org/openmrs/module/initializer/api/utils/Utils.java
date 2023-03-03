@@ -230,8 +230,17 @@ public class Utils {
 		if (instance != null) {
 			return instance;
 		}
-		Concept concept = Context.getService(InitializerService.class).getUnretiredConceptByFullySpecifiedName(id);
-		return concept;
+		
+		List<Concept> concepts = Context.getService(InitializerService.class).getUnretiredConceptsByFullySpecifiedName(id);
+		if (concepts.size() == 1) {
+			return concepts.iterator().next();
+		} else if (concepts.isEmpty()) {
+			log.warn("No concept found for '" + id + "'");
+		} else {
+			throw new RuntimeException("Multiple concepts with the same fully specified name found for '" + id + "':\n"
+			        + concepts.stream().map(Concept::getUuid).collect(Collectors.joining("\n")));
+		}
+		return null;
 	}
 	
 	/**

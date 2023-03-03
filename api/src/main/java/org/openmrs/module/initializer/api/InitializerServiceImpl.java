@@ -219,10 +219,10 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	}
 	
 	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#getUnretiredConceptByFullySpecifiedName(String)
+	 * @see org.openmrs.module.initializer.api.InitializerService#getUnretiredConceptsByFullySpecifiedName(String)
 	 */
 	@Override
-	public Concept getUnretiredConceptByFullySpecifiedName(String name) {
-		return initializerDAO.getUnretiredConceptByFullySpecifiedName(name);
+	public List<Concept> getUnretiredConceptsByFullySpecifiedName(String name) {
+		return initializerDAO.getUnretiredConceptsByFullySpecifiedName(name);
 	}
 }

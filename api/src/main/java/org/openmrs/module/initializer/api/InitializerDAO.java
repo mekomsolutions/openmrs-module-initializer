@@ -1,5 +1,7 @@
 package org.openmrs.module.initializer.api;
 
+import java.util.List;
+
 import org.openmrs.Concept;
 
 /**
@@ -10,7 +12,7 @@ import org.openmrs.Concept;
 public interface InitializerDAO {
 	
 	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#getUnretiredConceptByFullySpecifiedName(String)
+	 * @see org.openmrs.module.initializer.api.InitializerService#getUnretiredConceptsByFullySpecifiedName(String)
 	 */
-	public Concept getUnretiredConceptByFullySpecifiedName(String name);
+	public List<Concept> getUnretiredConceptsByFullySpecifiedName(String name);
 }

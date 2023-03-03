@@ -1,11 +1,13 @@
 package org.openmrs.module.initializer.api;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
@@ -39,12 +41,12 @@ public class HibernateInitializerDAO implements InitializerDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#getUnretiredConceptByFullySpecifiedName(String)
+	 * @see org.openmrs.module.initializer.api.InitializerService#getUnretiredConceptsByFullySpecifiedName(String)
 	 */
 	@Override
-	public Concept getUnretiredConceptByFullySpecifiedName(String name) {
+	public List<Concept> getUnretiredConceptsByFullySpecifiedName(String name) {
 		if (StringUtils.isBlank(name)) {
-			return null;
+			return Collections.emptyList();
 		}
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ConceptName.class);
 		
@@ -59,19 +61,14 @@ public class HibernateInitializerDAO implements InitializerDAO {
 		
 		criteria.createAlias("concept", "concept");
 		criteria.add(Restrictions.eq("concept.retired", false));
+		criteria.setProjection(Projections.distinct(Projections.property("concept")));
 		
 		@SuppressWarnings("unchecked")
-		List<ConceptName> list = criteria.list();
+		List<Concept> list = criteria.list();
 		
-		if (list.size() == 1) {
-			return list.iterator().next().getConcept();
-		} else if (list.isEmpty()) {
+		if (list.isEmpty()) {
 			log.warn("No concept found for '" + name + "'");
-		} else {
-			List<Concept> concepts = list.stream().map(ConceptName::getConcept).collect(Collectors.toList());
-			throw new RuntimeException("Multiple concepts with the same fully specified name found for '" + name + "':\n"
-			        + concepts.stream().map(Concept::getUuid).collect(Collectors.joining("\n")));
 		}
-		return null;
+		return list;
 	}
 }
