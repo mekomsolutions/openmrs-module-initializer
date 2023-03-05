@@ -119,10 +119,10 @@ public interface InitializerService extends OpenmrsService {
 	InitializerConfig getInitializerConfig();
 	
 	/**
-	 * Return a Concept that matches the exact fully specified name
+	 * Returns Unretired unique Concepts that match the exact fully specified name across all locales
 	 * 
 	 * @param name The search string
-	 * @return the found Concept
+	 * @return the found Concepts
 	 */
 	List<Concept> getUnretiredConceptsByFullySpecifiedName(String name);
 }
