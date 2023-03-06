@@ -38,6 +38,9 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug> {
 		drug.setStrength(line.getString(HEADER_STRENGTH, ""));
 		
 		Concept conceptDrug = Utils.fetchConcept(line.get(HEADER_CONCEPT_DRUG), conceptService);
+		if (conceptDrug == null) {
+			throw new IllegalArgumentException("No drug concept found for '" + line.get(HEADER_CONCEPT_DRUG) + "'");
+		}
 		drug.setConcept(conceptDrug);
 		
 		Concept conceptDosageForm = Utils.fetchConcept(line.get(HEADER_DOSAGE_FORM), conceptService);
