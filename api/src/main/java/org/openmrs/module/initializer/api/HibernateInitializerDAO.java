@@ -65,10 +65,6 @@ public class HibernateInitializerDAO implements InitializerDAO {
 		
 		@SuppressWarnings("unchecked")
 		List<Concept> list = criteria.list();
-		
-		if (list.isEmpty()) {
-			log.warn("No concept found for '" + name + "'");
-		}
 		return list;
 	}
 }
