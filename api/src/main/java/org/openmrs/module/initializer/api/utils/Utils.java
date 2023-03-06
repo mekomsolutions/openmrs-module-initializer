@@ -38,6 +38,7 @@ import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.SpecialityService;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.util.LocaleUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -229,21 +230,15 @@ public class Utils {
 		if (instance != null) {
 			return instance;
 		}
-		Locale originalLocale = Context.getLocale();
-		try {
-			for (Locale locale : LocaleUtility.getLocalesInOrder()) {
-				Context.setLocale(locale);
-				Concept concept = service.getConceptByName(id);
-				if (concept != null) {
-					if (!originalLocale.equals(locale)) {
-						log.warn("Found '{}' in locale '{}', not in '{}'", new Object[] { id, locale, originalLocale });
-					}
-					return concept;
-				}
-			}
-		}
-		finally {
-			Context.setLocale(originalLocale);
+		
+		List<Concept> concepts = Context.getService(InitializerService.class).getUnretiredConceptsByFullySpecifiedName(id);
+		if (concepts.size() == 1) {
+			return concepts.get(0);
+		} else if (concepts.isEmpty()) {
+			log.info("No concept found for '" + id + "'");
+		} else {
+			throw new RuntimeException("Multiple concepts with the same fully specified name found for '" + id + "':\n"
+			        + concepts.stream().map(Concept::getUuid).collect(Collectors.joining("\n")));
 		}
 		return null;
 	}

@@ -49,6 +49,9 @@ public class UtilsTest {
 		
 		ConceptService cs = mock(ConceptService.class);
 		when(Context.getConceptService()).thenReturn(cs);
+		
+		InitializerService ics = mock(InitializerService.class);
+		when(Context.getService(InitializerService.class)).thenReturn(ics);
 	}
 	
 	@Test
@@ -323,7 +326,10 @@ public class UtilsTest {
 		when(cs.getConceptByUuid("concept:lookup")).thenReturn(null);
 		when(cs.getConceptByMapping("lookup", "concept")).thenReturn(null);
 		Concept nameConcept = new Concept();
-		when(cs.getConceptByName("concept:lookup")).thenReturn(nameConcept);
+		
+		InitializerService ics = mock(InitializerService.class);
+		when(Context.getService(InitializerService.class)).thenReturn(ics);
+		when(ics.getUnretiredConceptsByFullySpecifiedName("concept:lookup")).thenReturn(Arrays.asList(nameConcept));
 		Assert.assertEquals(nameConcept, Utils.fetchConcept("concept:lookup", cs));
 	}
 	
@@ -427,5 +433,20 @@ public class UtilsTest {
 		when(cs.getConceptMapTypeByUuid(ConceptMapType.SAME_AS_MAP_TYPE_UUID)).thenReturn(sameAsMapType);
 		when(cs.getDrugByMapping(eq("code"), eq(source), anyCollectionOf(ConceptMapType.class))).thenReturn(drug);
 		Assert.assertEquals(drug, Utils.getDrugByMapping("source:code", cs));
+	}
+	
+	@Test
+	public void fetchConcept_shouldThrowGivenMoreThanOneConeptWithSameFullySpecifiedName() {
+		ConceptService cs = mock(ConceptService.class);
+		when(cs.getConceptByUuid("concept:lookup")).thenReturn(null);
+		when(cs.getConceptByMapping("lookup", "concept")).thenReturn(null);
+		Concept nameConcept = new Concept();
+		Concept nameConcept2 = new Concept();
+		
+		InitializerService ics = mock(InitializerService.class);
+		when(Context.getService(InitializerService.class)).thenReturn(ics);
+		when(ics.getUnretiredConceptsByFullySpecifiedName("concept:lookup"))
+		        .thenReturn(Arrays.asList(nameConcept, nameConcept2));
+		Assert.assertThrows(RuntimeException.class, () -> Utils.fetchConcept("concept:lookup", cs));
 	}
 }

@@ -17,6 +17,8 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptAttribute;
 import org.openmrs.ConceptComplex;
+import org.openmrs.ConceptDatatype;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNumeric;
@@ -25,12 +27,14 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.customdatatype.datatype.DateDatatype;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
@@ -42,6 +46,10 @@ import static org.junit.Assert.assertNotEquals;
 import static org.openmrs.module.initializer.InitializerConstants.CONCEPT_NAME_NAMESPACE_UUID;
 
 public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+	
+	@Autowired
+	@Qualifier("initializer.InitializerService")
+	private InitializerService inizService;
 	
 	@Autowired
 	@Qualifier("conceptService")
@@ -494,6 +502,61 @@ public class ConceptsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		Assert.assertTrue(lemon.getVoided());
 		assertName(yellow, "Lemon Yellow", localeEn, false, fsn);
 		assertName(yellow, "Y", localeEn, false, shortName);
+	}
+	
+	@Test
+	public void load_shouldLoadConceptSetMembersByFullySpecifiedNameSearch() {
+		// Replay
+		loader.load();
+		
+		// Verify
+		// Retrieving the 'Overall vital signs' set concept that should have the actual 'Vital signs' concept 
+		// and not the 'False vital signs' concept
+		Concept actualVitalSigns = cs.getConceptByUuid("23542fd3-4315-4e51-b68e-bce887331c0a").getSetMembers().get(0);
+		Assert.assertNotNull(actualVitalSigns);
+		assertName(actualVitalSigns, "Vital signs", localeEn, true, ConceptNameType.FULLY_SPECIFIED);
+	}
+	
+	@Test
+	public void load_shouldFailToLoadConceptSetMembersByFullySpecifiedNameSearchGivenMoreThanOneConceptExists() {
+		// Setup
+		{
+			Locale localeEs = new Locale("es");
+			ConceptName name = new ConceptName();
+			name.setConceptNameType(ConceptNameType.FULLY_SPECIFIED);
+			name.setName("Vital signs");
+			name.setLocale(localeKm);
+			name.setLocalePreferred(true);
+			ConceptName name2 = new ConceptName();
+			name2.setConceptNameType(ConceptNameType.FULLY_SPECIFIED);
+			name2.setName("Vital signs");
+			name2.setLocale(localeEs);
+			name2.setLocalePreferred(false);
+			
+			Concept concept = new Concept();
+			concept.addName(name);
+			concept.addName(name2);
+			concept.addDescription(new ConceptDescription("Duplicate concept in another locale", localeEs));
+			concept.setDatatype(cs.getConceptDatatypeByName("Text"));
+			concept.setConceptClass(cs.getConceptClassByName("Misc"));
+			cs.saveConcept(concept);
+		}
+		
+		// Replay
+		loader.load();
+		
+		// Verify fail
+		Concept actualVitalSigns = cs.getConceptByUuid("23542fd3-4315-4e51-b68e-bce887331c0a");
+		Assert.assertNull(actualVitalSigns);
+		Assert.assertEquals(2, inizService.getUnretiredConceptsByFullySpecifiedName("Vital signs").size());
+	}
+	
+	@Test
+	public void getUnretiredConceptsByFullySpecifiedName_shouldReturnNullGivenBlankNameStringOrConceptNotFound() {
+		// Verify
+		Assert.assertTrue(inizService.getUnretiredConceptsByFullySpecifiedName(" ").size() == 0);
+		Assert.assertTrue(inizService.getUnretiredConceptsByFullySpecifiedName(null).size() == 0);
+		Assert.assertTrue(inizService.getUnretiredConceptsByFullySpecifiedName("Missing Concept").size() == 0);
 	}
 	
 	protected ConceptName assertName(Concept c, String name, Locale locale, boolean preferred, ConceptNameType type) {
