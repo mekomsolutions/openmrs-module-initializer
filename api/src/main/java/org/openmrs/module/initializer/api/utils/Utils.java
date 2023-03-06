@@ -233,9 +233,9 @@ public class Utils {
 		
 		List<Concept> concepts = Context.getService(InitializerService.class).getUnretiredConceptsByFullySpecifiedName(id);
 		if (concepts.size() == 1) {
-			return concepts.iterator().next();
+			return concepts.get(0);
 		} else if (concepts.isEmpty()) {
-			log.warn("No concept found for '" + id + "'");
+			log.info("No concept found for '" + id + "'");
 		} else {
 			throw new RuntimeException("Multiple concepts with the same fully specified name found for '" + id + "':\n"
 			        + concepts.stream().map(Concept::getUuid).collect(Collectors.joining("\n")));
