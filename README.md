@@ -1,5 +1,27 @@
 # OpenMRS Initializer module
-### Introduction
+
+- [Introduction](#introduction)
+- [Goals](#goals)
+- [Supported domains and default loading order](#supported-domains-and-default-loading-order)
+- [Try it out](#try-it-out)
+  * [Runtime compatibility](#runtime-compatibility)
+  * [Test your OpenMRS configs](#test-your-openmrs-configs)
+  * [Finer control of domains loading at runtime](#finer-control-of-domains-loading-at-runtime)
+  * [Setting up and controlling logging](#setting-up-and-controlling-logging)
+- [Get in touch](#get-in-touch)
+- [Releases notes](#releases-notes)
+    + [Version 2.5.0](#version-250)
+    + [Version 2.4.0](#version-240)
+    + [Version 2.3.0](#version-230)
+    + [Version 2.2.0](#version-220)
+    + [Version 2.1.0](#version-210)
+    + [Version 2.0.0](#version-200)
+    + [Version 1.1.0](#version-110)
+    + [Version 1.0.1](#version-101)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>(Table of contents generated with markdown-toc)</a></i></small>
+
+## Introduction
 The Initializer module is an API-only module that processes the content of the **configuration** folder when it is found inside OpenMRS' application data directory:
 
 <pre>
@@ -61,7 +83,7 @@ configuration/
 ```  
 Each domain-specific subfolder contains OpenMRS metadata configuration files that pertains to the domain.
 
-### Objectives
+## Goals
 * This module loads an OpenMRS configuration consisting of OpenMRS metadata.
 * CSV files are the preferred format, however a number of metadata domains rely on other file formats. See the list [below](#supported-domains-and-default-loading-order) for details.
 * Initializer processes all configuration files upon starting up.
@@ -70,7 +92,7 @@ Each domain-specific subfolder contains OpenMRS metadata configuration files tha
 * Each line of those CSV files represents an **OpenMRS metadata entity to be created, edited or retired**.
 * Each line of those CSV files follows the WYSIWYG principle.
 
-### Supported domains and default loading order
+## Supported domains and default loading order
 We suggest to go through the following before looking at the specifics for each supported domain:
 * [Conventions for CSV files](readme/csv_conventions.md)
 
@@ -121,7 +143,7 @@ This is the list of currently supported domains in their loading order:
 1. [AMPATH Forms Translations (JSON files)](readme/ampathformstranslations.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
 
-### How to try it out?
+## Try it out
 Build the master branch and install the built OMOD to your OpenMRS instance:
 ```bash
 git clone https://github.com/mekomsolutions/openmrs-module-initializer/tree/master
@@ -129,7 +151,7 @@ cd openmrs-module-initializer
 mvn clean package
 ```
 
-##### Runtime requirements & compatibility
+### Runtime compatibility
 * OpenMRS Core 2.1.1 (*required*)
 * Bahmni Appointments 1.2.1 (*compatible*)
 * Bahmni Core 0.93 (*compatible*)
@@ -141,40 +163,39 @@ mvn clean package
 * Metadata Mapping 1.3.4 (*compatible*)
 * Open Concept Lab 1.2.9 (*compatible*)
 
-### How to test out your OpenMRS configs?
+### Test your OpenMRS configs
 See the [Initializer Validator README page](readme/validator.md).
 
-### Finer control of domains loading at app runtime
+### Finer control of domains loading at runtime
 See the [documentation on Initializer's runtime properties](readme/rtprops.md).
 
-### Control of logging setup
-See the [documentation on Initializer's runtime properties](readme/rtprops.md).
+### Setting up and controlling logging
+See the [documentation on Initializer's logging properties](readme/rtprops.md#logging-properties).
 
-### Get in touch
+## Get in touch
 * On [OpenMRS Talk](https://talk.openmrs.org/)
   * Sign up, start a conversation and ping us with the mention [`@MekomSolutions`](https://talk.openmrs.org/g/MekomSolutions) in your post. 
 * On Slack:  
   * Join the [Initializer channel](https://openmrs.slack.com/archives/CPC20CBFH) and ping us with a `@Mekom` mention.
-
-### Report an issue
-https://github.com/mekomsolutions/openmrs-module-initializer/issues
+* Report an issue:
+  * https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ----
 
-### Releases notes
+## Releases notes
 
 #### Version 2.5.0
-* Added support for AMPATH Forms translations: https://github.com/mekomsolutions/openmrs-module-initializer/issues/180
-* Fix for Message Source when system default language is not English: https://github.com/mekomsolutions/openmrs-module-initializer/issues/212
+* Added support for AMPATH Forms translations, see https://github.com/mekomsolutions/openmrs-module-initializer/issues/180
+* Fix for Message Source when system default language is not English, see https://github.com/mekomsolutions/openmrs-module-initializer/issues/212
 * Logging now uses the configured level as a minimum.
-* Added support for [Drug Reference Maps](https://github.com/mekomsolutions/openmrs-module-initializer/issues/219) on the drugs domain
+* Added support for [drug reference maps](https://github.com/mekomsolutions/openmrs-module-initializer/issues/219) on the drugs domain.
 
 #### Version 2.4.0
 * Added support for 'fhirconceptsources' domain.
 * Added support for 'fhirpatientidentifiersystems' domain.
 * Enhancement to ensure that reloading Concept CSVs does not clear Members/Answers if those columns aren't part of CSV file.
 * 'concepts' domain to support a new expandable `MAPPINGS` header, thereby discouraging the older `Same as mappings`.
-* Concept references expanded to allow use of concept names in locales other than the default system locale
+* Concept references expanded to allow use of concept names in locales other than the default system locale.
 
 #### Version 2.3.0
 * Added configuration options for logging.
@@ -244,7 +265,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and edition of patient identifier types provided through CSV files in **configuration/patientidentifiertypes**.
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatasets**.
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatasetmembers**.
-* Bulk creation and edition of bahmni forms provided JSON files in **configuration/bahmniforms**
+* Bulk creation and edition of bahmni forms provided JSON files in **configuration/bahmniforms**.
 * Support concept attributes.
 
 #### Version 1.1.0
