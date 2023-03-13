@@ -9,6 +9,8 @@
  */
 package org.openmrs.module.initializer.api;
 
+import java.util.Locale;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,14 +20,12 @@ import org.openmrs.ConceptSource;
 import org.openmrs.Drug;
 import org.openmrs.DrugReferenceMap;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_3_Test;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.Locale;
-
-public class DrugsLoaderWithMappingsIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+public class DrugsLoaderWithMappingsIntegrationTest extends DomainBaseModuleContextSensitive_2_3_Test {
 	
 	@Autowired
 	@Qualifier("conceptService")
