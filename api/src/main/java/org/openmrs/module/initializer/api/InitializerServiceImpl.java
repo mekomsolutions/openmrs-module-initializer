@@ -49,7 +49,6 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	private InitializerDAO initializerDAO;
 	
-	@Autowired
 	public void setConfig(InitializerConfig cfg) {
 		this.cfg = cfg;
 	}
@@ -60,7 +59,6 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	 * 
 	 * @param initializerDAO The data access object to use
 	 */
-	@Autowired
 	public void setInitializerDAO(InitializerDAO initializerDAO) {
 		this.initializerDAO = initializerDAO;
 	}
