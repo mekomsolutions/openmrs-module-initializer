@@ -32,18 +32,15 @@
     which set audit info like dateCreated, changedBy, etc.-->
     <bean id="initializer.InitializerService"
             class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager" />
-        </property>
+        <property name="transactionManager" ref="transactionManager"/>
         <property name="target">
-            <bean class="org.openmrs.module.initializer.api.InitializerServiceImpl"/>   
+            <bean class="org.openmrs.module.initializer.api.InitializerServiceImpl">
+                <property name="initializerDAO" ref="initializerDAO" />
+                <property name="config" ref="initializerConfig" />
+            </bean>
         </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors" />
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource" />
-        </property>
+        <property name="preInterceptors" ref="serviceInterceptors"/>
+        <property name="transactionAttributeSource" ref="transactionAttributeSource"/>
     </bean>
     
     <!-- Adds InitializerService to OpenMRS context so it can be accessed
