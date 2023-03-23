@@ -66,6 +66,21 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>openconceptlab-api</artifactId>
         </dependency>
+        
+        <!-- Dependencies required to compile against Java 11 -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>2.3.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.2</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
