@@ -10,8 +10,8 @@
 package org.openmrs.module.initializer;
 
 /**
- * This allows to perform Spring context sensitive tests when Data Filter API is a dependency.
- * In that case it is necessary for each context sensitive test to update the search index.
+ * This allows to perform Spring context sensitive tests when Data Filter API is a dependency. In
+ * that case it is necessary for each context sensitive test to update the search index.
  */
 public abstract class DomainBaseModuleContextSensitive_2_3_Test extends DomainBaseModuleContextSensitiveTest {
 	
