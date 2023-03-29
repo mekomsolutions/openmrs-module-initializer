@@ -14,7 +14,6 @@ import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.InitializerMessageSource;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
-import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -85,10 +84,10 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 		String formNameTranslation = (String) jsonTranslationsDefinition.get("form_name_translation");
 		if (!StringUtils.isBlank(formNameTranslation)) {
 				msgSource.addPresentation(new PresentationMessage(
-				        "ui.i18n." + Utils.unProxy(form.getClass().getSimpleName()) + ".name." + form.getUuid(),
+				        "ui.i18n.Form.name." + form.getUuid(),
 				        LocaleUtils.toLocale(language), formNameTranslation, null));
 				msgSource.addPresentation(new PresentationMessage(
-				        "org.openmrs." + Utils.unProxy(form.getClass().getSimpleName()) + "." + form.getUuid(),
+				        "org.openmrs.Form." + form.getUuid(),
 				        LocaleUtils.toLocale(language), formNameTranslation, null));
 		}
 	}
