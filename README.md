@@ -185,7 +185,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ## Releases notes
 
 #### Version 2.5.0
-* Added support for AMPATH Forms translations, see https://github.com/mekomsolutions/openmrs-module-initializer/issues/180
+* Added support for AMPATH Forms translations, see https://github.com/mekomsolutions/openmrs-module-initializer/issues/180 and https://github.com/mekomsolutions/openmrs-module-initializer/issues/221
 * Fix for Message Source when system default language is not English, see https://github.com/mekomsolutions/openmrs-module-initializer/issues/212
 * Logging now uses the configured level as a minimum.
 * Added support for [drug reference maps](https://github.com/mekomsolutions/openmrs-module-initializer/issues/219) on the drugs domain.

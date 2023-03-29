@@ -3,14 +3,19 @@ package org.openmrs.module.initializer.api.loaders;
 import java.io.File;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Form;
 import org.openmrs.FormResource;
 import org.openmrs.api.FormService;
 import org.openmrs.api.context.Context;
+import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.InitializerMessageSource;
+import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 
@@ -19,6 +24,10 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 	
 	@Autowired
 	private FormService formService;
+	
+	@Autowired
+	@Qualifier("initializer.InitializerMessageSource")
+	private InitializerMessageSource msgSource;
 	
 	@Override
 	protected Domain getDomain() {
@@ -71,5 +80,20 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 		formResource.setDatatypeClassname("org.openmrs.customdatatype.datatype.LongFreeTextDatatype");
 		formResource.setValue(jsonTranslationsString);
 		formService.saveFormResource(formResource);
+		
+		String formNameTranslation = (String) jsonTranslationsDefinition.get("form_name_translation");
+		if (!StringUtils.isBlank(formNameTranslation)) {
+				msgSource.addPresentation(new PresentationMessage(
+				        "ui.i18n.Form.name." + form.getUuid(),
+				        LocaleUtils.toLocale(language), formNameTranslation, null));
+				msgSource.addPresentation(new PresentationMessage(
+				        "org.openmrs.Form." + form.getUuid(),
+				        LocaleUtils.toLocale(language), formNameTranslation, null));
+		}
+	}
+	
+	@Override
+	public ConfigDirUtil getDirUtil() {
+		return new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), getDomainName(), true);
 	}
 }
