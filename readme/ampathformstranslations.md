@@ -12,6 +12,7 @@ ampathformstranslations/
 {
     "uuid": "c5bf3efe-3798-4052-8dcb-09aacfcbabdc",
     "form": "Form 1",
+    "form_name_translation": "Formulaire 1",
     "description": "French Translations for Form 1",
     "language": "fr",
     "translations": {
