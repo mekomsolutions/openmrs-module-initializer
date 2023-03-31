@@ -25,7 +25,7 @@ ampathformstranslations/
 
 **NOTE:** 
 * The `form` attribute must be provided with an existing form name for the translations to load successfully. The translations form resources get names following the following pattern `<form_name>_translations_<language>`.
-* The `form_name_translation` property of the JSON file is treated as the localized name for the form in the translation locale. 
+* The `form_name_translation` attribute is treated as the localized name for the form in the translation locale. 
 
 ###### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).
