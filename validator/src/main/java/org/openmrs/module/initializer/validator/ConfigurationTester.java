@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Stream;
-
+import org.springframework.test.annotation.Rollback;
 import org.apache.commons.lang.StringUtils;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
@@ -211,11 +211,13 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	}
 	
 	@Test
+	@Rollback(false)
 	public void loadConfiguration() throws Exception {
 		super.getConnection().setAutoCommit(true);
 		getService().loadUnsafe(true, Validator.unsafe);
 		Context.flushSession();
 		Context.clearSession();
+		super.getConnection().setAutoCommit(false);
 	}
 	
 	@After
