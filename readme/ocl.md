@@ -27,7 +27,7 @@ ocl/
 
 
 ### Further examples:
-* See how the /ocl file is used in the OpenMRS 3.x RefApp distro: https://github.com/openmrs/openmrs-distro-referenceapplication/tree/3.x/package/config/configuration/ocl 
+* See how the /ocl file is used in the OpenMRS 3.x RefApp distro: https://github.com/openmrs/openmrs-distro-referenceapplication/tree/main/distro/configuration/ocl
 * Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).
 
 ## Video Tutorial: 📽️
