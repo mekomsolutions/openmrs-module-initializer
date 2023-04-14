@@ -83,12 +83,10 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 		
 		String formNameTranslation = (String) jsonTranslationsDefinition.get("form_name_translation");
 		if (!StringUtils.isBlank(formNameTranslation)) {
-				msgSource.addPresentation(new PresentationMessage(
-				        "ui.i18n.Form.name." + form.getUuid(),
-				        LocaleUtils.toLocale(language), formNameTranslation, null));
-				msgSource.addPresentation(new PresentationMessage(
-				        "org.openmrs.Form." + form.getUuid(),
-				        LocaleUtils.toLocale(language), formNameTranslation, null));
+			msgSource.addPresentation(new PresentationMessage("ui.i18n.Form.name." + form.getUuid(),
+			        LocaleUtils.toLocale(language), formNameTranslation, null));
+			msgSource.addPresentation(new PresentationMessage("org.openmrs.Form." + form.getUuid(),
+			        LocaleUtils.toLocale(language), formNameTranslation, null));
 		}
 	}
 	
