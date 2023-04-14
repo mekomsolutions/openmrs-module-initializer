@@ -84,6 +84,9 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		props.setProperty(Environment.USER, "root");
 		props.setProperty(Environment.PASS, "");
 		props.setProperty("initializer.log.enabled", "true");
+		// disable hibernate indexing during searches to avoid LazyInitializationExceptions 
+		// on indexed entities after test execution
+		props.setProperty("hibernate.search.indexing_strategy", "manual");
 		
 		// automatically create the tables defined in the hbm files
 		props.setProperty(Environment.HBM2DDL_AUTO, "update");
