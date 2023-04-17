@@ -35,6 +35,7 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.dialect.MySQLDialect;
 import org.hsqldb.cmdline.SqlFile;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -232,5 +233,12 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		}
 		Assert.assertThat(sb.toString(), Validator.errors, is(empty()));
 		super.getConnection();
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+		if (null != mysqlContainer) {
+			mysqlContainer.stop();
+		}
 	}
 }
