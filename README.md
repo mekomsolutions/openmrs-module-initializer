@@ -185,7 +185,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ## Releases notes
 
 #### Version 2.5.1
-* Enhanced Validator so it's usable in a Maven plugin like is done with the [openmrs-packager-maven-plugin 1.5.0](https://github.com/openmrs/openmrs-contrib-packager-maven-plugin)
+* Enhanced Validator to stop randomly failing because of `LazyInitializationException`, and better teardown cleanup for uses with Maven plugins such as [openmrs-packager-maven-plugin](https://github.com/openmrs/openmrs-contrib-packager-maven-plugin) 1.5.0.
 
 #### Version 2.5.0
 * Added support for AMPATH Forms translations, see https://github.com/mekomsolutions/openmrs-module-initializer/issues/180 and https://github.com/mekomsolutions/openmrs-module-initializer/issues/221
