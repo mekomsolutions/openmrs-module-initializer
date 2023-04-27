@@ -20,6 +20,8 @@
     <reportingCompatibilityVersion>2.0.6</reportingCompatibilityVersion>
     <htmlwidgetsVersion>1.7.2</htmlwidgetsVersion>
     <mysqlTestContainerVersion>1.15.3</mysqlTestContainerVersion>
+    <metadatasharingVersion>1.9.0</metadatasharingVersion>
+    <metadatamappingVersion>1.6.0</metadatamappingVersion>
   </properties>
 
   <dependencies>
