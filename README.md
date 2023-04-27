@@ -184,6 +184,8 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 
 ## Releases notes
 
+#### Version 2.6.0
+
 #### Version 2.5.2
 * Updated versions of Validator's metadatamapping to 1.6.0 and metadatasharing to 1.9.0.
 
