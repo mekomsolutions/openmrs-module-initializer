@@ -52,6 +52,7 @@ configuration/
   ├── datafiltermappings/
   ├── drugs/
   ├── encountertypes/
+  ├── encounterroles/
   ├── fhirconceptsources/
   ├── fhirpatientidentifiersystems/
   ├── globalproperties/
