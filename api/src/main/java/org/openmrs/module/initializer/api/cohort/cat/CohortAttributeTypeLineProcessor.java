@@ -1,41 +1,24 @@
 package org.openmrs.module.initializer.api.cohort.cat;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.Cohort;
-import org.openmrs.module.cohort.api.CohortService;
-import org.openmrs.module.cohort.CohortAttribute;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.cohort.CohortAttributeType;
-import org.openmrs.module.initializer.api.BaseAttributeLineProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.openmrs.module.initializer.api.CsvLine;
 
-@Component("initializer.conceptAttributeLineProcessor")
-public class CohortAttributeTypeLineProcessor extends BaseAttributeLineProcessor<Cohort, CohortAttributeType, CohortAttribute> {
-	
-	private CohortService cohortService;
-	
-	@Autowired()
-	public CohortAttributeTypeLineProcessor(@Qualifier("cohortService") CohortService cohortService) {
-		this.cohortService = cohortService;
-	}
+@OpenmrsProfile(modules = { "cohort:3.2.* - 9.*" })
+public class CohortAttributeTypeLineProcessor extends BaseLineProcessor<CohortAttributeType> {
 	
 	@Override
-	public CohortAttributeType getAttributeType(String identifier) throws IllegalArgumentException {
+	public CohortAttributeType fill(CohortAttributeType instance, CsvLine line) throws IllegalArgumentException {
+		String uuid = line.getUuid();
+		if (StringUtils.isNotBlank(uuid)) {
+			instance.setUuid(line.getUuid());
+		}
 		
-		if (StringUtils.isBlank(identifier)) {
-			throw new IllegalArgumentException("A blank attribute type identifier was provided.");
-		}
-		CohortAttributeType ret = cohortService.getAttributeTypeByUuid(identifier);
-		if (ret == null) {
-			ret = cohortService.getAttributeTypeByName(identifier);
-		}
-		return ret;
+		instance.setName(line.getName(true));
+		instance.setDescription(line.get("Description"));
+		
+		return instance;
 	}
-	
-	@Override
-	public CohortAttribute newAttribute() {
-		return new CohortAttribute();
-	}
-	
 }
