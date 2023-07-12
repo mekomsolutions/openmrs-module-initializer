@@ -19,28 +19,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 public class CohortAttributeTypesLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
-
-    @Autowired
-    @Qualifier("cohort.cohortService")
-    private CohortService cs;
-
-    @Autowired
-    private CohortAttributeTypeLoader loader;
-
-    @Before
-    public void setup() {
-    }
-
-    @Test
-    public void load_shouldLoadCohortAttributeTypesAccordingToCsvFiles() {
-
-        // Replay
-        loader.load();
-
-        // verif
-        CohortAttributeType cat = cs.getAttributeTypeByName("Test");
-        Assert.assertNotNull(cat);
-        Assert.assertEquals("This is a test group.", cat.getDescription());
-        Assert.assertEquals("09790099-9190-429d-811a-aac9edb8d98e", cat.getUuid());
-    }
+	
+	@Autowired
+	@Qualifier("cohort.cohortService")
+	private CohortService cs;
+	
+	@Autowired
+	private CohortAttributeTypeLoader loader;
+	
+	@Before
+	public void setup() {
+	}
+	
+	@Test
+	public void load_shouldLoadCohortAttributeTypesAccordingToCsvFiles() {
+		
+		// Replay
+		loader.load();
+		
+		// verif
+		CohortAttributeType cat = cs.getAttributeTypeByName("Test");
+		Assert.assertNotNull(cat);
+		Assert.assertEquals("This is a test group.", cat.getDescription());
+		Assert.assertEquals("09790099-9190-429d-811a-aac9edb8d98e", cat.getUuid());
+	}
 }
