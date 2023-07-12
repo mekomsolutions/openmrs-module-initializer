@@ -31,6 +31,9 @@
         <mapping resource="ProviderRole.hbm.xml"/>
         <!-- Cohort -->
         <mapping resource="CohortAttributeType.hbm.xml"/>
+        <mapping resource="CohortAttribute.hbm.xml"/>
+        <mapping resource="CohortMemberAttribute.hbm.xml"/>
+        <mapping resource="CohortMemberAttributeType.hbm.xml"/>
 
     </session-factory>
 </hibernate-configuration>
