@@ -29,5 +29,8 @@
         <mapping resource="ReportDesign.hbm.xml"/>
         <!-- Provider Management -->
         <mapping resource="ProviderRole.hbm.xml"/>
+        <!-- Cohort -->
+        <mapping resource="CohortAttributeType.hbm.xml"/>
+
     </session-factory>
 </hibernate-configuration>
