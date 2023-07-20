@@ -37,7 +37,7 @@ public class CohortAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 		// Replay
 		loader.load();
 		
-		// verif
+		// Verify
 		CohortAttributeType cat = cs.getAttributeTypeByName("Test");
 		Assert.assertNotNull(cat);
 		Assert.assertEquals("This is a test group.", cat.getDescription());
