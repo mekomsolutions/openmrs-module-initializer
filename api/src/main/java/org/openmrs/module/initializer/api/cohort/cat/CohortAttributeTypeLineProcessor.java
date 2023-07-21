@@ -18,7 +18,11 @@ public class CohortAttributeTypeLineProcessor extends BaseLineProcessor<CohortAt
 		
 		instance.setName(line.getName(true));
 		instance.setDescription(line.get("Description"));
-		instance.setDatatypeConfig(line.get("Datatype classname",true));
+		instance.setDatatypeConfig(line.get("Datatype classname", true));
+		instance.setDatatypeConfig(line.get("Preferred handler classname"));
+		instance.setDatatypeConfig(line.get("Handler config"));
+		instance.setMinOccurs(line.getInt("Min occurs"));
+		instance.setMaxOccurs(line.getInt("Max occurs"));
 		
 		return instance;
 	}

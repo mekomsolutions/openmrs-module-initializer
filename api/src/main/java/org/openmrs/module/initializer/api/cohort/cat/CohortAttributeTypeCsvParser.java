@@ -13,14 +13,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "cohort:3.2.* - 9.*" })
 public class CohortAttributeTypeCsvParser extends CsvParser<CohortAttributeType, BaseLineProcessor<CohortAttributeType>> {
-
+	
 	private CohortService cohortService;
-
+	
 	@Override
 	public Domain getDomain() {
 		return Domain.COHORT_ATTRIBUTE_TYPES;
 	}
-
+	
 	/**
 	 * Most CSV parsers are built on a single line processor. This superclass constructor should be used
 	 * to initialize such parsers.
@@ -33,7 +33,7 @@ public class CohortAttributeTypeCsvParser extends CsvParser<CohortAttributeType,
 		super(lineProcessor);
 		this.cohortService = cohortService;
 	}
-
+	
 	@Override
 	public CohortAttributeType bootstrap(CsvLine line) throws IllegalArgumentException {
 		CohortAttributeType result = null;
@@ -55,7 +55,7 @@ public class CohortAttributeTypeCsvParser extends CsvParser<CohortAttributeType,
 		if (result != null) {
 			return result;
 		}
-
+		
 		return new CohortAttributeType();
 	}
 	

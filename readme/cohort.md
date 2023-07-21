@@ -38,8 +38,8 @@ cohorttypes/
 
 The format of this CSV should be as follows:
 
-| <sub>Uuid</sub> |<sub>Void/Retire</sub> | <sub>Name</sub> | <sub>Description</sub> | <sub>Datatype classname</sub> | <sub>_order:1000</sub> |
-| - | - | - | - | - | - |
+| <sub>Uuid</sub> |<sub>Void/Retire</sub> | <sub>Name</sub> | <sub>Description</sub> | <sub>Datatype classname</sub> | <sub>Min occurs</sub> | <sub>Max occurs</sub> | <sub>Preferred handler classname</sub> | <sub>Handler config</sub> | <sub>_order:1000</sub> |
+| - | - | - | - | - | - | - | - | - | - |
 | <sub>09790099-9190-429d-811a-aac9edb8d98e</sub> | | <sub>Control</sub> | <sub>This is a control group.</sub> | <sub>org.openmrs.customdatatype.datatype.FreeTextDatatype</sub> |
 
 Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
