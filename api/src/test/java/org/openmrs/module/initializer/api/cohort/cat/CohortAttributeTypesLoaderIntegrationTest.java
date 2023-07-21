@@ -42,5 +42,6 @@ public class CohortAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 		Assert.assertNotNull(cat);
 		Assert.assertEquals("This is a test group.", cat.getDescription());
 		Assert.assertEquals("09790099-9190-429d-811a-aac9edb8d98e", cat.getUuid());
+		Assert.assertEquals("org.openmrs.customdatatype.datatype.FreeTextDatatype", cat.getDatatypeClassname());
 	}
 }
