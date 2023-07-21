@@ -18,6 +18,7 @@ public class CohortAttributeTypeLineProcessor extends BaseLineProcessor<CohortAt
 		
 		instance.setName(line.getName(true));
 		instance.setDescription(line.get("Description"));
+		instance.setDatatypeConfig(line.get("Datatype classname",true));
 		
 		return instance;
 	}
