@@ -45,6 +45,7 @@ configuration/
   ├── autogenerationoptions/
   ├── bahmniforms/
   ├── cohorttypes/
+  ├── cohortattributetypes/
   ├── conceptclasses/
   ├── conceptsources/
   ├── concepts/
@@ -138,6 +139,7 @@ This is the list of currently supported domains in their loading order:
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
 1. [Cohort Types (CSV files)](readme/cohort.md#domain-cohorttypes)
+1. [Cohort Attribute Types (CSV files)](readme/cohort.md#domain-cohortattributetypes)
 1. [FHIR Concept Sources (CSV files)](readme/fhir.md#domain-fhirconceptsources)
 1. [FHIR Patient Identifier Systems (CSV Files)](readme/fhir.md#domain-fhirpatientidentifiersystems)
 1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
