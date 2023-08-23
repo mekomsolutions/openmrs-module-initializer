@@ -1,4 +1,4 @@
-Uuid,Void/Retire,Attribute Type Domain,System,Use,Rank,_order:1000
-87c87473-b394-430b-93d3-b46d0faca26e,,person,phone,work,1,
-ed2571ad-6a0b-413d-8506-362266c7595e,,provider,email,home,2,
-73f4f1d6-6086-41d5-a0f1-6d688a4b10af,,location,url,temp,3,
+Uuid,Void/Retire,Attribute Type Domain,Attribute Type Id,System,Use,Rank,_order:1000
+fa48acc4-ef1f-46d6-b0af-150b00ddee9d,,person,10001,phone,work,1,
+bcf23315-a236-42aa-be95-b9e0931e22b0,,provider,10002,email,home,2,
+800e48ba-666c-445c-b871-68e54eec6de8,,location,10003,url,temp,3,
