@@ -74,3 +74,39 @@ This is the URL of the code system in FHIR. For terminologies identified
 that code system, e.g. SNOMED CT is "http://snomed.info/sct". If the code system is not defined by HL7 or that table, then
 the code systems own preferred URL should be used, e.g., for CIEL we tend to use
 "https://api.openconceptlab.org/orgs/CIEL/sources/CIEL".
+
+## Domain 'fhirContactPointMap'
+
+The **fhirContactPointMap** subfolder contains CSV import files for defining contact point fields like system, use, rank for any of person, provider and location in your OpenMRS instance. 
+These are used in data exchange to store contact attributes a person, provider or location may have. If none are provided, the identifier type UUID is used as the "system" for these attributes.
+
+This is a possible example of its contents:
+```bash
+fhirContactPointMap/
+  ├──contactPointMap.csv
+  └── ...
+```
+The format of this CSV should be as follows:
+
+| <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Attribute Type Domain</sub> | <sub>Attribute Type Id</sub> | <sub>System</sub> | <sub>Use</sub> | <sub>Rank</sub> | <sub>_order:1000</sub>
+| - | - | - | - | - | - | - | - |
+| <sub>fa48acc4-ef1f-46d6-b0af-150b00ddee9d</sub> | | <sub>person</sub> | | <sub>10001</sub> | | <sub>phone</sub> | | <sub>work</sub> | | <sub>1</sub> |
+| <sub>bcf23315-a236-42aa-be95-b9e0931e22b0</sub> | | <sub>provider</sub> | | <sub>10002</sub> | | <sub>email</sub> | | <sub>home</sub> | | <sub>2</sub> |
+| <sub>800e48ba-666c-445c-b871-68e54eec6de8</sub> | | <sub>location</sub> | | <sub>10003</sub> | | <sub>url</sub> | | <sub>temp</sub> | | <sub>3</sub> |
+
+Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
+
+###### Attribute Type Domain(mandatory)
+This is a *required* field for every entry. This can either be person, provider or location which represent the **Person Attribute Type**, **Provider Attribute Type** and **Location Attribute Type** respectively.
+
+###### System(mandatory)
+
+This can be any of phone, fax, email, pager, url, sms. Take a look at [ContactPointSystem](https://www.hl7.org/fhir/valueset-contact-point-system.html) for more information.
+
+###### Use(mandatory)
+
+This represents the actual purpose of the contact point. It could be any of home ,work ,temp ,old ,mobile. Take a deeper look at [ContactPointUse](https://www.hl7.org/fhir/valueset-contact-point-use.html).
+
+###### Rank(mandatory)
+
+This specifies the preferred order of use (1 = highest).
