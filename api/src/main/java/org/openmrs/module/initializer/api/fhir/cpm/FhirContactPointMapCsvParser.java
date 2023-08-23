@@ -14,7 +14,6 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Optional;
 
@@ -38,7 +37,7 @@ public class FhirContactPointMapCsvParser extends CsvParser<FhirContactPointMap,
 	private final FhirContactPointMapService fhirContactPointMapService;
 	
 	@Autowired
-	protected FhirContactPointMapCsvParser(@Qualifier("fhirContactPointMapService")FhirContactPointMapService fhirContactPointMapService,BaseLineProcessor<FhirContactPointMap> lineProcessor,
+	protected FhirContactPointMapCsvParser(FhirContactPointMapService fhirContactPointMapService,BaseLineProcessor<FhirContactPointMap> lineProcessor,
 			LocationService locationService, PersonService personService, ProviderService providerService) {
 		super(lineProcessor);
 		this.fhirContactPointMapService = fhirContactPointMapService;
