@@ -60,6 +60,7 @@ configuration/
   ├── encounterroles/
   ├── fhirconceptsources/
   ├── fhirpatientidentifiersystems/
+  ├── fhirContactPointMap/
   ├── globalproperties/
   ├── htmlforms/
   ├── idgen/
