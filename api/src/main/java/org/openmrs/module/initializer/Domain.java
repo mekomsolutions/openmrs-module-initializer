@@ -45,14 +45,15 @@ public enum Domain {
 	COHORT_ATTRIBUTE_TYPES,
 	FHIR_CONCEPT_SOURCES,
 	FHIR_PATIENT_IDENTIFIER_SYSTEMS,
+	FHIR_CONTACT_POINT_MAP,
 	AMPATH_FORMS,
 	AMPATH_FORMS_TRANSLATIONS,
 	HTML_FORMS;
-
+	
 	public int getOrder() {
 		return ArrayUtils.indexOf(values(), this) + 1;
 	}
-
+	
 	/**
 	 * The name of the domain is also the name of its subfolder inside the configuration folder.
 	 */
