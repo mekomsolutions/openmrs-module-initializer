@@ -38,7 +38,7 @@ public class CohortAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 		loader.load();
 		
 		// Verify
-		CohortAttributeType cat = cs.getAttributeTypeByName("Test");
+		CohortAttributeType cat = cs.getCohortAttributeTypeByName("Test");
 		Assert.assertNotNull(cat);
 		Assert.assertEquals("This is a test group.", cat.getDescription());
 		Assert.assertEquals("09790099-9190-429d-811a-aac9edb8d98e", cat.getUuid());

@@ -40,10 +40,10 @@ public class CohortTypeCsvParser extends CsvParser<CohortType, BaseLineProcessor
 		
 		String name = line.getName();
 		if (StringUtils.isNotBlank(name)) {
-			result = cohortTypeService.getByName(name);
+			result = cohortTypeService.getCohortTypeByName(name);
 			
 			if (result == null && BaseLineProcessor.getVoidOrRetire(line)) {
-				result = cohortTypeService.getByName(name, true);
+				result = cohortTypeService.getCohortTypeByName(name, true);
 			}
 		}
 		
@@ -53,10 +53,10 @@ public class CohortTypeCsvParser extends CsvParser<CohortType, BaseLineProcessor
 		
 		String uuid = line.getUuid();
 		if (StringUtils.isNotBlank(uuid)) {
-			result = cohortTypeService.getByUuid(uuid);
+			result = cohortTypeService.getCohortTypeByUuid(uuid);
 			
 			if (result == null && BaseLineProcessor.getVoidOrRetire(line)) {
-				result = cohortTypeService.getByUuid(uuid, true);
+				result = cohortTypeService.getCohortTypeByUuid(uuid, true);
 			}
 		}
 		
