@@ -5,7 +5,7 @@ import org.openmrs.module.cohort.CohortType;
 import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@OpenmrsProfile(modules = { "cohort:3.2.* - 9.*" })
+@OpenmrsProfile(modules = { "cohort:3.5.* - 9.*" })
 public class CohortTypeLoader extends BaseCsvLoader<CohortType, CohortTypeCsvParser> {
 	
 	@Autowired

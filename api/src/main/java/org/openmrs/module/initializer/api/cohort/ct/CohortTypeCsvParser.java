@@ -11,7 +11,7 @@ import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@OpenmrsProfile(modules = { "cohort:3.2.* - 9.*" })
+@OpenmrsProfile(modules = { "cohort:3.5.* - 9.*" })
 public class CohortTypeCsvParser extends CsvParser<CohortType, BaseLineProcessor<CohortType>> {
 	
 	private CohortTypeService cohortTypeService;
@@ -40,10 +40,10 @@ public class CohortTypeCsvParser extends CsvParser<CohortType, BaseLineProcessor
 		
 		String name = line.getName();
 		if (StringUtils.isNotBlank(name)) {
-			result = cohortTypeService.getByName(name);
+			result = cohortTypeService.getCohortTypeByName(name);
 			
 			if (result == null && BaseLineProcessor.getVoidOrRetire(line)) {
-				result = cohortTypeService.getByName(name, true);
+				result = cohortTypeService.getCohortTypeByName(name, true);
 			}
 		}
 		
@@ -53,10 +53,10 @@ public class CohortTypeCsvParser extends CsvParser<CohortType, BaseLineProcessor
 		
 		String uuid = line.getUuid();
 		if (StringUtils.isNotBlank(uuid)) {
-			result = cohortTypeService.getByUuid(uuid);
+			result = cohortTypeService.getCohortTypeByUuid(uuid);
 			
 			if (result == null && BaseLineProcessor.getVoidOrRetire(line)) {
-				result = cohortTypeService.getByUuid(uuid, true);
+				result = cohortTypeService.getCohortTypeByUuid(uuid, true);
 			}
 		}
 		

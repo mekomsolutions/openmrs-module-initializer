@@ -6,7 +6,7 @@ import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@OpenmrsProfile(modules = { "cohort:3.2.* - 9.*" })
+@OpenmrsProfile(modules = { "cohort:3.5.* - 9.*" })
 public class CohortAttributeTypeLoader extends BaseCsvLoader<CohortAttributeType, CohortAttributeTypeCsvParser> {
 	
 	@Override

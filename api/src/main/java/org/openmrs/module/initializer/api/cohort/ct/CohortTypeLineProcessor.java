@@ -6,7 +6,7 @@ import org.openmrs.module.cohort.CohortType;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 
-@OpenmrsProfile(modules = { "cohort:3.2.* - 9.*" })
+@OpenmrsProfile(modules = { "cohort:3.5.* - 9.*" })
 public class CohortTypeLineProcessor extends BaseLineProcessor<CohortType> {
 	
 	@Override

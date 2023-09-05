@@ -11,7 +11,7 @@ import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@OpenmrsProfile(modules = { "cohort:3.2.* - 9.*" })
+@OpenmrsProfile(modules = { "cohort:3.5.* - 9.*" })
 public class CohortAttributeTypeCsvParser extends CsvParser<CohortAttributeType, BaseLineProcessor<CohortAttributeType>> {
 	
 	private CohortService cohortService;
@@ -40,7 +40,7 @@ public class CohortAttributeTypeCsvParser extends CsvParser<CohortAttributeType,
 		
 		String name = line.getName();
 		if (StringUtils.isNotBlank(name)) {
-			result = cohortService.getAttributeTypeByName(name);
+			result = cohortService.getCohortAttributeTypeByName(name);
 		}
 		
 		if (result != null) {
@@ -49,7 +49,7 @@ public class CohortAttributeTypeCsvParser extends CsvParser<CohortAttributeType,
 		
 		String uuid = line.getUuid();
 		if (StringUtils.isNotBlank(uuid)) {
-			result = cohortService.getAttributeTypeByUuid(uuid);
+			result = cohortService.getCohortAttributeTypeByUuid(uuid);
 		}
 		
 		if (result != null) {
@@ -61,6 +61,6 @@ public class CohortAttributeTypeCsvParser extends CsvParser<CohortAttributeType,
 	
 	@Override
 	public CohortAttributeType save(CohortAttributeType instance) {
-		return cohortService.saveAttributeType(instance);
+		return cohortService.saveCohortAttributeType(instance);
 	}
 }
