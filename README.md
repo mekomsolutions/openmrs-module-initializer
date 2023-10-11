@@ -187,6 +187,8 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 
 ## Releases notes
 
+#### Version 2.7.0
+
 #### Version 2.6.0
 * Added support for Cohort Attribute types
 
