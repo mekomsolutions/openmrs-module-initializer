@@ -61,7 +61,7 @@
         <appointmentsVersion>1.2.1</appointmentsVersion>
         <bahmniIeAppsVersion>1.1.0</bahmniIeAppsVersion>
         <bahmniCoreVersion>0.93-1.1.0</bahmniCoreVersion>
-        <cohortModuleVersion>3.5.0-SNAPSHOT</cohortModuleVersion>
+        <cohortModuleVersion>3.5.0</cohortModuleVersion>
         <htmlformentryVersion>4.0.0</htmlformentryVersion>
         <idgenVersion>4.6.0</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
