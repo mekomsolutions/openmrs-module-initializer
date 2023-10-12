@@ -134,6 +134,7 @@ This is the list of currently supported domains in their loading order:
 1. [Bahmni Appointment Specialities (CSV files)](readme/appointmentspecialities.md)
 1. [Bahmni Appointment Service Definitions (CSV files)](readme/appointmentservices.md#domain-appointmentservicedefinitions)
 1. [Bahmni Appointment Service Types (CSV files)](readme/appointmentservices.md#domain-appointmentservicetypes)
+1. [Queues (CSV files)](readme/queues.md#domain-queues)
 1. [Data Filter Entity-Basis Mappings (CSV files)](readme/datafiltermappings.md)
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
@@ -188,6 +189,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ## Releases notes
 
 #### Version 2.7.0
+* Added support for Queues
 
 #### Version 2.6.0
 * Added support for Cohort Attribute types

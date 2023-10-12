@@ -66,6 +66,13 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>openconceptlab-api</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>queue-api</artifactId>
+            <version>${queueVersion}</version>
+            <scope>provided</scope>
+        </dependency>
         
         <!-- Dependencies required to compile against Java 11 -->
         <dependency>

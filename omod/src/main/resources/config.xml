@@ -56,6 +56,9 @@
 		<aware_of_module version="${fhir2Version}">
 			org.openmrs.module.fhir2
 		</aware_of_module>
+		<aware_of_module version="${queueVersion}">
+			org.openmrs.module.queue
+		</aware_of_module>
 	</aware_of_modules>
 	
 	<!-- Internationalization -->
