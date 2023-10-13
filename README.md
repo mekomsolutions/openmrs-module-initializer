@@ -10,6 +10,10 @@
   * [Setting up and controlling logging](#setting-up-and-controlling-logging)
 - [Get in touch](#get-in-touch)
 - [Releases notes](#releases-notes)
+    + [Version 2.7.0](#version-270)
+    + [Version 2.6.0](#version-260)
+    + [Version 2.5.2](#version-252)
+    + [Version 2.5.1](#version-251)
     + [Version 2.5.0](#version-250)
     + [Version 2.4.0](#version-240)
     + [Version 2.3.0](#version-230)
@@ -78,7 +82,8 @@ configuration/
   ├── programs/ 
   ├── programworkflows/
   ├── programworkflowstates/
-  ├── providerroles/ 
+  ├── providerroles/
+  ├── queues/
   ├── relationshiptypes/
   └── roles/
    
@@ -189,16 +194,16 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ## Releases notes
 
 #### Version 2.7.0
-* Added support for Queues
+* Added support for 'queues' domain.
 
 #### Version 2.6.0
-* Added support for Cohort Attribute types
+* Added support for 'cohorttypes' and 'cohortattributetypes' domains.
 
 #### Version 2.5.2
 * Updated versions of Validator's metadatamapping to 1.6.0 and metadatasharing to 1.9.0.
 
 #### Version 2.5.1
-* Enhanced Validator to stop randomly failing because of `LazyInitializationException`, and better teardown cleanup for uses with Maven plugins such as [openmrs-packager-maven-plugin](https://github.com/openmrs/openmrs-contrib-packager-maven-plugin) 1.7.0.
+* Enhanced Validator to prevent random failures because of `LazyInitializationException`, and better teardown cleanup for uses with Maven plugins such as [openmrs-packager-maven-plugin](https://github.com/openmrs/openmrs-contrib-packager-maven-plugin) 1.7.0.
 
 #### Version 2.5.0
 * Added support for AMPATH Forms translations, see https://github.com/mekomsolutions/openmrs-module-initializer/issues/180 and https://github.com/mekomsolutions/openmrs-module-initializer/issues/221
