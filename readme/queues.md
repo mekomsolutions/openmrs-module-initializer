@@ -7,9 +7,9 @@ queues/
 ```
 There is currently only one format for the queue CSV line, here are the possible headers with a sample data set:
 
-|<sub>Uuid</sub> |<sub>Void/Retire</sub> |<sub>Name</sub> | <sub>Description</sub> | <sub>Service</sub> | <sub>Location</sub> | <sub>_order:1000</sub> |
-| - | - | - | - | - |
-|<sub>32176576-1652-4835-8736-826eb0237482</sub>|<sub></sub>| <sub>Clinical Consultation Queue</sub> | <sub>Consult Queue</sub> |<sub></sub>| <sub>Outpatient Service</sub>| <sub>Outpatient Clinic</sub>|
+| <sub>Uuid</sub>                                 | <sub>Void/Retire</sub> | <sub>Name</sub>                        | <sub>Description</sub>   | <sub>Service</sub>            | <sub>Location</sub>           |
+|--------------------------------------|-------------|-----------------------------|---------------|--------------------|--------------------|
+| <sub>32176576-1652-4835-8736-826eb0237482</sub> |             | <sub>Clinical Consultation Queue</sub> | <sub>Consult Queue</sub> | <sub>Outpatient Service</sub> | <sub>Outpatient Clinic</sub>| |
 
 Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
 
@@ -17,16 +17,16 @@ Let's review some important headers.
 
 ###### Header `Name` *(mandatory)*
 This is _not_ a localized header.
-<br/>The  name is _not_ a secondary identifier to access a queue type. UUID must be provided for each Queue.
+<br/>The  name is _not_ a secondary identifier to access a queue type. A UUID must be provided for each queue.
 
 ###### Header `Description`
-A description is optional and will populate the Queue description
+A description is optional and will populate the queue description
 
 ###### Header `Service`
-This is a reference (UUID, same as mapping or name) to an existing Concept that defines the service associated with this Queue
+This is a reference (UUID, same as mapping or name) to an existing concept that defines the service associated with this queue.
 
 ###### Header `Location`
-This is a reference (UUID or name) to an existing Location that defines the Location associated with this Queue
+This is a reference (UUID or name) to an existing location that defines the location associated with this queue.
 
 #### Requirements
 * The [queue module](https://github.com/openmrs/openmrs-module-queue) must be installed
