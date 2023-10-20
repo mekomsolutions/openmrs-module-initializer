@@ -49,7 +49,8 @@ public class FhirContactPointMapCsvParser extends CsvParser<FhirContactPointMap,
 	public FhirContactPointMap bootstrap(CsvLine line) throws IllegalArgumentException {
 		FhirContactPointMap contactPointMap = null;
 		if (line.getUuid() != null) {
-			contactPointMap = fhirContactPointMapService.getFhirConactPointMapByUuid(line.getUuid());
+			contactPointMap = fhirContactPointMapService.getFhirContactPointMapByUuid(line.getUuid())
+					.orElse(null);
 		}
 		
 		if (contactPointMap != null) {
@@ -134,5 +135,6 @@ public class FhirContactPointMapCsvParser extends CsvParser<FhirContactPointMap,
 				return providerService.getProviderAttributeTypeByUuid(attributeType);
 			break;
 		}
+		return baseAttributeType;
 	}
 }

@@ -88,11 +88,12 @@ fhirContactPointMap/
 ```
 The format of this CSV should be as follows:
 
-| <sub>Uuid</sub> | <sub>Void/Retire</sub> | <sub>Attribute Type Domain</sub> | <sub>Attribute Type Id</sub> | <sub>System</sub> | <sub>Use</sub> | <sub>Rank</sub> | <sub>_order:1000</sub>
-| - | - | - | - | - | - | - | - |
-| <sub>fa48acc4-ef1f-46d6-b0af-150b00ddee9d</sub> | | <sub>person</sub> | | <sub>10001</sub> | | <sub>phone</sub> | | <sub>work</sub> | | <sub>1</sub> |
-| <sub>bcf23315-a236-42aa-be95-b9e0931e22b0</sub> | | <sub>provider</sub> | | <sub>10002</sub> | | <sub>email</sub> | | <sub>home</sub> | | <sub>2</sub> |
-| <sub>800e48ba-666c-445c-b871-68e54eec6de8</sub> | | <sub>location</sub> | | <sub>10003</sub> | | <sub>url</sub> | | <sub>temp</sub> | | <sub>3</sub> |
+| Uuid                                 | Void/Retire | Entity name | Attribute Type                       | System | Use  | Rank | _order:1000 |
+|--------------------------------------|-------------|-------------|--------------------------------------|--------|------|------|-------------|
+| fa48acc4-ef1f-46d6-b0af-150b00ddee9d |             | person      | 717ec942-3c4a-11ea-b024-ffc81a23382e | phone  | work | 1    |             |
+|                                      |             | person      | PAT_RENAME_NEW_NAME                  | phone  | home |      |             |
+| bcf23315-a236-42aa-be95-b9e0931e22b0 |             | provider    | Provider Speciality                  | email  | home | 2    |             |
+| 800e48ba-666c-445c-b871-68e54eec6de8 |             | location    | e7aacc6e-d151-4d9e-a808-6ed9ff761212 | phone  | temp | 3    |             |
 
 Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
 
