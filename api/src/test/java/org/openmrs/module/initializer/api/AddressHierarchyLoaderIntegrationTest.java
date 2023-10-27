@@ -7,7 +7,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.initializer;
+package org.openmrs.module.initializer.api;
 
 import java.io.File;
 import java.io.FileReader;
@@ -23,7 +23,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openmrs.GlobalProperty;
 import org.openmrs.PersonAddress;
@@ -38,13 +37,18 @@ import org.openmrs.module.addresshierarchy.AddressHierarchyLevel;
 import org.openmrs.module.addresshierarchy.config.AddressConfigurationLoader;
 import org.openmrs.module.addresshierarchy.service.AddressHierarchyService;
 import org.openmrs.module.exti18n.ExtI18nConstants;
+import org.openmrs.module.exti18n.api.AddressHierarchyI18nCache;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.InitializerConfig;
+import org.openmrs.module.initializer.InitializerConstants;
+import org.openmrs.module.initializer.InitializerMessageSource;
 import org.openmrs.module.initializer.api.InitializerService;
+import org.openmrs.module.initializer.api.loaders.AddressHierarchyLoader;
 import org.openmrs.test.Verifies;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Ignore
-public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContextSensitiveTest {
+public class AddressHierarchyLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	protected static final String MODULES_TO_LOAD = "org/openmrs/module/addresshierarchy/include/"
 	        + ExtI18nConstants.MODULE_ARTIFACT_ID + ".omod";
@@ -54,14 +58,17 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 	@Autowired
 	protected InitializerConfig cfg;
 	
+	@Autowired
+	private AddressHierarchyLoader loader;
+	
 	@Before
 	public void setup() {
 		// Disabling AH full caching otherwise loading takes too long
 		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty(
 		        AddressHierarchyConstants.GLOBAL_PROP_INITIALIZE_ADDRESS_HIERARCHY_CACHE_ON_STARTUP, "false"));
 		
-		Context.getAdministrationService()
-		        .saveGlobalProperty(new GlobalProperty(OpenmrsConstants.GLOBAL_PROPERTY_LOCALE_ALLOWED_LIST, "en, km_KH"));
+		Context.getAdministrationService().saveGlobalProperty(
+		    new GlobalProperty(OpenmrsConstants.GLOBAL_PROPERTY_LOCALE_ALLOWED_LIST, "en_GB, km_KH"));
 		
 		Context.getAdministrationService()
 		        .saveGlobalProperty(new GlobalProperty(ExtI18nConstants.GLOBAL_PROP_REV_I18N_SUPPORT, "true"));
@@ -84,10 +91,9 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 	public void refreshCache_shouldLoadAddressHierarchyMessages() throws IOException {
 		
 		// Replay
+		loader.load();
 		AddressConfigurationLoader.loadAddressConfiguration();
-		
 		AddressHierarchyService ahs = Context.getService(AddressHierarchyService.class);
-		ahs.initI18nCache();
 		InitializerService iniz = Context.getService(InitializerService.class);
 		
 		File csvFile = new File(
@@ -106,6 +112,8 @@ public class AddressHierarchyMessagesLoadingTest extends DomainBaseModuleContext
 		address.setCountyDistrict("ច្បារមន");
 		address.setAddress1("សុព័រទេព");
 		
+		AddressHierarchyI18nCache ahI18nCache = Context.getRegisteredComponent(ExtI18nConstants.COMPONENT_AH_REVI18N,
+		    AddressHierarchyI18nCache.class);
 		// Looking for possible villages based on an address provided in km_KH
 		AddressHierarchyLevel villageLevel = ahs.getAddressHierarchyLevelByAddressField(AddressField.CITY_VILLAGE);
 		List<AddressHierarchyEntry> villageEntries = ahs.getPossibleAddressHierarchyEntries(address, villageLevel);
