@@ -32,6 +32,7 @@ public class AddressHierarchyLoader extends BaseLoader {
 		
 		try {
 			AddressConfigurationLoader.loadAddressConfiguration(Paths.get(iniz.getConfigDirPath()), Paths.get(iniz.getChecksumsDirPath()), getDomain().toString());
+			Context.getService(AddressHierarchyService.class).initializeFullAddressCache();
 			Context.getService(AddressHierarchyService.class).initI18nCache();
 		}
 		catch (Exception e) {
