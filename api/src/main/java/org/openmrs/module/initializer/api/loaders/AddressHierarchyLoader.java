@@ -3,16 +3,14 @@ package org.openmrs.module.initializer.api.loaders;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.openmrs.api.context.Context;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.addresshierarchy.config.AddressConfigurationLoader;
-import org.openmrs.module.addresshierarchy.service.AddressHierarchyService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-@Component
+@OpenmrsProfile(modules = { "addresshierarchy:2.17.* - 9.*" })
 public class AddressHierarchyLoader extends BaseLoader {
 	
 	protected final Logger log = LoggerFactory.getLogger(getClass());
