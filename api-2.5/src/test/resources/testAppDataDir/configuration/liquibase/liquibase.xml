@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<changeSet id="previousSqlFileChangeset" author="iniz" runAlways="true" runOnChange="true">
+		<sqlFile endDelimiter="#" path="sql/test_changes_1.sql" relativeToChangelogFile="true" stripComments="true" />
+	</changeSet>
+
+	<changeSet id="newSqlFileChangeset" author="iniz" runAlways="true" runOnChange="true">
+		<sqlFile endDelimiter="#" path="sql/test_changes_2.sql" relativeToChangelogFile="true" stripComments="true" />
+	</changeSet>
+
+</databaseChangeLog>
