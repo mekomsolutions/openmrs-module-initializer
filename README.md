@@ -196,7 +196,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 
 #### Version 2.7.0
 * Added support for 'queues' domain.
-* Added support for addresshierarchy domain.
+* Added support for 'addresshierarchy' domain.
 
 #### Version 2.6.0
 * Added support for 'cohorttypes' and 'cohortattributetypes' domains.
