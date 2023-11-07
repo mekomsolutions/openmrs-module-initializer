@@ -9,11 +9,12 @@ addresshierarchy/
   ├── messages_en.properties
   └── messages_fr.properties
 ```
-###### File `addresshierarchy.csv` *(mandatory)*
+###### Address Entries CSV File *(mandatory)*
 
-It contains the address hierarchy entries themselves. This is typically a large file since it may contain thousands of lower level entries in a given country. Eg.:
+This file is usually named `addresshierarchy.csv`, however this name is configurable.
+
+It contains the address hierarchy entries themselves. This is typically a large file since it usually contains thousands of lower level entries. Here is an sample snippet for Haiti with the entries down to the third _commune_ level. We see on each row `Pays,Département,Commune` (country, district, borough):
 ```csv
-Pays, Province, Commune
 Haiti,Artibonite,Anse Rouge
 Haiti,Artibonite,Desdunes
 Haiti,Artibonite,Dessalines
@@ -21,26 +22,48 @@ Haiti,Artibonite,Dessalines
 Haiti,Sud-Est,Marigot
 Haiti,Sud-Est,Thiotte
 ```
-**NOTE:** This file may or may not contain a header row.
+**NOTE:** This file provides raw entries, without a header row.
+
+The entries levels will be mapped, following their order of enumeration in the file, to the fields in the address template, see below.
 
 ###### File `addressConfiguration.xml` *(mandatory)*
-This file defines both:
-
-1. The [address template](https://wiki.openmrs.org/x/OgTX) and
-2. A mapping of the address template fields to the level of the address hierarchy entries that it can be populated with. This mapping occurs differently depending on whether the address level entries CSV file may or may not have a header row.
-
-**Option 1: if the address level entries CSV file has a header row**, it maps the address template fields (`field`) with the address hierachy levels (`nameMapping`) defined as headers in `addresshierarchy.csv`. Here is an example how the address template field `STATE_PROVINCE` is mapped with the address hierarchy entries provided for `Province`:
-
+This file defines the [address template](https://wiki.openmrs.org/x/OgTX). Example, for Haiti:
 ```xml
-<addressComponent>
-  <field>STATE_PROVINCE</field>
-  <nameMapping>Province</nameMapping>
-  <sizeMapping>40</sizeMapping>
-  <requiredInHierarchy>true</requiredInHierarchy>
-</addressComponent>
+<addressConfiguration>
+  <wipe>true</wipe>
+  <addressComponents>
+    <addressComponent>
+      <field>COUNTRY</field>
+      ...
+    </addressComponent>
+    <addressComponent>
+      <field>STATE_PROVINCE</field>
+      ...
+    </addressComponent>
+    <addressComponent>
+      <field>CITY_VILLAGE</field>
+      ...
+    </addressComponent>
+    <addressComponent>
+      <field>ADDRESS_2</field>
+      ...
+    </addressComponent>
+  </addressComponents>
+  <addressHierarchyFile>
+    <filename>addresshierarchy.csv</filename>
+    <entryDelimiter>,</entryDelimiter>
+    ...
+  </addressHierarchyFile>
+</addressConfiguration>```
 ```
+In this Haiti example, the configuration loader will map address field and hierarchy levels as such because of the enumeration order in each of the two files:
 
-**Option 2: if  the address level entries CSV file doesn't have a header row**, it maps the address template fields <u>in the order in which they are found in the address template</u>.
+| Address field    | Hierarchy level |
+|------------------|-----------------|
+| `COUNTRY`        | `Pays`          |
+| `STATE_PROVINCE` | `Département`   |
+| `CITY_VILLAGE`   | `Commune`       |
+| `ADDRESS_2`      | -               |
 
 ###### I18n `.properties` files *(optional)*
 * The i18n `.properties` files are used to populate the address/location i18n cache. The messages files can be similarly defined as those loaded by the [messageproperties](readme/messageproperties.md) domain.
@@ -51,5 +74,5 @@ This file defines both:
 ### Further examples:
 * Find out more how the Address Hierarchy module at https://wiki.openmrs.org/display/docs/Address+Hierarchy+Module
 * Find out more about the address template at https://wiki.openmrs.org/x/OgTX
-* A full configuration example at https://github.com/openmrs/ozone-distro-cambodia/tree/main/configs/openmrs_config/addresshierarchy
+* A full configuration example for Haiti at https://github.com/mekomsolutions/openmrs-config-haiti/tree/master/configuration/addresshierarchy
 * Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).
