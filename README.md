@@ -121,6 +121,7 @@ This is the list of currently supported domains in their loading order:
 1. [Provider Roles (CSV files)](readme/providerroles.md)
 1. [Locations (CSV files)](readme/loc.md)
 1. [Location Tag Maps (CSV files)](readme/loctagmaps.md)
+1. [Address Hierarchy (XML, CSV, .properties files)](readme/addresshierarchy.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
@@ -195,6 +196,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 
 #### Version 2.7.0
 * Added support for 'queues' domain.
+* Added support for 'addresshierarchy' domain.
 
 #### Version 2.6.0
 * Added support for 'cohorttypes' and 'cohortattributetypes' domains.
