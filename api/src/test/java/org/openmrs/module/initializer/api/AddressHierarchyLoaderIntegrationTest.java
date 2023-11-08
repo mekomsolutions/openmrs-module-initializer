@@ -88,7 +88,7 @@ public class AddressHierarchyLoaderIntegrationTest extends DomainBaseModuleConte
 	
 	@Test
 	@Verifies(value = "should load i18n messages specific to the address hierarchy configuration", method = "refreshCache()")
-	public void refreshCache_shouldLoadAddressHierarchyMessages() throws IOException {
+	public void load_shouldLoadAddressHierarchyMessages() throws IOException {
 		
 		// Replay
 		loader.load();
