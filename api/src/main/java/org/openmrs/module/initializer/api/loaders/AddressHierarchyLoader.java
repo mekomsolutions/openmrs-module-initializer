@@ -29,7 +29,8 @@ public class AddressHierarchyLoader extends BaseLoader {
 	public void loadUnsafe(List<String> wildcardExclusions, boolean doThrow) throws Exception {
 		
 		try {
-			AddressConfigurationLoader.loadAddressConfiguration(Paths.get(iniz.getConfigDirPath()), Paths.get(iniz.getChecksumsDirPath()));
+			AddressConfigurationLoader.loadAddressConfiguration(Paths.get(iniz.getConfigDirPath()),
+			    Paths.get(iniz.getChecksumsDirPath()));
 		}
 		catch (Exception e) {
 			log.error(e.getMessage());

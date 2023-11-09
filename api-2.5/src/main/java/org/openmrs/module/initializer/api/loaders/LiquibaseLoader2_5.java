@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.5")
+@OpenmrsProfile(openmrsPlatformVersion = "2.5.5")
 public class LiquibaseLoader2_5 extends BaseFileLoader {
 	
 	public static final String LIQUIBASE_FILE_NAME = "liquibase";

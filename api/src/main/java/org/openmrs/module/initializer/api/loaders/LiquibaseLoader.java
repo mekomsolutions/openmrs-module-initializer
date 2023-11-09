@@ -7,7 +7,7 @@ import org.openmrs.util.DatabaseUpdater;
 
 import java.io.File;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.1.1 - 2.4.*")
+@OpenmrsProfile(openmrsPlatformVersion = "2.1.1 - 2.5.4")
 public class LiquibaseLoader extends BaseFileLoader {
 	
 	public static final String LIQUIBASE_FILE_NAME = "liquibase";
