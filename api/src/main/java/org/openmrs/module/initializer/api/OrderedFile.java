@@ -24,7 +24,7 @@ public class OrderedFile extends File {
 			order = fetchOrder(this);
 		}
 		catch (UnsupportedOperationException e) {
-			log.warn(e.getMessage());
+			log.debug(e.getMessage());
 		}
 		catch (Exception e) {
 			log.error("There was an error while attempting to read the loading order of a configuration file: "

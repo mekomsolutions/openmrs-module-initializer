@@ -1,12 +1,13 @@
 package org.openmrs.module.initializer.api.loaders;
 
-import java.io.File;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.util.DatabaseUpdater;
-import org.springframework.stereotype.Component;
 
-@Component
+import java.io.File;
+
+@OpenmrsProfile(openmrsPlatformVersion = "2.1.1 - 2.5.4")
 public class LiquibaseLoader extends BaseFileLoader {
 	
 	public static final String LIQUIBASE_FILE_NAME = "liquibase";
