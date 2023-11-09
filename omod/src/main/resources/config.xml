@@ -63,6 +63,9 @@
 		<aware_of_module version="${queueVersion}">
 			org.openmrs.module.queue
 		</aware_of_module>
+		<aware_of_module version="${addresshierarchyVersion}">
+			org.openmrs.module.addresshierarchy
+		</aware_of_module>
 	</aware_of_modules>
 	
 	<!-- Internationalization -->
