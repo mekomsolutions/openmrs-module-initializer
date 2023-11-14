@@ -9,10 +9,6 @@
  */
 package org.openmrs.module.initializer;
 
-public abstract class DomainBaseModuleContextSensitive_2_6_Test extends DomainBaseModuleContextSensitiveTest {
+public abstract class DomainBaseModuleContextSensitive_2_6_Test extends DomainBaseModuleContextSensitive_2_3_Test {
 	
-	@Override
-	public void updateSearchIndex() {
-		// to prevent Data Filter's 'Illegal Record Access'
-	}
 }

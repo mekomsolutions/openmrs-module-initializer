@@ -15,15 +15,20 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.fhir2.model.FhirContactPointMap;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.springframework.stereotype.Component;
 
 import static org.openmrs.module.initializer.api.fhir.cpm.FhirContactPointMapCsvParser.ATTRIBUTE_TYPE_DOMAIN_HEADER;
 
+@Component
 @OpenmrsProfile(modules = { "fhir2:1.11.* - 9.*" }, openmrsPlatformVersion = "2.6.3 - 2.6.*, 2.7.* - 9.*")
 public class FhirContactPointMapLineProcessor extends BaseLineProcessor<FhirContactPointMap> {
 	
 	private static final String SYSTEM_HEADER = "system";
+	
 	private static final String USE_HEADER = "use";
+	
 	private static final String RANK_HEADER = "rank";
+	
 	@Override
 	public FhirContactPointMap fill(FhirContactPointMap instance, CsvLine line) throws IllegalArgumentException {
 		String uuid = line.getUuid();
