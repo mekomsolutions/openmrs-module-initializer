@@ -22,13 +22,15 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 @OpenmrsProfile(modules = { "fhir2:1.11.* - 9.*" }, openmrsPlatformVersion = "2.6.3 - 2.6.*, 2.7.* - 9.*")
 public class FhirContactPointMapCsvParser extends CsvParser<FhirContactPointMap, BaseLineProcessor<FhirContactPointMap>> {
 	
 	public static final String ATTRIBUTE_TYPE_DOMAIN_HEADER = "Entity name";
 	
-	public static final String ATTRIBUTE_TYPE = "Attribute type";
+	public static final String ATTRIBUTE_TYPE = "Attribute Type";
 	
 	private static final String LOCATION = "location";
 	
@@ -45,8 +47,9 @@ public class FhirContactPointMapCsvParser extends CsvParser<FhirContactPointMap,
 	private final FhirContactPointMapService fhirContactPointMapService;
 	
 	@Autowired
-	protected FhirContactPointMapCsvParser(FhirContactPointMapService fhirContactPointMapService,BaseLineProcessor<FhirContactPointMap> lineProcessor,
-			LocationService locationService, PersonService personService, ProviderService providerService) {
+	protected FhirContactPointMapCsvParser(FhirContactPointMapService fhirContactPointMapService,
+	    BaseLineProcessor<FhirContactPointMap> lineProcessor, LocationService locationService, PersonService personService,
+	    ProviderService providerService) {
 		super(lineProcessor);
 		this.fhirContactPointMapService = fhirContactPointMapService;
 		this.locationService = locationService;
@@ -58,8 +61,7 @@ public class FhirContactPointMapCsvParser extends CsvParser<FhirContactPointMap,
 	public FhirContactPointMap bootstrap(CsvLine line) throws IllegalArgumentException {
 		FhirContactPointMap contactPointMap = null;
 		if (line.getUuid() != null) {
-			contactPointMap = fhirContactPointMapService.getFhirContactPointMapByUuid(line.getUuid())
-					.orElse(null);
+			contactPointMap = fhirContactPointMapService.getFhirContactPointMapByUuid(line.getUuid()).orElse(null);
 		}
 		
 		if (contactPointMap != null) {
@@ -74,21 +76,21 @@ public class FhirContactPointMapCsvParser extends CsvParser<FhirContactPointMap,
 			
 			if (personAttributeType == null) {
 				throw new IllegalArgumentException("PersonAttributeType " + attributeType
-						+ " does not exist. Please ensure your Initializer configuration contains this attribute type.");
+				        + " does not exist. Please ensure your Initializer configuration contains this attribute type.");
 			}
 			
 			contactPointMap = fhirContactPointMapService.getFhirContactPointMapForPersonAttributeType(personAttributeType)
-					.orElse(null);
+			        .orElse(null);
 		} else {
 			BaseAttributeType<?> baseAttributeType = getBaseAttributeType(attributeTypeDomain, attributeType);
 			
 			if (baseAttributeType == null) {
 				throw new IllegalArgumentException(
-						"Could not find attribute type " + attributeType + " for attribute domain " + attributeTypeDomain);
+				        "Could not find attribute type " + attributeType + " for attribute domain " + attributeTypeDomain);
 			}
 			
 			contactPointMap = fhirContactPointMapService.getFhirContactPointMapForAttributeType(baseAttributeType)
-					.orElse(null);
+			        .orElse(null);
 		}
 		
 		if (contactPointMap != null) {
@@ -97,7 +99,6 @@ public class FhirContactPointMapCsvParser extends CsvParser<FhirContactPointMap,
 		
 		return new FhirContactPointMap();
 	}
-
 	
 	@Override
 	public FhirContactPointMap save(FhirContactPointMap instance) {
@@ -116,9 +117,7 @@ public class FhirContactPointMapCsvParser extends CsvParser<FhirContactPointMap,
 			return personAttributeType;
 		}
 		
-		personAttributeType = personService.getPersonAttributeTypeByUuid(attributeType);
-		
-		return personAttributeType;
+		return personService.getPersonAttributeTypeByUuid(attributeType);
 	}
 	
 	protected BaseAttributeType<?> getBaseAttributeType(String attributeDomain, String attributeType) {

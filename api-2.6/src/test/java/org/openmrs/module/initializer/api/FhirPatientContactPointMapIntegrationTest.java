@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 public class FhirPatientContactPointMapIntegrationTest extends DomainBaseModuleContextSensitive_2_6_Test {
-
+	
 	@Autowired
 	private FhirContactPointMapService fhirContactPointMapService;
 	
@@ -58,19 +58,61 @@ public class FhirPatientContactPointMapIntegrationTest extends DomainBaseModuleC
 	
 	@Before
 	public void setup() {
-		personAttributeType = new PersonAttributeType();
-		providerAttributeType = new ProviderAttributeType();
-		locationAttributeType = new LocationAttributeType();
-		
-		fhirContactPointMap = new FhirContactPointMap();
-		fhirContactPointMap.setUuid("fa48acc4-ef1f-46d6-b0af-150b00ddee9d");
-		fhirContactPointMap.setAttributeTypeDomain("person");
-		fhirContactPointMap.setAttributeTypeId(10001);
-		fhirContactPointMap.setSystem(ContactPoint.ContactPointSystem.PHONE);
-		fhirContactPointMap.setUse(ContactPoint.ContactPointUse.WORK);
-		fhirContactPointMap.setRank(1);
-		fhirContactPointMapService.saveFhirContactPointMap(fhirContactPointMap);
-		personService.savePersonAttributeType(personAttributeType);
+		{
+			personAttributeType = new PersonAttributeType();
+			personAttributeType.setId(10001);
+			personAttributeType.setUuid("717ec942-3c4a-11ea-b024-ffc81a23382e");
+			
+			fhirContactPointMap = new FhirContactPointMap();
+			fhirContactPointMap.setUuid("fa48acc4-ef1f-46d6-b0af-150b00ddee9d");
+			fhirContactPointMap.setAttributeTypeDomain("person");
+			fhirContactPointMap.setAttributeTypeId(10001);
+			fhirContactPointMap.setSystem(ContactPoint.ContactPointSystem.PHONE);
+			fhirContactPointMap.setUse(ContactPoint.ContactPointUse.WORK);
+			fhirContactPointMap.setRank(1);
+			fhirContactPointMapService.saveFhirContactPointMap(fhirContactPointMap);
+		}
+		{
+			personAttributeType = new PersonAttributeType();
+			personAttributeType.setId(10002);
+			personAttributeType.setUuid("PAT_RENAME_NEW_NAME");
+			
+			fhirContactPointMap = new FhirContactPointMap();
+			fhirContactPointMap.setUuid("");
+			fhirContactPointMap.setAttributeTypeDomain("person");
+			fhirContactPointMap.setAttributeTypeId(10002);
+			fhirContactPointMap.setSystem(ContactPoint.ContactPointSystem.PHONE);
+			fhirContactPointMap.setUse(ContactPoint.ContactPointUse.WORK);
+			fhirContactPointMapService.saveFhirContactPointMap(fhirContactPointMap);
+		}
+		{
+			providerAttributeType = new ProviderAttributeType();
+			providerAttributeType.setId(10003);
+			providerAttributeType.setUuid("Provider Speciality");
+			
+			fhirContactPointMap = new FhirContactPointMap();
+			fhirContactPointMap.setUuid("bcf23315-a236-42aa-be95-b9e0931e22b0");
+			fhirContactPointMap.setAttributeTypeDomain("provider");
+			fhirContactPointMap.setAttributeTypeId(10003);
+			fhirContactPointMap.setSystem(ContactPoint.ContactPointSystem.EMAIL);
+			fhirContactPointMap.setUse(ContactPoint.ContactPointUse.HOME);
+			fhirContactPointMap.setRank(2);
+			fhirContactPointMapService.saveFhirContactPointMap(fhirContactPointMap);
+		}
+		{
+			locationAttributeType = new LocationAttributeType();
+			locationAttributeType.setId(10004);
+			locationAttributeType.setUuid("e7aacc6e-d151-4d9e-a808-6ed9ff761212");
+			
+			fhirContactPointMap = new FhirContactPointMap();
+			fhirContactPointMap.setUuid("800e48ba-666c-445c-b871-68e54eec6de8");
+			fhirContactPointMap.setAttributeTypeDomain("location");
+			fhirContactPointMap.setAttributeTypeId(10004);
+			fhirContactPointMap.setSystem(ContactPoint.ContactPointSystem.PHONE);
+			fhirContactPointMap.setUse(ContactPoint.ContactPointUse.TEMP);
+			fhirContactPointMap.setRank(3);
+			fhirContactPointMapService.saveFhirContactPointMap(fhirContactPointMap);
+		}
 	}
 	
 	@Test
@@ -86,22 +128,24 @@ public class FhirPatientContactPointMapIntegrationTest extends DomainBaseModuleC
 		assertThat(firstFhirContactPointMap.getUse(), equalTo(ContactPoint.ContactPointUse.WORK));
 		
 		assertThat(secondFhirContactPointMap.getAttributeTypeDomain(), equalTo("provider"));
-		assertThat(firstFhirContactPointMap.getSystem(), equalTo(ContactPoint.ContactPointSystem.EMAIL));
-		assertThat(firstFhirContactPointMap.getUse(), equalTo(ContactPoint.ContactPointUse.HOME));
+		assertThat(secondFhirContactPointMap.getSystem(), equalTo(ContactPoint.ContactPointSystem.EMAIL));
+		assertThat(secondFhirContactPointMap.getUse(), equalTo(ContactPoint.ContactPointUse.HOME));
 		
 		assertThat(thirdFhirContactPointMap.getAttributeTypeDomain(), equalTo("location"));
-		assertThat(firstFhirContactPointMap.getSystem(), equalTo(ContactPoint.ContactPointSystem.URL));
-		assertThat(firstFhirContactPointMap.getUse(), equalTo(ContactPoint.ContactPointUse.TEMP));
+		assertThat(thirdFhirContactPointMap.getSystem(), equalTo(ContactPoint.ContactPointSystem.PHONE));
+		assertThat(thirdFhirContactPointMap.getUse(), equalTo(ContactPoint.ContactPointUse.TEMP));
 	}
 	
 	protected FhirContactPointMap assertPersonAttributeType(PersonAttributeType attributeType) {
-		Optional<FhirContactPointMap> contactPointMap = fhirContactPointMapService.getFhirContactPointMapForPersonAttributeType(attributeType);
+		Optional<FhirContactPointMap> contactPointMap = fhirContactPointMapService
+		        .getFhirContactPointMapForPersonAttributeType(attributeType);
 		assertThat(contactPointMap.isPresent(), is(true));
 		return contactPointMap.get();
 	}
 	
 	protected FhirContactPointMap assertBaseAttributeType(BaseAttributeType<?> attributeType) {
-		Optional<FhirContactPointMap> contactPointMap = fhirContactPointMapService.getFhirContactPointMapForAttributeType(attributeType);
+		Optional<FhirContactPointMap> contactPointMap = fhirContactPointMapService
+		        .getFhirContactPointMapForAttributeType(attributeType);
 		assertThat(contactPointMap.isPresent(), is(true));
 		return contactPointMap.get();
 	}

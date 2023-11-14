@@ -53,6 +53,21 @@
 
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
+            <artifactId>${project.parent.artifactId}-api-2.5</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>${project.parent.artifactId}-api-2.5</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>${project.parent.artifactId}-api-2.4</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
@@ -90,6 +105,13 @@
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
+            <artifactId>fhir2-api-2.5</artifactId>
+            <version>${fhir2Version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
             <artifactId>fhir2-api-2.6</artifactId>
             <version>${fhir2Version}</version>
             <scope>provided</scope>
@@ -99,6 +121,13 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>datafilter-api</artifactId>
             <version>${datafilterVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>queue-api</artifactId>
+            <version>${queueVersion}</version>
             <scope>provided</scope>
         </dependency>
 

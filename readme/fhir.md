@@ -90,10 +90,10 @@ The format of this CSV should be as follows:
 
 | Uuid                                 | Void/Retire | Entity name | Attribute Type                       | System | Use  | Rank | _order:1000 |
 |--------------------------------------|-------------|-------------|--------------------------------------|--------|------|------|-------------|
-| fa48acc4-ef1f-46d6-b0af-150b00ddee9d |             | person      | 717ec942-3c4a-11ea-b024-ffc81a23382e | phone  | work | 1    |             |
-|                                      |             | person      | PAT_RENAME_NEW_NAME                  | phone  | home |      |             |
-| bcf23315-a236-42aa-be95-b9e0931e22b0 |             | provider    | Provider Speciality                  | email  | home | 2    |             |
-| 800e48ba-666c-445c-b871-68e54eec6de8 |             | location    | e7aacc6e-d151-4d9e-a808-6ed9ff761212 | phone  | temp | 3    |             |
+| fa48acc4-ef1f-46d6-b0af-150b00ddee9d |             | person      | 717ec942-3c4a-11ea-b024-ffc81a23382e | PHONE  | WORK | 1    |             |
+|                                      |             | person      | PAT_RENAME_NEW_NAME                  | PHONE  | HOME |      |             |
+| bcf23315-a236-42aa-be95-b9e0931e22b0 |             | provider    | Provider Speciality                  | EMAIL  | HOME | 2    |             |
+| 800e48ba-666c-445c-b871-68e54eec6de8 |             | location    | e7aacc6e-d151-4d9e-a808-6ed9ff761212 | PHONE  | TEMP | 3    |             |
 
 Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
 

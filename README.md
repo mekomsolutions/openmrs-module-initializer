@@ -150,6 +150,7 @@ This is the list of currently supported domains in their loading order:
 1. [Cohort Attribute Types (CSV files)](readme/cohort.md#domain-cohortattributetypes)
 1. [FHIR Concept Sources (CSV files)](readme/fhir.md#domain-fhirconceptsources)
 1. [FHIR Patient Identifier Systems (CSV Files)](readme/fhir.md#domain-fhirpatientidentifiersystems)
+2. [FHIR ContactPointMap (CSV Files)](https://github.com/mherman22/openmrs-module-initializer/blob/ContactPointMap-impl/readme/fhir.md#domain-fhircontactpointmap)
 1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
 1. [AMPATH Forms Translations (JSON files)](readme/ampathformstranslations.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
@@ -199,6 +200,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 * Added support for 'queues' domain.
 * Added support for 'addresshierarchy' domain.
 * Fix for Liquibase Loader to ensure compatibility with OpenMRS versions 2.5.5+
+* Added support for 'fhircontactpointmap' domain.
 
 #### Version 2.6.0
 * Added support for 'cohorttypes' and 'cohortattributetypes' domains.
