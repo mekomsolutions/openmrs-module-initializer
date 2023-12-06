@@ -1,7 +1,9 @@
 package org.openmrs.module.initializer.api.c;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
@@ -88,5 +90,23 @@ public class ConceptNumericLineProcessorTest {
 		// Replay
 		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(cs);
 		p.fill(new Concept(), new CsvLine(headerLine, line));
+	}
+	
+	@Test
+	public void fill_shouldOverrideProvidedDataType() {
+		
+		// Setup
+		when(cs.getConceptNumeric(any(Integer.class))).thenReturn(null);
+		String[] headerLine = { "Data type", "Absolute low" };
+		String[] line = { "Numeric", "11.11" };
+		
+		// Replay
+		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(cs);
+		ConceptNumeric cn = (ConceptNumeric) p.fill(new Concept(1), new CsvLine(headerLine, line));
+		
+		// Verify
+		verify(cs, atLeast(1)).getConceptNumeric(any(Integer.class));
+		Assert.assertEquals(ConceptNumericLineProcessor.DATATYPE_NUMERIC, cn.getDatatype().getName());
+		Assert.assertEquals(0, cn.getLowAbsolute().compareTo(11.11));
 	}
 }

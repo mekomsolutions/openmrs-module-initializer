@@ -42,10 +42,15 @@ public class ConceptNumericLineProcessor extends ConceptLineProcessor {
 			return instance;
 		}
 		
-		ConceptNumeric cn = new ConceptNumeric(instance);
+		ConceptNumeric cn = null;
 		if (instance.getId() != null) { // below overrides any other processors work, so this one should be called first
 			cn = conceptService.getConceptNumeric(instance.getId());
 		}
+		
+		if (cn == null) {
+			cn = new ConceptNumeric(instance);
+		}
+		
 		cn.setDatatype(conceptService.getConceptDatatypeByName(DATATYPE_NUMERIC));
 		
 		cn.setHiAbsolute(line.getDouble(HEADER_AH));
