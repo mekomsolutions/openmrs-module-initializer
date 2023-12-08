@@ -17,7 +17,7 @@ jobs:
       - name: Set up JDK 8
         uses: actions/setup-java@v2
         with:
-          distribution: 'temurin'
+          distribution: 'adopt'
           java-version: '8'
 
       - name: Build and Test
@@ -37,8 +37,8 @@ jobs:
               "username": "${{ secrets.NEXUS_USERNAME }}",
               "password": "${{ secrets.NEXUS_PASSWORD }}"
             }]
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/2.3.x' }}
 
       - name: Publish
         run: mvn --batch-mode clean deploy -P validator
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/2.3.x' }}
