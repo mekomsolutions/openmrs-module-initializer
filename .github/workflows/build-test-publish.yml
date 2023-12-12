@@ -18,10 +18,10 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '8'
+          java-version: '8.0.265'
 
       - name: Build and Test
-        run: mvn --batch-mode --update-snapshots clean package -P validator
+        run: mvn --batch-mode --update-snapshots clean install -P validator
 
       - name: Set settings.xml
         uses: s4u/maven-settings-action@v2.6.0
