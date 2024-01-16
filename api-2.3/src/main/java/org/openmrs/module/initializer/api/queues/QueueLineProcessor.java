@@ -19,6 +19,8 @@ public class QueueLineProcessor extends BaseLineProcessor<Queue> {
 	
 	protected static String HEADER_SERVICE = "service";
 	
+	protected static String HEADER_STATUS_CONCEPT_SET = "statusConceptSet";
+	
 	protected static String HEADER_LOCATION = "location";
 	
 	private final ConceptService conceptService;
@@ -43,6 +45,14 @@ public class QueueLineProcessor extends BaseLineProcessor<Queue> {
 				queue.setService(Utils.fetchConcept(service, conceptService));
 			} else {
 				queue.setService(null);
+			}
+		}
+		if (line.containsHeader(HEADER_STATUS_CONCEPT_SET)) {
+			String statusConceptSet = line.getString(HEADER_STATUS_CONCEPT_SET);
+			if (StringUtils.isNotBlank(statusConceptSet)) {
+				queue.setStatusConceptSet(Utils.fetchConcept(statusConceptSet, conceptService));
+			} else {
+				queue.setStatusConceptSet(null);
 			}
 		}
 		if (line.containsHeader(HEADER_LOCATION)) {
