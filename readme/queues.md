@@ -7,9 +7,9 @@ queues/
 ```
 There is currently only one format for the queue CSV line, here are the possible headers with a sample data set:
 
-| <sub>Uuid</sub>                                 | <sub>Void/Retire</sub> | <sub>Name</sub>                        | <sub>Description</sub>   | <sub>Service</sub>            | <sub>Location</sub>           |
-|--------------------------------------|-------------|-----------------------------|---------------|--------------------|--------------------|
-| <sub>32176576-1652-4835-8736-826eb0237482</sub> |             | <sub>Clinical Consultation Queue</sub> | <sub>Consult Queue</sub> | <sub>Outpatient Service</sub> | <sub>Outpatient Clinic</sub>| |
+| <sub>Uuid</sub>                                 | <sub>Void/Retire</sub> | <sub>Name</sub>                        | <sub>Description</sub>   | <sub>Service</sub>            | <sub>Status Concept Set</sub>            | <sub>Priority Concept Set</sub>   | <sub>Location</sub>           |
+|--------------------------------------|-------------|-----------------------------|---------------|--------------------|--------------------|-----------------------------------|--------------------|
+| <sub>32176576-1652-4835-8736-826eb0237482</sub> |             | <sub>Clinical Consultation Queue</sub> | <sub>Consult Queue</sub> | <sub>Outpatient Service</sub> |<sub>Queue entry statuses</sub> | <sub>Queue entry priorities</sub> | <sub>Outpatient Clinic</sub>| |
 
 Headers that start with an underscore such as `_order:1000` are metadata headers. The values in the columns under those headers are never read by the CSV parser.
 
@@ -25,11 +25,17 @@ A description is optional and will populate the queue description
 ###### Header `Service`
 This is a reference (UUID, same as mapping or name) to an existing concept that defines the service associated with this queue.
 
+###### Header `Status Concept Set`
+This is a reference (UUID, same as mapping or name) to an existing concept set that defines the queue statuses that could be assigned to the entries in this queue.
+
+###### Header `Priority Concept Set`
+This is a reference (UUID, same as mapping or name) to an existing concept set that defines the queue priorities that could be assigned to the entries in this queue.
+
 ###### Header `Location`
 This is a reference (UUID or name) to an existing location that defines the location associated with this queue.
 
 #### Requirements
-* The [queue module](https://github.com/openmrs/openmrs-module-queue) must be installed
+* The [queue module](https://github.com/openmrs/openmrs-module-queue) version 2.1 or higher must be installed
 * The OpenMRS version must be 2.3 or higher
 
 #### Further examples:
