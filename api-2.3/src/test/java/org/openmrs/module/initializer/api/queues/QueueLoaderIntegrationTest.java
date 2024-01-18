@@ -73,6 +73,7 @@ public class QueueLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Assert.assertEquals("Queue with custom statuses", queue.getDescription());
 			Assert.assertEquals(2001, queue.getService().getConceptId().intValue());
 			Assert.assertEquals(2003, queue.getStatusConceptSet().getConceptId().intValue());
+			Assert.assertEquals("Triage queue priorities", queue.getPriorityConceptSet().getName().getName());
 			Assert.assertEquals("Xanadu", queue.getLocation().getName());
 		}
 	}
