@@ -73,7 +73,7 @@
 
         <!-- Modules compatibility > Core 2.3.0 -->
         <datafilterVersion>1.0.0</datafilterVersion>
-        <queueVersion>1.0.0-SNAPSHOT</queueVersion>
+        <queueVersion>2.1.0</queueVersion>
 
         <!-- For Validator -->
         <reportingVersion>1.19.0</reportingVersion>

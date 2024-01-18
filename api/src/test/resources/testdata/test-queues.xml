@@ -4,9 +4,13 @@
   <concept concept_id="2000" retired="false" is_set="true" creator="1" date_created="2022-02-02 14:31:00.0" uuid="907eba27-2b38-43e8-91a9-4dfe3956a35t"/>
   <concept concept_id="2001" retired="false" is_set="false" creator="1" date_created="2022-02-02 14:40:00.0" uuid="67b910bd-298c-4ecf-a632-661ae2f446op"/>
   <concept concept_id="2002" retired="false" is_set="false" creator="1" date_created="2022-03-08 15:40:00.0" uuid="68b910bd-298c-4ecf-a632-661ae2f446op"/>
+  <concept concept_id="2003" retired="false" is_set="false" creator="1" date_created="2024-01-16 15:40:00.0" uuid="1d2a73ca-20aa-4218-b4d2-043024a9156e"/>
+  <concept concept_id="2004" retired="false" is_set="false" creator="1" date_created="2024-01-18 05:40:00.0" uuid="24932838-60ca-44e8-840f-4184b368643c"/>
   <concept_name concept_name_id="893" concept_id="2000" name="Queue Service" locale="en" creator="1" date_created="2022-02-02 14:40:00.0" voided="0" uuid="9cp62348-5bf2-4050-b824-0aa009436ed6" concept_name_type="FULLY_SPECIFIED" locale_preferred="0"/>
   <concept_name concept_name_id="210" concept_id="2001" name="Triage" locale="en" creator="1" date_created="2022-02-02 14:40:00.0" voided="0" uuid="9i667348-5bf2-4050-b824-0aa009436kl0" concept_name_type="FULLY_SPECIFIED" locale_preferred="0"/>
   <concept_name concept_name_id="211" concept_id="2002" name="Consultation" locale="en" creator="1" date_created="2022-02-02 14:40:00.0" voided="0" uuid="5t747348-5bf2-4050-b824-0aa009436kl0" concept_name_type="FULLY_SPECIFIED" locale_preferred="0"/>
+  <concept_name concept_name_id="212" concept_id="2003" name="Triage statuses" locale="en" creator="1" date_created="2024-01-15 14:40:00.0" voided="0" uuid="9b6d5a44-47b0-4ed2-873b-5b317721ca9a" concept_name_type="FULLY_SPECIFIED" locale_preferred="0"/>
+  <concept_name concept_name_id="213" concept_id="2004" name="Triage queue priorities" locale="en" creator="1" date_created="2024-01-16 14:40:00.0" voided="0" uuid="9f2af84d-5e4c-43d9-bdde-fea4a3f15744" concept_name_type="FULLY_SPECIFIED" locale_preferred="0"/>
   <concept_set concept_set_id="389000" concept_set="2000" concept_id="2001" sort_weight="0" date_created="2022-02-02 14:40:00.0" creator="1" uuid="470b910bd-298c-4ecf-a632-661ae2f886bf"/>
   <concept_set concept_set_id="389001" concept_set="2000" concept_id="2002" sort_weight="0" date_created="2022-03-08 15:50:00.0" creator="1" uuid="380b910bd-298c-4ecf-a632-661ae2f886bf"/>
 
