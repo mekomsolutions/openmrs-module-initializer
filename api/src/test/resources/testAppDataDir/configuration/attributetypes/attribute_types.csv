@@ -1,5 +1,6 @@
 Uuid,Void/Retire,Entity name,Name,Description,Min occurs,Max occurs,Datatype classname,Datatype config,Preferred handler classname,Handler config,_order:1000
 0bb29984-3193-11e7-93ae-92367f002671,,Location,Location Height,Location Height's description,1,1,org.openmrs.customdatatype.datatype.FloatDatatype,,,,
+e7aacc6e-d151-4d9e-a808-6ed9ff761212,,Location,Location Phone Number,Location Phone Numbers's description,1,1,org.openmrs.customdatatype.datatype.FreeTextDataType,,,,
 0bc29982-3193-11e3-93ae-92367f222671,,Visit,Visit Color,Visit Color's description,1,1,org.openmrs.customdatatype.datatype.FreeTextDatatype,,,,
 9eca4f4e-707f-4bb8-8289-2f9b6e93803c,,Location,Location ISO Code,Location ISO Code's description,1,10,org.openmrs.customdatatype.datatype.FreeTextDatatype,,,,
 ,,Provider,Provider Speciality,Clinical speciality for this provider,0,7,org.openmrs.customdatatype.datatype.FreeTextDatatype,,,,
