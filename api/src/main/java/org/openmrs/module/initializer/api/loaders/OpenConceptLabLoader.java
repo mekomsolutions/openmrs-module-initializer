@@ -9,7 +9,6 @@ import org.openmrs.module.openconceptlab.ImportService;
 import org.openmrs.module.openconceptlab.importer.Importer;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipFile;
 
 @OpenmrsProfile(modules = { "openconceptlab:1.2.9" })
@@ -40,17 +39,17 @@ public class OpenConceptLabLoader extends BaseFileLoader {
 		if (oclImport == null || oclImport.equals(lastImport)) {
 			throw new IllegalStateException("OCL import did not start successfully");
 		}
-		
-		// Import is still running.  This is unexpected at this point
-		if (!oclImport.isStopped()) {
-			throw new IllegalStateException("OCL import did not complete successfully");
-		}
-		
-		// Import stopped but had errors
+
+		// Import detected errors
 		if (StringUtils.isNotBlank(oclImport.getErrorMessage())) {
 			throw new IllegalStateException(oclImport.getErrorMessage());
 		}
 		
+		// Import never stopped
+		if (!oclImport.isStopped()) {
+			throw new IllegalStateException("OCL import did not complete successfully");
+		}
+
 		log.debug("OCL import completed successfully: " + oclImport.getLocalDateStopped());
 	}
 	
