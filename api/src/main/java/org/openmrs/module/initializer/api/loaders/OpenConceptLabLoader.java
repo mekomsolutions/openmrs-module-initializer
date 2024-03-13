@@ -39,7 +39,7 @@ public class OpenConceptLabLoader extends BaseFileLoader {
 		if (oclImport == null || oclImport.equals(lastImport)) {
 			throw new IllegalStateException("OCL import did not start successfully");
 		}
-
+		
 		// Import detected errors
 		if (StringUtils.isNotBlank(oclImport.getErrorMessage())) {
 			throw new IllegalStateException(oclImport.getErrorMessage());
@@ -49,7 +49,7 @@ public class OpenConceptLabLoader extends BaseFileLoader {
 		if (!oclImport.isStopped()) {
 			throw new IllegalStateException("OCL import did not complete successfully");
 		}
-
+		
 		log.debug("OCL import completed successfully: " + oclImport.getLocalDateStopped());
 	}
 	
