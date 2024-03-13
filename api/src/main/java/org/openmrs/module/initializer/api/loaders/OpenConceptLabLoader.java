@@ -30,26 +30,23 @@ public class OpenConceptLabLoader extends BaseFileLoader {
 		ZipFile zip = new ZipFile(file);
 		Importer importer = Context.getRegisteredComponent("openconceptlab.importer", Importer.class);
 		ImportService importService = Context.getService(ImportService.class);
+		
 		Import lastImport = importService.getLastImport();
 		log.debug("Starting OCL importer");
 		importer.run(zip);
-		
-		// This is just a sanity check, this is never expected to be true
-		while (lastImport == importService.getLastImport()) {
-			log.warn("Waiting for OCL to start import");
-			TimeUnit.SECONDS.sleep(1);
-		}
-		
 		Import oclImport = importService.getLastImport();
 		
-		// This is just a sanity check, this is never expected to be true
-		while (!oclImport.isStopped()) {
-			log.debug("OCL import: " + importer.getBytesProcessed() + " / " + importer.getTotalBytesToProcess());
-			TimeUnit.SECONDS.sleep(1);
-			oclImport = importService.getLastImport();
+		// Import failed to start.  This can happen another import is already currently running
+		if (oclImport == null || oclImport.equals(lastImport)) {
+			throw new IllegalStateException("OCL import did not start successfully");
 		}
 		
-		// If the import stopped with errors, then throw an exception
+		// Import is still running.  This is unexpected at this point
+		if (!oclImport.isStopped()) {
+			throw new IllegalStateException("OCL import did not complete successfully");
+		}
+		
+		// Import stopped but had errors
 		if (StringUtils.isNotBlank(oclImport.getErrorMessage())) {
 			throw new IllegalStateException(oclImport.getErrorMessage());
 		}
