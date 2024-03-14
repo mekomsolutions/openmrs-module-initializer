@@ -198,6 +198,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 * Added support for 'queues' domain.
 * Added support for 'addresshierarchy' domain.
 * Fix for Liquibase Loader to ensure compatibility with OpenMRS versions 2.5.5+
+* Fix for OCL Loader to ensure it throws an Exception if the OCL import fails
 
 #### Version 2.6.0
 * Added support for 'cohorttypes' and 'cohortattributetypes' domains.
