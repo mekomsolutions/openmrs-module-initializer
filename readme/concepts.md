@@ -39,7 +39,7 @@ Each combination of those four arguments always produce the same concept name UU
 Those are locale specific headers that need to indicate the locale for the values of their column.
 <br/>For example for a column to contain short names in English (locale 'en') simply name the header `Short name:en`. The same logic applies for the other locale specific headers.
 
-At least one fully specified name per locale **must** be specified for a concept.  All other concept names are optional.
+At least one fully specified name **must** be provided for a concept.  All other concept names are optional.
 The fully specified name is a secondary identifier for the concepts domain, it will be used to attempt fetching the concept if no UUID is provided.
 A concept may contain one short name per Locale. A concept may contain more than one index term and synonym per Locale.
 
