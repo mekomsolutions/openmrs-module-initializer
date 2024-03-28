@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * This class configured as controller using annotation and mapped to an URL.
+ * This class is configured as a controller using annotation and mapped to a URL.
  */
 @Controller(InitializerConstants.COMPONENT_LEGACY_CONTROLLER)
 @RequestMapping(value = "module/" + InitializerConstants.MODULE_ARTIFACT_ID + "/" + InitializerConstants.MODULE_ARTIFACT_ID
@@ -73,15 +73,15 @@ public class InitializerController {
 	}
 	
 	/**
-	 * This class returns the form backing object. This can be a string, a boolean, or a normal java
-	 * pojo. The bean name defined in the ModelAttribute annotation and the type can be just defined by
+	 * This class returns the form backing object. This can be a string, a boolean, or a normal Java
+	 * POJO. The bean name is defined in the ModelAttribute annotation and the type can be just defined by
 	 * the return type of this method
 	 */
 	@ModelAttribute("users")
 	protected List<User> getUsers() throws Exception {
 		List<User> users = userService.getAllUsers();
 		
-		// this object will be made available to the jsp page under the variable name
+		//This object will be made available to the JSP page under the variable name
 		// that is defined in the @ModuleAttribute tag
 		return users;
 	}
