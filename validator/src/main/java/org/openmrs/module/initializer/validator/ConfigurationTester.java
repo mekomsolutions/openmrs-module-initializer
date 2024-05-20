@@ -24,6 +24,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Stream;
+
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.apache.commons.lang.StringUtils;
 import org.dbunit.DatabaseUnitException;
@@ -53,11 +56,14 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.MySQLContainer;
 import ch.vorburger.exec.ManagedProcessException;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	protected static final Logger log = LoggerFactory.getLogger(ConfigurationTester.class);
 	
 	private static MySQLContainer mysqlContainer = new MySQLContainer("mysql:5.7.31");
+	
+	private static ConfigurableApplicationContext storedApplicationContext;
 	
 	private String configDirPath;
 	
@@ -74,6 +80,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		mysqlContainer.withPassword("");
 		mysqlContainer.withCommand("mysqld --character-set-server=utf8 --collation-server=utf8_general_ci");
 		mysqlContainer.start();
+		
 	}
 	
 	protected void setupDatabaseProps(Properties props) throws ManagedProcessException, URISyntaxException {
@@ -233,6 +240,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		}
 		Assert.assertThat(sb.toString(), Validator.errors, is(empty()));
 		super.getConnection();
+		storedApplicationContext = (ConfigurableApplicationContext) applicationContext;
 	}
 	
 	@AfterClass
@@ -240,5 +248,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		if (null != mysqlContainer) {
 			mysqlContainer.stop();
 		}
+		storedApplicationContext.close();
 	}
+	
 }
