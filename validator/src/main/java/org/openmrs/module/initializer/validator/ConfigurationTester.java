@@ -248,7 +248,8 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		if (null != mysqlContainer) {
 			mysqlContainer.stop();
 		}
-		storedApplicationContext.close();
+		if (null != storedApplicationContext) {
+			storedApplicationContext.close();
+		}
 	}
-	
 }
