@@ -16,6 +16,7 @@
 
     <properties>
         <openmrsPlatformVersion>${openmrsVersion2.4}</openmrsPlatformVersion>
+        <billingVersion>1.1.0-SNAPSHOT</billingVersion>
     </properties>
 
     <dependencies>
@@ -62,6 +63,13 @@
             <version>${project.parent.version}</version>
             <scope>test</scope>
             <type>test-jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>billing-omod</artifactId>
+            <version>${billingVersion}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
