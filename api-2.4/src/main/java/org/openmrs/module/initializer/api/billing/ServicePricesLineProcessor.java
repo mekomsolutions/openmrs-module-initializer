@@ -9,14 +9,14 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-/**
- * This is the first level line processor for a Queue
- */
 @OpenmrsProfile(modules = { "billing:*" })
 public class ServicePricesLineProcessor extends BaseLineProcessor<PaymentMode> {
     
-    protected static String HEADER_NAME = "name";
-    protected static String HEADER_DESC = "description";
+    protected static String HEADER_NAME = "Service Name";
+    protected static String HEADER_SHORT_NAME = "Short Name";
+    protected static String HEADER_CONCEPT = "Concept";
+    protected static String HEADER_SERVICE_TYPE = "Service Type";
+    protected static String HEADER_SERVICE_STATUS = "Service Status";
     
     private final ConceptService conceptService;
     
@@ -29,12 +29,28 @@ public class ServicePricesLineProcessor extends BaseLineProcessor<PaymentMode> {
     @Override
     public PaymentMode fill(PaymentMode paymentMode, CsvLine line) throws IllegalArgumentException {
         paymentMode.setName(line.get(HEADER_NAME, true));
-        
-        // Assuming the description is an attribute to be added to PaymentMode
-        if (line.containsHeader(HEADER_DESC)) {
-            String description = line.getString(HEADER_DESC);
-            if (StringUtils.isNotBlank(description)) {
-                paymentMode.addAttributeType("Description", "String", null, false);
+                if (line.containsHeader(HEADER_SHORT_NAME)) {
+            String shortName = line.getString(HEADER_SHORT_NAME);
+            if (StringUtils.isNotBlank(shortName)) {
+                paymentMode.addAttributeType("Short Name", "String", null, false);
+            }
+        }
+        if (line.containsHeader(HEADER_CONCEPT)) {
+            String concept = line.getString(HEADER_CONCEPT);
+            if (StringUtils.isNotBlank(concept)) {
+                paymentMode.addAttributeType("Concept", "String", null, false);
+            }
+        }
+                if (line.containsHeader(HEADER_SERVICE_TYPE)) {
+            String serviceType = line.getString(HEADER_SERVICE_TYPE);
+            if (StringUtils.isNotBlank(serviceType)) {
+                paymentMode.addAttributeType("Service Type", "String", null, false);
+            }
+        }
+                if (line.containsHeader(HEADER_SERVICE_STATUS)) {
+            String serviceStatus = line.getString(HEADER_SERVICE_STATUS);
+            if (StringUtils.isNotBlank(serviceStatus)) {
+                paymentMode.addAttributeType("Service Status", "String", null, false);
             }
         }
                 
