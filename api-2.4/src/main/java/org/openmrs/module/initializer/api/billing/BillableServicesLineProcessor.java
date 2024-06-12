@@ -16,53 +16,57 @@ import org.springframework.beans.factory.annotation.Qualifier;
  */
 @OpenmrsProfile(modules = { "billing:*" })
 public class BillableServicesLineProcessor extends BaseLineProcessor<BillableService> {
-    
-    protected static final String HEADER_NAME = "Service Name";
-    protected static final String HEADER_DESC = "Short Name";
-    protected static final String HEADER_SERVICE = "Concept";
-    protected static final String HEADER_SERVICE_TYPE = "Service Type";
-    protected static final String HEADER_SERVICE_STATUS = "Service Status";
-    
-    private final ConceptService conceptService;
-    
-    @Autowired
-    public BillableServicesLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
-        super();
-        this.conceptService = conceptService;
-    }
-    
-    @Override
-    public BillableService fill(BillableService billableService, CsvLine line) throws IllegalArgumentException {
-        billableService.setName(line.get(HEADER_NAME, true));
-        billableService.setShortName(line.getString(HEADER_DESC));
-        
-        if (line.containsHeader(HEADER_SERVICE)) {
-            String service = line.getString(HEADER_SERVICE);
-            if (StringUtils.isNotBlank(service)) {
-                billableService.setConcept(Utils.fetchConcept(service, conceptService));
-            } else {
-                billableService.setConcept(null);
-            }
-        }
-        
-        if (line.containsHeader(HEADER_SERVICE_TYPE)) {
-            String serviceType = line.getString(HEADER_SERVICE_TYPE);
-            if (StringUtils.isNotBlank(serviceType)) {
-                billableService.setServiceType(Utils.fetchConcept(serviceType, conceptService));
-            } else {
-                billableService.setServiceType(null);
-            }
-        }
-        
-        if (line.containsHeader(HEADER_SERVICE_STATUS)) {
-            String serviceStatus = line.getString(HEADER_SERVICE_STATUS);
-            if (StringUtils.isNotBlank(serviceStatus)) {
-                billableService.setServiceStatus(BillableServiceStatus.valueOf(serviceStatus.toUpperCase()));
-            } else {
-                billableService.setServiceStatus(BillableServiceStatus.ENABLED);
-            }
-        }
-        
-        return billableService;
-    }
+	
+	protected static final String HEADER_NAME = "Service Name";
+	
+	protected static final String HEADER_DESC = "Short Name";
+	
+	protected static final String HEADER_SERVICE = "Concept";
+	
+	protected static final String HEADER_SERVICE_TYPE = "Service Type";
+	
+	protected static final String HEADER_SERVICE_STATUS = "Service Status";
+	
+	private final ConceptService conceptService;
+	
+	@Autowired
+	public BillableServicesLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
+		super();
+		this.conceptService = conceptService;
+	}
+	
+	@Override
+	public BillableService fill(BillableService billableService, CsvLine line) throws IllegalArgumentException {
+		billableService.setName(line.get(HEADER_NAME, true));
+		billableService.setShortName(line.getString(HEADER_DESC));
+		
+		if (line.containsHeader(HEADER_SERVICE)) {
+			String service = line.getString(HEADER_SERVICE);
+			if (StringUtils.isNotBlank(service)) {
+				billableService.setConcept(Utils.fetchConcept(service, conceptService));
+			} else {
+				billableService.setConcept(null);
+			}
+		}
+		
+		if (line.containsHeader(HEADER_SERVICE_TYPE)) {
+			String serviceType = line.getString(HEADER_SERVICE_TYPE);
+			if (StringUtils.isNotBlank(serviceType)) {
+				billableService.setServiceType(Utils.fetchConcept(serviceType, conceptService));
+			} else {
+				billableService.setServiceType(null);
+			}
+		}
+		
+		if (line.containsHeader(HEADER_SERVICE_STATUS)) {
+			String serviceStatus = line.getString(HEADER_SERVICE_STATUS);
+			if (StringUtils.isNotBlank(serviceStatus)) {
+				billableService.setServiceStatus(BillableServiceStatus.valueOf(serviceStatus.toUpperCase()));
+			} else {
+				billableService.setServiceStatus(BillableServiceStatus.ENABLED);
+			}
+		}
+		
+		return billableService;
+	}
 }

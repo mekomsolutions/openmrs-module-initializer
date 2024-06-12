@@ -10,5 +10,5 @@ public class CashPointLoader extends BaseCsvLoader<CashPoint, CashPointCsvParser
 	public void setParser(CashPointCsvParser parser) {
 		this.parser = parser;
 	}
-    
+	
 }
