@@ -13,35 +13,36 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "billing:*" })
 public class ServicePricesCsvParser extends CsvParser<PaymentMode, BaseLineProcessor<PaymentMode>> {
-
-    private final IPaymentModeService paymentModeService;
-    
-    @Autowired
-    public ServicePricesCsvParser(@Qualifier("paymentModeService") IPaymentModeService paymentModeService, ServicePricesLineProcessor processor) {
-        super(processor);
-        this.paymentModeService = paymentModeService;
-    }
-    
-    @Override
-    public Domain getDomain() {
-        return Domain.BILLABLE_SERVICE_PRICES;
-    }
-    
-    @Override
-    public PaymentMode bootstrap(CsvLine line) throws IllegalArgumentException {
-        String uuid = line.getUuid();
-        PaymentMode paymentMode = paymentModeService.getByUuid(uuid);
-        if (paymentMode == null) {
-            paymentMode = new PaymentMode();
-            if (StringUtils.isNotBlank(uuid)) {
-                paymentMode.setUuid(uuid);
-            }
-        }
-        return paymentMode;
-    }
-    
-    @Override
-    public PaymentMode save(PaymentMode instance) {
-        return paymentModeService.save(instance);
-    }
+	
+	private final IPaymentModeService paymentModeService;
+	
+	@Autowired
+	public ServicePricesCsvParser(@Qualifier("paymentModeService") IPaymentModeService paymentModeService,
+	    ServicePricesLineProcessor processor) {
+		super(processor);
+		this.paymentModeService = paymentModeService;
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.BILLABLE_SERVICE_PRICES;
+	}
+	
+	@Override
+	public PaymentMode bootstrap(CsvLine line) throws IllegalArgumentException {
+		String uuid = line.getUuid();
+		PaymentMode paymentMode = paymentModeService.getByUuid(uuid);
+		if (paymentMode == null) {
+			paymentMode = new PaymentMode();
+			if (StringUtils.isNotBlank(uuid)) {
+				paymentMode.setUuid(uuid);
+			}
+		}
+		return paymentMode;
+	}
+	
+	@Override
+	public PaymentMode save(PaymentMode instance) {
+		return paymentModeService.save(instance);
+	}
 }

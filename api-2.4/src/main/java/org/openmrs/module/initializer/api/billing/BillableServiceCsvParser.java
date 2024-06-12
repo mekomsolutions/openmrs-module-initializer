@@ -13,35 +13,37 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "billing:*" })
 public class BillableServiceCsvParser extends CsvParser<BillableService, BaseLineProcessor<BillableService>> {
-
-    private final BillableServiceResource billableServiceResource;
-
-    @Autowired
-    public BillableServiceCsvParser(@Qualifier("billableService.billableServiceResource") BillableServiceResource billableServiceResource, BillableServicesLineProcessor processor) {
-        super(processor);
-        this.billableServiceResource = billableServiceResource;
-    }
-
-    @Override
-    public Domain getDomain() {
-        return Domain.BILLABLE_SERVICES;
-    }
-
-    @Override
-    public BillableService bootstrap(CsvLine line) throws IllegalArgumentException {
-        String uuid = line.getUuid();
-        BillableService billableService = billableServiceResource.getByUniqueId(uuid);
-        if (billableService == null) {
-            billableService = new BillableService();
-        }
-        if (StringUtils.isNotBlank(uuid)) {
-            billableService.setUuid(uuid);
-        }
-        return billableService;
-    }
-
-    @Override
-    public BillableService save(BillableService instance) {
-        return billableServiceResource.save(instance);
-    }
+	
+	private final BillableServiceResource billableServiceResource;
+	
+	@Autowired
+	public BillableServiceCsvParser(
+	    @Qualifier("billableService.billableServiceResource") BillableServiceResource billableServiceResource,
+	    BillableServicesLineProcessor processor) {
+		super(processor);
+		this.billableServiceResource = billableServiceResource;
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.BILLABLE_SERVICES;
+	}
+	
+	@Override
+	public BillableService bootstrap(CsvLine line) throws IllegalArgumentException {
+		String uuid = line.getUuid();
+		BillableService billableService = billableServiceResource.getByUniqueId(uuid);
+		if (billableService == null) {
+			billableService = new BillableService();
+		}
+		if (StringUtils.isNotBlank(uuid)) {
+			billableService.setUuid(uuid);
+		}
+		return billableService;
+	}
+	
+	@Override
+	public BillableService save(BillableService instance) {
+		return billableServiceResource.save(instance);
+	}
 }
