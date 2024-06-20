@@ -1,6 +1,7 @@
 package org.openmrs.module.initializer.api.billing;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.billing.api.ICashPointService;
 import org.openmrs.module.billing.api.model.CashPoint;
 import org.openmrs.module.initializer.Domain;
@@ -10,6 +11,7 @@ import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+@OpenmrsProfile(modules = { "billing:*" })
 public class CashPointCsvParser extends CsvParser<CashPoint, BaseLineProcessor<CashPoint>> {
 	
 	private final ICashPointService iCashPointService;
