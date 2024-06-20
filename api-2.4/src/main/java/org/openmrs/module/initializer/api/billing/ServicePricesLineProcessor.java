@@ -11,53 +11,65 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "billing:*" })
 public class ServicePricesLineProcessor extends BaseLineProcessor<PaymentMode> {
-	
-	protected static String HEADER_NAME = "Service Name";
-	
-	protected static String HEADER_SHORT_NAME = "Short Name";
-	
-	protected static String HEADER_CONCEPT = "Concept";
-	
-	protected static String HEADER_SERVICE_TYPE = "Service Type";
-	
-	protected static String HEADER_SERVICE_STATUS = "Service Status";
-	
-	private final ConceptService conceptService;
-	
-	@Autowired
-	public ServicePricesLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
-		super();
-		this.conceptService = conceptService;
-	}
-	
-	@Override
-	public PaymentMode fill(PaymentMode paymentMode, CsvLine line) throws IllegalArgumentException {
-		paymentMode.setName(line.get(HEADER_NAME, true));
-		if (line.containsHeader(HEADER_SHORT_NAME)) {
-			String shortName = line.getString(HEADER_SHORT_NAME);
-			if (StringUtils.isNotBlank(shortName)) {
-				paymentMode.addAttributeType("Short Name", "String", null, false);
-			}
-		}
-		if (line.containsHeader(HEADER_CONCEPT)) {
-			String concept = line.getString(HEADER_CONCEPT);
-			if (StringUtils.isNotBlank(concept)) {
-				paymentMode.addAttributeType("Concept", "String", null, false);
-			}
-		}
-		if (line.containsHeader(HEADER_SERVICE_TYPE)) {
-			String serviceType = line.getString(HEADER_SERVICE_TYPE);
-			if (StringUtils.isNotBlank(serviceType)) {
-				paymentMode.addAttributeType("Service Type", "String", null, false);
-			}
-		}
-		if (line.containsHeader(HEADER_SERVICE_STATUS)) {
-			String serviceStatus = line.getString(HEADER_SERVICE_STATUS);
-			if (StringUtils.isNotBlank(serviceStatus)) {
-				paymentMode.addAttributeType("Service Status", "String", null, false);
-			}
-		}
-		
-		return paymentMode;
-	}
+    
+    protected static final String HEADER_UUID = "uuid";
+    
+    protected static final String HEADER_NAME = "name";
+    
+    protected static final String HEADER_PRICE = "price";
+    
+    protected static final String HEADER_PAYMENT_MODE = "paymentMode";
+    
+    protected static final String HEADER_ITEM = "item";
+    
+    protected static final String HEADER_BILLABLE_SERVICE = "billableService";
+    
+    private final ConceptService conceptService;
+    
+    @Autowired
+    public ServicePricesLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
+        super();
+        this.conceptService = conceptService;
+    }
+    
+    @Override
+    public PaymentMode fill(PaymentMode paymentMode, CsvLine line) throws IllegalArgumentException {
+        if (line.containsHeader(HEADER_UUID)) {
+            String uuid = line.getString(HEADER_UUID);
+            if (StringUtils.isNotBlank(uuid)) {
+                paymentMode.setUuid(uuid);
+            }
+        }
+        paymentMode.setName(line.get(HEADER_NAME, true));
+        
+        if (line.containsHeader(HEADER_PRICE)) {
+            String price = line.getString(HEADER_PRICE);
+            if (StringUtils.isNotBlank(price)) {
+                paymentMode.addAttributeType(HEADER_PRICE, "String", null, false);
+            }
+        }
+        
+        if (line.containsHeader(HEADER_PAYMENT_MODE)) {
+            String paymentModeStr = line.getString(HEADER_PAYMENT_MODE);
+            if (StringUtils.isNotBlank(paymentModeStr)) {
+                paymentMode.addAttributeType(HEADER_PAYMENT_MODE, "String", null, false);
+            }
+        }
+        
+        if (line.containsHeader(HEADER_ITEM)) {
+            String item = line.getString(HEADER_ITEM);
+            if (StringUtils.isNotBlank(item)) {
+                paymentMode.addAttributeType(HEADER_ITEM, "String", null, false);
+            }
+        }
+        
+        if (line.containsHeader(HEADER_BILLABLE_SERVICE)) {
+            String billableService = line.getString(HEADER_BILLABLE_SERVICE);
+            if (StringUtils.isNotBlank(billableService)) {
+                paymentMode.addAttributeType(HEADER_BILLABLE_SERVICE, "String", null, false);
+            }
+        }
+        
+        return paymentMode;
+    }
 }

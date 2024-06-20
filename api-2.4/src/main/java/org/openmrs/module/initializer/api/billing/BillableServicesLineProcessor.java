@@ -17,15 +17,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @OpenmrsProfile(modules = { "billing:*" })
 public class BillableServicesLineProcessor extends BaseLineProcessor<BillableService> {
 	
-	protected static final String HEADER_NAME = "Service Name";
+	protected static final String HEADER_NAME = "service name";
 	
-	protected static final String HEADER_DESC = "Short Name";
+	protected static final String HEADER_DESC = "short name";
 	
-	protected static final String HEADER_SERVICE = "Concept";
+	protected static final String HEADER_SERVICE = "concept";
 	
-	protected static final String HEADER_SERVICE_TYPE = "Service Type";
+	protected static final String HEADER_SERVICE_TYPE = "service type";
 	
-	protected static final String HEADER_SERVICE_STATUS = "Service Status";
+	protected static final String HEADER_SERVICE_STATUS = "service status";
 	
 	private final ConceptService conceptService;
 	
@@ -40,32 +40,18 @@ public class BillableServicesLineProcessor extends BaseLineProcessor<BillableSer
 		billableService.setName(line.get(HEADER_NAME, true));
 		billableService.setShortName(line.getString(HEADER_DESC));
 		
-		if (line.containsHeader(HEADER_SERVICE)) {
-			String service = line.getString(HEADER_SERVICE);
-			if (StringUtils.isNotBlank(service)) {
-				billableService.setConcept(Utils.fetchConcept(service, conceptService));
-			} else {
-				billableService.setConcept(null);
-			}
-		}
+		String service = line.getString(HEADER_SERVICE);
+		billableService.setConcept(Utils.fetchConcept(service, conceptService));
 		
-		if (line.containsHeader(HEADER_SERVICE_TYPE)) {
-			String serviceType = line.getString(HEADER_SERVICE_TYPE);
-			if (StringUtils.isNotBlank(serviceType)) {
-				billableService.setServiceType(Utils.fetchConcept(serviceType, conceptService));
-			} else {
-				billableService.setServiceType(null);
-			}
-		}
+		String serviceType = line.getString(HEADER_SERVICE_TYPE);
+		billableService.setServiceType(Utils.fetchConcept(serviceType, conceptService));
 		
-		if (line.containsHeader(HEADER_SERVICE_STATUS)) {
-			String serviceStatus = line.getString(HEADER_SERVICE_STATUS);
-			if (StringUtils.isNotBlank(serviceStatus)) {
-				billableService.setServiceStatus(BillableServiceStatus.valueOf(serviceStatus.toUpperCase()));
-			} else {
-				billableService.setServiceStatus(BillableServiceStatus.ENABLED);
-			}
-		}
+		String serviceStatus = line.getString(HEADER_SERVICE_STATUS);
+		billableService.setServiceStatus(
+			StringUtils.isNotBlank(serviceStatus) ? 
+			BillableServiceStatus.valueOf(serviceStatus.toUpperCase()) : 
+			BillableServiceStatus.ENABLED
+		);
 		
 		return billableService;
 	}

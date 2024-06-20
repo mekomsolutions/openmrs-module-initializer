@@ -48,6 +48,7 @@ configuration/
   ├── attributetypes/
   ├── autogenerationoptions/
   ├── bahmniforms/
+  ├── billing/
   ├── cohorttypes/
   ├── cohortattributetypes/
   ├── conceptclasses/
@@ -127,6 +128,7 @@ This is the list of currently supported domains in their loading order:
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
 1. [Open Concept Lab (ZIP Files)](readme/ocl.md)
 1. [Concepts (CSV files)](readme/concepts.md)
+1. [Billing (CSV files)](readme/billing.md)
 1. [Concept Sets and Answers (CSV files)](readme/conceptsets.md)
 1. [Programs (CSV files)](readme/prog.md)
 1. [Program Worklows (CSV files)](readme/prog.md)
@@ -166,6 +168,7 @@ mvn clean package
 * Bahmni Appointments 1.2.1 (*compatible*)
 * Bahmni Core 0.93 (*compatible*)
 * Bahmni I.e Apps 1.1.0 (*compatible*)
+* Billing 1.1.0 (*compatible*)
 * Data Filter 1.0.0 (*compatible*)
 * HTML Form Entry 4.0.0 (*compatible*)
 * ID Gen 4.3 (*compatible*)
@@ -200,6 +203,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 
 #### Version 2.7.0
 * Added support for 'queues' domain.
+* Added support for 'billing' domain.
 * Added support for 'addresshierarchy' domain.
 * Fix for Liquibase Loader to ensure compatibility with OpenMRS versions 2.5.5+.
 * Fix for OCL Loader to ensure it throws an Exception if the OCL import fails.
