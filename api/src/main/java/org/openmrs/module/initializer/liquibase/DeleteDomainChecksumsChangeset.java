@@ -1,6 +1,9 @@
 package org.openmrs.module.initializer.liquibase;
 
+import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CONFIG;
+
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.openmrs.module.initializer.Domain;
@@ -49,7 +52,8 @@ public class DeleteDomainChecksumsChangeset implements CustomTaskChange {
 		String checksumsDirPath = Paths
 		        .get(OpenmrsUtil.getApplicationDataDirectory(), InitializerConstants.DIR_NAME_CHECKSUM).toString();
 		
-		ConfigDirUtil util = new ConfigDirUtil(null, checksumsDirPath, domain.getName());
+		String configDirPath = getBasePath().resolve(DIR_NAME_CONFIG).toString();
+		ConfigDirUtil util = new ConfigDirUtil(configDirPath, checksumsDirPath, domain.getName());
 		util.deleteChecksums();
 	}
 	
@@ -81,5 +85,9 @@ public class DeleteDomainChecksumsChangeset implements CustomTaskChange {
 	@Override
 	public ValidationErrors validate(Database database) {
 		return null;
+	}
+	
+	private Path getBasePath() {
+		return Paths.get(new File(OpenmrsUtil.getApplicationDataDirectory()).toURI());
 	}
 }
