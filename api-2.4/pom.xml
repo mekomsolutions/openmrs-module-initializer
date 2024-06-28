@@ -16,7 +16,7 @@
 
     <properties>
         <openmrsPlatformVersion>${openmrsVersion2.4}</openmrsPlatformVersion>
-        <billingVersion>1.1.0-SNAPSHOT</billingVersion>
+        <billingVersion>1.1.0</billingVersion>
     </properties>
 
     <dependencies>

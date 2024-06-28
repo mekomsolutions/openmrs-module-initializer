@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 /**
  * This is the first level line processor for Billable Services
  */
-@OpenmrsProfile(modules = { "billing:*" })
+@OpenmrsProfile(modules = { "billing:1.1.0" })
 public class BillableServicesLineProcessor extends BaseLineProcessor<BillableService> {
 	
 	protected static final String HEADER_NAME = "service name";
@@ -48,10 +48,8 @@ public class BillableServicesLineProcessor extends BaseLineProcessor<BillableSer
 		
 		String serviceStatus = line.getString(HEADER_SERVICE_STATUS);
 		billableService.setServiceStatus(
-			StringUtils.isNotBlank(serviceStatus) ? 
-			BillableServiceStatus.valueOf(serviceStatus.toUpperCase()) : 
-			BillableServiceStatus.ENABLED
-		);
+		    StringUtils.isNotBlank(serviceStatus) ? BillableServiceStatus.valueOf(serviceStatus.toUpperCase())
+		            : BillableServiceStatus.ENABLED);
 		
 		return billableService;
 	}

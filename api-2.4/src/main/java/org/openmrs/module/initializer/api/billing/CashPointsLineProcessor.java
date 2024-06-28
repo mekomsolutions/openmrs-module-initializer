@@ -10,7 +10,7 @@ import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@OpenmrsProfile(modules = { "billing:*" })
+@OpenmrsProfile(modules = { "billing:1.1.0" })
 public class CashPointsLineProcessor extends BaseLineProcessor<CashPoint> {
 	
 	protected static final String HEADER_UUID = "uuid";
