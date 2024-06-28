@@ -13,7 +13,7 @@ There is currently only one format for the billing CSV line, here are the possib
 
 Let's review some important headers.
 ##### Billable Services
-###### Header `UUID` 
+###### Header `UUID` *(required)*
 This is the UUID of the billable service
 
 ###### Header `Service Name` *(required)*
@@ -70,7 +70,7 @@ This is a description of the item of service being prices that helps with catego
 This references the billable service associated with the item
 
 #### Requirements
-* The [billing module](https://github.com/openmrs/openmrs-module-billing) version 1.0.0 or higher must be installed
+* The [billing module](https://github.com/openmrs/openmrs-module-billing) version 1.1.0 or higher must be installed
 * The OpenMRS version must be 2.4 or higher
 
 #### Further examples:

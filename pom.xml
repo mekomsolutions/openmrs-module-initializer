@@ -87,6 +87,7 @@
         <exti18nVersion>1.0.0</exti18nVersion>
         <appframeworkVersion>2.14.0</appframeworkVersion>
         <providermanagementVersion>2.13.0</providermanagementVersion>
+        <webservicesVersion>2.45.0-SNAPSHOT</webservicesVersion>
     </properties>
 
     <dependencies>
@@ -289,6 +290,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>webservices.rest-omod</artifactId>
+            <version>${webservicesVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        
         <!-- Depedency required to compile against Java 11 -->
         <dependency>
             <groupId>javax.annotation</groupId>
