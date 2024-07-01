@@ -10,6 +10,7 @@
   * [Setting up and controlling logging](#setting-up-and-controlling-logging)
 - [Get in touch](#get-in-touch)
 - [Releases notes](#releases-notes)
+    + [Version 2.8.0](#version-280)
     + [Version 2.7.0](#version-270)
     + [Version 2.6.0](#version-260)
     + [Version 2.5.2](#version-252)
