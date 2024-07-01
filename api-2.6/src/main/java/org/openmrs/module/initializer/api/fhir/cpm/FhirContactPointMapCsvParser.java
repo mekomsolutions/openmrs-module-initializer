@@ -25,12 +25,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@OpenmrsProfile(modules = { "fhir2:1.11.* - 9.*" }, openmrsPlatformVersion = "2.6.3 - 2.6.*, 2.7.* - 9.*")
+@OpenmrsProfile(modules = { "fhir2:1.11.0" }, openmrsPlatformVersion = "2.6.3")
 public class FhirContactPointMapCsvParser extends CsvParser<FhirContactPointMap, BaseLineProcessor<FhirContactPointMap>> {
 	
 	public static final String ATTRIBUTE_TYPE_DOMAIN_HEADER = "Entity name";
 	
-	public static final String ATTRIBUTE_TYPE = "Attribute Type";
+	public static final String ATTRIBUTE_TYPE = "Attribute type";
 	
 	private static final String LOCATION = "location";
 	

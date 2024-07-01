@@ -88,7 +88,7 @@ fhirContactPointMap/
 ```
 The format of this CSV should be as follows:
 
-| Uuid                                 | Void/Retire | Entity name | Attribute Type                       | System | Use  | Rank | _order:1000 |
+| Uuid                                 | Void/Retire | Entity name | Attribute type                       | System | Use  | Rank | _order:1000 |
 |--------------------------------------|-------------|-------------|--------------------------------------|--------|------|------|-------------|
 | fa48acc4-ef1f-46d6-b0af-150b00ddee9d |             | person      | 717ec942-3c4a-11ea-b024-ffc81a23382e | PHONE  | WORK | 1    |             |
 |                                      |             | person      | PAT_RENAME_NEW_NAME                  | PHONE  | HOME |      |             |

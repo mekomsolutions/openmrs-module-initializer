@@ -20,14 +20,14 @@ import org.springframework.stereotype.Component;
 import static org.openmrs.module.initializer.api.fhir.cpm.FhirContactPointMapCsvParser.ATTRIBUTE_TYPE_DOMAIN_HEADER;
 
 @Component
-@OpenmrsProfile(modules = { "fhir2:1.11.* - 9.*" }, openmrsPlatformVersion = "2.6.3 - 2.6.*, 2.7.* - 9.*")
+@OpenmrsProfile(modules = { "fhir2:1.11.0" }, openmrsPlatformVersion = "2.6.3")
 public class FhirContactPointMapLineProcessor extends BaseLineProcessor<FhirContactPointMap> {
 	
-	private static final String SYSTEM_HEADER = "system";
+	private static final String SYSTEM_HEADER = "System";
 	
-	private static final String USE_HEADER = "use";
+	private static final String USE_HEADER = "Use";
 	
-	private static final String RANK_HEADER = "rank";
+	private static final String RANK_HEADER = "Rank";
 	
 	@Override
 	public FhirContactPointMap fill(FhirContactPointMap instance, CsvLine line) throws IllegalArgumentException {

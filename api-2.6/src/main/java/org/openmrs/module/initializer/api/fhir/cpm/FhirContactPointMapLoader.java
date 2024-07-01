@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@OpenmrsProfile(modules = { "fhir2:1.11.* - 9.*" }, openmrsPlatformVersion = "2.6.3 - 2.6.*, 2.7.* - 9.*")
+@OpenmrsProfile(modules = { "fhir2:1.11.0" }, openmrsPlatformVersion = "2.6.3")
 public class FhirContactPointMapLoader extends BaseCsvLoader<FhirContactPointMap, FhirContactPointMapCsvParser> {
 	
 	@Autowired
