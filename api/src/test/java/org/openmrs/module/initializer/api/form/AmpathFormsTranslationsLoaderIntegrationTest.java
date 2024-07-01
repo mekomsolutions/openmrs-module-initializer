@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openmrs.FormResource;
 import org.openmrs.api.FormService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loaders.AmpathFormsLoader;
 import org.openmrs.module.initializer.api.loaders.AmpathFormsTranslationsLoader;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Locale;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
@@ -70,6 +72,12 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		Assert.assertEquals("Encontre", actualObj.get("translations").get("Encounter").getTextValue());
 		Assert.assertEquals("Autre", actualObj.get("translations").get("Other").getTextValue());
 		Assert.assertEquals("Enfant", actualObj.get("translations").get("Child").getTextValue());
+		
+		// verify form name translation
+		Assert.assertEquals("Formulaire d'essai 1", Context.getMessageSourceService()
+		        .getMessage("ui.i18n.Form.name." + formResource.getForm().getUuid(), null, Locale.CANADA_FRENCH));
+		Assert.assertEquals("Formulaire d'essai 1", Context.getMessageSourceService()
+		        .getMessage("org.openmrs.Form." + formResource.getForm().getUuid(), null, Locale.CANADA_FRENCH));
 		
 	}
 	

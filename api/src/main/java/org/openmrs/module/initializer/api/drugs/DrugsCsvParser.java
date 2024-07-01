@@ -14,11 +14,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class DrugsCsvParser extends CsvParser<Drug, BaseLineProcessor<Drug>> {
 	
-	private ConceptService conceptService;
+	private final ConceptService conceptService;
+	
+	private final MappingsDrugLineProcessor mappingsProcessor;
 	
 	@Autowired
-	public DrugsCsvParser(@Qualifier("conceptService") ConceptService conceptService, DrugLineProcessor processor) {
+	public DrugsCsvParser(@Qualifier("conceptService") ConceptService conceptService,
+	    @Qualifier("initializer.drugLineProcessor") DrugLineProcessor processor,
+	    @Qualifier("initializer.mappingsDrugLineProcessor") MappingsDrugLineProcessor mappingsProcessor) {
 		super(processor);
+		this.mappingsProcessor = mappingsProcessor;
 		this.conceptService = conceptService;
 	}
 	
@@ -49,5 +54,12 @@ public class DrugsCsvParser extends CsvParser<Drug, BaseLineProcessor<Drug>> {
 	@Override
 	public Drug save(Drug instance) {
 		return conceptService.saveDrug(instance);
+	}
+	
+	@Override
+	protected void setLineProcessors(String version) {
+		lineProcessors.clear();
+		lineProcessors.add(getSingleLineProcessor());
+		lineProcessors.add(mappingsProcessor);
 	}
 }

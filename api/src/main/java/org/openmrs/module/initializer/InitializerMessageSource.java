@@ -13,6 +13,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openmrs.api.APIException;
 import org.openmrs.messagesource.MutableMessageSource;
 import org.openmrs.messagesource.PresentationMessage;
 import org.openmrs.messagesource.impl.CachedMessageSource;
@@ -168,7 +169,12 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		stopWatch.start();
 		Map<String, Properties> resources = new LinkedHashMap<>();
 		resources.putAll(getMessagePropertyResourcesFromClasspath());
-		resources.putAll(getMessagePropertyResourcesFromFilesystem()); // Filesystem takes precedence
+		try {
+			resources.putAll(getMessagePropertyResourcesFromFilesystem()); // Filesystem takes precedence
+		}
+		catch (APIException e) {
+			log.warn("Could not load message property resources from file system because of: ", e);
+		}
 		
 		for (String resourceName : resources.keySet()) {
 			Properties properties = resources.get(resourceName);

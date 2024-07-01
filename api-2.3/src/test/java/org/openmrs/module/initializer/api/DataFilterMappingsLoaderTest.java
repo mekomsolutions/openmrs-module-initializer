@@ -7,12 +7,12 @@ import org.openmrs.api.LocationService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
 import org.openmrs.module.datafilter.impl.api.DataFilterService;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_3_Test;
 import org.openmrs.module.initializer.api.datafilter.mappings.DataFilterMappingsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class DataFilterMappingsLoaderTest extends DomainBaseModuleContextSensitiveTest {
+public class DataFilterMappingsLoaderTest extends DomainBaseModuleContextSensitive_2_3_Test {
 	
 	@Autowired
 	private DataFilterMappingsLoader loader;
@@ -31,11 +31,6 @@ public class DataFilterMappingsLoaderTest extends DomainBaseModuleContextSensiti
 	
 	@Autowired
 	private DataFilterService dfs;
-	
-	@Override
-	public void updateSearchIndex() {
-		// to prevent Data Filter's 'Illegal Record Access'
-	}
 	
 	@Before
 	public void setup() {

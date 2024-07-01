@@ -9,7 +9,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>initializer</artifactId>
-    <version>2.5.0-SNAPSHOT</version>
+    <version>2.8.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Initializer</name>
     <description>The OpenMRS Initializer module is an API-only module that processes the content of the configuration folder when it is found inside OpenMRS' application data directory.</description>
@@ -36,6 +36,7 @@
         <module>api-2.2</module>
         <module>api-2.3</module>
         <module>api-2.4</module>
+        <module>api-2.5</module>
         <module>omod</module>
     </modules>
 
@@ -52,8 +53,9 @@
     <properties>
         <openmrsVersion2.1>2.1.1</openmrsVersion2.1>
         <openmrsVersion2.2>2.2.0</openmrsVersion2.2>
-        <openmrsVersion2.3>2.3.0</openmrsVersion2.3>
+        <openmrsVersion2.3>2.3.6</openmrsVersion2.3>
         <openmrsVersion2.4>2.4.0</openmrsVersion2.4>
+        <openmrsVersion2.5>2.5.5</openmrsVersion2.5>
 
         <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
 
@@ -61,6 +63,7 @@
         <appointmentsVersion>1.2.1</appointmentsVersion>
         <bahmniIeAppsVersion>1.1.0</bahmniIeAppsVersion>
         <bahmniCoreVersion>0.93-1.1.0</bahmniCoreVersion>
+        <cohortModuleVersion>3.5.0</cohortModuleVersion>
         <htmlformentryVersion>4.0.0</htmlformentryVersion>
         <idgenVersion>4.6.0</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
@@ -70,6 +73,7 @@
 
         <!-- Modules compatibility > Core 2.3.0 -->
         <datafilterVersion>1.0.0</datafilterVersion>
+        <queueVersion>2.1.0</queueVersion>
 
         <!-- For Validator -->
         <reportingVersion>1.19.0</reportingVersion>
@@ -77,7 +81,7 @@
         <serializationVersion>0.2.14</serializationVersion>
 
         <!-- For tests -->
-        <addresshierarchyVersion>2.11.0</addresshierarchyVersion>
+        <addresshierarchyVersion>2.17.0-SNAPSHOT</addresshierarchyVersion>
         <exti18nVersion>1.0.0</exti18nVersion>
         <appframeworkVersion>2.14.0</appframeworkVersion>
         <providermanagementVersion>2.13.0</providermanagementVersion>
@@ -163,6 +167,13 @@
             <groupId>org.bahmni.module</groupId>
             <artifactId>bahmni.ie.apps-api</artifactId>
             <version>${bahmniIeAppsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>cohort-api</artifactId>
+            <version>${cohortModuleVersion}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -274,6 +285,14 @@
             <artifactId>serialization.xstream-api-2.0</artifactId>
             <version>${serializationVersion}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Depedency required to compile against Java 11 -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

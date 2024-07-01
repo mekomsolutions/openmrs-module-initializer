@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.BaseOpenmrsData;
@@ -189,12 +191,12 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	public CsvFailingLines process(List<String[]> lines) {
 		
 		CsvFailingLines result = new CsvFailingLines();
-		
 		int saved = 0;
 		for (String[] line : lines) {
+			T instance = null;
 			try {
-				save(initialize(line));
-				
+				instance = initialize(line);
+				save(instance);
 				saved++;
 				if (saved > 250) { // TODO make this configurable
 					Context.flushSession();
@@ -203,6 +205,9 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 			}
 			catch (Exception e) {
 				result.addFailingLine(new CsvLine(getHeaderLine(), line), e);
+				if (instance != null) {
+					Context.evictFromSession(instance);
+				}
 			}
 		}
 		

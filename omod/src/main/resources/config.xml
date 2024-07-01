@@ -17,7 +17,11 @@
 	<conditionalResources>
 		<conditionalResource>
 			<path>/lib/initializer-api-2.4-${project.version}.jar</path>
-			<openmrsVersion>2.4.* - 2.*</openmrsVersion>
+			<openmrsVersion>2.4.* - 9.*</openmrsVersion>
+		</conditionalResource>
+		<conditionalResource>
+			<path>/lib/initializer-api-2.5-${project.version}.jar</path>
+			<openmrsVersion>2.5.* - 9.*</openmrsVersion>
 		</conditionalResource>
 	</conditionalResources>
 
@@ -50,8 +54,17 @@
 		<aware_of_module version="${bahmniCoreVersion}">
 			org.bahmni.module.bahmnicore
 		</aware_of_module>
+		<aware_of_module version="${cohortModuleVersion}">
+			org.openmrs.module.cohort
+		</aware_of_module>
 		<aware_of_module version="${fhir2Version}">
 			org.openmrs.module.fhir2
+		</aware_of_module>
+		<aware_of_module version="${queueVersion}">
+			org.openmrs.module.queue
+		</aware_of_module>
+		<aware_of_module version="${addresshierarchyVersion}">
+			org.openmrs.module.addresshierarchy
 		</aware_of_module>
 	</aware_of_modules>
 	

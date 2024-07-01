@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
- * This is the first level line processor for concepts. It allows to parse and save concepts with
- * the minimal set of required fields.
+ * This is the first level line processor for drugs. It allows to parse and save drugs with the
+ * minimal set of required fields.
  */
-@Component
+@Component("initializer.drugLineProcessor")
 public class DrugLineProcessor extends BaseLineProcessor<Drug> {
 	
 	protected static String HEADER_STRENGTH = "strength";
@@ -23,7 +23,7 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug> {
 	
 	protected static String HEADER_CONCEPT_DRUG = "concept drug";
 	
-	private ConceptService conceptService;
+	protected ConceptService conceptService;
 	
 	@Autowired
 	public DrugLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
@@ -38,6 +38,9 @@ public class DrugLineProcessor extends BaseLineProcessor<Drug> {
 		drug.setStrength(line.getString(HEADER_STRENGTH, ""));
 		
 		Concept conceptDrug = Utils.fetchConcept(line.get(HEADER_CONCEPT_DRUG), conceptService);
+		if (conceptDrug == null) {
+			throw new IllegalArgumentException("No drug concept found for '" + line.get(HEADER_CONCEPT_DRUG) + "'");
+		}
 		drug.setConcept(conceptDrug);
 		
 		Concept conceptDosageForm = Utils.fetchConcept(line.get(HEADER_DOSAGE_FORM), conceptService);

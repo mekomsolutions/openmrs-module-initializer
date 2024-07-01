@@ -9,28 +9,23 @@
  */
 package org.openmrs.module.initializer.api.loaders;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.greaterThan;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.greaterThan;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
 import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_3_Test;
 
-public class LoadersOrderTest extends DomainBaseModuleContextSensitiveTest {
-	
-	@Override
-	public void updateSearchIndex() {
-		// to prevent Data Filter's 'Illegal Record Access'
-	}
+public class LoadersOrderTest extends DomainBaseModuleContextSensitive_2_3_Test {
 	
 	@Test
 	public void getLoaders_shouldBeUnequivocallyOrdered() {

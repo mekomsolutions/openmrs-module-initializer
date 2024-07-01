@@ -1,5 +1,31 @@
 # OpenMRS Initializer module
-### Introduction
+
+- [Introduction](#introduction)
+- [Goals](#goals)
+- [Supported domains and default loading order](#supported-domains-and-default-loading-order)
+- [Try it out](#try-it-out)
+  * [Runtime compatibility](#runtime-compatibility)
+  * [Test your OpenMRS configs](#test-your-openmrs-configs)
+  * [Finer control of domains loading at runtime](#finer-control-of-domains-loading-at-runtime)
+  * [Setting up and controlling logging](#setting-up-and-controlling-logging)
+- [Get in touch](#get-in-touch)
+- [Releases notes](#releases-notes)
+    + [Version 2.7.0](#version-270)
+    + [Version 2.6.0](#version-260)
+    + [Version 2.5.2](#version-252)
+    + [Version 2.5.1](#version-251)
+    + [Version 2.5.0](#version-250)
+    + [Version 2.4.0](#version-240)
+    + [Version 2.3.0](#version-230)
+    + [Version 2.2.0](#version-220)
+    + [Version 2.1.0](#version-210)
+    + [Version 2.0.0](#version-200)
+    + [Version 1.1.0](#version-110)
+    + [Version 1.0.1](#version-101)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>(Table of contents generated with markdown-toc)</a></i></small>
+
+## Introduction
 The Initializer module is an API-only module that processes the content of the **configuration** folder when it is found inside OpenMRS' application data directory:
 
 <pre>
@@ -22,6 +48,8 @@ configuration/
   ├── attributetypes/
   ├── autogenerationoptions/
   ├── bahmniforms/
+  ├── cohorttypes/
+  ├── cohortattributetypes/
   ├── conceptclasses/
   ├── conceptsources/
   ├── concepts/
@@ -29,6 +57,7 @@ configuration/
   ├── datafiltermappings/
   ├── drugs/
   ├── encountertypes/
+  ├── encounterroles/
   ├── fhirconceptsources/
   ├── fhirobservationcategorymaps/
   ├── fhirpatientidentifiersystems/
@@ -54,14 +83,15 @@ configuration/
   ├── programs/ 
   ├── programworkflows/
   ├── programworkflowstates/
-  ├── providerroles/ 
+  ├── providerroles/
+  ├── queues/
   ├── relationshiptypes/
   └── roles/
    
 ```  
 Each domain-specific subfolder contains OpenMRS metadata configuration files that pertains to the domain.
 
-### Objectives
+## Goals
 * This module loads an OpenMRS configuration consisting of OpenMRS metadata.
 * CSV files are the preferred format, however a number of metadata domains rely on other file formats. See the list [below](#supported-domains-and-default-loading-order) for details.
 * Initializer processes all configuration files upon starting up.
@@ -70,7 +100,7 @@ Each domain-specific subfolder contains OpenMRS metadata configuration files tha
 * Each line of those CSV files represents an **OpenMRS metadata entity to be created, edited or retired**.
 * Each line of those CSV files follows the WYSIWYG principle.
 
-### Supported domains and default loading order
+## Supported domains and default loading order
 We suggest to go through the following before looking at the specifics for each supported domain:
 * [Conventions for CSV files](readme/csv_conventions.md)
 
@@ -92,6 +122,7 @@ This is the list of currently supported domains in their loading order:
 1. [Provider Roles (CSV files)](readme/providerroles.md)
 1. [Locations (CSV files)](readme/loc.md)
 1. [Location Tag Maps (CSV files)](readme/loctagmaps.md)
+1. [Address Hierarchy (XML, CSV, .properties files)](readme/addresshierarchy.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
@@ -110,10 +141,13 @@ This is the list of currently supported domains in their loading order:
 1. [Bahmni Appointment Specialities (CSV files)](readme/appointmentspecialities.md)
 1. [Bahmni Appointment Service Definitions (CSV files)](readme/appointmentservices.md#domain-appointmentservicedefinitions)
 1. [Bahmni Appointment Service Types (CSV files)](readme/appointmentservices.md#domain-appointmentservicetypes)
+1. [Queues (CSV files)](readme/queues.md#domain-queues)
 1. [Data Filter Entity-Basis Mappings (CSV files)](readme/datafiltermappings.md)
 1. [Metadata Sets (CSV files)](readme/mdm.md#domain-metadatasets)
 1. [Metadata Set Members (CSV files)](readme/mdm.md#domain-metadatasetmembers)
 1. [Metadata Term Mappings (CSV files)](readme/mdm.md#domain-metadatatermmappings)
+1. [Cohort Types (CSV files)](readme/cohort.md#domain-cohorttypes)
+1. [Cohort Attribute Types (CSV files)](readme/cohort.md#domain-cohortattributetypes)
 1. [FHIR Concept Sources (CSV files)](readme/fhir.md#domain-fhirconceptsources)
 1. [FHIR Patient Identifier Systems (CSV Files)](readme/fhir.md#domain-fhirpatientidentifiersystems)
 1. [FHIR Observation Category Maps (CSV Files)](readme/fhir.md#domain-fhirobservationcategorymaps)
@@ -121,7 +155,7 @@ This is the list of currently supported domains in their loading order:
 1. [AMPATH Forms Translations (JSON files)](readme/ampathformstranslations.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
 
-### How to try it out?
+## Try it out
 Build the master branch and install the built OMOD to your OpenMRS instance:
 ```bash
 git clone https://github.com/mekomsolutions/openmrs-module-initializer/tree/master
@@ -129,7 +163,7 @@ cd openmrs-module-initializer
 mvn clean package
 ```
 
-##### Runtime requirements & compatibility
+### Runtime compatibility
 * OpenMRS Core 2.1.1 (*required*)
 * Bahmni Appointments 1.2.1 (*compatible*)
 * Bahmni Core 0.93 (*compatible*)
@@ -142,40 +176,59 @@ mvn clean package
 * Open Concept Lab 1.2.9 (*compatible*)
 * FHIR2 1.2.0 (*compatible*)
 
-### How to test out your OpenMRS configs?
+### Test your OpenMRS configs
 See the [Initializer Validator README page](readme/validator.md).
 
-### Finer control of domains loading at app runtime
+### Finer control of domains loading at runtime
 See the [documentation on Initializer's runtime properties](readme/rtprops.md).
 
-### Control of logging setup
-See the [documentation on Initializer's runtime properties](readme/rtprops.md).
+### Setting up and controlling logging
+See the [documentation on Initializer's logging properties](readme/rtprops.md#logging-properties).
 
-### Get in touch
+## Get in touch
 * On [OpenMRS Talk](https://talk.openmrs.org/)
   * Sign up, start a conversation and ping us with the mention [`@MekomSolutions`](https://talk.openmrs.org/g/MekomSolutions) in your post. 
 * On Slack:  
   * Join the [Initializer channel](https://openmrs.slack.com/archives/CPC20CBFH) and ping us with a `@Mekom` mention.
-
-### Report an issue
-https://github.com/mekomsolutions/openmrs-module-initializer/issues
+* Report an issue:
+  * https://github.com/mekomsolutions/openmrs-module-initializer/issues
 
 ----
 
-### Releases notes
+## Releases notes
+
+#### Version 2.8.0
+* Support for FHIR2 module and domains related to the metadata needed for FHIR
+
+#### Version 2.7.0
+* Added support for 'queues' domain.
+* Added support for 'addresshierarchy' domain.
+* Fix for Liquibase Loader to ensure compatibility with OpenMRS versions 2.5.5+.
+* Fix for OCL Loader to ensure it throws an Exception if the OCL import fails.
+* Fix for Validator to not encounter failure upon repeated execution on the same JVM process.
+* Fix for null config directory path in `DeleteDomainChecksumsChangeset`.
+
+#### Version 2.6.0
+* Added support for 'cohorttypes' and 'cohortattributetypes' domains.
+
+#### Version 2.5.2
+* Updated versions of Validator's metadatamapping to 1.6.0 and metadatasharing to 1.9.0.
+
+#### Version 2.5.1
+* Enhanced Validator to prevent random failures because of `LazyInitializationException`, and better teardown cleanup for uses with Maven plugins such as [openmrs-packager-maven-plugin](https://github.com/openmrs/openmrs-contrib-packager-maven-plugin) 1.7.0.
 
 #### Version 2.5.0
-* Added support for AMPATH Forms translations: https://github.com/mekomsolutions/openmrs-module-initializer/issues/180
-* Fix for Message Source when system default language is not English: https://github.com/mekomsolutions/openmrs-module-initializer/issues/212
+* Added support for AMPATH Forms translations, see https://github.com/mekomsolutions/openmrs-module-initializer/issues/180 and https://github.com/mekomsolutions/openmrs-module-initializer/issues/221
+* Fix for Message Source when system default language is not English, see https://github.com/mekomsolutions/openmrs-module-initializer/issues/212
 * Logging now uses the configured level as a minimum.
+* Added support for [drug reference maps](https://github.com/mekomsolutions/openmrs-module-initializer/issues/219) on the drugs domain.
 
 #### Version 2.4.0
 * Added support for 'fhirconceptsources' domain.
 * Added support for 'fhirpatientidentifiersystems' domain.
 * Enhancement to ensure that reloading Concept CSVs does not clear Members/Answers if those columns aren't part of CSV file.
 * 'concepts' domain to support a new expandable `MAPPINGS` header, thereby discouraging the older `Same as mappings`.
-* Concept references expanded to allow use of concept names in locales other than the default system locale
-* Support for FHIR2 module and domains related to the metadata needed for FHIR
+* Concept references expanded to allow use of concept names in locales other than the default system locale.
 
 #### Version 2.3.0
 * Added configuration options for logging.
@@ -245,7 +298,7 @@ https://github.com/mekomsolutions/openmrs-module-initializer/issues
 * Bulk creation and edition of patient identifier types provided through CSV files in **configuration/patientidentifiertypes**.
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatasets**.
 * Bulk creation and edition of metadata terms mappings provided through CSV files in **configuration/metadatasetmembers**.
-* Bulk creation and edition of bahmni forms provided JSON files in **configuration/bahmniforms**
+* Bulk creation and edition of bahmni forms provided JSON files in **configuration/bahmniforms**.
 * Support concept attributes.
 
 #### Version 1.1.0

@@ -1,0 +1,4 @@
+Uuid,Void/Retire,Name,Description,Service,Status Concept Set,Priority Concept Set,Location
+2a0e0eee-6888-11ee-ab8d-0242ac120002,,Revised Queue,Revised Description,68b910bd-298c-4ecf-a632-661ae2f446op,,,Xanadu
+288db1cc-688a-11ee-ab8d-0242ac120002,,New Queue,New Description,Triage,,,167ce20c-4785-4285-9119-d197268f7f4a
+4856c1c1-c9b3-4a7e-8669-4220051ab640,,Triage Queue,Queue with custom statuses,67b910bd-298c-4ecf-a632-661ae2f446op,1d2a73ca-20aa-4218-b4d2-043024a9156e,24932838-60ca-44e8-840f-4184b368643c,Xanadu

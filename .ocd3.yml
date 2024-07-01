@@ -1,6 +1,7 @@
 version: 1
 build:
-  bash_commands: "mvn clean install -P Validator"
+  # Do skip OCD3 build. Initializer reference build is made through GitHub Actions.
+  bash_commands: "exit 0"
 deploy:
-  # Do not deploy via OCD3. Initializer publishing is done via GitHub Actions now.
+  # Do not deploy via OCD3. Initializer publishing is done via GitHub Actions.
   bash_commands: "exit 0"

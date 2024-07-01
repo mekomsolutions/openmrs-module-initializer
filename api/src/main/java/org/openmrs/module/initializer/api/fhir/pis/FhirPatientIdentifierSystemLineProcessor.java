@@ -2,15 +2,11 @@ package org.openmrs.module.initializer.api.fhir.pis;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.annotation.OpenmrsProfile;
-import org.openmrs.api.PatientService;
 import org.openmrs.module.fhir2.model.FhirPatientIdentifierSystem;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
-@OpenmrsProfile(modules = { "fhir2:1.6.*" })
+@OpenmrsProfile(modules = { "fhir2:1.6.* - 9.*" })
 public class FhirPatientIdentifierSystemLineProcessor extends BaseLineProcessor<FhirPatientIdentifierSystem> {
 	
 	private static final String URL_HEADER = "url";

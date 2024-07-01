@@ -5,7 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.Concept;
+import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptSource;
+import org.openmrs.Drug;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
@@ -16,6 +19,7 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -24,11 +28,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import static org.mockito.Matchers.anyCollectionOf;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
+@PowerMockIgnore("jdk.internal.reflect.*")
 public class UtilsTest {
 	
 	@Before
@@ -44,6 +51,9 @@ public class UtilsTest {
 		
 		ConceptService cs = mock(ConceptService.class);
 		when(Context.getConceptService()).thenReturn(cs);
+		
+		InitializerService ics = mock(InitializerService.class);
+		when(Context.getService(InitializerService.class)).thenReturn(ics);
 	}
 	
 	@Test
@@ -318,7 +328,127 @@ public class UtilsTest {
 		when(cs.getConceptByUuid("concept:lookup")).thenReturn(null);
 		when(cs.getConceptByMapping("lookup", "concept")).thenReturn(null);
 		Concept nameConcept = new Concept();
-		when(cs.getConceptByName("concept:lookup")).thenReturn(nameConcept);
+		
+		InitializerService ics = mock(InitializerService.class);
+		when(Context.getService(InitializerService.class)).thenReturn(ics);
+		when(ics.getUnretiredConceptsByFullySpecifiedName("concept:lookup")).thenReturn(Arrays.asList(nameConcept));
 		Assert.assertEquals(nameConcept, Utils.fetchConcept("concept:lookup", cs));
+	}
+	
+	@Test
+	public void getSameAsConceptMapType_shouldFetchBasedOnUuidConstant() {
+		ConceptService cs = mock(ConceptService.class);
+		ConceptMapType sameAsMapType = new ConceptMapType();
+		when(cs.getConceptMapTypeByUuid(ConceptMapType.SAME_AS_MAP_TYPE_UUID)).thenReturn(sameAsMapType);
+		Assert.assertEquals(sameAsMapType, Utils.getSameAsConceptMapType(cs));
+	}
+	
+	@Test
+	public void fetchConceptSource_shouldFetchConceptSourceByName() {
+		ConceptSource source = new ConceptSource();
+		String lookup = "concept-lookup";
+		ConceptService cs = mock(ConceptService.class);
+		when(cs.getConceptSourceByName(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByHL7Code(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByUniqueId(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByUuid(lookup)).thenReturn(null);
+		
+		Assert.assertNull(Utils.fetchConceptSource(lookup, cs));
+		when(cs.getConceptSourceByName(lookup)).thenReturn(source);
+		Assert.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
+	}
+	
+	@Test
+	public void fetchConceptSource_shouldFetchConceptSourceByHl7Code() {
+		ConceptSource source = new ConceptSource();
+		String lookup = "concept-lookup";
+		ConceptService cs = mock(ConceptService.class);
+		when(cs.getConceptSourceByName(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByHL7Code(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByUniqueId(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByUuid(lookup)).thenReturn(null);
+		
+		Assert.assertNull(Utils.fetchConceptSource(lookup, cs));
+		when(cs.getConceptSourceByHL7Code(lookup)).thenReturn(source);
+		Assert.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
+	}
+	
+	@Test
+	public void fetchConceptSource_shouldFetchConceptSourceByUniqueId() {
+		ConceptSource source = new ConceptSource();
+		String lookup = "concept-lookup";
+		ConceptService cs = mock(ConceptService.class);
+		when(cs.getConceptSourceByName(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByHL7Code(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByUniqueId(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByUuid(lookup)).thenReturn(null);
+		
+		Assert.assertNull(Utils.fetchConceptSource(lookup, cs));
+		when(cs.getConceptSourceByUniqueId(lookup)).thenReturn(source);
+		Assert.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
+	}
+	
+	@Test
+	public void fetchConceptSource_shouldFetchConceptSourceByUuid() {
+		ConceptSource source = new ConceptSource();
+		String lookup = "concept-lookup";
+		ConceptService cs = mock(ConceptService.class);
+		when(cs.getConceptSourceByName(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByHL7Code(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByUniqueId(lookup)).thenReturn(null);
+		when(cs.getConceptSourceByUuid(lookup)).thenReturn(null);
+		
+		Assert.assertNull(Utils.fetchConceptSource(lookup, cs));
+		when(cs.getConceptSourceByUuid(lookup)).thenReturn(source);
+		Assert.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
+	}
+	
+	@Test
+	public void getDrugByMapping_shouldReturnNullIfLookupIsNullOrEmpty() {
+		ConceptService cs = mock(ConceptService.class);
+		Assert.assertNull(Utils.getDrugByMapping(null, cs));
+		Assert.assertNull(Utils.getDrugByMapping("", cs));
+		Assert.assertNull(Utils.getDrugByMapping("    ", cs));
+	}
+	
+	@Test
+	public void getDrugByMapping_shouldReturnNullIfNoSourceAndCodeSpecified() {
+		ConceptService cs = mock(ConceptService.class);
+		when(cs.getConceptSourceByName("source")).thenReturn(null);
+		Assert.assertNull(Utils.getDrugByMapping("source_code", cs));
+	}
+	
+	@Test
+	public void getDrugByMapping_shouldReturnNullIfSourceIsNotFound() {
+		ConceptService cs = mock(ConceptService.class);
+		when(cs.getConceptSourceByName("source")).thenReturn(null);
+		Assert.assertNull(Utils.getDrugByMapping("source:code", cs));
+	}
+	
+	@Test
+	public void getDrugByMapping_shouldReturnDrugByMapping() {
+		ConceptService cs = mock(ConceptService.class);
+		Drug drug = new Drug();
+		ConceptSource source = new ConceptSource();
+		when(cs.getConceptSourceByName("source")).thenReturn(source);
+		ConceptMapType sameAsMapType = new ConceptMapType();
+		when(cs.getConceptMapTypeByUuid(ConceptMapType.SAME_AS_MAP_TYPE_UUID)).thenReturn(sameAsMapType);
+		when(cs.getDrugByMapping(eq("code"), eq(source), anyCollectionOf(ConceptMapType.class))).thenReturn(drug);
+		Assert.assertEquals(drug, Utils.getDrugByMapping("source:code", cs));
+	}
+	
+	@Test
+	public void fetchConcept_shouldThrowGivenMoreThanOneConeptWithSameFullySpecifiedName() {
+		ConceptService cs = mock(ConceptService.class);
+		when(cs.getConceptByUuid("concept:lookup")).thenReturn(null);
+		when(cs.getConceptByMapping("lookup", "concept")).thenReturn(null);
+		Concept nameConcept = new Concept();
+		Concept nameConcept2 = new Concept();
+		
+		InitializerService ics = mock(InitializerService.class);
+		when(Context.getService(InitializerService.class)).thenReturn(ics);
+		when(ics.getUnretiredConceptsByFullySpecifiedName("concept:lookup"))
+		        .thenReturn(Arrays.asList(nameConcept, nameConcept2));
+		Assert.assertThrows(RuntimeException.class, () -> Utils.fetchConcept("concept:lookup", cs));
 	}
 }

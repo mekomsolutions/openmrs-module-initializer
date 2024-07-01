@@ -47,9 +47,20 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	
 	private Map<String, Object> keyValueCache = new HashMap<String, Object>();
 	
-	@Autowired
+	private InitializerDAO initializerDAO;
+	
 	public void setConfig(InitializerConfig cfg) {
 		this.cfg = cfg;
+	}
+	
+	/**
+	 * Sets the data access object. The initializerDao is used for saving and getting entities to/from
+	 * the database
+	 * 
+	 * @param initializerDAO The data access object to use
+	 */
+	public void setInitializerDAO(InitializerDAO initializerDAO) {
+		this.initializerDAO = initializerDAO;
 	}
 	
 	public Path getBasePath() {
@@ -79,7 +90,7 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	public void loadUnsafe(boolean applyFilters, boolean doThrow) throws Exception {
 		
 		final Set<String> specifiedDomains = applyFilters ? cfg.getFilteredDomains() : Collections.emptySet();
-		final boolean includeSpecifiedDomains = applyFilters ? cfg.isInclusionList() : true;
+		final boolean includeSpecifiedDomains = !applyFilters || cfg.isInclusionList();
 		
 		for (Loader loader : getLoaders()) {
 			boolean domainSpecified = specifiedDomains.contains(loader.getDomainName());
@@ -89,7 +100,6 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 				final List<String> wildcardExclusions = applyFilters ? cfg.getWidlcardExclusions(loader.getDomainName())
 				        : Collections.emptyList();
 				loader.loadUnsafe(wildcardExclusions, doThrow);
-				
 			}
 		}
 	}
@@ -204,5 +214,13 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public InitializerConfig getInitializerConfig() {
 		return cfg;
+	}
+	
+	/**
+	 * @see org.openmrs.module.initializer.api.InitializerService#getUnretiredConceptsByFullySpecifiedName(String)
+	 */
+	@Override
+	public List<Concept> getUnretiredConceptsByFullySpecifiedName(String name) {
+		return initializerDAO.getUnretiredConceptsByFullySpecifiedName(name);
 	}
 }

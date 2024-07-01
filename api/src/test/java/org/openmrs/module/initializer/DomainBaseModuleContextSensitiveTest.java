@@ -67,7 +67,17 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	public DomainBaseModuleContextSensitiveTest() {
 		super();
 		{
-			Module mod = new Module("", "fhir2", "", "", "", "1.2.0");
+			Module mod = new Module("", "addresshierarchy", "", "", "", "2.17.0");
+			mod.setFile(new File(""));
+			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+		}
+		{
+			Module mod = new Module("", "exti18n", "", "", "", "1.0.0");
+			mod.setFile(new File(""));
+			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+		}
+		{
+			Module mod = new Module("", "fhir2", "", "", "", "1.6.0");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
@@ -113,6 +123,11 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		}
 		{
 			Module mod = new Module("", "providermanagement", "", "", "", "1.0.0");
+			mod.setFile(new File(""));
+			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+		}
+		{
+			Module mod = new Module("", "cohort", "", "", "", "3.5.0");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
