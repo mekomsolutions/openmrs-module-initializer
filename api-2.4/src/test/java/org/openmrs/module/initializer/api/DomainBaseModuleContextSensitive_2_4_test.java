@@ -11,7 +11,7 @@ package org.openmrs.module.initializer.api;
 
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleFactory;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_3_Test;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 
 import java.io.File;
 
@@ -19,12 +19,12 @@ import java.io.File;
  * This allows to perform Spring context sensitive tests when Data Filter API is a dependency. In
  * that case it is necessary for each context sensitive test to update the search index.
  */
-public abstract class BillableServicesLoaderIntergrationTest extends DomainBaseModuleContextSensitive_2_3_Test {
+public abstract class DomainBaseModuleContextSensitive_2_4_test extends DomainBaseModuleContextSensitiveTest {
 	
-	public BillableServicesLoaderIntergrationTest() {
+	public DomainBaseModuleContextSensitive_2_4_test() {
 		super();
 		{
-			Module mod = new Module("", "billing", "", "", "", "1.1.0-SNAPSHOT");
+			Module mod = new Module("", "billing", "", "", "", "1.1.0");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
