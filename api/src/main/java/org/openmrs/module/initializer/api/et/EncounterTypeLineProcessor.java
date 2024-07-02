@@ -5,7 +5,8 @@ import org.openmrs.EncounterType;
 import org.openmrs.Privilege;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.UserService;
-import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.openmrs.messagesource.MessageSourceService;
+import org.openmrs.module.initializer.api.BaseMetadataLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EncounterTypeLineProcessor extends BaseLineProcessor<EncounterType> {
+public class EncounterTypeLineProcessor extends BaseMetadataLineProcessor<EncounterType> {
 	
 	protected static String HEADER_VIEW_PRIV = "view privilege";
 	
@@ -25,8 +26,9 @@ public class EncounterTypeLineProcessor extends BaseLineProcessor<EncounterType>
 	
 	@Autowired
 	public EncounterTypeLineProcessor(@Qualifier("encounterService") EncounterService encounterService,
-	    @Qualifier("userService") UserService userService) {
-		super();
+	    @Qualifier("userService") UserService userService,
+	    @Qualifier("messageSourceService") MessageSourceService messageSourceService) {
+		super(messageSourceService);
 		this.service = encounterService;
 		this.userService = userService;
 	}
@@ -34,8 +36,8 @@ public class EncounterTypeLineProcessor extends BaseLineProcessor<EncounterType>
 	@Override
 	public EncounterType fill(EncounterType type, CsvLine line) throws IllegalArgumentException {
 		
-		type.setName(line.getName(true));
-		type.setDescription(line.get(HEADER_DESC));
+		type.setName(getName(type, line));
+		type.setDescription(getDescription(type, line));
 		{
 			String privilegeId = line.get(HEADER_VIEW_PRIV);
 			if (!StringUtils.isEmpty(privilegeId)) {
