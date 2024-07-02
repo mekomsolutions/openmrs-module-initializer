@@ -4,9 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
-import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptService;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.billing.api.model.BillableService;
 import org.openmrs.module.billing.api.model.BillableServiceStatus;
 import org.openmrs.module.initializer.api.DomainBaseModuleContextSensitive_2_4_test;
@@ -14,8 +12,6 @@ import org.openmrs.module.initializer.api.billing.BillableServiceLoader;
 import org.openmrs.module.billing.web.rest.resource.BillableServiceResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
-import java.util.Locale;
 
 public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_test {
 
@@ -32,35 +28,26 @@ public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContex
     @Before
     public void setup() {
         {
-            Concept concept = new Concept();
-            concept.setShortName(new ConceptName("Antenatal Services", Locale.ENGLISH));
-            concept.setConceptClass(conceptService.getConceptClassByName("Misc"));
-            concept.setDatatype(conceptService.getConceptDatatypeByName("N/A"));
-            concept = conceptService.saveConcept(concept);
-        }
-        {
-            Concept concept = new Concept();
-            concept.setShortName(new ConceptName("Orthopedic Services", Locale.ENGLISH));
-            concept.setConceptClass(conceptService.getConceptClassByName("Misc"));
-            concept.setDatatype(conceptService.getConceptDatatypeByName("N/A"));
-            concept = conceptService.saveConcept(concept);
-        }
+            Concept concept = conceptService.getConceptByUuid("a09ab2c5-878e-4905-b25d-5784167d0216");
+            Assert.assertNotNull("Concept should not be null", concept);
 
-        {
             BillableService service = new BillableService();
             service.setUuid("44ebd6cd-04ad-4eba-8ce1-0de4564bfd17");
             service.setName("Antenatal Care");
             service.setShortName("ANTC");
-            service.setConcept(conceptService.getConceptByName("Antenatal Services"));
+            service.setConcept(concept);
             service.setServiceStatus(BillableServiceStatus.ENABLED);
             billableServiceResource.save(service);
         }
         {
+            Concept concept = conceptService.getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
+            Assert.assertNotNull("Concept should not be null", concept);
+
             BillableService service = new BillableService();
             service.setUuid("a0f7d8a1-4fa2-418c-aa8a-9b358f43d605");
             service.setName("Orthopedic Therapy");
             service.setShortName("OTHS");
-            service.setConcept(conceptService.getConceptByName("Orthopedic Services"));
+            service.setConcept(concept);
             service.setServiceStatus(BillableServiceStatus.ENABLED);
             billableServiceResource.save(service);
         }
@@ -73,13 +60,13 @@ public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContex
         {
             BillableService service = billableServiceResource.getByUniqueId("44ebd6cd-04ad-4eba-8ce1-0de4564bfd17");
             Assert.assertNotNull(service);
-            Assert.assertEquals(conceptService.getConceptByName("Antenatal Services"), service.getConcept());
+            Assert.assertEquals(conceptService.getConceptByUuid("a09ab2c5-878e-4905-b25d-5784167d0216"), service.getConcept());
             Assert.assertEquals(BillableServiceStatus.ENABLED, service.getServiceStatus());
         }
         {
             BillableService service = billableServiceResource.getByUniqueId("a0f7d8a1-4fa2-418c-aa8a-9b358f43d605");
             Assert.assertNotNull(service);
-            Assert.assertEquals(conceptService.getConceptByName("Orthopedic Services"), service.getConcept());
+            Assert.assertEquals(conceptService.getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f"), service.getConcept());
             Assert.assertEquals(BillableServiceStatus.ENABLED, service.getServiceStatus());
         }
         {
