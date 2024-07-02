@@ -2,6 +2,7 @@ package org.openmrs.module.initializer.validator;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
+import org.openmrs.liquibase.ChangeSetExecutorCallback;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.ARG_EXCLUDE;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
@@ -172,9 +173,9 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 			getRuntimeProperties().put(PROPS_SKIPCHECKSUMS, "true");
 		}
 		// Setting up initial core database
-		DatabaseUpdater.executeChangelog("liquibase-schema-only.xml", null);
-		DatabaseUpdater.executeChangelog("liquibase-core-data.xml", null);
-		DatabaseUpdater.executeChangelog("liquibase-update-to-latest.xml", null);
+		DatabaseUpdater.executeChangelog("liquibase-schema-only.xml", (ChangeSetExecutorCallback) null);
+		DatabaseUpdater.executeChangelog("liquibase-core-data.xml", (ChangeSetExecutorCallback) null);
+		DatabaseUpdater.executeChangelog("liquibase-update-to-latest.xml", (ChangeSetExecutorCallback) null);
 	}
 	
 	@Before
