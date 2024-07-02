@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loaders.LiquibaseLoader;
+import org.openmrs.util.DatabaseUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.Matchers.nullValue;
@@ -25,15 +26,8 @@ public class LiquibaseLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	@Autowired
 	private LiquibaseLoader loader;
 	
-	@Before
-	public void setup() {
-		System.setProperty("useInMemoryDatabase", "true");
-	}
-	
 	@Test
 	public void load_shouldLoadStructuredLiquibaseChangesets() throws Exception {
-		// TODO This test fails on GitHub Actions but the failure cannot be reproduced so for now, skip it
-		assumeThat(System.getenv("GITHUB_ENV"), nullValue());
 		
 		// Replay
 		loader.load();
