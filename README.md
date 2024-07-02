@@ -10,6 +10,7 @@
   * [Setting up and controlling logging](#setting-up-and-controlling-logging)
 - [Get in touch](#get-in-touch)
 - [Releases notes](#releases-notes)
+    + [Version 2.8.0](#version-280)
     + [Version 2.7.0](#version-270)
     + [Version 2.6.0](#version-260)
     + [Version 2.5.2](#version-252)
@@ -59,6 +60,7 @@ configuration/
   ├── encountertypes/
   ├── encounterroles/
   ├── fhirconceptsources/
+  ├── fhirobservationcategorymaps/
   ├── fhirpatientidentifiersystems/
   ├── globalproperties/
   ├── htmlforms/
@@ -149,6 +151,7 @@ This is the list of currently supported domains in their loading order:
 1. [Cohort Attribute Types (CSV files)](readme/cohort.md#domain-cohortattributetypes)
 1. [FHIR Concept Sources (CSV files)](readme/fhir.md#domain-fhirconceptsources)
 1. [FHIR Patient Identifier Systems (CSV Files)](readme/fhir.md#domain-fhirpatientidentifiersystems)
+1. [FHIR Observation Category Maps (CSV Files)](readme/fhir.md#domain-fhirobservationcategorymaps)
 1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
 1. [AMPATH Forms Translations (JSON files)](readme/ampathformstranslations.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
@@ -172,6 +175,7 @@ mvn clean package
 * Metadata Sharing 1.2.2 (*compatible*)
 * Metadata Mapping 1.3.4 (*compatible*)
 * Open Concept Lab 1.2.9 (*compatible*)
+* FHIR2 1.2.0 (*compatible*)
 
 ### Test your OpenMRS configs
 See the [Initializer Validator README page](readme/validator.md).
@@ -193,6 +197,9 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ----
 
 ## Releases notes
+
+#### Version 2.8.0
+* Support for FHIR2 module and domains related to the metadata needed for FHIR
 
 #### Version 2.7.0
 * Added support for 'queues' domain.
