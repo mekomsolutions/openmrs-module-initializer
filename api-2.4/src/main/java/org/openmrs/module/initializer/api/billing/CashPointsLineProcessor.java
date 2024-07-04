@@ -31,20 +31,11 @@ public class CashPointsLineProcessor extends BaseLineProcessor<CashPoint> {
 
     @Override
     public CashPoint fill(CashPoint cashPoint, CsvLine line) throws IllegalArgumentException {
-        // UUID is required
-        cashPoint.setUuid(line.get(HEADER_UUID));
-
+        cashPoint.setUuid(line.get(HEADER_UUID, true));
         cashPoint.setName(line.get(HEADER_NAME, true));
         cashPoint.setDescription(line.getString(HEADER_DESCRIPTION));
-
-        if (line.containsHeader(HEADER_LOCATION)) {
-            String location = line.getString(HEADER_LOCATION);
-            if (StringUtils.isNotBlank(location)) {
-                cashPoint.setLocation(Utils.fetchLocation(location, locationService));
-            } else {
-                cashPoint.setLocation(null);
-            }
-        }
+		String location = line.getString(HEADER_LOCATION);
+		cashPoint.setLocation(Utils.fetchLocation(location, locationService));
 
         return cashPoint;
     }
