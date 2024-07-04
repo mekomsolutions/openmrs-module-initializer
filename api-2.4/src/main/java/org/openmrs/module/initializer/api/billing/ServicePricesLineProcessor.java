@@ -34,8 +34,8 @@ public class ServicePricesLineProcessor extends BaseLineProcessor<PaymentMode> {
 	
 	@Override
 	public PaymentMode fill(PaymentMode paymentMode, CsvLine line) throws IllegalArgumentException {
-		// Process UUID
-		String uuid = line.getString(HEADER_UUID);
+		// Process UUID (required)
+		String uuid = line.get(HEADER_UUID, true);
 		if (StringUtils.isNotBlank(uuid)) {
 			paymentMode.setUuid(uuid);
 		}

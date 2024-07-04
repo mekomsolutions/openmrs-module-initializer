@@ -32,45 +32,52 @@ public class BillableServiceCsvParserTest {
 	}
 	
 	@Test
-	public void testGetDomain() {
+	public void getDomain_shouldReturnBillableServicesDomain() {
 		assertEquals(Domain.BILLABLE_SERVICES, parser.getDomain());
 	}
 	
 	@Test
-	public void testBootstrapWithExistingService() {
+	public void bootstrap_shouldReturnExistingServiceGivenUuidPresent() {
+		// setup
 		String uuid = "44ebd6cd-04ad-4eba-8ce1-0de4564bfd17";
 		CsvLine csvLine = new CsvLine(new String[] { "Uuid" }, new String[] { uuid });
-		
 		BillableService existingService = new BillableService();
 		when(billableServiceResource.getByUniqueId(uuid)).thenReturn(existingService);
 		
+		// Replay
 		BillableService result = parser.bootstrap(csvLine);
 		
+		// Verify
 		assertNotNull(result);
 		assertEquals(existingService, result);
 	}
 	
 	@Test
-	public void testBootstrapWithNewService() {
+	public void bootstrap_shouldReturnNewServiceGivenUuidNotPresent() {
+		// Setup
 		String uuid = "44ebd6cd-04ad-4eba-8ce1-0de4564bfd17";
 		CsvLine csvLine = new CsvLine(new String[] { "Uuid" }, new String[] { uuid });
-		
 		when(billableServiceResource.getByUniqueId(uuid)).thenReturn(null);
 		
+		// Replay
 		BillableService result = parser.bootstrap(csvLine);
 		
+		// Verify
 		assertNotNull(result);
-		assertNull(result.getId()); // New service should not have an ID
+		assertNull(result.getId());
 		assertEquals(uuid, result.getUuid());
 	}
 	
 	@Test
-	public void testSave() {
+	public void save_shouldReturnSavedService() {
+		// Setup
 		BillableService service = new BillableService();
 		when(billableServiceResource.save(service)).thenReturn(service);
 		
+		// Replay
 		BillableService result = parser.save(service);
 		
+		// Verify
 		assertNotNull(result);
 		assertEquals(service, result);
 	}

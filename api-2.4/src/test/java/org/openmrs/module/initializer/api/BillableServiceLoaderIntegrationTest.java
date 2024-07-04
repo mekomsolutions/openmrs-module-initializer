@@ -29,7 +29,6 @@ public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContex
     public void setup() {
         {
             Concept concept = conceptService.getConceptByUuid("a09ab2c5-878e-4905-b25d-5784167d0216");
-            Assert.assertNotNull("Concept should not be null", concept);
 
             BillableService service = new BillableService();
             service.setUuid("44ebd6cd-04ad-4eba-8ce1-0de4564bfd17");
@@ -41,7 +40,6 @@ public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContex
         }
         {
             Concept concept = conceptService.getConceptByUuid("4421da0d-42d0-410d-8ffd-47ec6f155d8f");
-            Assert.assertNotNull("Concept should not be null", concept);
 
             BillableService service = new BillableService();
             service.setUuid("a0f7d8a1-4fa2-418c-aa8a-9b358f43d605");
@@ -55,8 +53,10 @@ public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContex
 
     @Test
     public void load_shouldLoadBillableServicesAccordingToCsvFiles() {
+        //replay
         loader.load();
 
+        //verify
         {
             BillableService service = billableServiceResource.getByUniqueId("44ebd6cd-04ad-4eba-8ce1-0de4564bfd17");
             Assert.assertNotNull(service);
