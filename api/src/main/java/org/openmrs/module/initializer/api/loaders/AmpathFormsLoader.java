@@ -1,7 +1,9 @@
 package org.openmrs.module.initializer.api.loaders;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -15,6 +17,7 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.db.ClobDatatypeStorage;
 import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,8 @@ import java.util.UUID;
 public class AmpathFormsLoader extends BaseFileLoader {
 	
 	public static final String AMPATH_FORMS_UUID = "794c4598-ab82-47ca-8d18-483a8abe6f4f";
+	
+	public static final String JSON_EXTENSION = "json";
 	
 	@Autowired
 	private DatatypeService datatypeService;
@@ -82,6 +87,25 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		if (formVersion == null) {
 			throw new Exception("Form Version is required");
 		}
+		
+		// Delete Checksum Files for the translation files associated with the form
+		ConfigDirUtil configDirUtil = new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
+		        Domain.AMPATH_FORMS_TRANSLATIONS.getName(), true);
+		
+		List<File> translationFiles = configDirUtil.getFiles(JSON_EXTENSION);
+		translationFiles.stream().filter(f -> {
+			try {
+				String js = FileUtils.readFileToString(f, StandardCharsets.UTF_8.toString());
+				Map<String, Object> jf = new ObjectMapper().readValue(js, Map.class);
+				String translationForm = (String) jf.get("form");
+				return StringUtils.equals(translationForm, formName);
+			}
+			catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}).forEach(f -> {
+			configDirUtil.deleteChecksumFile(replaceExtension(f.getName(), ConfigDirUtil.CHECKSUM_FILE_EXT));
+		});
 		
 		String uuid = Utils.generateUuidFromObjects(AMPATH_FORMS_UUID, formName, formVersion);
 		// Process Form
@@ -168,5 +192,23 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		clobData.setUuid(clobUuid);
 		clobData.setValue(jsonString);
 		datatypeService.saveClobDatatypeStorage(clobData);
+	}
+	
+	private static String replaceExtension(String fileName, String newExtension) {
+		// Validate inputs
+		if (StringUtils.isEmpty(fileName) || StringUtils.isEmpty(newExtension)) {
+			throw new IllegalArgumentException("File name and extension must not be null or empty");
+		}
+		
+		// Find the last dot in the file name
+		int lastDotIndex = fileName.lastIndexOf('.');
+		
+		// Handle the case where there's no dot in the file name
+		if (lastDotIndex == -1) {
+			return fileName + "." + newExtension;
+		}
+		
+		// Replace the extension
+		return fileName.substring(0, lastDotIndex) + "." + newExtension;
 	}
 }

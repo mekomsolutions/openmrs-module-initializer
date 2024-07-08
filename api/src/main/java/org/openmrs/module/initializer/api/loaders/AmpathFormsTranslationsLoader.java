@@ -59,20 +59,16 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 		if (formResource == null) {
 			formResource = new FormResource();
 			formResource.setUuid(formResourceUuid);
-		} else {
-			form = formResource.getForm();
 		}
 		
+		String formName = (String) jsonTranslationsDefinition.get("form");
+		if (formName == null) {
+			throw new IllegalArgumentException("'form' property is required for AMPATH forms translations loader.");
+		}
+		form = formService.getForm(formName);
 		if (form == null) {
-			String formName = (String) jsonTranslationsDefinition.get("form");
-			if (formName == null) {
-				throw new IllegalArgumentException("'form' property is required for AMPATH forms translations loader.");
-			}
-			form = formService.getForm(formName);
-			if (form == null) {
-				throw new IllegalArgumentException(
-				        "Could not find a form named '" + formName + "'. Please ensure an existing form is configured.");
-			}
+			throw new IllegalArgumentException(
+			        "Could not find a form named '" + formName + "'. Please ensure an existing form is configured.");
 		}
 		
 		formResource.setForm(form);
@@ -88,10 +84,5 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 			msgSource.addPresentation(new PresentationMessage("org.openmrs.Form." + form.getUuid(),
 			        LocaleUtils.toLocale(language), formNameTranslation, null));
 		}
-	}
-	
-	@Override
-	public ConfigDirUtil getDirUtil() {
-		return new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), getDomainName(), true);
 	}
 }
