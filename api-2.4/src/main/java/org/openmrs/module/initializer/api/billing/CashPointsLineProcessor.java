@@ -13,10 +13,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @OpenmrsProfile(modules = { "billing:1.1.0" })
 public class CashPointsLineProcessor extends BaseLineProcessor<CashPoint> {
 
-    protected static final String HEADER_UUID = "uuid";
-
-    protected static final String HEADER_NAME = "name";
-
     protected static final String HEADER_DESCRIPTION = "description";
 
     protected static final String HEADER_LOCATION = "location";

@@ -12,10 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @OpenmrsProfile(modules = { "billing:1.1.0" })
 public class ServicePricesLineProcessor extends BaseLineProcessor<PaymentMode> {
     
-    protected static final String HEADER_UUID = "uuid";
-    
-    protected static final String HEADER_NAME = "name";
-    
     protected static final String HEADER_PRICE = "price";
     
     protected static final String HEADER_PAYMENT_MODE = "paymentMode";
@@ -34,11 +30,8 @@ public class ServicePricesLineProcessor extends BaseLineProcessor<PaymentMode> {
     
     @Override
     public PaymentMode fill(PaymentMode paymentMode, CsvLine line) throws IllegalArgumentException {
-        // Process UUID (required)
         paymentMode.setUuid(line.get(HEADER_UUID, true));
-        // Process Name (required)
         paymentMode.setName(line.get(HEADER_NAME, true));
-        // Process other optional attributes
         processAttribute(line, HEADER_PRICE, paymentMode);
         processAttribute(line, HEADER_PAYMENT_MODE, paymentMode);
         processAttribute(line, HEADER_ITEM, paymentMode);

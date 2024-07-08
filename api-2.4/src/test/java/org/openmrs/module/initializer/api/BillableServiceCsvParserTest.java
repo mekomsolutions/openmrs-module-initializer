@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.openmrs.module.billing.api.IBillableItemsService;
 import org.openmrs.module.billing.api.model.BillableService;
-import org.openmrs.module.billing.web.rest.resource.BillableServiceResource;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.billing.BillableServiceCsvParser;
@@ -18,7 +18,7 @@ import org.openmrs.module.initializer.api.billing.BillableServicesLineProcessor;
 public class BillableServiceCsvParserTest {
 	
 	@Mock
-	private BillableServiceResource billableServiceResource;
+	private IBillableItemsService billableItemsService;
 	
 	@Mock
 	private BillableServicesLineProcessor processor;
@@ -42,7 +42,7 @@ public class BillableServiceCsvParserTest {
 		String uuid = "44ebd6cd-04ad-4eba-8ce1-0de4564bfd17";
 		CsvLine csvLine = new CsvLine(new String[] { "Uuid" }, new String[] { uuid });
 		BillableService existingService = new BillableService();
-		when(billableServiceResource.getByUniqueId(uuid)).thenReturn(existingService);
+		when(billableItemsService.getByUuid(uuid)).thenReturn(existingService);
 		
 		// Replay
 		BillableService result = parser.bootstrap(csvLine);
@@ -57,7 +57,7 @@ public class BillableServiceCsvParserTest {
 		// Setup
 		String uuid = "44ebd6cd-04ad-4eba-8ce1-0de4564bfd17";
 		CsvLine csvLine = new CsvLine(new String[] { "Uuid" }, new String[] { uuid });
-		when(billableServiceResource.getByUniqueId(uuid)).thenReturn(null);
+		when(billableItemsService.getByUuid(uuid)).thenReturn(null);
 		
 		// Replay
 		BillableService result = parser.bootstrap(csvLine);
@@ -72,7 +72,7 @@ public class BillableServiceCsvParserTest {
 	public void save_shouldReturnSavedService() {
 		// Setup
 		BillableService service = new BillableService();
-		when(billableServiceResource.save(service)).thenReturn(service);
+		when(billableItemsService.save(service)).thenReturn(service);
 		
 		// Replay
 		BillableService result = parser.save(service);

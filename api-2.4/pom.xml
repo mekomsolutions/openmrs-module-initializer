@@ -67,7 +67,7 @@
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
-            <artifactId>billing-omod</artifactId>
+            <artifactId>billing-api</artifactId>
             <version>${billingVersion}</version>
             <scope>provided</scope>
         </dependency>
