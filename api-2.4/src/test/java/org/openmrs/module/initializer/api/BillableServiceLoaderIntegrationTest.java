@@ -8,7 +8,6 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.module.billing.api.IBillableItemsService;
 import org.openmrs.module.billing.api.model.BillableService;
 import org.openmrs.module.billing.api.model.BillableServiceStatus;
-import org.openmrs.module.initializer.api.DomainBaseModuleContextSensitive_2_4_test;
 import org.openmrs.module.initializer.api.billing.BillableServiceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,25 +24,12 @@ public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContex
     @Autowired
     private IBillableItemsService billableItemsService;
 
-    @Before
-    public void setup() {
-        Concept concept = conceptService.getConceptByUuid("1380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-        BillableService service = new BillableService();
-        service.setUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
-        service.setName("Nutrition counseling");
-        service.setShortName("NUC");
-        service.setConcept(concept);
-        service.setServiceStatus(BillableServiceStatus.DISABLED);
-        billableItemsService.save(service);
-    }
-
     @Test
     public void load_shouldLoadBillableServicesAccordingToCsvFiles() {
         // Replay
         loader.load();
 
-        // Verify
+        // Verify fetch
         {
             BillableService service = billableItemsService.getByUuid("44ebd6cd-04ad-4eba-8ce1-0de4564bfd17");
             Assert.assertNotNull(service);
@@ -61,6 +47,40 @@ public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContex
             Assert.assertNotNull(service);
             Assert.assertEquals("Nutrition counseling", service.getName());
             Assert.assertEquals(BillableServiceStatus.ENABLED, service.getServiceStatus());
+        }
+
+        // Modify an existing entity in the CSV
+        {
+            BillableService service = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
+            service.setName("Nutrition counseling updated");
+            service.setServiceStatus(BillableServiceStatus.DISABLED);
+            billableItemsService.save(service);
+
+            loader.load();
+
+            BillableService updatedService = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
+            Assert.assertEquals("Nutrition counseling updated", updatedService.getName());
+            Assert.assertEquals(BillableServiceStatus.ENABLED, updatedService.getServiceStatus());
+        }
+
+        // Retire and un-retire an existing entity via CSV (assuming retirement is done by setting status to DISABLED)
+        {
+            BillableService service = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
+            service.setServiceStatus(BillableServiceStatus.DISABLED);
+            billableItemsService.save(service);
+
+            loader.load();
+
+            BillableService retiredService = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
+            Assert.assertEquals(BillableServiceStatus.DISABLED, retiredService.getServiceStatus());
+
+            retiredService.setServiceStatus(BillableServiceStatus.ENABLED);
+            billableItemsService.save(retiredService);
+
+            loader.load();
+
+            BillableService unretiredService = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
+            Assert.assertEquals(BillableServiceStatus.ENABLED, unretiredService.getServiceStatus());
         }
     }
 }

@@ -48,7 +48,8 @@ configuration/
   ├── attributetypes/
   ├── autogenerationoptions/
   ├── bahmniforms/
-  ├── billing/
+  ├── billableservices/
+  ├── cashpoints/
   ├── cohorttypes/
   ├── cohortattributetypes/
   ├── conceptclasses/
@@ -86,7 +87,8 @@ configuration/
   ├── providerroles/
   ├── queues/
   ├── relationshiptypes/
-  └── roles/
+  ├── roles/
+  └── serviceprices/
    
 ```  
 Each domain-specific subfolder contains OpenMRS metadata configuration files that pertains to the domain.
@@ -128,7 +130,9 @@ This is the list of currently supported domains in their loading order:
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
 1. [Open Concept Lab (ZIP Files)](readme/ocl.md)
 1. [Concepts (CSV files)](readme/concepts.md)
-1. [Billing (CSV files)](readme/billing.md)
+1. [Billable Services (CSV files)](readme/billableservies.md)
+1. [Cash Points (CSV files)](readme/cashpoints.md)
+1. [Service Prices (CSV files)](readme/serviceprices.md)
 1. [Concept Sets and Answers (CSV files)](readme/conceptsets.md)
 1. [Programs (CSV files)](readme/prog.md)
 1. [Program Worklows (CSV files)](readme/prog.md)
@@ -200,10 +204,10 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 #### Version 2.8.0
 * Ampath forms translation files will now generate checksums.
 * Enhancement to ensure that when an Ampath forms file is loaded, a new resource with the existing Ampath forms translations is created.
+* Added support for 'billing' (billableservices, serviceprices, cashpoints) domains.
 
 #### Version 2.7.0
 * Added support for 'queues' domain.
-* Added support for 'billing' domain.
 * Added support for 'addresshierarchy' domain.
 * Fix for Liquibase Loader to ensure compatibility with OpenMRS versions 2.5.5+.
 * Fix for OCL Loader to ensure it throws an Exception if the OCL import fails.

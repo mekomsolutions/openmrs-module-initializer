@@ -9,14 +9,17 @@
  */
 package org.openmrs.module.initializer.api;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.billing.api.IPaymentModeService;
 import org.openmrs.module.billing.api.model.PaymentMode;
 import org.openmrs.module.initializer.api.billing.ServicePricesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
 
 public class ServicePricesLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_test {
     
@@ -27,12 +30,8 @@ public class ServicePricesLoaderIntegrationTest extends DomainBaseModuleContextS
     private ServicePricesLoader loader;
     
     @Before
-    public void setup() {
-        PaymentMode paymentMode = new PaymentMode();
-        paymentMode.setUuid("526bf278-ba81-4436-b867-c2f6641d060a");
-        paymentMode.setName("Cash");
-        paymentMode.setDescription("Cash payment mode");
-        paymentModeService.save(paymentMode);
+    public void setup() throws Exception {
+        executeDataSet("testdata/test-metadata.xml");
     }
     
     @Test
@@ -40,10 +39,44 @@ public class ServicePricesLoaderIntegrationTest extends DomainBaseModuleContextS
         // Replay
         loader.load();
         
-        // Verify
-        PaymentMode paymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
-        assertNotNull(paymentMode);
-        assertEquals("Cash", paymentMode.getName());
-        assertEquals("Cash payment mode", paymentMode.getDescription());
+        // Verify fetch
+        {
+            PaymentMode paymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+            assertNotNull(paymentMode);
+            assertEquals("Cash", paymentMode.getName());
+            assertEquals("Cash payment mode", paymentMode.getDescription());
+        }
+        
+        // Verify edition (Modify an existing entity in the CSV)
+        {
+            PaymentMode paymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+            paymentMode.setName("Cash Updated");
+            paymentModeService.save(paymentMode);
+
+            loader.load();
+            
+            PaymentMode updatedPaymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+            assertEquals("Cash Updated", updatedPaymentMode.getName());
+        }
+        
+        // Verify retirement and un-retire using UUID as pivot in CSV
+        {
+            PaymentMode paymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+            paymentMode.setRetired(true);
+            paymentModeService.save(paymentMode);
+
+            loader.load();
+            
+            PaymentMode retiredPaymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+            Assert.assertTrue(retiredPaymentMode.getRetired());
+
+            retiredPaymentMode.setRetired(false);
+            paymentModeService.save(retiredPaymentMode);
+            
+            loader.load();
+            
+            PaymentMode unretiredPaymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+            Assert.assertFalse(unretiredPaymentMode.getRetired());
+        }
     }
 }
