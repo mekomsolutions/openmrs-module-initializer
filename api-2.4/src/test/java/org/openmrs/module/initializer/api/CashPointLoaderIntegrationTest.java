@@ -9,7 +9,6 @@
  */
 package org.openmrs.module.initializer.api;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -47,17 +46,37 @@ public class CashPointLoaderIntegrationTest extends DomainBaseModuleContextSensi
         // Replay
         loader.load();
 
-        // Verify fetch
+        // Verify creation for all CashPoints
         {
-            CashPoint cashPoint = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
-            assertNotNull(cashPoint);
-            assertEquals("OPD Cash Point", cashPoint.getName());
-            assertEquals("Opd cash point for billing", cashPoint.getDescription());
+            CashPoint cashPoint1 = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
+            assertNotNull(cashPoint1);
+            assertEquals("OPD Cash Point", cashPoint1.getName());
+            assertEquals("Opd cash point for billing", cashPoint1.getDescription());
 
-            Location location = locationService.getLocationByUuid("fdddc31a-3930-11ea-9712-a73c3c19744f");
-            assertNotNull(location);
-            assertEquals("ART Clinic", location.getName());
-            assertEquals(location, cashPoint.getLocation());
+            Location location1 = locationService.getLocation("ART Clinic");
+            assertNotNull(location1);
+            assertEquals("ART Clinic", location1.getName());
+            assertEquals(location1, cashPoint1.getLocation());
+
+            CashPoint cashPoint2 = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
+            assertNotNull(cashPoint2);
+            assertEquals("IPD Cash Point", cashPoint2.getName());
+            assertEquals("IPD cash point for billing", cashPoint2.getDescription());
+
+            Location location2 = locationService.getLocation("Inpatient Ward");
+            assertNotNull(location2);
+            assertEquals("Inpatient Ward", location2.getName());
+            assertEquals(location2, cashPoint2.getLocation());
+
+            CashPoint cashPoint3 = iCashPointService.getByUuid("8e48e0be-1a31-4bd3-a54d-ace82653f8b8");
+            assertNotNull(cashPoint3);
+            assertEquals("MCH Cash Point", cashPoint3.getName());
+            assertEquals("MCH cash point for billing", cashPoint3.getDescription());
+
+            Location location3 = locationService.getLocation("MCH Clinic");
+            assertNotNull(location3);
+            assertEquals("MCH Clinic", location3.getName());
+            assertEquals(location3, cashPoint3.getLocation());
         }
 
         // Verify edition (Modify an existing entity in the CSV)
@@ -74,13 +93,13 @@ public class CashPointLoaderIntegrationTest extends DomainBaseModuleContextSensi
 
         // Verify retirement and un-retire using UUID as pivot in CSV
         {
-            CashPoint cashPoint = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
+            CashPoint cashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
             cashPoint.setRetired(true);
             iCashPointService.save(cashPoint);
 
             loader.load();
 
-            CashPoint retiredCashPoint = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
+            CashPoint retiredCashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
             assertTrue(retiredCashPoint.getRetired());
 
             retiredCashPoint.setRetired(false);
@@ -88,7 +107,7 @@ public class CashPointLoaderIntegrationTest extends DomainBaseModuleContextSensi
 
             loader.load();
 
-            CashPoint unretiredCashPoint = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
+            CashPoint unretiredCashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
             assertFalse(unretiredCashPoint.getRetired());
         }
     }

@@ -12,7 +12,6 @@ package org.openmrs.module.initializer.api;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,12 +38,19 @@ public class ServicePricesLoaderIntegrationTest extends DomainBaseModuleContextS
         // Replay
         loader.load();
         
-        // Verify fetch
+        // Verify creation for all PaymentModes
         {
-            PaymentMode paymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
-            assertNotNull(paymentMode);
-            assertEquals("Cash", paymentMode.getName());
-            assertEquals("Cash payment mode", paymentMode.getDescription());
+            PaymentMode paymentMode1 = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+            assertNotNull(paymentMode1);
+            assertEquals("Cash", paymentMode1.getName());
+
+            PaymentMode paymentMode2 = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
+            assertNotNull(paymentMode2);
+            assertEquals("Credit Card", paymentMode2.getName());
+
+            PaymentMode paymentMode3 = paymentModeService.getByUuid("e168c141-f5fd-4eec-bd3e-633bed1c9606");
+            assertNotNull(paymentMode3);
+            assertEquals("Mobile money", paymentMode3.getName());
         }
         
         // Verify edition (Modify an existing entity in the CSV)
@@ -61,13 +67,13 @@ public class ServicePricesLoaderIntegrationTest extends DomainBaseModuleContextS
         
         // Verify retirement and un-retire using UUID as pivot in CSV
         {
-            PaymentMode paymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+            PaymentMode paymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
             paymentMode.setRetired(true);
             paymentModeService.save(paymentMode);
 
             loader.load();
             
-            PaymentMode retiredPaymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+            PaymentMode retiredPaymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
             Assert.assertTrue(retiredPaymentMode.getRetired());
 
             retiredPaymentMode.setRetired(false);
@@ -75,7 +81,7 @@ public class ServicePricesLoaderIntegrationTest extends DomainBaseModuleContextS
             
             loader.load();
             
-            PaymentMode unretiredPaymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+            PaymentMode unretiredPaymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
             Assert.assertFalse(unretiredPaymentMode.getRetired());
         }
     }
