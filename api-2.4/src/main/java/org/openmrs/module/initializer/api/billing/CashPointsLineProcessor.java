@@ -10,7 +10,7 @@ import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@OpenmrsProfile(modules = { "billing:1.1.0" })
+@OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
 public class CashPointsLineProcessor extends BaseLineProcessor<CashPoint> {
 
     protected static final String HEADER_DESCRIPTION = "description";

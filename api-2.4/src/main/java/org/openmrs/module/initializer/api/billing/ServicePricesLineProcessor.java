@@ -9,7 +9,7 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@OpenmrsProfile(modules = { "billing:1.1.0" })
+@OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
 public class ServicePricesLineProcessor extends BaseLineProcessor<PaymentMode> {
     
     protected static final String HEADER_PRICE = "price";

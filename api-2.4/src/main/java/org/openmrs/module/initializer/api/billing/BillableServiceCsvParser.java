@@ -10,7 +10,7 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@OpenmrsProfile(modules = { "billing:1.1.0" })
+@OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
 public class BillableServiceCsvParser extends CsvParser<BillableService, BaseLineProcessor<BillableService>> {
 
     private final IBillableItemsService billableItemsService;

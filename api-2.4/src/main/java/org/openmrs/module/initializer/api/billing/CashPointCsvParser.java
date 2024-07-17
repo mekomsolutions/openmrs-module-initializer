@@ -11,7 +11,7 @@ import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@OpenmrsProfile(modules = { "billing:1.1.0" })
+@OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
 public class CashPointCsvParser extends CsvParser<CashPoint, BaseLineProcessor<CashPoint>> {
 	
 	private final ICashPointService iCashPointService;

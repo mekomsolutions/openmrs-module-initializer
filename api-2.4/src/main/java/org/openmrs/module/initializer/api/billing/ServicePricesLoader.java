@@ -5,7 +5,7 @@ import org.openmrs.module.billing.api.model.PaymentMode;
 import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@OpenmrsProfile(modules = { "billing:1.1.0" })
+@OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
 public class ServicePricesLoader extends BaseCsvLoader<PaymentMode, ServicePricesCsvParser> {
 	
 	@Autowired

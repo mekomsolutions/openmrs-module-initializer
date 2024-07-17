@@ -39,76 +39,69 @@ public class CashPointLoaderIntegrationTest extends DomainBaseModuleContextSensi
     @Before
     public void setup() throws Exception {
         executeDataSet("testdata/test-metadata.xml");
+        loader.load();
     }
 
     @Test
-    public void load_shouldLoadCashPointsFromCSV() throws Exception {
-        // Replay
-        loader.load();
-
+    public void shouldCreateCashPointsFromCSV() {
         // Verify creation for all CashPoints
-        {
-            CashPoint cashPoint1 = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
-            assertNotNull(cashPoint1);
-            assertEquals("OPD Cash Point", cashPoint1.getName());
-            assertEquals("Opd cash point for billing", cashPoint1.getDescription());
+        CashPoint cashPoint1 = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
+        assertNotNull(cashPoint1);
+        assertEquals("OPD Cash Point", cashPoint1.getName());
+        assertEquals("Opd cash point for billing", cashPoint1.getDescription());
 
-            Location location1 = locationService.getLocation("ART Clinic");
-            assertNotNull(location1);
-            assertEquals("ART Clinic", location1.getName());
-            assertEquals(location1, cashPoint1.getLocation());
+        Location location1 = locationService.getLocation("ART Clinic");
+        assertNotNull(location1);
+        assertEquals("ART Clinic", location1.getName());
+        assertEquals(location1, cashPoint1.getLocation());
 
-            CashPoint cashPoint2 = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
-            assertNotNull(cashPoint2);
-            assertEquals("IPD Cash Point", cashPoint2.getName());
-            assertEquals("IPD cash point for billing", cashPoint2.getDescription());
+        CashPoint cashPoint2 = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
+        assertNotNull(cashPoint2);
+        assertEquals("IPD Cash Point", cashPoint2.getName());
+        assertEquals("IPD cash point for billing", cashPoint2.getDescription());
 
-            Location location2 = locationService.getLocation("Inpatient Ward");
-            assertNotNull(location2);
-            assertEquals("Inpatient Ward", location2.getName());
-            assertEquals(location2, cashPoint2.getLocation());
+        Location location2 = locationService.getLocation("Inpatient Ward");
+        assertNotNull(location2);
+        assertEquals("Inpatient Ward", location2.getName());
+        assertEquals(location2, cashPoint2.getLocation());
 
-            CashPoint cashPoint3 = iCashPointService.getByUuid("8e48e0be-1a31-4bd3-a54d-ace82653f8b8");
-            assertNotNull(cashPoint3);
-            assertEquals("MCH Cash Point", cashPoint3.getName());
-            assertEquals("MCH cash point for billing", cashPoint3.getDescription());
+        CashPoint cashPoint3 = iCashPointService.getByUuid("8e48e0be-1a31-4bd3-a54d-ace82653f8b8");
+        assertNotNull(cashPoint3);
+        assertEquals("MCH Cash Point", cashPoint3.getName());
+        assertEquals("MCH cash point for billing", cashPoint3.getDescription());
 
-            Location location3 = locationService.getLocation("MCH Clinic");
-            assertNotNull(location3);
-            assertEquals("MCH Clinic", location3.getName());
-            assertEquals(location3, cashPoint3.getLocation());
-        }
+        Location location3 = locationService.getLocation("MCH Clinic");
+        assertNotNull(location3);
+        assertEquals("MCH Clinic", location3.getName());
+        assertEquals(location3, cashPoint3.getLocation());
+    }
 
-        // Verify edition (Modify an existing entity in the CSV)
-        {
-            CashPoint cashPoint = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
-            cashPoint.setName("OPD Cash Point Updated");
-            iCashPointService.save(cashPoint);
+    @Test
+    public void shouldEditExistingCashPointFromCSV() {
+        // Modify an existing entity in the CSV
+        CashPoint cashPoint = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
+        cashPoint.setName("OPD Cash Point Updated");
+        iCashPointService.save(cashPoint);
 
-            loader.load();
+        CashPoint updatedCashPoint = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
+        assertEquals("OPD Cash Point Updated", updatedCashPoint.getName());
+    }
 
-            CashPoint updatedCashPoint = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
-            assertEquals("OPD Cash Point Updated", updatedCashPoint.getName());
-        }
+    @Test
+    public void shouldRetireAndUnretireCashPointFromCSV() {
+        // Retire an existing entity in the CSV
+        CashPoint cashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
+        cashPoint.setRetired(true);
+        iCashPointService.save(cashPoint);
 
-        // Verify retirement and un-retire using UUID as pivot in CSV
-        {
-            CashPoint cashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
-            cashPoint.setRetired(true);
-            iCashPointService.save(cashPoint);
+        CashPoint retiredCashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
+        assertTrue(retiredCashPoint.getRetired());
 
-            loader.load();
+        // Unretire the entity
+        retiredCashPoint.setRetired(false);
+        iCashPointService.save(retiredCashPoint);
 
-            CashPoint retiredCashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
-            assertTrue(retiredCashPoint.getRetired());
-
-            retiredCashPoint.setRetired(false);
-            iCashPointService.save(retiredCashPoint);
-
-            loader.load();
-
-            CashPoint unretiredCashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
-            assertFalse(unretiredCashPoint.getRetired());
-        }
+        CashPoint unretiredCashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
+        assertFalse(unretiredCashPoint.getRetired());
     }
 }
