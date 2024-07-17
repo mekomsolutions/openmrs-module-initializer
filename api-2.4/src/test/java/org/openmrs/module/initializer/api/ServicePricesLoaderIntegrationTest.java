@@ -31,11 +31,13 @@ public class ServicePricesLoaderIntegrationTest extends DomainBaseModuleContextS
     @Before
     public void setup() throws Exception {
         executeDataSet("testdata/test-metadata.xml");
-        loader.load();
     }
 
     @Test
     public void shouldCreatePaymentModesFromCSV() {
+         // Replay
+         loader.load();
+
         // Verify creation for all PaymentModes
         PaymentMode paymentMode1 = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
         assertNotNull(paymentMode1);

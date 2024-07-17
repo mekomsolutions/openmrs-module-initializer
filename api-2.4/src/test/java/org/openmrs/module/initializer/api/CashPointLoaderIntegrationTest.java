@@ -39,11 +39,13 @@ public class CashPointLoaderIntegrationTest extends DomainBaseModuleContextSensi
     @Before
     public void setup() throws Exception {
         executeDataSet("testdata/test-metadata.xml");
-        loader.load();
     }
 
     @Test
     public void shouldCreateCashPointsFromCSV() {
+         // Replay
+         loader.load();
+
         // Verify creation for all CashPoints
         CashPoint cashPoint1 = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
         assertNotNull(cashPoint1);
