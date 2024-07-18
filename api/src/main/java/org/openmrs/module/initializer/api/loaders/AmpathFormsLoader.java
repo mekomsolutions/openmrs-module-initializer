@@ -1,9 +1,7 @@
 package org.openmrs.module.initializer.api.loaders;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -92,20 +90,16 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		ConfigDirUtil configDirUtil = new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
 		        Domain.AMPATH_FORMS_TRANSLATIONS.getName(), true);
 		
-		List<File> translationFiles = configDirUtil.getFiles(JSON_EXTENSION);
-		translationFiles.stream().filter(f -> {
-			try {
-				String js = FileUtils.readFileToString(f, StandardCharsets.UTF_8.toString());
-				Map<String, Object> jf = new ObjectMapper().readValue(js, Map.class);
-				String translationForm = (String) jf.get("form");
-				return StringUtils.equals(translationForm, formName);
+		for (File translationFile : configDirUtil.getFiles(JSON_EXTENSION)) {
+			String js = FileUtils.readFileToString(translationFile, StandardCharsets.UTF_8.toString());
+			Map<String, Object> jf = new ObjectMapper().readValue(js, Map.class);
+			String translationForm = (String) jf.get("form");
+			
+			if (StringUtils.equals(translationForm, formName)) {
+				configDirUtil
+				        .deleteChecksumFile(replaceExtension(translationFile.getName(), ConfigDirUtil.CHECKSUM_FILE_EXT));
 			}
-			catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		}).forEach(f -> {
-			configDirUtil.deleteChecksumFile(replaceExtension(f.getName(), ConfigDirUtil.CHECKSUM_FILE_EXT));
-		});
+		}
 		
 		String uuid = Utils.generateUuidFromObjects(AMPATH_FORMS_UUID, formName, formVersion);
 		// Process Form
