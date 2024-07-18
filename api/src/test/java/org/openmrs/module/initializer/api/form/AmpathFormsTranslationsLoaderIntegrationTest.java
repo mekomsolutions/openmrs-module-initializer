@@ -32,8 +32,6 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 	
 	private static final String FORM_TRANSLATIONS_FOLDER_PATH = "src/test/resources/ampathformstranslations/";
 	
-	private static final String RESOURCE_UUID = "c5bf3efe-3798-4052-8dcb-09aacfcbabdc";
-	
 	@Autowired
 	private AmpathFormsTranslationsLoader ampathFormsTranslationsLoader;
 	

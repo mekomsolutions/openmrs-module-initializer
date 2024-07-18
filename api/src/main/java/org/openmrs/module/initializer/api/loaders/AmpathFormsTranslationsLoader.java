@@ -45,7 +45,7 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 	protected void load(File file) throws Exception {
 		String jsonTranslationsString = FileUtils.readFileToString(file, StandardCharsets.UTF_8.toString());
 		Map<String, Object> jsonTranslationsDefinition = new ObjectMapper().readValue(jsonTranslationsString, Map.class);
-
+		
 		String language = (String) jsonTranslationsDefinition.get("language");
 		if (StringUtils.isBlank(language)) {
 			throw new IllegalArgumentException("'language' property is required for AMPATH forms translations loader.");
@@ -66,7 +66,7 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 		FormResource formResource = null;
 		for (FormResource fr : formService.getFormResourcesForForm(form)) {
 			if (LONG_FREE_TEXT_DATATYPE.equals(fr.getDatatypeClassname())) {
-				Map<String, Object> jsonMap = new ObjectMapper().readValue(jsonTranslationsString, Map.class);
+				Map<String, Object> jsonMap = new ObjectMapper().readValue(fr.getValue().toString(), Map.class);
 				if (jsonMap.containsKey("translations") && StringUtils.equals(jsonMap.get("language").toString(),
 				    jsonTranslationsDefinition.get("language").toString())) {
 					formResource = fr;
