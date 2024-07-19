@@ -67,5 +67,7 @@ The JSON source for these forms can be obtained from [AMPATH Form Builder](https
 
 **NOTE:** Like other form engines (and as a result of the form tooling), the unique identifier for a form is its name. As a result, the `uuid` field provided by the Form Builder is usually `"xxxx"` and not used. Instead, the form UUID is determined based on the form name and the form version. Any previous version of the form with the same name, however, will also be replaced with whatever form is loaded by Initializer. It is therefore not recommended to combine Initializer with another mechanism for loading forms into the system, e.g., by using the Form Builder directly.
 
+**NOTE:** When an Ampath forms file is loaded, a new resource with the existing Ampath forms translations is created
+
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).
