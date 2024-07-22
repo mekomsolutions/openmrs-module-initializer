@@ -7,7 +7,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.initializer.api.loaders;
+package org.openmrs.module.initializer.api;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.everyItem;
@@ -23,9 +23,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
 import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_3_Test;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_6_Test;
+import org.openmrs.module.initializer.api.loaders.Loader;
 
-public class LoadersOrderTest extends DomainBaseModuleContextSensitive_2_3_Test {
+public class LoadersOrderTest extends DomainBaseModuleContextSensitive_2_6_Test {
 	
 	@Test
 	public void getLoaders_shouldBeUnequivocallyOrdered() {
@@ -45,6 +46,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitive_2_3_Test 
 		
 		List<Loader> runtimeLoaders = getService().getLoaders();
 		assertThat(runtimeLoaders, everyItem(hasExpectedDomain()));
+		
 		assertThat(runtimeLoaders, coversAllDomains());
 	}
 	

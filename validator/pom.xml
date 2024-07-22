@@ -14,12 +14,12 @@
   <description>Validator project for Initializer</description>
 
   <properties>
-    <springVersion>4.1.4.RELEASE</springVersion>
+    <springVersion>5.3.23</springVersion>
     <!-- OpenMRS Core and modules -->
-    <openmrsPlatformVersion>2.3.6</openmrsPlatformVersion>
+    <openmrsPlatformVersion>2.6.3</openmrsPlatformVersion>
     <reportingCompatibilityVersion>2.0.6</reportingCompatibilityVersion>
     <htmlwidgetsVersion>1.7.2</htmlwidgetsVersion>
-    <mysqlTestContainerVersion>1.15.3</mysqlTestContainerVersion>
+    <mysqlTestContainerVersion>1.17.6</mysqlTestContainerVersion>
     <metadatasharingVersion>1.9.0</metadatasharingVersion>
     <metadatamappingVersion>1.6.0</metadatamappingVersion>
   </properties>
@@ -58,7 +58,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.6.28</version>
+      <version>3.12.4</version>
       <type>jar</type>
     </dependency>
 
@@ -86,7 +86,7 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.45</version>
+      <version>8.0.30</version>
       <type>jar</type>
       <scope>runtime</scope>
     </dependency>
@@ -136,6 +136,13 @@
     <dependency>
       <groupId>${project.parent.groupId}</groupId>
       <artifactId>${project.parent.artifactId}-api-2.5</artifactId>
+      <version>${project.parent.version}</version>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>${project.parent.artifactId}-api-2.6</artifactId>
       <version>${project.parent.version}</version>
       <type>jar</type>
     </dependency>
