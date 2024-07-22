@@ -34,8 +34,8 @@ jobs:
               "username": "${{ secrets.NEXUS_USERNAME }}",
               "password": "${{ secrets.NEXUS_PASSWORD }}"
             }]
-        if: ${{ github.ref == 'refs/heads/master' && github.repository_owner == 'mekomsolutions' }}
+        if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'mekomsolutions' }}
 
       - name: Publish
         run: mvn --batch-mode clean deploy -P validator
-        if: ${{ github.ref == 'refs/heads/master' && github.repository_owner == 'mekomsolutions' }}
+        if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'mekomsolutions' }}
