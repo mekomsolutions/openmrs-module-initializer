@@ -37,13 +37,29 @@ public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContex
 	public void setup() {
 		executeDataSet("testdata/test-concepts-2.4.xml");
 		{
-			Concept concept = conceptService.getConceptByUuid("164949AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+			// To be edited
+			Concept concept = conceptService.getConceptByUuid("3f6f6c92-8d5c-4a9e-bb1c-d3e00e4f8b71");
 			
 			BillableService service = new BillableService();
 			service.setUuid("a0f7d8a1-4fa2-418c-aa8a-9b358f43d605");
 			service.setName("Orthopedic Therapy");
 			service.setShortName("OTHS");
 			service.setConcept(concept);
+			service.setServiceStatus(BillableServiceStatus.ENABLED);
+			billableItemsService.save(service);
+		}
+		
+		{
+			// To be retired
+			Concept concept = conceptService.getConceptByUuid("550e8400-e29b-41d4-a716-446655440000");
+			
+			BillableService service = new BillableService();
+			service.setUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
+			service.setName("Nutrition");
+			service.setShortName("NUC");
+			service.setVoided(false);
+			service.setConcept(concept);
+			service.setServiceType(concept);
 			service.setServiceStatus(BillableServiceStatus.ENABLED);
 			billableItemsService.save(service);
 		}
@@ -59,38 +75,28 @@ public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContex
 			BillableService service = billableItemsService.getByUuid("44ebd6cd-04ad-4eba-8ce1-0de4564bfd17");
 			Assert.assertNotNull(service);
 			Assert.assertNotNull(service.getServiceType());
-			Assert.assertEquals(conceptService.getConceptByUuid("1592AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"),
-			    service.getConcept());
+			Assert.assertEquals("Antenatal Care", service.getName());
+			Assert.assertEquals(conceptService.getConceptByUuid("d4b4b6ef-6f3e-43a4-a3b9-9c56f3a1e2d8").getId(),
+			    service.getConcept().getId());
 			Assert.assertEquals(BillableServiceStatus.ENABLED, service.getServiceStatus());
 		}
 		
 		// Verify edition
 		{
-			BillableService service = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
-			service.setName("Nutrition counseling updated");
-			service.setServiceStatus(BillableServiceStatus.DISABLED);
-			billableItemsService.save(service);
-			
-			BillableService updatedService = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
-			Assert.assertEquals("Nutrition counseling updated", updatedService.getName());
-			Assert.assertEquals(BillableServiceStatus.DISABLED, updatedService.getServiceStatus());
+			BillableService service = billableItemsService.getByUuid("a0f7d8a1-4fa2-418c-aa8a-9b358f43d605");
+			Assert.assertNotNull(service);
+			Assert.assertNotNull(service.getServiceType());
+			Assert.assertEquals("Orthopedic Modified", service.getName());
+			Assert.assertEquals(conceptService.getConceptByUuid("3f6f6c92-8d5c-4a9e-bb1c-d3e00e4f8b71").getId(),
+			    service.getConcept().getId());
+			Assert.assertEquals(BillableServiceStatus.DISABLED, service.getServiceStatus());
 		}
 		
 		// Verify retirement
 		{
 			BillableService service = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
-			service.setServiceStatus(BillableServiceStatus.DISABLED);
-			billableItemsService.save(service);
+			Assert.assertTrue(service.getVoided());
 			
-			BillableService retiredService = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
-			Assert.assertEquals(BillableServiceStatus.DISABLED, retiredService.getServiceStatus());
-			
-			// Unretire the entity
-			retiredService.setServiceStatus(BillableServiceStatus.ENABLED);
-			billableItemsService.save(retiredService);
-			
-			BillableService unretiredService = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
-			Assert.assertEquals(BillableServiceStatus.ENABLED, unretiredService.getServiceStatus());
 		}
 	}
 }

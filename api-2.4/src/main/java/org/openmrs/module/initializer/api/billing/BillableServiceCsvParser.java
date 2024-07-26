@@ -9,6 +9,7 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
 public class BillableServiceCsvParser extends CsvParser<BillableService, BaseLineProcessor<BillableService>> {
@@ -18,7 +19,7 @@ public class BillableServiceCsvParser extends CsvParser<BillableService, BaseLin
     private final BillableServicesLineProcessor billableServicesLineProcessor;
 
     @Autowired
-    public BillableServiceCsvParser(IBillableItemsService billableItemsService, BillableServicesLineProcessor billableServicesLineProcessor) {
+    public BillableServiceCsvParser(@Qualifier("billableItemsService") IBillableItemsService billableItemsService, BillableServicesLineProcessor billableServicesLineProcessor) {
         super(billableServicesLineProcessor);
         this.billableItemsService = billableItemsService;
         this.billableServicesLineProcessor = billableServicesLineProcessor;
@@ -47,7 +48,7 @@ public class BillableServiceCsvParser extends CsvParser<BillableService, BaseLin
 
     @Override
     public BillableService save(BillableService instance) {
-        return billableItemsService.save(instance);
+    	return billableItemsService.save(instance);
     }
 
     @Override

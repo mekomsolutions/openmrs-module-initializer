@@ -34,4 +34,9 @@ public abstract class DomainBaseModuleContextSensitive_2_4_test extends DomainBa
 	public void updateSearchIndex() {
 		// to prevent Data Filter's 'Illegal Record Access'
 	}
+	
+	@Override
+	public void revertContextMocks() {
+		
+	}
 }
