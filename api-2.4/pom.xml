@@ -23,6 +23,20 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.openmrs.test</groupId>
+            <artifactId>openmrs-test</artifactId>
+            <type>pom</type>
+            <version>${openmrsPlatformVersion}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.powermock</groupId>
+                    <artifactId>powermock-api-mockito2</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>${project.parent.artifactId}-api</artifactId>
             <version>${project.parent.version}</version>
@@ -36,7 +50,7 @@
             <scope>test</scope>
             <type>test-jar</type>
         </dependency>
-
+        
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>${project.parent.artifactId}-api-2.3</artifactId>
@@ -75,44 +89,24 @@
         </dependency>
         
         <dependency>
-			<groupId>org.openmrs.module</groupId>
-			<artifactId>stockmanagement-api</artifactId>
-			<version>${stockmanagementVersion}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>stockmanagement-api</artifactId>
+            <version>${stockmanagementVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>fhir2-api-2.5</artifactId>
+            <version>${fhir2Version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>datafilter-api</artifactId>
             <version>${datafilterVersion}</version>
             <scope>test</scope>
         </dependency>
-		
-		<dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>1.7.1</version>
-            <exclusions>
-				<exclusion>
-					<artifactId>mockito-all</artifactId>
-					<groupId>org.mockito</groupId>
-				</exclusion>
-			</exclusions>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>1.7.1</version>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>1.10.19</version>
-			<scope>test</scope>
-	    </dependency>
     </dependencies>
 </project>

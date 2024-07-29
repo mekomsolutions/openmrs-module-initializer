@@ -13,47 +13,48 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
 public class BillableServiceCsvParser extends CsvParser<BillableService, BaseLineProcessor<BillableService>> {
-
-    private final IBillableItemsService billableItemsService;
-
-    private final BillableServicesLineProcessor billableServicesLineProcessor;
-
-    @Autowired
-    public BillableServiceCsvParser(@Qualifier("billableItemsService") IBillableItemsService billableItemsService, BillableServicesLineProcessor billableServicesLineProcessor) {
-        super(billableServicesLineProcessor);
-        this.billableItemsService = billableItemsService;
-        this.billableServicesLineProcessor = billableServicesLineProcessor;
-    }
-
-    @Override
-    public Domain getDomain() {
-        return Domain.BILLABLE_SERVICES;
-    }
-
-    @Override
-    public BillableService bootstrap(CsvLine line) throws IllegalArgumentException {
-        String uuid = line.getUuid();
-
-        BillableService billableService = billableItemsService.getByUuid(uuid);
-
-        if (billableService == null) {
-            billableService = new BillableService();
-            if (!StringUtils.isEmpty(uuid)) {
-                billableService.setUuid(uuid);
-            }
-        }
-
-        return billableService;
-    }
-
-    @Override
-    public BillableService save(BillableService instance) {
-    	return billableItemsService.save(instance);
-    }
-
-    @Override
-    protected void setLineProcessors(String version) {
-        lineProcessors.clear();
-        lineProcessors.add(billableServicesLineProcessor);
-    }
+	
+	private final IBillableItemsService billableItemsService;
+	
+	private final BillableServicesLineProcessor billableServicesLineProcessor;
+	
+	@Autowired
+	public BillableServiceCsvParser(@Qualifier("billableItemsService") IBillableItemsService billableItemsService,
+	    BillableServicesLineProcessor billableServicesLineProcessor) {
+		super(billableServicesLineProcessor);
+		this.billableItemsService = billableItemsService;
+		this.billableServicesLineProcessor = billableServicesLineProcessor;
+	}
+	
+	@Override
+	public Domain getDomain() {
+		return Domain.BILLABLE_SERVICES;
+	}
+	
+	@Override
+	public BillableService bootstrap(CsvLine line) throws IllegalArgumentException {
+		String uuid = line.getUuid();
+		
+		BillableService billableService = billableItemsService.getByUuid(uuid);
+		
+		if (billableService == null) {
+			billableService = new BillableService();
+			if (!StringUtils.isEmpty(uuid)) {
+				billableService.setUuid(uuid);
+			}
+		}
+		
+		return billableService;
+	}
+	
+	@Override
+	public BillableService save(BillableService instance) {
+		return billableItemsService.save(instance);
+	}
+	
+	@Override
+	protected void setLineProcessors(String version) {
+		lineProcessors.clear();
+		lineProcessors.add(billableServicesLineProcessor);
+	}
 }

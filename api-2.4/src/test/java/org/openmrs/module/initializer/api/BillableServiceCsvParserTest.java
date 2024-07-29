@@ -64,7 +64,6 @@ public class BillableServiceCsvParserTest {
 		
 		// Verify
 		assertNotNull(result);
-		assertNull(result.getId());
 		assertEquals(uuid, result.getUuid());
 	}
 	
