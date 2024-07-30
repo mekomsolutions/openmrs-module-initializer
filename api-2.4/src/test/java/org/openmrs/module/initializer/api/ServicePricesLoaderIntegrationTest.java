@@ -1,12 +1,3 @@
-/**
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
- * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
- *
- * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
- * graphic logo is a trademark of OpenMRS Inc.
- */
 package org.openmrs.module.initializer.api;
 
 import static org.junit.Assert.assertEquals;
@@ -30,54 +21,57 @@ public class ServicePricesLoaderIntegrationTest extends DomainBaseModuleContextS
 	
 	@Before
 	public void setup() throws Exception {
-		executeDataSet("testdata/test-metadata.xml");
+		executeDataSet("testdata/test-concepts-2.4.xml");
+		{
+			// To be edited
+			PaymentMode paymentMode = new PaymentMode();
+			paymentMode.setUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+			paymentMode.setName("Antenatal Cash Item");
+			paymentMode.setRetired(false);
+		}
+		
+		{
+			// To be retired
+			PaymentMode paymentMode = new PaymentMode();
+			paymentMode.setUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
+			paymentMode.setName("Orthopedic Cash Item");
+			paymentMode.setRetired(false);
+		}
 	}
 	
 	@Test
-	public void shouldCreatePaymentModesFromCSV() {
+	public void load_shouldLoadPaymentModesAccordingToCsvFiles() {
 		// Replay
 		loader.load();
 		
-		// Verify creation for all PaymentModes
-		PaymentMode paymentMode1 = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
-		assertNotNull(paymentMode1);
-		assertEquals("Cash", paymentMode1.getName());
+		// Verify creation
+		{
+			PaymentMode paymentMode = paymentModeService.getByUuid("e168c141-f5fd-4eec-bd3e-633bed1c9606");
+			assertNotNull(paymentMode);
+			assertEquals("Nutrition Cash Item", paymentMode.getName());
+		}
 		
-		PaymentMode paymentMode2 = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
-		assertNotNull(paymentMode2);
-		assertEquals("Credit Card", paymentMode2.getName());
+		// Verify edition
+		{
+			PaymentMode paymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
+			assertNotNull(paymentMode);
+			assertEquals("Antenatal Cash Item Modified", paymentMode.getName());
+		}
 		
-		PaymentMode paymentMode3 = paymentModeService.getByUuid("e168c141-f5fd-4eec-bd3e-633bed1c9606");
-		assertNotNull(paymentMode3);
-		assertEquals("Mobile money", paymentMode3.getName());
-	}
-	
-	@Test
-	public void shouldEditExistingPaymentModeFromCSV() {
-		// Modify an existing entity in the CSV
-		PaymentMode paymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
-		paymentMode.setName("Cash Updated");
-		paymentModeService.save(paymentMode);
+		// Verify retirement
+		{
+			PaymentMode paymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
+			Assert.assertTrue(paymentMode.getRetired());
+		}
 		
-		PaymentMode updatedPaymentMode = paymentModeService.getByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
-		assertEquals("Cash Updated", updatedPaymentMode.getName());
-	}
-	
-	@Test
-	public void shouldRetireAndUnretirePaymentModeFromCSV() {
-		// Retire an existing entity in the CSV
-		PaymentMode paymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
-		paymentMode.setRetired(true);
-		paymentModeService.save(paymentMode);
-		
-		PaymentMode retiredPaymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
-		Assert.assertTrue(retiredPaymentMode.getRetired());
-		
-		// Unretire the entity
-		retiredPaymentMode.setRetired(false);
-		paymentModeService.save(retiredPaymentMode);
-		
-		PaymentMode unretiredPaymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
-		Assert.assertFalse(unretiredPaymentMode.getRetired());
+		// Verify unretirement
+		{
+			PaymentMode paymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
+			paymentMode.setRetired(false);
+			paymentModeService.save(paymentMode);
+			
+			PaymentMode unretiredPaymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
+			Assert.assertFalse(unretiredPaymentMode.getRetired());
+		}
 	}
 }

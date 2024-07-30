@@ -1,4 +1,4 @@
-uuid, name, price, paymentMode, item, billableService
-526bf278-ba81-4436-b867-c2f6641d060a, Antenatal Cash Item, 10000, Cash, , Antenatal Care
-2b1b9aae-5d35-43dd-9214-3fd370fd7737, Orthopedic Cash Item, 20000, Credit Card, ,Orthopedic Therapy
-e168c141-f5fd-4eec-bd3e-633bed1c9606, Nutrition Cash Item, 15000, Mobile money, ,Nutrition counseling
+uuid, Void/Retire, name, price, paymentMode, item, billableService
+526bf278-ba81-4436-b867-c2f6641d060a, , Antenatal Cash Item Modified, 10000, Cash, , Antenatal Care
+2b1b9aae-5d35-43dd-9214-3fd370fd7737, true, Orthopedic Cash Item, 20000, Credit Card, ,Orthopedic Therapy
+e168c141-f5fd-4eec-bd3e-633bed1c9606, , Nutrition Cash Item, 15000, Mobile money, ,Nutrition counseling
