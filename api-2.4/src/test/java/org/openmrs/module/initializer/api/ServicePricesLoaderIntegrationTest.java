@@ -1,9 +1,10 @@
 package org.openmrs.module.initializer.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.billing.api.IPaymentModeService;
@@ -61,7 +62,7 @@ public class ServicePricesLoaderIntegrationTest extends DomainBaseModuleContextS
 		// Verify retirement
 		{
 			PaymentMode paymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
-			Assert.assertTrue(paymentMode.getRetired());
+			assertTrue(paymentMode.getRetired());
 		}
 		
 		// Verify unretirement
@@ -71,7 +72,7 @@ public class ServicePricesLoaderIntegrationTest extends DomainBaseModuleContextS
 			paymentModeService.save(paymentMode);
 			
 			PaymentMode unretiredPaymentMode = paymentModeService.getByUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
-			Assert.assertFalse(unretiredPaymentMode.getRetired());
+			assertFalse(unretiredPaymentMode.getRetired());
 		}
 	}
 }

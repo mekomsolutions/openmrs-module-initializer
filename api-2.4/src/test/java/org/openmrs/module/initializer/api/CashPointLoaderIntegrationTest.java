@@ -2,8 +2,7 @@ package org.openmrs.module.initializer.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
-import org.junit.Assert;
+import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.assertFalse;
 
@@ -84,7 +83,7 @@ public class CashPointLoaderIntegrationTest extends DomainBaseModuleContextSensi
 		// Verify retirement
 		{
 			CashPoint cashPoint = iCashPointService.getByUuid("8e48e0be-1a31-4bd3-a54d-ace82653f8b8");
-			Assert.assertTrue(cashPoint.getRetired());
+			assertTrue(cashPoint.getRetired());
 			
 		}
 		
