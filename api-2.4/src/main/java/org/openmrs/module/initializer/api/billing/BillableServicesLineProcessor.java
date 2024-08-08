@@ -40,10 +40,10 @@ public class BillableServicesLineProcessor extends BaseLineProcessor<BillableSer
 		billableService.setName(line.get(HEADER_NAME, true));
 		billableService.setShortName(line.getString(HEADER_DESC));
 		
-		String service = line.getString(HEADER_SERVICE);
+		String service = line.get(HEADER_SERVICE, true);
 		billableService.setConcept(Utils.fetchConcept(service, conceptService));
 		
-		String serviceType = line.getString(HEADER_SERVICE_TYPE);
+		String serviceType = line.get(HEADER_SERVICE_TYPE, true);
 		billableService.setServiceType(Utils.fetchConcept(serviceType, conceptService));
 		
 		String serviceStatus = line.getString(HEADER_SERVICE_STATUS);

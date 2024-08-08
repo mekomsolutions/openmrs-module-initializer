@@ -1,6 +1,5 @@
 package org.openmrs.module.initializer.api.billing;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.billing.api.model.CashPoint;
@@ -27,10 +26,9 @@ public class CashPointsLineProcessor extends BaseLineProcessor<CashPoint> {
 	
 	@Override
 	public CashPoint fill(CashPoint cashPoint, CsvLine line) throws IllegalArgumentException {
-		cashPoint.setUuid(line.get(HEADER_UUID, true));
 		cashPoint.setName(line.get(HEADER_NAME, true));
 		cashPoint.setDescription(line.getString(HEADER_DESCRIPTION));
-		String location = line.getString(HEADER_LOCATION);
+		String location = line.get(HEADER_LOCATION, true);
 		cashPoint.setLocation(Utils.fetchLocation(location, locationService));
 		
 		return cashPoint;

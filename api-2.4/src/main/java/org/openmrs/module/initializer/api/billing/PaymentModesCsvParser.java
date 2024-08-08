@@ -12,20 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
-public class ServicePricesCsvParser extends CsvParser<PaymentMode, BaseLineProcessor<PaymentMode>> {
+public class PaymentModesCsvParser extends CsvParser<PaymentMode, BaseLineProcessor<PaymentMode>> {
 	
 	private final IPaymentModeService paymentModeService;
 	
 	@Autowired
-	public ServicePricesCsvParser(@Qualifier("cashierPaymentModeService") IPaymentModeService paymentModeService,
-	    ServicePricesLineProcessor processor) {
+	public PaymentModesCsvParser(@Qualifier("cashierPaymentModeService") IPaymentModeService paymentModeService,
+			PaymentModesLineProcessor processor) {
 		super(processor);
 		this.paymentModeService = paymentModeService;
 	}
 	
 	@Override
 	public Domain getDomain() {
-		return Domain.BILLABLE_SERVICE_PRICES;
+		return Domain.PAYMENT_MODES;
 	}
 	
 	@Override

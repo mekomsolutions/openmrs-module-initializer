@@ -70,7 +70,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitive_2_3_Test 
 		@Override
 		protected boolean matchesSafely(List<Loader> loaders, Description mismatchDescription) {
 			Set<String> exclude = new HashSet<>();
-			exclude.add(Domain.BILLABLE_SERVICE_PRICES.getName());
+			exclude.add(Domain.PAYMENT_MODES.getName());
 			exclude.add(Domain.BILLABLE_SERVICES.getName());
 			exclude.add(Domain.CASH_POINTS.getName());
 			
