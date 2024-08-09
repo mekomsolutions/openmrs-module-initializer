@@ -16,10 +16,27 @@
 
     <properties>
         <openmrsPlatformVersion>${openmrsVersion2.4}</openmrsPlatformVersion>
+        <datafilterVersion>2.2.0</datafilterVersion>
+        <billingVersion>1.1.0</billingVersion>
+        <stockmanagementVersion>2.0.0</stockmanagementVersion>
     </properties>
 
     <dependencies>
         <dependency>
+            <groupId>org.openmrs.test</groupId>
+            <artifactId>openmrs-test</artifactId>
+            <type>pom</type>
+            <version>${openmrsPlatformVersion}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.powermock</groupId>
+                    <artifactId>powermock-api-mockito2</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>${project.parent.artifactId}-api</artifactId>
             <version>${project.parent.version}</version>
@@ -33,7 +50,7 @@
             <scope>test</scope>
             <type>test-jar</type>
         </dependency>
-
+        
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>${project.parent.artifactId}-api-2.3</artifactId>
@@ -62,7 +79,34 @@
             <version>${project.parent.version}</version>
             <scope>test</scope>
             <type>test-jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>billing-api</artifactId>
+            <version>${billingVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>stockmanagement-api</artifactId>
+            <version>${stockmanagementVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>fhir2-api-2.5</artifactId>
+            <version>${fhir2Version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>datafilter-api</artifactId>
+            <version>${datafilterVersion}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

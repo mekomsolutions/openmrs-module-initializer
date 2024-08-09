@@ -22,6 +22,7 @@
     <mysqlTestContainerVersion>1.15.3</mysqlTestContainerVersion>
     <metadatasharingVersion>1.9.0</metadatasharingVersion>
     <metadatamappingVersion>1.6.0</metadatamappingVersion>
+    <billingVersion>1.1.0</billingVersion>
   </properties>
 
   <dependencies>
@@ -187,6 +188,14 @@
       <groupId>org.openmrs.module</groupId>
       <artifactId>idgen-api</artifactId>
       <version>${idgenVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>billing-api</artifactId>
+      <version>${billingVersion}</version>
       <scope>runtime</scope>
       <type>jar</type>
     </dependency>

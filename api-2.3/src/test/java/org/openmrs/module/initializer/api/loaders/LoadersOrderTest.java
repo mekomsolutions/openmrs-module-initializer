@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.greaterThan;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -68,11 +69,19 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitive_2_3_Test 
 		
 		@Override
 		protected boolean matchesSafely(List<Loader> loaders, Description mismatchDescription) {
+			Set<String> exclude = new HashSet<>();
+			exclude.add(Domain.PAYMENT_MODES.getName());
+			exclude.add(Domain.BILLABLE_SERVICES.getName());
+			exclude.add(Domain.CASH_POINTS.getName());
+			
 			boolean result = true;
 			Set<String> loaderDomains = loaders.stream().map(Loader::getDomainName).collect(Collectors.toSet());
 			for (Domain domain : Domain.values()) {
+				if (exclude.contains(domain.getName())) {
+					continue;
+				}
 				if (!loaderDomains.contains(domain.getName())) {
-					mismatchDescription.appendText("no loader for domain ").appendText(domain.toString())
+					mismatchDescription.appendText(" no loader for domain ").appendText(domain.toString())
 					        .appendText(" was found");
 					result = false;
 				}
