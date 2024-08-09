@@ -21,6 +21,7 @@ public class PaymentModesLineProcessor extends BaseLineProcessor<PaymentMode> {
 		
 		String attributes = line.get(HEADER_ATTRIBUTES, false);
 		if (StringUtils.isNotBlank(attributes)) {
+			paymentMode.getAttributeTypes().clear();
 			for (String attribute : attributes.split(BaseLineProcessor.LIST_SEPARATOR)) {
 				String[] parts = attribute.trim().split("::");
 				if (parts.length > 3) {
