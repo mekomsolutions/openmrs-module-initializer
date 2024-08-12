@@ -131,7 +131,7 @@ This is the list of currently supported domains in their loading order:
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
 1. [Open Concept Lab (ZIP Files)](readme/ocl.md)
 1. [Concepts (CSV files)](readme/concepts.md)
-1. [Billable Services (CSV files)](readme/billableservies.md)
+1. [Billable Services (CSV files)](readme/billableservices.md)
 1. [Cash Points (CSV files)](readme/cashpoints.md)
 1. [Payment Modes (CSV files)](readme/paymentmodes.md)
 1. [Concept Sets and Answers (CSV files)](readme/conceptsets.md)

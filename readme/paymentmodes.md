@@ -1,4 +1,4 @@
-## Domain 'serviceprices'
+## Domain 'paymentmodes'
 The **Payment Modes** subfolder contains CSV import files for saving Payment Modes which are the modes of payment tied to a single billable service, that is, the form of payment e.g. Cash, Insurance, PayPal, Mobile Money etc. Below is a possible example of its content:
 
 ```bash
@@ -6,7 +6,7 @@ paymentmodes/
   ├──paymentModes.csv
   └── ...
 ```
-There is currently only one format for the Payment Modes CSV line, here are the possible headers with a sample data set:
+Here are the possible headers with a sample data set:
 
 | <sub>Uuid</sub>                                 | <sub>name</sub> | <sub>attributes</sub>                        |
 |--------------------------------------|-------------|-----------------------------|
@@ -21,8 +21,16 @@ This unique identifier represents the different payment modes.
 This is the descriptive name of the service price item.
 
 ###### Header `Attributes` *(optional)*
-A semi-colon separated list of attributes, further divided by the `::` delimiter into `name`, `format`, `regex`, and `required` properties of a payment mode attribute.
+A semi-colon separated list of attributes, further divided by the `::` delimiter into `name`, `format`, `regex`, and `required` properties (in that order) of a payment mode's attribute type. For example, in the dataset provided:
 
+First attribute type
+* `name`: Maximum
+* `format`: Numeric
+* `regex`: example-regex
+* `required`: True
+
+Second attribute type
+* name: Minimum
 
 #### Requirements
 * The [billing module](https://github.com/openmrs/openmrs-module-billing) version 1.1.0 or higher must be installed
