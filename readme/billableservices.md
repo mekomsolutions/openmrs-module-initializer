@@ -2,7 +2,7 @@
 The **Billable Services** subfolder contains CSV import files for saving Billable Services which are services offered at a facility that can be billed to client. Below is a possible example of its content:
 
 ```bash
-billableservice/
+billableservices/
   ├──services.csv
   └── ...
 ```
