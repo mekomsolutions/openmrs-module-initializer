@@ -17,18 +17,18 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.module.billing.api.IBillableItemsService;
 import org.openmrs.module.billing.api.model.BillableService;
 import org.openmrs.module.billing.api.model.BillableServiceStatus;
-import org.openmrs.module.initializer.api.billing.BillableServiceLoader;
+import org.openmrs.module.initializer.api.billing.BillableServicesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class BillableServiceLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_test {
+public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_test {
 	
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService conceptService;
 	
 	@Autowired
-	private BillableServiceLoader loader;
+	private BillableServicesLoader loader;
 	
 	@Autowired
 	private IBillableItemsService billableItemsService;

@@ -13,10 +13,10 @@ import org.openmrs.module.billing.api.IBillableItemsService;
 import org.openmrs.module.billing.api.model.BillableService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.billing.BillableServiceCsvParser;
+import org.openmrs.module.initializer.api.billing.BillableServicesCsvParser;
 import org.openmrs.module.initializer.api.billing.BillableServicesLineProcessor;
 
-public class BillableServiceCsvParserTest {
+public class BillableServicesCsvParserTest {
 	
 	@Mock
 	private IBillableItemsService billableItemsService;
@@ -25,7 +25,7 @@ public class BillableServiceCsvParserTest {
 	private BillableServicesLineProcessor processor;
 	
 	@InjectMocks
-	private BillableServiceCsvParser parser;
+	private BillableServicesCsvParser parser;
 	
 	@Before
 	public void setUp() {

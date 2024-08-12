@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
-public class CashPointCsvParser extends CsvParser<CashPoint, BaseLineProcessor<CashPoint>> {
+public class CashPointsCsvParser extends CsvParser<CashPoint, BaseLineProcessor<CashPoint>> {
 	
 	private final ICashPointService iCashPointService;
 	
 	@Autowired
-	public CashPointCsvParser(@Qualifier("cashierCashPointService") ICashPointService iCashPointService,
+	public CashPointsCsvParser(@Qualifier("cashierCashPointService") ICashPointService iCashPointService,
 	    CashPointsLineProcessor processor) {
 		super(processor);
 		this.iCashPointService = iCashPointService;

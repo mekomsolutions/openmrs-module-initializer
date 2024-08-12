@@ -12,14 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 @OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
-public class BillableServiceCsvParser extends CsvParser<BillableService, BaseLineProcessor<BillableService>> {
+public class BillableServicesCsvParser extends CsvParser<BillableService, BaseLineProcessor<BillableService>> {
 	
 	private final IBillableItemsService billableItemsService;
 	
 	private final BillableServicesLineProcessor billableServicesLineProcessor;
 	
 	@Autowired
-	public BillableServiceCsvParser(@Qualifier("billableItemsService") IBillableItemsService billableItemsService,
+	public BillableServicesCsvParser(@Qualifier("billableItemsService") IBillableItemsService billableItemsService,
 	    BillableServicesLineProcessor billableServicesLineProcessor) {
 		super(billableServicesLineProcessor);
 		this.billableItemsService = billableItemsService;

@@ -12,11 +12,11 @@ import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.billing.api.ICashPointService;
 import org.openmrs.module.billing.api.model.CashPoint;
-import org.openmrs.module.initializer.api.billing.CashPointLoader;
+import org.openmrs.module.initializer.api.billing.CashPointsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class CashPointLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_test {
+public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_test {
 	
 	@Autowired
 	@Qualifier("locationService")
@@ -26,7 +26,7 @@ public class CashPointLoaderIntegrationTest extends DomainBaseModuleContextSensi
 	private ICashPointService iCashPointService;
 	
 	@Autowired
-	private CashPointLoader loader;
+	private CashPointsLoader loader;
 	
 	@Before
 	public void setup() throws Exception {
