@@ -2,11 +2,11 @@
 The **Payment Modes** subfolder contains CSV import files for saving Payment Modes which are the modes of payment tied to a single billable service, that is, the form of payment e.g. Cash, Insurance, PayPal, Mobile Money etc. Below is a possible example of its content:
 
 ```bash
-serviceprices/
-  ├──ServicePrices.csv
+paymentmodes/
+  ├──paymentModes.csv
   └── ...
 ```
-There is currently only one format for the Service Prices CSV line, here are the possible headers with a sample data set:
+There is currently only one format for the Payment Modes CSV line, here are the possible headers with a sample data set:
 
 | <sub>Uuid</sub>                                 | <sub>name</sub> | <sub>attributes</sub>                        |
 |--------------------------------------|-------------|-----------------------------|
