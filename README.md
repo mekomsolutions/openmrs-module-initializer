@@ -10,6 +10,7 @@
   * [Setting up and controlling logging](#setting-up-and-controlling-logging)
 - [Get in touch](#get-in-touch)
 - [Releases notes](#releases-notes)
+    + [Version 2.8.0](#version-280) 
     + [Version 2.7.0](#version-270)
     + [Version 2.6.0](#version-260)
     + [Version 2.5.2](#version-252)
@@ -48,6 +49,8 @@ configuration/
   ├── attributetypes/
   ├── autogenerationoptions/
   ├── bahmniforms/
+  ├── billableservices/
+  ├── cashpoints/
   ├── cohorttypes/
   ├── cohortattributetypes/
   ├── conceptclasses/
@@ -76,6 +79,7 @@ configuration/
   ├── ocl/
   ├── orderfrequencies/
   ├── ordertypes/
+  ├── paymentmodes/
   ├── patientidentifiertypes/ 
   ├── personattributetypes/ 
   ├── privileges/ 
@@ -127,6 +131,9 @@ This is the list of currently supported domains in their loading order:
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
 1. [Open Concept Lab (ZIP Files)](readme/ocl.md)
 1. [Concepts (CSV files)](readme/concepts.md)
+1. [Billable Services (CSV files)](readme/billableservices.md)
+1. [Cash Points (CSV files)](readme/cashpoints.md)
+1. [Payment Modes (CSV files)](readme/paymentmodes.md)
 1. [Concept Sets and Answers (CSV files)](readme/conceptsets.md)
 1. [Programs (CSV files)](readme/prog.md)
 1. [Program Worklows (CSV files)](readme/prog.md)
@@ -166,6 +173,7 @@ mvn clean package
 * Bahmni Appointments 1.2.1 (*compatible*)
 * Bahmni Core 0.93 (*compatible*)
 * Bahmni I.e Apps 1.1.0 (*compatible*)
+* Billing 1.1.0 (*compatible*)
 * Data Filter 1.0.0 (*compatible*)
 * HTML Form Entry 4.0.0 (*compatible*)
 * ID Gen 4.3 (*compatible*)
@@ -197,6 +205,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 #### Version 2.8.0
 * Ampath forms translation files will now generate checksums.
 * Enhancement to ensure that when an Ampath forms file is loaded, a new resource with the existing Ampath forms translations is created.
+* Added support for 'billing' (billableservices, paymentmodes, cashpoints) domains.
 
 #### Version 2.7.0
 * Added support for 'queues' domain.
