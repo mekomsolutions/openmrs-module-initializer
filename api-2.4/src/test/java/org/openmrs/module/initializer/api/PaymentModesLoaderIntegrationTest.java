@@ -12,7 +12,7 @@ import org.openmrs.module.billing.api.model.PaymentMode;
 import org.openmrs.module.initializer.api.billing.PaymentModesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class PaymentModesLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_test {
+public class PaymentModesLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_Test {
 	
 	@Autowired
 	private IPaymentModeService paymentModeService;

@@ -38,7 +38,9 @@ public class DisplaysCsvParser extends CsvParser<OpenmrsObject, BaseLineProcesso
 	public OpenmrsObject save(OpenmrsObject instance) {
 		// Clearing object from session to prevent possibly saving it later on.
 		// See CsvParser#process(List<String[]>) 
-		Context.clearSession();
+		if (instance != null && instance.getId() != null) {
+			Context.evictFromSession(instance);
+		}
 		return instance;
 	}
 }

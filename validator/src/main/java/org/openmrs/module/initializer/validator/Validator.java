@@ -37,6 +37,9 @@ import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator2_0;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator2_4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,22 +173,16 @@ public class Validator {
 	}
 	
 	public static void setupLog4j() {
-		org.apache.log4j.Logger.getRootLogger().setLevel(level);
-		
-		org.apache.log4j.Logger.getLogger("org.openmrs").setLevel(level);
-		org.apache.log4j.Logger.getLogger("org.openmrs.api").setLevel(level);
-		
-		org.apache.log4j.Logger inizLogger = org.apache.log4j.Logger.getLogger("org.openmrs.module.initializer");
-		inizLogger.setLevel(org.apache.log4j.Level.INFO); // this is to focus the Inititalizer log file to the most relevant messages
-		if (logFilePath != null) {
-			try {
-				inizLogger.addAppender(new org.apache.log4j.FileAppender(
-				        new PatternLayout("%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n"), logFilePath.toString()));
-			}
-			catch (IOException e) {
-				log.error("The validator log file appender could not be setup because of: ", e);
-			}
+		InitializerLogConfigurator logConfigurator;
+		try {
+			Class.forName("org.apache.logging.log4j.LogManager");
+			logConfigurator = new InitializerLogConfigurator2_4();
 		}
+		catch (ClassNotFoundException | LinkageError e) {
+			logConfigurator = new InitializerLogConfigurator2_0();
+		}
+		
+		logConfigurator.setupLogging(level, logFilePath);
 	}
 	
 	/**

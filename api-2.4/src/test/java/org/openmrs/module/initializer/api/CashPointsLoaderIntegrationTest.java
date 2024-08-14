@@ -16,7 +16,7 @@ import org.openmrs.module.initializer.api.billing.CashPointsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_test {
+public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_Test {
 	
 	@Autowired
 	@Qualifier("locationService")

@@ -1,6 +1,5 @@
 package org.openmrs.module.initializer.validator;
 
-import static groovy.json.internal.Charsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -35,9 +34,9 @@ public class ValidatorTest {
 		File trimmedCielFile = Validator.trimCielSqlFile(cielFile);
 		
 		// verify
-		String trimmedSql = readFile(trimmedCielFile.getAbsolutePath(), UTF_8);
+		String trimmedSql = readFile(trimmedCielFile.getAbsolutePath(), Charset.forName("UTF-8"));
 		File expectedFile = new File(getClass().getClassLoader().getResource("trimmed_ciel_excerpt.txt").toURI());
-		String expectedSql = readFile(expectedFile.getAbsolutePath(), UTF_8);
+		String expectedSql = readFile(expectedFile.getAbsolutePath(), Charset.forName("UTF-8"));
 		assertEquals(expectedSql, trimmedSql);
 	}
 	
