@@ -17,7 +17,6 @@
     <properties>
         <openmrsPlatformVersion>${openmrsVersion2.4}</openmrsPlatformVersion>
         <datafilterVersion>2.2.0</datafilterVersion>
-        <billingVersion>1.1.0</billingVersion>
         <stockmanagementVersion>2.0.0</stockmanagementVersion>
     </properties>
 
