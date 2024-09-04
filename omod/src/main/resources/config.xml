@@ -66,6 +66,9 @@
 		<aware_of_module version="${addresshierarchyVersion}">
 			org.openmrs.module.addresshierarchy
 		</aware_of_module>
+		<aware_of_module version="${billingVersion}">
+			org.openmrs.module.billing
+		</aware_of_module>
 	</aware_of_modules>
 	
 	<!-- Internationalization -->
