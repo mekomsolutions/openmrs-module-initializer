@@ -72,6 +72,7 @@
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
         <openconceptlabVersion>1.2.9</openconceptlabVersion>
         <fhir2Version>1.6.0</fhir2Version>
+        <billingVersion>1.1.0</billingVersion>
 
         <!-- Modules compatibility > Core 2.3.0 -->
         <datafilterVersion>1.0.0</datafilterVersion>
