@@ -1,11 +1,14 @@
 package org.openmrs.module.initializer.api;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Locale;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
@@ -50,6 +53,7 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 		{
 			Concept c = new Concept();
 			c.setShortName(new ConceptName("Active treatment (initial)", Locale.ENGLISH));
+			c.setDescriptions(Collections.singleton(new ConceptDescription("Active treatment (initial)", Locale.ENGLISH)));
 			c.setConceptClass(cs.getConceptClassByName("State"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c = cs.saveConcept(c);
@@ -124,8 +128,8 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 			Assert.assertEquals(wf, state.getProgramWorkflow());
 			
 			Assert.assertEquals(cs.getConceptByName("Active treatment (initial)"), state.getConcept());
-			Assert.assertEquals("Active treatment (initial)", state.getName());
-			Assert.assertEquals("Active treatment (initial)", state.getDescription());
+			Assert.assertEquals("Active treatment (initial)", state.getConcept().getName().getName());
+			Assert.assertEquals("Active treatment (initial)", state.getConcept().getDescription().getDescription());
 			Assert.assertFalse(state.isRetired());
 			Assert.assertTrue(state.getInitial());
 			Assert.assertFalse(state.getTerminal());

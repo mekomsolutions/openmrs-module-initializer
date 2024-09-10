@@ -382,6 +382,22 @@
         <version>${mysqlTestContainerVersion}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>exti18n-api</artifactId>
+      <version>${exti18nVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>stockmanagement-api</artifactId>
+      <version>${stockmanagementVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
   </dependencies>
 
   <build>
