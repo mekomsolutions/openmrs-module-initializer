@@ -211,6 +211,9 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 			}
 		}
 		
+		Context.flushSession();
+		Context.clearSession();
+		
 		return result;
 	}
 	

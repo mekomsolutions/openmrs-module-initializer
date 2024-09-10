@@ -1,11 +1,13 @@
 package org.openmrs.module.initializer.api;
 
+import java.util.Collections;
 import java.util.Locale;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
@@ -39,6 +41,8 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleConte
 		{
 			Concept c = new Concept();
 			c.setShortName(new ConceptName("TB Treatment Status (workflow)", Locale.ENGLISH));
+			c.setDescriptions(
+			    Collections.singleton(new ConceptDescription("TB Treatment Status (workflow)", Locale.ENGLISH)));
 			c.setConceptClass(cs.getConceptClassByName("Workflow"));
 			c.setDatatype(cs.getConceptDatatypeByName("Text"));
 			c = cs.saveConcept(c);
@@ -133,8 +137,8 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleConte
 			Program prog = pws.getProgramByName("TB Program");
 			Assert.assertEquals(prog, wf.getProgram());
 			Assert.assertEquals(cs.getConceptByName("TB Treatment Status (workflow)"), wf.getConcept());
-			Assert.assertEquals("TB Treatment Status (workflow)", wf.getName());
-			Assert.assertEquals("TB Treatment Status (workflow)", wf.getDescription());
+			Assert.assertEquals("TB Treatment Status (workflow)", wf.getConcept().getName().getName());
+			Assert.assertEquals("TB Treatment Status (workflow)", wf.getConcept().getDescription().getDescription());
 			Assert.assertFalse(wf.isRetired());
 			Assert.assertEquals(wf, prog.getWorkflow(wf.getId()));
 		}

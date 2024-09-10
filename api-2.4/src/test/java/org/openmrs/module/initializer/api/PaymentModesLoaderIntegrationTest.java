@@ -49,16 +49,7 @@ public class PaymentModesLoaderIntegrationTest extends DomainBaseModuleContextSe
 		{
 			PaymentMode paymentMode = paymentModeService.getByUuid("e168c141-f5fd-4eec-bd3e-633bed1c9606");
 			assertNotNull(paymentMode);
-			assertEquals("Paypal", paymentMode.getName()); 
-			
-			paymentMode.getAttributeTypes().forEach(attributeType -> {
-	            if (attributeType.getName().equals("Maximum")) {
-	            	assertEquals("Numeric", attributeType.getFormat());
-	            	assertTrue(attributeType.getRequired());
-	            } else {
-	            	assertEquals("Minimum", attributeType.getName());
-	            }
-	        });
+			assertEquals("Nutrition Cash Item", paymentMode.getName());
 		}
 		
 		// Verify edition

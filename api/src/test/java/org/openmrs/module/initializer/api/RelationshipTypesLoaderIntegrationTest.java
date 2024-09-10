@@ -29,7 +29,7 @@ public class RelationshipTypesLoaderIntegrationTest extends DomainBaseModuleCont
 		{
 			RelationshipType rt = ps.getRelationshipTypeByUuid("c86d9979-b8ac-4d8c-85cf-cc04e7f16315");
 			Assert.assertNotNull(rt);
-			Assert.assertEquals("Uncle/Nephew", rt.getName());
+			Assert.assertEquals("Uncle/Nephew", rt.toString());
 			Assert.assertEquals("A relationship of an uncle and his nephew", rt.getDescription());
 			Assert.assertEquals("Uncle", rt.getaIsToB());
 			Assert.assertEquals("Nephew", rt.getbIsToA());
@@ -41,7 +41,7 @@ public class RelationshipTypesLoaderIntegrationTest extends DomainBaseModuleCont
 		{
 			RelationshipType rt = ps.getRelationshipTypeByUuid("53d8a8f3-0084-4a52-8666-c655f5bd2689");
 			Assert.assertNotNull(rt);
-			Assert.assertEquals("Supervisor/Supervisee", rt.getName());
+			Assert.assertEquals("Supervisor/Supervisee", rt.toString());
 			Assert.assertEquals("A new description for supervisor to supervisee relationship", rt.getDescription());
 		}
 		
