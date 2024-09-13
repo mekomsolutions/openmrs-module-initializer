@@ -189,6 +189,8 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	 * @return The resulting CsvParserResult instance.
 	 */
 	public CsvFailingLines process(List<String[]> lines) {
+		// Save cached objects to avoid losing them prematurely by other Parsers
+		// See DisplaysCsvParser#save(OpenmrsObject)
 		Context.flushSession();
 		Context.clearSession();
 		
