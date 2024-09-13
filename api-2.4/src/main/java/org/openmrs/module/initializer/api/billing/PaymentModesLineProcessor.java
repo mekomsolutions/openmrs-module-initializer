@@ -21,18 +21,21 @@ public class PaymentModesLineProcessor extends BaseLineProcessor<PaymentMode> {
 		
 		String attributes = line.get(HEADER_ATTRIBUTES, false);
 		if (StringUtils.isNotBlank(attributes)) {
-			paymentMode.getAttributeTypes().clear();
+			if (paymentMode.getAttributeTypes() != null) {
+				paymentMode.getAttributeTypes().clear();
+			}
 			for (String attribute : attributes.split(BaseLineProcessor.LIST_SEPARATOR)) {
 				String[] parts = attribute.trim().split("::");
 				if (parts.length > 3) {
-					paymentMode.addAttributeType(parts[0].trim(), parts[1].trim(), parts[2].trim(), Boolean.parseBoolean(parts[3].trim()));
+					paymentMode.addAttributeType(parts[0].trim(), parts[1].trim(), parts[2].trim(),
+					    Boolean.parseBoolean(parts[3].trim()));
 				} else if (parts.length > 2) {
 					paymentMode.addAttributeType(parts[0].trim(), parts[1].trim(), parts[2].trim(), false);
 				} else if (parts.length > 1) {
 					paymentMode.addAttributeType(parts[0].trim(), parts[1].trim(), null, false);
 				} else {
 					paymentMode.addAttributeType(parts[0].trim(), null, null, false);
-				} 
+				}
 			}
 		}
 		

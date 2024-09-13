@@ -189,6 +189,8 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	 * @return The resulting CsvParserResult instance.
 	 */
 	public CsvFailingLines process(List<String[]> lines) {
+		Context.flushSession();
+		Context.clearSession();
 		
 		CsvFailingLines result = new CsvFailingLines();
 		int saved = 0;
@@ -210,9 +212,6 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 				}
 			}
 		}
-		
-		Context.flushSession();
-		Context.clearSession();
 		
 		return result;
 	}

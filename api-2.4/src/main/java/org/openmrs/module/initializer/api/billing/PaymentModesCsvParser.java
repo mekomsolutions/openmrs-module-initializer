@@ -18,7 +18,7 @@ public class PaymentModesCsvParser extends CsvParser<PaymentMode, BaseLineProces
 	
 	@Autowired
 	public PaymentModesCsvParser(@Qualifier("cashierPaymentModeService") IPaymentModeService paymentModeService,
-			PaymentModesLineProcessor processor) {
+	    PaymentModesLineProcessor processor) {
 		super(processor);
 		this.paymentModeService = paymentModeService;
 	}
