@@ -5,7 +5,9 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptReferenceRange;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -28,7 +30,7 @@ public class ConceptReferenceRangeCsvParser extends CsvParser<ConceptReferenceRa
 	}
 	
 	@Override
-	public Concept bootstrap(CsvLine line) throws IllegalArgumentException {
+	public ConceptReferenceRange bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = line.getUuid();
 
 		ConceptReferenceRange referenceRange = conceptService.getconceptReferenceRangeByUuid(uuid);
@@ -40,11 +42,11 @@ public class ConceptReferenceRangeCsvParser extends CsvParser<ConceptReferenceRa
             }
 		}
 		
-		return concept;
+		return referenceRange;
 	}
 	
 	@Override
-	public Concept save(ConceptReferenceRange instance) {
-		return conceptService.saveConcept(instance);
+	public ConceptReferenceRange save(ConceptReferenceRange instance) {
+		return conceptService.saveConceptReferenceRange(instance);
 	}
 }
