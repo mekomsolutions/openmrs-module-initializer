@@ -60,7 +60,7 @@
         <openmrsVersion2.5>2.5.5</openmrsVersion2.5>
         <openmrsVersion2.7>2.7.0-SNAPSHOT</openmrsVersion2.7>
 
-        <openmrsPlatformVersion>${openmrsVersion2.7}</openmrsPlatformVersion>
+        <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
 
         <!-- Modules compatibility -->
         <appointmentsVersion>1.2.1</appointmentsVersion>
