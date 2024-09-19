@@ -9,13 +9,13 @@ import java.io.File;
 
 @Component
 public class ConceptReferenceRangeLoader extends BaseCsvLoader<ConceptReferenceRange, ConceptReferenceRangeCsvParser> {
-
-    @Autowired
-    public void setParser(ConceptReferenceRangeCsvParser parser) {
-        this.parser = parser;
-    }
-
-    @Override
-    protected void preload(File file) {
-    }
+	
+	@Autowired
+	public void setParser(ConceptReferenceRangeCsvParser parser) {
+		this.parser = parser;
+	}
+	
+	@Override
+	protected void preload(File file) {
+	}
 }

@@ -1,7 +1,6 @@
 package org.openmrs.module.initializer.api.c;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.Concept;
 import org.openmrs.ConceptReferenceRange;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.Domain;
@@ -14,12 +13,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ConceptReferenceRangeCsvParser extends CsvParser<ConceptReferenceRange, BaseLineProcessor<ConceptReferenceRange>> {
-
+	
 	private final ConceptService conceptService;
-
+	
 	@Autowired
 	public ConceptReferenceRangeCsvParser(@Qualifier("conceptService") ConceptService conceptService,
-										  ConceptReferenceRangeLineProcessor processor) {
+	    ConceptReferenceRangeLineProcessor processor) {
 		super(processor);
 		this.conceptService = conceptService;
 	}
@@ -32,14 +31,14 @@ public class ConceptReferenceRangeCsvParser extends CsvParser<ConceptReferenceRa
 	@Override
 	public ConceptReferenceRange bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = line.getUuid();
-
-		ConceptReferenceRange referenceRange = conceptService.getconceptReferenceRangeByUuid(uuid);
-
+		
+		ConceptReferenceRange referenceRange = conceptService.getConceptReferenceRangeByUuid(uuid);
+		
 		if (referenceRange == null) {
 			referenceRange = new ConceptReferenceRange();
-            if (!StringUtils.isEmpty(uuid)) {
-                referenceRange.setUuid(uuid);
-            }
+			if (!StringUtils.isEmpty(uuid)) {
+				referenceRange.setUuid(uuid);
+			}
 		}
 		
 		return referenceRange;

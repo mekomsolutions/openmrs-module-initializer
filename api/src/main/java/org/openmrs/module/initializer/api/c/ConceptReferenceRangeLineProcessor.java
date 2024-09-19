@@ -11,26 +11,25 @@ import org.springframework.stereotype.Component;
 
 @Component("initializer.conceptReferenceRangeLineProcessor")
 public class ConceptReferenceRangeLineProcessor extends BaseLineProcessor<ConceptReferenceRange> {
-
 	
-	private final String HEADER_CONCEPT_NUMERIC_UUID = "Concept Numeric uuid";
-
+	private final String HEADER_CONCEPT_NUMERIC_UUID = "Concept Numeric Uuid";
+	
 	private final String HEADER_AH = "Absolute high";
-
+	
 	private final String HEADER_CH = "Critical high";
-
+	
 	private final String HEADER_NH = "Normal high";
-
+	
 	private final String HEADER_AL = "Absolute low";
-
+	
 	private final String HEADER_CL = "Critical low";
-
+	
 	private final String HEADER_NL = "Normal low";
-
+	
 	private final String HEADER_CRITERIA = "Criteria";
-
+	
 	private ConceptService conceptService;
-
+	
 	@Autowired
 	public ConceptReferenceRangeLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
 		this.conceptService = conceptService;
@@ -40,7 +39,8 @@ public class ConceptReferenceRangeLineProcessor extends BaseLineProcessor<Concep
 		ConceptNumeric conceptNumeric = conceptService.getConceptNumericByUuid(line.get(HEADER_CONCEPT_NUMERIC_UUID));
 		
 		if (conceptNumeric == null) { // below overrides any other processors work, so this one should be called first
-			throw new IllegalArgumentException("No concept numeric found for '" + line.get(HEADER_CONCEPT_NUMERIC_UUID) + "'");
+			throw new IllegalArgumentException(
+			        "No concept numeric found for '" + line.get(HEADER_CONCEPT_NUMERIC_UUID) + "'");
 		}
 		
 		if (referenceRange == null) {
