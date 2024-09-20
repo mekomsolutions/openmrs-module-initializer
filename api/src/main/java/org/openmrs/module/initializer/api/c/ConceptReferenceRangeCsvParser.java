@@ -25,7 +25,7 @@ public class ConceptReferenceRangeCsvParser extends CsvParser<ConceptReferenceRa
 	
 	@Override
 	public Domain getDomain() {
-		return Domain.CONCEPT_REFERENCE_RANGE;
+		return Domain.CONCEPT_REFERENCE_RANGES;
 	}
 	
 	@Override
