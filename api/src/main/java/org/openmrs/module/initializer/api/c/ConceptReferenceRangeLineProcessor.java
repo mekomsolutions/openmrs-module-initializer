@@ -38,7 +38,7 @@ public class ConceptReferenceRangeLineProcessor extends BaseLineProcessor<Concep
 	public ConceptReferenceRange fill(ConceptReferenceRange referenceRange, CsvLine line) throws IllegalArgumentException {
 		ConceptNumeric conceptNumeric = conceptService.getConceptNumericByUuid(line.get(HEADER_CONCEPT_NUMERIC_UUID));
 		
-		if (conceptNumeric == null) { // below overrides any other processors work, so this one should be called first
+		if (conceptNumeric == null) {
 			throw new IllegalArgumentException(
 			        "No concept numeric found for '" + line.get(HEADER_CONCEPT_NUMERIC_UUID) + "'");
 		}
