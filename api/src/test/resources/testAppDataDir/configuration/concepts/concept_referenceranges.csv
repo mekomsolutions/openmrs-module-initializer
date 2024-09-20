@@ -1,4 +1,4 @@
 Uuid,Concept Numeric Uuid,Absolute low,Critical low,Normal low,Normal high,Critical high,Absolute high,Criteria
-bc059100-4ace-4af5-afbf-2da7f3a34acf,30247229-052c-400b-a823-cb66b1c506c7,-100.5,-85.7,-50.3,45.1,78,98.8, $patient.getAge() > 3
-930e1fb4-490d-45fe-a137-0cd941c76124,,-100.5,-85.7,-50.3,45.1,78,98.8, $patient.getAge() < 10
-b5a7b296-e500-4a2c-ab2e-eb012ed9ae1e,,60,70,80,120,130,150, $fn.getCurrentHour() > 2
+bc059100-4ace-4af5-afbf-2da7f3a34acf,239c1904-15ff-45e1-ac9d-d83afb637926,-100.5,-85.7,-50.3,45.1,78,98.8, $patient.getAge() > 3
+930e1fb4-490d-45fe-a137-0cd941c76124,239c1904-15ff-45e1-ac9d-d83afb637926,-100.5,-85.7,-50.3,45.1,78,98.8, $patient.getAge() < 10
+b5a7b296-e500-4a2c-ab2e-eb012ed9ae1e,239c1904-15ff-45e1-ac9d-d83afb637926,60,70,80,120,130,150, $fn.getCurrentHour() > 2

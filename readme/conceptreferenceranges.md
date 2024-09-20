@@ -16,7 +16,7 @@ Here is a sample CSV:
 | bc059100-4ace-4af5-afbf-2da7f3a34acf | 3f8f0ab7-c240-4b68-8951-bb7020be01f6 | 60                               | 70                                              | 80                              | 120 | 130 | 150                     | $patient.getAge() > 3 |
 
 
-Summery of the set of available headers.
+Available headers for this domain
 
 ###### Header `Uuid`
 Uuid of the conceptReferenceRange entity.
@@ -27,10 +27,10 @@ UUID of ConceptNumeric.
 ###### Header `Absolute low` *(mandatory)*
 Absolute low of referenceRange.
 
-###### Header `Critical low` *(mandatory)*
+###### Header `Critical low` 
 Critical low of referenceRange.
 
-###### Header `Normal low` *(mandatory)*
+###### Header `Normal low`
 Normal low of referenceRange.
 
 ###### Header `Normal high`
