@@ -139,12 +139,12 @@
 <!--            <scope>test</scope>-->
 <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>org.openmrs.module</groupId>-->
-<!--            <artifactId>fhir2-api-2.5</artifactId>-->
-<!--            <version>${fhir2Version}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>fhir2-api-2.5</artifactId>
+            <version>${fhir2Version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.openmrs.module</groupId>

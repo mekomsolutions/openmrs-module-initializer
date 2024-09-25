@@ -30,13 +30,19 @@ public class ConceptReferenceRangeLineProcessor extends BaseLineProcessor<Concep
 	
 	private ConceptService conceptService;
 	
+	private final ConceptReferenceRangeService conceptReferenceRangeService;
+	
 	@Autowired
-	public ConceptReferenceRangeLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
+	public ConceptReferenceRangeLineProcessor(@Qualifier("conceptService") ConceptService conceptService,
+	    ConceptReferenceRangeService conceptReferenceRangeService) {
 		this.conceptService = conceptService;
+		this.conceptReferenceRangeService = conceptReferenceRangeService;
 	}
 	
 	public ConceptReferenceRange fill(ConceptReferenceRange referenceRange, CsvLine line) throws IllegalArgumentException {
-		ConceptNumeric conceptNumeric = conceptService.getConceptNumericByUuid(line.get(HEADER_CONCEPT_NUMERIC_UUID));
+		//		ConceptNumeric conceptNumeric = conceptService.getConceptNumericByUuid(line.get(HEADER_CONCEPT_NUMERIC_UUID));
+		ConceptNumeric conceptNumeric = conceptReferenceRangeService
+		        .getConceptNumericByUuid(line.get(HEADER_CONCEPT_NUMERIC_UUID));
 		
 		if (conceptNumeric == null) {
 			throw new IllegalArgumentException(

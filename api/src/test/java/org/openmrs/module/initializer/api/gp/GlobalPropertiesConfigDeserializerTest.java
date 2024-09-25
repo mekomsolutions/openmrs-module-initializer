@@ -39,7 +39,7 @@ public class GlobalPropertiesConfigDeserializerTest {
 	@Verifies(value = "should throw XStream exception on invalid config", method = "fromXML(InputStream input)")
 	public void shouldThrowException() {
 		
-		InitializerSerializer.getGlobalPropertiesConfig(
-		    getClass().getClassLoader().getResourceAsStream("org/openmrs/module/initializer/include/gp_error.xml"));
+		InitializerSerializer.getGlobalPropertiesConfig(getClass().getClassLoader().getResourceAsStream(
+		    "org/openmrs/module/initializer/include/gp_error.xml"));
 	}
 }
