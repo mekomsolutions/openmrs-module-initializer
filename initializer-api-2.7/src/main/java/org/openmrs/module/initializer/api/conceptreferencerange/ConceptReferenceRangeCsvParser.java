@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.c;
+package org.openmrs.module.initializer.api.conceptreferencerange;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.ConceptReferenceRange;

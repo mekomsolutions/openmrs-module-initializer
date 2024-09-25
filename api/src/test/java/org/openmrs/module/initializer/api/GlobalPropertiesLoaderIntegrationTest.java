@@ -28,7 +28,7 @@ public class GlobalPropertiesLoaderIntegrationTest extends DomainBaseModuleConte
 		// Replay
 		loader.load();
 		
-		// Verif
+		// Verify
 		Assert.assertEquals("GP one one", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
 		Assert.assertEquals("GP one two", Context.getAdministrationService().getGlobalProperty("gp.gp12"));
 		Assert.assertEquals("GP two one", Context.getAdministrationService().getGlobalProperty("gp.gp21"));

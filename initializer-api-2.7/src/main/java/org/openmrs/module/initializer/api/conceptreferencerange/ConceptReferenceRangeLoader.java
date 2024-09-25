@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer.api.c;
+package org.openmrs.module.initializer.api.conceptreferencerange;
 
 import org.openmrs.ConceptReferenceRange;
 import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;

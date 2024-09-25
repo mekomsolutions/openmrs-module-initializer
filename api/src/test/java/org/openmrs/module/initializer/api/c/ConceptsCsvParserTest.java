@@ -120,7 +120,7 @@ public class ConceptsCsvParserTest {
 		
 		List<String[]> lines = parser.process(parser.getLines()).getFailingLines();
 		
-		// verif
+		// verify
 		Assert.assertEquals(1, lines.size());
 	}
 	

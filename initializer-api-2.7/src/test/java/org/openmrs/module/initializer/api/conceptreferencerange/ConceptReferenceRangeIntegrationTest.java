@@ -1,11 +1,11 @@
-package org.openmrs.module.initializer.api;
+package org.openmrs.module.initializer.api.conceptreferencerange;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.openmrs.ConceptReferenceRange;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
-import org.openmrs.module.initializer.api.c.ConceptReferenceRangeLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ConceptReferenceRangeIntegrationTest extends DomainBaseModuleContextSensitiveTest {
@@ -13,13 +13,13 @@ public class ConceptReferenceRangeIntegrationTest extends DomainBaseModuleContex
 	@Autowired
 	private ConceptService conceptService;
 	
-	@Autowired
+	@Mock
 	private ConceptReferenceRangeLoader conceptReferenceRangeLoader;
-	
+
 	@Test
 	public void load_shouldLoadConceptReferenceRangeFromCsvFiles() {
 		conceptReferenceRangeLoader.load();
-		
+
 		{
 			ConceptReferenceRange referenceRange = conceptService
 			        .getConceptReferenceRangeByUuid("239c1904-15ff-45e1-ac9d-d83afb637926");
