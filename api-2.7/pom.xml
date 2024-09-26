@@ -15,9 +15,6 @@
     <description>API 2.7 project for Initializer</description>
 
     <properties>
-<!--        <maven.compiler.source>8</maven.compiler.source>-->
-<!--        <maven.compiler.target>8</maven.compiler.target>-->
-<!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
         <openmrsPlatformVersion>${openmrsVersion2.7}</openmrsPlatformVersion>
         <datafilterVersion>2.2.0</datafilterVersion>
     </properties>
@@ -37,25 +34,11 @@
             </exclusions>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.powermock</groupId>-->
-<!--            <artifactId>powermock-api-mockito2</artifactId>-->
-<!--            <version>2.0.9</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.powermock</groupId>-->
-<!--            <artifactId>powermock-module-junit4</artifactId>-->
-<!--            <version>2.0.9</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>3.12.4</version>
-            <type>jar</type>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -123,27 +106,6 @@
             <version>${project.parent.version}</version>
             <scope>test</scope>
             <type>test-jar</type>
-        </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.openmrs.module</groupId>-->
-<!--            <artifactId>billing-api</artifactId>-->
-<!--            <version>${billingVersion}</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.openmrs.module</groupId>-->
-<!--            <artifactId>stockmanagement-api</artifactId>-->
-<!--            <version>${stockmanagementVersion}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>fhir2-api-2.5</artifactId>
-            <version>${fhir2Version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>

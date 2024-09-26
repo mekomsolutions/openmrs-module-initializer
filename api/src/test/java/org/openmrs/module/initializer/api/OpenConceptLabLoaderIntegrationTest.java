@@ -58,7 +58,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 	}
 	
 	@After
-	public void deleteAllData() {
+	public void deleteAllData() throws Exception {
 		// this is necessary or else future test cases will fail because of two sources named CIEL
 		super.deleteAllData();
 	}

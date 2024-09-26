@@ -16,7 +16,7 @@ public class ConceptReferenceRangeCsvParser extends CsvParser<ConceptReferenceRa
 	
 	@Autowired
 	public ConceptReferenceRangeCsvParser(ConceptReferenceRangeLineProcessor processor,
-										  ConceptReferenceRangeService conceptReferenceRangeService) {
+	    ConceptReferenceRangeService conceptReferenceRangeService) {
 		super(processor);
 		this.conceptReferenceRangeService = conceptReferenceRangeService;
 	}
@@ -29,7 +29,7 @@ public class ConceptReferenceRangeCsvParser extends CsvParser<ConceptReferenceRa
 	@Override
 	public ConceptReferenceRange bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = line.getUuid();
-
+		
 		ConceptReferenceRange referenceRange = conceptReferenceRangeService.getConceptReferenceRangeByUuid(uuid);
 		
 		if (referenceRange == null) {

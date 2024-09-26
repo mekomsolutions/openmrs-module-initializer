@@ -1,13 +1,11 @@
 package org.openmrs.module.initializer.api.loc;
 
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.openmrs.module.initializer.api.BaseAttributeLineProcessor.HEADER_ATTRIBUTE_PREFIX;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
 

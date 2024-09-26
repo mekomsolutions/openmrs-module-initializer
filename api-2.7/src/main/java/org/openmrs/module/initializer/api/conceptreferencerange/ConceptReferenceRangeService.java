@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @OpenmrsProfile(openmrsPlatformVersion = "2.7.0 - 2.7.*")
 public class ConceptReferenceRangeService implements OpenmrsService {
 	
+	@Autowired
 	private final ConceptService conceptService;
 	
 	@Autowired

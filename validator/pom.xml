@@ -142,6 +142,13 @@
     </dependency>
 
     <dependency>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>${project.parent.artifactId}-api-2.7</artifactId>
+      <version>${project.parent.version}</version>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
       <groupId>org.openmrs.api</groupId>
       <artifactId>openmrs-api</artifactId>
       <version>${openmrsPlatformVersion}</version>
