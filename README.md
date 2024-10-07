@@ -179,7 +179,7 @@ mvn clean package
 * ID Gen 4.3 (*compatible*)
 * Metadata Sharing 1.2.2 (*compatible*)
 * Metadata Mapping 1.3.4 (*compatible*)
-* Open Concept Lab 1.2.9 (*compatible*)
+* Open Concept Lab 2.4.0 (*compatible*)
 
 ### Test your OpenMRS configs
 See the [Initializer Validator README page](readme/validator.md).
