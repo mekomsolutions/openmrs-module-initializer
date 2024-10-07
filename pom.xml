@@ -70,7 +70,7 @@
         <idgenVersion>4.6.0</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
-        <openconceptlabVersion>1.2.9</openconceptlabVersion>
+        <openconceptlabVersion>2.4.0</openconceptlabVersion>
         <fhir2Version>1.6.0</fhir2Version>
         <billingVersion>1.1.0</billingVersion>
         <stockmanagementVersion>2.0.2-SNAPSHOT</stockmanagementVersion>

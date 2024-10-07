@@ -73,8 +73,8 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Concept c = conceptService.getConceptByUuid("1419AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			Assert.assertNotNull(c);
 			Assert.assertFalse(c.getRetired());
-			Assert.assertEquals("VACCINE MANUFACTURER", c.getName(Locale.ENGLISH).getName());
-			Assert.assertEquals("vaccine maker", c.getShortNameInLocale(Locale.ENGLISH).getName());
+			Assert.assertEquals("Vaccine manufacturer", c.getName(Locale.ENGLISH).getName());
+			Assert.assertEquals("Vaccine maker", c.getShortNameInLocale(Locale.ENGLISH).getName());
 			Assert.assertEquals("Fabricant du vaccin", c.getName(Locale.FRENCH).getName());
 			Assert.assertEquals("Kiwanda cha kutengeneza chanjo", c.getName(LOCALE_SW).getName());
 			Assert.assertEquals(0, c.getDescriptions().size());
@@ -100,20 +100,20 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Context.setLocale(Locale.ENGLISH);
 			Concept c = conceptService.getConceptByUuid("5864AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			Assert.assertNotNull(c);
-			Assert.assertEquals("YELLOW FEVER VACCINATION", c.getName(Locale.ENGLISH).getName());
-			Assert.assertEquals("Vaccine given for Yellow Fever.", c.getDescription().toString());
-			Assert.assertEquals("Drug", c.getConceptClass().getName());
+			Assert.assertEquals("Yellow fever vaccination", c.getName(Locale.ENGLISH).getName());
+			Assert.assertEquals("Vaccination given for Yellow Fever.", c.getDescription().toString());
+			Assert.assertEquals("Procedure", c.getConceptClass().getName());
 			Assert.assertEquals("N/A", c.getDatatype().getName());
 		}
 		
 		// Verify by name
 		{
 			Context.setLocale(Locale.ENGLISH);
-			Concept c = conceptService.getConceptByName("VACCINE MANUFACTURER");
+			Concept c = conceptService.getConceptByName("Vaccine manufacturer");
 			Assert.assertNotNull(c);
 			Assert.assertFalse(c.getRetired());
-			Assert.assertEquals("VACCINE MANUFACTURER", c.getName(Locale.ENGLISH).getName());
-			Assert.assertEquals("vaccine maker", c.getShortNameInLocale(Locale.ENGLISH).getName());
+			Assert.assertEquals("Vaccine manufacturer", c.getName(Locale.ENGLISH).getName());
+			Assert.assertEquals("Vaccine maker", c.getShortNameInLocale(Locale.ENGLISH).getName());
 			Assert.assertEquals("Fabricant du vaccin", c.getName(Locale.FRENCH).getName());
 			Assert.assertEquals("Kiwanda cha kutengeneza chanjo", c.getName(LOCALE_SW).getName());
 			Assert.assertEquals(0, c.getDescriptions().size());
@@ -140,8 +140,8 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Concept c = conceptService.getConceptByMapping("1419", "CIEL");
 			Assert.assertNotNull(c);
 			Assert.assertFalse(c.getRetired());
-			Assert.assertEquals("VACCINE MANUFACTURER", c.getName(Locale.ENGLISH).getName());
-			Assert.assertEquals("vaccine maker", c.getShortNameInLocale(Locale.ENGLISH).getName());
+			Assert.assertEquals("Vaccine manufacturer", c.getName(Locale.ENGLISH).getName());
+			Assert.assertEquals("Vaccine maker", c.getShortNameInLocale(Locale.ENGLISH).getName());
 			Assert.assertEquals("Fabricant du vaccin", c.getName(Locale.FRENCH).getName());
 			Assert.assertEquals("Kiwanda cha kutengeneza chanjo", c.getName(LOCALE_SW).getName());
 			Assert.assertEquals(0, c.getDescriptions().size());
@@ -189,7 +189,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Context.setLocale(Locale.ENGLISH);
 			Concept c = conceptService.getConceptByName("PNEUMOCOCCAL VACCINE");
 			Assert.assertNotNull(c);
-			Assert.assertEquals(3, c.getNames().size());
+			Assert.assertEquals(6, c.getNames().size());
 			Assert.assertEquals(0, c.getShortNames().size());
 			Assert.assertEquals(0, c.getDescriptions().size());
 			Assert.assertEquals("Drug", c.getConceptClass().getName());
@@ -218,7 +218,7 @@ public class OpenConceptLabLoaderIntegrationTest extends DomainBaseModuleContext
 			Concept c = conceptService.getConceptByUuid("17AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			Assert.assertNotNull(c);
 			Assert.assertFalse(c.getRetired());
-			Assert.assertEquals("DIPTHERIA TETANUS BOOSTER", c.getFullySpecifiedName(Locale.ENGLISH).getName());
+			Assert.assertEquals("Diptheria tetanus booster", c.getFullySpecifiedName(Locale.ENGLISH).getName());
 			Assert.assertEquals("Drug", c.getConceptClass().getName());
 			Assert.assertEquals("N/A", c.getDatatype().getName());
 		}
