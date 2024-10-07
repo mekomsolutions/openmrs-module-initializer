@@ -155,7 +155,7 @@ public class ConfigDirUtilTest {
 		List<String> orderedFilenames = dirUtil.getFiles("csv", null).stream()
 		        .map(f -> new ConceptsLoader().toOrderedFile(f)).sorted().map(f -> f.getName()).collect(Collectors.toList());
 		
-		// Verif
+		// Verify
 		assertThat(orderedFilenames.size(), is(5));
 		Assert.assertEquals("5_order_500.csv", orderedFilenames.get(0));
 		Assert.assertEquals("4_order_1000.csv", orderedFilenames.get(1));

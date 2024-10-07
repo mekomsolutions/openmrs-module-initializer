@@ -115,7 +115,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		loader.load();
 		String json = getService().getValueFromKey("structured.json");
 		
-		// Verif
+		// Verify
 		Assert.assertEquals("{\"foo\":\"bar\",\"fooz\":{\"baz\":\"value\"}}", json);
 	}
 	
@@ -125,7 +125,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		loader.load();
 		List<Concept> concepts = getService().getConceptsFromKey("impl.purpose.concepts");
 		
-		// Verif
+		// Verify
 		Assert.assertThat(concepts.size(), is(2));
 		for (Concept c : concepts) {
 			Assert.assertNotNull(c);
@@ -138,7 +138,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		// Replay
 		ConfigDirUtil dirUtil = loader.getDirUtil();
 		
-		// Verif
+		// Verify
 		Assert.assertEquals(true, dirUtil.skipChecksums);
 		Assert.assertEquals(iniz.getChecksumsDirPath() + File.separator + loader.getDomainName(),
 		    dirUtil.getDomainChecksumsDirPath());

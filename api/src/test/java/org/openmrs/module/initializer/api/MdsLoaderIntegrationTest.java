@@ -33,7 +33,7 @@ public class MdsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTe
 		
 		loader.load();
 		
-		// Verif
+		// Verify
 		PatientIdentifierType patientIdType = Context.getPatientService()
 		        .getPatientIdentifierTypeByUuid("0d2ac572-8de3-46c8-9976-1f78899c599f");
 		Assert.assertEquals("National ID card number", patientIdType.getName());

@@ -126,7 +126,7 @@ public class BaseLineProcessorTest {
 		// a regular header line
 		Map<String, LocalizedHeader> lhMap = LocalizedHeader.getLocalizedHeadersMap(hl1.toArray(new String[hl1.size()]));
 		
-		// Verif
+		// Verify
 		Assert.assertEquals(2, lhMap.size());
 		LocalizedHeader lh = null;
 		Assert.assertTrue(lhMap.containsKey("name"));
