@@ -70,7 +70,7 @@ public class EncounterTypesLoaderIntegrationTest extends DomainBaseModuleContext
 		// Replay
 		loader.load();
 		
-		// verif
+		// verify
 		{
 			EncounterType et = es.getEncounterType("Triage Encounter");
 			Assert.assertNotNull(et);

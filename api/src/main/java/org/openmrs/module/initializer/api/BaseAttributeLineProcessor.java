@@ -41,7 +41,7 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 			
 			CustomDatatype<?> datatype = CustomDatatypeUtil.getDatatype(attType.getDatatypeClassname(),
 			    attType.getDatatypeConfig());
-			Object value = datatype.fromReferenceString(attData.getValue());
+			Object value = datatype == null ? null : datatype.fromReferenceString(attData.getValue());
 			
 			A attribute = newAttribute();
 			attribute.setAttributeType(attType);

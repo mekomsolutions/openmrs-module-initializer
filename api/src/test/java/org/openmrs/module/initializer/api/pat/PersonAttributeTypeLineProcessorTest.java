@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.openmrs.PersonAttributeType;
@@ -14,10 +15,12 @@ import org.openmrs.Privilege;
 import org.openmrs.api.PersonService;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.pat.PersonAttributeTypeLineProcessor.Helper;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /*
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
  */
+@RunWith(PowerMockRunner.class)
 public class PersonAttributeTypeLineProcessorTest {
 	
 	private PersonService ps = mock(PersonService.class);

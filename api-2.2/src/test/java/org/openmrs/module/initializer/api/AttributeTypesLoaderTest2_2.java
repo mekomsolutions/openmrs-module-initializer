@@ -2,6 +2,7 @@ package org.openmrs.module.initializer.api;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.openmrs.module.initializer.api.AttributeTypesLoaderTest.assertCustomDatatype;
 
@@ -46,7 +47,7 @@ public class AttributeTypesLoaderTest2_2 extends DomainBaseModuleContextSensitiv
 			Assert.assertEquals("Program Efficiency Score", attType.getName());
 			Assert.assertEquals("Metric of the program efficiency", attType.getDescription());
 			Assert.assertThat(attType.getMinOccurs(), is(0));
-			Assert.assertThat(attType.getMaxOccurs(), is(1));
+			assertNull(attType.getMaxOccurs());
 		}
 		
 		// Replay

@@ -159,6 +159,7 @@ This is the list of currently supported domains in their loading order:
 1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
 1. [AMPATH Forms Translations (JSON files)](readme/ampathformstranslations.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
+1. [Concept Reference Ranges (CSV files)](readme/conceptreferenceranges.md)
 
 ## Try it out
 Build the master branch and install the built OMOD to your OpenMRS instance:
@@ -206,6 +207,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 * Ampath forms translation files will now generate checksums.
 * Enhancement to ensure that when an Ampath forms file is loaded, a new resource with the existing Ampath forms translations is created.
 * Added support for 'billing' (billableservices, paymentmodes, cashpoints) domains.
+* Added support for 'conceptreferencerange' domain.
 
 #### Version 2.7.0
 * Added support for 'queues' domain.
