@@ -1,0 +1,28 @@
+package org.openmrs.module.initializer.api;
+
+import org.junit.Test;
+import org.openmrs.module.emrapi.disposition.DispositionService;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
+import org.openmrs.module.initializer.api.loaders.DispositionsLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class DispositionsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
+	
+	@Autowired
+	protected InitializerService iniz;
+	
+	@Autowired
+	private DispositionsLoader loader;
+	
+	@Autowired
+	private DispositionService dispositionService;
+	
+	@Test
+	public void load_shouldLoadDisposition() {
+		loader.load();
+		assertEquals(5, dispositionService.getDispositions().size());
+	}
+	
+}

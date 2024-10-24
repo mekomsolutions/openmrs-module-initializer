@@ -57,6 +57,9 @@
 		<aware_of_module version="${cohortModuleVersion}">
 			org.openmrs.module.cohort
 		</aware_of_module>
+		<aware_of_module version="${emrapiModuleVersion}">
+			org.openmrs.module.emrapi
+		</aware_of_module>
 		<aware_of_module version="${fhir2Version}">
 			org.openmrs.module.fhir2
 		</aware_of_module>

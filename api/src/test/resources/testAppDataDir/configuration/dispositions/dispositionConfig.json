@@ -1,0 +1,51 @@
+[
+    {
+        "uuid" : "d2d89630-b698-11e2-9e96-0800200c9a66",
+        "name" : "disposition.death",
+        "conceptCode" : "org.openmrs.module.emrapi:Death",
+        "actions" : [
+            "closeCurrentVisitAction",
+            "markPatientDeadAction"
+        ],
+        "additionalObs" : [
+            {
+                "label" : "emr.dateOfDeath",
+                "conceptCode" : "org.openmrs.module.emrapi:Date of death"
+            }
+        ]
+    },
+    {
+        "uuid" : "66de7f60-b73a-11e2-9e96-0800200c9a66",
+        "name" : "disposition.admit",
+        "type" : "ADMIT",
+        "conceptCode" : "org.openmrs.module.emrapi:Admit to hospital",
+        "actions" : [ ],
+        "additionalObs" : [ ]
+    },
+    {
+        "uuid" : "8297651b-4046-11ef-ba6a-0242ac120002",
+        "name" : "disposition.transfer",
+        "type" : "TRANSFER",
+        "conceptCode" : "org.openmrs.module.emrapi:Transfer out of hospital",
+        "actions" : [ ],
+        "additionalObs" : [ ]
+    },
+    {
+        "uuid" : "687d966bb-9c91-4886-b8b0-e63361f495f0",
+        "name" : "disposition.observation",
+        "conceptCode" : "org.openmrs.module.emrapi:ED Observation",
+        "keepsVisitOpen" : "true",
+        "actions" : [ ],
+        "additionalObs" : [ ]
+    },
+    {
+        "uuid" : "12129630-b698-11e2-9e96-0800200c9a66",
+        "name" : "disposition.discharge",
+        "type" : "DISCHARGE",
+        "conceptCode" : "org.openmrs.module.emrapi:Discharged",
+        "actions" : [
+            "closeCurrentVisitAction"
+        ],
+        "additionalObs" : [ ]
+    }
+]
