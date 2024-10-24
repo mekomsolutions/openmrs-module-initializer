@@ -2,7 +2,7 @@
 **Dispositions** subfolder contains a single JSON that defines the dispositions available in the system::
 
 ```bash
-cashpoints/
+dispositions/
   ├──dispositions.json
 ```
 
