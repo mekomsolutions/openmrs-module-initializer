@@ -7,7 +7,6 @@ import org.openmrs.module.initializer.api.loaders.DispositionsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class DispositionsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -22,7 +21,7 @@ public class DispositionsLoaderIntegrationTest extends DomainBaseModuleContextSe
 	
 	@Test
 	public void load_shouldLoadDisposition() {
-		loader.load();
+		loader.load(); // ignore the test file we are using for the exception test below
 		assertEquals(5, dispositionService.getDispositions().size());
 	}
 	
@@ -35,6 +34,11 @@ public class DispositionsLoaderIntegrationTest extends DomainBaseModuleContextSe
 		dispositionService.setDispositionConfig(null);
 		loader.load();
 		assertEquals(5, dispositionService.getDispositions().size());
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void load_shouldThrowExceptionInUnsafeMode() throws Exception {
+		loader.loadUnsafe(null, true);
 	}
 	
 }
