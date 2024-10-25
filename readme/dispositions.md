@@ -7,7 +7,7 @@ dispositions/
 ```
 
 #### Requirements
-* The [emr-api](https://github.com/openmrs/openmrs-module-emrapi) version 2.1.0 or higher must be installed
+* The [emr-api](https://github.com/openmrs/openmrs-module-emrapi) version 2.0.0 or higher must be installed
 * The OpenMRS version must be 2.2.1 or higher most be installed
 
 #### Further examples:
