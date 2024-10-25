@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 
-@OpenmrsProfile(modules = { "emrapi:2.1.0-SNAPSHOT-9.*" })
+@OpenmrsProfile(modules = { "emrapi:2.0.0-SNAPSHOT-9.*" })
 public class DispositionsLoader extends BaseFileLoader {
 	
 	@Autowired

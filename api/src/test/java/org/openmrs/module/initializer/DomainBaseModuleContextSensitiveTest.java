@@ -132,7 +132,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
 		{
-			Module mod = new Module("", "emrapi", "", "", "", "2.1.0-SNAPSHOT");
+			Module mod = new Module("", "emrapi", "", "", "", "2.0.0");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
