@@ -39,7 +39,7 @@ public class DispositionsLoader extends BaseFileLoader {
 			        "Multiple disposition files found in the disposition configuration directory.");
 		}
 		fileFound = true;
-		dispositionService.setDispositionConfig("file:" + file.getAbsolutePath());
+		dispositionService.setDispositionConfig("file:" + iniz.getBasePath().relativize(file.toPath()));
 	}
 	
 	@Override
