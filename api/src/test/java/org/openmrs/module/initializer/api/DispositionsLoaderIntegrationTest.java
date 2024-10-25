@@ -21,7 +21,7 @@ public class DispositionsLoaderIntegrationTest extends DomainBaseModuleContextSe
 	
 	@Test
 	public void load_shouldLoadDisposition() {
-		loader.load(); // ignore the test file we are using for the exception test below
+		loader.load(); 
 		assertEquals(5, dispositionService.getDispositions().size());
 	}
 	
