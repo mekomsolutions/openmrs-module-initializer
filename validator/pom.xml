@@ -398,6 +398,14 @@
       <type>jar</type>
     </dependency>
 
+    <dependency>
+      <groupId>org.openmrs.module</groupId>
+      <artifactId>emrapi-api</artifactId>
+      <version>${emrapiModuleVersion}</version>
+      <scope>runtime</scope>
+      <type>jar</type>
+    </dependency>
+
   </dependencies>
 
   <build>

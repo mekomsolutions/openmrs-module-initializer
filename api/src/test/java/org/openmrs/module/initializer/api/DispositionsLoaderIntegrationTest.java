@@ -24,7 +24,7 @@ public class DispositionsLoaderIntegrationTest extends DomainBaseModuleContextSe
 	
 	@Test
 	public void load_shouldLoadDisposition() {
-		loader.load(); 
+		loader.load();
 		assertEquals(5, dispositionService.getDispositions().size());
 	}
 	
@@ -46,7 +46,7 @@ public class DispositionsLoaderIntegrationTest extends DomainBaseModuleContextSe
 		File srcFile = new File(existingFilePath);
 		File dstFile = new File(additionalFilePath);
 		FileUtils.copyFile(srcFile, dstFile);
-
+		
 		try {
 			loader.loadUnsafe(null, true);
 		}
