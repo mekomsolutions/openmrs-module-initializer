@@ -160,7 +160,7 @@ This is the list of currently supported domains in their loading order:
 1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
 1. [AMPATH Forms Translations (JSON files)](readme/ampathformstranslations.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
-1. [Disposition Config (json files)](readme/dispositions.md)
+1. [Disposition Config (json file)](readme/dispositions.md)
 
 ## Try it out
 Build the master branch and install the built OMOD to your OpenMRS instance:
