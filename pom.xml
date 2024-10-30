@@ -66,6 +66,7 @@
         <bahmniIeAppsVersion>1.1.0</bahmniIeAppsVersion>
         <bahmniCoreVersion>0.93-1.1.0</bahmniCoreVersion>
         <cohortModuleVersion>3.5.0</cohortModuleVersion>
+        <emrapiModuleVersion>2.0.0</emrapiModuleVersion>
         <htmlformentryVersion>4.0.0</htmlformentryVersion>
         <idgenVersion>4.6.0</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
@@ -178,6 +179,13 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>cohort-api</artifactId>
             <version>${cohortModuleVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>emrapi-api</artifactId>
+            <version>${emrapiModuleVersion}</version>
             <scope>provided</scope>
         </dependency>
 

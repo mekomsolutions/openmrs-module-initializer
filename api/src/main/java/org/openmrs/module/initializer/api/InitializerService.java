@@ -10,6 +10,7 @@
 package org.openmrs.module.initializer.api;
 
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.openmrs.Concept;
@@ -19,6 +20,11 @@ import org.openmrs.module.initializer.InitializerConfig;
 import org.openmrs.module.initializer.api.loaders.Loader;
 
 public interface InitializerService extends OpenmrsService {
+	
+	/**
+	 * @return A Path object representing the base path of the application data directory
+	 */
+	Path getBasePath();
 	
 	/**
 	 * @return The path to the configuration folder (with NO trailing forward slash), eg.

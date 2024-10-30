@@ -52,7 +52,8 @@ public enum Domain {
 	FHIR_PATIENT_IDENTIFIER_SYSTEMS,
 	AMPATH_FORMS,
 	AMPATH_FORMS_TRANSLATIONS,
-	HTML_FORMS;
+	HTML_FORMS,
+	DISPOSITIONS;
 	
 	public int getOrder() {
 		return ArrayUtils.indexOf(values(), this) + 1;
