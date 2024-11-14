@@ -9,7 +9,7 @@ import org.openmrs.api.context.Context;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.7.0 - 2.7.*")
+@OpenmrsProfile(openmrsPlatformVersion = "[2.7.0 - 2.7.*]")
 public class ConceptReferenceRangeService implements OpenmrsService {
 	
 	@Autowired

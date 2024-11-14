@@ -3,7 +3,6 @@ package org.openmrs.module.initializer.api;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +11,7 @@ import org.openmrs.attribute.Attribute;
 import org.openmrs.attribute.BaseAttribute;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.customdatatype.CustomDatatype;
+import org.openmrs.customdatatype.CustomDatatypeException;
 import org.openmrs.customdatatype.CustomDatatypeUtil;
 import org.openmrs.customdatatype.Customizable;
 
@@ -24,7 +24,7 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 	public static final String HEADER_ATTRIBUTE_PREFIX = "attribute|";
 	
 	@Override
-	public T fill(T instance, CsvLine line) throws IllegalArgumentException {
+	public T fill(T instance, CsvLine line) throws IllegalArgumentException, CustomDatatypeException {
 		
 		Customizable<A> attributable = (Customizable<A>) instance;
 		
