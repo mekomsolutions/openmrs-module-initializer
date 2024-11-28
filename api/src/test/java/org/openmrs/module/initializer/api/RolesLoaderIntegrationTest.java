@@ -89,7 +89,7 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			// replay
 			Role role = us.getRoleByUuid("d2fcb604-2700-102b-80cb-0017a47871b2");
 			
-			// verif
+			// verify
 			Assert.assertNotNull(role);
 			Assert.assertEquals("Organizational: Doctor", role.getName());
 			Assert.assertEquals("Doctor role", role.getDescription());

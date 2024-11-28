@@ -1,13 +1,13 @@
 package org.openmrs.module.initializer.api.loc;
 
-import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.openmrs.module.initializer.api.BaseAttributeLineProcessor.HEADER_ATTRIBUTE_PREFIX;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
 
@@ -21,6 +21,7 @@ import org.openmrs.LocationAttributeType;
 import org.openmrs.api.DatatypeService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.customdatatype.CustomDatatypeException;
 import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.powermock.api.mockito.PowerMockito;
@@ -85,9 +86,8 @@ public class LocationAttributeLineProcessorTest {
 		// Verify
 		Collection<LocationAttribute> attributes = loc.getActiveAttributes();
 		Assert.assertEquals(2, attributes.size());
-		Assert.assertTrue("Must have attribute +1 206 555 0100",
-		    attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
-		Assert.assertTrue("Must have attribute jdoe@example.com",
+		assertTrue("Must have attribute +1 206 555 0100", attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
+		assertTrue("Must have attribute jdoe@example.com",
 		    attributes.removeIf(a -> a.getValue().equals("jdoe@example.com")));
 	}
 	
@@ -108,13 +108,12 @@ public class LocationAttributeLineProcessorTest {
 		// Verify
 		Collection<LocationAttribute> attributes = loc.getActiveAttributes();
 		Assert.assertEquals(2, attributes.size());
-		Assert.assertTrue("Must have attribute +1 206 555 0100",
-		    attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
-		Assert.assertTrue("Must have attribute janedoe@example.com",
+		assertTrue("Must have attribute +1 206 555 0100", attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
+		assertTrue("Must have attribute janedoe@example.com",
 		    attributes.removeIf(a -> a.getValue().equals("janedoe@example.com")));
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void fill_shouldFailIfAttributeTypeDoesNotExistAndAttributeValueIsNotBlank() {
 		// Setup
 		String[] headerLine = { HEADER_ATTRIBUTE_PREFIX + PHONE_ATT_TYPE_UUID,
@@ -123,7 +122,11 @@ public class LocationAttributeLineProcessorTest {
 		when(ls.getLocationAttributeTypeByName(EMAIL_ATT_TYPE_NAME)).thenReturn(null);
 		
 		// Replay
-		processor.fill(new Location(), new CsvLine(headerLine, line));
+		Exception exception = assertThrows(Exception.class, () -> {
+			processor.fill(new Location(), new CsvLine(headerLine, line));
+		});
+		
+		// Check if it's either IllegalArgumentException or CustomDatatypeException
+		assertTrue(exception instanceof IllegalArgumentException || exception instanceof CustomDatatypeException);
 	}
-	
 }

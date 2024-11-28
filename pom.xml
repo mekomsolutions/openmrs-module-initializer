@@ -39,6 +39,7 @@
         <module>api-2.3</module>
         <module>api-2.4</module>
         <module>api-2.5</module>
+        <module>api-2.7</module>
         <module>omod</module>
     </modules>
 
@@ -58,6 +59,7 @@
         <openmrsVersion2.3>2.3.6</openmrsVersion2.3>
         <openmrsVersion2.4>2.4.5</openmrsVersion2.4>
         <openmrsVersion2.5>2.5.5</openmrsVersion2.5>
+        <openmrsVersion2.7>2.7.0-SNAPSHOT</openmrsVersion2.7>
 
         <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
 
@@ -111,14 +113,22 @@
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>1.6.1</version>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>2.0.9</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>1.6.1</version>
+            <artifactId>powermock-api-mockito2</artifactId>
+            <version>2.0.9</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.28.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
