@@ -58,6 +58,7 @@ configuration/
   ├── concepts/
   ├── conceptsets/
   ├── datafiltermappings/
+  ├── dispositions/
   ├── drugs/
   ├── encountertypes/
   ├── encounterroles/
@@ -159,6 +160,7 @@ This is the list of currently supported domains in their loading order:
 1. [AMPATH Forms (JSON files)](readme/ampathforms.md)
 1. [AMPATH Forms Translations (JSON files)](readme/ampathformstranslations.md)
 1. [HTML Forms (XML files)](readme/htmlforms.md)
+1. [Disposition Config (json file)](readme/dispositions.md)
 1. [Concept Reference Ranges (CSV files)](readme/conceptreferenceranges.md)
 
 ## Try it out

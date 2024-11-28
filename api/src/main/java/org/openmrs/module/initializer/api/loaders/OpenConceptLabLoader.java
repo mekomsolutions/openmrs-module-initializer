@@ -11,7 +11,7 @@ import org.openmrs.module.openconceptlab.importer.Importer;
 import java.io.File;
 import java.util.zip.ZipFile;
 
-@OpenmrsProfile(modules = { "openconceptlab:1.2.9" })
+@OpenmrsProfile(modules = { "openconceptlab:1.2.9 - 9.*" })
 public class OpenConceptLabLoader extends BaseFileLoader {
 	
 	@Override
