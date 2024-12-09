@@ -66,6 +66,10 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	 */
 	public DomainBaseModuleContextSensitiveTest() {
 		super();
+		initModules();
+	}
+	
+	protected void initModules() {
 		{
 			Module mod = new Module("", "addresshierarchy", "", "", "", "2.17.0");
 			mod.setFile(new File(""));
