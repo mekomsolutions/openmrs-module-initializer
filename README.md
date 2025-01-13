@@ -57,6 +57,7 @@ configuration/
   ├── conceptsources/
   ├── concepts/
   ├── conceptsets/
+  ├── conceptreferencerange/
   ├── datafiltermappings/
   ├── dispositions/
   ├── drugs/
@@ -136,6 +137,7 @@ This is the list of currently supported domains in their loading order:
 1. [Cash Points (CSV files)](readme/cashpoints.md)
 1. [Payment Modes (CSV files)](readme/paymentmodes.md)
 1. [Concept Sets and Answers (CSV files)](readme/conceptsets.md)
+1. [Concept Reference Ranges (CSV files)](readme/conceptreferencerange.md)
 1. [Programs (CSV files)](readme/prog.md)
 1. [Program Worklows (CSV files)](readme/prog.md)
 1. [Program Worklow States (CSV files)](readme/prog.md)
@@ -208,6 +210,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 * Ampath forms translation files will now generate checksums.
 * Enhancement to ensure that when an Ampath forms file is loaded, a new resource with the existing Ampath forms translations is created.
 * Added support for 'billing' (billableservices, paymentmodes, cashpoints) domains.
+* Added support for 'conceptreferencerange' domain.
 
 #### Version 2.7.0
 * Added support for 'queues' domain.

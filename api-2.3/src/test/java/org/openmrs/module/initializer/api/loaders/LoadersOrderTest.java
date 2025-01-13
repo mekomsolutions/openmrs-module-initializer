@@ -73,6 +73,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitive_2_3_Test 
 			exclude.add(Domain.PAYMENT_MODES.getName());
 			exclude.add(Domain.BILLABLE_SERVICES.getName());
 			exclude.add(Domain.CASH_POINTS.getName());
+			exclude.add(Domain.CONCEPT_REFERENCE_RANGE.getName());
 			
 			boolean result = true;
 			Set<String> loaderDomains = loaders.stream().map(Loader::getDomainName).collect(Collectors.toSet());

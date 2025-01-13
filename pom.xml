@@ -39,6 +39,7 @@
         <module>api-2.3</module>
         <module>api-2.4</module>
         <module>api-2.5</module>
+        <module>api-2.7</module>
         <module>omod</module>
     </modules>
 
@@ -58,6 +59,7 @@
         <openmrsVersion2.3>2.3.6</openmrsVersion2.3>
         <openmrsVersion2.4>2.4.5</openmrsVersion2.4>
         <openmrsVersion2.5>2.5.5</openmrsVersion2.5>
+        <openmrsVersion2.7>2.7.0</openmrsVersion2.7>
 
         <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
 
