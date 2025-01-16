@@ -11,7 +11,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>initializer</artifactId>
-    <version>2.8.0-SNAPSHOT</version>
+    <version>2.8.0</version>
     <packaging>pom</packaging>
     <name>Initializer</name>
     <description>The OpenMRS Initializer module is an API-only module that processes the content of the configuration folder when it is found inside OpenMRS' application data directory.</description>
@@ -76,7 +76,7 @@
         <openconceptlabVersion>2.4.0</openconceptlabVersion>
         <fhir2Version>1.6.0</fhir2Version>
         <billingVersion>1.1.0</billingVersion>
-        <stockmanagementVersion>2.0.2-SNAPSHOT</stockmanagementVersion>
+        <stockmanagementVersion>2.0.2</stockmanagementVersion>
 
         <!-- Modules compatibility > Core 2.3.0 -->
         <datafilterVersion>1.0.0</datafilterVersion>
@@ -88,7 +88,7 @@
         <serializationVersion>0.2.14</serializationVersion>
 
         <!-- For tests -->
-        <addresshierarchyVersion>2.17.0-SNAPSHOT</addresshierarchyVersion>
+        <addresshierarchyVersion>2.17.0</addresshierarchyVersion>
         <exti18nVersion>1.0.0</exti18nVersion>
         <appframeworkVersion>2.14.0</appframeworkVersion>
         <providermanagementVersion>2.13.0</providermanagementVersion>
