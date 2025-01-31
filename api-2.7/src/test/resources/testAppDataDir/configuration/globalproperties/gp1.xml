@@ -1,0 +1,12 @@
+<config>
+  <globalProperties>
+    <globalProperty>
+      <property>gp.gp11</property>
+      <value>GP one one</value>
+    </globalProperty>
+    <globalProperty>
+      <property>gp.gp12</property>
+      <value>GP one two</value>
+    </globalProperty>
+  </globalProperties>
+</config>

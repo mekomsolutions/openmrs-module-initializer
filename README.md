@@ -206,6 +206,9 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 
 ## Releases notes
 
+#### Version 2.9.0
+* Fix for InitializerSerializer to ensure compatibility with OpenMRS version 2.7.0+
+
 #### Version 2.8.0
 * Ampath forms translation files will now generate checksums.
 * Enhancement to ensure that when an Ampath forms file is loaded, a new resource with the existing Ampath forms translations is created.

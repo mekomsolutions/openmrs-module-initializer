@@ -1,0 +1,19 @@
+<config>
+  <comment>
+    It should be ok to just add some comments like this.
+  </comment>
+  <globalProperties>
+    <globalProperty>
+      <property>gp.gp31</property>
+      <value>GP three one</value>
+    </globalProperty>
+    <globalProperty>
+      <property>gp.gp32</property>
+      <value>GP three two</value>
+    </globalProperty>
+    <globalProperty>
+      <property>gp.gp33</property>
+      <value>GP three three</value>
+    </globalProperty>
+  </globalProperties>
+</config>
