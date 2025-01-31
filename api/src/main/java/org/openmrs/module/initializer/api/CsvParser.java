@@ -208,6 +208,8 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 				}
 			}
 			catch (Exception e) {
+				System.out.println("Error processing line: " + Arrays.toString(line));
+				e.printStackTrace();
 				result.addFailingLine(new CsvLine(getHeaderLine(), line), e);
 				if (instance != null) {
 					Context.evictFromSession(instance);
