@@ -10,8 +10,6 @@ import org.openmrs.customdatatype.CustomDatatype;
 import org.openmrs.customdatatype.CustomDatatypeUtil;
 import org.openmrs.customdatatype.Customizable;
 import org.openmrs.module.initializer.InitializerConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -22,8 +20,6 @@ import java.util.Map;
  * entity.
  */
 public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT extends BaseAttributeType<?>, A extends BaseAttribute<AT, ?>> extends BaseLineProcessor<T> {
-	
-	private final Logger log = LoggerFactory.getLogger(getClass());
 	
 	public static final String HEADER_ATTRIBUTE_PREFIX = "attribute|";
 	
