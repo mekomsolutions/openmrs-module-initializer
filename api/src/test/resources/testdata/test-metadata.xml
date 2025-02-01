@@ -25,7 +25,7 @@
 
   <location_attribute_type LOCATION_ATTRIBUTE_TYPE_ID="1089" NAME="Location Code" DATATYPE="org.openmrs.customdatatype.datatype.FreeTextDatatype" MIN_OCCURS="0" CREATOR="1" DATE_CREATED="2019-12-11 09:31:48.0" RETIRED="false" UUID="9eca4f4e-707f-4bb8-8289-2f9b6e93803c"/>
   <location_attribute_type LOCATION_ATTRIBUTE_TYPE_ID="1090" NAME="Last Audit Date" DATATYPE="org.openmrs.customdatatype.datatype.DateDatatype" CREATOR="1" DATE_CREATED="2005-01-01 00:00:00.0" MIN_OCCURS="0" RETIRED="false" UUID="9516cc50-6f9f-11e0-8414-001e378eb67e"/>
-  
+
   <location_attribute location_attribute_id="1089" location_id="4089" attribute_type_id="1090" value_reference="2016-04-14" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="3a2bdb18-6faa-11e0-8414-001e378eb67e"/>
 
   <location_tag_map location_id="4092" location_tag_id="4089"/>
@@ -41,18 +41,18 @@
   <privilege privilege="Add Apples" description="Able to add apples." uuid="4604e928-96bf-4e2c-be08-cbbc40dd000c"/>
   <privilege privilege="Add Reports" description="Able to add analytic reports." uuid="cf68a296-2700-102b-80cb-0017a47871b2"/>
   <privilege privilege="Add Hens" description="Able to add poultry." uuid="36404041-c255-4c5b-9b47-0d757d2afa95"/>
-  
+
   <role ROLE="test-entity-role" UUID="3f8f0ab7-c240-4b68-8951-bb7020be01f6"/>
-  
+
   <patient_identifier_type patient_identifier_type_id="1" name="OpenMRS ID" description="OpenMRS Identification Number" creator="1" date_created="2020-03-1 15:59:20.0" required="false" format="" format_description="" validator="" retired="false" uuid="b0d10dc0-d8ce-11e3-9c1a-0jhg89c9a66" />
   <patient_identifier_type patient_identifier_type_id="2" name="Legacy ID" description="Legacy Identification Number" creator="1" date_created="2020-03-1 15:59:20.0" required="false" format="" format_description="" validator="" retired="false" uuid="8aaacb14-5ac0-4226-9a6e-fee8e9d92aeb" />
-  
-  <idgen_identifier_source id="1" name="OpenMRS ID Generator" identifier_type="1" creator="1" date_created="2009-11-30 11:28:30.489" retired="false" uuid="0d47284f-9e9b-4a81-a88b-8bb42bc0a901" />  
+
+  <idgen_identifier_source id="1" name="OpenMRS ID Generator" identifier_type="1" creator="1" date_created="2009-11-30 11:28:30.489" retired="false" uuid="0d47284f-9e9b-4a81-a88b-8bb42bc0a901" />
   <idgen_seq_id_gen id="1" first_identifier_base="1" next_sequence_value="6" base_character_set="abcdefghijklmnopqrstuvwxyz0123456789" prefix="" min_length="0" max_length="0" />
-  
+
   <idgen_identifier_source id="2" name="Legacy ID Generator" identifier_type="2" creator="1" date_created="2009-11-30 11:28:30.489" retired="false" uuid="9eca4f4e-707f-4lb8-8289-2f9b6e93803f" />
   <idgen_seq_id_gen id="2" first_identifier_base="1" next_sequence_value="2" base_character_set="0123456789" prefix="" min_length="0" max_length="0" />
-  
+
   <idgen_auto_generation_option id="15000" source="1" identifier_type="1" manual_entry_enabled="false" automatic_generation_enabled="true" uuid="eade77b6-3365-47ed-9ee3-2324598629eb" />
 
   <relationship_type relationship_type_id="15001" a_is_to_b="Aunt" b_is_to_a="Niece" preferred="false" weight="0" description="A relationship of an aunt and her niece" creator="1" date_created="2007-05-04 00:00:00.0" retired="false" uuid="3982f469-cedc-4b2d-91ea-fe38f881e1a0"/>
