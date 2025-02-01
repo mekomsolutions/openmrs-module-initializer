@@ -32,6 +32,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
+/**
+ * This is a copy of the LocationsLoaderIntegration test in order to test the same test against
+ * OpenMRS 2.7
+ */
 public class LocationsLoader_2_7_IntegrationTest extends DomainBaseModuleContextSensitive_2_7_Test {
 	
 	@Autowired
