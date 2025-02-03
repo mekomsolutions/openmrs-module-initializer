@@ -1,11 +1,5 @@
 package org.openmrs.module.initializer.api;
 
-import java.io.InputStream;
-
-import org.openmrs.GlobalProperty;
-import org.openmrs.module.idgen.IdentifierSource;
-import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
@@ -14,11 +8,21 @@ import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
+import org.openmrs.GlobalProperty;
+import org.openmrs.module.idgen.IdentifierSource;
+import org.openmrs.module.initializer.api.gp.GlobalPropertiesConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.InputStream;
+import java.lang.reflect.Method;
 
 /**
  * Use this serializer instead of a bare {@link XStream} if you want to ignore unmapped fields.
  */
 public class InitializerSerializer extends XStream {
+	
+	private static final Logger log = LoggerFactory.getLogger(InitializerSerializer.class);
 	
 	public InitializerSerializer() {
 		super();
@@ -53,6 +57,15 @@ public class InitializerSerializer extends XStream {
 		xs.alias("config", GlobalPropertiesConfig.class);
 		xs.alias("globalProperty", GlobalProperty.class);
 		xs.aliasField("value", GlobalProperty.class, "propertyValue");
+		try {
+			Method allowTypeHierarchy = XStream.class.getMethod("allowTypeHierarchy", Class.class);
+			allowTypeHierarchy.invoke(xs, GlobalPropertiesConfig.class);
+			allowTypeHierarchy.invoke(xs, GlobalProperty.class);
+			log.debug("Successfully configured global properties config serializer with allowed types");
+		}
+		catch (Exception e) {
+			log.debug("Error configuring global properties config serializer with allowed types", e);
+		}
 		return xs;
 	}
 	
