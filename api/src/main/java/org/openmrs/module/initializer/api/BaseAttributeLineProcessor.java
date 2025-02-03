@@ -28,7 +28,7 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 		
 		Customizable<A> attributable = (Customizable<A>) instance;
 		
-		// First, retrieve all attributes that are defined in the CSV and tha values for the given row
+		// First, retrieve all attributes that are defined in the CSV and the values for the given row
 		Map<AT, Object> rowValues = new LinkedHashMap<>();
 		for (String header : line.getHeaderLine()) {
 			if (header.toLowerCase().startsWith(HEADER_ATTRIBUTE_PREFIX)) {
