@@ -39,7 +39,7 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 				if (attributeType == null) {
 					throw new IllegalArgumentException("An attribute value is specified ('" + attributeValueStr
 					        + "') for an attribute type that cannot be resolved by the following identifier: '"
-					        + attributeType + "'");
+					        + attributeTypeIdentifier + "'");
 				}
 				if (StringUtils.isNotBlank(attributeValueStr)) {
 					String dtClass = attributeType.getDatatypeClassname();
