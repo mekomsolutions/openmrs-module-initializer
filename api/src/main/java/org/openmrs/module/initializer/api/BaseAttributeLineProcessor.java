@@ -1,19 +1,19 @@
 package org.openmrs.module.initializer.api;
 
-import java.util.AbstractMap;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.function.Consumer;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.api.context.Context;
 import org.openmrs.attribute.Attribute;
 import org.openmrs.attribute.BaseAttribute;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.customdatatype.CustomDatatype;
 import org.openmrs.customdatatype.CustomDatatypeUtil;
 import org.openmrs.customdatatype.Customizable;
+import org.openmrs.module.initializer.InitializerConstants;
+
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Base class to any <code>AttributeLineProcessor</code> that processes all attributes of a domain
@@ -28,32 +28,64 @@ public abstract class BaseAttributeLineProcessor<T extends BaseOpenmrsObject, AT
 		
 		Customizable<A> attributable = (Customizable<A>) instance;
 		
-		Consumer<? super SimpleEntry<String, String>> processAttributeData = attData -> {
-			
-			AT attType = getAttributeType(attData.getKey());
-			if (attType == null) {
-				throw new IllegalArgumentException("An attribute value is specified ('" + attData.getValue()
-				        + "') for an attribute type that cannot be resolved by the following identifier: '"
-				        + attData.getKey() + "'");
+		// First, retrieve all attributes that are defined in the CSV and the values for the given row
+		Map<AT, Object> rowValues = new LinkedHashMap<>();
+		for (String header : line.getHeaderLine()) {
+			if (header.toLowerCase().startsWith(HEADER_ATTRIBUTE_PREFIX)) {
+				String attributeTypeIdentifier = StringUtils.removeStartIgnoreCase(header, HEADER_ATTRIBUTE_PREFIX);
+				AT attributeType = getAttributeType(attributeTypeIdentifier);
+				Object attributeValue = null;
+				String attributeValueStr = line.getString(header, "");
+				if (attributeType == null) {
+					throw new IllegalArgumentException("An attribute value is specified ('" + attributeValueStr
+					        + "') for an attribute type that cannot be resolved by the following identifier: '"
+					        + attributeTypeIdentifier + "'");
+				}
+				if (StringUtils.isNotBlank(attributeValueStr)) {
+					String dtClass = attributeType.getDatatypeClassname();
+					String dtConfig = attributeType.getDatatypeConfig();
+					CustomDatatype<?> datatype = CustomDatatypeUtil.getDatatype(dtClass, dtConfig);
+					attributeValue = datatype.fromReferenceString(attributeValueStr);
+				}
+				rowValues.put(attributeType, attributeValue);
 			}
-			
-			attributable.getAttributes().removeIf(att -> att.getAttributeType().equals(attType));
-			
-			CustomDatatype<?> datatype = CustomDatatypeUtil.getDatatype(attType.getDatatypeClassname(),
-			    attType.getDatatypeConfig());
-			Object value = datatype.fromReferenceString(attData.getValue());
-			
-			A attribute = newAttribute();
-			attribute.setAttributeType(attType);
-			attribute.setValue(value);
-			
-			attributable.addAttribute(attribute);
-		};
+		}
 		
-		// process the attribute value from each attribute header
-		Arrays.stream(line.getHeaderLine()).filter(h -> StringUtils.startsWithIgnoreCase(h, HEADER_ATTRIBUTE_PREFIX)).map(
-		    h -> new AbstractMap.SimpleEntry<>(StringUtils.removeStartIgnoreCase(h, HEADER_ATTRIBUTE_PREFIX), line.get(h)))
-		        .filter(attData -> StringUtils.isNotBlank(attData.getValue())).forEach(processAttributeData);
+		// Next, iterate over the existing attributes on the instance, and void and recreate if any have changed
+		for (A existingAttribute : attributable.getActiveAttributes()) {
+			AT type = existingAttribute.getAttributeType();
+			Object existingValue = existingAttribute.getValue();
+			// If the CSV does not define a column for an existing attribute type, do not modify it on the instance
+			if (rowValues.containsKey(type)) {
+				Object newValue = rowValues.remove(type);
+				// Only process a change if the new value is different from the existing value
+				if (!existingValue.equals(newValue)) {
+					// Void existing attribute
+					existingAttribute.setVoided(true);
+					existingAttribute.setDateVoided(new Date());
+					existingAttribute.setVoidedBy(Context.getAuthenticatedUser());
+					existingAttribute.setVoidReason(InitializerConstants.DEFAULT_VOID_REASON);
+					// Add new attribute, if there is a value defined for it
+					if (newValue != null) {
+						A newAttribute = newAttribute();
+						newAttribute.setAttributeType(type);
+						newAttribute.setValue(newValue);
+						attributable.addAttribute(newAttribute);
+					}
+				}
+			}
+		}
+		
+		// Finally, add any remaining attributes that did not match any existing types on the instance
+		for (AT type : rowValues.keySet()) {
+			Object newValue = rowValues.get(type);
+			if (newValue != null) {
+				A newAttribute = newAttribute();
+				newAttribute.setAttributeType(type);
+				newAttribute.setValue(newValue);
+				attributable.addAttribute(newAttribute);
+			}
+		}
 		
 		return instance;
 	}
