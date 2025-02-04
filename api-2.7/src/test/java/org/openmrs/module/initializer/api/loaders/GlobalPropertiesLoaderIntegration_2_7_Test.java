@@ -18,9 +18,9 @@ import org.openmrs.module.initializer.api.gp.GlobalPropertiesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * This test is intended to be a copy of the GlobalPropertiesLoaderIntegrationTest from the api module,
- * but included within the api-2.7 module to test that global properties loading from xml works successfully
- * in an OpenMRS 2.7 environment
+ * This test is intended to be a copy of the GlobalPropertiesLoaderIntegrationTest from the api
+ * module, but included within the api-2.7 module to test that global properties loading from xml
+ * works successfully in an OpenMRS 2.7 environment
  */
 public class GlobalPropertiesLoaderIntegration_2_7_Test extends DomainBaseModuleContextSensitive_2_7_Test {
 	
