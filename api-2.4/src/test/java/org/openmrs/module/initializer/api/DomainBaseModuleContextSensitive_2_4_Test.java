@@ -19,9 +19,9 @@ import java.io.File;
  * This allows to perform Spring context sensitive tests when Data Filter API is a dependency. In
  * that case it is necessary for each context sensitive test to update the search index.
  */
-public abstract class DomainBaseModuleContextSensitive_2_4_test extends DomainBaseModuleContextSensitiveTest {
+public abstract class DomainBaseModuleContextSensitive_2_4_Test extends DomainBaseModuleContextSensitiveTest {
 	
-	public DomainBaseModuleContextSensitive_2_4_test() {
+	public DomainBaseModuleContextSensitive_2_4_Test() {
 		super();
 		{
 			Module mod = new Module("", "billing", "", "", "", "1.1.0");
