@@ -387,10 +387,10 @@
     </dependency>
     
     <dependency>
-        <groupId>org.testcontainers</groupId>
-        <artifactId>mysql</artifactId>
-        <version>${mysqlTestContainerVersion}</version>
-        <type>jar</type>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mysql</artifactId>
+      <version>${mysqlTestContainerVersion}</version>
+      <type>jar</type>
     </dependency>
 
     <dependency>
@@ -418,32 +418,32 @@
     </dependency>
     
     <dependency>
-	  <groupId>com.fasterxml.jackson.dataformat</groupId>
-	  <artifactId>jackson-dataformat-xml</artifactId>
-	  <version>2.10.1</version>
-	</dependency>
+  	  <groupId>com.fasterxml.jackson.dataformat</groupId>
+  	  <artifactId>jackson-dataformat-xml</artifactId>
+  	  <version>2.10.1</version>
+  	</dependency>
 	
-	<dependency>
-	  <groupId>com.fasterxml.jackson.core</groupId>
-	  <artifactId>jackson-databind</artifactId>
-	  <version>2.10.5.1</version>
-	</dependency>
+  	<dependency>
+  	  <groupId>com.fasterxml.jackson.core</groupId>
+  	  <artifactId>jackson-databind</artifactId>
+  	  <version>2.10.5.1</version>
+  	</dependency>
 
-	<dependency>
-	  <groupId>org.yaml</groupId>
-	  <artifactId>snakeyaml</artifactId>
-	  <version>1.24</version>
-	  <scope>runtime</scope>
-	  <type>jar</type>
-	</dependency>
+  	<dependency>
+  	  <groupId>org.yaml</groupId>
+  	  <artifactId>snakeyaml</artifactId>
+  	  <version>1.24</version>
+  	  <scope>runtime</scope>
+  	  <type>jar</type>
+  	</dependency>
 
-  <dependency>
-    <groupId>org.liquibase.ext</groupId>
-    <artifactId>liquibase-compat</artifactId>
-    <type>jar</type>
-    <scope>runtime</scope>
-    <version>4.0.0-beta2</version>
-  </dependency>
+    <dependency>
+      <groupId>org.liquibase.ext</groupId>
+      <artifactId>liquibase-compat</artifactId>
+      <type>jar</type>
+      <scope>runtime</scope>
+      <version>4.0.0-beta2</version>
+    </dependency>
 
   </dependencies>
 
