@@ -1,7 +1,5 @@
 package org.openmrs.module.initializer.api.loaders;
 
-import java.io.File;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.EncounterType;
@@ -16,6 +14,9 @@ import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
+import java.io.File;
+import java.lang.reflect.Method;
 
 @OpenmrsProfile(modules = { "htmlformentry:*" })
 public class HtmlFormsLoader extends BaseFileLoader {
@@ -57,6 +58,22 @@ public class HtmlFormsLoader extends BaseFileLoader {
 	@Override
 	protected void load(File file) throws Exception {
 		String xmlData = FileUtils.readFileToString(file, "UTF-8");
+		// In HFE 5.5.0, a new service method was introduced to save or update an html form from xml
+		// If this method is available, use it, otherwise fall back to the legacy implementation here
+		try {
+			Method method = HtmlFormEntryService.class.getDeclaredMethod("saveHtmlFormFromXml", String.class);
+			method.invoke(htmlFormEntryService, xmlData);
+		}
+		catch (NoSuchMethodException e) {
+			loadFromXmlData(xmlData);
+		}
+	}
+	
+	/**
+	 * Legacy implementation that loads an htmlform from XML. This has been moved and enhanced in the
+	 * HFE module
+	 */
+	protected void loadFromXmlData(String xmlData) throws Exception {
 		Document doc = HtmlFormEntryUtil.stringToDocument(xmlData);
 		Node htmlFormNode = HtmlFormEntryUtil.findChild(doc, HTML_FORM_TAG);
 		
