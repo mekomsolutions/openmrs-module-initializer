@@ -13,7 +13,6 @@ import static org.openmrs.module.initializer.validator.Validator.ARG_CONFIG_DIR;
 import static org.openmrs.module.initializer.validator.Validator.cmdLine;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
@@ -25,6 +24,9 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Stream;
 
+import org.hibernate.cfg.Environment;
+import org.hibernate.dialect.MySQL5Dialect;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
@@ -34,34 +36,31 @@ import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.ext.mysql.MySqlDataTypeFactory;
-import org.hibernate.cfg.Environment;
-import org.hibernate.dialect.MySQLDialect;
 import org.hsqldb.cmdline.SqlFile;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.context.ContextAuthenticationException;
+import org.openmrs.api.context.UsernamePasswordCredentials;
+import org.openmrs.liquibase.ChangeSetExecutorCallback;
 import org.openmrs.module.DaemonToken;
+import org.openmrs.module.Module;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.openconceptlab.OpenConceptLabActivator;
+import org.openmrs.test.SkipBaseSetup;
 import org.openmrs.test.TestUtil;
 import org.openmrs.util.DatabaseUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.MySQLContainer;
-import ch.vorburger.exec.ManagedProcessException;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	protected static final Logger log = LoggerFactory.getLogger(ConfigurationTester.class);
-	
-	private static MySQLContainer mysqlContainer = new MySQLContainer("mysql:5.7.31");
 	
 	private static ConfigurableApplicationContext storedApplicationContext;
 	
@@ -69,64 +68,21 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	private String cielFilePath;
 	
-	protected String getAppDataDirPath() {
-		return Paths.get(configDirPath).getParent().toString();
-	}
-	
-	@BeforeClass
-	public static void setupMySqlDb() throws IOException {
-		mysqlContainer.withDatabaseName("openmrs");
-		mysqlContainer.withUsername("root");
-		mysqlContainer.withPassword("");
-		mysqlContainer.withCommand("mysqld --character-set-server=utf8 --collation-server=utf8_general_ci");
-		mysqlContainer.start();
-		
-	}
-	
-	protected void setupDatabaseProps(Properties props) throws ManagedProcessException, URISyntaxException {
-		props.setProperty(Environment.DIALECT, MySQLDialect.class.getName());
-		String url = "jdbc:mysql://localhost:DATABASE_PORT/openmrs?autoReconnect=true&sessionVariables=default_storage_engine%3DInnoDB&useUnicode=true&characterEncoding=UTF-8&useSSL=false";
-		url = url.replaceAll("DATABASE_PORT", String.valueOf(mysqlContainer.getMappedPort(3306)));
-		props.setProperty(Environment.URL, url);
-		
-		props.setProperty(Environment.USER, "root");
-		props.setProperty(Environment.PASS, "");
-		props.setProperty("initializer.log.enabled", "true");
-		// disable hibernate indexing during searches to avoid LazyInitializationExceptions 
-		// on indexed entities after test execution
-		props.setProperty("hibernate.search.indexing_strategy", "manual");
-		
-		// automatically create the tables defined in the hbm files
-		props.setProperty(Environment.HBM2DDL_AUTO, "update");
-	}
-	
 	@Override
-	public Properties getRuntimeProperties() {
-		if (runtimeProperties == null) {
-			runtimeProperties = TestUtil.getRuntimeProperties(getWebappName());
+	public Boolean useInMemoryDatabase() {
+		return false;
+	}
+	
+	protected String getAppDataDirPath() {
+		if (configDirPath == null) {
+			configDirPath = cmdLine.getOptionValue(ARG_CONFIG_DIR);
 		}
-		
-		try {
-			setupDatabaseProps(runtimeProperties);
-		}
-		catch (ManagedProcessException | URISyntaxException e) {
-			log.error("mariaDB4j could not be setup properly, reverting to OpenMRS defaults.", e);
-			runtimeProperties = super.getRuntimeProperties();
-		}
-		return runtimeProperties;
+		return Paths.get(configDirPath).getParent().toString();
 	}
 	
 	@Override
 	public void updateSearchIndex() {
 		// to prevent Data Filter's 'Illegal Record Access'
-	}
-	
-	@Override
-	protected IDatabaseConnection setupDatabaseConnection(Connection connection) throws DatabaseUnitException {
-		IDatabaseConnection dbUnitConn = new DatabaseConnection(connection);
-		DatabaseConfig config = dbUnitConn.getConfig();
-		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
-		return dbUnitConn;
 	}
 	
 	@Override
@@ -154,8 +110,11 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 	
 	public ConfigurationTester() throws Exception {
 		super();
-		
-		configDirPath = cmdLine.getOptionValue(ARG_CONFIG_DIR);
+		{
+			Module mod = new Module("", "queue", "", "", "", "1.0.0");
+			mod.setFile(new File(""));
+			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+		}
 		if (cmdLine.hasOption(ARG_CIEL_FILE)) {
 			cielFilePath = cmdLine.getOptionValue(ARG_CIEL_FILE);
 		}
@@ -171,10 +130,7 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		if (!cmdLine.hasOption(ARG_CHECKSUMS)) {
 			getRuntimeProperties().put(PROPS_SKIPCHECKSUMS, "true");
 		}
-		// Setting up initial core database
-		DatabaseUpdater.executeChangelog("liquibase-schema-only.xml", null);
-		DatabaseUpdater.executeChangelog("liquibase-core-data.xml", null);
-		DatabaseUpdater.executeChangelog("liquibase-update-to-latest.xml", null);
+		DatabaseUpdater.executeChangelog("liquibase-core-data.xml", (ChangeSetExecutorCallback) null);
 	}
 	
 	@Before
@@ -211,19 +167,11 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		new OpenConceptLabActivator().setDaemonToken(daemonToken);
 	}
 	
-	@Override
-	public void baseSetupWithStandardDataAndAuthentication() throws SQLException {
-		// Open a session if needed
-		if (!Context.isSessionOpen()) {
-			Context.openSession();
-		}
-		authenticate();
-		Context.clearSession();
-	}
-	
 	@Test
+	@SkipBaseSetup
 	@Rollback(false)
 	public void loadConfiguration() throws Exception {
+		Context.authenticate(new UsernamePasswordCredentials("admin", "test"));
 		super.getConnection().setAutoCommit(true);
 		getService().loadUnsafe(true, Validator.unsafe);
 		Context.flushSession();
@@ -243,13 +191,13 @@ public class ConfigurationTester extends DomainBaseModuleContextSensitiveTest {
 		storedApplicationContext = (ConfigurableApplicationContext) applicationContext;
 	}
 	
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		if (null != mysqlContainer) {
-			mysqlContainer.stop();
-		}
-		if (null != storedApplicationContext) {
-			storedApplicationContext.close();
-		}
+	public Properties getRuntimeProperties() {
+		
+		// Override MySQL Dialect for compatibility purposes
+		Properties runtimeProperties = super.getRuntimeProperties();
+		runtimeProperties.setProperty(Environment.DIALECT, MySQL5Dialect.class.getName());
+		runtimeProperties.setProperty(Environment.HBM2DDL_AUTO, "update");
+		
+		return runtimeProperties;
 	}
 }
