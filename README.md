@@ -197,7 +197,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 
 ## Helpful Resources
 * UUID Generator website: [uuidgenerator.net](https://www.uuidgenerator.net)
-* YouTube Tutorial on Initializer Config File Basics: [English version](https://youtu.be/Nerhs2ANq98), [French version](https://youtu.be/olzM4NOmyNk)
+* YouTube Tutorial on Initializer Config File Basics: [English version](https://youtu.be/Nerhs2ANq98), [French version](https://youtu.be/olzM4NOmyNk). Specifically this video will walk through real example config files for locations, drugs, forms, and form translations, with live-time editing shown. We also explain *why* and *how* to use config files, and we look at several other example demo files for reference.
 
 [![Video Tutorial](https://github.com/user-attachments/assets/8dfa3627-2cd1-42c6-a391-a7e024c6a362)](https://youtu.be/Nerhs2ANq98)
 
