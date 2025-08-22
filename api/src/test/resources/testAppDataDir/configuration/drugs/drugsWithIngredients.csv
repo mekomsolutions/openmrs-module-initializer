@@ -1,0 +1,3 @@
+Uuid,Void/Retire,Name,Concept Drug,Concept Dosage Form,Strength,Ingredient 1,Ingredient 1 Strength,Ingredient 1 Units,Ingredient 2,Ingredient 2 Strength,Ingredient 2 Units,_version:1
+e1c5584e-7f62-11f0-9e36-be568b1ab237,,Combo Drug,d4T,Tablet,10mg,Erythromycine,4,mg,Cetirizine,6.0,mg,
+8abf401a-7f65-11f0-9e36-be568b1ab237,,Drug without Erythromycine,d4T,Tablet,20mg,Cetirizine,15.0,mg,"","","",

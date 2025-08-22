@@ -217,6 +217,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 
 #### Version 2.10.0
 * Support enhanced methods for loading htmlforms when running htmlformentry 5.5.0+
+* Support loading drug ingredients within the drug domain, for compatible OpenMRS versions
 
 #### Version 2.9.0
 * Fix for InitializerSerializer to ensure compatibility with OpenMRS version 2.7.0+

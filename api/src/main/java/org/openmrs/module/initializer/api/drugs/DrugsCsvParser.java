@@ -18,12 +18,16 @@ public class DrugsCsvParser extends CsvParser<Drug, BaseLineProcessor<Drug>> {
 	
 	private final MappingsDrugLineProcessor mappingsProcessor;
 	
+	private final IngredientsDrugLineProcessor ingredientsProcessor;
+	
 	@Autowired
 	public DrugsCsvParser(@Qualifier("conceptService") ConceptService conceptService,
 	    @Qualifier("initializer.drugLineProcessor") DrugLineProcessor processor,
-	    @Qualifier("initializer.mappingsDrugLineProcessor") MappingsDrugLineProcessor mappingsProcessor) {
+	    @Qualifier("initializer.mappingsDrugLineProcessor") MappingsDrugLineProcessor mappingsProcessor,
+	    @Qualifier("initializer.ingredientsDrugLineProcessor") IngredientsDrugLineProcessor ingredientsProcessor) {
 		super(processor);
 		this.mappingsProcessor = mappingsProcessor;
+		this.ingredientsProcessor = ingredientsProcessor;
 		this.conceptService = conceptService;
 	}
 	
@@ -61,5 +65,6 @@ public class DrugsCsvParser extends CsvParser<Drug, BaseLineProcessor<Drug>> {
 		lineProcessors.clear();
 		lineProcessors.add(getSingleLineProcessor());
 		lineProcessors.add(mappingsProcessor);
+		lineProcessors.add(ingredientsProcessor);
 	}
 }

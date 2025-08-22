@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.initializer.api;
 
+import java.util.Collection;
 import java.util.Locale;
 
 import org.junit.Assert;
@@ -17,6 +18,7 @@ import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.Drug;
+import org.openmrs.DrugIngredient;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.drugs.DrugsLoader;
@@ -93,6 +95,20 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			d.setStrength("100mg");
 			d = cs.saveDrug(d);
 		}
+		{
+			Drug d = new Drug();
+			d.setUuid("8abf401a-7f65-11f0-9e36-be568b1ab237");
+			d.setName("Drug with Erythromycine");
+			d.setConcept(cs.getConceptByName("d4T"));
+			d.setStrength("20mg");
+			DrugIngredient ingredient = new DrugIngredient();
+			ingredient.setDrug(d);
+			ingredient.setIngredient(cs.getConceptByName("Erythromycine"));
+			ingredient.setStrength(20.0);
+			ingredient.setUnits(cs.getConceptByName("mg"));
+			d.getIngredients().add(ingredient);
+			cs.saveDrug(d);
+		}
 	}
 	
 	@Test
@@ -140,5 +156,90 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Assert.assertEquals("250mg", d.getStrength());
 			Assert.assertTrue(d.getRetired());
 		}
+	}
+	
+	@Test
+	public void load_shouldAddIngredientsToDrugs() {
+		loader.load();
+		{
+			Drug d = cs.getDrug("Combo Drug");
+			Assert.assertNotNull(d);
+			Assert.assertEquals(cs.getConceptByName("d4T"), d.getConcept());
+			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
+			Assert.assertEquals("10mg", d.getStrength());
+			Collection<DrugIngredient> ingredients = d.getIngredients();
+			Concept erythromycine = cs.getConceptByName("Erythromycine");
+			Concept cetirizine = cs.getConceptByName("Cetirizine");
+			Concept mg = cs.getConceptByName("mg");
+			Assert.assertEquals(2, ingredients.size());
+			for (DrugIngredient ingredient : ingredients) {
+				if (ingredient.getIngredient().equals(erythromycine)) {
+					Assert.assertEquals((Double) 4.0, ingredient.getStrength());
+					Assert.assertEquals(mg, ingredient.getUnits());
+				} else if (ingredient.getIngredient().equals(cetirizine)) {
+					Assert.assertEquals((Double) 6.0, ingredient.getStrength());
+					Assert.assertEquals(mg, ingredient.getUnits());
+				} else {
+					Assert.fail("Unexpected ingredient " + ingredient);
+				}
+			}
+		}
+	}
+	
+	@Test
+	public void load_shouldRemoveIngredientsFromDrugs() {
+		
+		Drug drug = cs.getDrugByUuid("8abf401a-7f65-11f0-9e36-be568b1ab237");
+		Assert.assertNotNull(drug);
+		Assert.assertEquals("Drug with Erythromycine", drug.getName());
+		Assert.assertEquals(1, drug.getIngredients().size());
+		DrugIngredient erythromycine = drug.getIngredients().iterator().next();
+		Assert.assertEquals(cs.getConceptByName("Erythromycine"), erythromycine.getIngredient());
+		Assert.assertEquals((Double) 20.0, erythromycine.getStrength());
+		Assert.assertEquals(cs.getConceptByName("mg"), erythromycine.getUnits());
+		
+		loader.load();
+		
+		drug = cs.getDrugByUuid("8abf401a-7f65-11f0-9e36-be568b1ab237");
+		Assert.assertNotNull(drug);
+		Assert.assertEquals("Drug without Erythromycine", drug.getName());
+		Assert.assertEquals(1, drug.getIngredients().size());
+		DrugIngredient cetirizine = drug.getIngredients().iterator().next();
+		Assert.assertNotEquals(erythromycine.getUuid(), cetirizine.getUuid());
+		Assert.assertEquals(cs.getConceptByName("Cetirizine"), cetirizine.getIngredient());
+		Assert.assertEquals((Double) 15.0, cetirizine.getStrength());
+		Assert.assertEquals(cs.getConceptByName("mg"), cetirizine.getUnits());
+	}
+	
+	@Test
+	public void load_shouldModifyIngredientsInDrugs() {
+		
+		loader.load();
+		
+		Drug drug = cs.getDrugByUuid("8abf401a-7f65-11f0-9e36-be568b1ab237");
+		Assert.assertNotNull(drug);
+		Assert.assertEquals("Drug without Erythromycine", drug.getName());
+		Assert.assertEquals(1, drug.getIngredients().size());
+		DrugIngredient cetirizine = drug.getIngredients().iterator().next();
+		Assert.assertEquals(cs.getConceptByName("Cetirizine"), cetirizine.getIngredient());
+		Assert.assertEquals((Double) 15.0, cetirizine.getStrength());
+		
+		cetirizine.setStrength(20.0);
+		cs.saveDrug(drug);
+		
+		drug = cs.getDrugByUuid("8abf401a-7f65-11f0-9e36-be568b1ab237");
+		Assert.assertEquals(1, drug.getIngredients().size());
+		DrugIngredient originalIngredient = drug.getIngredients().iterator().next();
+		Assert.assertEquals((Double) 20.0, originalIngredient.getStrength());
+		
+		loader.getDirUtil().deleteChecksums();
+		loader.load();
+		
+		drug = cs.getDrugByUuid("8abf401a-7f65-11f0-9e36-be568b1ab237");
+		Assert.assertEquals(1, drug.getIngredients().size());
+		DrugIngredient modifiedIngredient = drug.getIngredients().iterator().next();
+		// NOTE: Ideally we'd test this, but due to a bug in core with saving drug ingredients, it doesn't work unless you are on very specific versions of core
+		//Assert.assertEquals(originalIngredient.getUuid(), modifiedIngredient.getUuid());
+		Assert.assertEquals((Double) 15.0, modifiedIngredient.getStrength());
 	}
 }
