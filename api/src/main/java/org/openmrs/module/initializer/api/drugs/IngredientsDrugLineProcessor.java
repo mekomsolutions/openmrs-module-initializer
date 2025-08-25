@@ -73,7 +73,7 @@ public class IngredientsDrugLineProcessor extends DrugLineProcessor {
 					// Strength is not required, but if non-null, needs to be a double
 					Double strength = null;
 					String strengthLookup = line.getString(ingredientHeader + " " + HEADER_INGREDIENT_STRENGTH);
-					if (org.apache.commons.lang.StringUtils.isNotBlank(strengthLookup)) {
+					if (StringUtils.isNotBlank(strengthLookup)) {
 						try {
 							strength = Double.parseDouble(strengthLookup);
 						}
