@@ -78,8 +78,7 @@ public class IngredientsDrugLineProcessor extends DrugLineProcessor {
 							strength = Double.parseDouble(strengthLookup);
 						}
 						catch (NumberFormatException e) {
-							String msg = String.format("Invalid strength, must be a number: " + strengthLookup);
-							throw new IllegalArgumentException(msg);
+							throw new IllegalArgumentException("Invalid strength, must be a number: " + strengthLookup);
 						}
 					}
 					newIngredient.setStrength(strength);
