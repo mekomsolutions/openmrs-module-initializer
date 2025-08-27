@@ -60,5 +60,31 @@ In order to specify mappings on a given concept, the values for those mappings c
 | - | - | - | - | - |
 | ... | <sub>5089</sub> | <sub>27113001</sub> | <sub>5089</sub> | <sub>WEIGHT (KG)</sub> |
 
+###### Ingredient headers
+OpenMRS supports the ability to associated 0-N ingredients with a Drug, where an ingredient is made up of an ingredient (Concept), strength (Double), and units (Concept)
+
+Important note:  Due to a bug in OpenMRS core, use of Ingredient headers will silently fail if your core version does not meet one of the following minimum versions:
+* 2.8.1+
+* 2.7.6+
+See [TRUNK-6411](https://openmrs.atlassian.net/browse/TRUNK-6411) for more information on this bug.
+
+Ingredients may be specified via headers that start with the `Ingredient` prefix, followed by a numeric index.  You may add any number of ingredients by adding additional numeric indices.
+These headers should be named as follows, where `N` should be replaced with a numerical index that is unique to each ingredient.
+
+###### Header `Ingredient N`
+The value under this header links to the concept representing the ingredient. This can be a concept name (if unique), concept mapping, or UUID.
+
+###### Header `Ingredient N Strength`
+The value under this heading is expected to be a numeric quantity.  This can include decimals but is not required.
+
+###### Header `Ingredient N Units`
+The value under this header links to the concept representing the units related to the strength. This can be a concept name (if unique), concept mapping, or UUID.
+
+For example, a drug containing 2 ingredients might contain the following ingredient columns:
+
+| ... | <sub>Ingredient 1</sub> | <sub>Ingredient 1 Strength</sub> | <sub>Ingredient 1 Units</sub>  | <sub>Ingredient 2</sub> | <sub>Ingredient 2 Strength</sub> | <sub>Ingredient 2 Units</sub> |
+| --- |-------------------------|----------------------------------|--------------------------------|-------------------------|----------------------------------|-------------------------------|
+| ... | <sub>Lopinavir</sub>    | <sub>200</sub>                   | <sub>Milligram</sub>           | <sub>Ritonavir<sub>     | <sub>50</sub>                    | <sub>Milligram</sub>          |
+
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).
