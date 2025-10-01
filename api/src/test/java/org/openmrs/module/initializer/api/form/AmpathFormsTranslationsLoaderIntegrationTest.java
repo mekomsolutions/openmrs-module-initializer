@@ -158,7 +158,6 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 	@Test
 	public void load_shouldThrowGivenMissingLanguageFieldInFormTranslationsDef() throws Exception {
 		// Setup
-		ampathFormsLoader.load();
 		thrown.expectMessage(
 		    "IllegalArgumentException: 'language' property is required for AMPATH forms translations loader.");
 		
@@ -170,6 +169,7 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		FileUtils.copyFile(srcFile, dstFile);
 		
 		// Replay
+		ampathFormsLoader.load();
 		ampathFormsTranslationsLoader.loadUnsafe(Collections.emptyList(), true);
 		
 	}
