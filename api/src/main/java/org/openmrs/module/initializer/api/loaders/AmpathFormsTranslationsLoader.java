@@ -42,6 +42,37 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 	}
 	
 	@Override
+	protected void preload(File file) throws Exception {
+		String jsonTranslationsString = FileUtils.readFileToString(file, StandardCharsets.UTF_8.toString());
+		Map<String, Object> jsonTranslationsDefinition = new ObjectMapper().readValue(jsonTranslationsString, Map.class);
+		
+		Form form = null;
+		
+		String formName = (String) jsonTranslationsDefinition.get("form");
+		if (formName == null) {
+			throw new IllegalArgumentException("'form' property is required for AMPATH forms translations loader.");
+		}
+		form = formService.getForm(formName);
+		if (form == null) {
+			throw new IllegalArgumentException(
+			        "Could not find a form named '" + formName + "'. Please ensure an existing form is configured.");
+		}
+		
+		String language = (String) jsonTranslationsDefinition.get("language");
+		if (StringUtils.isBlank(language)) {
+			throw new IllegalArgumentException("'language' property is required for AMPATH forms translations loader.");
+		}
+		
+		String formNameTranslation = (String) jsonTranslationsDefinition.get("form_name_translation");
+		if (!StringUtils.isBlank(formNameTranslation)) {
+			msgSource.addPresentation(new PresentationMessage("ui.i18n.Form.name." + form.getUuid(),
+			        LocaleUtils.toLocale(language), formNameTranslation, null));
+			msgSource.addPresentation(new PresentationMessage("org.openmrs.Form." + form.getUuid(),
+			        LocaleUtils.toLocale(language), formNameTranslation, null));
+		}
+	}
+	
+	@Override
 	protected void load(File file) throws Exception {
 		String jsonTranslationsString = FileUtils.readFileToString(file, StandardCharsets.UTF_8.toString());
 		Map<String, Object> jsonTranslationsDefinition = new ObjectMapper().readValue(jsonTranslationsString, Map.class);
@@ -84,13 +115,5 @@ public class AmpathFormsTranslationsLoader extends BaseFileLoader {
 		
 		formResource.setValue(jsonTranslationsString);
 		formService.saveFormResource(formResource);
-		
-		String formNameTranslation = (String) jsonTranslationsDefinition.get("form_name_translation");
-		if (!StringUtils.isBlank(formNameTranslation)) {
-			msgSource.addPresentation(new PresentationMessage("ui.i18n.Form.name." + form.getUuid(),
-			        LocaleUtils.toLocale(language), formNameTranslation, null));
-			msgSource.addPresentation(new PresentationMessage("org.openmrs.Form." + form.getUuid(),
-			        LocaleUtils.toLocale(language), formNameTranslation, null));
-		}
 	}
 }

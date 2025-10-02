@@ -169,6 +169,7 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		FileUtils.copyFile(srcFile, dstFile);
 		
 		// Replay
+		ampathFormsLoader.load();
 		ampathFormsTranslationsLoader.loadUnsafe(Collections.emptyList(), true);
 		
 	}
