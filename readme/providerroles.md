@@ -1,7 +1,12 @@
 ## Domain 'providerroles'
 The **providerroles** subfolder contains CSV import files for saving Provider Roles in bulk. 
-This domain requires that an implementation is running the providermanagement module.
-This is a possible example of its content:
+
+If the providermanagement module is not installed, then this domain requires OpenMRS 2.8.2+, and does not support 
+the `Supervisee Provider Role`, `Relationship Type`, or `Provider Attribute Type` headers.
+
+If the providermanagement module _is_ installed, then this domain supports any OpenMRS version except 2.8.0 and 2.8.1,
+due to a bug that was fixed in OpenMRS 2.8.2.
+
 ```bash
 providerroles/
   ├──providerroles.csv

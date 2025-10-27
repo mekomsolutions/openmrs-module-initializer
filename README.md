@@ -185,6 +185,7 @@ mvn clean package
 * Metadata Sharing 1.2.2 (*compatible*)
 * Metadata Mapping 1.3.4 (*compatible*)
 * Open Concept Lab 1.2.9 (*compatible*)
+* Providermanagement 2.13.0 (*compatible*) 
 
 ### Test your OpenMRS configs
 See the [Initializer Validator README page](readme/validator.md).
@@ -219,6 +220,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 * Support enhanced methods for loading htmlforms when running htmlformentry 5.5.0+
 * Support loading drug ingredients within the drug domain, for compatible OpenMRS versions
 * Moved the form name translation loader to the preload function to support loading form names on instance restarts
+* Updated providerroles domain to support core ProviderRoles from OpenMRS 2.8.2+
 
 #### Version 2.9.0
 * Fix for InitializerSerializer to ensure compatibility with OpenMRS version 2.7.0+

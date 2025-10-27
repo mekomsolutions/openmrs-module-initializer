@@ -1,24 +1,22 @@
 package org.openmrs.module.initializer.api.providerroles;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.annotation.OpenmrsProfile;
+import org.openmrs.OpenmrsMetadata;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
-import org.openmrs.module.providermanagement.ProviderRole;
-import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@OpenmrsProfile(modules = { "providermanagement:*" })
-public class ProviderRolesCsvParser extends CsvParser<ProviderRole, BaseLineProcessor<ProviderRole>> {
+@Component
+public class ProviderRolesCsvParser extends CsvParser<OpenmrsMetadata, BaseLineProcessor<OpenmrsMetadata>> {
 	
-	private ProviderManagementService providerManagementService;
+	private final ProviderRoleServiceAdapter service = new ProviderRoleServiceAdapter();
 	
 	@Autowired
-	public ProviderRolesCsvParser(ProviderManagementService pms, ProviderRolesLineProcessor processor) {
+	public ProviderRolesCsvParser(ProviderRolesLineProcessor processor) {
 		super(processor);
-		this.providerManagementService = pms;
 	}
 	
 	@Override
@@ -27,21 +25,24 @@ public class ProviderRolesCsvParser extends CsvParser<ProviderRole, BaseLineProc
 	}
 	
 	@Override
-	public ProviderRole bootstrap(CsvLine line) throws IllegalArgumentException {
+	public OpenmrsMetadata bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = line.getUuid();
 		if (StringUtils.isEmpty(uuid)) {
 			throw new IllegalArgumentException("uuid is required for provider roles");
 		}
-		ProviderRole role = providerManagementService.getProviderRoleByUuid(uuid);
+		OpenmrsMetadata role = service.getProviderRoleByUuid(uuid);
 		if (role == null) {
-			role = new ProviderRole();
+			ProviderRoleAdapter roleAdapter = service.newProviderRoleAdapter();
+			role = roleAdapter.getProviderRole();
 			role.setUuid(uuid);
 		}
 		return role;
 	}
 	
 	@Override
-	public ProviderRole save(ProviderRole instance) {
-		return providerManagementService.saveProviderRole(instance);
+	public OpenmrsMetadata save(OpenmrsMetadata instance) {
+		ProviderRoleAdapter roleAdapter = new ProviderRoleAdapter(instance);
+		service.saveProviderRole(roleAdapter);
+		return roleAdapter.getProviderRole();
 	}
 }
