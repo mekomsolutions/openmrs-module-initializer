@@ -16,6 +16,7 @@ import org.junit.rules.ExpectedException;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class InitializerMessageSourceTest {
 	
@@ -35,9 +36,8 @@ public class InitializerMessageSourceTest {
 	}
 	
 	@Test
-	public void getLocaleFromFileBaseName_shouldThrowIfNoValidLocaleAsSuffixToFileBaseName() {
-		expectedException.expect(IllegalArgumentException.class);
-		src.getLocaleFromFileBaseName("my_base_name");
+	public void getLocaleFromFileBaseName_shouldReturnNullIfNoValidLocaleAsSuffixToFileBaseName() {
+		assertNull(src.getLocaleFromFileBaseName("my_base_name"));
 	}
 	
 	@Test
