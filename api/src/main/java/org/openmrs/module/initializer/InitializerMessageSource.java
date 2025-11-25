@@ -180,11 +180,15 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 			Properties properties = resources.get(resourceName);
 			String nameWithoutExtension = FilenameUtils.removeExtension(resourceName);
 			Locale locale = getLocaleFromFileBaseName(nameWithoutExtension);
-			log.trace("Adding " + properties.size() + " messages from " + resourceName + " in locale: " + locale);
-			for (Object property : properties.keySet()) {
-				String key = property.toString();
-				String value = properties.getProperty(key);
-				addPresentation(new PresentationMessage(key, locale, value, ""));
+			if (locale == null) {
+				log.warn("No valid locale could be inferred from resource: '" + resourceName + "', skipping");
+			} else {
+				log.trace("Adding " + properties.size() + " messages from " + resourceName + " in locale: " + locale);
+				for (Object property : properties.keySet()) {
+					String key = property.toString();
+					String value = properties.getProperty(key);
+					addPresentation(new PresentationMessage(key, locale, value, ""));
+				}
 			}
 		}
 		stopWatch.stop();
@@ -279,8 +283,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 				log.trace(candidate + " is not a valid locale");
 			}
 		}
-		String msg = "No valid locale could be inferred from the following file base name: '" + baseName + "'.";
-		throw new IllegalArgumentException(msg);
+		return null;
 	}
 	
 	/**
