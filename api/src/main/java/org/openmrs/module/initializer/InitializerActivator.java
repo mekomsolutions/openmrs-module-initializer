@@ -28,6 +28,7 @@ import static org.openmrs.module.initializer.InitializerConstants.MODULE_ARTIFAC
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_LOGGING_ENABLED;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_LOGGING_LEVEL;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_LOGGING_LOCATION;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_PRIMARY_STARTUP;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_DISABLED;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_FAIL_ON_ERROR;
 import static org.openmrs.module.initializer.api.utils.Utils.getPropertyValue;
@@ -76,20 +77,34 @@ public class InitializerActivator extends BaseModuleActivator {
 		InitializerMessageSource messageSource = getInitializerMessageSource();
 		Context.getMessageSourceService().setActiveMessageSource(messageSource);
 		
+		boolean isPrimary = Boolean.parseBoolean(getPropertyValue(PROPS_PRIMARY_STARTUP, "false"));
+		if (!isPrimary) {
+			log.info("Initializer running in REPLICA mode → skipping config imports");
+			return;
+		}
+		
 		String startupLoadingMode = getInitializerService().getInitializerConfig().getStartupLoadingMode();
 		
 		if (PROPS_STARTUP_LOAD_DISABLED.equalsIgnoreCase(startupLoadingMode)) {
 			log.info("OpenMRS config loading process disabled at initializer startup");
-		} else {
-			boolean throwError = PROPS_STARTUP_LOAD_FAIL_ON_ERROR.equalsIgnoreCase(startupLoadingMode);
-			log.info("OpenMRS config loading process started...");
-			try {
-				getInitializerService().loadUnsafe(true, throwError);
-				log.info("OpenMRS config loading process completed.");
-			}
-			catch (Exception e) {
-				throw new ModuleException("An error occurred loading initializer configuration", e);
-			}
+			return;
+		}
+		
+		if (!shouldRunInitializerSafely()) {
+			log.info("No version/config changes detected → skipping initializer execution.");
+			return;
+		}
+		
+		boolean throwError = PROPS_STARTUP_LOAD_FAIL_ON_ERROR.equalsIgnoreCase(startupLoadingMode);
+		log.info("OpenMRS config loading process started...");
+		
+		try {
+			getInitializerService().loadUnsafe(true, throwError);
+			updateRunState();
+			log.info("OpenMRS config loading process completed.");
+		}
+		catch (Exception e) {
+			throw new ModuleException("An error occurred loading initializer configuration", e);
 		}
 	}
 	
@@ -103,6 +118,14 @@ public class InitializerActivator extends BaseModuleActivator {
 	
 	protected InitializerMessageSource getInitializerMessageSource() {
 		return Context.getRegisteredComponents(InitializerMessageSource.class).get(0);
+	}
+	
+	protected boolean shouldRunInitializerSafely() {
+		return getInitializerService().shouldRunInitializer();
+	}
+	
+	protected void updateRunState() {
+		getInitializerService().updateInitializerRunState();
 	}
 	
 	/**

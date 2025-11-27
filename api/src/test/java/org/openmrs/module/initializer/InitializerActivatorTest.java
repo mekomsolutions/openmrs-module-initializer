@@ -27,6 +27,7 @@ import java.util.Properties;
 import static org.openmrs.module.initializer.Domain.CONCEPTS;
 import static org.openmrs.module.initializer.Domain.DRUGS;
 import static org.openmrs.module.initializer.Domain.ENCOUNTER_TYPES;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_PRIMARY_STARTUP;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_DISABLED;
@@ -69,6 +70,15 @@ public class InitializerActivatorTest {
 			}
 			
 			@Override
+			protected boolean shouldRunInitializerSafely() {
+				return true;
+			}
+			
+			@Override
+			protected void updateRunState() {
+			}
+			
+			@Override
 			protected List<InitializerLogConfigurator> getInitializerLogConfigurator() {
 				return null;
 			}
@@ -83,6 +93,7 @@ public class InitializerActivatorTest {
 	}
 	
 	protected void startActivator(String startupLoadConfiguration) {
+		System.setProperty(PROPS_PRIMARY_STARTUP, "true");
 		startActivator(startupLoadConfiguration, false);
 	}
 	
