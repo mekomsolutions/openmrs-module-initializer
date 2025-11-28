@@ -76,6 +76,9 @@
 		<aware_of_module version="${billingVersion}">
 			org.openmrs.module.billing
 		</aware_of_module>
+		<aware_of_module version="${providermanagementVersion}">
+			org.openmrs.module.providermanagement
+		</aware_of_module>
 	</aware_of_modules>
 	
 	<!-- Internationalization -->
