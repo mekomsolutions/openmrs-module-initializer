@@ -89,6 +89,13 @@
         
         <dependency>
             <groupId>org.openmrs.module</groupId>
+            <artifactId>patientflags-api</artifactId>
+            <version>${patientflagsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
             <artifactId>stockmanagement-api</artifactId>
             <version>${stockmanagementVersion}</version>
             <scope>test</scope>

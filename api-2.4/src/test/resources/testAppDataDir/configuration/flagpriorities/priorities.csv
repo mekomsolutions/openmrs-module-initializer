@@ -1,0 +1,6 @@
+uuid,Void/Retire,name,style,rank,description
+526bf278-ba81-4436-b867-c2f6641d060a,,High Priority,color:red,1,High priority flags
+627bf278-ba81-4436-b867-c2f6641d060b,,Medium Priority,color:orange,2,Medium priority flags
+728bf278-ba81-4436-b867-c2f6641d060c,,Low Priority,color:yellow,3,Low priority flags
+829bf278-ba81-4436-b867-c2f6641d060d,true,Very Low Priority,color:gray,4,Very low priority flags
+

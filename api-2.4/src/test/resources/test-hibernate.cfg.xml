@@ -9,5 +9,11 @@
         <mapping resource="Bill.hbm.xml"/>
         <mapping resource="Cashier.hbm.xml"/>
         <mapping resource="SequentialReceiptNumberGenerator.hbm.xml"/>
+        <!-- Patient Flags -->
+        <mapping resource="DisplayPoint.hbm.xml"/>
+        <mapping resource="Flag.hbm.xml"/>
+        <mapping resource="Priority.hbm.xml"/>
+        <mapping resource="Tag.hbm.xml"/>
+        <mapping resource="PatientFlag.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
