@@ -219,8 +219,9 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 #### Version 2.10.0
 * Support enhanced methods for loading htmlforms when running htmlformentry 5.5.0+
 * Support loading drug ingredients within the drug domain, for compatible OpenMRS versions.
+* Initializer message source should not throw an Exception if locale is not found for resource.
 * Moved the form name translation loader to the preload function to support loading form names on instance restarts.
-* Added video tutorial to the README covering the fundamentals of editing and managing Iniz configuration files.
+* Added video tutorial to the README covering the fundamentals of modifying and managing Iniz configuration files.
 
 #### Version 2.9.0
 * Fix for InitializerSerializer to ensure compatibility with OpenMRS version 2.7.0+
