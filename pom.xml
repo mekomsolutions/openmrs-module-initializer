@@ -77,6 +77,7 @@
         <fhir2Version>1.6.0</fhir2Version>
         <billingVersion>1.1.0</billingVersion>
         <stockmanagementVersion>2.0.2</stockmanagementVersion>
+        <patientflagsVersion>3.0.9-SNAPSHOT</patientflagsVersion>
 
         <!-- Modules compatibility > Core 2.3.0 -->
         <datafilterVersion>1.0.0</datafilterVersion>
