@@ -24,11 +24,11 @@ This is the descriptive name of the tag.
 ###### Header `Roles` *(optional)*
 A semi-colon separated list of Role identifiers (UUID or name). Flags associated with this tag will be visible to users with these roles.
 
-###### Header `Display Points` *(optional)*
-A semi-colon separated list of DisplayPoint identifiers (UUID or name). Flags associated with this tag will be displayed at these display points.
-
 ###### Header `Description` *(optional)*
 A description of the tag.
+
+###### Header `Display Points` *(optional)*
+LEGACY: Only used for RefApp 2.x. A semi-colon separated list of DisplayPoint identifiers (UUID or name). Flags associated with this tag will be displayed at these display points in RefApp 2.x. In OpenMRS 3+, this is configured on the frontend.
 
 #### Requirements
 * The [patientflags module](https://github.com/openmrs/openmrs-module-patientflags) version 3.0 or higher must be installed

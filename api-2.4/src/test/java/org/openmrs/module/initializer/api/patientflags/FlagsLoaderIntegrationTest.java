@@ -78,7 +78,8 @@ public class FlagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Flag flag = new Flag();
 			flag.setUuid("f279d252-g6ge-5ffd-ce4f-744cef2d0717");
 			flag.setName("Test Flag");
-			flag.setCriteria("SELECT patient_id FROM patient WHERE patient_id = 99");
+			
+			flag.setCriteria("SELECT a.patient_id FROM allergy a where a.allergen_type = 'CATS'");
 			flag.setEvaluator("org.openmrs.module.patientflags.evaluator.SqlFlagEvaluator");
 			flag.setMessage("Old test message");
 			flag.setPriority(lowPriority);
@@ -92,7 +93,7 @@ public class FlagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Flag flag = new Flag();
 			flag.setUuid("g38ae363-h7hf-6gge-df5g-855dfg3e1828");
 			flag.setName("Retired Flag");
-			flag.setCriteria("SELECT patient_id FROM patient WHERE patient_id = 3");
+			flag.setCriteria("SELECT a.patient_id FROM allergy a where a.allergen_type = 'DOGS'");
 			flag.setEvaluator("org.openmrs.module.patientflags.evaluator.SqlFlagEvaluator");
 			flag.setMessage("Retired message");
 			flag.setPriority(lowPriority);
@@ -112,7 +113,7 @@ public class FlagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Flag flag = flagService.getFlagByUuid("e168c141-f5fd-4eec-bd3e-633bed1c9606");
 			assertNotNull(flag);
 			assertEquals("HIV Positive", flag.getName());
-			assertEquals("SELECT patient_id FROM patient WHERE patient_id = 2", flag.getCriteria());
+			assertEquals("SELECT c.patient_id FROM condition c where c.condition_name = 'HIV'", flag.getCriteria());
 			assertEquals("org.openmrs.module.patientflags.evaluator.SqlFlagEvaluator", flag.getEvaluator());
 			assertEquals("patientflags.message.hivPositive", flag.getMessage());
 			assertNotNull(flag.getPriority());
@@ -123,12 +124,12 @@ public class FlagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			assertEquals("Flag for HIV positive patients", flag.getDescription());
 		}
 		
-		// Verify edition
+		// Verify editing
 		{
 			Flag flag = flagService.getFlagByUuid("f279d252-g6ge-5ffd-ce4f-744cef2d0717");
 			assertNotNull(flag);
 			assertEquals("Test Flag", flag.getName());
-			assertEquals("SELECT patient_id FROM patient WHERE patient_id = 1", flag.getCriteria()); // Updated
+			assertEquals("SELECT a.patient_id FROM allergy a where a.allergen_type = 'DRUG'", flag.getCriteria()); // Updated
 			assertEquals("Test message", flag.getMessage()); // Updated
 			assertNotNull(flag.getPriority());
 			assertEquals("Medium Priority", flag.getPriority().getName()); // Updated

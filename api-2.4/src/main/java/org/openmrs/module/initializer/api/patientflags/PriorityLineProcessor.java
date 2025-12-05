@@ -23,18 +23,21 @@ public class PriorityLineProcessor extends BaseLineProcessor<Priority> {
 		priority.setName(line.get(HEADER_NAME, true));
 		priority.setDescription(line.get(HEADER_DESC));
 		
-		// Required style
-		priority.setStyle(line.get(HEADER_STYLE, true));
+		// Optional style
+		String styleStr = line.getString(HEADER_STYLE, "");
+		if (StringUtils.isBlank(styleStr)) {
+			priority.setStyle("/**/"); // field is non-nullable but is not used; set to empty comment
+		} else {
+			priority.setStyle(styleStr.trim());
+		}
 		
 		// Required rank
 		String rankStr = line.get(HEADER_RANK, true);
-		if (StringUtils.isNotBlank(rankStr)) {
-			try {
-				priority.setRank(Integer.parseInt(rankStr.trim()));
-			}
-			catch (NumberFormatException e) {
-				throw new IllegalArgumentException("The rank value '" + rankStr + "' could not be parsed as an integer.");
-			}
+		try {
+			priority.setRank(Integer.parseInt(rankStr.trim()));
+		}
+		catch (NumberFormatException e) {
+			throw new IllegalArgumentException("The rank value '" + rankStr + "' could not be parsed as an integer.");
 		}
 		
 		return priority;

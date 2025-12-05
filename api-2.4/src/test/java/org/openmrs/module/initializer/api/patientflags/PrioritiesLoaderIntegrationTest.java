@@ -53,12 +53,12 @@ public class PrioritiesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		// Replay
 		loader.load();
 		
-		// Verify creation
+		// Verify creation with blank style (null, legacy field not used in OpenMRS 3+)
 		{
 			Priority priority = flagService.getPriorityByUuid("627bf278-ba81-4436-b867-c2f6641d060b");
 			assertNotNull(priority);
 			assertEquals("Medium Priority", priority.getName());
-			assertEquals("color:orange", priority.getStyle());
+			assertEquals("/**/", priority.getStyle()); // Blank style stored as null
 			assertEquals(Integer.valueOf(2), priority.getRank());
 			assertEquals("Medium priority flags", priority.getDescription());
 		}
@@ -67,11 +67,11 @@ public class PrioritiesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			Priority priority = flagService.getPriorityByUuid("728bf278-ba81-4436-b867-c2f6641d060c");
 			assertNotNull(priority);
 			assertEquals("Low Priority", priority.getName());
-			assertEquals("color:yellow", priority.getStyle());
+			assertEquals("/**/", priority.getStyle()); // Blank style stored as null
 			assertEquals(Integer.valueOf(3), priority.getRank());
 		}
 		
-		// Verify edition
+		// Verify editing
 		{
 			Priority priority = flagService.getPriorityByUuid("526bf278-ba81-4436-b867-c2f6641d060a");
 			assertNotNull(priority);
@@ -80,7 +80,7 @@ public class PrioritiesLoaderIntegrationTest extends DomainBaseModuleContextSens
 			assertEquals(Integer.valueOf(1), priority.getRank()); // Updated from 10
 		}
 		
-		// Verify retirement
+		// Verify retirement (style set to placeholder from CSV)
 		{
 			Priority priority = flagService.getPriorityByUuid("829bf278-ba81-4436-b867-c2f6641d060d");
 			assertTrue(priority.getRetired());

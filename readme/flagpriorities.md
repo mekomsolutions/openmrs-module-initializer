@@ -21,14 +21,14 @@ This unique identifier represents the different priorities.
 ###### Header `Name` *(required)*
 This is the descriptive name of the priority.
 
-###### Header `Style` *(required)*
-This is the CSS style string applied to flags with this priority (e.g., "color:red", "background-color:yellow").
-
 ###### Header `Rank` *(required)*
 This is an integer value representing the priority rank. Lower numbers indicate higher priority.
 
 ###### Header `Description` *(optional)*
 A description of the priority.
+
+###### Header `Style` *(optional)*
+LEGACY: Only used for RefApp 2.x. This is the CSS style string applied to flags with this priority (e.g., "color:red", "background-color:yellow"). In OpenMRS 3+, this is configured on the frontend.
 
 #### Requirements
 * The [patientflags module](https://github.com/openmrs/openmrs-module-patientflags) version 3.0 or higher must be installed

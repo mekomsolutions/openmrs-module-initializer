@@ -1,5 +1,4 @@
 uuid,Void/Retire,name,criteria,evaluator,message,priority,enabled,tags,description
-e168c141-f5fd-4eec-bd3e-633bed1c9606,,HIV Positive,SELECT patient_id FROM patient WHERE patient_id = 2,org.openmrs.module.patientflags.evaluator.SqlFlagEvaluator,patientflags.message.hivPositive,High Priority,true,HIV;Clinical,Flag for HIV positive patients
-f279d252-g6ge-5ffd-ce4f-744cef2d0717,,Test Flag,SELECT patient_id FROM patient WHERE patient_id = 1,org.openmrs.module.patientflags.evaluator.SqlFlagEvaluator,Test message,Medium Priority,true,Clinical,Test flag for unit testing
-g38ae363-h7hf-6gge-df5g-855dfg3e1828,true,Retired Flag,SELECT patient_id FROM patient WHERE patient_id = 3,org.openmrs.module.patientflags.evaluator.SqlFlagEvaluator,Retired message,Low Priority,true,Urgent,This flag should be retired
-
+e168c141-f5fd-4eec-bd3e-633bed1c9606,,HIV Positive,SELECT c.patient_id FROM condition c where c.condition_name = 'HIV',org.openmrs.module.patientflags.evaluator.SqlFlagEvaluator,patientflags.message.hivPositive,High Priority,true,HIV;Clinical,Flag for HIV positive patients
+f279d252-g6ge-5ffd-ce4f-744cef2d0717,,Test Flag,SELECT a.patient_id FROM allergy a where a.allergen_type = 'DRUG',org.openmrs.module.patientflags.evaluator.SqlFlagEvaluator,Test message,Medium Priority,true,Clinical,Test flag for unit testing
+g38ae363-h7hf-6gge-df5g-855dfg3e1828,true,Retired Flag,SELECT a.patient_id FROM allergy a where a.allergen_type = 'DOGS',org.openmrs.module.patientflags.evaluator.SqlFlagEvaluator,Retired message,Low Priority,true,Urgent,This flag should be retired

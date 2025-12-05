@@ -39,7 +39,7 @@ This references a Priority entity by UUID or name. The priority determines the v
 Whether the flag is enabled (true/false). Defaults to `true` if not specified.
 
 ###### Header `Tags` *(optional)*
-A semi-colon separated list of Tag identifiers (UUID or name) associated with the flag. Tags can be used to categorize and filter flags.
+A semi-colon separated list of Tag identifiers (UUID or name) associated with the flag. Tags are used to determine where flags are displayed in the UI.
 
 ###### Header `Description` *(optional)*
 A description of the flag.
