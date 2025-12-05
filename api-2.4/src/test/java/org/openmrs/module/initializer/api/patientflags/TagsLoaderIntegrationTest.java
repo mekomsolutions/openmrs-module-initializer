@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Role;
 import org.openmrs.api.UserService;
+import org.openmrs.module.patientflags.DisplayPoint;
 import org.openmrs.module.patientflags.Tag;
 import org.openmrs.module.patientflags.api.FlagService;
 import org.openmrs.module.initializer.api.DomainBaseModuleContextSensitive_2_4_patientflags_test;
@@ -37,6 +38,17 @@ public class TagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_
 		
 		Role nurseRole = new Role("Nurse", "Nurse role");
 		userService.saveRole(nurseRole);
+		
+		// Create display points for testing
+		DisplayPoint patientSummary = new DisplayPoint("Patient Summary");
+		patientSummary.setUuid("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
+		patientSummary.setRetired(false);
+		flagService.saveDisplayPoint(patientSummary);
+		
+		DisplayPoint patientDashboard = new DisplayPoint("Patient Dashboard");
+		patientDashboard.setUuid("b2c3d4e5-f6a7-8901-bcde-f12345678901");
+		patientDashboard.setRetired(false);
+		flagService.saveDisplayPoint(patientDashboard);
 		
 		{
 			// To be edited

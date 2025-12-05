@@ -13,10 +13,12 @@ import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 /**
  * Processes CSV lines for Flag entities.
  */
+@Component("initializer.flagsLineProcessor")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class FlagsLineProcessor extends BaseLineProcessor<Flag> {
 	
@@ -37,7 +39,8 @@ public class FlagsLineProcessor extends BaseLineProcessor<Flag> {
 	private TagListParser tagListParser;
 	
 	@Autowired
-	public FlagsLineProcessor(@Qualifier("flagService") FlagService flagService, TagListParser tagListParser) {
+	public FlagsLineProcessor(@Qualifier("flagService") FlagService flagService,
+	    @Qualifier("initializer.tagListParser") TagListParser tagListParser) {
 		this.flagService = flagService;
 		this.tagListParser = tagListParser;
 	}

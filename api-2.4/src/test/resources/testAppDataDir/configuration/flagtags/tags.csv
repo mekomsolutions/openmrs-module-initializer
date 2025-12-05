@@ -3,4 +3,3 @@ uuid,Void/Retire,name,roles,display points,description
 627bf278-ba81-4436-b867-c2f6641d060b,,Clinical,Clinician;Nurse,Patient Summary;Patient Dashboard,General clinical flags
 728bf278-ba81-4436-b867-c2f6641d060c,,Urgent,,,Urgent flags
 829bf278-ba81-4436-b867-c2f6641d060d,true,Deprecated,,,Deprecated flags
-

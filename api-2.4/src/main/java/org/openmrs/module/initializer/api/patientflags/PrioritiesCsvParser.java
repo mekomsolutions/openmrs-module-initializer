@@ -10,17 +10,20 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 /**
  * Parses CSV files for Priority entities.
  */
+@Component
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class PrioritiesCsvParser extends CsvParser<Priority, BaseLineProcessor<Priority>> {
 	
 	private final FlagService flagService;
 	
 	@Autowired
-	public PrioritiesCsvParser(@Qualifier("flagService") FlagService flagService, PriorityLineProcessor processor) {
+	public PrioritiesCsvParser(@Qualifier("flagService") FlagService flagService,
+	    @Qualifier("initializer.priorityLineProcessor") PriorityLineProcessor processor) {
 		super(processor);
 		this.flagService = flagService;
 	}

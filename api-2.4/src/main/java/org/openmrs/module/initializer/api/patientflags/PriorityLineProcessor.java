@@ -5,10 +5,12 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.patientflags.Priority;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.springframework.stereotype.Component;
 
 /**
  * Processes CSV lines for Priority entities.
  */
+@Component("initializer.priorityLineProcessor")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class PriorityLineProcessor extends BaseLineProcessor<Priority> {
 	
