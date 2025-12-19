@@ -92,6 +92,7 @@
         <exti18nVersion>1.0.0</exti18nVersion>
         <appframeworkVersion>2.14.0</appframeworkVersion>
         <providermanagementVersion>2.13.0</providermanagementVersion>
+        <tasksVersion>1.0.0-SNAPSHOT</tasksVersion>
     </properties>
 
     <dependencies>
@@ -246,6 +247,13 @@
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
+            <artifactId>tasks-api</artifactId>
+            <version>${tasksVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
             <artifactId>fhir2-api</artifactId>
             <version>${fhir2Version}</version>
             <scope>provided</scope>
@@ -300,7 +308,7 @@
             <version>${serializationVersion}</version>
             <scope>test</scope>
         </dependency>
-        
+
         <!-- Depedency required to compile against Java 11 -->
         <dependency>
             <groupId>javax.annotation</groupId>
