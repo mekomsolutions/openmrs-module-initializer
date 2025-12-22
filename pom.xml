@@ -1,6 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -14,7 +16,8 @@
     <version>2.11.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Initializer</name>
-    <description>The OpenMRS Initializer module is an API-only module that processes the content of the configuration folder when it is found inside OpenMRS' application data directory.</description>
+    <description
+  >The OpenMRS Initializer module is an API-only module that processes the content of the configuration folder when it is found inside OpenMRS' application data directory.</description>
 
     <developers>
         <developer>
@@ -27,8 +30,10 @@
     </organization>
 
     <scm>
-        <connection>scm:git@github.com:mekomsolutions/openmrs-module-initializer.git</connection>
-        <developerConnection>scm:git:git@github.com:mekomsolutions/openmrs-module-initializer.git</developerConnection>
+        <connection
+    >scm:git@github.com:mekomsolutions/openmrs-module-initializer.git</connection>
+        <developerConnection
+    >scm:git:git@github.com:mekomsolutions/openmrs-module-initializer.git</developerConnection>
         <url>https://github.com/mekomsolutions/openmrs-module-initializer</url>
     </scm>
 
@@ -40,6 +45,7 @@
         <module>api-2.4</module>
         <module>api-2.5</module>
         <module>api-2.7</module>
+        <module>api-2.8</module>
         <module>omod</module>
     </modules>
 
@@ -60,6 +66,7 @@
         <openmrsVersion2.4>2.4.5</openmrsVersion2.4>
         <openmrsVersion2.5>2.5.5</openmrsVersion2.5>
         <openmrsVersion2.7>2.7.0</openmrsVersion2.7>
+        <openmrsVersion2.8>2.8.0</openmrsVersion2.8>
 
         <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
 
@@ -355,7 +362,8 @@
                             <directories>
                                 <directory>.</directory>
                             </directories>
-                            <configFile>eclipse/OpenMRSFormatter.xml</configFile>
+                            <configFile
+              >eclipse/OpenMRSFormatter.xml</configFile>
                             <includes>
                                 <include>**/*.java</include>
                                 <include>**/*.json</include>
@@ -397,7 +405,8 @@
         <repository>
             <id>repo.mybahmni.org</id>
             <name>bahmni-artifactory-snapshots</name>
-            <url>https://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
+            <url
+      >https://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
             <snapshots>
                 <updatePolicy>always</updatePolicy>
             </snapshots>
@@ -405,7 +414,8 @@
         <repository>
             <id>repo.mybahmni.org-release</id>
             <name>bahmni-artifactory-release</name>
-            <url>https://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
+            <url
+      >https://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
         </repository>
         <repository>
             <id>bahmni-nexus</id>
