@@ -13,7 +13,7 @@ import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@OpenmrsProfile(modules = { "idgen:4.6.0" })
+@OpenmrsProfile(modules = { "idgen:*" })
 public class AutoGenerationOptionLineProcessor extends BaseLineProcessor<AutoGenerationOption> {
 	
 	final public static String IDENTIFIER_TYPE = "identifier type";
@@ -49,12 +49,19 @@ public class AutoGenerationOptionLineProcessor extends BaseLineProcessor<AutoGen
 		// Fill identifier type
 		{
 			String identifierTypeRef = line.get(IDENTIFIER_TYPE, true);
-			option.setIdentifierType(Utils.fetchPatientIdentifierType(identifierTypeRef, ps));
+			PatientIdentifierType idType = Utils.fetchPatientIdentifierType(identifierTypeRef, ps);
+			if (idType == null) {
+				throw new IllegalArgumentException("No identifier type found for '" + identifierTypeRef + "'");
+			}
+			option.setIdentifierType(idType);
 		}
 		// Fill identifier source
 		{
 			String identifierSourceRef = line.get(IDENTIFIER_SOURCE, true);
 			IdentifierSource source = iss.getIdentifierSourceByUuid(identifierSourceRef);
+			if (source == null) {
+				throw new IllegalArgumentException("No identifier source found for '" + identifierSourceRef + "'");
+			}
 			option.setSource(source);
 		}
 		// Fill location
