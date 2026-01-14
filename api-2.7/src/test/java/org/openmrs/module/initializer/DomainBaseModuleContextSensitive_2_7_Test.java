@@ -79,5 +79,10 @@ public abstract class DomainBaseModuleContextSensitive_2_7_Test extends DomainBa
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
+		{
+			Module mod = new Module("", "billing", "", "", "", "2.0.0-SNAPSHOT", "");
+			mod.setFile(new File(""));
+			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+		}
 	}
 }
