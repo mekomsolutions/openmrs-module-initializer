@@ -7,7 +7,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.initializer;
+package org.openmrs.module.initializer.api.billing;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,7 +17,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.module.billing.api.BillableServiceService;
 import org.openmrs.module.billing.api.model.BillableService;
 import org.openmrs.module.billing.api.model.BillableServiceStatus;
-import org.openmrs.module.initializer.api.billing.BillableServicesLoader;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_7_Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -35,7 +35,7 @@ public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleConte
 	
 	@Before
 	public void setup() {
-		executeDataSet("testdata/test-concepts-2.4.xml");
+		executeDataSet("testdata/test-concepts-2.7.xml");
 		{
 			// To be edited
 			Concept concept = conceptService.getConceptByUuid("3f6f6c92-8d5c-4a9e-bb1c-d3e00e4f8b71");

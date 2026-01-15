@@ -1,4 +1,4 @@
-package org.openmrs.module.initializer;
+package org.openmrs.module.initializer.api.billing;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,7 +6,7 @@ import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.billing.api.ICashPointService;
 import org.openmrs.module.billing.api.model.CashPoint;
-import org.openmrs.module.initializer.api.billing.CashPointsLoader;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_7_Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -28,7 +28,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 	
 	@Before
 	public void setup() throws Exception {
-		executeDataSet("testdata/test-concepts-2.4.xml");
+		executeDataSet("testdata/test-concepts-2.7.xml");
 		{
 			// To be edited
 			Location location = locationService.getLocationByUuid("c4bb4f44-726d-11eb-9439-0242ac130002");

@@ -1,5 +1,6 @@
-package org.openmrs.module.initializer;
+package org.openmrs.module.initializer.api.billing;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -7,9 +8,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openmrs.module.billing.api.impl.BillableServiceServiceImpl;
 import org.openmrs.module.billing.api.model.BillableService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.openmrs.module.initializer.api.billing.BillableServicesCsvParser;
-import org.openmrs.module.initializer.api.billing.BillableServicesLineProcessor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -33,7 +33,7 @@ public class BillableServicesCsvParserTest {
 	
 	@Test
 	public void getDomain_shouldReturnBillableServicesDomain() {
-		assertEquals(Domain.BILLABLE_SERVICES, parser.getDomain());
+		Assert.assertEquals(Domain.BILLABLE_SERVICES, parser.getDomain());
 	}
 	
 	@Test

@@ -1,10 +1,10 @@
-package org.openmrs.module.initializer;
+package org.openmrs.module.initializer.api.billing;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.billing.api.IPaymentModeService;
 import org.openmrs.module.billing.api.model.PaymentMode;
-import org.openmrs.module.initializer.api.billing.PaymentModesLoader;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_7_Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
@@ -20,23 +20,8 @@ public class PaymentModesLoaderIntegrationTest extends DomainBaseModuleContextSe
 	private PaymentModesLoader loader;
 	
 	@Before
-	public void setup() throws Exception {
-		executeDataSet("testdata/test-concepts-2.4.xml");
-		{
-			// To be edited
-			PaymentMode paymentMode = new PaymentMode();
-			paymentMode.setUuid("526bf278-ba81-4436-b867-c2f6641d060a");
-			paymentMode.setName("Visa Card");
-			paymentMode.setRetired(false);
-		}
-		
-		{
-			// To be retired
-			PaymentMode paymentMode = new PaymentMode();
-			paymentMode.setUuid("2b1b9aae-5d35-43dd-9214-3fd370fd7737");
-			paymentMode.setName("Bank transfer");
-			paymentMode.setRetired(false);
-		}
+	public void setup() {
+		executeDataSet("testdata/test-concepts-2.7.xml");
 	}
 	
 	@Test
