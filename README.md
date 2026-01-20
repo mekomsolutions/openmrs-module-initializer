@@ -186,6 +186,7 @@ mvn clean package
 * Bahmni I.e Apps 1.1.0 (*compatible*)
 * Billing 1.1.0 (*compatible*)
 * Data Filter 1.0.0 (*compatible*)
+* Flags 3.0.8 (*compatible*)
 * HTML Form Entry 4.0.0 (*compatible*)
 * ID Gen 4.3 (*compatible*)
 * Metadata Sharing 1.2.2 (*compatible*)
@@ -220,6 +221,9 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ----
 
 ## Releases notes
+
+#### Version 2.11.0
+* Added support for patient flags (flags, flagpriorities, flagtags) domains
 
 #### Version 2.10.0
 * Support enhanced methods for loading htmlforms when running htmlformentry 5.5.0+
