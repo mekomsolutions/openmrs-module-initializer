@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 /**
  * Parses CSV files for Flag entities.
  */
-@Component
+@Component("initializer.flagFlagsCsvParser")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class FlagsCsvParser extends CsvParser<Flag, BaseLineProcessor<Flag>> {
 	

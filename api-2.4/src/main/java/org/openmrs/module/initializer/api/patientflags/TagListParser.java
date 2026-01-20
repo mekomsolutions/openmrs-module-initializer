@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * Parses a list of Tag identifiers (UUID or name) and fetches the corresponding Tag entities.
  */
-@Component("initializer.tagListParser")
+@Component("initializer.flagTagListParser")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class TagListParser extends ListParser<Tag> {
 	

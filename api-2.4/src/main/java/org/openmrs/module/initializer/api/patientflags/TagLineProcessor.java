@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 /**
  * Processes CSV lines for Tag entities.
  */
-@Component("initializer.tagLineProcessor")
+@Component("initializer.flagTagLineProcessor")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class TagLineProcessor extends BaseLineProcessor<Tag> {
 	
@@ -33,7 +33,7 @@ public class TagLineProcessor extends BaseLineProcessor<Tag> {
 	
 	@Autowired
 	public TagLineProcessor(RoleListParser roleListParser,
-	    @Qualifier("initializer.displayPointListParser") DisplayPointListParser displayPointListParser) {
+	    @Qualifier("initializer.flagDisplayPointListParser") DisplayPointListParser displayPointListParser) {
 		this.roleListParser = roleListParser;
 		this.displayPointListParser = displayPointListParser;
 	}
@@ -46,7 +46,7 @@ public class TagLineProcessor extends BaseLineProcessor<Tag> {
 		// Optional roles
 		String rolesStr = line.getString(HEADER_ROLES, "");
 		if (StringUtils.isNotBlank(rolesStr)) {
-			Set<Role> roles = new HashSet<Role>(roleListParser.parseList(rolesStr));
+			Set<Role> roles = new HashSet<>(roleListParser.parseList(rolesStr));
 			tag.setRoles(roles);
 		} else if (tag.getRoles() != null) {
 			// Clear roles if not specified (only if roles were previously set)
@@ -56,7 +56,7 @@ public class TagLineProcessor extends BaseLineProcessor<Tag> {
 		// Optional display points
 		String displayPointsStr = line.getString(HEADER_DISPLAY_POINTS, "");
 		if (StringUtils.isNotBlank(displayPointsStr)) {
-			Set<DisplayPoint> displayPoints = new HashSet<DisplayPoint>(displayPointListParser.parseList(displayPointsStr));
+			Set<DisplayPoint> displayPoints = new HashSet<>(displayPointListParser.parseList(displayPointsStr));
 			tag.setDisplayPoints(displayPoints);
 		} else if (tag.getDisplayPoints() != null) {
 			// Clear display points if not specified (only if display points were previously set)

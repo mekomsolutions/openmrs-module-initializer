@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * Processes CSV lines for Priority entities.
  */
-@Component("initializer.priorityLineProcessor")
+@Component("initializer.flagPriorityLineProcessor")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class PriorityLineProcessor extends BaseLineProcessor<Priority> {
 	

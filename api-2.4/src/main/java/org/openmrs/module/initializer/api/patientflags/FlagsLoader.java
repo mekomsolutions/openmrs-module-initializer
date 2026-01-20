@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * Loads Flags from CSV files.
  */
-@Component
+@Component("initializer.flagFlagsLoader")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class FlagsLoader extends BaseCsvLoader<Flag, FlagsCsvParser> {
 	

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * Parses a list of DisplayPoint identifiers (UUID or name) and fetches the corresponding
  * DisplayPoint entities.
  */
-@Component("initializer.displayPointListParser")
+@Component("initializer.flagDisplayPointListParser")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class DisplayPointListParser extends ListParser<DisplayPoint> {
 	

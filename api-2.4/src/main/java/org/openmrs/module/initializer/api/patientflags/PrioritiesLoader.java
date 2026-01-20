@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * Loads Priorities from CSV files.
  */
-@Component
+@Component("initializer.flagPrioritiesLoader")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class PrioritiesLoader extends BaseCsvLoader<Priority, PrioritiesCsvParser> {
 	

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 /**
  * Parses CSV files for Priority entities.
  */
-@Component
+@Component("initializer.flagPrioritiesCsvParser")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class PrioritiesCsvParser extends CsvParser<Priority, BaseLineProcessor<Priority>> {
 	
@@ -23,7 +23,7 @@ public class PrioritiesCsvParser extends CsvParser<Priority, BaseLineProcessor<P
 	
 	@Autowired
 	public PrioritiesCsvParser(@Qualifier("flagService") FlagService flagService,
-	    @Qualifier("initializer.priorityLineProcessor") PriorityLineProcessor processor) {
+	    @Qualifier("initializer.flagPriorityLineProcessor") PriorityLineProcessor processor) {
 		super(processor);
 		this.flagService = flagService;
 	}

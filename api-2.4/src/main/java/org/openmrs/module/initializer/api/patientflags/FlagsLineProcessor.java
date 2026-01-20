@@ -40,7 +40,7 @@ public class FlagsLineProcessor extends BaseLineProcessor<Flag> {
 	
 	@Autowired
 	public FlagsLineProcessor(@Qualifier("flagService") FlagService flagService,
-	    @Qualifier("initializer.tagListParser") TagListParser tagListParser) {
+	    @Qualifier("initializer.flagTagListParser") TagListParser tagListParser) {
 		this.flagService = flagService;
 		this.tagListParser = tagListParser;
 	}

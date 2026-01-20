@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 /**
  * Parses CSV files for Tag entities.
  */
-@Component
+@Component("initializer.flagTagsCsvParser")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class TagsCsvParser extends CsvParser<Tag, BaseLineProcessor<Tag>> {
 	
@@ -23,7 +23,7 @@ public class TagsCsvParser extends CsvParser<Tag, BaseLineProcessor<Tag>> {
 	
 	@Autowired
 	public TagsCsvParser(@Qualifier("flagService") FlagService flagService,
-	    @Qualifier("initializer.tagLineProcessor") TagLineProcessor processor) {
+	    @Qualifier("initializer.flagTagLineProcessor") TagLineProcessor processor) {
 		super(processor);
 		this.flagService = flagService;
 	}
