@@ -36,7 +36,10 @@ public class FlagsCsvParser extends CsvParser<Flag, BaseLineProcessor<Flag>> {
 	@Override
 	public Flag bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = line.getUuid();
-		Flag flag = flagService.getFlagByUuid(uuid);
+		Flag flag = null;
+		if (uuid != null && uuid != "") {
+			flag = flagService.getFlagByUuid(uuid);
+		}
 		if (flag == null) {
 			flag = new Flag();
 			if (StringUtils.isNotBlank(uuid)) {
