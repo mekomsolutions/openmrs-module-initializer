@@ -8,11 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.patientflags.Priority;
 import org.openmrs.module.patientflags.api.FlagService;
-import org.openmrs.module.initializer.api.DomainBaseModuleContextSensitive_2_4_patientflags_test;
+import org.openmrs.module.initializer.api.DomainBaseModuleContextSensitive_patientflags_test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class PrioritiesLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_patientflags_test {
+public class PrioritiesLoaderIntegrationTest extends DomainBaseModuleContextSensitive_patientflags_test {
 	
 	@Autowired
 	@Qualifier("flagService")
@@ -23,7 +23,7 @@ public class PrioritiesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	
 	@Before
 	public void setup() throws Exception {
-		executeDataSet("testdata/test-concepts-2.4.xml");
+		executeDataSet("testdata/test-concepts.xml");
 		
 		{
 			// To be edited

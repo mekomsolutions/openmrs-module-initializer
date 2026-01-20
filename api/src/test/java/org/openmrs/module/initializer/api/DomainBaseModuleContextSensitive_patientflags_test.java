@@ -18,9 +18,9 @@ import java.io.File;
 /**
  * This allows to perform Spring context sensitive tests when patientflags module is a dependency.
  */
-public abstract class DomainBaseModuleContextSensitive_2_4_patientflags_test extends DomainBaseModuleContextSensitiveTest {
+public abstract class DomainBaseModuleContextSensitive_patientflags_test extends DomainBaseModuleContextSensitiveTest {
 	
-	public DomainBaseModuleContextSensitive_2_4_patientflags_test() {
+	public DomainBaseModuleContextSensitive_patientflags_test() {
 		super();
 		{
 			Module mod = new Module("", "patientflags", "", "", "", "3.0.0");

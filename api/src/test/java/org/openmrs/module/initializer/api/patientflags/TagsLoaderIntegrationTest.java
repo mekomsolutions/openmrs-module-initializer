@@ -11,11 +11,11 @@ import org.openmrs.api.UserService;
 import org.openmrs.module.patientflags.DisplayPoint;
 import org.openmrs.module.patientflags.Tag;
 import org.openmrs.module.patientflags.api.FlagService;
-import org.openmrs.module.initializer.api.DomainBaseModuleContextSensitive_2_4_patientflags_test;
+import org.openmrs.module.initializer.api.DomainBaseModuleContextSensitive_patientflags_test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class TagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_patientflags_test {
+public class TagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_patientflags_test {
 	
 	@Autowired
 	@Qualifier("flagService")
@@ -30,7 +30,7 @@ public class TagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_
 	
 	@Before
 	public void setup() throws Exception {
-		executeDataSet("testdata/test-concepts-2.4.xml");
+		executeDataSet("testdata/test-concepts.xml");
 		
 		// Create roles for testing
 		Role clinicianRole = new Role("Clinician", "Clinician role");

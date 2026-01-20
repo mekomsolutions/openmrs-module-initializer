@@ -10,11 +10,11 @@ import org.openmrs.module.patientflags.Flag;
 import org.openmrs.module.patientflags.Priority;
 import org.openmrs.module.patientflags.Tag;
 import org.openmrs.module.patientflags.api.FlagService;
-import org.openmrs.module.initializer.api.DomainBaseModuleContextSensitive_2_4_patientflags_test;
+import org.openmrs.module.initializer.api.DomainBaseModuleContextSensitive_patientflags_test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class FlagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_patientflags_test {
+public class FlagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_patientflags_test {
 	
 	@Autowired
 	@Qualifier("flagService")
@@ -25,7 +25,7 @@ public class FlagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 	
 	@Before
 	public void setup() throws Exception {
-		executeDataSet("testdata/test-concepts-2.4.xml");
+		executeDataSet("testdata/test-concepts.xml");
 		
 		// Set up prerequisites: Priorities and Tags that flags will reference
 		
