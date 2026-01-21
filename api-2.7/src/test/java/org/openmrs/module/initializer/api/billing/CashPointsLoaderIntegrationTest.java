@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
-import org.openmrs.module.billing.api.ICashPointService;
+import org.openmrs.module.billing.api.CashPointService;
 import org.openmrs.module.billing.api.model.CashPoint;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_7_Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 	private LocationService locationService;
 	
 	@Autowired
-	private ICashPointService iCashPointService;
+	private CashPointService cashPointService;
 	
 	@Autowired
 	private CashPointsLoader loader;
@@ -38,7 +38,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 			cashPoint.setName("OPD Cash Point");
 			cashPoint.setDescription("Opd cash point for billing");
 			cashPoint.setLocation(location);
-			iCashPointService.save(cashPoint);
+			cashPointService.saveCashPoint(cashPoint);
 		}
 		
 		{
@@ -51,7 +51,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 			cashPoint.setDescription("MCH cash point for billing");
 			cashPoint.setLocation(location);
 			cashPoint.setRetired(false);
-			iCashPointService.save(cashPoint);
+			cashPointService.saveCashPoint(cashPoint);
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 		
 		// Verify creation
 		{
-			CashPoint cashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
+			CashPoint cashPoint = cashPointService.getCashPointByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
 			assertNotNull(cashPoint);
 			assertEquals("IPD Cash Point", cashPoint.getName());
 			assertEquals("IPD cash point for billing", cashPoint.getDescription());
@@ -71,7 +71,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 		
 		// Verify edition
 		{
-			CashPoint cashPoint = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
+			CashPoint cashPoint = cashPointService.getCashPointByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
 			assertNotNull(cashPoint);
 			assertEquals("OPD Cash Point (Modified)", cashPoint.getName());
 			assertEquals("Opd cash point for billing (Modified)", cashPoint.getDescription());
@@ -80,7 +80,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 		
 		// Verify retirement
 		{
-			CashPoint cashPoint = iCashPointService.getByUuid("8e48e0be-1a31-4bd3-a54d-ace82653f8b8");
+			CashPoint cashPoint = cashPointService.getCashPointByUuid("8e48e0be-1a31-4bd3-a54d-ace82653f8b8");
 			assertTrue(cashPoint.getRetired());
 			assertEquals("MCH Cash Point", cashPoint.getName());
 			assertEquals("MCH cash point for billing", cashPoint.getDescription());
