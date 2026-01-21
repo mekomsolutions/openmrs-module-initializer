@@ -17,7 +17,7 @@ public class CashPointsCsvParser extends CsvParser<CashPoint, BaseLineProcessor<
 	private final CashPointService cashPointService;
 	
 	@Autowired
-	public CashPointsCsvParser(@Qualifier("cashierCashPointService") CashPointService cashPointService,
+	public CashPointsCsvParser(@Qualifier("cashPointService") CashPointService cashPointService,
 	    CashPointsLineProcessor processor) {
 		super(processor);
 		this.cashPointService = cashPointService;
