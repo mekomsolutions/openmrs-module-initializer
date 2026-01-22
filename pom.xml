@@ -59,7 +59,7 @@
         <openmrsVersion2.3>2.3.6</openmrsVersion2.3>
         <openmrsVersion2.4>2.4.5</openmrsVersion2.4>
         <openmrsVersion2.5>2.5.5</openmrsVersion2.5>
-        <openmrsVersion2.7>2.7.8-SNAPSHOT</openmrsVersion2.7>
+        <openmrsVersion2.7>2.7.8</openmrsVersion2.7>
 
         <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
 
