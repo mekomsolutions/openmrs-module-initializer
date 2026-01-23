@@ -215,6 +215,8 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ----
 
 ## Releases notes
+#### Version 2.11.0
+* Support Billing V2.
 
 #### Version 2.10.0
 * Support enhanced methods for loading htmlforms when running htmlformentry 5.5.0+
