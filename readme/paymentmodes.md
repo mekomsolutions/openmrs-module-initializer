@@ -33,11 +33,6 @@ Second attribute type
 * name: Minimum
 
 #### Requirements
-#### Billing V1
-* The [billing module](https://github.com/openmrs/openmrs-module-billing) version 1.1.0 or higher must be installed
-* The OpenMRS version must be 2.4 or higher
-
-#### Billing V2
 * The [billing module](https://github.com/openmrs/openmrs-module-billing) version 2.0.0 or higher must be installed
 * The OpenMRS version must be 2.7.8 or higher
 
