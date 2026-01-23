@@ -33,8 +33,8 @@ This is a reference to an existing concept for the type of service that could be
 This references to the service status, defaulting to Billable Service Status ENABLED if the status is not provided.
 
 #### Requirements
-* The [billing module](https://github.com/openmrs/openmrs-module-billing) version 1.1.0 or higher must be installed
-* The OpenMRS version must be 2.4 or higher
+* The [billing module](https://github.com/openmrs/openmrs-module-billing) version 2.0.0 or higher must be installed
+* The OpenMRS version must be 2.7.8 or higher
 
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api-2.4/src/test/resources/testAppDataDir/configuration).

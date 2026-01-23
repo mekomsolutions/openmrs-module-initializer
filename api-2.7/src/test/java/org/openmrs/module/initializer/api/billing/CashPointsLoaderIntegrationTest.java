@@ -1,36 +1,34 @@
-package org.openmrs.module.initializer.api;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import static org.junit.Assert.assertFalse;
+package org.openmrs.module.initializer.api.billing;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
-import org.openmrs.module.billing.api.ICashPointService;
+import org.openmrs.module.billing.api.CashPointService;
 import org.openmrs.module.billing.api.model.CashPoint;
-import org.openmrs.module.initializer.api.billing.CashPointsLoader;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_7_Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_test {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_7_Test {
 	
 	@Autowired
 	@Qualifier("locationService")
 	private LocationService locationService;
 	
 	@Autowired
-	private ICashPointService iCashPointService;
+	private CashPointService cashPointService;
 	
 	@Autowired
 	private CashPointsLoader loader;
 	
 	@Before
 	public void setup() throws Exception {
-		executeDataSet("testdata/test-concepts-2.4.xml");
+		executeDataSet("testdata/test-concepts-2.7.xml");
 		{
 			// To be edited
 			Location location = locationService.getLocationByUuid("c4bb4f44-726d-11eb-9439-0242ac130002");
@@ -40,7 +38,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 			cashPoint.setName("OPD Cash Point");
 			cashPoint.setDescription("Opd cash point for billing");
 			cashPoint.setLocation(location);
-			iCashPointService.save(cashPoint);
+			cashPointService.saveCashPoint(cashPoint);
 		}
 		
 		{
@@ -53,7 +51,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 			cashPoint.setDescription("MCH cash point for billing");
 			cashPoint.setLocation(location);
 			cashPoint.setRetired(false);
-			iCashPointService.save(cashPoint);
+			cashPointService.saveCashPoint(cashPoint);
 		}
 	}
 	
@@ -64,7 +62,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 		
 		// Verify creation
 		{
-			CashPoint cashPoint = iCashPointService.getByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
+			CashPoint cashPoint = cashPointService.getCashPointByUuid("c56a108f-e3c5-4881-a5e8-a796601883b9");
 			assertNotNull(cashPoint);
 			assertEquals("IPD Cash Point", cashPoint.getName());
 			assertEquals("IPD cash point for billing", cashPoint.getDescription());
@@ -73,7 +71,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 		
 		// Verify edition
 		{
-			CashPoint cashPoint = iCashPointService.getByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
+			CashPoint cashPoint = cashPointService.getCashPointByUuid("54065383-b4d4-42d2-af4d-d250a1fd2590");
 			assertNotNull(cashPoint);
 			assertEquals("OPD Cash Point (Modified)", cashPoint.getName());
 			assertEquals("Opd cash point for billing (Modified)", cashPoint.getDescription());
@@ -82,7 +80,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 		
 		// Verify retirement
 		{
-			CashPoint cashPoint = iCashPointService.getByUuid("8e48e0be-1a31-4bd3-a54d-ace82653f8b8");
+			CashPoint cashPoint = cashPointService.getCashPointByUuid("8e48e0be-1a31-4bd3-a54d-ace82653f8b8");
 			assertTrue(cashPoint.getRetired());
 			assertEquals("MCH Cash Point", cashPoint.getName());
 			assertEquals("MCH cash point for billing", cashPoint.getDescription());

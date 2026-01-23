@@ -17,6 +17,7 @@
     <properties>
         <openmrsPlatformVersion>${openmrsVersion2.7}</openmrsPlatformVersion>
         <fhir2Version2.2>2.2.0</fhir2Version2.2>
+        <billing2Version>2.0.0-SNAPSHOT</billing2Version>
     </properties>
 
     <dependencies>
@@ -79,6 +80,19 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>billing-api</artifactId>
+            <version>${billing2Version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>stockmanagement-api</artifactId>
+            <version>${stockmanagementVersion}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>
