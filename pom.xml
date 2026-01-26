@@ -208,6 +208,13 @@
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
+            <artifactId>patientflags-api</artifactId>
+            <version>${patientflagsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
             <artifactId>idgen-api</artifactId>
             <version>${idgenVersion}</version>
             <scope>provided</scope>

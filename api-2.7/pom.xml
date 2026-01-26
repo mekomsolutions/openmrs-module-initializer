@@ -82,11 +82,6 @@
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
-            <artifactId>patientflags-api</artifactId>
-            <version>${patientflagsVersion}</version>
-            <scope>test</scope>
-        </dependency>
-
             <artifactId>billing-api</artifactId>
             <version>${billing2Version}</version>
             <scope>provided</scope>
