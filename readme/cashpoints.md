@@ -27,8 +27,8 @@ The description of the cash point
 This is a reference to the location of the cash point e.g ART Clinic
 
 #### Requirements
-* The [billing module](https://github.com/openmrs/openmrs-module-billing) version 1.1.0 or higher must be installed
-* The OpenMRS version must be 2.4 or higher
+* The [billing module](https://github.com/openmrs/openmrs-module-billing) version 2.0.0 or higher must be installed
+* The OpenMRS version must be 2.7.8 or higher
 
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api-2.4/src/test/resources/testAppDataDir/configuration).

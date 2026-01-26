@@ -10,6 +10,7 @@
   * [Setting up and controlling logging](#setting-up-and-controlling-logging)
 - [Get in touch](#get-in-touch)
 - [Releases notes](#releases-notes)
+    + [Version 2.10.0](#version-2100)
     + [Version 2.9.0](#version-290)
     + [Version 2.8.0](#version-280) 
     + [Version 2.7.0](#version-270)
@@ -221,14 +222,19 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ----
 
 ## Releases notes
+#### Version 2.11.0
+* Support for 'billing' (billableservices, paymentmodes, cashpoints) for Billing V2
+* Removed support for Billing V1 (1.x) versions
 
 #### Version 2.11.0
 * Added support for patient flags (flags, flagpriorities, flagtags) domains
 
 #### Version 2.10.0
 * Support enhanced methods for loading htmlforms when running htmlformentry 5.5.0+
-* Support loading drug ingredients within the drug domain, for compatible OpenMRS versions
-* Moved the form name translation loader to the preload function to support loading form names on instance restarts
+* Support loading drug ingredients within the drug domain, for compatible OpenMRS versions.
+* Initializer message source should not throw an Exception if locale is not found for resource.
+* Moved the form name translation loader to the preload function to support loading form names on instance restarts.
+* Added video tutorial to the README covering the fundamentals of modifying and managing Iniz configuration files.
 
 #### Version 2.9.0
 * Fix for InitializerSerializer to ensure compatibility with OpenMRS version 2.7.0+
