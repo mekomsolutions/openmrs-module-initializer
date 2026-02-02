@@ -16,8 +16,7 @@
     <version>2.11.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Initializer</name>
-    <description
-  >The OpenMRS Initializer module is an API-only module that processes the content of the configuration folder when it is found inside OpenMRS' application data directory.</description>
+    <description>The OpenMRS Initializer module is an API-only module that processes the content of the configuration folder when it is found inside OpenMRS' application data directory.</description>
 
     <developers>
         <developer>
@@ -30,10 +29,8 @@
     </organization>
 
     <scm>
-        <connection
-    >scm:git@github.com:mekomsolutions/openmrs-module-initializer.git</connection>
-        <developerConnection
-    >scm:git:git@github.com:mekomsolutions/openmrs-module-initializer.git</developerConnection>
+        <connection>scm:git@github.com:mekomsolutions/openmrs-module-initializer.git</connection>
+        <developerConnection>scm:git:git@github.com:mekomsolutions/openmrs-module-initializer.git</developerConnection>
         <url>https://github.com/mekomsolutions/openmrs-module-initializer</url>
     </scm>
 
