@@ -362,8 +362,7 @@
                             <directories>
                                 <directory>.</directory>
                             </directories>
-                            <configFile
-              >eclipse/OpenMRSFormatter.xml</configFile>
+                            <configFile>eclipse/OpenMRSFormatter.xml</configFile>
                             <includes>
                                 <include>**/*.java</include>
                                 <include>**/*.json</include>
@@ -405,8 +404,7 @@
         <repository>
             <id>repo.mybahmni.org</id>
             <name>bahmni-artifactory-snapshots</name>
-            <url
-      >https://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
+            <url>https://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
             <snapshots>
                 <updatePolicy>always</updatePolicy>
             </snapshots>
@@ -414,8 +412,7 @@
         <repository>
             <id>repo.mybahmni.org-release</id>
             <name>bahmni-artifactory-release</name>
-            <url
-      >https://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
+            <url>https://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
         </repository>
         <repository>
             <id>bahmni-nexus</id>
