@@ -6,7 +6,7 @@ import org.openmrs.module.billing.api.model.PaymentMode;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvLine;
 
-@OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
+@OpenmrsProfile(modules = { "billing:2.0.0 - 9.*" })
 public class PaymentModesLineProcessor extends BaseLineProcessor<PaymentMode> {
 	
 	protected static final String HEADER_ATTRIBUTES = "attributes";

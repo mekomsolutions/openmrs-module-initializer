@@ -7,21 +7,21 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.initializer.api;
+package org.openmrs.module.initializer.api.billing;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.billing.api.IBillableItemsService;
+import org.openmrs.module.billing.api.BillableServiceService;
 import org.openmrs.module.billing.api.model.BillableService;
 import org.openmrs.module.billing.api.model.BillableServiceStatus;
-import org.openmrs.module.initializer.api.billing.BillableServicesLoader;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_7_Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_4_test {
+public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_7_Test {
 	
 	@Autowired
 	@Qualifier("conceptService")
@@ -31,11 +31,11 @@ public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleConte
 	private BillableServicesLoader loader;
 	
 	@Autowired
-	private IBillableItemsService billableItemsService;
+	private BillableServiceService billableServiceService;
 	
 	@Before
 	public void setup() {
-		executeDataSet("testdata/test-concepts-2.4.xml");
+		executeDataSet("testdata/test-concepts-2.7.xml");
 		{
 			// To be edited
 			Concept concept = conceptService.getConceptByUuid("3f6f6c92-8d5c-4a9e-bb1c-d3e00e4f8b71");
@@ -46,7 +46,7 @@ public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleConte
 			service.setShortName("OTHS");
 			service.setConcept(concept);
 			service.setServiceStatus(BillableServiceStatus.ENABLED);
-			billableItemsService.save(service);
+			billableServiceService.saveBillableService(service);
 		}
 		
 		{
@@ -57,11 +57,11 @@ public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleConte
 			service.setUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
 			service.setName("Nutrition");
 			service.setShortName("NUC");
-			service.setVoided(false);
+			service.setRetired(false);
 			service.setConcept(concept);
 			service.setServiceType(concept);
 			service.setServiceStatus(BillableServiceStatus.ENABLED);
-			billableItemsService.save(service);
+			billableServiceService.saveBillableService(service);
 		}
 	}
 	
@@ -72,7 +72,8 @@ public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleConte
 		
 		// Verify creation
 		{
-			BillableService service = billableItemsService.getByUuid("44ebd6cd-04ad-4eba-8ce1-0de4564bfd17");
+			BillableService service = billableServiceService
+			        .getBillableServiceByUuid("44ebd6cd-04ad-4eba-8ce1-0de4564bfd17");
 			Assert.assertNotNull(service);
 			Assert.assertNotNull(service.getServiceType());
 			Assert.assertEquals("Antenatal Care", service.getName());
@@ -83,7 +84,8 @@ public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleConte
 		
 		// Verify edition
 		{
-			BillableService service = billableItemsService.getByUuid("a0f7d8a1-4fa2-418c-aa8a-9b358f43d605");
+			BillableService service = billableServiceService
+			        .getBillableServiceByUuid("a0f7d8a1-4fa2-418c-aa8a-9b358f43d605");
 			Assert.assertNotNull(service);
 			Assert.assertNotNull(service.getServiceType());
 			Assert.assertEquals("Orthopedic Modified", service.getName());
@@ -94,8 +96,9 @@ public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleConte
 		
 		// Verify retirement
 		{
-			BillableService service = billableItemsService.getByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
-			Assert.assertTrue(service.getVoided());
+			BillableService service = billableServiceService
+			        .getBillableServiceByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
+			Assert.assertTrue(service.getRetired());
 			
 		}
 	}

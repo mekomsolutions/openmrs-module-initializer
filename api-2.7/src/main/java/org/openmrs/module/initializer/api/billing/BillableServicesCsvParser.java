@@ -2,7 +2,7 @@ package org.openmrs.module.initializer.api.billing;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.annotation.OpenmrsProfile;
-import org.openmrs.module.billing.api.IBillableItemsService;
+import org.openmrs.module.billing.api.BillableServiceService;
 import org.openmrs.module.billing.api.model.BillableService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
@@ -11,18 +11,18 @@ import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@OpenmrsProfile(modules = { "billing:1.1.0 - 9.*" })
+@OpenmrsProfile(modules = { "billing:2.0.0 - 9.*" })
 public class BillableServicesCsvParser extends CsvParser<BillableService, BaseLineProcessor<BillableService>> {
 	
-	private final IBillableItemsService billableItemsService;
+	private final BillableServiceService billableServiceService;
 	
 	private final BillableServicesLineProcessor billableServicesLineProcessor;
 	
 	@Autowired
-	public BillableServicesCsvParser(@Qualifier("billableItemsService") IBillableItemsService billableItemsService,
+	public BillableServicesCsvParser(@Qualifier("billableServiceService") BillableServiceService billableServiceService,
 	    BillableServicesLineProcessor billableServicesLineProcessor) {
 		super(billableServicesLineProcessor);
-		this.billableItemsService = billableItemsService;
+		this.billableServiceService = billableServiceService;
 		this.billableServicesLineProcessor = billableServicesLineProcessor;
 	}
 	
@@ -35,7 +35,7 @@ public class BillableServicesCsvParser extends CsvParser<BillableService, BaseLi
 	public BillableService bootstrap(CsvLine line) throws IllegalArgumentException {
 		String uuid = line.getUuid();
 		
-		BillableService billableService = billableItemsService.getByUuid(uuid);
+		BillableService billableService = billableServiceService.getBillableServiceByUuid(uuid);
 		
 		if (billableService == null) {
 			billableService = new BillableService();
@@ -49,7 +49,7 @@ public class BillableServicesCsvParser extends CsvParser<BillableService, BaseLi
 	
 	@Override
 	public BillableService save(BillableService instance) {
-		return billableItemsService.save(instance);
+		return billableServiceService.saveBillableService(instance);
 	}
 	
 	@Override
