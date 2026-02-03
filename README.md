@@ -187,7 +187,7 @@ mvn clean package
 * Bahmni I.e Apps 1.1.0 (*compatible*)
 * Billing 1.1.0 (*compatible*)
 * Data Filter 1.0.0 (*compatible*)
-* Flags 3.0.8 (*compatible*)
+* Flags 3.0.9 (*compatible*)
 * HTML Form Entry 4.0.0 (*compatible*)
 * ID Gen 4.3 (*compatible*)
 * Metadata Sharing 1.2.2 (*compatible*)
