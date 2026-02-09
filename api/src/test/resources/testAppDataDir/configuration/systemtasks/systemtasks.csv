@@ -1,0 +1,4 @@
+Uuid,Void/Retire,Name,Title,Description,Priority,Default Assignee Role,Rationale
+550e8400-e29b-41d4-a716-446655440001,,vital-check,Daily Vital Check,Check patient vitals every day,HIGH,,Routine monitoring required
+550e8400-e29b-41d4-a716-446655440002,,follow-up,Follow-up Appointment,Schedule a follow-up visit with the patient,MEDIUM,,Continuity of care
+550e8400-e29b-41d4-a716-446655440003,,lab-review,Lab Order Review,Review pending lab results,LOW,,
