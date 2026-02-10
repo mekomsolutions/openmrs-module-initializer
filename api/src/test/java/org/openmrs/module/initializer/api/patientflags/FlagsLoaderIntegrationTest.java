@@ -10,11 +10,11 @@ import org.openmrs.module.patientflags.Flag;
 import org.openmrs.module.patientflags.Priority;
 import org.openmrs.module.patientflags.Tag;
 import org.openmrs.module.patientflags.api.FlagService;
-import org.openmrs.module.initializer.api.DomainBaseModuleContextSensitive_patientflags_test;
+import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class FlagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_patientflags_test {
+public class FlagsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
 	@Autowired
 	@Qualifier("flagService")
