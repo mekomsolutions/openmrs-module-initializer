@@ -10,20 +10,17 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 /**
  * Parses CSV files for Tag entities.
  */
-@Component("initializer.flagTagsCsvParser")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class TagsCsvParser extends CsvParser<Tag, BaseLineProcessor<Tag>> {
 	
 	private final FlagService flagService;
 	
 	@Autowired
-	public TagsCsvParser(@Qualifier("flagService") FlagService flagService,
-	    @Qualifier("initializer.flagTagLineProcessor") TagLineProcessor processor) {
+	public TagsCsvParser(@Qualifier("flagService") FlagService flagService, TagLineProcessor processor) {
 		super(processor);
 		this.flagService = flagService;
 	}

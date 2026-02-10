@@ -7,13 +7,11 @@ import org.openmrs.module.patientflags.api.FlagService;
 import org.openmrs.module.initializer.api.utils.ListParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 /**
  * Parses a list of DisplayPoint identifiers (UUID or name) and fetches the corresponding
  * DisplayPoint entities.
  */
-@Component("initializer.flagDisplayPointListParser")
 @OpenmrsProfile(modules = { "patientflags:3.* - 9.*" })
 public class DisplayPointListParser extends ListParser<DisplayPoint> {
 	
