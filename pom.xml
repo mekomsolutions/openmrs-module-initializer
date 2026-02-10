@@ -1,6 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -40,6 +42,7 @@
         <module>api-2.4</module>
         <module>api-2.5</module>
         <module>api-2.7</module>
+        <module>api-2.8</module>
         <module>omod</module>
     </modules>
 
@@ -60,6 +63,7 @@
         <openmrsVersion2.4>2.4.5</openmrsVersion2.4>
         <openmrsVersion2.5>2.5.5</openmrsVersion2.5>
         <openmrsVersion2.7>2.7.8</openmrsVersion2.7>
+        <openmrsVersion2.8>2.8.0</openmrsVersion2.8>
 
         <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
 
@@ -93,6 +97,7 @@
         <exti18nVersion>1.0.0</exti18nVersion>
         <appframeworkVersion>2.14.0</appframeworkVersion>
         <providermanagementVersion>2.13.0</providermanagementVersion>
+        <tasksVersion>1.0.0-SNAPSHOT</tasksVersion>
     </properties>
 
     <dependencies>
@@ -254,6 +259,13 @@
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
+            <artifactId>tasks-api</artifactId>
+            <version>${tasksVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
             <artifactId>fhir2-api</artifactId>
             <version>${fhir2Version}</version>
             <scope>provided</scope>
@@ -308,7 +320,7 @@
             <version>${serializationVersion}</version>
             <scope>test</scope>
         </dependency>
-        
+
         <!-- Depedency required to compile against Java 11 -->
         <dependency>
             <groupId>javax.annotation</groupId>

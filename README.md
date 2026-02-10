@@ -96,7 +96,8 @@ configuration/
   ├── providerroles/
   ├── queues/
   ├── relationshiptypes/
-  └── roles/
+  ├── roles/
+  └── systemtasks/
    
 ```  
 Each domain-specific subfolder contains OpenMRS metadata configuration files that pertains to the domain.
@@ -130,6 +131,7 @@ This is the list of currently supported domains in their loading order:
 1. [Global Properties (XML files)](readme/globalproperties.md)
 1. [Attribute Types (CSV files)](readme/atttypes.md)
 1. [Provider Roles (CSV files)](readme/providerroles.md)
+1. [System Tasks (CSV files)](readme/systemtasks.md)
 1. [Locations (CSV files)](readme/loc.md)
 1. [Location Tag Maps (CSV files)](readme/loctagmaps.md)
 1. [Address Hierarchy (XML, CSV, .properties files)](readme/addresshierarchy.md)
@@ -193,6 +195,7 @@ mvn clean package
 * Metadata Sharing 1.2.2 (*compatible*)
 * Metadata Mapping 1.3.4 (*compatible*)
 * Open Concept Lab 1.2.9 (*compatible*)
+* Tasks 1.0.0 (*compatible*)
 
 ### Test your OpenMRS configs
 See the [Initializer Validator README page](readme/validator.md).
@@ -225,6 +228,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 #### Version 2.11.0
 * Support for 'billing' (billableservices, paymentmodes, cashpoints) for Billing V2
 * Removed support for Billing V1 (1.x) versions
+* Support for system tasks with openmrs-module-tasks
 
 #### Version 2.11.0
 * Added support for patient flags (flags, flagpriorities, flagtags) domains

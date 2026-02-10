@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <module configVersion="1.6">
-	
+
 	<!-- Base Module Properties -->
 	<id>${project.parent.artifactId}</id>
 	<name>${project.parent.name}</name>
@@ -11,7 +11,7 @@
 	<description>${project.parent.description}</description>
 
 	<activator>org.openmrs.module.initializer.InitializerActivator</activator>
-	
+
 	<require_version>${openmrsPlatformVersion}</require_version>
 
 	<conditionalResources>
@@ -79,8 +79,11 @@
 		<aware_of_module version="${patientflagsVersion}">
 			org.openmrs.module.patientflags
 		</aware_of_module>
+		<aware_of_module version="${tasksVersion}">
+			org.openmrs.module.tasks
+		</aware_of_module>
 	</aware_of_modules>
-	
+
 	<!-- Internationalization -->
 	<!-- All message codes should start with @MODULE_ID@.* -->
 	<messages>
@@ -88,5 +91,5 @@
 		<file>messages.properties</file>
 	</messages>
 	<!-- /Internationalization -->
-	
+
 </module>
