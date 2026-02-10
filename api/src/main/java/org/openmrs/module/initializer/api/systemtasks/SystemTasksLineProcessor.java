@@ -18,13 +18,11 @@ import org.openmrs.module.tasks.Priority;
 import org.openmrs.module.tasks.SystemTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * Line processor for SystemTask CSV files. Handles field mapping from CSV columns to SystemTask
  * entity properties.
  */
-@Component
 @OpenmrsProfile(modules = { "tasks:*" })
 public class SystemTasksLineProcessor extends BaseLineProcessor<SystemTask> {
 	
