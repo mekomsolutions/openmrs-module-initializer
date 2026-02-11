@@ -11,19 +11,23 @@ package org.openmrs.module.initializer.api;
 
 import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CHECKSUM;
 import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CONFIG;
+import static org.openmrs.module.initializer.InitializerConstants.GP_INITIALIZER_SIGNATURE;
 
 import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -31,9 +35,11 @@ import org.openmrs.Concept;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.InitializerConfig;
 import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
+import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -222,5 +228,40 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public List<Concept> getUnretiredConceptsByFullySpecifiedName(String name) {
 		return initializerDAO.getUnretiredConceptsByFullySpecifiedName(name);
+	}
+	
+	@Override
+	public boolean shouldRunInitializer() {
+		String oldSig = Context.getAdministrationService().getGlobalProperty(GP_INITIALIZER_SIGNATURE);
+		return oldSig == null || !oldSig.equals(computeSignature());
+	}
+	
+	@Override
+	public void updateInitializerRunState() {
+		Context.getAdministrationService().setGlobalProperty(GP_INITIALIZER_SIGNATURE, computeSignature());
+	}
+	
+	private String computeSignature() {
+		String coreVersion = OpenmrsConstants.OPENMRS_VERSION;
+		
+		String moduleVersions = ModuleFactory.getLoadedModules().stream().map(m -> m.getModuleId() + ":" + m.getVersion())
+		        .collect(Collectors.joining(","));
+		
+		ConfigDirUtil configUtil = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(), "");
+		
+		List<File> files = configUtil.getFiles("", Collections.emptyList());
+		String concatenated = files.stream().filter(File::isFile).sorted(Comparator.comparing(File::getAbsolutePath))
+		        .map(file -> {
+			        try {
+				        byte[] bytes = Files.readAllBytes(file.toPath());
+				        return DigestUtils.sha256Hex(bytes) + ":" + file.getAbsolutePath();
+			        }
+			        catch (Exception e) {
+				        return "ERR:" + file.getAbsolutePath();
+			        }
+		        }).collect(Collectors.joining("|"));
+		
+		String configChecksum = DigestUtils.sha256Hex(concatenated);
+		return DigestUtils.sha256Hex(coreVersion + "|" + moduleVersions + "|" + configChecksum);
 	}
 }

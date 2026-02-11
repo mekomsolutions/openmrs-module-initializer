@@ -132,4 +132,15 @@ public interface InitializerService extends OpenmrsService {
 	 * @return the found Concepts
 	 */
 	List<Concept> getUnretiredConceptsByFullySpecifiedName(String name);
+	
+	/**
+	 * Returns true if initializer should run based on: core version change, module version change,
+	 * config directory checksum change.
+	 */
+	boolean shouldRunInitializer();
+	
+	/**
+	 * Updates stored signature after successful initializer execution.
+	 */
+	void updateInitializerRunState();
 }

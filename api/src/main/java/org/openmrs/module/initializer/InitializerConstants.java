@@ -40,6 +40,10 @@ public class InitializerConstants {
 	
 	public static final String PROPS_STARTUP_LOAD_DISABLED = "disabled";
 	
+	public static final String GP_INITIALIZER_SIGNATURE = "initializer.lastSignature";
+	
+	public static final String PROPS_PRIMARY_STARTUP = "primary.startup";
+	
 	/*
 	 * Logging properties
 	 */
