@@ -80,6 +80,7 @@
         <fhir2Version>1.6.0</fhir2Version>
         <billingVersion>1.1.0</billingVersion>
         <stockmanagementVersion>2.0.2</stockmanagementVersion>
+        <patientflagsVersion>3.0.9</patientflagsVersion>
 
         <!-- Modules compatibility > Core 2.3.0 -->
         <datafilterVersion>1.0.0</datafilterVersion>
@@ -206,6 +207,13 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>htmlformentry-api</artifactId>
             <version>${htmlformentryVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>patientflags-api</artifactId>
+            <version>${patientflagsVersion}</version>
             <scope>provided</scope>
         </dependency>
 

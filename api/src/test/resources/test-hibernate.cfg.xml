@@ -34,6 +34,12 @@
         <mapping resource="CohortAttribute.hbm.xml"/>
         <mapping resource="CohortMemberAttribute.hbm.xml"/>
         <mapping resource="CohortMemberAttributeType.hbm.xml"/>
+        <!-- Patient Flags -->
+        <mapping resource="DisplayPoint.hbm.xml"/>
+        <mapping resource="Flag.hbm.xml"/>
+        <mapping resource="Priority.hbm.xml"/>
+        <mapping resource="Tag.hbm.xml"/>
+        <mapping resource="PatientFlag.hbm.xml"/>
 
     </session-factory>
 </hibernate-configuration>

@@ -84,6 +84,9 @@ configuration/
   ├── orderfrequencies/
   ├── ordertypes/
   ├── paymentmodes/
+  ├── flags/
+  ├── flagpriorities/
+  ├── flagtags/
   ├── patientidentifiertypes/ 
   ├── personattributetypes/ 
   ├── privileges/ 
@@ -140,6 +143,9 @@ This is the list of currently supported domains in their loading order:
 1. [Billable Services (CSV files)](readme/billableservices.md)
 1. [Cash Points (CSV files)](readme/cashpoints.md)
 1. [Payment Modes (CSV files)](readme/paymentmodes.md)
+1. [Flags (CSV files)](readme/flags.md)
+1. [Flag Priorities (CSV files)](readme/flagpriorities.md)
+1. [Flag Tags (CSV files)](readme/flagtags.md)
 1. [Concept Sets and Answers (CSV files)](readme/conceptsets.md)
 1. [Concept Reference Ranges (CSV files)](readme/conceptreferencerange.md)
 1. [Programs (CSV files)](readme/prog.md)
@@ -183,6 +189,7 @@ mvn clean package
 * Bahmni I.e Apps 1.1.0 (*compatible*)
 * Billing 1.1.0 (*compatible*)
 * Data Filter 1.0.0 (*compatible*)
+* Flags 3.0.9 (*compatible*)
 * HTML Form Entry 4.0.0 (*compatible*)
 * ID Gen 4.3 (*compatible*)
 * Metadata Sharing 1.2.2 (*compatible*)
@@ -222,6 +229,9 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 * Support for 'billing' (billableservices, paymentmodes, cashpoints) for Billing V2
 * Removed support for Billing V1 (1.x) versions
 * Support for system tasks with openmrs-module-tasks
+
+#### Version 2.11.0
+* Added support for patient flags (flags, flagpriorities, flagtags) domains
 
 #### Version 2.10.0
 * Support enhanced methods for loading htmlforms when running htmlformentry 5.5.0+
