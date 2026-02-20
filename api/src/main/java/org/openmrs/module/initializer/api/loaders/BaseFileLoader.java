@@ -79,9 +79,8 @@ public abstract class BaseFileLoader extends BaseLoader {
 		
 		final ConfigDirUtil dirUtil = getDirUtil();
 		
-		dirUtil.getFiles(getFileExtension(), wildcardExclusions).stream().map(f -> toOrderedFile(f)).sorted()
-		        .map(f -> preload(f, throwingOnPreload(doThrow))).filter(f -> !dirUtil.getChecksumIfChanged(f).isEmpty())
-		        .forEach(file -> {
+		dirUtil.getFiles(getFileExtension(), wildcardExclusions).stream().map(this::toOrderedFile).sorted()
+		        .map(f -> preload(f, throwingOnPreload(doThrow))).forEach(file -> {
 			        
 			        try {
 				        load(file);
@@ -95,9 +94,6 @@ public abstract class BaseFileLoader extends BaseLoader {
 					        throw new RuntimeException(e);
 				        }
 			        }
-			        
-			        dirUtil.writeChecksum(file, dirUtil.getChecksumIfChanged(file)); // the config file is marked as processed
-			        log.info("The '" + getDomainName() + "' configuration file has finished loading:\n" + file.getPath());
 		        });
 		
 	}

@@ -86,21 +86,6 @@ public class AmpathFormsLoader extends BaseFileLoader {
 			throw new Exception("Form Version is required");
 		}
 		
-		// Delete Checksum Files for the translation files associated with the form
-		ConfigDirUtil configDirUtil = new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
-		        Domain.AMPATH_FORMS_TRANSLATIONS.getName(), true);
-		
-		for (File translationFile : configDirUtil.getFiles(JSON_EXTENSION)) {
-			String js = FileUtils.readFileToString(translationFile, StandardCharsets.UTF_8.toString());
-			Map<String, Object> jf = new ObjectMapper().readValue(js, Map.class);
-			String translationForm = (String) jf.get("form");
-			
-			if (StringUtils.equals(translationForm, formName)) {
-				configDirUtil
-				        .deleteChecksumFile(replaceExtension(translationFile.getName(), ConfigDirUtil.CHECKSUM_FILE_EXT));
-			}
-		}
-		
 		String uuid = Utils.generateUuidFromObjects(AMPATH_FORMS_UUID, formName, formVersion);
 		// Process Form
 		// ISSUE-150 If form with uuid present then update it

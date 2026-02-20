@@ -36,7 +36,6 @@ public class BaseFileLoaderTest {
 		List<File> files = Arrays.asList(new File("test1.txt"), new File("test2.txt"), new File("test3.txt"));
 		
 		when(dirUtil.getFiles(eq("txt"), any(List.class))).thenReturn(files);
-		when(dirUtil.getChecksumIfChanged(any(File.class))).thenReturn("2b2f585d-checksum");
 	}
 	
 	private class TestLoader extends BaseFileLoader {
@@ -93,27 +92,6 @@ public class BaseFileLoaderTest {
 			return "testdomain";
 		}
 		
-	}
-	
-	@Test
-	public void load_shouldLoadSafely() throws Exception {
-		// replay
-		testLoader.load();
-		
-		// verify
-		verify(dirUtil, times(3)).writeChecksum(any(), any());
-	}
-	
-	@Test
-	public void loadUnsafe_shouldThrowEarly() throws Exception {
-		// replay
-		RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-			testLoader.loadUnsafe(Collections.emptyList(), true);
-		});
-		
-		// verify
-		Assert.assertTrue(thrown.getMessage().endsWith("Error right from file 1."));
-		verify(dirUtil, times(0)).writeChecksum(any(), any());
 	}
 	
 	@Test
