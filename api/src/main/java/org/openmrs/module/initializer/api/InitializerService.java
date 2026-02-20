@@ -144,14 +144,12 @@ public interface InitializerService extends OpenmrsService {
 	/**
 	 * Determines whether the initializer configuration has changed since the last successful execution.
 	 * 
-	 * @return true or false if configuration changes are detected and the initializer should run or
-	 *         otherwise.
+	 * @return true or false if configuration changes are detected and the initializer should run or otherwise.
 	 */
 	Boolean isConfigChanged();
 	
 	/**
-	 * Updates and persists the current configuration checksums after a successful initializer
-	 * execution.
+	 * Updates and persists the current configuration checksums after a successful initializer execution.
 	 */
 	void updateChecksums();
 	
@@ -162,8 +160,7 @@ public interface InitializerService extends OpenmrsService {
 	 * it for too long.
 	 * 
 	 * @param nodeId the identifier of the node attempting to acquire the lock.
-	 * @return true if the lock was successfully acquired or false if another node currently holds the
-	 *         lock.
+	 * @return true if the lock was successfully acquired or false if another node currently holds the lock.
 	 */
 	Boolean tryAcquireLock(String nodeId);
 	

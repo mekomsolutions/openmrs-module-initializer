@@ -13,8 +13,8 @@ import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CHECK
 import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CONFIG;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -322,18 +322,16 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		Path base = Paths.get(getConfigDirPath());
 		List<File> files = util.getFiles("", Collections.emptyList());
 		Map<String, String> map = new HashMap<>();
-		
+
 		for (File f : files) {
 			if (!f.isFile()) {
 				continue;
 			}
-			
-			try {
+			try (FileInputStream fis = new FileInputStream(f)) {
 				Path rel = base.relativize(f.toPath());
-				byte[] bytes = Files.readAllBytes(f.toPath());
-				map.put(rel.toString(), DigestUtils.sha256Hex(bytes));
-			}
-			catch (Exception e) {
+				String checksum = DigestUtils.sha256Hex(fis);
+				map.put(rel.toString(), checksum);
+			} catch (Exception e) {
 				map.put(f.getName(), "ERROR");
 			}
 		}
