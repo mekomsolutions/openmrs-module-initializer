@@ -28,7 +28,7 @@ public class HibernateInitializerDAO implements InitializerDAO {
 	
 	private static final Logger log = LoggerFactory.getLogger(HibernateInitializerDAO.class);
 	
-	private static final long LOCK_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
+	private static final long LOCK_TIMEOUT = 10 * 60 * 1000; // 10 minutes
 	
 	private SessionFactory sessionFactory;
 	
@@ -75,10 +75,11 @@ public class HibernateInitializerDAO implements InitializerDAO {
 	@Override
 	public Boolean tryAcquireLock(String nodeId) {
 		long now = System.currentTimeMillis();
-		String hql = "UPDATE InitializerLock " + "SET locked = true, lockedAt = current_timestamp, lockedBy = :node "
+		String hql = "UPDATE InitializerLock "
+				+ "SET locked = true, lockedAt = current_timestamp, lockedBy = :node "
 		        + "WHERE id = 1 AND (locked = false OR lockedAt < :expiryTime)";
 		
-		Date expiryTime = new Date(now - LOCK_TIMEOUT_MS);
+		Date expiryTime = new Date(now - LOCK_TIMEOUT);
 		int updated = sessionFactory.getCurrentSession().createQuery(hql).setParameter("node", nodeId)
 		        .setParameter("expiryTime", expiryTime).executeUpdate();
 		
@@ -90,7 +91,8 @@ public class HibernateInitializerDAO implements InitializerDAO {
 	 */
 	@Override
 	public void releaseLock(String nodeId) {
-		String hql = "UPDATE InitializerLock " + "SET locked = false, lockedAt = null, lockedBy = null "
+		String hql = "UPDATE InitializerLock "
+				+ "SET locked = false, lockedAt = null, lockedBy = null "
 		        + "WHERE id = 1 AND lockedBy = :node";
 		sessionFactory.getCurrentSession().createQuery(hql).setParameter("node", nodeId).executeUpdate();
 	}
@@ -99,7 +101,9 @@ public class HibernateInitializerDAO implements InitializerDAO {
 	 * @see org.openmrs.module.initializer.api.InitializerService#forceReleaseLock()
 	 */
 	public void forceReleaseLock() {
-		String hql = "UPDATE InitializerLock " + "SET locked = false, lockedAt = null, lockedBy = null " + "WHERE id = 1";
+		String hql = "UPDATE InitializerLock "
+				+ "SET locked = false, lockedAt = null, lockedBy = null "
+				+ "WHERE id = 1";
 		sessionFactory.getCurrentSession().createQuery(hql).executeUpdate();
 	}
 	
