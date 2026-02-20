@@ -55,10 +55,47 @@ public class InitializerActivatorTest {
 		final List<Loader> loaders = Arrays.asList(conceptsLoader, encounterTypesLoader, drugsLoader);
 		iniz = new InitializerServiceImpl() {
 			
+			private boolean locked = false;
+			
 			@Override
 			public List<Loader> getLoaders() {
 				return loaders;
 			}
+			
+			@Override
+			public String getOrCreateNodeId() {
+				return "test-node";
+			}
+			
+			@Override
+			public Boolean isConfigChanged() {
+				return true;
+			}
+			
+			@Override
+			public void updateChecksums() {
+				// unit test
+			}
+			
+			@Override
+			public Boolean tryAcquireLock(String nodeId) {
+				if (locked) {
+					return false;
+				}
+				locked = true;
+				return true;
+			}
+			
+			@Override
+			public Boolean isLocked() {
+				return locked;
+			}
+			
+			@Override
+			public void releaseLock(String nodeId) {
+				locked = false;
+			}
+			
 		};
 		((InitializerServiceImpl) iniz).setConfig(cfg);
 		activator = new InitializerActivator() {
@@ -182,5 +219,48 @@ public class InitializerActivatorTest {
 		Assertions.assertEquals(0, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
 		Assertions.assertEquals(0, drugsLoader.getNumberOfTimesLoadUnsafeCompleted());
 		Assertions.assertNull(exceptionThrown);
+	}
+	
+	@Test
+	public void started_shouldNotRunWhenLocked() {
+		Assertions.assertFalse(iniz.isLocked());
+		
+		// node1 acquires the lock. This should prevent the activator from executing the initializer.
+		boolean acquired = iniz.tryAcquireLock("node1");
+		Assertions.assertTrue(acquired);
+		Assertions.assertTrue(iniz.isLocked());
+		
+		// Attempt to start the activator while lock is already held.
+		startActivator(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, true);
+		Assertions.assertEquals(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, System.getProperty(PROPS_STARTUP_LOAD));
+		Assertions.assertNull(props.get(PROPS_STARTUP_LOAD));
+		
+		// Lock should still be held (activator must NOT release it)
+		Assertions.assertTrue(iniz.isLocked());
+		
+		// No loaders should have been executed
+		Assertions.assertEquals(0, conceptsLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertEquals(0, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertEquals(0, drugsLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertNull(exceptionThrown);
+	}
+	
+	@Test
+	public void started_shouldRunWhenLockIsAvailable() {
+		Assertions.assertFalse(iniz.isLocked());
+		
+		// Start activator
+		startActivator(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, true);
+		Assertions.assertEquals(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, System.getProperty(PROPS_STARTUP_LOAD));
+		Assertions.assertNull(props.get(PROPS_STARTUP_LOAD));
+		
+		// Loaders should have been executed
+		Assertions.assertEquals(1, conceptsLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertEquals(1, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertEquals(1, drugsLoader.getNumberOfTimesLoadUnsafeCompleted());
+		Assertions.assertNull(exceptionThrown);
+		
+		// Lock should have been released after execution
+		Assertions.assertFalse(iniz.isLocked());
 	}
 }

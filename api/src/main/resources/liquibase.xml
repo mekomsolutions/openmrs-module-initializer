@@ -40,5 +40,58 @@
         <comment>Deleting 'concepts' domain checksums</comment>
         <customChange class="org.openmrs.module.initializer.liquibase.DeleteDomainChecksumsChangeset" domainName="concepts"></customChange>
     </changeSet>
+
+    <changeSet id="create-initializer-lock-table" author="mujuzi">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="initializer_lock"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="initializer_lock">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="locked" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="locked_at" type="datetime"/>
+            <column name="locked_by" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="init-initializer-lock-row" author="mujuzi">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="1">
+                    SELECT COUNT(*) FROM initializer_lock WHERE id = 1
+                </sqlCheck>
+            </not>
+        </preConditions>
+
+        <insert tableName="initializer_lock">
+            <column name="id" valueNumeric="1"/>
+            <column name="locked" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="create-initializer-checksums-table" author="mujuzi">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="initializer_checksums"/>
+            </not>
+        </preConditions>
+        <createTable tableName="initializer_checksums">
+            <column name="file_path" type="varchar(512)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="checksum" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
  
 </databaseChangeLog>
