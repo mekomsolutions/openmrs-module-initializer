@@ -33,12 +33,6 @@ public interface InitializerService extends OpenmrsService {
 	String getConfigDirPath();
 	
 	/**
-	 * @return The path to the checksum folder (with NO trailing forward slash), eg.
-	 *         "/opt/openmrs/configuration_checksums"
-	 */
-	String getChecksumsDirPath();
-	
-	/**
 	 * @return The list of ordered domain loaders.
 	 */
 	List<Loader> getLoaders();
@@ -132,4 +126,43 @@ public interface InitializerService extends OpenmrsService {
 	 * @return the found Concepts
 	 */
 	List<Concept> getUnretiredConceptsByFullySpecifiedName(String name);
+	
+	/**
+	 * Determines whether the initializer configuration has changed since the last successful execution.
+	 * 
+	 * @return true or false if configuration changes are detected and the initializer should run or
+	 *         otherwise.
+	 */
+	Boolean isConfigChanged();
+	
+	/**
+	 * Updates and persists the current configuration checksums after a successful initializer
+	 * execution.
+	 */
+	void updateChecksums();
+	
+	/**
+	 * Attempts to acquire the initializer lock for the given name.
+	 * 
+	 * @param lockName the name of the lock.
+	 * @return true if the lock was successfully acquired, false otherwise.
+	 */
+	Boolean tryAcquireLock(String lockName);
+	
+	/**
+	 * Releases the initializer lock for the given name.
+	 * 
+	 * @param lockName the name of the lock.
+	 */
+	void releaseLock(String lockName);
+	
+	/**
+	 * Waits to acquire the initializer lock for the given name until the specified timeout.
+	 * 
+	 * @param lockName the name of the lock.
+	 * @param timeoutMillis maximum time in milliseconds to wait for the lock.
+	 * @throws RuntimeException if the timeout is reached before acquiring the lock.
+	 */
+	void acquireLockOrWait(String lockName, long timeoutMillis);
+	
 }

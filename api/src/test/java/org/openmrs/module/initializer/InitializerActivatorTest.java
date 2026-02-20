@@ -50,15 +50,70 @@ public class InitializerActivatorTest {
 	
 	private Exception exceptionThrown;
 	
+	private boolean configChanged = true;
+	
+	private boolean throwDuringLoad = false;
+	
+	private boolean updateChecksumsCalled = false;
+	
+	private boolean simulateLockTimeout = false;
+	
+	private Long capturedTimeout;
+	
 	@BeforeEach
 	public void setup() {
 		final List<Loader> loaders = Arrays.asList(conceptsLoader, encounterTypesLoader, drugsLoader);
+		
+		boolean lockInitiallyAvailable = true;
 		iniz = new InitializerServiceImpl() {
+			
+			private boolean locked = !lockInitiallyAvailable;
 			
 			@Override
 			public List<Loader> getLoaders() {
 				return loaders;
 			}
+			
+			@Override
+			public Boolean isConfigChanged() {
+				return configChanged;
+			}
+			
+			@Override
+			public void updateChecksums() {
+				updateChecksumsCalled = true;
+			}
+			
+			@Override
+			public void loadUnsafe(boolean startup, boolean throwError) throws Exception {
+				if (throwDuringLoad) {
+					throw new RuntimeException("Load failure");
+				}
+				super.loadUnsafe(startup, throwError);
+			}
+			
+			@Override
+			public void acquireLockOrWait(String lockName, long timeoutMillis) {
+				if (simulateLockTimeout) {
+					throw new RuntimeException("Timeout waiting for lock");
+				}
+				capturedTimeout = timeoutMillis;
+			}
+			
+			@Override
+			public Boolean tryAcquireLock(String nodeId) {
+				if (locked) {
+					return false;
+				}
+				locked = true;
+				return true;
+			}
+			
+			@Override
+			public void releaseLock(String nodeId) {
+				locked = false;
+			}
+			
 		};
 		((InitializerServiceImpl) iniz).setConfig(cfg);
 		activator = new InitializerActivator() {
@@ -182,5 +237,52 @@ public class InitializerActivatorTest {
 		Assertions.assertEquals(0, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
 		Assertions.assertEquals(0, drugsLoader.getNumberOfTimesLoadUnsafeCompleted());
 		Assertions.assertNull(exceptionThrown);
+	}
+	
+	@Test
+	public void started_shouldSkipIfNoConfigChanges() {
+		configChanged = false;
+		
+		activator.started();
+		
+		Assertions.assertFalse(updateChecksumsCalled);
+	}
+	
+	@Test
+	public void started_shouldRunInitializerIfConfigChanged() {
+		configChanged = true;
+		
+		activator.started();
+		
+		Assertions.assertTrue(updateChecksumsCalled);
+	}
+	
+	@Test
+	public void started_shouldThrowModuleExceptionIfLoadFails() {
+		throwDuringLoad = true;
+		
+		Exception ex = Assertions.assertThrows(ModuleException.class, () -> {
+			activator.started();
+		});
+		
+		Assertions.assertTrue(ex.getMessage().contains("An error occurred loading initializer configuration"));
+	}
+	
+	@Test
+	public void started_shouldThrowIfLockTimeout() {
+		simulateLockTimeout = true;
+		
+		Exception ex = Assertions.assertThrows(ModuleException.class, () -> {
+			activator.started();
+		});
+		
+		Assertions.assertTrue(ex.getMessage().contains("An error occurred loading initializer configuration"));
+	}
+	
+	@Test
+	public void started_shouldUse15MinuteLockTimeout() {
+		activator.started();
+		
+		Assertions.assertEquals(15 * 60 * 1000L, capturedTimeout.longValue());
 	}
 }

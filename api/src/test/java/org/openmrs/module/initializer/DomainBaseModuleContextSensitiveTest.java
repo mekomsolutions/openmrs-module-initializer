@@ -9,9 +9,6 @@
  */
 package org.openmrs.module.initializer;
 
-import static org.openmrs.module.initializer.api.ConfigDirUtil.CHECKSUM_FILE_EXT;
-import static org.openmrs.module.initializer.api.ConfigDirUtil.deleteFilesByExtension;
-
 import java.io.File;
 import java.util.Locale;
 import java.util.Properties;
@@ -190,10 +187,5 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 			initializerMessageSource.addFallbackLanguage("ht", "fr");
 		}
 		Locale.setDefault(Locale.ENGLISH);
-	}
-	
-	@After
-	public void tearDown() {
-		deleteFilesByExtension(iniz.getChecksumsDirPath(), CHECKSUM_FILE_EXT);
 	}
 }

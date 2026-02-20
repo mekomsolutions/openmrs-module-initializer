@@ -40,5 +40,40 @@
         <comment>Deleting 'concepts' domain checksums</comment>
         <customChange class="org.openmrs.module.initializer.liquibase.DeleteDomainChecksumsChangeset" domainName="concepts"></customChange>
     </changeSet>
+
+    <changeSet id="create-initializer-lock-table-20260225" author="mujuzi">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="initializer_lock"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="initializer_lock">
+            <column name="lock_name" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="lock_until" type="datetime"/>
+            <column name="locked_by" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-initializer-checksums-table-20260225" author="mujuzi">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="initializer_checksums"/>
+            </not>
+        </preConditions>
+        <createTable tableName="initializer_checksums">
+            <column name="file_path" type="varchar(512)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="checksum" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
  
 </databaseChangeLog>
