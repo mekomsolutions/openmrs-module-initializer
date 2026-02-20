@@ -132,4 +132,58 @@ public interface InitializerService extends OpenmrsService {
 	 * @return the found Concepts
 	 */
 	List<Concept> getUnretiredConceptsByFullySpecifiedName(String name);
+	
+	/**
+	 * Returns the persistent unique identifier for this node (never null) If no node identifier exists
+	 * yet, a new one is generated and persisted.
+	 * 
+	 * @return the unique identifier of current node.
+	 */
+	String getOrCreateNodeId();
+	
+	/**
+	 * Determines whether the initializer configuration has changed since the last successful execution.
+	 * 
+	 * @return true or false if configuration changes are detected and the initializer should run or
+	 *         otherwise.
+	 */
+	Boolean isConfigChanged();
+	
+	/**
+	 * Updates and persists the current configuration checksums after a successful initializer
+	 * execution.
+	 */
+	void updateChecksums();
+	
+	/**
+	 * Attempts to acquire the initializer lock for the given node. This prevents multiple nodes from
+	 * executing the initializer concurrently in a clustered environment. This is a timeout-based lock
+	 * which releases in case of a node crash so that the lock is not stuck forever or if a node holds
+	 * it for too long.
+	 * 
+	 * @param nodeId the identifier of the node attempting to acquire the lock.
+	 * @return true if the lock was successfully acquired or false if another node currently holds the
+	 *         lock.
+	 */
+	Boolean tryAcquireLock(String nodeId);
+	
+	/**
+	 * Releases the initializer lock held by the given node.
+	 * 
+	 * @param nodeId the identifier of the node releasing the lock.
+	 */
+	void releaseLock(String nodeId);
+	
+	/**
+	 * Forces the release of the initializer lock regardless, useful for manual intervention, recovery
+	 * from node crashes, or administrative operations.
+	 */
+	void forceReleaseLock();
+	
+	/**
+	 * Indicates whether the initializer is currently locked.
+	 * 
+	 * @return true or false if the initializer lock is currently held or otherwise.
+	 */
+	Boolean isLocked();
 }
