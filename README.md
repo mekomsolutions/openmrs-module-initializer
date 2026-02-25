@@ -10,6 +10,7 @@
   * [Setting up and controlling logging](#setting-up-and-controlling-logging)
 - [Get in touch](#get-in-touch)
 - [Releases notes](#releases-notes)
+    + [version 2.12.0](#version-2120)
     + [Version 2.11.0](#version-2110)
     + [Version 2.10.0](#version-2100)
     + [Version 2.9.0](#version-290)
@@ -226,6 +227,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ----
 
 ## Releases notes
+#### version 2.12.0
 #### Version 2.11.0
 * Added support for patient flags (flags, flagpriorities, flagtags) domains
 * Support for 'billing' (billableservices, paymentmodes, cashpoints) for Billing V2
