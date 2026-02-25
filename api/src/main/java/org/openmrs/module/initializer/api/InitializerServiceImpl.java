@@ -13,25 +13,31 @@ import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CHECK
 import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CONFIG;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Concept;
 import org.openmrs.PersonAttributeType;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.initializer.InitializerConfig;
+import org.openmrs.module.initializer.api.entities.InitializerChecksum;
 import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
@@ -48,6 +54,8 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	private Map<String, Object> keyValueCache = new HashMap<String, Object>();
 	
 	private InitializerDAO initializerDAO;
+	
+	private static final String GP_NODE_ID = "initializer.node.id";
 	
 	public void setConfig(InitializerConfig cfg) {
 		this.cfg = cfg;
@@ -222,5 +230,112 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public List<Concept> getUnretiredConceptsByFullySpecifiedName(String name) {
 		return initializerDAO.getUnretiredConceptsByFullySpecifiedName(name);
+	}
+	
+	/**
+	 * @see org.openmrs.module.initializer.api.InitializerService#getOrCreateNodeId()
+	 */
+	@Override
+	public String getOrCreateNodeId() {
+		AdministrationService admin = Context.getAdministrationService();
+		String nodeId = admin.getGlobalProperty(GP_NODE_ID);
+		
+		if (StringUtils.isBlank(nodeId)) {
+			nodeId = UUID.randomUUID().toString();
+			admin.setGlobalProperty(GP_NODE_ID, nodeId);
+		}
+		return nodeId;
+	}
+	
+	/**
+	 * @see org.openmrs.module.initializer.api.InitializerService#isConfigChanged()
+	 */
+	@Override
+	public Boolean isConfigChanged() {
+		Map<String, String> db = loadChecksumsFromDb();
+		Map<String, String> fs = computeFileChecksums();
+		
+		return !db.equals(fs);
+	}
+	
+	/**
+	 * @see org.openmrs.module.initializer.api.InitializerService#updateChecksums()
+	 */
+	@Override
+	public void updateChecksums() {
+		Map<String, String> checksums = computeFileChecksums();
+		initializerDAO.deleteAll();
+		
+		for (Map.Entry<String, String> e : checksums.entrySet()) {
+			InitializerChecksum cs = new InitializerChecksum();
+			cs.setFilePath(e.getKey());
+			cs.setChecksum(e.getValue());
+			cs.setUpdatedAt(new Date());
+			initializerDAO.saveOrUpdate(cs);
+		}
+	}
+	
+	/**
+	 * @see org.openmrs.module.initializer.api.InitializerService#tryAcquireLock(String)
+	 */
+	@Override
+	public Boolean tryAcquireLock(String nodeId) {
+		return initializerDAO.tryAcquireLock(nodeId);
+	}
+	
+	/**
+	 * @see org.openmrs.module.initializer.api.InitializerService#releaseLock(String)
+	 */
+	@Override
+	public void releaseLock(String nodeId) {
+		initializerDAO.releaseLock(nodeId);
+	}
+	
+	/**
+	 * @see org.openmrs.module.initializer.api.InitializerService#forceReleaseLock()
+	 */
+	@Override
+	public void forceReleaseLock() {
+		initializerDAO.forceReleaseLock();
+	}
+	
+	/**
+	 * @see org.openmrs.module.initializer.api.InitializerService#isLocked()
+	 */
+	@Override
+	public Boolean isLocked() {
+		return initializerDAO.isLocked();
+	}
+	
+	private Map<String, String> loadChecksumsFromDb() {
+		List<InitializerChecksum> list = initializerDAO.getAll();
+		Map<String, String> map = new HashMap<>();
+		
+		for (InitializerChecksum cs : list) {
+			map.put(cs.getFilePath(), cs.getChecksum());
+		}
+		return map;
+	}
+	
+	private Map<String, String> computeFileChecksums() {
+		ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(), "");
+		Path base = Paths.get(getConfigDirPath());
+		List<File> files = util.getFiles("", Collections.emptyList());
+		Map<String, String> map = new HashMap<>();
+
+		for (File f : files) {
+			if (!f.isFile()) {
+				continue;
+			}
+			try (FileInputStream fis = new FileInputStream(f)) {
+				Path rel = base.relativize(f.toPath());
+				String checksum = DigestUtils.sha256Hex(fis);
+				map.put(rel.toString(), checksum);
+			} catch (Exception e) {
+				map.put(f.getName(), "ERROR");
+			}
+		}
+		
+		return map;
 	}
 }
