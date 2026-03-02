@@ -1,9 +1,12 @@
 package org.openmrs.module.initializer.api;
 
+import javax.persistence.PersistenceException;
+import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
@@ -14,6 +17,7 @@ import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.entities.InitializerChecksum;
+import org.openmrs.module.initializer.api.entities.InitializerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,8 +31,6 @@ import org.slf4j.LoggerFactory;
 public class HibernateInitializerDAO implements InitializerDAO {
 	
 	private static final Logger log = LoggerFactory.getLogger(HibernateInitializerDAO.class);
-	
-	private static final long LOCK_TIMEOUT = 10 * 60 * 1000; // 10 minutes
 	
 	private SessionFactory sessionFactory;
 	
@@ -69,52 +71,41 @@ public class HibernateInitializerDAO implements InitializerDAO {
 		return list;
 	}
 	
+	@Override
+	public void removeExpiredLock(String lockName) {
+		String hql = "DELETE FROM InitializerLock WHERE lockName = :name AND lockUntil < :now";
+		sessionFactory.getCurrentSession().createQuery(hql).setParameter("name", lockName).setParameter("now", new Date())
+		        .executeUpdate();
+	}
+	
 	/**
 	 * @see org.openmrs.module.initializer.api.InitializerService#tryAcquireLock(String)
 	 */
 	@Override
-	public Boolean tryAcquireLock(String nodeId) {
-		long now = System.currentTimeMillis();
-		String hql = "UPDATE InitializerLock "
-				+ "SET locked = true, lockedAt = current_timestamp, lockedBy = :node "
-		        + "WHERE id = 1 AND (locked = false OR lockedAt < :expiryTime)";
-		
-		Date expiryTime = new Date(now - LOCK_TIMEOUT);
-		int updated = sessionFactory.getCurrentSession().createQuery(hql).setParameter("node", nodeId)
-		        .setParameter("expiryTime", expiryTime).executeUpdate();
-		
-		return updated == 1;
+	public Boolean tryAcquireLock(String lockName, Date lockUntil, String lockedBy) {
+		try {
+			InitializerLock lock = new InitializerLock();
+			lock.setLockName(lockName);
+			lock.setLockUntil(lockUntil);
+			lock.setLockedBy(lockedBy);
+			
+			sessionFactory.getCurrentSession().save(lock);
+			sessionFactory.getCurrentSession().flush();
+			
+			return true;
+		}
+		catch (PersistenceException e) {
+			if (ExceptionUtils.getRootCause(e) instanceof ConstraintViolationException) {
+				return false;
+			}
+			throw e;
+		}
 	}
 	
-	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#releaseLock(String)
-	 */
 	@Override
-	public void releaseLock(String nodeId) {
-		String hql = "UPDATE InitializerLock "
-				+ "SET locked = false, lockedAt = null, lockedBy = null "
-		        + "WHERE id = 1 AND lockedBy = :node";
-		sessionFactory.getCurrentSession().createQuery(hql).setParameter("node", nodeId).executeUpdate();
-	}
-	
-	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#forceReleaseLock()
-	 */
-	public void forceReleaseLock() {
-		String hql = "UPDATE InitializerLock "
-				+ "SET locked = false, lockedAt = null, lockedBy = null "
-				+ "WHERE id = 1";
-		sessionFactory.getCurrentSession().createQuery(hql).executeUpdate();
-	}
-	
-	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#isLocked()
-	 */
-	@Override
-	public Boolean isLocked() {
-		Boolean locked = (Boolean) sessionFactory.getCurrentSession()
-		        .createQuery("SELECT locked FROM InitializerLock WHERE id = 1").uniqueResult();
-		return Boolean.TRUE.equals(locked);
+	public void deleteLock(String lockName) {
+		sessionFactory.getCurrentSession().createQuery("DELETE FROM InitializerLock WHERE lockName = :name")
+		        .setParameter("name", lockName).executeUpdate();
 	}
 	
 	@Override
@@ -124,12 +115,13 @@ public class HibernateInitializerDAO implements InitializerDAO {
 	}
 	
 	@Override
-	public void deleteAll() {
-		sessionFactory.getCurrentSession().createQuery("DELETE FROM InitializerChecksum").executeUpdate();
+	public void saveOrUpdate(InitializerChecksum checksum) {
+		sessionFactory.getCurrentSession().saveOrUpdate(checksum);
 	}
 	
 	@Override
-	public void saveOrUpdate(InitializerChecksum checksum) {
-		sessionFactory.getCurrentSession().saveOrUpdate(checksum);
+	public void deleteByFilePath(String filePath) {
+		sessionFactory.getCurrentSession().createQuery("DELETE FROM InitializerChecksum WHERE filePath = :filePath")
+		        .setParameter("filePath", filePath).executeUpdate();
 	}
 }

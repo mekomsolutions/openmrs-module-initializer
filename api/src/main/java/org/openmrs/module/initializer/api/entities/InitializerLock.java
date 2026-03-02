@@ -13,6 +13,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Entity
@@ -20,32 +22,30 @@ import java.util.Date;
 public class InitializerLock {
 	
 	@Id
-	@Column(name = "id")
-	private Integer id;
+	@Column(name = "lock_name")
+	private String lockName;
 	
-	@Column(name = "locked", nullable = false)
-	private Boolean locked;
+	@Column(name = "lock_until", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lockUntil;
 	
-	@Column(name = "locked_at")
-	private Date lockedAt;
-	
-	@Column(name = "locked_by")
+	@Column(name = "locked_by", length = 255)
 	private String lockedBy;
 	
-	public Boolean getLocked() {
-		return locked;
+	public String getLockName() {
+		return lockName;
 	}
 	
-	public void setLocked(Boolean locked) {
-		this.locked = locked;
+	public void setLockName(String lockName) {
+		this.lockName = lockName;
 	}
 	
-	public Date getLockedAt() {
-		return lockedAt;
+	public Date getLockUntil() {
+		return lockUntil;
 	}
 	
-	public void setLockedAt(Date lockedAt) {
-		this.lockedAt = lockedAt;
+	public void setLockUntil(Date lockUntil) {
+		this.lockUntil = lockUntil;
 	}
 	
 	public String getLockedBy() {
@@ -54,13 +54,5 @@ public class InitializerLock {
 	
 	public void setLockedBy(String lockedBy) {
 		this.lockedBy = lockedBy;
-	}
-	
-	public Integer getId() {
-		return id;
-	}
-	
-	public void setId(Integer id) {
-		this.id = id;
 	}
 }

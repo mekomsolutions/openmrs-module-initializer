@@ -33,12 +33,6 @@ public interface InitializerService extends OpenmrsService {
 	String getConfigDirPath();
 	
 	/**
-	 * @return The path to the checksum folder (with NO trailing forward slash), eg.
-	 *         "/opt/openmrs/configuration_checksums"
-	 */
-	String getChecksumsDirPath();
-	
-	/**
 	 * @return The list of ordered domain loaders.
 	 */
 	List<Loader> getLoaders();
@@ -134,53 +128,41 @@ public interface InitializerService extends OpenmrsService {
 	List<Concept> getUnretiredConceptsByFullySpecifiedName(String name);
 	
 	/**
-	 * Returns the persistent unique identifier for this node (never null) If no node identifier exists
-	 * yet, a new one is generated and persisted.
-	 * 
-	 * @return the unique identifier of current node.
-	 */
-	String getOrCreateNodeId();
-	
-	/**
 	 * Determines whether the initializer configuration has changed since the last successful execution.
 	 * 
-	 * @return true or false if configuration changes are detected and the initializer should run or otherwise.
+	 * @return true or false if configuration changes are detected and the initializer should run or
+	 *         otherwise.
 	 */
 	Boolean isConfigChanged();
 	
 	/**
-	 * Updates and persists the current configuration checksums after a successful initializer execution.
+	 * Updates and persists the current configuration checksums after a successful initializer
+	 * execution.
 	 */
 	void updateChecksums();
 	
 	/**
-	 * Attempts to acquire the initializer lock for the given node. This prevents multiple nodes from
-	 * executing the initializer concurrently in a clustered environment. This is a timeout-based lock
-	 * which releases in case of a node crash so that the lock is not stuck forever or if a node holds
-	 * it for too long.
+	 * Attempts to acquire the initializer lock for the given name.
 	 * 
-	 * @param nodeId the identifier of the node attempting to acquire the lock.
-	 * @return true if the lock was successfully acquired or false if another node currently holds the lock.
+	 * @param lockName the name of the lock.
+	 * @return true if the lock was successfully acquired, false otherwise.
 	 */
-	Boolean tryAcquireLock(String nodeId);
+	Boolean tryAcquireLock(String lockName);
 	
 	/**
-	 * Releases the initializer lock held by the given node.
+	 * Releases the initializer lock for the given name.
 	 * 
-	 * @param nodeId the identifier of the node releasing the lock.
+	 * @param lockName the name of the lock.
 	 */
-	void releaseLock(String nodeId);
+	void releaseLock(String lockName);
 	
 	/**
-	 * Forces the release of the initializer lock regardless, useful for manual intervention, recovery
-	 * from node crashes, or administrative operations.
-	 */
-	void forceReleaseLock();
-	
-	/**
-	 * Indicates whether the initializer is currently locked.
+	 * Waits to acquire the initializer lock for the given name until the specified timeout.
 	 * 
-	 * @return true or false if the initializer lock is currently held or otherwise.
+	 * @param lockName the name of the lock.
+	 * @param timeoutMillis maximum time in milliseconds to wait for the lock.
+	 * @throws RuntimeException if the timeout is reached before acquiring the lock.
 	 */
-	Boolean isLocked();
+	void acquireLockOrWait(String lockName, long timeoutMillis);
+	
 }

@@ -50,12 +50,24 @@ public class InitializerActivatorTest {
 	
 	private Exception exceptionThrown;
 	
+	private boolean configChanged = true;
+	
+	private boolean throwDuringLoad = false;
+	
+	private boolean updateChecksumsCalled = false;
+	
+	private boolean simulateLockTimeout = false;
+	
+	private Long capturedTimeout;
+	
 	@BeforeEach
 	public void setup() {
 		final List<Loader> loaders = Arrays.asList(conceptsLoader, encounterTypesLoader, drugsLoader);
+		
+		boolean lockInitiallyAvailable = true;
 		iniz = new InitializerServiceImpl() {
 			
-			private boolean locked = false;
+			private boolean locked = !lockInitiallyAvailable;
 			
 			@Override
 			public List<Loader> getLoaders() {
@@ -63,18 +75,29 @@ public class InitializerActivatorTest {
 			}
 			
 			@Override
-			public String getOrCreateNodeId() {
-				return "test-node";
-			}
-			
-			@Override
 			public Boolean isConfigChanged() {
-				return true;
+				return configChanged;
 			}
 			
 			@Override
 			public void updateChecksums() {
-				// unit test
+				updateChecksumsCalled = true;
+			}
+			
+			@Override
+			public void loadUnsafe(boolean startup, boolean throwError) throws Exception {
+				if (throwDuringLoad) {
+					throw new RuntimeException("Load failure");
+				}
+				super.loadUnsafe(startup, throwError);
+			}
+			
+			@Override
+			public void acquireLockOrWait(String lockName, long timeoutMillis) {
+				if (simulateLockTimeout) {
+					throw new RuntimeException("Timeout waiting for lock");
+				}
+				capturedTimeout = timeoutMillis;
 			}
 			
 			@Override
@@ -84,11 +107,6 @@ public class InitializerActivatorTest {
 				}
 				locked = true;
 				return true;
-			}
-			
-			@Override
-			public Boolean isLocked() {
-				return locked;
 			}
 			
 			@Override
@@ -222,45 +240,49 @@ public class InitializerActivatorTest {
 	}
 	
 	@Test
-	public void started_shouldNotRunWhenLocked() {
-		Assertions.assertFalse(iniz.isLocked());
+	public void started_shouldSkipIfNoConfigChanges() {
+		configChanged = false;
 		
-		// node1 acquires the lock. This should prevent the activator from executing the initializer.
-		boolean acquired = iniz.tryAcquireLock("node1");
-		Assertions.assertTrue(acquired);
-		Assertions.assertTrue(iniz.isLocked());
+		activator.started();
 		
-		// Attempt to start the activator while lock is already held.
-		startActivator(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, true);
-		Assertions.assertEquals(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, System.getProperty(PROPS_STARTUP_LOAD));
-		Assertions.assertNull(props.get(PROPS_STARTUP_LOAD));
-		
-		// Lock should still be held (activator must NOT release it)
-		Assertions.assertTrue(iniz.isLocked());
-		
-		// No loaders should have been executed
-		Assertions.assertEquals(0, conceptsLoader.getNumberOfTimesLoadUnsafeCompleted());
-		Assertions.assertEquals(0, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
-		Assertions.assertEquals(0, drugsLoader.getNumberOfTimesLoadUnsafeCompleted());
-		Assertions.assertNull(exceptionThrown);
+		Assertions.assertFalse(updateChecksumsCalled);
 	}
 	
 	@Test
-	public void started_shouldRunWhenLockIsAvailable() {
-		Assertions.assertFalse(iniz.isLocked());
+	public void started_shouldRunInitializerIfConfigChanged() {
+		configChanged = true;
 		
-		// Start activator
-		startActivator(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, true);
-		Assertions.assertEquals(PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR, System.getProperty(PROPS_STARTUP_LOAD));
-		Assertions.assertNull(props.get(PROPS_STARTUP_LOAD));
+		activator.started();
 		
-		// Loaders should have been executed
-		Assertions.assertEquals(1, conceptsLoader.getNumberOfTimesLoadUnsafeCompleted());
-		Assertions.assertEquals(1, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
-		Assertions.assertEquals(1, drugsLoader.getNumberOfTimesLoadUnsafeCompleted());
-		Assertions.assertNull(exceptionThrown);
+		Assertions.assertTrue(updateChecksumsCalled);
+	}
+	
+	@Test
+	public void started_shouldThrowModuleExceptionIfLoadFails() {
+		throwDuringLoad = true;
 		
-		// Lock should have been released after execution
-		Assertions.assertFalse(iniz.isLocked());
+		Exception ex = Assertions.assertThrows(ModuleException.class, () -> {
+			activator.started();
+		});
+		
+		Assertions.assertTrue(ex.getMessage().contains("An error occurred loading initializer configuration"));
+	}
+	
+	@Test
+	public void started_shouldThrowIfLockTimeout() {
+		simulateLockTimeout = true;
+		
+		Exception ex = Assertions.assertThrows(ModuleException.class, () -> {
+			activator.started();
+		});
+		
+		Assertions.assertTrue(ex.getMessage().contains("An error occurred loading initializer configuration"));
+	}
+	
+	@Test
+	public void started_shouldUse15MinuteLockTimeout() {
+		activator.started();
+		
+		Assertions.assertEquals(15 * 60 * 1000L, capturedTimeout.longValue());
 	}
 }

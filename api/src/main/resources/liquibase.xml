@@ -41,7 +41,7 @@
         <customChange class="org.openmrs.module.initializer.liquibase.DeleteDomainChecksumsChangeset" domainName="concepts"></customChange>
     </changeSet>
 
-    <changeSet id="create-initializer-lock-table" author="mujuzi">
+    <changeSet id="create-initializer-lock-table-20260225" author="mujuzi">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="initializer_lock"/>
@@ -49,33 +49,15 @@
         </preConditions>
 
         <createTable tableName="initializer_lock">
-            <column name="id" type="int">
+            <column name="lock_name" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="locked" type="boolean">
-                <constraints nullable="false"/>
-            </column>
-            <column name="locked_at" type="datetime"/>
+            <column name="lock_until" type="datetime"/>
             <column name="locked_by" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
-    <changeSet id="init-initializer-lock-row" author="mujuzi">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sqlCheck expectedResult="1">
-                    SELECT COUNT(*) FROM initializer_lock WHERE id = 1
-                </sqlCheck>
-            </not>
-        </preConditions>
-
-        <insert tableName="initializer_lock">
-            <column name="id" valueNumeric="1"/>
-            <column name="locked" valueBoolean="false"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="create-initializer-checksums-table" author="mujuzi">
+    <changeSet id="create-initializer-checksums-table-20260225" author="mujuzi">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="initializer_checksums"/>

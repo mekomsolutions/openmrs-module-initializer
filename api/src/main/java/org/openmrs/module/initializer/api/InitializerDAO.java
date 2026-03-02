@@ -1,9 +1,11 @@
 package org.openmrs.module.initializer.api;
 
+import java.util.Date;
 import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.module.initializer.api.entities.InitializerChecksum;
+import org.openmrs.module.initializer.api.entities.InitializerLock;
 
 /**
  * For database related functions
@@ -20,27 +22,16 @@ public interface InitializerDAO {
 	/**
 	 * @see org.openmrs.module.initializer.api.InitializerService#tryAcquireLock(String)
 	 */
-	Boolean tryAcquireLock(String nodeId);
+	Boolean tryAcquireLock(String lockName, Date lockUntil, String lockedBy);
 	
-	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#releaseLock(String)
-	 */
-	void releaseLock(String nodeId);
+	void removeExpiredLock(String lockName);
 	
-	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#forceReleaseLock()
-	 */
-	void forceReleaseLock();
-	
-	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#isLocked()
-	 */
-	Boolean isLocked();
+	void deleteLock(String lockName);
 	
 	List<InitializerChecksum> getAll();
 	
-	void deleteAll();
-	
 	void saveOrUpdate(InitializerChecksum checksum);
+	
+	void deleteByFilePath(String filePath);
 	
 }

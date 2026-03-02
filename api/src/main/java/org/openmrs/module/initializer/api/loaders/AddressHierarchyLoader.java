@@ -21,16 +21,10 @@ public class AddressHierarchyLoader extends BaseLoader {
 	}
 	
 	@Override
-	public ConfigDirUtil getDirUtil() {
-		return new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), getDomainName(), true);
-	}
-	
-	@Override
 	public void loadUnsafe(List<String> wildcardExclusions, boolean doThrow) throws Exception {
 		
 		try {
-			AddressConfigurationLoader.loadAddressConfiguration(Paths.get(iniz.getConfigDirPath()),
-			    Paths.get(iniz.getChecksumsDirPath()));
+			AddressConfigurationLoader.loadAddressConfiguration(Paths.get(iniz.getConfigDirPath()), null);
 		}
 		catch (Exception e) {
 			log.error(e.getMessage());

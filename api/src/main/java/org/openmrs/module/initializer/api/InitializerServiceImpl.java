@@ -9,23 +9,28 @@
  */
 package org.openmrs.module.initializer.api;
 
-import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CHECKSUM;
 import static org.openmrs.module.initializer.InitializerConstants.DIR_NAME_CONFIG;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -33,7 +38,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Concept;
 import org.openmrs.PersonAttributeType;
-import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.initializer.InitializerConfig;
@@ -43,7 +47,7 @@ import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 public class InitializerServiceImpl extends BaseOpenmrsService implements InitializerService {
 	
@@ -54,8 +58,6 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	private Map<String, Object> keyValueCache = new HashMap<String, Object>();
 	
 	private InitializerDAO initializerDAO;
-	
-	private static final String GP_NODE_ID = "initializer.node.id";
 	
 	public void setConfig(InitializerConfig cfg) {
 		this.cfg = cfg;
@@ -81,11 +83,6 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public String getConfigDirPath() {
 		return getBasePath().resolve(DIR_NAME_CONFIG).toString();
-	}
-	
-	@Override
-	public String getChecksumsDirPath() {
-		return getBasePath().resolve(DIR_NAME_CHECKSUM).toString();
 	}
 	
 	@Override
@@ -233,18 +230,15 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	}
 	
 	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#getOrCreateNodeId()
+	 * @see org.openmrs.module.initializer.api.InitializerService#tryAcquireLock(String)
 	 */
 	@Override
-	public String getOrCreateNodeId() {
-		AdministrationService admin = Context.getAdministrationService();
-		String nodeId = admin.getGlobalProperty(GP_NODE_ID);
+	@Transactional
+	public Boolean tryAcquireLock(String lockName) {
+		initializerDAO.removeExpiredLock(lockName);
+		Date lockUntil = Date.from(Instant.now().plus(15, ChronoUnit.MINUTES));
 		
-		if (StringUtils.isBlank(nodeId)) {
-			nodeId = UUID.randomUUID().toString();
-			admin.setGlobalProperty(GP_NODE_ID, nodeId);
-		}
-		return nodeId;
+		return initializerDAO.tryAcquireLock(lockName, lockUntil, getHostname());
 	}
 	
 	/**
@@ -253,8 +247,13 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	@Override
 	public Boolean isConfigChanged() {
 		Map<String, String> db = loadChecksumsFromDb();
-		Map<String, String> fs = computeFileChecksums();
 		
+		// First run ever
+		if (db.isEmpty()) {
+			return true;
+		}
+		
+		Map<String, String> fs = computeFileChecksums();
 		return !db.equals(fs);
 	}
 	
@@ -262,49 +261,61 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 	 * @see org.openmrs.module.initializer.api.InitializerService#updateChecksums()
 	 */
 	@Override
+	@Transactional
 	public void updateChecksums() {
-		Map<String, String> checksums = computeFileChecksums();
-		initializerDAO.deleteAll();
+		Map<String, String> current = computeFileChecksums();
+		Map<String, String> existing = loadChecksumsFromDb();
 		
-		for (Map.Entry<String, String> e : checksums.entrySet()) {
+		// Update or insert
+		for (Map.Entry<String, String> e : current.entrySet()) {
 			InitializerChecksum cs = new InitializerChecksum();
 			cs.setFilePath(e.getKey());
 			cs.setChecksum(e.getValue());
 			cs.setUpdatedAt(new Date());
 			initializerDAO.saveOrUpdate(cs);
 		}
+		
+		// Delete removed files
+		for (String oldPath : existing.keySet()) {
+			if (!current.containsKey(oldPath)) {
+				initializerDAO.deleteByFilePath(oldPath);
+			}
+		}
 	}
 	
 	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#tryAcquireLock(String)
+	 * @see org.openmrs.module.initializer.api.InitializerService#acquireLockOrWait(String, long
 	 */
 	@Override
-	public Boolean tryAcquireLock(String nodeId) {
-		return initializerDAO.tryAcquireLock(nodeId);
+	public void acquireLockOrWait(String lockName, long timeoutMillis) {
+		long start = System.currentTimeMillis();
+		
+		while (true) {
+			if (tryAcquireLock(lockName)) {
+				return;
+			}
+			
+			if (System.currentTimeMillis() - start > timeoutMillis) {
+				throw new RuntimeException("Timeout waiting for lock: " + lockName);
+			}
+			
+			try {
+				Thread.sleep(2000);
+			}
+			catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				throw new RuntimeException("Interrupted while waiting for lock", e);
+			}
+		}
 	}
 	
 	/**
 	 * @see org.openmrs.module.initializer.api.InitializerService#releaseLock(String)
 	 */
 	@Override
-	public void releaseLock(String nodeId) {
-		initializerDAO.releaseLock(nodeId);
-	}
-	
-	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#forceReleaseLock()
-	 */
-	@Override
-	public void forceReleaseLock() {
-		initializerDAO.forceReleaseLock();
-	}
-	
-	/**
-	 * @see org.openmrs.module.initializer.api.InitializerService#isLocked()
-	 */
-	@Override
-	public Boolean isLocked() {
-		return initializerDAO.isLocked();
+	@Transactional
+	public void releaseLock(String lockName) {
+		initializerDAO.deleteLock(lockName);
 	}
 	
 	private Map<String, String> loadChecksumsFromDb() {
@@ -314,28 +325,47 @@ public class InitializerServiceImpl extends BaseOpenmrsService implements Initia
 		for (InitializerChecksum cs : list) {
 			map.put(cs.getFilePath(), cs.getChecksum());
 		}
+		
 		return map;
 	}
 	
 	private Map<String, String> computeFileChecksums() {
-		ConfigDirUtil util = new ConfigDirUtil(getConfigDirPath(), getChecksumsDirPath(), "");
 		Path base = Paths.get(getConfigDirPath());
-		List<File> files = util.getFiles("", Collections.emptyList());
 		Map<String, String> map = new HashMap<>();
-
-		for (File f : files) {
-			if (!f.isFile()) {
-				continue;
+		
+		try (Stream<Path> stream = Files.walk(base)) {
+			for (Iterator<Path> it = stream.iterator(); it.hasNext();) {
+				
+				Path path = it.next();
+				if (!Files.isRegularFile(path)) {
+					continue;
+				}
+				
+				try (InputStream is = Files.newInputStream(path)) {
+					Path rel = base.relativize(path);
+					String checksum = DigestUtils.sha256Hex(is);
+					map.put(rel.toString().replace(File.separator, "/"), checksum);
+					
+				}
+				catch (Exception e) {
+					log.error("Failed to compute checksum for " + path, e);
+					map.put(base.relativize(path).toString(), "ERROR");
+				}
 			}
-			try (FileInputStream fis = new FileInputStream(f)) {
-				Path rel = base.relativize(f.toPath());
-				String checksum = DigestUtils.sha256Hex(fis);
-				map.put(rel.toString(), checksum);
-			} catch (Exception e) {
-				map.put(f.getName(), "ERROR");
-			}
+		}
+		catch (IOException e) {
+			log.error("Failed to scan configuration directory", e);
 		}
 		
 		return map;
+	}
+	
+	private String getHostname() {
+		try {
+			return InetAddress.getLocalHost().getHostName();
+		}
+		catch (Exception e) {
+			return "unknown";
+		}
 	}
 }
