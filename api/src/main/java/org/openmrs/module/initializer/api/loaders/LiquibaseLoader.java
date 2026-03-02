@@ -28,9 +28,4 @@ public class LiquibaseLoader extends BaseFileLoader {
 			DatabaseUpdater.executeChangelog(file.getPath(), null);
 		}
 	}
-	
-	@Override
-	public ConfigDirUtil getDirUtil() {
-		return new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), getDomainName(), true);
-	}
 }

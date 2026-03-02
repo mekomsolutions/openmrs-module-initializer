@@ -82,13 +82,37 @@ public class InitializerActivator extends BaseModuleActivator {
 			log.info("OpenMRS config loading process disabled at initializer startup");
 		} else {
 			boolean throwError = PROPS_STARTUP_LOAD_FAIL_ON_ERROR.equalsIgnoreCase(startupLoadingMode);
-			log.info("OpenMRS config loading process started...");
+			boolean lockAquired = false;
+			String lockName = "initializer";
+			
 			try {
+				log.info("Waiting for initializer lock...");
+				getInitializerService().acquireLockOrWait(lockName, 15 * 60 * 1000); // 15 minutes
+				lockAquired = true;
+				
+				// Check if config changed
+				if (!getInitializerService().isConfigChanged()) {
+					log.info("No config changes... skipping initializer");
+					return;
+				}
+				
+				// Run Initializer
+				log.info("OpenMRS config loading process started...");
 				getInitializerService().loadUnsafe(true, throwError);
+				
+				// Save new checksums
+				getInitializerService().updateChecksums();
 				log.info("OpenMRS config loading process completed.");
 			}
 			catch (Exception e) {
+				log.error("Initializer failed", e);
 				throw new ModuleException("An error occurred loading initializer configuration", e);
+			}
+			finally {
+				if (lockAquired) {
+					getInitializerService().releaseLock(lockName);
+					log.info("Initializer lock released");
+				}
 			}
 		}
 	}

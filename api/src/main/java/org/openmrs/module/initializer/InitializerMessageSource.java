@@ -202,7 +202,7 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 	protected Map<String, Properties> getMessagePropertyResourcesFromFilesystem() {
 		List<OrderedPropertiesFile> messagePropertyFiles = new ArrayList<>();
 		for (String domain : getDomainsToScan()) {
-			ConfigDirUtil dirUtil = new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), domain, true);
+			ConfigDirUtil dirUtil = new ConfigDirUtil(iniz.getConfigDirPath(), domain);
 			List<File> propFiles = dirUtil.getFiles(PROPERTIES_EXTENSION);
 			for (File file : propFiles) {
 				messagePropertyFiles.add(new OrderedPropertiesFile(file));

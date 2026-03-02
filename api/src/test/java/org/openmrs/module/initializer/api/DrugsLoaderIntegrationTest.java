@@ -232,7 +232,6 @@ public class DrugsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 		DrugIngredient originalIngredient = drug.getIngredients().iterator().next();
 		Assert.assertEquals((Double) 20.0, originalIngredient.getStrength());
 		
-		loader.getDirUtil().deleteChecksums();
 		loader.load();
 		
 		drug = cs.getDrugByUuid("8abf401a-7f65-11f0-9e36-be568b1ab237");
