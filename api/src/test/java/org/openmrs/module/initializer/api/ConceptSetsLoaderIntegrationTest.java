@@ -27,6 +27,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class ConceptSetsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -48,6 +49,15 @@ public class ConceptSetsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	
 	@Test
 	public void load_shouldLoadConceptSetsAccordingToCsvFiles() {
+		
+		// Test starting values
+		
+		{
+			Concept retiredSet = cs.getConceptByUuid("bcc1796a-16f1-11f1-a7b6-da82fbe923ea");
+			assertNotNull(retiredSet);
+			assertTrue(retiredSet.getRetired());
+			assertEquals(0, retiredSet.getSetMembers().size());
+		}
 		
 		// Load
 		conceptsLoader.load();
@@ -83,6 +93,13 @@ public class ConceptSetsLoaderIntegrationTest extends DomainBaseModuleContextSen
 			assertEquals(new Double(100), senseAnswers.get(1).getSortWeight());
 			assertEquals("Sight", senseAnswers.get(2).getAnswerConcept().getName().getName());
 			assertEquals(new Double(200), senseAnswers.get(2).getSortWeight());
+		}
+		
+		{
+			Concept retiredSet = cs.getConceptByUuid("bcc1796a-16f1-11f1-a7b6-da82fbe923ea");
+			assertNotNull(retiredSet);
+			assertTrue(retiredSet.getRetired());
+			assertEquals(2, retiredSet.getSetMembers().size());
 		}
 	}
 }
