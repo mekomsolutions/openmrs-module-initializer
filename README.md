@@ -229,6 +229,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ## Releases notes
 #### version 2.12.0
 * Fix conceptsets domain to prevent incorrect unretiring of associated concept
+* Fix to ensure concept lookups correctly handle concepts with % characters
 
 #### Version 2.11.0
 * Added support for patient flags (flags, flagpriorities, flagtags) domains
