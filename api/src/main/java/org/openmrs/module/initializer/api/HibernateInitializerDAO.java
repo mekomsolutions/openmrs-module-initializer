@@ -1,12 +1,9 @@
 package org.openmrs.module.initializer.api;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Concept;
@@ -15,8 +12,9 @@ import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The Hibernate class for database related functions <br>
@@ -51,7 +49,8 @@ public class HibernateInitializerDAO implements InitializerDAO {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ConceptName.class);
 		
 		if (Context.getAdministrationService().isDatabaseStringComparisonCaseSensitive()) {
-			criteria.add(Restrictions.ilike("name", name));
+			name = name.replace("%", "\\%");
+			criteria.add(Restrictions.ilike("name", name, MatchMode.EXACT));
 		} else {
 			criteria.add(Restrictions.eq("name", name));
 		}
