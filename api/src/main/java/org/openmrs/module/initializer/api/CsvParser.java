@@ -191,20 +191,21 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	public CsvFailingLines process(List<String[]> lines) {
 		// Save cached objects to avoid losing them prematurely by other Parsers
 		// See DisplaysCsvParser#save(OpenmrsObject)
-		Context.flushSession();
-		Context.clearSession();
+		
+		log.debug(getClass() + " processing " + lines.size() + " lines");
+		int saved = 0;
+		clearAndFlushSession(saved);
 		
 		CsvFailingLines result = new CsvFailingLines();
-		int saved = 0;
+		
 		for (String[] line : lines) {
 			T instance = null;
 			try {
 				instance = initialize(line);
 				save(instance);
 				saved++;
-				if (saved > 250) { // TODO make this configurable
-					Context.flushSession();
-					Context.clearSession();
+				if (saved % 250 == 0) { // TODO make this configurable
+					clearAndFlushSession(saved);
 				}
 			}
 			catch (Exception e) {
@@ -216,6 +217,17 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * Flushes and clears the hibernate session
+	 * 
+	 * @param saved the current count of saved items to log
+	 */
+	private void clearAndFlushSession(int saved) {
+		Context.flushSession();
+		Context.clearSession();
+		log.debug("Number processed: " + saved);
 	}
 	
 	/**

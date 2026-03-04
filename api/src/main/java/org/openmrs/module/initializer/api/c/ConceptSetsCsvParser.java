@@ -40,6 +40,18 @@ public class ConceptSetsCsvParser extends CsvParser<Concept, BaseLineProcessor<C
 	}
 	
 	@Override
+	public boolean setRetired(Concept instance, boolean retired) {
+		// The Concept Sets domain should never result in changing the retired status of the underlying concept
+		return false;
+	}
+	
+	@Override
+	protected boolean shouldFill(Concept instance, CsvLine csvLine) {
+		// We need to process all set members, whether the underlying concept is retired or not
+		return true;
+	}
+	
+	@Override
 	public Concept save(Concept instance) {
 		return conceptService.saveConcept(instance);
 	}

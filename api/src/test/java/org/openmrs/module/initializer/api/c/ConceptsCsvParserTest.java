@@ -55,7 +55,9 @@ public class ConceptsCsvParserTest {
 		ConceptClass classMisc = new ConceptClass();
 		classMisc.setName("Misc");
 		when(cs.getConceptClassByName(eq("Misc"))).thenReturn(classMisc);
-		
+		ConceptClass convSet = new ConceptClass();
+		convSet.setName("ConvSet");
+		when(cs.getConceptClassByName(eq("ConvSet"))).thenReturn(convSet);
 		ConceptDatatype typeCoded = new ConceptDatatype();
 		typeCoded.setName("Coded");
 		when(cs.getConceptDatatypeByName(eq("Coded"))).thenReturn(typeCoded);
