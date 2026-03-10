@@ -88,4 +88,8 @@ public class LiquibaseLoader2_5 extends BaseFileLoader {
 	private void sqlUpdate(String sql) {
 		Context.getAdministrationService().executeSQL(sql, false);
 	}
+	
+	public ConfigDirUtil getDirUtil() {
+		return new ConfigDirUtil(iniz.getConfigDirPath(), getDomainName(), true);
+	}
 }

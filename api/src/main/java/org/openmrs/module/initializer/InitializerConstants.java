@@ -56,6 +56,8 @@ public class InitializerConstants {
 	 */
 	public static final String DIR_NAME_CONFIG = "configuration";
 	
+	public static final String DIR_NAME_CHECKSUM = "configuration_checksums";
+	
 	public static final String DIR_NAME_REJECTIONS = "configuration_rejections";
 	
 	/*

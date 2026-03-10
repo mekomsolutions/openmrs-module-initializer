@@ -104,6 +104,7 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		FileUtils.copyFile(srcFile, dstFile);
 		
 		// Replay
+		getService().clearChecksums();
 		ampathFormsLoader.load();
 		form = formService.getForm("Test Form 1");
 		
@@ -154,6 +155,7 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		
 		// Test that new version loads in with expected values
 		// Replay
+		getService().clearChecksums();
 		ampathFormsLoader.load();
 		Form form2 = formService.getForm("Test Form 1");
 		Form initialForm = formService.getFormByUuid(form.getUuid());

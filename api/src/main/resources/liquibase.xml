@@ -36,11 +36,6 @@
                                  referencedColumnNames="user_id" />
     </changeSet> -->
     
-    <changeSet id="delete-concepts-checksums-20211025" author="iniz" failOnError="false">
-        <comment>Deleting 'concepts' domain checksums</comment>
-        <customChange class="org.openmrs.module.initializer.liquibase.DeleteDomainChecksumsChangeset" domainName="concepts"></customChange>
-    </changeSet>
-
     <changeSet id="create-initializer-lock-table-20260225" author="mujuzi">
         <preConditions onFail="MARK_RAN">
             <not>

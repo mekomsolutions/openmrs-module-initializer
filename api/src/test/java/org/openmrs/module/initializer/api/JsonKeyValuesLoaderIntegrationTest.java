@@ -131,4 +131,15 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 			Assert.assertNotNull(c);
 		}
 	}
+	
+	@Test
+	public void getDirUtil_shouldConfigureDirUtilToSkipChecksums() {
+		
+		// Replay
+		ConfigDirUtil dirUtil = loader.getDirUtil();
+		
+		// Verif
+		Assert.assertEquals(true, dirUtil.skipChecksums);
+		Assert.assertEquals(iniz.getConfigDirPath() + File.separator + loader.getDomainName(), dirUtil.getDomainDirPath());
+	}
 }

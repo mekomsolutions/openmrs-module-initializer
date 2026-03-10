@@ -173,6 +173,11 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	}
 	
 	@Before
+	public void clearChecksumsCache() {
+		getService().clearChecksumsCache();
+	}
+	
+	@Before
 	public void setupAppDataDir() {
 		String path = getAppDataDirPath();
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
