@@ -111,6 +111,7 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		
 		// Replay
 		// Now load updated values
+		getService().clearChecksumsCache();
 		ampathFormsTranslationsLoader.load();
 		
 		Form formUpdated = formService.getForm("Test Form 1");

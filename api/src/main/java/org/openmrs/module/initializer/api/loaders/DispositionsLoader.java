@@ -45,6 +45,6 @@ public class DispositionsLoader extends BaseFileLoader {
 	@Override
 	public ConfigDirUtil getDirUtil() {
 		// skip checksums, this needs to be processed every time
-		return new ConfigDirUtil(iniz.getConfigDirPath(), getDomainName());
+		return new ConfigDirUtil(iniz.getConfigDirPath(), getDomainName(), true);
 	}
 }

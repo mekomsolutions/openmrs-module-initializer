@@ -9,21 +9,6 @@
  */
 package org.openmrs.module.initializer;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.ModuleException;
-import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.module.initializer.api.InitializerServiceImpl;
-import org.openmrs.module.initializer.api.MockLoader;
-import org.openmrs.module.initializer.api.loaders.Loader;
-import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-
 import static org.openmrs.module.initializer.Domain.CONCEPTS;
 import static org.openmrs.module.initializer.Domain.DRUGS;
 import static org.openmrs.module.initializer.Domain.ENCOUNTER_TYPES;
@@ -32,9 +17,32 @@ import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_DISABLED;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_FAIL_ON_ERROR;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mockito;
+import org.openmrs.api.AdministrationService;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.ModuleException;
+import org.openmrs.module.initializer.api.InitializerService;
+import org.openmrs.module.initializer.api.InitializerServiceImpl;
+import org.openmrs.module.initializer.api.MockLoader;
+import org.openmrs.module.initializer.api.entities.InitializerChecksum;
+import org.openmrs.module.initializer.api.loaders.Loader;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
+
 public class InitializerActivatorTest {
 	
 	private InitializerService iniz;
+	
+	private AdministrationService adminService;
 	
 	private InitializerActivator activator;
 	
@@ -54,15 +62,22 @@ public class InitializerActivatorTest {
 	
 	private boolean throwDuringLoad = false;
 	
-	private boolean updateChecksumsCalled = false;
+	private boolean loadUnsafeCalled = false;
+	
+	private boolean loadersCalled = false;
 	
 	private boolean simulateLockTimeout = false;
 	
 	private Long capturedTimeout;
 	
+	@TempDir
+	Path tempDir;
+	
 	@BeforeEach
 	public void setup() {
 		final List<Loader> loaders = Arrays.asList(conceptsLoader, encounterTypesLoader, drugsLoader);
+		
+		adminService = Mockito.mock(AdministrationService.class);
 		
 		boolean lockInitiallyAvailable = true;
 		iniz = new InitializerServiceImpl() {
@@ -71,17 +86,27 @@ public class InitializerActivatorTest {
 			
 			@Override
 			public List<Loader> getLoaders() {
+				loadersCalled = true;
 				return loaders;
 			}
 			
 			@Override
-			public Boolean isConfigChanged() {
-				return configChanged;
+			public String getConfigDirPath() {
+				File file = new File(tempDir.toFile(), "config");
+				file.mkdirs();
+				return file.toString();
 			}
 			
 			@Override
-			public void updateChecksums() {
-				updateChecksumsCalled = true;
+			public String getChecksumsDirPath() {
+				File file = new File(tempDir.toFile(), "checksums");
+				file.mkdirs();
+				return file.toString();
+			}
+			
+			@Override
+			public boolean hasChecksumsChanged() {
+				return configChanged;
 			}
 			
 			@Override
@@ -89,6 +114,7 @@ public class InitializerActivatorTest {
 				if (throwDuringLoad) {
 					throw new RuntimeException("Load failure");
 				}
+				loadUnsafeCalled = true;
 				super.loadUnsafe(startup, throwError);
 			}
 			
@@ -114,8 +140,13 @@ public class InitializerActivatorTest {
 				locked = false;
 			}
 			
+			@Override
+			public InitializerService getSelf() {
+				return this;
+			}
 		};
 		((InitializerServiceImpl) iniz).setConfig(cfg);
+		((InitializerServiceImpl) iniz).setAdminService(adminService);
 		activator = new InitializerActivator() {
 			
 			@Override
@@ -135,6 +166,8 @@ public class InitializerActivatorTest {
 		};
 		props = new Properties();
 		System.clearProperty(PROPS_STARTUP_LOAD);
+		loadersCalled = false;
+		loadUnsafeCalled = false;
 	}
 	
 	protected void startActivator(String startupLoadConfiguration) {
@@ -245,7 +278,7 @@ public class InitializerActivatorTest {
 		
 		activator.started();
 		
-		Assertions.assertFalse(updateChecksumsCalled);
+		Assertions.assertFalse(loadersCalled);
 	}
 	
 	@Test
@@ -254,7 +287,7 @@ public class InitializerActivatorTest {
 		
 		activator.started();
 		
-		Assertions.assertTrue(updateChecksumsCalled);
+		Assertions.assertTrue(loadersCalled);
 	}
 	
 	@Test

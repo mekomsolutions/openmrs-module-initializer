@@ -12,11 +12,13 @@ package org.openmrs.module.initializer.api;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.Concept;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.initializer.InitializerConfig;
+import org.openmrs.module.initializer.api.entities.InitializerChecksum;
 import org.openmrs.module.initializer.api.loaders.Loader;
 
 public interface InitializerService extends OpenmrsService {
@@ -31,6 +33,14 @@ public interface InitializerService extends OpenmrsService {
 	 *         "/opt/openmrs/configuration"
 	 */
 	String getConfigDirPath();
+	
+	/**
+	 * @return The path to the checksum folder (with NO trailing forward slash), eg.
+	 *         "/opt/openmrs/configuration_checksums"
+	 * @deprecated used only for migration
+	 */
+	@Deprecated
+	String getChecksumsDirPath();
 	
 	/**
 	 * @return The list of ordered domain loaders.
@@ -128,18 +138,72 @@ public interface InitializerService extends OpenmrsService {
 	List<Concept> getUnretiredConceptsByFullySpecifiedName(String name);
 	
 	/**
-	 * Determines whether the initializer configuration has changed since the last successful execution.
+	 * Determines whether the initializer config files have changed since the last successful execution.
 	 * 
-	 * @return true or false if configuration changes are detected and the initializer should run or
-	 *         otherwise.
+	 * @return true or false if changes are detected and the initializer should run or otherwise.
 	 */
-	Boolean isConfigChanged();
+	boolean hasChecksumsChanged();
 	
 	/**
-	 * Updates and persists the current configuration checksums after a successful initializer
-	 * execution.
+	 * Used to free up memory after initialization is done
 	 */
-	void updateChecksums();
+	void clearChecksumsCache();
+	
+	/**
+	 * Used for testing only
+	 */
+	void clearChecksums();
+	
+	/**
+	 * Use to delete a checksum for a particular Path
+	 * 
+	 * @param path
+	 */
+	void deleteChecksum(Path path);
+	
+	/**
+	 * Delete all checksums for a particular domain
+	 * 
+	 * @param domain
+	 */
+	void deleteChecksums(String domain);
+	
+	/**
+	 * Gets all checksums from DB.
+	 * 
+	 * @return map of file paths and checksums
+	 */
+	Map<String, String> getSavedChecksums();
+	
+	/**
+	 * Calculates checksum for the given file.
+	 * 
+	 * @param path
+	 * @return
+	 */
+	String getFileChecksum(Path path);
+	
+	/**
+	 * Calculates checksum for the given file and returns it if it is different from the one in DB.
+	 * 
+	 * @param path
+	 * @return checksum if changed
+	 */
+	InitializerChecksum getChecksumIfChanged(Path path);
+	
+	/**
+	 * Calculates checksums for all initializer files. It is cached.
+	 * 
+	 * @return map of file paths and checksums
+	 */
+	Map<String, String> getFileChecksums();
+	
+	/**
+	 * Saves new or updates checksum if changed
+	 * 
+	 * @param checksum
+	 */
+	void saveOrUpdateChecksum(InitializerChecksum checksum);
 	
 	/**
 	 * Attempts to acquire the initializer lock for the given name.
@@ -165,4 +229,10 @@ public interface InitializerService extends OpenmrsService {
 	 */
 	void acquireLockOrWait(String lockName, long timeoutMillis);
 	
+	/**
+	 * Migrates checksums saved in files to DB. It is intended to be run on module startup only. It will
+	 * be removed in some later version of module.
+	 */
+	@Deprecated
+	void migrateChecksumsFromFilesToDB();
 }

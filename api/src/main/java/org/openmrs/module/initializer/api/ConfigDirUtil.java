@@ -26,6 +26,10 @@ public class ConfigDirUtil {
 	
 	protected static final Logger log = LoggerFactory.getLogger(ConfigDirUtil.class);
 	
+	public static final String CHECKSUM_FILE_EXT = "checksum";
+	
+	protected boolean skipChecksums = false;
+	
 	/*
 	 * The domain name, so the final part of configuration domain subdirectory. Eg.
 	 * "locations" in "../configuration/locations"
@@ -39,8 +43,8 @@ public class ConfigDirUtil {
 	protected String domainDirPath = "";
 	
 	/**
-	 * Instantiates a configuration directory utility class for the specified configuration and checksum
-	 * files directories and for the specified domain.
+	 * Instantiates a configuration directory utility class for the specified configuration directories
+	 * and for the specified domain.
 	 * 
 	 * @param configDirPath The absolute path to the configuration directory.
 	 * @param domain The domain name within the configuration directory.
@@ -50,12 +54,30 @@ public class ConfigDirUtil {
 		this.domainDirPath = Paths.get(configDirPath, domain).toString();
 	}
 	
+	/**
+	 * Instantiates a configuration directory utility class for the specified configuration directories
+	 * and for the specified domain.
+	 * 
+	 * @param configDirPath The absolute path to the configuration directory.
+	 * @param domain The domain name within the configuration directory.
+	 * @param skipChecksums Set this to true to bypass the generation of checksums.
+	 */
+	public ConfigDirUtil(String configDirPath, String domain, boolean skipChecksums) {
+		this.domain = domain;
+		this.domainDirPath = Paths.get(configDirPath, domain).toString();
+		this.skipChecksums = skipChecksums;
+	}
+	
 	public String getDomain() {
 		return domain;
 	}
 	
 	public String getDomainDirPath() {
 		return domainDirPath;
+	}
+	
+	public boolean isSkipChecksums() {
+		return skipChecksums;
 	}
 	
 	@Override
