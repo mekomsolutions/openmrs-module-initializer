@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.openmrs.module.initializer.api.ConfigDirUtil.getLocatedFilename;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +29,21 @@ public class ConfigDirUtilTest {
 	@Before
 	public void before() {
 		allFiles = Arrays.asList(new File(dirPath).list());
+	}
+	
+	@Test
+	public void getFiles_shouldReturnNestedFiles() {
+		// setup
+		String configDirPath = getClass().getClassLoader().getResource("org/openmrs/module/initializer/include").getPath();
+		
+		// replay
+		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, "nested_txt_files");
+		
+		assertThat(
+		    dirUtil.getFiles("txt").stream().map(f -> Paths.get(configDirPath).relativize(f.toPath()).toString())
+		            .collect(Collectors.toList()),
+		    containsInAnyOrder("nested_txt_files/config.txt", "nested_txt_files/level1/config.txt",
+		        "nested_txt_files/level1/level2/config.txt"));
 	}
 	
 	@Test

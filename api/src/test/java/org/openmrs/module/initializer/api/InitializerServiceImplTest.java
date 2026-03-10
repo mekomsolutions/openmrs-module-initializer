@@ -1,8 +1,7 @@
 package org.openmrs.module.initializer.api;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,6 +40,25 @@ public class InitializerServiceImplTest {
 	public void before() {
 		final List<Loader> loaders = Arrays.asList(conceptsLoader, encounterTypesLoader, drugsLoader);
 		iniz = new InitializerServiceImpl() {
+			
+			@Override
+			public void acquireLockOrWait(String lockName, long timeoutMillis) {
+			}
+			
+			@Override
+			public InitializerService getSelf() {
+				return this;
+			}
+			
+			@Override
+			public boolean hasChecksumsChanged() {
+				return true;
+			}
+			
+			@Override
+			public void releaseLock(String lockName) {
+				
+			}
 			
 			@Override
 			public List<Loader> getLoaders() {

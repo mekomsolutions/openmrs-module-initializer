@@ -16,6 +16,7 @@ import org.openmrs.api.FormService;
 import org.openmrs.api.db.ClobDatatypeStorage;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
+import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class AmpathFormsLoader extends BaseFileLoader {
 	
 	@Autowired
 	private EncounterService encounterService;
+	
+	@Autowired
+	private InitializerService initializerService;
 	
 	@Autowired
 	private FormService formService;
@@ -84,6 +88,20 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		String formVersion = (String) jsonFile.get("version");
 		if (formVersion == null) {
 			throw new Exception("Form Version is required");
+		}
+		
+		// Delete Checksum Files for the translation files associated with the form
+		ConfigDirUtil configDirUtil = new ConfigDirUtil(iniz.getConfigDirPath(), Domain.AMPATH_FORMS_TRANSLATIONS.getName(),
+		        true);
+		
+		for (File translationFile : configDirUtil.getFiles(JSON_EXTENSION)) {
+			String js = FileUtils.readFileToString(translationFile, StandardCharsets.UTF_8.toString());
+			Map<String, Object> jf = new ObjectMapper().readValue(js, Map.class);
+			String translationForm = (String) jf.get("form");
+			
+			if (StringUtils.equals(translationForm, formName)) {
+				initializerService.deleteChecksum(translationFile.toPath());
+			}
 		}
 		
 		String uuid = Utils.generateUuidFromObjects(AMPATH_FORMS_UUID, formName, formVersion);

@@ -113,18 +113,30 @@ public class HibernateInitializerDAO implements InitializerDAO {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<InitializerChecksum> getAll() {
+	public List<InitializerChecksum> getAllChecksums() {
 		return sessionFactory.getCurrentSession().createQuery("FROM InitializerChecksum").list();
 	}
 	
 	@Override
-	public void saveOrUpdate(InitializerChecksum checksum) {
+	public void saveOrUpdateChecksum(InitializerChecksum checksum) {
 		sessionFactory.getCurrentSession().saveOrUpdate(checksum);
 	}
 	
 	@Override
-	public void deleteByFilePath(String filePath) {
-		sessionFactory.getCurrentSession().createQuery("DELETE FROM InitializerChecksum WHERE filePath = :filePath")
-		        .setParameter("filePath", filePath).executeUpdate();
+	public void clearChecksums() {
+		sessionFactory.getCurrentSession().createQuery("DELETE FROM InitializerChecksum").executeUpdate();
+	}
+	
+	@Override
+	public void deleteChecksum(String checksumPath) {
+		sessionFactory.getCurrentSession().createQuery("DELETE FROM InitializerChecksum WHERE filePath = :path")
+		        .setParameter("path", checksumPath).executeUpdate();
+	}
+	
+	@Override
+	public void deleteChecksumsStartingWith(String checksumPathStartingWith) {
+		sessionFactory.getCurrentSession()
+		        .createQuery("DELETE FROM InitializerChecksum WHERE filePath LIKE :pathStartingWith")
+		        .setParameter("pathStartingWith", checksumPathStartingWith + "%").executeUpdate();
 	}
 }

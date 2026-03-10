@@ -35,6 +35,7 @@ public class DispositionsLoaderIntegrationTest extends DomainBaseModuleContextSe
 		assertEquals(5, dispositionService.getDispositions().size());
 		
 		dispositionService.setDispositionConfig(null);
+		getService().clearChecksums();
 		loader.load();
 		assertEquals(5, dispositionService.getDispositions().size());
 	}
