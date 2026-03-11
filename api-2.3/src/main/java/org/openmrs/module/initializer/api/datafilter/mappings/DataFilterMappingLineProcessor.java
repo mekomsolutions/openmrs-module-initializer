@@ -31,7 +31,6 @@ public class DataFilterMappingLineProcessor extends BaseLineProcessor<DataFilter
 	
 	protected static String HEADER_BASIS_CLASS = "basis class";
 	
-	@Transactional(readOnly = true)
 	public OpenmrsObject getOpenmrsObject(String uuid, String className) throws HibernateException, ClassNotFoundException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Class.forName(className));
 		criteria.add(Restrictions.eq("uuid", uuid));
