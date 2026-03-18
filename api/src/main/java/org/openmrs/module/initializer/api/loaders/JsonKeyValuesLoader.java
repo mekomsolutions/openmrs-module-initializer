@@ -26,6 +26,7 @@ public class JsonKeyValuesLoader extends BaseInputStreamLoader {
 	
 	@Override
 	public ConfigDirUtil getDirUtil() {
-		return new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(), getDomainName(), true);
+		return new ConfigDirUtil(iniz.getConfigDirPath(), getDomainName(), true);
 	}
+	
 }

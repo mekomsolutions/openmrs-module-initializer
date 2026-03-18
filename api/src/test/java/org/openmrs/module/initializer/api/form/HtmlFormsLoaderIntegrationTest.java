@@ -75,6 +75,7 @@ public class HtmlFormsLoaderIntegrationTest extends DomainBaseModuleContextSensi
 			FileUtils.writeStringToFile(formFile, HtmlFormEntryUtil.documentToString(doc));
 			
 			// Now, reload configuration and test that the form has the new values
+			getService().clearChecksumsCache();
 			htmlFormsLoader.load();
 			HtmlForm f2 = htmlFormEntryService.getHtmlFormByUuid("26ddfe02-28f3-11eb-bc37-0242ac110002");
 			Assert.assertNotNull(f2);

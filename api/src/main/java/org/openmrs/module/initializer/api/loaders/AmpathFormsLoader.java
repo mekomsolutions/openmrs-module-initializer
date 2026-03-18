@@ -16,6 +16,7 @@ import org.openmrs.api.FormService;
 import org.openmrs.api.db.ClobDatatypeStorage;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
+import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class AmpathFormsLoader extends BaseFileLoader {
 	
 	@Autowired
 	private EncounterService encounterService;
+	
+	@Autowired
+	private InitializerService initializerService;
 	
 	@Autowired
 	private FormService formService;
@@ -87,8 +91,8 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		}
 		
 		// Delete Checksum Files for the translation files associated with the form
-		ConfigDirUtil configDirUtil = new ConfigDirUtil(iniz.getConfigDirPath(), iniz.getChecksumsDirPath(),
-		        Domain.AMPATH_FORMS_TRANSLATIONS.getName(), true);
+		ConfigDirUtil configDirUtil = new ConfigDirUtil(iniz.getConfigDirPath(), Domain.AMPATH_FORMS_TRANSLATIONS.getName(),
+		        true);
 		
 		for (File translationFile : configDirUtil.getFiles(JSON_EXTENSION)) {
 			String js = FileUtils.readFileToString(translationFile, StandardCharsets.UTF_8.toString());
@@ -96,8 +100,7 @@ public class AmpathFormsLoader extends BaseFileLoader {
 			String translationForm = (String) jf.get("form");
 			
 			if (StringUtils.equals(translationForm, formName)) {
-				configDirUtil
-				        .deleteChecksumFile(replaceExtension(translationFile.getName(), ConfigDirUtil.CHECKSUM_FILE_EXT));
+				initializerService.deleteChecksum(translationFile.toPath());
 			}
 		}
 		

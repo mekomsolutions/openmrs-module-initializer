@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openmrs.module.initializer.api.ConfigDirUtil;
 import org.openmrs.module.initializer.api.OrderedFile;
+import org.openmrs.module.initializer.api.entities.InitializerChecksum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,12 +80,18 @@ public abstract class BaseFileLoader extends BaseLoader {
 		
 		final ConfigDirUtil dirUtil = getDirUtil();
 		
-		dirUtil.getFiles(getFileExtension(), wildcardExclusions).stream().map(f -> toOrderedFile(f)).sorted()
-		        .map(f -> preload(f, throwingOnPreload(doThrow))).filter(f -> !dirUtil.getChecksumIfChanged(f).isEmpty())
-		        .forEach(file -> {
-			        
+		dirUtil.getFiles(getFileExtension(), wildcardExclusions).stream().map(this::toOrderedFile).sorted()
+		        .map(f -> preload(f, throwingOnPreload(doThrow))).forEach(file -> {
 			        try {
-				        load(file);
+				        if (getDirUtil().isSkipChecksums()) {
+					        load(file);
+				        } else {
+					        InitializerChecksum changedChecksum = iniz.getChecksumIfChanged(file.toPath());
+					        if (changedChecksum != null) {
+						        load(file);
+						        iniz.saveOrUpdateChecksum(changedChecksum);
+					        }
+				        }
 			        }
 			        catch (Exception e) {
 				        log.error(e.getMessage());
@@ -95,9 +102,7 @@ public abstract class BaseFileLoader extends BaseLoader {
 					        throw new RuntimeException(e);
 				        }
 			        }
-			        
-			        dirUtil.writeChecksum(file, dirUtil.getChecksumIfChanged(file)); // the config file is marked as processed
-			        log.info("The '" + getDomainName() + "' configuration file has finished loading:\n" + file.getPath());
+			        log.info("The '{}' configuration file has finished loading:\n{}", getDomainName(), file.getPath());
 		        });
 		
 	}
