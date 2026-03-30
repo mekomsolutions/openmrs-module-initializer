@@ -140,8 +140,6 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		
 		// Verif
 		Assert.assertEquals(true, dirUtil.skipChecksums);
-		Assert.assertEquals(iniz.getChecksumsDirPath() + File.separator + loader.getDomainName(),
-		    dirUtil.getDomainChecksumsDirPath());
 		Assert.assertEquals(iniz.getConfigDirPath() + File.separator + loader.getDomainName(), dirUtil.getDomainDirPath());
 	}
 }

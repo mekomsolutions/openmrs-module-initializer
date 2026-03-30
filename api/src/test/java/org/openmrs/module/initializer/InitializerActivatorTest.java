@@ -9,21 +9,6 @@
  */
 package org.openmrs.module.initializer;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.ModuleException;
-import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.module.initializer.api.InitializerServiceImpl;
-import org.openmrs.module.initializer.api.MockLoader;
-import org.openmrs.module.initializer.api.loaders.Loader;
-import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-
 import static org.openmrs.module.initializer.Domain.CONCEPTS;
 import static org.openmrs.module.initializer.Domain.DRUGS;
 import static org.openmrs.module.initializer.Domain.ENCOUNTER_TYPES;
@@ -32,9 +17,32 @@ import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_DISABLED;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_FAIL_ON_ERROR;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mockito;
+import org.openmrs.api.AdministrationService;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.ModuleException;
+import org.openmrs.module.initializer.api.InitializerService;
+import org.openmrs.module.initializer.api.InitializerServiceImpl;
+import org.openmrs.module.initializer.api.MockLoader;
+import org.openmrs.module.initializer.api.entities.InitializerChecksum;
+import org.openmrs.module.initializer.api.loaders.Loader;
+import org.openmrs.module.initializer.api.logging.InitializerLogConfigurator;
+
 public class InitializerActivatorTest {
 	
 	private InitializerService iniz;
+	
+	private AdministrationService adminService;
 	
 	private InitializerActivator activator;
 	
@@ -50,17 +58,95 @@ public class InitializerActivatorTest {
 	
 	private Exception exceptionThrown;
 	
+	private boolean configChanged = true;
+	
+	private boolean throwDuringLoad = false;
+	
+	private boolean loadUnsafeCalled = false;
+	
+	private boolean loadersCalled = false;
+	
+	private boolean simulateLockTimeout = false;
+	
+	private Long capturedTimeout;
+	
+	@TempDir
+	Path tempDir;
+	
 	@BeforeEach
 	public void setup() {
 		final List<Loader> loaders = Arrays.asList(conceptsLoader, encounterTypesLoader, drugsLoader);
+		
+		adminService = Mockito.mock(AdministrationService.class);
+		
+		boolean lockInitiallyAvailable = true;
 		iniz = new InitializerServiceImpl() {
+			
+			private boolean locked = !lockInitiallyAvailable;
 			
 			@Override
 			public List<Loader> getLoaders() {
+				loadersCalled = true;
 				return loaders;
+			}
+			
+			@Override
+			public String getConfigDirPath() {
+				File file = new File(tempDir.toFile(), "config");
+				file.mkdirs();
+				return file.toString();
+			}
+			
+			@Override
+			public String getChecksumsDirPath() {
+				File file = new File(tempDir.toFile(), "checksums");
+				file.mkdirs();
+				return file.toString();
+			}
+			
+			@Override
+			public boolean hasChecksumsChanged() {
+				return configChanged;
+			}
+			
+			@Override
+			public void loadUnsafe(boolean startup, boolean throwError) throws Exception {
+				if (throwDuringLoad) {
+					throw new RuntimeException("Load failure");
+				}
+				loadUnsafeCalled = true;
+				super.loadUnsafe(startup, throwError);
+			}
+			
+			@Override
+			public void acquireLockOrWait(String lockName, long timeoutMillis) {
+				if (simulateLockTimeout) {
+					throw new RuntimeException("Timeout waiting for lock");
+				}
+				capturedTimeout = timeoutMillis;
+			}
+			
+			@Override
+			public Boolean tryAcquireLock(String nodeId) {
+				if (locked) {
+					return false;
+				}
+				locked = true;
+				return true;
+			}
+			
+			@Override
+			public void releaseLock(String nodeId) {
+				locked = false;
+			}
+			
+			@Override
+			public InitializerService getSelf() {
+				return this;
 			}
 		};
 		((InitializerServiceImpl) iniz).setConfig(cfg);
+		((InitializerServiceImpl) iniz).setAdminService(adminService);
 		activator = new InitializerActivator() {
 			
 			@Override
@@ -80,6 +166,8 @@ public class InitializerActivatorTest {
 		};
 		props = new Properties();
 		System.clearProperty(PROPS_STARTUP_LOAD);
+		loadersCalled = false;
+		loadUnsafeCalled = false;
 	}
 	
 	protected void startActivator(String startupLoadConfiguration) {
@@ -182,5 +270,52 @@ public class InitializerActivatorTest {
 		Assertions.assertEquals(0, encounterTypesLoader.getNumberOfTimesLoadUnsafeCompleted());
 		Assertions.assertEquals(0, drugsLoader.getNumberOfTimesLoadUnsafeCompleted());
 		Assertions.assertNull(exceptionThrown);
+	}
+	
+	@Test
+	public void started_shouldSkipIfNoConfigChanges() {
+		configChanged = false;
+		
+		activator.started();
+		
+		Assertions.assertFalse(loadersCalled);
+	}
+	
+	@Test
+	public void started_shouldRunInitializerIfConfigChanged() {
+		configChanged = true;
+		
+		activator.started();
+		
+		Assertions.assertTrue(loadersCalled);
+	}
+	
+	@Test
+	public void started_shouldThrowModuleExceptionIfLoadFails() {
+		throwDuringLoad = true;
+		
+		Exception ex = Assertions.assertThrows(ModuleException.class, () -> {
+			activator.started();
+		});
+		
+		Assertions.assertTrue(ex.getMessage().contains("An error occurred loading initializer configuration"));
+	}
+	
+	@Test
+	public void started_shouldThrowIfLockTimeout() {
+		simulateLockTimeout = true;
+		
+		Exception ex = Assertions.assertThrows(ModuleException.class, () -> {
+			activator.started();
+		});
+		
+		Assertions.assertTrue(ex.getMessage().contains("An error occurred loading initializer configuration"));
+	}
+	
+	@Test
+	public void started_shouldUse15MinuteLockTimeout() {
+		activator.started();
+		
+		Assertions.assertEquals(15 * 60 * 1000L, capturedTimeout.longValue());
 	}
 }
