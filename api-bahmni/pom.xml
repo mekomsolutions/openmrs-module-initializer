@@ -118,7 +118,7 @@
 				                <resource>
 				                    <directory>../api/src/test/resources</directory>
 				                    <excludes>
-				                        <exclude>../api/src/test/resources/test-hibernate.cfg.xml</exclude>
+                                        <exclude>test-hibernate.cfg.xml</exclude>
 				                    </excludes>
 				                </resource>
 				            </resources>
