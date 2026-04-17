@@ -5,6 +5,41 @@
 
 <hibernate-configuration>
     <session-factory>
+        <!-- AH -->
+        <mapping resource="AddressHierarchyLevel.hbm.xml"/>
+        <mapping resource="AddressHierarchyEntry.hbm.xml"/>
+        <!-- MDS -->
+        <mapping resource="ImportedItem.hbm.xml"/>
+        <mapping resource="ImportedPackage.hbm.xml"/>
+        <!-- Htmlformentry -->
+        <mapping resource="HtmlFormEntryHtmlForm.hbm.xml"/>
+        <!-- Idgen -->
+        <mapping resource="IdentifierSource.hbm.xml"/>
+        <!-- MetadataMapping -->
+        <mapping resource="MetadataSource.hbm.xml"/>
+        <mapping resource="MetadataTermMapping.hbm.xml"/>
+        <mapping resource="MetadataSet.hbm.xml"/>
+        <mapping resource="MetadataSetMember.hbm.xml"/>
+        <!-- Bahmni Appointments -->
+        <mapping resource="Speciality.hbm.xml"/>
+        <mapping resource="AppointmentServiceDefinition.hbm.xml"/>
+        <mapping resource="ServiceWeeklyAvailability.hbm.xml"/>
+        <mapping resource="AppointmentServiceType.hbm.xml"/>
+        <!-- Reporting  - For Validator -->
+        <mapping resource="ReportDesign.hbm.xml"/>
+        <!-- Provider Management -->
+        <mapping resource="ProviderRole.hbm.xml"/>
+        <!-- Cohort -->
+        <mapping resource="CohortAttributeType.hbm.xml"/>
+        <mapping resource="CohortAttribute.hbm.xml"/>
+        <mapping resource="CohortMemberAttribute.hbm.xml"/>
+        <mapping resource="CohortMemberAttributeType.hbm.xml"/>
+        <!-- Patient Flags -->
+        <mapping resource="DisplayPoint.hbm.xml"/>
+        <mapping resource="Flag.hbm.xml"/>
+        <mapping resource="Priority.hbm.xml"/>
+        <mapping resource="Tag.hbm.xml"/>
+        <mapping resource="PatientFlag.hbm.xml"/>
         <!-- Bahmni Core -->
         <mapping resource="ProgramAttributeType.hbm.xml"/>
     </session-factory>
