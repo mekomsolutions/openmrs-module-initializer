@@ -4,23 +4,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
-import static org.openmrs.module.initializer.api.ConfigDirUtil.CHECKSUM_FILE_EXT;
 import static org.openmrs.module.initializer.api.ConfigDirUtil.getLocatedFilename;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +29,21 @@ public class ConfigDirUtilTest {
 	@Before
 	public void before() {
 		allFiles = Arrays.asList(new File(dirPath).list());
+	}
+	
+	@Test
+	public void getFiles_shouldReturnNestedFiles() {
+		// setup
+		String configDirPath = getClass().getClassLoader().getResource("org/openmrs/module/initializer/include").getPath();
+		
+		// replay
+		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, "nested_txt_files");
+		
+		assertThat(
+		    dirUtil.getFiles("txt").stream().map(f -> Paths.get(configDirPath).relativize(f.toPath()).toString())
+		            .collect(Collectors.toList()),
+		    containsInAnyOrder("nested_txt_files/config.txt", "nested_txt_files/level1/config.txt",
+		        "nested_txt_files/level1/level2/config.txt"));
 	}
 	
 	@Test
@@ -97,45 +105,6 @@ public class ConfigDirUtilTest {
 		}
 	}
 	
-	@Test
-	public void getFiles_shouldHandleChecksumsWhenNestedFiles() throws IOException {
-		// setup
-		String configDirPath = getClass().getClassLoader().getResource("org/openmrs/module/initializer/include").getPath();
-		String checksumsDirPath = Files.createTempDirectory("configuration_checksums").toString();
-		String domain = "nested_txt_files";
-		
-		// replay
-		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain);
-		
-		Map<String, String> fileContents = new HashMap<>();
-		
-		for (File file : dirUtil.getFiles("txt")) {
-			String checksum = dirUtil.getChecksumIfChanged(file);
-			{
-				// we store each file "path" and text content
-				String locatedFilename = getLocatedFilename(Paths.get(configDirPath, domain).toString(), file);
-				fileContents.put(locatedFilename, FileUtils.readFileToString(file, "UTF-8"));
-			}
-			dirUtil.writeChecksum(file, checksum);
-		}
-		
-		assertThat(fileContents.size(), is(3));
-		for (String locatedFilename : fileContents.keySet()) {
-			
-			String checksumFilename = locatedFilename + "." + CHECKSUM_FILE_EXT;
-			
-			// verify checksum
-			File checksumFile = new File(Paths.get(checksumsDirPath, "nested_txt_files", checksumFilename).toUri());
-			assertThat(checksumFile.exists(), is(true));
-			Assert.assertEquals(DigestUtils.md5Hex(fileContents.get(locatedFilename)),
-			    FileUtils.readFileToString(checksumFile, "UTF-8"));
-			
-			// verify deletion
-			dirUtil.deleteChecksumFile(checksumFilename);
-			assertThat(checksumFile.exists(), is(false));
-		}
-	}
-	
 	/*
 	 * One of the CSV files has a non-parseable _order.
 	 * The resulting exception is logged as an error.
@@ -149,7 +118,7 @@ public class ConfigDirUtilTest {
 		String checksumsDirPath = null;
 		String domain = "orders";
 		
-		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain);
+		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, domain);
 		
 		// Replay
 		List<String> orderedFilenames = dirUtil.getFiles("csv", null).stream()
