@@ -89,6 +89,7 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		FileUtils.copyFile(srcFile, dstFile);
 		
 		// Replay
+		getService().clearChecksums();
 		bahmniFormsLoader.load();
 		Form updatedForm = formService.getForm("form1");
 		List<FormTranslation> bahmniFormTranslation = bahmniFormTranslationService.getFormTranslations(form.getName(),

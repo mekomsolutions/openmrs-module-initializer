@@ -34,7 +34,6 @@ import org.openmrs.module.addresshierarchy.AddressField;
 import org.openmrs.module.addresshierarchy.AddressHierarchyConstants;
 import org.openmrs.module.addresshierarchy.AddressHierarchyEntry;
 import org.openmrs.module.addresshierarchy.AddressHierarchyLevel;
-import org.openmrs.module.addresshierarchy.config.AddressConfigurationLoader;
 import org.openmrs.module.addresshierarchy.service.AddressHierarchyService;
 import org.openmrs.module.exti18n.ExtI18nConstants;
 import org.openmrs.module.exti18n.api.AddressHierarchyI18nCache;
@@ -42,7 +41,6 @@ import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConfig;
 import org.openmrs.module.initializer.InitializerConstants;
 import org.openmrs.module.initializer.InitializerMessageSource;
-import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.AddressHierarchyLoader;
 import org.openmrs.test.Verifies;
 import org.openmrs.util.OpenmrsConstants;
@@ -92,7 +90,6 @@ public class AddressHierarchyLoaderIntegrationTest extends DomainBaseModuleConte
 		
 		// Replay
 		loader.load();
-		AddressConfigurationLoader.loadAddressConfiguration();
 		AddressHierarchyService ahs = Context.getService(AddressHierarchyService.class);
 		InitializerService iniz = Context.getService(InitializerService.class);
 		

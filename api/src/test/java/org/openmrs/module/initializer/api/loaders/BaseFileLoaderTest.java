@@ -2,7 +2,9 @@ package org.openmrs.module.initializer.api.loaders;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,50 +17,90 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoSettings;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.ConfigDirUtil;
+import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.OrderedFile;
+import org.openmrs.module.initializer.api.entities.InitializerChecksum;
 
 public class BaseFileLoaderTest {
 	
 	private TestLoader testLoader;
 	
+	@TempDir
+	File tempDir;
+	
 	@Mock
-	private ConfigDirUtil dirUtil;
+	InitializerService iniz;
+	
+	@Mock
+	ConfigDirUtil dirUtil;
 	
 	@BeforeEach
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		testLoader = new TestLoader();
+		testLoader = spy(new TestLoader());
+		testLoader.setIniz(iniz);
+		testLoader.setDirUtil(dirUtil);
 		
 		List<File> files = Arrays.asList(new File("test1.txt"), new File("test2.txt"), new File("test3.txt"));
+		when(dirUtil.getFiles(any(), any())).thenReturn(files);
 		
-		when(dirUtil.getFiles(eq("txt"), any(List.class))).thenReturn(files);
-		when(dirUtil.getChecksumIfChanged(any(File.class))).thenReturn("2b2f585d-checksum");
+		when(iniz.getChecksumIfChanged(any()))
+		        .thenAnswer(i -> new InitializerChecksum(i.getArguments()[0].toString(), "checksum"));
 	}
 	
-	private class TestLoader extends BaseFileLoader {
+	@Test
+	public void loadUnsafe_shouldLoadFileIfChecksumChanged() throws Exception {
+		// Setup
+		File file = new File(tempDir, "test.csv");
+		file.createNewFile();
 		
-		private class TestOrderedFile extends OrderedFile {
-			
-			private static final long serialVersionUID = 1L;
-			
-			public TestOrderedFile(File file) {
-				super(file);
-			}
-			
-			@Override
-			protected Integer fetchOrder(File file) throws Exception {
-				return order;
-			}
-			
+		when(dirUtil.getFiles(any(), any())).thenReturn(Collections.singletonList(file));
+		
+		InitializerChecksum checksum = mock(InitializerChecksum.class);
+		when(iniz.getChecksumIfChanged(file.toPath())).thenReturn(checksum);
+		
+		// Replay
+		testLoader.loadUnsafe(Collections.emptyList(), true);
+		
+		// Verify
+		verify(testLoader, times(1)).load(file);
+		verify(iniz, times(1)).saveOrUpdateChecksum(checksum);
+	}
+	
+	@Test
+	public void loadUnsafe_shouldNotLoadFileIfChecksumNotChanged() throws Exception {
+		// Setup
+		File file = new File(tempDir, "test.csv");
+		file.createNewFile();
+		
+		when(dirUtil.getFiles(any(), any())).thenReturn(Collections.singletonList(file));
+		
+		when(iniz.getChecksumIfChanged(file.toPath())).thenReturn(null);
+		
+		// Replay
+		testLoader.loadUnsafe(Collections.emptyList(), true);
+		
+		// Verify
+		verify(testLoader, never()).load(file);
+		verify(iniz, never()).saveOrUpdateChecksum(any());
+	}
+	
+	public static class TestLoader extends BaseFileLoader {
+		
+		private ConfigDirUtil dirUtil;
+		
+		public void setIniz(InitializerService iniz) {
+			this.iniz = iniz;
 		}
 		
-		@Override
-		protected String getFileExtension() {
-			return "txt";
+		public void setDirUtil(ConfigDirUtil dirUtil) {
+			this.dirUtil = dirUtil;
 		}
 		
 		@Override
@@ -67,8 +109,8 @@ public class BaseFileLoaderTest {
 		}
 		
 		@Override
-		public OrderedFile toOrderedFile(File file) {
-			return new TestOrderedFile(file);
+		protected Domain getDomain() {
+			return null;
 		}
 		
 		@Override
@@ -84,15 +126,14 @@ public class BaseFileLoaderTest {
 		}
 		
 		@Override
-		protected Domain getDomain() {
-			return null;
+		protected String getFileExtension() {
+			return "csv";
 		}
 		
 		@Override
 		public String getDomainName() {
-			return "testdomain";
+			return "test";
 		}
-		
 	}
 	
 	@Test
@@ -101,7 +142,7 @@ public class BaseFileLoaderTest {
 		testLoader.load();
 		
 		// verify
-		verify(dirUtil, times(3)).writeChecksum(any(), any());
+		verify(iniz, times(3)).getChecksumIfChanged(any());
 	}
 	
 	@Test
@@ -113,7 +154,8 @@ public class BaseFileLoaderTest {
 		
 		// verify
 		Assert.assertTrue(thrown.getMessage().endsWith("Error right from file 1."));
-		verify(dirUtil, times(0)).writeChecksum(any(), any());
+		verify(iniz, times(1)).getChecksumIfChanged(any());
+		verify(iniz, times(0)).saveOrUpdateChecksum(any());
 	}
 	
 	@Test
