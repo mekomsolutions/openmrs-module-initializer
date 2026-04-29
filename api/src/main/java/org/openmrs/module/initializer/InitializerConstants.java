@@ -29,6 +29,8 @@ public class InitializerConstants {
 	
 	public static final String PROPS_SKIPCHECKSUMS = MODULE_ARTIFACT_ID + "." + "skip.checksums";
 	
+	public static final String PROPS_ROW_CHECKSUMS_ENABLED = MODULE_ARTIFACT_ID + "." + "row.checksums.enabled";
+	
 	/*
 	 * Startup properties
 	 */

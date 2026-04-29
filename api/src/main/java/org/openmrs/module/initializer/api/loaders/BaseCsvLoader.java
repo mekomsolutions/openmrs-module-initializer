@@ -5,7 +5,10 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.openmrs.OpenmrsObject;
@@ -88,8 +91,32 @@ public abstract class BaseCsvLoader<T extends OpenmrsObject, P extends CsvParser
 		//
 		
 		final CsvParser<T, BaseLineProcessor<T>> parser = getParser(is);
-		List<String[]> remainingLines = parser.getLines();
-		int totalCount = remainingLines.size();
+		final List<String[]> allLines = parser.getLines();
+		final int totalCount = allLines.size();
+		final String[] headerLine = parser.getHeaderLine();
+		
+		final boolean rowChecksumsEnabled = cfg.isRowChecksumsEnabled() && !cfg.skipChecksums();
+		final File file = getLoadedFile();
+		final ConfigDirUtil dirUtil = getDirUtil();
+		
+		final Set<String> previousRowHashes = rowChecksumsEnabled ? dirUtil.readRowChecksums(file) : new HashSet<>();
+		
+		List<String[]> remainingLines;
+		if (rowChecksumsEnabled) {
+			remainingLines = new ArrayList<>();
+			for (String[] line : allLines) {
+				if (!previousRowHashes.contains(ConfigDirUtil.computeRowChecksum(headerLine, line))) {
+					remainingLines.add(line);
+				}
+			}
+			int skipped = totalCount - remainingLines.size();
+			if (skipped > 0) {
+				log.info(skipped + " of " + totalCount + " CSV rows in " + file.getName()
+				        + " are unchanged since last load and will be skipped.");
+			}
+		} else {
+			remainingLines = new ArrayList<>(allLines);
+		}
 		
 		int lastFailCount = 0;
 		CsvFailingLines result = new CsvFailingLines();
@@ -100,11 +127,28 @@ public abstract class BaseCsvLoader<T extends OpenmrsObject, P extends CsvParser
 			remainingLines = result.getFailingLines();
 		}
 		
+		// Row checksum bookkeeping: persist hashes for rows considered processed — i.e. all rows in
+		// the file except those that failed on this run. Failing rows are excluded so they will be
+		// retried on the next load.
+		if (rowChecksumsEnabled) {
+			Set<String> failingHashes = new HashSet<>();
+			for (String[] failingLine : result.getFailingLines()) {
+				failingHashes.add(ConfigDirUtil.computeRowChecksum(headerLine, failingLine));
+			}
+			Set<String> newRowHashes = new HashSet<>();
+			for (String[] line : allLines) {
+				String rowHash = ConfigDirUtil.computeRowChecksum(headerLine, line);
+				if (!failingHashes.contains(rowHash)) {
+					newRowHashes.add(rowHash);
+				}
+			}
+			dirUtil.writeRowChecksums(file, newRowHashes);
+		}
+		
 		//
 		// logging
 		//
 		
-		final File file = getLoadedFile();
 		// success logging
 		if (isEmpty(result.getFailingLines())) {
 			log.info(file.getName() + " ('" + getDomainName() + "' domain) was entirely successfully processed.");
