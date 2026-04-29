@@ -1,10 +1,13 @@
 package org.openmrs.module.initializer.api;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.openmrs.module.initializer.api.ConfigDirUtil.CHECKSUM_FILE_EXT;
+import static org.openmrs.module.initializer.api.ConfigDirUtil.ROW_CHECKSUM_FILE_EXT;
+import static org.openmrs.module.initializer.api.ConfigDirUtil.computeRowChecksum;
 import static org.openmrs.module.initializer.api.ConfigDirUtil.getLocatedFilename;
 
 import java.io.File;
@@ -14,8 +17,10 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -134,6 +139,100 @@ public class ConfigDirUtilTest {
 			dirUtil.deleteChecksumFile(checksumFilename);
 			assertThat(checksumFile.exists(), is(false));
 		}
+	}
+	
+	@Test
+	public void computeRowChecksum_shouldBeStableUnderColumnReordering() {
+		String[] header1 = { "uuid", "name", "description" };
+		String[] row1 = { "abc-123", "Acme", "A clinic" };
+		String[] header2 = { "name", "description", "uuid" };
+		String[] row2 = { "Acme", "A clinic", "abc-123" };
+		Assert.assertEquals(computeRowChecksum(header1, row1), computeRowChecksum(header2, row2));
+	}
+	
+	@Test
+	public void computeRowChecksum_shouldChangeWhenAValueChanges() {
+		String[] header = { "uuid", "name" };
+		String[] row1 = { "abc-123", "Acme" };
+		String[] row2 = { "abc-123", "Beta" };
+		assertThat(computeRowChecksum(header, row1), is(not(computeRowChecksum(header, row2))));
+	}
+	
+	@Test
+	public void computeRowChecksum_shouldDistinguishAbsentFromPresentButEmpty() {
+		// Adding a column — even when its cell is empty — must change the hash, because some line
+		// processors (e.g. NestedConceptLineProcessor) treat a present-but-empty cell as a directive
+		// to clear an existing field and treat an absent column as "leave the field alone".
+		String[] header1 = { "uuid", "name" };
+		String[] row1 = { "abc-123", "Acme" };
+		String[] header2 = { "uuid", "name", "description" };
+		String[] row2 = { "abc-123", "Acme", null };
+		String[] row3 = { "abc-123", "Acme", "" };
+		assertThat(computeRowChecksum(header1, row1), is(not(computeRowChecksum(header2, row2))));
+		assertThat(computeRowChecksum(header1, row1), is(not(computeRowChecksum(header2, row3))));
+		// However null and empty values within an existing column should be treated identically,
+		// since CsvParser normalizes blank cells to null on read.
+		Assert.assertEquals(computeRowChecksum(header2, row2), computeRowChecksum(header2, row3));
+	}
+	
+	@Test
+	public void computeRowChecksum_shouldChangeWhenAColumnIsRenamed() {
+		String[] header1 = { "uuid", "name" };
+		String[] header2 = { "uuid", "label" };
+		String[] row = { "abc-123", "Acme" };
+		assertThat(computeRowChecksum(header1, row), is(not(computeRowChecksum(header2, row))));
+	}
+	
+	@Test
+	public void rowChecksums_shouldRoundTripThroughDisk() throws IOException {
+		String configDirPath = getClass().getClassLoader().getResource("org/openmrs/module/initializer/include").getPath();
+		String checksumsDirPath = Files.createTempDirectory("configuration_checksums_rows").toString();
+		String domain = "file_patterns";
+		
+		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain);
+		File configFile = new File(Paths.get(configDirPath, domain, "diagnoses.csv").toString());
+		
+		Set<String> hashes = new HashSet<>();
+		hashes.add("hash-a");
+		hashes.add("hash-b");
+		hashes.add("hash-c");
+		
+		// Writing then reading should round-trip the set.
+		dirUtil.writeRowChecksums(configFile, hashes);
+		File rowsFile = Paths.get(checksumsDirPath, domain,
+		    getLocatedFilename(Paths.get(configDirPath, domain).toString(), configFile) + "." + ROW_CHECKSUM_FILE_EXT)
+		        .toFile();
+		assertThat(rowsFile.exists(), is(true));
+		assertThat(dirUtil.readRowChecksums(configFile), is(hashes));
+		
+		// Writing an empty set should remove the file.
+		dirUtil.writeRowChecksums(configFile, new HashSet<>());
+		assertThat(rowsFile.exists(), is(false));
+		
+		// Reading when no file exists returns an empty set.
+		assertThat(dirUtil.readRowChecksums(configFile), is(empty()));
+	}
+	
+	@Test
+	public void deleteRowChecksums_shouldRemoveTheRowChecksumFile() throws IOException {
+		String configDirPath = getClass().getClassLoader().getResource("org/openmrs/module/initializer/include").getPath();
+		String checksumsDirPath = Files.createTempDirectory("configuration_checksums_rows_delete").toString();
+		String domain = "file_patterns";
+		
+		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain);
+		File configFile = new File(Paths.get(configDirPath, domain, "diagnoses.csv").toString());
+		
+		Set<String> hashes = new HashSet<>();
+		hashes.add("hash-a");
+		dirUtil.writeRowChecksums(configFile, hashes);
+		
+		File rowsFile = Paths.get(checksumsDirPath, domain,
+		    getLocatedFilename(Paths.get(configDirPath, domain).toString(), configFile) + "." + ROW_CHECKSUM_FILE_EXT)
+		        .toFile();
+		assertThat(rowsFile.exists(), is(true));
+		
+		dirUtil.deleteRowChecksums(configFile);
+		assertThat(rowsFile.exists(), is(false));
 	}
 	
 	/*

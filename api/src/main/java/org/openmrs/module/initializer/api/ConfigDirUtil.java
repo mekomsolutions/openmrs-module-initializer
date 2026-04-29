@@ -4,14 +4,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -35,6 +40,8 @@ public class ConfigDirUtil {
 	protected static final String NOT_READABLE_CHECKSUM = "not_readadble_checksum";
 	
 	public static final String CHECKSUM_FILE_EXT = "checksum";
+	
+	public static final String ROW_CHECKSUM_FILE_EXT = "rows.checksum";
 	
 	protected static final Logger log = LoggerFactory.getLogger(ConfigDirUtil.class);
 	
@@ -300,6 +307,109 @@ public class ConfigDirUtil {
 		final String checksumFilename = getLocatedFilename(domainDirPath, configFile) + "." + CHECKSUM_FILE_EXT;
 		if (!skipChecksums) {
 			writeChecksum(domainChecksumsDirPath, checksumFilename, checksum);
+		}
+	}
+	
+	/**
+	 * Computes a stable hash for a single CSV row. Each populated column header is paired with its
+	 * (possibly empty) value, and pairs are sorted by header name. This means column reordering does
+	 * not change the hash, but column addition/removal/rename or any value change — including a
+	 * transition between "absent" and "present-but-empty" — does. The latter distinction matters
+	 * because some line processors (e.g. NestedConceptLineProcessor) treat a present-but-empty cell as
+	 * an explicit clear, distinct from an absent column.
+	 * 
+	 * @param headerLine The CSV header line (column names).
+	 * @param line The CSV data row.
+	 * @return The MD5 hex hash of the normalized row.
+	 */
+	public static String computeRowChecksum(String[] headerLine, String[] line) {
+		if (headerLine == null || line == null) {
+			return NOT_COMPUTABLE_CHECKSUM;
+		}
+		Map<String, String> sorted = new TreeMap<>();
+		for (int i = 0; i < headerLine.length; i++) {
+			String header = headerLine[i];
+			if (StringUtils.isEmpty(header)) {
+				continue;
+			}
+			String value = (i < line.length && line[i] != null) ? line[i] : "";
+			sorted.put(header, value);
+		}
+		StringBuilder sb = new StringBuilder();
+		for (Map.Entry<String, String> e : sorted.entrySet()) {
+			sb.append(e.getKey()).append('=').append(e.getValue()).append('\n');
+		}
+		return DigestUtils.md5Hex(sb.toString().getBytes(StandardCharsets.UTF_8));
+	}
+	
+	/**
+	 * Reads the previously-saved set of row hashes for a CSV configuration file.
+	 * 
+	 * @param configFile The CSV configuration file.
+	 * @return The set of row hashes from the previous successful processing, or an empty set if no row
+	 *         checksum file exists yet.
+	 */
+	public Set<String> readRowChecksums(File configFile) {
+		final String rowChecksumFilename = getLocatedFilename(domainDirPath, configFile) + "." + ROW_CHECKSUM_FILE_EXT;
+		final Path rowChecksumPath = Paths.get(domainChecksumsDirPath, rowChecksumFilename);
+		Set<String> hashes = new HashSet<>();
+		if (!rowChecksumPath.toFile().exists()) {
+			return hashes;
+		}
+		try {
+			for (String line : Files.readAllLines(rowChecksumPath, StandardCharsets.UTF_8)) {
+				String trimmed = line.trim();
+				if (!trimmed.isEmpty()) {
+					hashes.add(trimmed);
+				}
+			}
+		}
+		catch (IOException e) {
+			log.warn("Error reading row checksum file: " + rowChecksumPath, e);
+		}
+		return hashes;
+	}
+	
+	/**
+	 * Writes the given set of row hashes for a CSV configuration file. Overwrites any previously saved
+	 * row checksums for the same file.
+	 * 
+	 * @param configFile The CSV configuration file.
+	 * @param rowChecksums The row hashes to persist.
+	 */
+	public void writeRowChecksums(File configFile, Set<String> rowChecksums) {
+		if (skipChecksums) {
+			return;
+		}
+		final String rowChecksumFilename = getLocatedFilename(domainDirPath, configFile) + "." + ROW_CHECKSUM_FILE_EXT;
+		final Path rowChecksumPath = Paths.get(domainChecksumsDirPath, rowChecksumFilename);
+		try {
+			Files.deleteIfExists(rowChecksumPath);
+			if (rowChecksums == null || rowChecksums.isEmpty()) {
+				return;
+			}
+			List<String> sorted = new ArrayList<>(rowChecksums);
+			Collections.sort(sorted);
+			FileUtils.writeLines(rowChecksumPath.toFile(), "UTF-8", sorted);
+		}
+		catch (IOException e) {
+			log.error("Error writing row checksum file at: " + rowChecksumPath, e);
+		}
+	}
+	
+	/**
+	 * Removes the row checksum file for a CSV configuration file, if any.
+	 * 
+	 * @param configFile The CSV configuration file.
+	 */
+	public void deleteRowChecksums(File configFile) {
+		final String rowChecksumFilename = getLocatedFilename(domainDirPath, configFile) + "." + ROW_CHECKSUM_FILE_EXT;
+		final Path rowChecksumPath = Paths.get(domainChecksumsDirPath, rowChecksumFilename);
+		try {
+			Files.deleteIfExists(rowChecksumPath);
+		}
+		catch (IOException e) {
+			log.warn("Error deleting row checksum file at: " + rowChecksumPath, e);
 		}
 	}
 	
