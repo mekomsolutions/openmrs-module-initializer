@@ -54,6 +54,12 @@ Valid options are:
 * **disabled**.  This mode instructs Initializer to **NOT** load in domains at module startup.  This mode may be 
   useful for distributions that wish more control over the exact order and timing of domain loading.
 
+#### 5) `initializer.row.checksums.enabled` _(optional)_
+
+Defaults to `false`.  When set to `true`, Initializer will calculate a checksum for each row in CSV domains and store it upon
+successfully saving that row.  If that CSV file is subsequently changed and reloaded, only the rows that have changed 
+and do not match a saved checksum will be reloaded. This is particularly useful as a performance improvement for large CSV files.
+
 ### Logging Properties
 
 In addition to controlling which domains Initializer loads, runtime properties can also be used to control Initializer's

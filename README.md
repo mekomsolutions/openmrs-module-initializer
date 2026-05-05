@@ -231,6 +231,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 * Fix conceptsets domain to prevent incorrect unretiring of associated concept
 * Fix to ensure concept lookups correctly handle concepts with % characters
 * Fix for performance to only process displays preloaders if they are present within csvs
+* Add support for row-level checksums in CSV domains to enable only re-loading those rows that have changed
 
 #### Version 2.11.0
 * Added support for patient flags (flags, flagpriorities, flagtags) domains

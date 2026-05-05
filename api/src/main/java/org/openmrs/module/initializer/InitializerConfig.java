@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_DOMAINS;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_EXCLUDE;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_ROW_CHECKSUMS_ENABLED;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_SKIPCHECKSUMS;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR;
@@ -52,6 +53,8 @@ public class InitializerConfig implements InitializingBean {
 	private Map<String, List<String>> allWildCardExclusions = new HashMap<>(); // mapped per domain
 	
 	private Boolean skipChecksums = false;
+	
+	private Boolean rowChecksumsEnabled = false;
 	
 	private String startupLoadingMode = "";
 	
@@ -90,6 +93,8 @@ public class InitializerConfig implements InitializingBean {
 		
 		// checksums
 		skipChecksums = BooleanUtils.toBoolean(Optional.ofNullable(getPropertyValue(PROPS_SKIPCHECKSUMS)).orElse(""));
+		rowChecksumsEnabled = BooleanUtils
+		        .toBoolean(Optional.ofNullable(getPropertyValue(PROPS_ROW_CHECKSUMS_ENABLED)).orElse(""));
 		
 		// Startup Loading Configuration
 		startupLoadingMode = getPropertyValue(PROPS_STARTUP_LOAD);
@@ -136,6 +141,14 @@ public class InitializerConfig implements InitializingBean {
 	 */
 	public boolean skipChecksums() {
 		return skipChecksums;
+	}
+	
+	/**
+	 * @return true to enable per-row checksum tracking for CSV loaders, false (default) to use only
+	 *         file-level checksums
+	 */
+	public boolean isRowChecksumsEnabled() {
+		return rowChecksumsEnabled;
 	}
 	
 	/**
