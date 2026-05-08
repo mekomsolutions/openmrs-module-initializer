@@ -77,6 +77,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitive_2_3_Test 
 			exclude.add(Domain.FLAGS.getName());
 			exclude.add(Domain.FLAG_PRIORITIES.getName());
 			exclude.add(Domain.FLAG_TAGS.getName());
+			exclude.add(Domain.PROCEDURE_TYPES.getName());
 			
 			boolean result = true;
 			Set<String> loaderDomains = loaders.stream().map(Loader::getDomainName).collect(Collectors.toSet());
