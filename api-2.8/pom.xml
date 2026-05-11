@@ -16,7 +16,7 @@
 
     <properties>
         <openmrsPlatformVersion>${openmrsVersion2.8}</openmrsPlatformVersion>
-        <emrapiVersion>3.4.0-SNAPSHOT</emrapiVersion>
+        <emrapiVersion>3.4.0</emrapiVersion>
     </properties>
 
     <repositories>
