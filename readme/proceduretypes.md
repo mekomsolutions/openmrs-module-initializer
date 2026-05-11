@@ -2,7 +2,7 @@
 
 The **proceduretypes** subfolder contains CSV configuration files that create, edit, or retire emrapi `ProcedureType` metadata.
 
-This domain requires the **emrapi** module at version **3.3.0** or above (`ProcedureType` was added in emrapi 3.3.0). emrapi 3.3+ in turn requires OpenMRS Core 2.8.0 or above. On a stack that does not satisfy these conditions, the loader is silently skipped.
+This domain requires the **emrapi** module at version **3.4.0** or above (`ProcedureType` was added in emrapi 3.4.0). emrapi 3.4+ in turn requires OpenMRS Core 2.8.0 or above. On a stack that does not satisfy these conditions, the loader is silently skipped.
 
 A typical layout:
 ```bash
