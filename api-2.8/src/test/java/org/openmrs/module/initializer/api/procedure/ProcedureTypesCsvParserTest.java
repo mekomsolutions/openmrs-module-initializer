@@ -42,7 +42,7 @@ public class ProcedureTypesCsvParserTest {
 	}
 	
 	@Test
-	public void bootstrap_shouldReturnExistingTypeWhenUuidMatches() {
+	public void shouldReturnExistingTypeWhenUuidMatches() {
 		String uuid = "9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b1234";
 		ProcedureType existing = new ProcedureType();
 		when(procedureService.getProcedureTypeByUuid(uuid)).thenReturn(existing);
@@ -54,9 +54,9 @@ public class ProcedureTypesCsvParserTest {
 	}
 	
 	@Test
-	public void bootstrap_shouldNotFallBackToNameWhenUuidIsProvidedButMisses() {
+	public void shouldNotFallBackToNameWhenUuidIsProvidedButMisses() {
 		// A typo in the UUID must NOT silently rebind to a name-matching record — that
-		// would mutate an unrelated row. Instead the parser creates a new instance bearing
+		// would mutate an unrelated row. Instead, the parser creates a new instance bearing
 		// the user-supplied UUID.
 		String typoedUuid = "00000000-0000-0000-0000-000000000000";
 		when(procedureService.getProcedureTypeByUuid(typoedUuid)).thenReturn(null);
@@ -70,7 +70,7 @@ public class ProcedureTypesCsvParserTest {
 	}
 	
 	@Test
-	public void bootstrap_shouldLookUpByNameWhenUuidIsBlank() {
+	public void shouldLookUpByNameWhenUuidIsBlank() {
 		ProcedureType existing = new ProcedureType();
 		existing.setName("Appendectomy");
 		existing.setUuid("9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b9999");
@@ -82,7 +82,7 @@ public class ProcedureTypesCsvParserTest {
 	}
 	
 	@Test
-	public void bootstrap_shouldReturnFreshInstanceWhenNeitherUuidNorNameMatches() {
+	public void shouldReturnFreshInstanceWhenNeitherUuidNorNameMatches() {
 		when(procedureService.getProcedureTypesByName("Brand New")).thenReturn(Collections.<ProcedureType> emptyList());
 		
 		ProcedureType result = parser.bootstrap(new CsvLine(HEADERS, new String[] { "", "Brand New", "" }));
@@ -93,21 +93,18 @@ public class ProcedureTypesCsvParserTest {
 	}
 	
 	@Test
-	public void bootstrap_shouldReturnFreshInstanceWhenBothUuidAndNameAreBlank() {
+	public void shouldReturnFreshInstanceWhenBothUuidAndNameAreBlank() {
 		ProcedureType result = parser.bootstrap(new CsvLine(HEADERS, new String[] { "", "", "" }));
 		
 		assertNotNull(result);
 		assertNull(result.getId());
-		// A fresh ProcedureType inherits a random UUID from BaseOpenmrsObject.
 		assertNotNull(result.getUuid());
 		verify(procedureService, never()).getProcedureTypeByUuid(anyString());
 		verify(procedureService, never()).getProcedureTypesByName(anyString());
 	}
 	
 	@Test
-	public void bootstrap_shouldFilterMultiMatchByExactName() {
-		// Even if the service returns extras (e.g. a hypothetical future like-match), only
-		// rows with the exact name should be considered.
+	public void shouldFilterMultiMatchByExactName() {
 		ProcedureType extra = new ProcedureType();
 		extra.setName("Appendectomy Plus");
 		ProcedureType exact = new ProcedureType();
@@ -120,13 +117,26 @@ public class ProcedureTypesCsvParserTest {
 		assertSame(exact, result);
 	}
 	
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowWhenMultipleExactNameMatches() {
+		ProcedureType a = new ProcedureType();
+		a.setName("Appendectomy");
+		a.setUuid("9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b0001");
+		ProcedureType b = new ProcedureType();
+		b.setName("Appendectomy");
+		b.setUuid("9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b0002");
+		when(procedureService.getProcedureTypesByName("Appendectomy")).thenReturn(Arrays.asList(a, b));
+		
+		parser.bootstrap(new CsvLine(HEADERS, new String[] { "", "Appendectomy", "" }));
+	}
+	
 	@Test
-	public void getDomain_shouldReturnProcedureTypesDomain() {
+	public void shouldReportProcedureTypesDomain() {
 		assertEquals(Domain.PROCEDURE_TYPES, parser.getDomain());
 	}
 	
 	@Test
-	public void save_shouldDelegateToProcedureService() {
+	public void shouldDelegateSaveToProcedureService() {
 		ProcedureType incoming = new ProcedureType();
 		ProcedureType persisted = new ProcedureType();
 		when(procedureService.saveProcedureType(incoming)).thenReturn(persisted);

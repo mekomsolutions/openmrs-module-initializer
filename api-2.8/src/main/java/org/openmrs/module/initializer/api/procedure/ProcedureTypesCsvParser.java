@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-@OpenmrsProfile(modules = { "emrapi:3.4 - 9.*" })
+@OpenmrsProfile(modules = { "emrapi:3.4.* - 9.*" })
 @Component
 public class ProcedureTypesCsvParser extends CsvParser<ProcedureType, BaseLineProcessor<ProcedureType>> {
 	
@@ -52,8 +52,8 @@ public class ProcedureTypesCsvParser extends CsvParser<ProcedureType, BaseLinePr
 				}
 			}
 			if (exactMatches.size() > 1) {
-				log.warn("{} procedure types matched name '{}'; binding to the first one (uuid={}).", exactMatches.size(),
-				    name, exactMatches.get(0).getUuid());
+				throw new IllegalArgumentException(
+				        exactMatches.size() + " procedure types match name '" + name + "'; provide a Uuid to disambiguate.");
 			}
 			if (!exactMatches.isEmpty()) {
 				type = exactMatches.get(0);
