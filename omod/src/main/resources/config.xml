@@ -27,6 +27,10 @@
 			<path>/lib/initializer-api-2.7-${project.version}.jar</path>
 			<openmrsVersion>2.7.* - 9.*</openmrsVersion>
 		</conditionalResource>
+		<conditionalResource>
+			<path>/lib/initializer-api-2.8-${project.version}.jar</path>
+			<openmrsVersion>2.8.* - 9.*</openmrsVersion>
+		</conditionalResource>
 	</conditionalResources>
 
 	<aware_of_modules>
