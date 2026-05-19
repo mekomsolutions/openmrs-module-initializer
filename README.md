@@ -233,7 +233,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 * Fix to ensure concept lookups correctly handle concepts with % characters
 * Fix for performance to only process displays preloaders if they are present within csvs
 * Add support for row-level checksums in CSV domains to enable only re-loading those rows that have changed
-* Added support for 'proceduretypes' domain (requires emrapi 3.3+ on OpenMRS Core 2.8+)
+* Added support for 'proceduretypes' domain (requires emrapi 3.4+ on OpenMRS Core 2.8+)
 
 #### Version 2.11.0
 * Added support for patient flags (flags, flagpriorities, flagtags) domains
