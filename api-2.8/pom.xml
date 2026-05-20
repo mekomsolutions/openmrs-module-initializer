@@ -65,6 +65,21 @@
         </dependency>
 
         <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>${project.parent.artifactId}-api-2.2</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>${project.parent.artifactId}-api-2.2</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
+
+        <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>emrapi-api</artifactId>
             <version>${emrapiVersion}</version>
@@ -72,5 +87,27 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Inherited from parent pom; not used by api-2.8 and each breaks the Spring test context on Core 2.8. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <classpathDependencyExcludes>
+                        <classpathDependencyExclude>org.openmrs.module:providermanagement-api</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.openmrs.module:htmlformentry-api</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.openmrs.module:fhir2-api</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.openmrs.module:fhir2-api-2.1</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.openmrs.module:fhir2-api-2.2</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.openmrs.module:tasks-api</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.openmrs.module:reporting-api</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.openmrs.module:reporting-api-2.0</classpathDependencyExclude>
+                    </classpathDependencyExcludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
