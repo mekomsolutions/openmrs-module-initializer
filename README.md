@@ -129,6 +129,7 @@ This is the list of currently supported domains in their loading order:
 1. [Privileges (CSV files)](readme/priv.md)
 1. [Encounter Types (CSV files)](readme/et.md)
 1. [Encounter Roles (CSV files)](readme/encounterroles.md)
+1. [Procedure Types (CSV files)](readme/proceduretypes.md)
 1. [Roles (CSV files)](readme/roles.md)
 1. [Global Properties (XML files)](readme/globalproperties.md)
 1. [Attribute Types (CSV files)](readme/atttypes.md)
@@ -232,6 +233,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 * Fix to ensure concept lookups correctly handle concepts with % characters
 * Fix for performance to only process displays preloaders if they are present within csvs
 * Add support for row-level checksums in CSV domains to enable only re-loading those rows that have changed
+* Added support for 'proceduretypes' domain (requires emrapi 3.4+ on OpenMRS Core 2.8+)
 
 #### Version 2.11.0
 * Added support for patient flags (flags, flagpriorities, flagtags) domains
