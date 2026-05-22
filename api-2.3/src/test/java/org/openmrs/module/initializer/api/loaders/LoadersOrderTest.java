@@ -73,6 +73,7 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitive_2_3_Test 
 			exclude.add(Domain.PAYMENT_MODES.getName());
 			exclude.add(Domain.BILLABLE_SERVICES.getName());
 			exclude.add(Domain.CASH_POINTS.getName());
+			exclude.add(Domain.CASHIER_ITEM_PRICES.getName());
 			exclude.add(Domain.CONCEPT_REFERENCE_RANGE.getName());
 			exclude.add(Domain.FLAGS.getName());
 			exclude.add(Domain.FLAG_PRIORITIES.getName());

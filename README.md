@@ -54,6 +54,7 @@ configuration/
   ├── autogenerationoptions/
   ├── bahmniforms/
   ├── billableservices/
+  ├── cashieritemprices/
   ├── cashpoints/
   ├── cohorttypes/
   ├── cohortattributetypes/
@@ -146,6 +147,7 @@ This is the list of currently supported domains in their loading order:
 1. [Billable Services (CSV files)](readme/billableservices.md)
 1. [Cash Points (CSV files)](readme/cashpoints.md)
 1. [Payment Modes (CSV files)](readme/paymentmodes.md)
+1. [Cashier Item Prices (CSV files)](readme/cashieritemprices.md)
 1. [Flags (CSV files)](readme/flags.md)
 1. [Flag Priorities (CSV files)](readme/flagpriorities.md)
 1. [Flag Tags (CSV files)](readme/flagtags.md)
