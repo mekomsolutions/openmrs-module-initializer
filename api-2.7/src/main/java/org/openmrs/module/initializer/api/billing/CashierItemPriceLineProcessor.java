@@ -70,12 +70,14 @@ public class CashierItemPriceLineProcessor extends BaseLineProcessor<CashierItem
 				throw new IllegalArgumentException("No StockItem found with UUID '" + stockItemUuid + "'");
 			}
 			instance.setItem(stockItem);
+			instance.setBillableService(null);
 		} else {
 			BillableService billableService = billableServiceService.getBillableServiceByUuid(billableServiceUuid);
 			if (billableService == null) {
 				throw new IllegalArgumentException("No BillableService found with UUID '" + billableServiceUuid + "'");
 			}
 			instance.setBillableService(billableService);
+			instance.setItem(null);
 		}
 		
 		return instance;
