@@ -18,6 +18,9 @@ Let's review the headers as below.
 ###### Header `Uuid` *(optional)*
 The UUID of the cashier item price. If empty a random UUID is generated; if provided, the row updates the existing item price with that UUID (or creates one with that UUID).
 
+###### Header `Void/Retire` *(optional)*
+When set to `true`, the rest of the row is ignored and the existing cashier item price (identified by `Uuid`) is retired. See [CSV conventions](csv_conventions.md).
+
 ###### Header `Name` *(required)*
 The display name of the item price.
 
