@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @OpenmrsProfile(modules = { "emrapi:3.4.* - 9.*" })
-@Component
 public class ProcedureTypesCsvParser extends CsvParser<ProcedureType, BaseLineProcessor<ProcedureType>> {
 	
 	private final ProcedureService procedureService;
