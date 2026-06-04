@@ -8,7 +8,6 @@ import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.stereotype.Component;
 
 @OpenmrsProfile(modules = { "emrapi:3.4.* - 9.*" })
-@Component
 public class ProcedureTypeLineProcessor extends BaseLineProcessor<ProcedureType> {
 	
 	@Override
