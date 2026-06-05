@@ -34,7 +34,6 @@ public class DataFilterMappingsCsvParser extends CsvParser<DataFilterMapping, Ba
 		return Domain.DATAFILTER_MAPPINGS;
 	}
 	
-	@Transactional(readOnly = true)
 	public OpenmrsObject getOpenmrsObject(String uuid, String className) throws HibernateException, ClassNotFoundException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Class.forName(className));
 		criteria.add(Restrictions.eq("uuid", uuid));
