@@ -149,4 +149,42 @@ public class EncounterTypesLoaderIntegrationTest extends DomainBaseModuleContext
 			    Context.getMessageSourceService().getMessage("org.openmrs.EncounterType." + uuid, null, localeKm));
 		}
 	}
+	
+	@Test
+	public void load_shouldLoadEncounterTypesWithTranslatedNameAndDescriptionInEnglish() {
+		
+		// Replay
+		loader.load();
+		{
+			EncounterType et = es.getEncounterTypeByUuid("e9be7307-6395-11ee-a0a0-0242ac120002");
+			Assert.assertNotNull(et);
+			Assert.assertEquals("English Encounter Type Name", et.getName());
+			Assert.assertEquals("English Encounter Type Description", et.getDescription());
+		}
+		{
+			EncounterType et = es.getEncounterTypeByUuid("d9fe17f4-639c-11ee-a0a0-0242ac120002");
+			Assert.assertNotNull(et);
+			Assert.assertEquals("English display", et.getName());
+		}
+	}
+	
+	@Test
+	public void load_shouldLoadEncounterTypesWithTranslatedNameAndDescriptionInFrench() {
+		
+		Context.setLocale(Locale.FRENCH);
+		
+		// Replay
+		loader.load();
+		{
+			EncounterType et = es.getEncounterTypeByUuid("e9be7307-6395-11ee-a0a0-0242ac120002");
+			Assert.assertNotNull(et);
+			Assert.assertEquals("French Encounter Type Name", et.getName());
+			Assert.assertEquals("French Encounter Type Description", et.getDescription());
+		}
+		{
+			EncounterType et = es.getEncounterTypeByUuid("d9fe17f4-639c-11ee-a0a0-0242ac120002");
+			Assert.assertNotNull(et);
+			Assert.assertEquals("French display", et.getName());
+		}
+	}
 }
