@@ -230,6 +230,8 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ----
 
 ## Releases notes
+#### version 2.13.0
+
 #### version 2.12.0
 * Fix conceptsets domain to prevent incorrect unretiring of associated concept
 * Fix to ensure concept lookups correctly handle concepts with % characters
