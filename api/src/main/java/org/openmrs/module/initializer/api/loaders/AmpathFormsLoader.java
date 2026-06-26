@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.EncounterType;
@@ -20,7 +21,12 @@ import org.openmrs.module.initializer.api.utils.Utils;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 import java.util.UUID;
+
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_ROW_CHECKSUMS_ENABLED;
+import static org.openmrs.module.initializer.api.utils.Utils.getPropertyValue;
 
 @Component
 public class AmpathFormsLoader extends BaseFileLoader {
@@ -59,27 +65,11 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		}
 		
 		String formDescription = (String) jsonFile.get("description");
-		boolean formPublished = (Boolean) jsonFile.get("published");
-		boolean formRetired = (Boolean) jsonFile.get("retired");
 		
-		String formProcessor = (String) jsonFile.get("processor");
-		boolean isEncounterForm = formProcessor == null || StringUtils.isBlank(formProcessor)
-		        || formProcessor.equalsIgnoreCase("EncounterFormProcessor");
+		boolean formPublished = resolveBooleanValue(jsonFile.get("published"), cfg.getDefaultFormPublishedState());
+		boolean formRetired = resolveBooleanValue(jsonFile.get("retired"), false);
 		
-		EncounterType encounterType = null;
-		String formEncounterType = (String) jsonFile.get("encounter");
-		if (formEncounterType != null) {
-			encounterType = encounterService.getEncounterType(formEncounterType);
-			if (encounterType == null) {
-				throw new Exception("Form Encounter type " + formEncounterType + " could not be found. Please ensure that "
-				        + "this encountertype is either loaded by Iniz or loaded in the system before Iniz runs.");
-			}
-		}
-		
-		if (isEncounterForm && encounterType == null) {
-			throw new Exception("No encounter was found for this form. You should have an \"encounter\" entry whose value "
-			        + "is the id of the encounter type to use for this form, e.g., \"encounter\": \"Emergency\".");
-		}
+		EncounterType encounterType = getEncounterType(jsonFile, formName);
 		
 		String formVersion = (String) jsonFile.get("version");
 		if (formVersion == null) {
@@ -159,6 +149,53 @@ public class AmpathFormsLoader extends BaseFileLoader {
 			createNewForm(uuid, formName, formDescription, formPublished, formRetired, encounterType, formVersion,
 			    jsonString);
 		}
+	}
+	
+	private boolean resolveBooleanValue(Object booleanValue, boolean defaultValue) {
+		if (booleanValue instanceof Boolean) {
+			return (Boolean) booleanValue;
+		}
+		return BooleanUtils.toBoolean(Optional.ofNullable((String) booleanValue).orElse(Boolean.toString(defaultValue)));
+	}
+	
+	private EncounterType getEncounterType(Map<String, Object> jsonFile, String formName) {
+		EncounterType encounterType = null;
+
+		String formEncounterType = (String) jsonFile.get("encounter");
+		if (!StringUtils.isBlank(formEncounterType)) {
+			encounterType = encounterService.getEncounterType(formEncounterType);
+		}
+		
+		String formEncounterTypeId = (String) jsonFile.get("encounterType");
+        if (!StringUtils.isBlank(formEncounterTypeId)) {
+			if (encounterType == null) {
+				encounterType = encounterService.getEncounterTypeByUuid(formEncounterTypeId);
+			} else if (!formEncounterTypeId.equals(formEncounterType) // Some of the existing form data already has both fields filled in with the name of the encounter type so we need to support that
+			        && !encounterType.getUuid().equals(formEncounterTypeId)) {
+				throw new IllegalArgumentException("Both the 'encounter' (" + formEncounterType + ") and 'encounterType' ("
+				        + formEncounterTypeId + ") fields are filled in for the form '" + formName
+				        + "', but they do not represent the same encounter type.");
+			}
+		}
+		
+		if (encounterType != null) {
+			return encounterType;
+		}
+		
+		String formProcessor = (String) jsonFile.get("processor");
+		boolean isEncounterForm = formProcessor == null || StringUtils.isBlank(formProcessor)
+		        || formProcessor.equalsIgnoreCase("EncounterFormProcessor");
+		
+		if (isEncounterForm) {
+			throw new IllegalArgumentException(
+			        encounterService.getEncounterType("Emergency").getUuid() + " - No encounter was found for the form '"
+			                + formName + "'." + " You must have an 'encounter' entry whose value (" + formEncounterType
+			                + ") is the name of the encounter type (e.g. 'encounter': 'Emergency')"
+			                + " or an 'encounterType' entry whose value (" + formEncounterTypeId
+			                + ") is the id of the encounter type (e.g. 'encounterType': '<UUID>').");
+		}
+		
+		return null;
 	}
 	
 	private void createNewForm(String uuid, String formName, String formDescription, Boolean formPublished,
