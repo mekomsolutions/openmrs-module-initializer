@@ -46,7 +46,7 @@ public class MedicationSideEffectsCsvParser extends CsvParser<MedicationSideEffe
 	
 	@Override
 	public MedicationSideEffect save(MedicationSideEffect instance) {
-		return service.save(instance);
+		return service.saveMedicationSideEffect(instance);
 	}
 	
 	@Override

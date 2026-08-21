@@ -79,14 +79,14 @@ public class MedicationSideEffectsLoaderIntegrationTest extends DomainBaseModule
 		toEdit.setDrug(drug);
 		toEdit.setClassification(SideEffectClassification.COMMON);
 		toEdit.setSideEffectText("Old text");
-		service.save(toEdit);
+		service.saveMedicationSideEffect(toEdit);
 		
 		MedicationSideEffect toRetire = new MedicationSideEffect();
 		toRetire.setUuid(UUID_TO_RETIRE);
 		toRetire.setDrug(drug);
 		toRetire.setClassification(SideEffectClassification.SERIOUS);
 		toRetire.setSideEffectText("To be voided");
-		service.save(toRetire);
+		service.saveMedicationSideEffect(toRetire);
 	}
 	
 	@Test
