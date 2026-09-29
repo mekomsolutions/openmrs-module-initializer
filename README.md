@@ -59,6 +59,7 @@ configuration/
   ├── cohorttypes/
   ├── cohortattributetypes/
   ├── conceptclasses/
+  ├── conceptmaptypes/
   ├── conceptsources/
   ├── concepts/
   ├── conceptsets/
@@ -141,6 +142,7 @@ This is the list of currently supported domains in their loading order:
 1. [Address Hierarchy (XML, CSV, .properties files)](readme/addresshierarchy.md)
 1. [Bahmni Forms (JSON Files)](readme/bahmniforms.md)
 1. [Concept Classes (CSV files)](readme/conceptclasses.md)
+1. [Concept Map Types (CSV files)](readme/conceptmaptypes.md)
 1. [Concept Sources (CSV files)](readme/conceptsources.md)
 1. [Open Concept Lab (ZIP Files)](readme/ocl.md)
 1. [Concepts (CSV files)](readme/concepts.md)
@@ -232,6 +234,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ## Releases notes
 #### version 2.13.0
 * Fix order types domain to apply the parent for order types with concrete Java classes (e.g. org.openmrs.DrugOrder)
+* Added support for 'conceptmaptypes' domain
 
 #### version 2.12.0
 * Fix conceptsets domain to prevent incorrect unretiring of associated concept
