@@ -1,0 +1,7 @@
+Uuid,Void/Retire,Name,Description,Is hidden
+d3a5e8b1-6c2f-4e7a-9b0d-1f2a3c4d5e6f,,ASSOCIATED-WITH,Loosely associated concepts,
+,,NARROWER-THAN,Target is narrower than the source,false
+,,INTERNAL-ONLY,Not shown to end users,true
+1ccba764-49d6-11e0-8fed-18a905e044dc,,RELATED-TO,Related but not equivalent,
+,,hidden,No longer hidden,
+,true,is-parent-to,,
