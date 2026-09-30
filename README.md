@@ -80,6 +80,7 @@ configuration/
   ├── locations/
   ├── locationtagmaps/
   ├── locationtags/
+  ├── medicationsideeffects/
   ├── messageproperties/
   ├── metadatasetmembers/ 
   ├── metadatasets/ 
@@ -163,6 +164,7 @@ This is the list of currently supported domains in their loading order:
 1. [Identifier Sources (CSV files)](readme/idgen.md)
 1. [Autogeneration Options (CSV files)](readme/autogenerationoptions.md)
 1. [Drugs (CSV files)](readme/drugs.md)
+1. [Medication Side Effects (CSV files)](readme/medicationsideeffects.md)
 1. [Order Frequencies (CSV files)](readme/freqs.md)
 1. [Order Types (CSV files)](readme/ordertypes.md)
 1. [Bahmni Appointment Specialities (CSV files)](readme/appointmentspecialities.md)

@@ -9,5 +9,6 @@
         <mapping resource="Bill.hbm.xml"/>
         <mapping resource="Cashier.hbm.xml"/>
         <mapping resource="SequentialReceiptNumberGenerator.hbm.xml"/>
+        <mapping class="org.openmrs.module.medicationsideeffects.model.MedicationSideEffect"/>
     </session-factory>
 </hibernate-configuration>
