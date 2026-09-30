@@ -7,6 +7,8 @@ ampathformstranslations/
   └── form2_translations_en.json
 ```
 
+**Note:** You will need a translation file for ALL languages you want to be able to switch between. For example, if you want to be able to switch between both French and English, you would need a file for BOTH those languages, as shown above. If you only had a fr.json file, then even when you set your language preference to English, you would still be seeing that form only in French. 
+
 ###### JSON file example:
 ```json
 {
