@@ -182,8 +182,53 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		Assert.assertEquals(clob2.getUuid(), formResource2.getValueReference());
 		
 		List<Form> forms = formService.getAllForms(true);
-		// There is an initial Basic form
-		Assert.assertEquals(3, forms.size());
+		// There is an initial Basic form and 2 O3 forms
+		Assert.assertEquals(5, forms.size());
 	}
 	
+	@Test
+	public void load_shouldLoadO3Form() throws Exception {
+		// Replay
+		ampathFormsLoader.load();
+		Form form = formService.getForm("O3 form 1");
+		FormResource formResource = formService.getFormResource(form, "JSON schema");
+		ClobDatatypeStorage clob = datatypeService
+		        .getClobDatatypeStorageByUuid(formService.getFormResource(form, "JSON schema").getValueReference());
+		// Verify form
+		Assert.assertEquals(Boolean.TRUE, form.getPublished());
+		Assert.assertEquals(Boolean.FALSE, form.getRetired());
+		Assert.assertEquals("Emergency", form.getEncounterType().getName());
+		Assert.assertEquals("Form with encounter type", form.getDescription());
+		// Verify clob
+		Assert.assertNotNull(clob);
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode actualObj = mapper.readTree(clob.getValue());
+		Assert.assertEquals("\"O3 1 Page\"", actualObj.get("pages").getElements().next().get("label").toString());
+		// Verify Form Resource
+		Assert.assertNotNull(formResource);
+		Assert.assertEquals(clob.getUuid(), formResource.getValueReference());
+	}
+	
+	@Test
+	public void load_shouldLoadO3FormWithMissingRetiredField() throws Exception {
+		// Replay
+		ampathFormsLoader.load();
+		Form form = formService.getForm("O3 form 2");
+		FormResource formResource = formService.getFormResource(form, "JSON schema");
+		ClobDatatypeStorage clob = datatypeService
+		        .getClobDatatypeStorageByUuid(formService.getFormResource(form, "JSON schema").getValueReference());
+		// Verify form
+		Assert.assertEquals(Boolean.FALSE, form.getPublished());
+		Assert.assertEquals(Boolean.FALSE, form.getRetired());
+		Assert.assertEquals("Emergency", form.getEncounterType().getName());
+		Assert.assertEquals("Form with missing retired and published fields", form.getDescription());
+		// Verify clob
+		Assert.assertNotNull(clob);
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode actualObj = mapper.readTree(clob.getValue());
+		Assert.assertEquals("\"O3 2 Page\"", actualObj.get("pages").getElements().next().get("label").toString());
+		// Verify Form Resource
+		Assert.assertNotNull(formResource);
+		Assert.assertEquals(clob.getUuid(), formResource.getValueReference());
+	}
 }
