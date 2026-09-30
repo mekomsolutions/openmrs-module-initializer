@@ -21,7 +21,7 @@ The **configuration** folder structure is reproduced within **configuration_chec
 ```bash
 configuration_checksums/
   ├── addresshierarchy/
-  ├── appointmentsspecialities/
+  ├── appointmentspecialities/
   ├── appointmentsservicesdefinitions/
   ├── ...
 ```
