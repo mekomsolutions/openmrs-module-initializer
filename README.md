@@ -10,6 +10,7 @@
   * [Setting up and controlling logging](#setting-up-and-controlling-logging)
 - [Get in touch](#get-in-touch)
 - [Releases notes](#releases-notes)
+    + [version 2.12.1](#version-2121)
     + [version 2.12.0](#version-2120)
     + [Version 2.11.0](#version-2110)
     + [Version 2.10.0](#version-2100)
@@ -232,7 +233,7 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ----
 
 ## Releases notes
-#### version 2.13.0
+#### version 2.12.1
 * Fix order types domain to apply the parent for order types with concrete Java classes (e.g. org.openmrs.DrugOrder)
 * Added support for 'conceptmaptypes' domain
 
