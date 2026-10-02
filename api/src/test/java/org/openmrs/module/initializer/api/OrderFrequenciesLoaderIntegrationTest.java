@@ -11,9 +11,9 @@ package org.openmrs.module.initializer.api;
 
 import java.util.Locale;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.OrderFrequency;
@@ -41,7 +41,7 @@ public class OrderFrequenciesLoaderIntegrationTest extends DomainBaseModuleConte
 	
 	private Concept bidailyConcept;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		// Concepts to be used as a 'frequency'
@@ -99,23 +99,23 @@ public class OrderFrequenciesLoaderIntegrationTest extends DomainBaseModuleConte
 		// created frequency
 		{
 			OrderFrequency freq = os.getOrderFrequencyByConcept(hourlyConcept);
-			Assert.assertNotNull(freq);
-			Assert.assertEquals(0, Double.compare(24.0, freq.getFrequencyPerDay()));
+			Assertions.assertNotNull(freq);
+			Assertions.assertEquals(0, Double.compare(24.0, freq.getFrequencyPerDay()));
 		}
 		
 		// retired frequency
 		{
 			OrderFrequency freq = os.getOrderFrequencyByUuid("4b33b729-1fe3-4fa5-acc4-084beb069b68");
-			Assert.assertNotNull(freq);
-			Assert.assertTrue(freq.getRetired());
+			Assertions.assertNotNull(freq);
+			Assertions.assertTrue(freq.getRetired());
 		}
 		
 		// edited frequency
 		{
 			OrderFrequency freq = os.getOrderFrequencyByUuid("136ebdb7-e989-47cf-8ec2-4e8b2ffe0ab3");
-			Assert.assertNotNull(freq);
-			Assert.assertEquals(bidailyConcept, freq.getConcept());
-			Assert.assertEquals(0, Double.compare(0.5, freq.getFrequencyPerDay()));
+			Assertions.assertNotNull(freq);
+			Assertions.assertEquals(bidailyConcept, freq.getConcept());
+			Assertions.assertEquals(0, Double.compare(0.5, freq.getFrequencyPerDay()));
 		}
 	}
 }

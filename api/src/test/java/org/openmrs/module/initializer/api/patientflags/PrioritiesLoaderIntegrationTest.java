@@ -1,11 +1,11 @@
 package org.openmrs.module.initializer.api.patientflags;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.patientflags.Priority;
 import org.openmrs.module.patientflags.api.FlagService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -21,7 +21,7 @@ public class PrioritiesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	@Autowired
 	private PrioritiesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-concepts.xml");
 		

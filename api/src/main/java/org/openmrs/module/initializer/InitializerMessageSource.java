@@ -10,7 +10,7 @@
 package org.openmrs.module.initializer;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.time.StopWatch;
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.api.APIException;
@@ -35,7 +35,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -277,7 +277,11 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 		for (int i = parts.length - 1; i > 0; i--) {
 			candidate = parts[i] + (candidate == null ? "" : "_" + candidate);
 			try {
-				return LocaleUtils.toLocale(candidate);
+				Locale locale = LocaleUtils.toLocale(candidate);
+				// Recent commons-lang3 versions parse a lone country code such as "FR" as a language-less locale
+				if (!locale.getLanguage().isEmpty()) {
+					return locale;
+				}
 			}
 			catch (IllegalArgumentException e) {
 				log.trace(candidate + " is not a valid locale");

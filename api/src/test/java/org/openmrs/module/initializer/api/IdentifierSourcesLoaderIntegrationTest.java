@@ -9,10 +9,10 @@
  */
 package org.openmrs.module.initializer.api;
 
-import org.apache.commons.lang.BooleanUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.commons.lang3.BooleanUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.idgen.IdentifierPool;
@@ -47,7 +47,7 @@ public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleCont
 	
 	public static final String NEW_POOL = "30799e8f-59cf-11ec-8885-0242ac110002";
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		PatientIdentifierType type = new PatientIdentifierType();
@@ -102,39 +102,40 @@ public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleCont
 		{
 			IdentifierSource source = idgenService.getIdentifierSourceByUuid(EXISTING_SEQ);
 			SequentialIdentifierGenerator generator = (SequentialIdentifierGenerator) source;
-			Assert.assertEquals("Edited sequential name", generator.getName());
-			Assert.assertEquals("Edited sequential description", generator.getDescription());
-			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", generator.getIdentifierType().getName());
-			Assert.assertEquals("ACDEFGHJKLMNPRTUVWXY1234567890", generator.getBaseCharacterSet());
-			Assert.assertEquals(6, generator.getMinLength().intValue());
-			Assert.assertEquals(6, generator.getMaxLength().intValue());
-			Assert.assertEquals("Y", generator.getPrefix());
-			Assert.assertEquals("", generator.getSuffix());
-			Assert.assertEquals("1000", generator.getFirstIdentifierBase());
-			Assert.assertFalse(BooleanUtils.isTrue(generator.getRetired()));
+			Assertions.assertEquals("Edited sequential name", generator.getName());
+			Assertions.assertEquals("Edited sequential description", generator.getDescription());
+			Assertions.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", generator.getIdentifierType().getName());
+			Assertions.assertEquals("ACDEFGHJKLMNPRTUVWXY1234567890", generator.getBaseCharacterSet());
+			Assertions.assertEquals(6, generator.getMinLength().intValue());
+			Assertions.assertEquals(6, generator.getMaxLength().intValue());
+			Assertions.assertEquals("Y", generator.getPrefix());
+			// the idgen service is advised by core's RequiredDataAdvice, which saves empty strings as null
+			Assertions.assertNull(generator.getSuffix());
+			Assertions.assertEquals("1000", generator.getFirstIdentifierBase());
+			Assertions.assertFalse(BooleanUtils.isTrue(generator.getRetired()));
 		}
 		{
 			IdentifierSource source = idgenService.getIdentifierSourceByUuid(EXISTING_REMOTE);
 			RemoteIdentifierSource remoteSource = (RemoteIdentifierSource) source;
-			Assert.assertEquals("Edited remote name", remoteSource.getName());
-			Assert.assertEquals("Edited remote description", remoteSource.getDescription());
-			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", remoteSource.getIdentifierType().getName());
-			Assert.assertEquals("http://example.com/edit", remoteSource.getUrl());
-			Assert.assertEquals("editUser", remoteSource.getUser());
-			Assert.assertEquals("editPass", remoteSource.getPassword());
-			Assert.assertFalse(BooleanUtils.isTrue(remoteSource.getRetired()));
+			Assertions.assertEquals("Edited remote name", remoteSource.getName());
+			Assertions.assertEquals("Edited remote description", remoteSource.getDescription());
+			Assertions.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", remoteSource.getIdentifierType().getName());
+			Assertions.assertEquals("http://example.com/edit", remoteSource.getUrl());
+			Assertions.assertEquals("editUser", remoteSource.getUser());
+			Assertions.assertEquals("editPass", remoteSource.getPassword());
+			Assertions.assertFalse(BooleanUtils.isTrue(remoteSource.getRetired()));
 		}
 		{
 			IdentifierSource source = idgenService.getIdentifierSourceByUuid(EXISTING_POOL);
 			IdentifierPool pool = (IdentifierPool) source;
-			Assert.assertEquals("Edited pool name", pool.getName());
-			Assert.assertEquals("Edited pool description", pool.getDescription());
-			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", pool.getIdentifierType().getName());
-			Assert.assertEquals(10, pool.getBatchSize().intValue());
-			Assert.assertEquals(40, pool.getMinPoolSize().intValue());
-			Assert.assertFalse(pool.getRefillWithScheduledTask());
-			Assert.assertFalse(pool.getSequential());
-			Assert.assertFalse(BooleanUtils.isTrue(pool.getRetired()));
+			Assertions.assertEquals("Edited pool name", pool.getName());
+			Assertions.assertEquals("Edited pool description", pool.getDescription());
+			Assertions.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", pool.getIdentifierType().getName());
+			Assertions.assertEquals(10, pool.getBatchSize().intValue());
+			Assertions.assertEquals(40, pool.getMinPoolSize().intValue());
+			Assertions.assertFalse(pool.getRefillWithScheduledTask());
+			Assertions.assertFalse(pool.getSequential());
+			Assertions.assertFalse(BooleanUtils.isTrue(pool.getRetired()));
 		}
 	}
 	
@@ -148,44 +149,44 @@ public class IdentifierSourcesLoaderIntegrationTest extends DomainBaseModuleCont
 		{
 			IdentifierSource source = idgenService.getIdentifierSourceByUuid(NEW_SEQ);
 			SequentialIdentifierGenerator generator = (SequentialIdentifierGenerator) source;
-			Assert.assertEquals("New sequential name", generator.getName());
-			Assert.assertEquals("New sequential description", generator.getDescription());
-			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", generator.getIdentifierType().getName());
-			Assert.assertEquals("0123456789", generator.getBaseCharacterSet());
-			Assert.assertEquals(5, generator.getMinLength().intValue());
-			Assert.assertEquals(7, generator.getMaxLength().intValue());
-			Assert.assertEquals("A", generator.getPrefix());
-			Assert.assertEquals("Z", generator.getSuffix());
-			Assert.assertEquals("001", generator.getFirstIdentifierBase());
-			Assert.assertFalse(BooleanUtils.isTrue(generator.getRetired()));
+			Assertions.assertEquals("New sequential name", generator.getName());
+			Assertions.assertEquals("New sequential description", generator.getDescription());
+			Assertions.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", generator.getIdentifierType().getName());
+			Assertions.assertEquals("0123456789", generator.getBaseCharacterSet());
+			Assertions.assertEquals(5, generator.getMinLength().intValue());
+			Assertions.assertEquals(7, generator.getMaxLength().intValue());
+			Assertions.assertEquals("A", generator.getPrefix());
+			Assertions.assertEquals("Z", generator.getSuffix());
+			Assertions.assertEquals("001", generator.getFirstIdentifierBase());
+			Assertions.assertFalse(BooleanUtils.isTrue(generator.getRetired()));
 		}
 		{
 			IdentifierSource source = idgenService.getIdentifierSourceByUuid(NEW_REMOTE);
 			RemoteIdentifierSource remoteSource = (RemoteIdentifierSource) source;
-			Assert.assertEquals("New remote name", remoteSource.getName());
-			Assert.assertEquals("New remote description", remoteSource.getDescription());
-			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", remoteSource.getIdentifierType().getName());
-			Assert.assertEquals("http://localhost", remoteSource.getUrl());
-			Assert.assertEquals("value-from-runtime-property", remoteSource.getUser());
-			Assert.assertEquals("value-from-system-property", remoteSource.getPassword());
-			Assert.assertFalse(BooleanUtils.isTrue(remoteSource.getRetired()));
+			Assertions.assertEquals("New remote name", remoteSource.getName());
+			Assertions.assertEquals("New remote description", remoteSource.getDescription());
+			Assertions.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", remoteSource.getIdentifierType().getName());
+			Assertions.assertEquals("http://localhost", remoteSource.getUrl());
+			Assertions.assertEquals("value-from-runtime-property", remoteSource.getUser());
+			Assertions.assertEquals("value-from-system-property", remoteSource.getPassword());
+			Assertions.assertFalse(BooleanUtils.isTrue(remoteSource.getRetired()));
 		}
 		{
 			IdentifierSource source = idgenService.getIdentifierSourceByUuid(NEW_POOL);
 			IdentifierPool pool = (IdentifierPool) source;
-			Assert.assertEquals("New pool name", pool.getName());
-			Assert.assertEquals("New pool description", pool.getDescription());
-			Assert.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", pool.getIdentifierType().getName());
-			Assert.assertEquals(NEW_SEQ, pool.getSource().getUuid());
-			Assert.assertEquals(20, pool.getBatchSize().intValue());
-			Assert.assertEquals(60, pool.getMinPoolSize().intValue());
-			Assert.assertTrue(pool.getRefillWithScheduledTask());
-			Assert.assertTrue(pool.getSequential());
-			Assert.assertFalse(BooleanUtils.isTrue(pool.getRetired()));
+			Assertions.assertEquals("New pool name", pool.getName());
+			Assertions.assertEquals("New pool description", pool.getDescription());
+			Assertions.assertEquals("PATIENTIDENTIFIERTYPE_1_OPENMRS_ID", pool.getIdentifierType().getName());
+			Assertions.assertEquals(NEW_SEQ, pool.getSource().getUuid());
+			Assertions.assertEquals(20, pool.getBatchSize().intValue());
+			Assertions.assertEquals(60, pool.getMinPoolSize().intValue());
+			Assertions.assertTrue(pool.getRefillWithScheduledTask());
+			Assertions.assertTrue(pool.getSequential());
+			Assertions.assertFalse(BooleanUtils.isTrue(pool.getRetired()));
 		}
 	}
 	
-	@Before
+	@BeforeEach
 	@Override
 	public void setupAppDataDir() {
 		

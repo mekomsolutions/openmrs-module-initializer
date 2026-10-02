@@ -10,14 +10,14 @@
 package org.openmrs.module.initializer.api;
 
 import static org.hamcrest.Matchers.hasItems;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.ConceptClass;
 import org.openmrs.DrugOrder;
 import org.openmrs.Order;
@@ -42,7 +42,7 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	@Autowired
 	private OrderTypesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		// An order type to rename
 		{
@@ -84,46 +84,46 @@ public class OrderTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		// Verif creation of an order type with concept classes and a parent
 		{
 			OrderType ot = os.getOrderTypeByName("Iniz Lab Order");
-			Assert.assertEquals("8189b409-3f10-11e4-adec-0800271c1b75", ot.getUuid());
-			Assert.assertEquals("An order for laboratory tests created by Iniz", ot.getDescription());
-			Assert.assertEquals("org.openmrs.Order", ot.getJavaClassName());
-			Assert.assertEquals(Order.class, ot.getJavaClass());
-			Assert.assertEquals(2, ot.getConceptClasses().size());
+			Assertions.assertEquals("8189b409-3f10-11e4-adec-0800271c1b75", ot.getUuid());
+			Assertions.assertEquals("An order for laboratory tests created by Iniz", ot.getDescription());
+			Assertions.assertEquals("org.openmrs.Order", ot.getJavaClassName());
+			Assertions.assertEquals(Order.class, ot.getJavaClass());
+			Assertions.assertEquals(2, ot.getConceptClasses().size());
 			List<String> classesUuids = ot.getConceptClasses().stream().map(cc -> cc.getUuid()).collect(Collectors.toList());
 			assertThat(classesUuids,
 			    hasItems("c652c923-552f-4634-9418-17692a856f03", "9ce20038-c1de-4856-b2b1-297d06e58326"));
 			List<String> classesNames = ot.getConceptClasses().stream().map(cc -> cc.getName()).collect(Collectors.toList());
 			assertThat(classesNames, hasItems("Lab orders #1", "Lab orders #2"));
-			Assert.assertEquals("01727040-a587-484d-b66a-f0afbae6c281", ot.getParent().getUuid());
+			Assertions.assertEquals("01727040-a587-484d-b66a-f0afbae6c281", ot.getParent().getUuid());
 		}
 		
 		// Verif renaming an existing  order type
 		{
 			OrderType ot = os.getOrderTypeByUuid("8be5f714-ee92-4d09-939e-2d1897bb2f95");
-			Assert.assertEquals("New Order Type Name", ot.getName());
+			Assertions.assertEquals("New Order Type Name", ot.getName());
 		}
 		
 		// Verif retiring an existing order type
 		{
 			OrderType ot = os.getOrderTypeByUuid("96f94b64-6c9e-489d-b258-633878b9af69");
-			Assert.assertEquals(true, ot.getRetired());
+			Assertions.assertEquals(true, ot.getRetired());
 		}
 		
 		// Verif bootstrapping by name only
 		{
 			OrderType ot = os.getOrderTypeByName("Order Type Without UUID");
-			Assert.assertNotNull(ot);
-			Assert.assertEquals("For testing loading order types by name.", ot.getDescription());
+			Assertions.assertNotNull(ot);
+			Assertions.assertEquals("For testing loading order types by name.", ot.getDescription());
 		}
 		
 		// Verif another Java class name than 'org.openmrs.Order'
 		{
 			OrderType ot = os.getOrderTypeByUuid("6721493b-ec7c-4e3f-980a-5be3a09585ce");
-			Assert.assertNotNull(ot);
-			Assert.assertEquals("org.openmrs.DrugOrder", ot.getJavaClassName());
-			Assert.assertEquals(DrugOrder.class, ot.getJavaClass());
+			Assertions.assertNotNull(ot);
+			Assertions.assertEquals("org.openmrs.DrugOrder", ot.getJavaClassName());
+			Assertions.assertEquals(DrugOrder.class, ot.getJavaClass());
 			// The parent must be applied even when the Java class name is a concrete subtype of Order
-			Assert.assertEquals("01727040-a587-484d-b66a-f0afbae6c281", ot.getParent().getUuid());
+			Assertions.assertEquals("01727040-a587-484d-b66a-f0afbae6c281", ot.getParent().getUuid());
 		}
 	}
 }

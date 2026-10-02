@@ -1,8 +1,9 @@
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.idgen.AutoGenerationOption;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -21,7 +22,7 @@ public class AutoGenerationOptionsLoaderIntegrationTest extends DomainBaseModule
 	
 	private static String OPTION_TO_EDIT_UUID = "eade77b6-3365-47ed-9ee3-2324598629eb";
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
 	}
@@ -36,14 +37,14 @@ public class AutoGenerationOptionsLoaderIntegrationTest extends DomainBaseModule
 		
 		// Verify created
 		option = identifierSourceService.getAutoGenerationOptionByUuid("ca5cc0bf-38f0-41a6-9759-dd2a6763155a");
-		Assert.assertNotNull(option);
-		Assert.assertTrue(option.isAutomaticGenerationEnabled());
-		Assert.assertFalse(option.isManualEntryEnabled());
+		Assertions.assertNotNull(option);
+		Assertions.assertTrue(option.isAutomaticGenerationEnabled());
+		Assertions.assertFalse(option.isManualEntryEnabled());
 		
 		//Verify edited
 		option = identifierSourceService.getAutoGenerationOptionByUuid(OPTION_TO_EDIT_UUID);
-		Assert.assertFalse(option.isAutomaticGenerationEnabled());
-		Assert.assertTrue(option.isManualEntryEnabled());
-		Assert.assertThat(option.getIdentifierType().getName(), is("Legacy ID"));
+		Assertions.assertFalse(option.isAutomaticGenerationEnabled());
+		Assertions.assertTrue(option.isManualEntryEnabled());
+		MatcherAssert.assertThat(option.getIdentifierType().getName(), is("Legacy ID"));
 	}
 }

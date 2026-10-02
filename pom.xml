@@ -13,7 +13,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>initializer</artifactId>
-    <version>2.13.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Initializer</name>
     <description>The OpenMRS Initializer module is an API-only module that processes the content of the configuration folder when it is found inside OpenMRS' application data directory.</description>
@@ -57,30 +57,23 @@
     </profiles>
 
     <properties>
-        <openmrsVersion2.1>2.1.1</openmrsVersion2.1>
-        <openmrsVersion2.2>2.2.0</openmrsVersion2.2>
-        <openmrsVersion2.3>2.3.6</openmrsVersion2.3>
-        <openmrsVersion2.4>2.4.5</openmrsVersion2.4>
-        <openmrsVersion2.5>2.5.5</openmrsVersion2.5>
-        <openmrsVersion2.7>2.7.8</openmrsVersion2.7>
-        <openmrsVersion2.8>2.8.0</openmrsVersion2.8>
-
-        <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
+        <openmrsPlatformVersion>3.0.0-SNAPSHOT</openmrsPlatformVersion>
+        <maven.compiler.release>21</maven.compiler.release>
 
         <!-- Modules compatibility -->
         <appointmentsVersion>1.2.1</appointmentsVersion>
         <bahmniIeAppsVersion>1.1.0</bahmniIeAppsVersion>
         <bahmniCoreVersion>0.93-1.1.0</bahmniCoreVersion>
-        <cohortModuleVersion>3.5.0</cohortModuleVersion>
+        <cohortModuleVersion>4.0.0-SNAPSHOT</cohortModuleVersion>
         <emrapiModuleVersion>2.0.0</emrapiModuleVersion>
         <htmlformentryVersion>4.0.0</htmlformentryVersion>
-        <idgenVersion>4.6.0</idgenVersion>
+        <idgenVersion>6.0.0-SNAPSHOT</idgenVersion>
         <metadatasharingVersion>1.2.2</metadatasharingVersion>
-        <metadatamappingVersion>1.3.4</metadatamappingVersion>
+        <metadatamappingVersion>3.0.0-SNAPSHOT</metadatamappingVersion>
         <openconceptlabVersion>2.4.0</openconceptlabVersion>
-        <fhir2Version>1.6.0</fhir2Version>
+        <fhir2Version>6.0.0-SNAPSHOT</fhir2Version>
         <billingVersion>1.1.0</billingVersion>
-        <stockmanagementVersion>2.0.2</stockmanagementVersion>
+        <stockmanagementVersion>4.0.0-SNAPSHOT</stockmanagementVersion>
         <patientflagsVersion>3.0.9</patientflagsVersion>
 
         <!-- Modules compatibility > Core 2.3.0 -->
@@ -110,25 +103,6 @@
             <type>jar</type>
         </dependency>
 
-        <!-- JUnit, Powermock -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>1.6.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>1.6.1</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.openmrs.api</groupId>
             <artifactId>openmrs-api</artifactId>
@@ -209,6 +183,13 @@
             <artifactId>htmlformentry-api</artifactId>
             <version>${htmlformentryVersion}</version>
             <scope>provided</scope>
+            <exclusions>
+                <!-- htmlformentry-api 4.0.0 leaks its JUnit 5.7 test engines with compile scope -->
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -271,20 +252,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>fhir2-api-2.1</artifactId>
-            <version>${fhir2Version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>fhir2-api-2.2</artifactId>
-            <version>${fhir2Version}</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- For Validator -->
         <dependency>
             <groupId>org.openmrs.module</groupId>
@@ -321,18 +288,60 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Depedency required to compile against Java 11 -->
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>1.3.2</version>
-            <scope>provided</scope>
-        </dependency>
-
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.openmrs</groupId>
+                <artifactId>openmrs-bom</artifactId>
+                <version>${openmrsPlatformVersion}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Overrides the JUnit 4 era test libraries managed by maven-parent-openmrs-module, which win over the BOM -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-core</artifactId>
+                <version>3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-library</artifactId>
+                <version>2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>5.24.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-module-junit4</artifactId>
+                <version>1.5</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-api-mockito</artifactId>
+                <version>1.5</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <dependency>
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>openconceptlab-api</artifactId>
@@ -347,10 +356,20 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.15.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <classpathDependencyExcludes>
+                        <!-- Inherited from maven-parent-openmrs-module; PowerMock registers a MockMaker that breaks Mockito 5 -->
+                        <classpathDependencyExclude>org.powermock:powermock-module-junit4</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.powermock:powermock-api-mockito</classpathDependencyExclude>
+                    </classpathDependencyExcludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -386,7 +405,8 @@
                         <dependency>
                             <groupId>org.openmrs.tools</groupId>
                             <artifactId>openmrs-tools</artifactId>
-                            <version>${openmrsPlatformVersion}</version>
+                            <!-- Pinned: the 3.x OpenMRSFormatter.xml uses a different style and would reformat the whole code base -->
+                            <version>2.1.1</version>
                         </dependency>
                     </dependencies>
                 </plugin>

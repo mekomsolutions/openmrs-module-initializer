@@ -1,7 +1,7 @@
 package org.openmrs.module.initializer.api.billing;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.billing.api.CashPointService;
@@ -10,9 +10,9 @@ import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_7_Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_7_Test {
 	
@@ -26,7 +26,7 @@ public class CashPointsLoaderIntegrationTest extends DomainBaseModuleContextSens
 	@Autowired
 	private CashPointsLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-concepts-2.7.xml");
 		{

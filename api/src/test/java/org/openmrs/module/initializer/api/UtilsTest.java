@@ -1,9 +1,10 @@
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptName;
@@ -18,29 +19,31 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.api.utils.Utils;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
-import static org.mockito.Matchers.anyCollectionOf;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Context.class)
-@PowerMockIgnore("jdk.internal.reflect.*")
 public class UtilsTest {
 	
-	@Before
+	private MockedStatic<Context> contextMock;
+	
+	@AfterEach
+	public void closeStaticMocks() {
+		contextMock.close();
+	}
+	
+	@BeforeEach
 	public void setUp() {
-		PowerMockito.mockStatic(Context.class);
+		contextMock = Mockito.mockStatic(Context.class);
 		AdministrationService as = mock(AdministrationService.class);
 		when(Context.getAdministrationService()).thenReturn(as);
 		when(as.getAllowedLocales()).thenReturn(Arrays.asList(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN));
@@ -71,30 +74,33 @@ public class UtilsTest {
 		}
 		
 		// replay
-		Assert.assertEquals("\n" + "+------------+-----------+-----+\n" + "| First name | Last name | Age |\n"
+		Assertions.assertEquals("\n" + "+------------+-----------+-----+\n" + "| First name | Last name | Age |\n"
 		        + "+------------+-----------+-----+\n" + "|       John |       Doe |  40 |\n"
 		        + "+------------+-----------+-----+\n" + "|       Paul |     Smith |  20 |\n"
 		        + "+------------+-----------+-----+",
 		    Utils.prettyPrint(lines));
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void prettyPrint_shouldThrowWhenCsvLinesHeadersDiffer() {
-		// setup
-		List<CsvLine> lines = new ArrayList<>();
-		{
-			String[] header = { "First name", "Last name", "Age" };
-			String[] line = { "John", "Doe", "40" };
-			lines.add(new CsvLine(header, line));
-		}
-		{
-			String[] header = { "First name", "Last name", "Height" };
-			String[] line = { "Phileas", "Fogg", "1.75" };
-			lines.add(new CsvLine(header, line));
-		}
-		
-		// replay
-		Utils.prettyPrint(lines);
+		assertThrows(IllegalArgumentException.class, () -> {
+			// setup
+			List<CsvLine> lines = new ArrayList<>();
+			{
+				String[] header = { "First name", "Last name", "Age" };
+				String[] line = { "John", "Doe", "40" };
+				lines.add(new CsvLine(header, line));
+			}
+			{
+				String[] header = { "First name", "Last name", "Height" };
+				String[] line = { "Phileas", "Fogg", "1.75" };
+				lines.add(new CsvLine(header, line));
+			}
+			
+			// replay
+			Utils.prettyPrint(lines);
+			
+		});
 	}
 	
 	@Test
@@ -112,26 +118,29 @@ public class UtilsTest {
 		}
 		
 		// replay
-		Assert.assertEquals("\nFirst name,Last name,Age\n" + "John,Doe,40\n" + "Paul,Smith,20", Utils.pastePrint(lines));
+		Assertions.assertEquals("\nFirst name,Last name,Age\n" + "John,Doe,40\n" + "Paul,Smith,20", Utils.pastePrint(lines));
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void pastePrint_shouldThrowWhenCsvLinesHeadersDiffer() {
-		// setup
-		List<CsvLine> lines = new ArrayList<>();
-		{
-			String[] header = { "First name", "Last name", "Age" };
-			String[] line = { "John", "Doe", "40" };
-			lines.add(new CsvLine(header, line));
-		}
-		{
-			String[] header = { "First name", "Last name", "Height" };
-			String[] line = { "Phileas", "Fogg", "1.75" };
-			lines.add(new CsvLine(header, line));
-		}
-		
-		// replay
-		Utils.pastePrint(lines);
+		assertThrows(IllegalArgumentException.class, () -> {
+			// setup
+			List<CsvLine> lines = new ArrayList<>();
+			{
+				String[] header = { "First name", "Last name", "Age" };
+				String[] line = { "John", "Doe", "40" };
+				lines.add(new CsvLine(header, line));
+			}
+			{
+				String[] header = { "First name", "Last name", "Height" };
+				String[] line = { "Phileas", "Fogg", "1.75" };
+				lines.add(new CsvLine(header, line));
+			}
+			
+			// replay
+			Utils.pastePrint(lines);
+			
+		});
 	}
 	
 	@Test
@@ -146,10 +155,10 @@ public class UtilsTest {
 			c.addName(cn);
 		}
 		
-		Assert.assertEquals("A name in English", Utils.getBestMatchName(c, Locale.ENGLISH));
-		Assert.assertEquals(c.getPreferredName(Locale.ENGLISH).getName(), Utils.getBestMatchName(c, Locale.ENGLISH));
-		Assert.assertEquals("A name in English", Utils.getBestMatchName(c, Locale.FRENCH));
-		Assert.assertEquals("A name in English", Utils.getBestMatchName(c, Locale.GERMAN));
+		Assertions.assertEquals("A name in English", Utils.getBestMatchName(c, Locale.ENGLISH));
+		Assertions.assertEquals(c.getPreferredName(Locale.ENGLISH).getName(), Utils.getBestMatchName(c, Locale.ENGLISH));
+		Assertions.assertEquals("A name in English", Utils.getBestMatchName(c, Locale.FRENCH));
+		Assertions.assertEquals("A name in English", Utils.getBestMatchName(c, Locale.GERMAN));
 		
 		{
 			ConceptName cn = new ConceptName();
@@ -159,10 +168,10 @@ public class UtilsTest {
 			c.setFullySpecifiedName(cn);
 		}
 		
-		Assert.assertEquals("An FSN in English", Utils.getBestMatchName(c, Locale.ENGLISH));
-		Assert.assertEquals(c.getPreferredName(Locale.ENGLISH).getName(), Utils.getBestMatchName(c, Locale.ENGLISH));
-		Assert.assertEquals("An FSN in English", Utils.getBestMatchName(c, Locale.FRENCH));
-		Assert.assertEquals("An FSN in English", Utils.getBestMatchName(c, Locale.GERMAN));
+		Assertions.assertEquals("An FSN in English", Utils.getBestMatchName(c, Locale.ENGLISH));
+		Assertions.assertEquals(c.getPreferredName(Locale.ENGLISH).getName(), Utils.getBestMatchName(c, Locale.ENGLISH));
+		Assertions.assertEquals("An FSN in English", Utils.getBestMatchName(c, Locale.FRENCH));
+		Assertions.assertEquals("An FSN in English", Utils.getBestMatchName(c, Locale.GERMAN));
 		
 		{
 			ConceptName cn = new ConceptName();
@@ -172,10 +181,10 @@ public class UtilsTest {
 			c.addName(cn);
 		}
 		
-		Assert.assertEquals("A preferred name in English", Utils.getBestMatchName(c, Locale.ENGLISH));
-		Assert.assertEquals(c.getPreferredName(Locale.ENGLISH).getName(), Utils.getBestMatchName(c, Locale.ENGLISH));
-		Assert.assertEquals("A preferred name in English", Utils.getBestMatchName(c, Locale.FRENCH));
-		Assert.assertEquals("A preferred name in English", Utils.getBestMatchName(c, Locale.GERMAN));
+		Assertions.assertEquals("A preferred name in English", Utils.getBestMatchName(c, Locale.ENGLISH));
+		Assertions.assertEquals(c.getPreferredName(Locale.ENGLISH).getName(), Utils.getBestMatchName(c, Locale.ENGLISH));
+		Assertions.assertEquals("A preferred name in English", Utils.getBestMatchName(c, Locale.FRENCH));
+		Assertions.assertEquals("A preferred name in English", Utils.getBestMatchName(c, Locale.GERMAN));
 	}
 	
 	@Test
@@ -194,9 +203,9 @@ public class UtilsTest {
 		when(cs.getConceptByUuid("concept-uuid")).thenReturn(c);
 		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(prog));
 		
-		Assert.assertEquals(prog, Utils.fetchProgram("Program Name", pws, cs));
-		Assert.assertEquals(prog, Utils.fetchProgram("program-uuid", pws, cs));
-		Assert.assertEquals(prog, Utils.fetchProgram("concept-uuid", pws, cs));
+		Assertions.assertEquals(prog, Utils.fetchProgram("Program Name", pws, cs));
+		Assertions.assertEquals(prog, Utils.fetchProgram("program-uuid", pws, cs));
+		Assertions.assertEquals(prog, Utils.fetchProgram("concept-uuid", pws, cs));
 	}
 	
 	@Test
@@ -208,7 +217,7 @@ public class UtilsTest {
 		c.setUuid("concept-uuid");
 		when(pws.getProgramsByConcept(c)).thenReturn(Arrays.asList(new Program(), new Program()));
 		
-		Assert.assertNull(Utils.fetchProgram("concept-uuid", pws, cs));
+		Assertions.assertNull(Utils.fetchProgram("concept-uuid", pws, cs));
 	}
 	
 	@Test
@@ -225,8 +234,8 @@ public class UtilsTest {
 		when(cs.getConceptByUuid("concept-uuid")).thenReturn(c);
 		when(pws.getProgramWorkflowsByConcept(c)).thenReturn(Arrays.asList(wf));
 		
-		Assert.assertEquals(wf, Utils.fetchProgramWorkflow("workflow-uuid", pws, cs));
-		Assert.assertEquals(wf, Utils.fetchProgramWorkflow("concept-uuid", pws, cs));
+		Assertions.assertEquals(wf, Utils.fetchProgramWorkflow("workflow-uuid", pws, cs));
+		Assertions.assertEquals(wf, Utils.fetchProgramWorkflow("concept-uuid", pws, cs));
 	}
 	
 	@Test
@@ -238,7 +247,7 @@ public class UtilsTest {
 		c.setUuid("concept-uuid");
 		when(pws.getProgramWorkflowsByConcept(c)).thenReturn(Arrays.asList(new ProgramWorkflow(), new ProgramWorkflow()));
 		
-		Assert.assertNull(Utils.fetchProgramWorkflow("concept-uuid", pws, cs));
+		Assertions.assertNull(Utils.fetchProgramWorkflow("concept-uuid", pws, cs));
 	}
 	
 	@Test
@@ -255,8 +264,8 @@ public class UtilsTest {
 		when(cs.getConceptByUuid("concept-uuid")).thenReturn(c);
 		when(pws.getProgramWorkflowStatesByConcept(c)).thenReturn(Arrays.asList(state));
 		
-		Assert.assertEquals(state, Utils.fetchProgramWorkflowState("state-uuid", pws, cs));
-		Assert.assertEquals(state, Utils.fetchProgramWorkflowState("concept-uuid", pws, cs));
+		Assertions.assertEquals(state, Utils.fetchProgramWorkflowState("state-uuid", pws, cs));
+		Assertions.assertEquals(state, Utils.fetchProgramWorkflowState("concept-uuid", pws, cs));
 	}
 	
 	@Test
@@ -269,7 +278,7 @@ public class UtilsTest {
 		when(pws.getProgramWorkflowStatesByConcept(c))
 		        .thenReturn(Arrays.asList(new ProgramWorkflowState(), new ProgramWorkflowState()));
 		
-		Assert.assertNull(Utils.fetchProgramWorkflowState("concept-uuid", pws, cs));
+		Assertions.assertNull(Utils.fetchProgramWorkflowState("concept-uuid", pws, cs));
 	}
 	
 	@Test
@@ -279,8 +288,8 @@ public class UtilsTest {
 		    ConceptNameType.FULLY_SPECIFIED, Locale.ENGLISH);
 		
 		// verify
-		Assert.assertNotNull(uuid);
-		Assert.assertEquals("f6fa2a4e-78a3-3378-a30a-c27c67f5734e", uuid);
+		Assertions.assertNotNull(uuid);
+		Assertions.assertEquals("f6fa2a4e-78a3-3378-a30a-c27c67f5734e", uuid);
 	}
 	
 	@Test
@@ -289,14 +298,14 @@ public class UtilsTest {
 		String uuid = Utils.generateUuidFromObjects("some-uuid", null, ConceptNameType.SHORT, Locale.ENGLISH);
 		
 		// verify
-		Assert.assertNotNull(uuid);
+		Assertions.assertNotNull(uuid);
 	}
 	
 	@Test
 	public void unProxy_shouldReturnOriginalClassName() {
-		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType$HibernateProxy$ODcBnusu"));
-		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType_$$_javassist_26"));
-		Assert.assertEquals("EncounterType", Utils.unProxy("EncounterType"));
+		Assertions.assertEquals("EncounterType", Utils.unProxy("EncounterType$HibernateProxy$ODcBnusu"));
+		Assertions.assertEquals("EncounterType", Utils.unProxy("EncounterType_$$_javassist_26"));
+		Assertions.assertEquals("EncounterType", Utils.unProxy("EncounterType"));
 	}
 	
 	@Test
@@ -308,7 +317,7 @@ public class UtilsTest {
 		when(cs.getConceptByMapping("lookup", "concept")).thenReturn(mappingConcept);
 		Concept nameConcept = new Concept();
 		when(cs.getConceptByName("concept:lookup")).thenReturn(nameConcept);
-		Assert.assertEquals(uuidConcept, Utils.fetchConcept("concept:lookup", cs));
+		Assertions.assertEquals(uuidConcept, Utils.fetchConcept("concept:lookup", cs));
 	}
 	
 	@Test
@@ -319,7 +328,7 @@ public class UtilsTest {
 		when(cs.getConceptByMapping("lookup", "concept")).thenReturn(mappingConcept);
 		Concept nameConcept = new Concept();
 		when(cs.getConceptByName("concept:lookup")).thenReturn(nameConcept);
-		Assert.assertEquals(mappingConcept, Utils.fetchConcept("concept:lookup", cs));
+		Assertions.assertEquals(mappingConcept, Utils.fetchConcept("concept:lookup", cs));
 	}
 	
 	@Test
@@ -332,7 +341,7 @@ public class UtilsTest {
 		InitializerService ics = mock(InitializerService.class);
 		when(Context.getService(InitializerService.class)).thenReturn(ics);
 		when(ics.getUnretiredConceptsByFullySpecifiedName("concept:lookup")).thenReturn(Arrays.asList(nameConcept));
-		Assert.assertEquals(nameConcept, Utils.fetchConcept("concept:lookup", cs));
+		Assertions.assertEquals(nameConcept, Utils.fetchConcept("concept:lookup", cs));
 	}
 	
 	@Test
@@ -340,7 +349,7 @@ public class UtilsTest {
 		ConceptService cs = mock(ConceptService.class);
 		ConceptMapType sameAsMapType = new ConceptMapType();
 		when(cs.getConceptMapTypeByUuid(ConceptMapType.SAME_AS_MAP_TYPE_UUID)).thenReturn(sameAsMapType);
-		Assert.assertEquals(sameAsMapType, Utils.getSameAsConceptMapType(cs));
+		Assertions.assertEquals(sameAsMapType, Utils.getSameAsConceptMapType(cs));
 	}
 	
 	@Test
@@ -353,9 +362,9 @@ public class UtilsTest {
 		when(cs.getConceptSourceByUniqueId(lookup)).thenReturn(null);
 		when(cs.getConceptSourceByUuid(lookup)).thenReturn(null);
 		
-		Assert.assertNull(Utils.fetchConceptSource(lookup, cs));
+		Assertions.assertNull(Utils.fetchConceptSource(lookup, cs));
 		when(cs.getConceptSourceByName(lookup)).thenReturn(source);
-		Assert.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
+		Assertions.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
 	}
 	
 	@Test
@@ -368,9 +377,9 @@ public class UtilsTest {
 		when(cs.getConceptSourceByUniqueId(lookup)).thenReturn(null);
 		when(cs.getConceptSourceByUuid(lookup)).thenReturn(null);
 		
-		Assert.assertNull(Utils.fetchConceptSource(lookup, cs));
+		Assertions.assertNull(Utils.fetchConceptSource(lookup, cs));
 		when(cs.getConceptSourceByHL7Code(lookup)).thenReturn(source);
-		Assert.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
+		Assertions.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
 	}
 	
 	@Test
@@ -383,9 +392,9 @@ public class UtilsTest {
 		when(cs.getConceptSourceByUniqueId(lookup)).thenReturn(null);
 		when(cs.getConceptSourceByUuid(lookup)).thenReturn(null);
 		
-		Assert.assertNull(Utils.fetchConceptSource(lookup, cs));
+		Assertions.assertNull(Utils.fetchConceptSource(lookup, cs));
 		when(cs.getConceptSourceByUniqueId(lookup)).thenReturn(source);
-		Assert.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
+		Assertions.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
 	}
 	
 	@Test
@@ -398,31 +407,31 @@ public class UtilsTest {
 		when(cs.getConceptSourceByUniqueId(lookup)).thenReturn(null);
 		when(cs.getConceptSourceByUuid(lookup)).thenReturn(null);
 		
-		Assert.assertNull(Utils.fetchConceptSource(lookup, cs));
+		Assertions.assertNull(Utils.fetchConceptSource(lookup, cs));
 		when(cs.getConceptSourceByUuid(lookup)).thenReturn(source);
-		Assert.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
+		Assertions.assertEquals(source, Utils.fetchConceptSource(lookup, cs));
 	}
 	
 	@Test
 	public void getDrugByMapping_shouldReturnNullIfLookupIsNullOrEmpty() {
 		ConceptService cs = mock(ConceptService.class);
-		Assert.assertNull(Utils.getDrugByMapping(null, cs));
-		Assert.assertNull(Utils.getDrugByMapping("", cs));
-		Assert.assertNull(Utils.getDrugByMapping("    ", cs));
+		Assertions.assertNull(Utils.getDrugByMapping(null, cs));
+		Assertions.assertNull(Utils.getDrugByMapping("", cs));
+		Assertions.assertNull(Utils.getDrugByMapping("    ", cs));
 	}
 	
 	@Test
 	public void getDrugByMapping_shouldReturnNullIfNoSourceAndCodeSpecified() {
 		ConceptService cs = mock(ConceptService.class);
 		when(cs.getConceptSourceByName("source")).thenReturn(null);
-		Assert.assertNull(Utils.getDrugByMapping("source_code", cs));
+		Assertions.assertNull(Utils.getDrugByMapping("source_code", cs));
 	}
 	
 	@Test
 	public void getDrugByMapping_shouldReturnNullIfSourceIsNotFound() {
 		ConceptService cs = mock(ConceptService.class);
 		when(cs.getConceptSourceByName("source")).thenReturn(null);
-		Assert.assertNull(Utils.getDrugByMapping("source:code", cs));
+		Assertions.assertNull(Utils.getDrugByMapping("source:code", cs));
 	}
 	
 	@Test
@@ -433,8 +442,8 @@ public class UtilsTest {
 		when(cs.getConceptSourceByName("source")).thenReturn(source);
 		ConceptMapType sameAsMapType = new ConceptMapType();
 		when(cs.getConceptMapTypeByUuid(ConceptMapType.SAME_AS_MAP_TYPE_UUID)).thenReturn(sameAsMapType);
-		when(cs.getDrugByMapping(eq("code"), eq(source), anyCollectionOf(ConceptMapType.class))).thenReturn(drug);
-		Assert.assertEquals(drug, Utils.getDrugByMapping("source:code", cs));
+		when(cs.getDrugByMapping(eq("code"), eq(source), anyCollection())).thenReturn(drug);
+		Assertions.assertEquals(drug, Utils.getDrugByMapping("source:code", cs));
 	}
 	
 	@Test
@@ -449,6 +458,6 @@ public class UtilsTest {
 		when(Context.getService(InitializerService.class)).thenReturn(ics);
 		when(ics.getUnretiredConceptsByFullySpecifiedName("concept:lookup"))
 		        .thenReturn(Arrays.asList(nameConcept, nameConcept2));
-		Assert.assertThrows(RuntimeException.class, () -> Utils.fetchConcept("concept:lookup", cs));
+		Assertions.assertThrows(RuntimeException.class, () -> Utils.fetchConcept("concept:lookup", cs));
 	}
 }

@@ -6,7 +6,7 @@ import org.openmrs.module.initializer.api.loaders.BaseCsvLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.7.0 - 2.*")
+@OpenmrsProfile(openmrsPlatformVersion = "2.7.0 - 9.*")
 @Component
 public class ConceptReferenceRangeLoader extends BaseCsvLoader<ConceptReferenceRange, ConceptReferenceRangeParser> {
 	

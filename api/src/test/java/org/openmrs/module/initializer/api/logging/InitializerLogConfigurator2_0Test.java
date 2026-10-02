@@ -4,8 +4,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.Filter;
 import org.apache.log4j.varia.LevelRangeFilter;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.initializer.InitializerActivator;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +23,7 @@ public class InitializerLogConfigurator2_0Test {
 		logConfigurator20.setupLogging(level, null);
 		
 		// verify
-		Assert.assertEquals(level, Logger.getLogger(InitializerActivator.class.getPackage().getName()).getLevel());
+		Assertions.assertEquals(level, Logger.getLogger(InitializerActivator.class.getPackage().getName()).getLevel());
 	}
 	
 }

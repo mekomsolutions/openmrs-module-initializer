@@ -20,10 +20,10 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.GlobalProperty;
 import org.openmrs.PersonAddress;
 import org.openmrs.api.context.Context;
@@ -61,7 +61,7 @@ public class AddressHierarchyLoaderIntegrationTest extends DomainBaseModuleConte
 	@Autowired
 	private AddressHierarchyLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		// Disabling AH full caching otherwise loading takes too long
 		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty(
@@ -74,12 +74,12 @@ public class AddressHierarchyLoaderIntegrationTest extends DomainBaseModuleConte
 		        .saveGlobalProperty(new GlobalProperty(ExtI18nConstants.GLOBAL_PROP_REV_I18N_SUPPORT, "true"));
 		runtimeProperties.setProperty(ModuleConstants.RUNTIMEPROPERTY_MODULE_LIST_TO_LOAD, MODULES_TO_LOAD);
 		ModuleUtil.startup(runtimeProperties);
-		Assert.assertTrue(ModuleFactory.isModuleStarted(ExtI18nConstants.MODULE_ARTIFACT_ID));
+		Assertions.assertTrue(ModuleFactory.isModuleStarted(ExtI18nConstants.MODULE_ARTIFACT_ID));
 		
 		inizSrc = (InitializerMessageSource) Context.getMessageSourceService().getActiveMessageSource();
 	}
 	
-	@After
+	@AfterEach
 	public void tearDown() {
 		Context.getAdministrationService()
 		        .saveGlobalProperty(new GlobalProperty(ExtI18nConstants.GLOBAL_PROP_REV_I18N_SUPPORT, "false"));
@@ -102,8 +102,8 @@ public class AddressHierarchyLoaderIntegrationTest extends DomainBaseModuleConte
 		lnr.skip(Long.MAX_VALUE);
 		int csvLineCount = lnr.getLineNumber() + 1;
 		lnr.close();
-		Assert.assertTrue(csvLineCount < ahs.getAddressHierarchyEntryCount()); // there should be more entries than the
-		                                                                       // number of lines in CSV import
+		Assertions.assertTrue(csvLineCount < ahs.getAddressHierarchyEntryCount()); // there should be more entries than the
+		// number of lines in CSV import
 		
 		// Working in km_KH
 		Context.getUserContext().setLocale(new Locale("km", "KH"));
@@ -117,7 +117,7 @@ public class AddressHierarchyLoaderIntegrationTest extends DomainBaseModuleConte
 		// Looking for possible villages based on an address provided in km_KH
 		AddressHierarchyLevel villageLevel = ahs.getAddressHierarchyLevelByAddressField(AddressField.CITY_VILLAGE);
 		List<AddressHierarchyEntry> villageEntries = ahs.getPossibleAddressHierarchyEntries(address, villageLevel);
-		Assert.assertFalse(CollectionUtils.isEmpty(villageEntries));
+		Assertions.assertFalse(CollectionUtils.isEmpty(villageEntries));
 		
 		// Verifying that possible villages are provided as i18n message codes
 		final Set<String> expectedVillageNames = new HashSet<String>(); // filled by looking at the test CSV
@@ -132,7 +132,7 @@ public class AddressHierarchyLoaderIntegrationTest extends DomainBaseModuleConte
 		expectedVillageNames.add("addresshierarchy.snaoTiPir");
 		expectedVillageNames.add("addresshierarchy.roleangSangkae");
 		for (AddressHierarchyEntry entry : villageEntries) {
-			Assert.assertTrue(expectedVillageNames.contains(entry.getName()));
+			Assertions.assertTrue(expectedVillageNames.contains(entry.getName()));
 		}
 		
 		// Pinpointing a specific village
@@ -142,9 +142,9 @@ public class AddressHierarchyLoaderIntegrationTest extends DomainBaseModuleConte
 		villageEntries = ahs.getPossibleAddressHierarchyEntries(address, villageLevel);
 		
 		// We should find our one village
-		Assert.assertEquals(1, villageEntries.size());
+		Assertions.assertEquals(1, villageEntries.size());
 		String messageKey = villageEntries.get(0).getName();
-		Assert.assertEquals(messageKey, "addresshierarchy.paelHael");
-		Assert.assertEquals(Context.getMessageSourceService().getMessage(messageKey), "ប៉ែលហែល");
+		Assertions.assertEquals(messageKey, "addresshierarchy.paelHael");
+		Assertions.assertEquals(Context.getMessageSourceService().getMessage(messageKey), "ប៉ែលហែល");
 	}
 }

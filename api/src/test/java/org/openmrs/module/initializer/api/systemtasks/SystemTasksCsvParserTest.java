@@ -1,9 +1,10 @@
 package org.openmrs.module.initializer.api.systemtasks;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.tasks.SystemTask;
@@ -36,15 +37,18 @@ public class SystemTasksCsvParserTest {
 		assertEquals("550e8400-e29b-41d4-a716-446655440001", task.getUuid());
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void bootstrap_shouldThrowExceptionWhenUuidIsMissing() {
-		SystemTasksCsvParser parser = new TestableSystemTasksCsvParser();
-		
-		String[] headerLine = { "Uuid", "Name", "Title" };
-		String[] line = { "", "test-task", "Test Task" };
-		CsvLine csvLine = new CsvLine(headerLine, line);
-		
-		parser.bootstrap(csvLine);
+		assertThrows(IllegalArgumentException.class, () -> {
+			SystemTasksCsvParser parser = new TestableSystemTasksCsvParser();
+			
+			String[] headerLine = { "Uuid", "Name", "Title" };
+			String[] line = { "", "test-task", "Test Task" };
+			CsvLine csvLine = new CsvLine(headerLine, line);
+			
+			parser.bootstrap(csvLine);
+			
+		});
 	}
 	
 	/**

@@ -9,15 +9,16 @@
  */
 package org.openmrs.module.initializer.api.billing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openmrs.module.billing.api.BillableServiceService;
@@ -53,9 +54,9 @@ public class CashierItemPriceLineProcessorTest {
 
 	private PaymentMode paymentMode;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
-		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.openMocks(this);
 		processor = new CashierItemPriceLineProcessor(paymentModeService, stockManagementService, billableServiceService);
 		paymentMode = new PaymentMode();
 		paymentMode.setUuid(PAYMENT_MODE_UUID);
@@ -119,18 +120,22 @@ public class CashierItemPriceLineProcessorTest {
 		assertSame(paymentMode, instance.getPaymentMode());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void fill_shouldRejectWhenBothAssociationsSet() {
-		CashierItemPrice instance = new CashierItemPrice();
-		CsvLine line = new CsvLine(HEADERS, new String[] { "", "Price", "100.00", PAYMENT_MODE_UUID, STOCK_ITEM_UUID,
-		        BILLABLE_SERVICE_UUID });
-		processor.fill(instance, line);
+		assertThrows(IllegalArgumentException.class, () -> {
+			CashierItemPrice instance = new CashierItemPrice();
+			CsvLine line = new CsvLine(HEADERS, new String[] { "", "Price", "100.00", PAYMENT_MODE_UUID, STOCK_ITEM_UUID,
+			        BILLABLE_SERVICE_UUID });
+			processor.fill(instance, line);
+		});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void fill_shouldRejectWhenNeitherAssociationSet() {
-		CashierItemPrice instance = new CashierItemPrice();
-		CsvLine line = new CsvLine(HEADERS, new String[] { "", "Price", "100.00", PAYMENT_MODE_UUID, "", "" });
-		processor.fill(instance, line);
+		assertThrows(IllegalArgumentException.class, () -> {
+			CashierItemPrice instance = new CashierItemPrice();
+			CsvLine line = new CsvLine(HEADERS, new String[] { "", "Price", "100.00", PAYMENT_MODE_UUID, "", "" });
+			processor.fill(instance, line);
+		});
 	}
 }

@@ -3,10 +3,11 @@ package org.openmrs.module.initializer.api.attributes.types;
 import static org.hamcrest.CoreMatchers.is;
 import static org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity.LOCATION;
 
-import org.apache.commons.lang.RandomStringUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.LocationAttributeType;
 import org.openmrs.api.LocationService;
 import org.openmrs.attribute.BaseAttributeType;
@@ -25,7 +26,7 @@ public class AttributeTypesProxyServiceTest extends DomainBaseModuleContextSensi
 	@Qualifier("locationService")
 	private LocationService ls;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
 	}
@@ -36,9 +37,9 @@ public class AttributeTypesProxyServiceTest extends DomainBaseModuleContextSensi
 		BaseAttributeType<?> attType = service.getAttributeTypeByUuid(LOCATION_ATT_TYPE_UUID, LOCATION);
 		
 		// Verif
-		Assert.assertNotNull(attType);
-		Assert.assertThat(attType.getName(), is("Location Code"));
-		Assert.assertTrue(attType instanceof LocationAttributeType);
+		Assertions.assertNotNull(attType);
+		MatcherAssert.assertThat(attType.getName(), is("Location Code"));
+		Assertions.assertTrue(attType instanceof LocationAttributeType);
 	}
 	
 	@Test
@@ -53,7 +54,7 @@ public class AttributeTypesProxyServiceTest extends DomainBaseModuleContextSensi
 		
 		// Verif
 		attType = service.getAttributeTypeByName(newName, LOCATION);
-		Assert.assertNotNull(attType);
-		Assert.assertThat(attType.getId(), is(1089));
+		Assertions.assertNotNull(attType);
+		MatcherAssert.assertThat(attType.getId(), is(1089));
 	}
 }

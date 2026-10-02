@@ -1,9 +1,12 @@
 package org.openmrs.module.initializer.api.datafilter.mappings;
 
-import org.hibernate.Criteria;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+
 import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.datafilter.impl.api.DataFilterService;
@@ -33,9 +36,16 @@ public class DataFilterMappingLineProcessor extends BaseLineProcessor<DataFilter
 	
 	@Transactional(readOnly = true)
 	public OpenmrsObject getOpenmrsObject(String uuid, String className) throws HibernateException, ClassNotFoundException {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Class.forName(className));
-		criteria.add(Restrictions.eq("uuid", uuid));
-		return (OpenmrsObject) criteria.uniqueResult();
+		return (OpenmrsObject) getByUuid(Class.forName(className), uuid);
+	}
+	
+	private <T> T getByUuid(Class<T> clazz, String uuid) {
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<T> cq = cb.createQuery(clazz);
+		Root<T> root = cq.from(clazz);
+		cq.where(cb.equal(root.get("uuid"), uuid));
+		return session.createQuery(cq).uniqueResult();
 	}
 	
 	@Autowired
