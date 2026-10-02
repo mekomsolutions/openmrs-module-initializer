@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.UserService;
@@ -32,7 +32,7 @@ public class DataFilterMappingsLoaderTest extends DomainBaseModuleContextSensiti
 	@Autowired
 	private DataFilterService dfs;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		executeDataSet("testdata/test-metadata.xml");
 		
@@ -45,9 +45,9 @@ public class DataFilterMappingsLoaderTest extends DomainBaseModuleContextSensiti
 		loader.load();
 		
 		// verify new access for entity through basis
-		Assert.assertTrue(dfs.hasAccess(us.getRole("test-entity-role"), pws.getProgram(4089)));
+		Assertions.assertTrue(dfs.hasAccess(us.getRole("test-entity-role"), pws.getProgram(4089)));
 		
 		// verify revoked access for entity through basis
-		Assert.assertFalse(dfs.hasAccess(us.getPrivilege("Add Apples"), ls.getLocation(4089)));
+		Assertions.assertFalse(dfs.hasAccess(us.getPrivilege("Add Apples"), ls.getLocation(4089)));
 	}
 }

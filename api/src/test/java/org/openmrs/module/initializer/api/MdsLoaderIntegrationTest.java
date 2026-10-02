@@ -9,8 +9,8 @@
  */
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
@@ -29,27 +29,27 @@ public class MdsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTe
 		// Replay
 		PersonAttributeType personAttType = null;
 		personAttType = Context.getPersonService().getPersonAttributeTypeByUuid("b3b6d540-a32e-44c7-91b3-292d97667518");
-		Assert.assertEquals("Race", personAttType.getName());
+		Assertions.assertEquals("Race", personAttType.getName());
 		
 		loader.load();
 		
 		// Verif
 		PatientIdentifierType patientIdType = Context.getPatientService()
 		        .getPatientIdentifierTypeByUuid("0d2ac572-8de3-46c8-9976-1f78899c599f");
-		Assert.assertEquals("National ID card number", patientIdType.getName());
+		Assertions.assertEquals("National ID card number", patientIdType.getName());
 		
 		personAttType = Context.getPersonService().getPersonAttributeTypeByUuid("b3b6d540-a32e-44c7-91b3-292d97667518");
-		Assert.assertEquals("Email address", personAttType.getName());
-		Assert.assertFalse(personAttType.isRetired());
+		Assertions.assertEquals("Email address", personAttType.getName());
+		Assertions.assertFalse(personAttType.isRetired());
 		personAttType = Context.getPersonService().getPersonAttributeTypeByUuid("c1f4a004-3f10-11e4-adec-0800271c1b75");
-		Assert.assertEquals("education", personAttType.getName());
-		Assert.assertTrue(personAttType.isRetired());
+		Assertions.assertEquals("education", personAttType.getName());
+		Assertions.assertTrue(personAttType.isRetired());
 		
 		// RelationshipType relType =
 		// Context.getPersonService().getRelationshipTypeByUuid(
 		// "2a5f4ff4-a179-4b8a-aa4c-40f71956ebbc");
-		// Assert.assertEquals("Provider supervisor to provider supervisee
+		// Assertions.assertEquals("Provider supervisor to provider supervisee
 		// relationship", relType.getDescription());
-		// Assert.assertTrue(relType.isRetired());
+		// Assertions.assertTrue(relType.isRetired());
 	}
 }

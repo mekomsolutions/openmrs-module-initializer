@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Test;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Form;
 import org.openmrs.FormResource;
 import org.openmrs.api.DatatypeService;
@@ -34,7 +34,7 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	@Autowired
 	private FormService formService;
 	
-	@After
+	@AfterEach
 	public void clean() throws IOException {
 		
 		// Delete created form files
@@ -54,20 +54,20 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		ClobDatatypeStorage clob = datatypeService
 		        .getClobDatatypeStorageByUuid(formService.getFormResource(form, "JSON schema").getValueReference());
 		// Verify form
-		Assert.assertEquals("Test Form 1", form.getName());
-		Assert.assertEquals(Boolean.TRUE, form.getPublished());
-		Assert.assertEquals("1", form.getVersion());
-		Assert.assertEquals(Boolean.FALSE, form.getRetired());
-		Assert.assertEquals("Emergency", form.getEncounterType().getName());
-		Assert.assertEquals("Test 1 Description", form.getDescription());
+		Assertions.assertEquals("Test Form 1", form.getName());
+		Assertions.assertEquals(Boolean.TRUE, form.getPublished());
+		Assertions.assertEquals("1", form.getVersion());
+		Assertions.assertEquals(Boolean.FALSE, form.getRetired());
+		Assertions.assertEquals("Emergency", form.getEncounterType().getName());
+		Assertions.assertEquals("Test 1 Description", form.getDescription());
 		// Verify clob
-		Assert.assertNotNull(clob);
+		Assertions.assertNotNull(clob);
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode actualObj = mapper.readTree(clob.getValue());
-		Assert.assertEquals("\"Page 1\"", actualObj.get("pages").getElements().next().get("label").toString());
+		Assertions.assertEquals("\"Page 1\"", actualObj.get("pages").elements().next().get("label").toString());
 		// Verify Form Resource 
-		Assert.assertNotNull(formResource);
-		Assert.assertEquals(clob.getUuid(), formResource.getValueReference());
+		Assertions.assertNotNull(formResource);
+		Assertions.assertEquals(clob.getUuid(), formResource.getValueReference());
 		
 	}
 	
@@ -82,20 +82,20 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		ClobDatatypeStorage clob = datatypeService
 		        .getClobDatatypeStorageByUuid(formService.getFormResource(form, "JSON schema").getValueReference());
 		// Verify form
-		Assert.assertEquals("Test Form 1", form.getName());
-		Assert.assertEquals(Boolean.TRUE, form.getPublished());
-		Assert.assertEquals("1", form.getVersion());
-		Assert.assertEquals(Boolean.FALSE, form.getRetired());
-		Assert.assertEquals("Emergency", form.getEncounterType().getName());
-		Assert.assertEquals("Test 1 Description", form.getDescription());
+		Assertions.assertEquals("Test Form 1", form.getName());
+		Assertions.assertEquals(Boolean.TRUE, form.getPublished());
+		Assertions.assertEquals("1", form.getVersion());
+		Assertions.assertEquals(Boolean.FALSE, form.getRetired());
+		Assertions.assertEquals("Emergency", form.getEncounterType().getName());
+		Assertions.assertEquals("Test 1 Description", form.getDescription());
 		// Verify clob
-		Assert.assertNotNull(clob);
+		Assertions.assertNotNull(clob);
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode actualObj = mapper.readTree(clob.getValue());
-		Assert.assertEquals("\"Page 1\"", actualObj.get("pages").getElements().next().get("label").toString());
+		Assertions.assertEquals("\"Page 1\"", actualObj.get("pages").elements().next().get("label").toString());
 		// Verify Form Resource
-		Assert.assertNotNull(formResource);
-		Assert.assertEquals(clob.getUuid(), formResource.getValueReference());
+		Assertions.assertNotNull(formResource);
+		Assertions.assertEquals(clob.getUuid(), formResource.getValueReference());
 		
 		String test_file_updated = "src/test/resources/testdata/testAmpathforms/test_form_clob_changed.json";
 		File srcFile = new File(test_file_updated);
@@ -108,17 +108,17 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		form = formService.getForm("Test Form 1");
 		
 		// Verify form unchanged
-		Assert.assertEquals("Test Form 1", form.getName());
-		Assert.assertEquals(Boolean.TRUE, form.getPublished());
-		Assert.assertEquals("1", form.getVersion());
-		Assert.assertEquals(Boolean.FALSE, form.getRetired());
-		Assert.assertEquals("Emergency", form.getEncounterType().getName());
-		Assert.assertEquals("Test 1 Description", form.getDescription());
+		Assertions.assertEquals("Test Form 1", form.getName());
+		Assertions.assertEquals(Boolean.TRUE, form.getPublished());
+		Assertions.assertEquals("1", form.getVersion());
+		Assertions.assertEquals(Boolean.FALSE, form.getRetired());
+		Assertions.assertEquals("Emergency", form.getEncounterType().getName());
+		Assertions.assertEquals("Test 1 Description", form.getDescription());
 		// Verify clob changed
-		Assert.assertNotNull(clob);
+		Assertions.assertNotNull(clob);
 		ObjectMapper mapper2 = new ObjectMapper();
 		JsonNode actualObj1 = mapper2.readTree(clob.getValue());
-		Assert.assertEquals("\"Page 1 changed\"", actualObj1.get("pages").getElements().next().get("label").toString());
+		Assertions.assertEquals("\"Page 1 changed\"", actualObj1.get("pages").elements().next().get("label").toString());
 	}
 	
 	@Test
@@ -132,20 +132,20 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		ClobDatatypeStorage clob = datatypeService
 		        .getClobDatatypeStorageByUuid(formService.getFormResource(form, "JSON schema").getValueReference());
 		// Verify Form
-		Assert.assertEquals("Test Form 1", form.getName());
-		Assert.assertEquals(Boolean.TRUE, form.getPublished());
-		Assert.assertEquals("1", form.getVersion());
-		Assert.assertEquals(Boolean.FALSE, form.getRetired());
-		Assert.assertEquals("Emergency", form.getEncounterType().getName());
-		Assert.assertEquals("Test 1 Description", form.getDescription());
+		Assertions.assertEquals("Test Form 1", form.getName());
+		Assertions.assertEquals(Boolean.TRUE, form.getPublished());
+		Assertions.assertEquals("1", form.getVersion());
+		Assertions.assertEquals(Boolean.FALSE, form.getRetired());
+		Assertions.assertEquals("Emergency", form.getEncounterType().getName());
+		Assertions.assertEquals("Test 1 Description", form.getDescription());
 		// Verify Clob
-		Assert.assertNotNull(clob);
+		Assertions.assertNotNull(clob);
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode actualObj = mapper.readTree(clob.getValue());
-		Assert.assertEquals("\"Page 1\"", actualObj.get("pages").getElements().next().get("label").toString());
+		Assertions.assertEquals("\"Page 1\"", actualObj.get("pages").elements().next().get("label").toString());
 		// Verify Form Resource 
-		Assert.assertNotNull(formResource);
-		Assert.assertEquals(clob.getUuid(), formResource.getValueReference());
+		Assertions.assertNotNull(formResource);
+		Assertions.assertEquals(clob.getUuid(), formResource.getValueReference());
 		
 		String test_file_updated = "src/test/resources/testdata/testAmpathforms/test_form_new_version.json";
 		File srcFile = new File(test_file_updated);
@@ -157,33 +157,33 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		ampathFormsLoader.load();
 		Form form2 = formService.getForm("Test Form 1");
 		Form initialForm = formService.getFormByUuid(form.getUuid());
-		Assert.assertEquals(Boolean.TRUE, initialForm.getRetired());
+		Assertions.assertEquals(Boolean.TRUE, initialForm.getRetired());
 		
 		// Verify Form Changed
-		Assert.assertEquals("Test Form 1", form2.getName());
-		Assert.assertEquals(Boolean.TRUE, form2.getPublished());
-		Assert.assertEquals("2", form2.getVersion());
-		Assert.assertEquals(Boolean.FALSE, form2.getRetired());
-		Assert.assertEquals("Emergency", form2.getEncounterType().getName());
-		Assert.assertEquals("Test 1 Description Updated", form2.getDescription());
+		Assertions.assertEquals("Test Form 1", form2.getName());
+		Assertions.assertEquals(Boolean.TRUE, form2.getPublished());
+		Assertions.assertEquals("2", form2.getVersion());
+		Assertions.assertEquals(Boolean.FALSE, form2.getRetired());
+		Assertions.assertEquals("Emergency", form2.getEncounterType().getName());
+		Assertions.assertEquals("Test 1 Description Updated", form2.getDescription());
 		
 		// Verify Clob Changed
 		ClobDatatypeStorage clob2 = datatypeService
 		        .getClobDatatypeStorageByUuid(formService.getFormResource(form2, "JSON schema").getValueReference());
-		Assert.assertNotNull(clob2);
+		Assertions.assertNotNull(clob2);
 		assertNotEquals(clob, clob2);
 		ObjectMapper mapper2 = new ObjectMapper();
 		JsonNode actualObj1 = mapper2.readTree(clob2.getValue());
-		Assert.assertEquals("\"Page X\"", actualObj1.get("pages").getElements().next().get("label").toString());
+		Assertions.assertEquals("\"Page X\"", actualObj1.get("pages").elements().next().get("label").toString());
 		
 		// Verify Form Resource 
 		FormResource formResource2 = formService.getFormResource(form2, "JSON schema");
-		Assert.assertNotNull(formResource2);
-		Assert.assertEquals(clob2.getUuid(), formResource2.getValueReference());
+		Assertions.assertNotNull(formResource2);
+		Assertions.assertEquals(clob2.getUuid(), formResource2.getValueReference());
 		
 		List<Form> forms = formService.getAllForms(true);
 		// There is an initial Basic form
-		Assert.assertEquals(3, forms.size());
+		Assertions.assertEquals(3, forms.size());
 	}
 	
 }

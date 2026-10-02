@@ -1,9 +1,9 @@
 package org.openmrs.module.initializer.api.c;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,7 +27,7 @@ public class MappingsConceptLineProcessorTest {
 	
 	private ConceptService cs = mock(ConceptService.class);
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		/*
@@ -86,15 +86,15 @@ public class MappingsConceptLineProcessorTest {
 		
 		// Verif
 		Collection<ConceptMap> mappings = c.getConceptMappings();
-		Assert.assertEquals(2, mappings.size());
+		Assertions.assertEquals(2, mappings.size());
 		Set<String> names = new HashSet<String>();
 		for (ConceptMap m : mappings) {
 			String source = m.getConceptReferenceTerm().getConceptSource().getName();
 			String code = m.getConceptReferenceTerm().getCode();
 			names.add(source + ":" + code);
 		}
-		Assert.assertTrue(names.contains("cambodia:123"));
-		Assert.assertTrue(names.contains("foo:456"));
+		Assertions.assertTrue(names.contains("cambodia:123"));
+		Assertions.assertTrue(names.contains("foo:456"));
 	}
 	
 	@Test
@@ -111,7 +111,7 @@ public class MappingsConceptLineProcessorTest {
 		
 		// Verif
 		Collection<ConceptMap> mappings = c.getConceptMappings();
-		Assert.assertEquals(6, mappings.size());
+		Assertions.assertEquals(6, mappings.size());
 		Set<String> names = new HashSet<String>();
 		for (ConceptMap m : mappings) {
 			String mapType = m.getConceptMapType().getName();
@@ -119,12 +119,12 @@ public class MappingsConceptLineProcessorTest {
 			String code = m.getConceptReferenceTerm().getCode();
 			names.add(mapType + ":" + source + ":" + code);
 		}
-		Assert.assertTrue(names.contains("same-as:cambodia:123"));
-		Assert.assertTrue(names.contains("broader-than:foo:456"));
-		Assert.assertTrue(names.contains("related-to:cambodia:789"));
-		Assert.assertTrue(names.contains("related-to:foo:abc"));
-		Assert.assertTrue(names.contains("same-as:pih:5089"));
-		Assert.assertTrue(names.contains("same-as:pih:weight"));
+		Assertions.assertTrue(names.contains("same-as:cambodia:123"));
+		Assertions.assertTrue(names.contains("broader-than:foo:456"));
+		Assertions.assertTrue(names.contains("related-to:cambodia:789"));
+		Assertions.assertTrue(names.contains("related-to:foo:abc"));
+		Assertions.assertTrue(names.contains("same-as:pih:5089"));
+		Assertions.assertTrue(names.contains("same-as:pih:weight"));
 	}
 	
 	@Test
@@ -139,7 +139,7 @@ public class MappingsConceptLineProcessorTest {
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertTrue(CollectionUtils.isEmpty(c.getConceptMappings()));
+		Assertions.assertTrue(CollectionUtils.isEmpty(c.getConceptMappings()));
 	}
 	
 	public void getConcept_shouldHandleMissingHeaders() {
@@ -151,6 +151,6 @@ public class MappingsConceptLineProcessorTest {
 		// Replay
 		MappingsConceptLineProcessor p = new MappingsConceptLineProcessor(cs);
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
-		Assert.assertNull(c.getConceptMappings());
+		Assertions.assertNull(c.getConceptMappings());
 	}
 }

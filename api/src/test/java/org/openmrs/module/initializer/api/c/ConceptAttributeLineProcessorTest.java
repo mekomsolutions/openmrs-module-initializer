@@ -5,16 +5,17 @@ import java.util.Date;
 import java.util.Properties;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.openmrs.module.initializer.api.BaseAttributeLineProcessor.HEADER_ATTRIBUTE_PREFIX;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAttribute;
 import org.openmrs.ConceptAttributeType;
@@ -25,15 +26,20 @@ import org.openmrs.customdatatype.CustomDatatypeUtil;
 import org.openmrs.customdatatype.datatype.DateDatatype;
 import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ Context.class, CustomDatatypeUtil.class })
-@PowerMockIgnore("jdk.internal.reflect.*")
 public class ConceptAttributeLineProcessorTest {
+	
+	private MockedStatic<Context> contextMock;
+	
+	private MockedStatic<CustomDatatypeUtil> customDatatypeUtilMock;
+	
+	@AfterEach
+	public void closeStaticMocks() {
+		contextMock.close();
+		customDatatypeUtilMock.close();
+	}
 	
 	private ConceptService cs;
 	
@@ -45,14 +51,14 @@ public class ConceptAttributeLineProcessorTest {
 	
 	private DateDatatype dateDatatype;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
-		PowerMockito.mockStatic(Context.class);
-		PowerMockito.mockStatic(CustomDatatypeUtil.class);
+		contextMock = Mockito.mockStatic(Context.class);
+		customDatatypeUtilMock = Mockito.mockStatic(CustomDatatypeUtil.class);
 		
-		when(CustomDatatypeUtil.getDatatype(eq(FreeTextDatatype.class.getName()), anyString()))
+		when(CustomDatatypeUtil.getDatatype(eq(FreeTextDatatype.class.getName()), any()))
 		        .thenReturn((CustomDatatype) new FreeTextDatatype());
-		when(CustomDatatypeUtil.getDatatype(eq(DateDatatype.class.getName()), anyString()))
+		when(CustomDatatypeUtil.getDatatype(eq(DateDatatype.class.getName()), any()))
 		        .thenReturn((CustomDatatype) new DateDatatype());
 		when(Context.getRuntimeProperties()).thenReturn(new Properties());
 		
@@ -85,11 +91,11 @@ public class ConceptAttributeLineProcessorTest {
 		
 		// Verify
 		Collection<ConceptAttribute> attributes = concept.getActiveAttributes();
-		Assert.assertEquals(2, attributes.size());
+		Assertions.assertEquals(2, attributes.size());
 		Object[] attributesArray = attributes.toArray();
 		Object auditDate = ((ConceptAttribute) attributesArray[0]).getValue();
-		Assert.assertTrue(auditDate instanceof Date);
-		Assert.assertThat(dateDatatype.serialize(((Date) auditDate)), is("2013-03-19"));
-		Assert.assertThat(((ConceptAttribute) attributesArray[1]).getValue(), is("jdoe@example.com"));
+		Assertions.assertTrue(auditDate instanceof Date);
+		MatcherAssert.assertThat(dateDatatype.serialize(((Date) auditDate)), is("2013-03-19"));
+		MatcherAssert.assertThat(((ConceptAttribute) attributesArray[1]).getValue(), is("jdoe@example.com"));
 	}
 }

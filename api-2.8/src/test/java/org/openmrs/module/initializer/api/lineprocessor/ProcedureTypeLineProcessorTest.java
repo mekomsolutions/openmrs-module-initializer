@@ -1,9 +1,10 @@
 package org.openmrs.module.initializer.api.lineprocessor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.emrapi.procedure.ProcedureType;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.procedure.ProcedureTypeLineProcessor;
@@ -34,19 +35,25 @@ public class ProcedureTypeLineProcessorTest {
 		assertNull(type.getDescription());
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowWhenNameIsNull() {
-		String[] headers = { "Uuid", "Name", "Description" };
-		String[] line = { "9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b1234", null, "Description without a name" };
-		
-		processor.fill(new ProcedureType(), new CsvLine(headers, line));
+		assertThrows(IllegalArgumentException.class, () -> {
+			String[] headers = { "Uuid", "Name", "Description" };
+			String[] line = { "9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b1234", null, "Description without a name" };
+			
+			processor.fill(new ProcedureType(), new CsvLine(headers, line));
+			
+		});
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowWhenNameIsBlank() {
-		String[] headers = { "Uuid", "Name", "Description" };
-		String[] line = { "9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b1234", "", "Description without a name" };
-		
-		processor.fill(new ProcedureType(), new CsvLine(headers, line));
+		assertThrows(IllegalArgumentException.class, () -> {
+			String[] headers = { "Uuid", "Name", "Description" };
+			String[] line = { "9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b1234", "", "Description without a name" };
+			
+			processor.fill(new ProcedureType(), new CsvLine(headers, line));
+			
+		});
 	}
 }

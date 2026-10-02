@@ -1,14 +1,15 @@
 package org.openmrs.module.initializer.api.c;
 
-import static org.mockito.Matchers.any;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.openmrs.Concept;
@@ -24,7 +25,7 @@ public class ConceptNumericLineProcessorTest {
 	
 	private ConceptService cs = mock(ConceptService.class);
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		when(cs.getConceptDatatypeByName(any(String.class))).thenAnswer(new Answer<ConceptDatatype>() {
@@ -53,16 +54,16 @@ public class ConceptNumericLineProcessorTest {
 		ConceptNumeric cn = (ConceptNumeric) p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertEquals(ConceptNumericLineProcessor.DATATYPE_NUMERIC, cn.getDatatype().getName());
-		Assert.assertEquals(0, cn.getLowAbsolute().compareTo(-100.5));
-		Assert.assertEquals(0, cn.getLowCritical().compareTo(-85.7));
-		Assert.assertEquals(0, cn.getLowNormal().compareTo(-50.3));
-		Assert.assertEquals(0, cn.getHiNormal().compareTo(45.1));
-		Assert.assertEquals(0, cn.getHiCritical().compareTo(78.0));
-		Assert.assertEquals(0, cn.getHiAbsolute().compareTo(98.8));
-		Assert.assertEquals("foo", cn.getUnits());
-		Assert.assertTrue(cn.getAllowDecimal());
-		Assert.assertEquals(1, cn.getDisplayPrecision().intValue());
+		Assertions.assertEquals(ConceptNumericLineProcessor.DATATYPE_NUMERIC, cn.getDatatype().getName());
+		Assertions.assertEquals(0, cn.getLowAbsolute().compareTo(-100.5));
+		Assertions.assertEquals(0, cn.getLowCritical().compareTo(-85.7));
+		Assertions.assertEquals(0, cn.getLowNormal().compareTo(-50.3));
+		Assertions.assertEquals(0, cn.getHiNormal().compareTo(45.1));
+		Assertions.assertEquals(0, cn.getHiCritical().compareTo(78.0));
+		Assertions.assertEquals(0, cn.getHiAbsolute().compareTo(98.8));
+		Assertions.assertEquals("foo", cn.getUnits());
+		Assertions.assertTrue(cn.getAllowDecimal());
+		Assertions.assertEquals(1, cn.getDisplayPrecision().intValue());
 	}
 	
 	@Test
@@ -77,19 +78,22 @@ public class ConceptNumericLineProcessorTest {
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertFalse(c instanceof ConceptNumeric);
+		Assertions.assertFalse(c instanceof ConceptNumeric);
 	}
 	
-	@Test(expected = NumberFormatException.class)
+	@Test
 	public void fill_shouldFailWhenCannotParse() {
-		
-		// Setup
-		String[] headerLine = { "Data type", "Absolute low" };
-		String[] line = { "Numeric", "-100.5a" };
-		
-		// Replay
-		ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(cs);
-		p.fill(new Concept(), new CsvLine(headerLine, line));
+		assertThrows(NumberFormatException.class, () -> {
+			
+			// Setup
+			String[] headerLine = { "Data type", "Absolute low" };
+			String[] line = { "Numeric", "-100.5a" };
+			
+			// Replay
+			ConceptNumericLineProcessor p = new ConceptNumericLineProcessor(cs);
+			p.fill(new Concept(), new CsvLine(headerLine, line));
+			
+		});
 	}
 	
 	@Test
@@ -106,7 +110,7 @@ public class ConceptNumericLineProcessorTest {
 		
 		// Verify
 		verify(cs, atLeast(1)).getConceptNumeric(any(Integer.class));
-		Assert.assertEquals(ConceptNumericLineProcessor.DATATYPE_NUMERIC, cn.getDatatype().getName());
-		Assert.assertEquals(0, cn.getLowAbsolute().compareTo(11.11));
+		Assertions.assertEquals(ConceptNumericLineProcessor.DATATYPE_NUMERIC, cn.getDatatype().getName());
+		Assertions.assertEquals(0, cn.getLowAbsolute().compareTo(11.11));
 	}
 }

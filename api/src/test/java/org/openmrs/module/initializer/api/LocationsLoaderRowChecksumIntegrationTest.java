@@ -18,9 +18,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.InitializerConfig;
 import org.openmrs.module.initializer.api.loc.LocationsLoader;
@@ -42,14 +42,14 @@ public class LocationsLoaderRowChecksumIntegrationTest extends DomainBaseModuleC
 	@Autowired
 	private InitializerService iniz;
 	
-	@Before
+	@BeforeEach
 	public void enableRowChecksums() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
 		System.setProperty(PROPS_ROW_CHECKSUMS_ENABLED, "true");
 		cfg.init();
 	}
 	
-	@After
+	@AfterEach
 	public void disableRowChecksums() {
 		System.clearProperty(PROPS_ROW_CHECKSUMS_ENABLED);
 		cfg.init();

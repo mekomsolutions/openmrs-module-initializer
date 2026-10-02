@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.EncounterType;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -23,7 +23,7 @@ public class MetadataTermMappingsLoaderIntegrationTest extends DomainBaseModuleC
 	
 	private MetadataSource ms;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		ms = new MetadataSource();
@@ -76,34 +76,34 @@ public class MetadataTermMappingsLoaderIntegrationTest extends DomainBaseModuleC
 		
 		// Verify created
 		mtm = service.getMetadataTermMapping(ms, "emr.atFacilityVisitType");
-		Assert.assertNotNull(mtm);
-		Assert.assertNotNull(mtm.getUuid());
-		Assert.assertEquals("org.openmrs.VisitType", mtm.getMetadataClass());
-		Assert.assertEquals("7b0f5697-27e3-40c4-8bae-f4049abfb4ed", mtm.getMetadataUuid());
+		Assertions.assertNotNull(mtm);
+		Assertions.assertNotNull(mtm.getUuid());
+		Assertions.assertEquals("org.openmrs.VisitType", mtm.getMetadataClass());
+		Assertions.assertEquals("7b0f5697-27e3-40c4-8bae-f4049abfb4ed", mtm.getMetadataUuid());
 		
 		// Verify edited using source and code
 		mtm = service.getMetadataTermMappingByUuid("21e24b36-f9e3-4b0e-986d-9899665597f7");
-		Assert.assertNotNull(mtm);
-		Assert.assertEquals("org.openmrs.module.emrapi", mtm.getMetadataSource().getName());
-		Assert.assertEquals("emr.primaryIdentifierType", mtm.getCode());
-		Assert.assertEquals("org.openmrs.PatientIdentifierType", mtm.getMetadataClass());
-		Assert.assertEquals("264c9e75-77da-486a-8361-31558e051930", mtm.getMetadataUuid());
+		Assertions.assertNotNull(mtm);
+		Assertions.assertEquals("org.openmrs.module.emrapi", mtm.getMetadataSource().getName());
+		Assertions.assertEquals("emr.primaryIdentifierType", mtm.getCode());
+		Assertions.assertEquals("org.openmrs.PatientIdentifierType", mtm.getMetadataClass());
+		Assertions.assertEquals("264c9e75-77da-486a-8361-31558e051930", mtm.getMetadataUuid());
 		
 		// Verify edited using metadataUuid
 		mtm = service.getMetadataTermMappingByUuid("dbfd899d-e9e1-4059-8992-73737c924f84");
-		Assert.assertNotNull(mtm);
-		Assert.assertEquals("org.openmrs.module.emrapi", mtm.getMetadataSource().getName());
-		Assert.assertEquals("emr.admissionEncounterType", mtm.getCode());
-		Assert.assertEquals("org.openmrs.EncounterType", mtm.getMetadataClass());
-		Assert.assertEquals("e22e39fd-7db2-45e7-80f1-60fa0d5a4378", mtm.getMetadataUuid());
+		Assertions.assertNotNull(mtm);
+		Assertions.assertEquals("org.openmrs.module.emrapi", mtm.getMetadataSource().getName());
+		Assertions.assertEquals("emr.admissionEncounterType", mtm.getCode());
+		Assertions.assertEquals("org.openmrs.EncounterType", mtm.getMetadataClass());
+		Assertions.assertEquals("e22e39fd-7db2-45e7-80f1-60fa0d5a4378", mtm.getMetadataUuid());
 		
 		// Verify retired
 		mtm = service.getMetadataTermMappingByUuid("5f84b986-232d-475b-aad2-2094306bd655");
-		Assert.assertNotNull(mtm);
-		Assert.assertTrue(mtm.isRetired());
-		Assert.assertEquals("org.openmrs.module.emrapi", mtm.getMetadataSource().getName());
-		Assert.assertEquals("emr.extraPatientIdentifierTypes", mtm.getCode());
-		Assert.assertEquals("org.openmrs.module.metadatamapping.MetadataSet", mtm.getMetadataClass());
-		Assert.assertEquals("05a29f94-c0ed-11e2-94be-8c13b969e334", mtm.getMetadataUuid());
+		Assertions.assertNotNull(mtm);
+		Assertions.assertTrue(mtm.isRetired());
+		Assertions.assertEquals("org.openmrs.module.emrapi", mtm.getMetadataSource().getName());
+		Assertions.assertEquals("emr.extraPatientIdentifierTypes", mtm.getCode());
+		Assertions.assertEquals("org.openmrs.module.metadatamapping.MetadataSet", mtm.getMetadataClass());
+		Assertions.assertEquals("05a29f94-c0ed-11e2-94be-8c13b969e334", mtm.getMetadataUuid());
 	}
 }

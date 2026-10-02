@@ -2,9 +2,9 @@ package org.openmrs.module.initializer.api;
 
 import java.util.Locale;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
@@ -134,7 +134,7 @@ public class ProgramsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		}
 	}
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		setupPrograms(cs, pws);
 	}
@@ -148,42 +148,42 @@ public class ProgramsLoaderIntegrationTest extends DomainBaseModuleContextSensit
 		// created programs
 		{
 			Program prog = pws.getProgramByName("TB Program");
-			Assert.assertNotNull(prog);
-			Assert.assertEquals(cs.getConceptByName("TB Program"), prog.getConcept());
-			Assert.assertEquals(cs.getConceptByName("TB Program Outcomes"), prog.getOutcomesConcept());
-			Assert.assertEquals("TB Program", prog.getDescription());
+			Assertions.assertNotNull(prog);
+			Assertions.assertEquals(cs.getConceptByName("TB Program"), prog.getConcept());
+			Assertions.assertEquals(cs.getConceptByName("TB Program Outcomes"), prog.getOutcomesConcept());
+			Assertions.assertEquals("TB Program", prog.getDescription());
 			
 		}
 		{
 			Program prog = pws.getProgramByName("AIDS Program");
-			Assert.assertNotNull(prog);
-			Assert.assertEquals(cs.getConceptByName("AIDS Program"), prog.getConcept());
-			Assert.assertEquals(cs.getConceptByName("AIDS Program Outcomes"), prog.getOutcomesConcept());
-			Assert.assertEquals("AIDS Program", prog.getDescription());
+			Assertions.assertNotNull(prog);
+			Assertions.assertEquals(cs.getConceptByName("AIDS Program"), prog.getConcept());
+			Assertions.assertEquals(cs.getConceptByName("AIDS Program Outcomes"), prog.getOutcomesConcept());
+			Assertions.assertEquals("AIDS Program", prog.getDescription());
 		}
 		{
 			Program prog = pws.getProgramByName("Mental Health Program");
-			Assert.assertNotNull(prog);
-			Assert.assertEquals(cs.getConceptByName("Mental Health Program"), prog.getConcept());
-			Assert.assertEquals(cs.getConceptByName("Mental Health Program Outcomes"), prog.getOutcomesConcept());
-			Assert.assertEquals("Mental Health Program", prog.getDescription());
+			Assertions.assertNotNull(prog);
+			Assertions.assertEquals(cs.getConceptByName("Mental Health Program"), prog.getConcept());
+			Assertions.assertEquals(cs.getConceptByName("Mental Health Program Outcomes"), prog.getOutcomesConcept());
+			Assertions.assertEquals("Mental Health Program", prog.getDescription());
 		}
 		
 		// an edited program
 		{
 			Program prog = pws.getProgramByName("Oncology Program");
-			Assert.assertNotNull(prog);
-			Assert.assertEquals(cs.getConceptByName("Oncology Program"), prog.getConcept());
-			Assert.assertEquals(cs.getConceptByName("Oncology Program Outcomes"), prog.getOutcomesConcept());
-			Assert.assertEquals("Oncology Program", prog.getName());
-			Assert.assertEquals("A regular oncology program with traditional chimotherapy.", prog.getDescription());
+			Assertions.assertNotNull(prog);
+			Assertions.assertEquals(cs.getConceptByName("Oncology Program"), prog.getConcept());
+			Assertions.assertEquals(cs.getConceptByName("Oncology Program Outcomes"), prog.getOutcomesConcept());
+			Assertions.assertEquals("Oncology Program", prog.getName());
+			Assertions.assertEquals("A regular oncology program with traditional chimotherapy.", prog.getDescription());
 		}
 		
 		// an retired program
 		{
 			Program prog = pws.getProgramByName("Ayurvedic Medicine Program");
-			Assert.assertNotNull(prog);
-			Assert.assertTrue(prog.isRetired());
+			Assertions.assertNotNull(prog);
+			Assertions.assertTrue(prog.isRetired());
 		}
 	}
 }

@@ -12,7 +12,7 @@
 
 	<activator>org.openmrs.module.initializer.InitializerActivator</activator>
 
-	<require_version>${openmrsPlatformVersion}</require_version>
+	<require_version>3.0.0</require_version>
 
 	<conditionalResources>
 		<conditionalResource>

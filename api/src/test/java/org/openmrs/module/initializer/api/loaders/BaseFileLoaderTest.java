@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api.loaders;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -30,7 +30,7 @@ public class BaseFileLoaderTest {
 	
 	@BeforeEach
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.openMocks(this);
 		testLoader = new TestLoader();
 		
 		List<File> files = Arrays.asList(new File("test1.txt"), new File("test2.txt"), new File("test3.txt"));
@@ -112,7 +112,7 @@ public class BaseFileLoaderTest {
 		});
 		
 		// verify
-		Assert.assertTrue(thrown.getMessage().endsWith("Error right from file 1."));
+		Assertions.assertTrue(thrown.getMessage().endsWith("Error right from file 1."));
 		verify(dirUtil, times(0)).writeChecksum(any(), any());
 	}
 	
@@ -163,7 +163,7 @@ public class BaseFileLoaderTest {
 		});
 		
 		// verify
-		Assert.assertTrue(thrown.getMessage().endsWith("Failed to preload from file 1."));
+		Assertions.assertTrue(thrown.getMessage().endsWith("Failed to preload from file 1."));
 	}
 	
 	@Test
@@ -219,6 +219,6 @@ public class BaseFileLoaderTest {
 		});
 		
 		// verify
-		Assert.assertFalse(thrown.getMessage().endsWith("Failed to preload from file 1."));
+		Assertions.assertFalse(thrown.getMessage().endsWith("Failed to preload from file 1."));
 	}
 }

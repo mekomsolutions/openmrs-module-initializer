@@ -9,9 +9,9 @@
  */
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.EncounterRole;
 import org.openmrs.api.EncounterService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -28,7 +28,7 @@ public class EncounterRolesLoaderIntegrationTest extends DomainBaseModuleContext
 	@Autowired
 	private EncounterRolesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
 	}
@@ -40,25 +40,25 @@ public class EncounterRolesLoaderIntegrationTest extends DomainBaseModuleContext
 		
 		{
 			EncounterRole er = es.getEncounterRoleByUuid("54ce9816-1062-4636-af95-655066cd6aba");
-			Assert.assertNotNull(er);
-			Assert.assertEquals("Surgeon", er.getName());
-			Assert.assertEquals("Does surgery", er.getDescription());
+			Assertions.assertNotNull(er);
+			Assertions.assertEquals("Surgeon", er.getName());
+			Assertions.assertEquals("Does surgery", er.getDescription());
 		}
 		{
 			EncounterRole er = es.getEncounterRoleByUuid("6eb3cf82-cae3-4d50-a31c-90f9230504c8");
-			Assert.assertNotNull(er);
-			Assert.assertEquals("Plague Doctor", er.getName());
-			Assert.assertTrue(er.getRetired());
+			Assertions.assertNotNull(er);
+			Assertions.assertEquals("Plague Doctor", er.getName());
+			Assertions.assertTrue(er.getRetired());
 		}
 		{
 			EncounterRole er = es.getEncounterRoleByName("Anesthesiologist");
-			Assert.assertNotNull(er);
+			Assertions.assertNotNull(er);
 		}
 		{
 			EncounterRole er = es.getEncounterRoleByUuid("09a55bcc-2ce2-46a2-836c-4a56dce9d239");
-			Assert.assertNotNull(er);
-			Assert.assertEquals("Phlebotomist", er.getName());
-			Assert.assertEquals("Responsible for drawing blood", er.getDescription());
+			Assertions.assertNotNull(er);
+			Assertions.assertEquals("Phlebotomist", er.getName());
+			Assertions.assertEquals("Responsible for drawing blood", er.getDescription());
 		}
 	}
 }

@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
@@ -41,7 +41,7 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 	@Autowired
 	private ProgramWorkflowStatesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		ProgramsLoaderIntegrationTest.setupPrograms(cs, pws);
@@ -122,36 +122,36 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 		// created state
 		{
 			ProgramWorkflowState state = pws.getStateByUuid("cfa241f4-2700-102b-80cb-0017a47871b2");
-			Assert.assertNotNull(state);
+			Assertions.assertNotNull(state);
 			
 			ProgramWorkflow wf = Utils.fetchProgramWorkflow("TB Treatment Status (workflow)", pws, cs);
-			Assert.assertEquals(wf, state.getProgramWorkflow());
+			Assertions.assertEquals(wf, state.getProgramWorkflow());
 			
-			Assert.assertEquals(cs.getConceptByName("Active treatment (initial)"), state.getConcept());
-			Assert.assertEquals("Active treatment (initial)", state.getConcept().getName().getName());
-			Assert.assertEquals("Active treatment (initial)", state.getConcept().getDescription().getDescription());
-			Assert.assertFalse(state.isRetired());
-			Assert.assertTrue(state.getInitial());
-			Assert.assertFalse(state.getTerminal());
-			Assert.assertEquals(state, wf.getState(state.getId()));
+			Assertions.assertEquals(cs.getConceptByName("Active treatment (initial)"), state.getConcept());
+			Assertions.assertEquals("Active treatment (initial)", state.getConcept().getName().getName());
+			Assertions.assertEquals("Active treatment (initial)", state.getConcept().getDescription().getDescription());
+			Assertions.assertFalse(state.isRetired());
+			Assertions.assertTrue(state.getInitial());
+			Assertions.assertFalse(state.getTerminal());
+			Assertions.assertEquals(state, wf.getState(state.getId()));
 		}
 		
 		// state created with workflow UUID
 		{
 			ProgramWorkflowState state = pws.getStateByUuid("cfa244b0-2700-102b-80cb-0017a47871b2");
-			Assert.assertNotNull(state);
-			Assert.assertEquals(cs.getConceptByName("Defaulted"), state.getConcept());
+			Assertions.assertNotNull(state);
+			Assertions.assertEquals(cs.getConceptByName("Defaulted"), state.getConcept());
 			
 			ProgramWorkflow wf = Utils.fetchProgramWorkflow("Extended Discharge (workflow)", pws, cs);
-			Assert.assertEquals(wf, state.getProgramWorkflow());
+			Assertions.assertEquals(wf, state.getProgramWorkflow());
 		}
 		
 		// state NOT added to a another workflow
 		{
 			ProgramWorkflowState state = pws.getStateByUuid("88b717c0-f580-497a-8d2b-026b60dd6bfd");
-			Assert.assertEquals(Utils.fetchProgramWorkflow("Palliative Care (workflow)", pws, cs),
+			Assertions.assertEquals(Utils.fetchProgramWorkflow("Palliative Care (workflow)", pws, cs),
 			    state.getProgramWorkflow());
-			Assert.assertFalse(
+			Assertions.assertFalse(
 			    Utils.fetchProgramWorkflow("TB Treatment Status (workflow)", pws, cs).getStates().contains(state));
 		}
 		
@@ -159,17 +159,17 @@ public class ProgramWorkflowStatesLoaderIntegrationTest extends DomainBaseModule
 		{
 			ProgramWorkflow wf = Utils.fetchProgramWorkflow("Standard Treatment Status (workflow)", pws, cs);
 			ProgramWorkflowState state = wf.getState("Transferred out");
-			Assert.assertNotNull(state);
+			Assertions.assertNotNull(state);
 		}
 		
 		// retired state
 		{
 			ProgramWorkflowState state = pws.getStateByUuid("cfa24690-2700-102b-80cb-0017a47871b2");
-			Assert.assertTrue(state.isRetired());
+			Assertions.assertTrue(state.isRetired());
 			
 			ProgramWorkflow wf = Utils.fetchProgramWorkflow("Extended Discharge (workflow)", pws, cs);
-			Assert.assertTrue(wf.getStates().contains(state));
-			Assert.assertTrue(wf.getStates(true).contains(state));
+			Assertions.assertTrue(wf.getStates().contains(state));
+			Assertions.assertTrue(wf.getStates(true).contains(state));
 		}
 	}
 }

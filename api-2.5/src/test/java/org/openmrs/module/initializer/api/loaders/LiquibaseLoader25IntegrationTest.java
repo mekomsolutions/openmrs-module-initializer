@@ -10,10 +10,10 @@
 package org.openmrs.module.initializer.api.loaders;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.util.OpenmrsClassLoader;
@@ -32,7 +32,7 @@ public class LiquibaseLoader25IntegrationTest extends DomainBaseModuleContextSen
 	@Qualifier("adminService")
 	private AdministrationService adminService;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		System.setProperty("useInMemoryDatabase", "true");
 		ClassLoader cl = OpenmrsClassLoader.getInstance();
@@ -40,7 +40,7 @@ public class LiquibaseLoader25IntegrationTest extends DomainBaseModuleContextSen
 		adminService.executeSQL(schemaSql, false);
 	}
 	
-	@After
+	@AfterEach
 	public void teardown() {
 		adminService.executeSQL("drop table LIQUIBASECHANGELOG", false);
 		adminService.executeSQL("drop table LIQUIBASECHANGELOGLOCK", false);
@@ -50,15 +50,15 @@ public class LiquibaseLoader25IntegrationTest extends DomainBaseModuleContextSen
 	public void load_shouldExecuteNewChangeSet() {
 		String relativePath = "configuration/liquibase/liquibase.xml";
 		String absolutePath = getAppDataDirPath() + relativePath;
-		Assert.assertEquals(0, numChangeLogEntries(absolutePath));
-		Assert.assertEquals(0, numChangeLogEntries(relativePath));
-		Assert.assertNull(adminService.getGlobalProperty("test_changes_1"));
-		Assert.assertNull(adminService.getGlobalProperty("test_changes_2"));
+		Assertions.assertEquals(0, numChangeLogEntries(absolutePath));
+		Assertions.assertEquals(0, numChangeLogEntries(relativePath));
+		Assertions.assertNull(adminService.getGlobalProperty("test_changes_1"));
+		Assertions.assertNull(adminService.getGlobalProperty("test_changes_2"));
 		loader.load();
-		Assert.assertEquals(0, numChangeLogEntries(absolutePath));
-		Assert.assertEquals(2, numChangeLogEntries(relativePath));
-		Assert.assertEquals("true", adminService.getGlobalProperty("test_changes_1"));
-		Assert.assertEquals("true", adminService.getGlobalProperty("test_changes_2"));
+		Assertions.assertEquals(0, numChangeLogEntries(absolutePath));
+		Assertions.assertEquals(2, numChangeLogEntries(relativePath));
+		Assertions.assertEquals("true", adminService.getGlobalProperty("test_changes_1"));
+		Assertions.assertEquals("true", adminService.getGlobalProperty("test_changes_2"));
 	}
 	
 	@Test
@@ -66,11 +66,11 @@ public class LiquibaseLoader25IntegrationTest extends DomainBaseModuleContextSen
 		String relativePath = "configuration/liquibase/liquibase.xml";
 		String absolutePath = getAppDataDirPath() + relativePath;
 		insertExistingChangeLogEntry(absolutePath);
-		Assert.assertEquals(1, numChangeLogEntries(absolutePath));
-		Assert.assertEquals(0, numChangeLogEntries(relativePath));
+		Assertions.assertEquals(1, numChangeLogEntries(absolutePath));
+		Assertions.assertEquals(0, numChangeLogEntries(relativePath));
 		loader.updateExistingLiquibaseChangeLogPathsIfNeeded(absolutePath, relativePath);
-		Assert.assertEquals(0, numChangeLogEntries(absolutePath));
-		Assert.assertEquals(1, numChangeLogEntries(relativePath));
+		Assertions.assertEquals(0, numChangeLogEntries(absolutePath));
+		Assertions.assertEquals(1, numChangeLogEntries(relativePath));
 	}
 	
 	private int numChangeLogEntries(String filename) {

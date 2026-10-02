@@ -3,10 +3,11 @@ package org.openmrs.module.initializer.attributes.types;
 import static org.hamcrest.CoreMatchers.is;
 import static org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity.CONCEPT;
 
-import org.apache.commons.lang.RandomStringUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.ConceptAttributeType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.attribute.BaseAttributeType;
@@ -26,7 +27,7 @@ public class AttributeTypesProxyServiceTest extends DomainBaseModuleContextSensi
 	@Qualifier("conceptService")
 	private ConceptService cs;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		executeDataSet("testdata/test-metadata-2.2.xml");
 	}
@@ -37,9 +38,9 @@ public class AttributeTypesProxyServiceTest extends DomainBaseModuleContextSensi
 		BaseAttributeType<?> attType = service.getAttributeTypeByUuid(CONCEPT_ATT_TYPE_UUID, CONCEPT);
 		
 		// Verif
-		Assert.assertNotNull(attType);
-		Assert.assertThat(attType.getName(), is("Concept Family"));
-		Assert.assertTrue(attType instanceof ConceptAttributeType);
+		Assertions.assertNotNull(attType);
+		MatcherAssert.assertThat(attType.getName(), is("Concept Family"));
+		Assertions.assertTrue(attType instanceof ConceptAttributeType);
 	}
 	
 	@Test
@@ -54,7 +55,7 @@ public class AttributeTypesProxyServiceTest extends DomainBaseModuleContextSensi
 		
 		// Verif
 		attType = service.getAttributeTypeByName(newName, CONCEPT);
-		Assert.assertNotNull(attType);
-		Assert.assertThat(attType.getId(), is(1089));
+		Assertions.assertNotNull(attType);
+		MatcherAssert.assertThat(attType.getId(), is(1089));
 	}
 }

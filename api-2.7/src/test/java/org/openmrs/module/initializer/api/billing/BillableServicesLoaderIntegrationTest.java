@@ -9,9 +9,9 @@
  */
 package org.openmrs.module.initializer.api.billing;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.billing.api.BillableServiceService;
@@ -33,7 +33,7 @@ public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleConte
 	@Autowired
 	private BillableServiceService billableServiceService;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		executeDataSet("testdata/test-concepts-2.7.xml");
 		{
@@ -74,31 +74,31 @@ public class BillableServicesLoaderIntegrationTest extends DomainBaseModuleConte
 		{
 			BillableService service = billableServiceService
 			        .getBillableServiceByUuid("44ebd6cd-04ad-4eba-8ce1-0de4564bfd17");
-			Assert.assertNotNull(service);
-			Assert.assertNotNull(service.getServiceType());
-			Assert.assertEquals("Antenatal Care", service.getName());
-			Assert.assertEquals(conceptService.getConceptByUuid("d4b4b6ef-6f3e-43a4-a3b9-9c56f3a1e2d8").getId(),
-			    service.getConcept().getId());
-			Assert.assertEquals(BillableServiceStatus.ENABLED, service.getServiceStatus());
+			Assertions.assertNotNull(service);
+			Assertions.assertNotNull(service.getServiceType());
+			Assertions.assertEquals("Antenatal Care", service.getName());
+			Assertions.assertEquals(conceptService.getConceptByUuid("d4b4b6ef-6f3e-43a4-a3b9-9c56f3a1e2d8").getId(), service
+			        .getConcept().getId());
+			Assertions.assertEquals(BillableServiceStatus.ENABLED, service.getServiceStatus());
 		}
 		
 		// Verify edition
 		{
 			BillableService service = billableServiceService
 			        .getBillableServiceByUuid("a0f7d8a1-4fa2-418c-aa8a-9b358f43d605");
-			Assert.assertNotNull(service);
-			Assert.assertNotNull(service.getServiceType());
-			Assert.assertEquals("Orthopedic Modified", service.getName());
-			Assert.assertEquals(conceptService.getConceptByUuid("3f6f6c92-8d5c-4a9e-bb1c-d3e00e4f8b71").getId(),
-			    service.getConcept().getId());
-			Assert.assertEquals(BillableServiceStatus.DISABLED, service.getServiceStatus());
+			Assertions.assertNotNull(service);
+			Assertions.assertNotNull(service.getServiceType());
+			Assertions.assertEquals("Orthopedic Modified", service.getName());
+			Assertions.assertEquals(conceptService.getConceptByUuid("3f6f6c92-8d5c-4a9e-bb1c-d3e00e4f8b71").getId(), service
+			        .getConcept().getId());
+			Assertions.assertEquals(BillableServiceStatus.DISABLED, service.getServiceStatus());
 		}
 		
 		// Verify retirement
 		{
 			BillableService service = billableServiceService
 			        .getBillableServiceByUuid("16435ab4-27c3-4d91-b21e-52819bd654d8");
-			Assert.assertTrue(service.getRetired());
+			Assertions.assertTrue(service.getRetired());
 			
 		}
 	}

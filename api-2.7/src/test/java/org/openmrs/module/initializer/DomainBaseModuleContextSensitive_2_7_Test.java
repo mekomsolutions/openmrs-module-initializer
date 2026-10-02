@@ -9,28 +9,9 @@ public abstract class DomainBaseModuleContextSensitive_2_7_Test extends DomainBa
 	
 	@Override
 	public void initModules() {
-		{
-			Module mod = new Module("", "addresshierarchy", "", "", "", "2.17.0", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "exti18n", "", "", "", "1.0.0", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
+		// Only the optional modules that have a Platform 3.0 release are started, see Platform3ModuleContextLoader
 		{
 			Module mod = new Module("", "fhir2", "", "", "", "1.6.0", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "openconceptlab", "", "", "", "1.2.9", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "htmlformentry", "", "", "", "4.0.0", "");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
@@ -40,47 +21,12 @@ public abstract class DomainBaseModuleContextSensitive_2_7_Test extends DomainBa
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
 		{
-			Module mod = new Module("", "metadatasharing", "", "", "", "1.2.2", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
 			Module mod = new Module("", "metadatamapping", "", "", "", "1.3.4", "");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
 		{
-			Module mod = new Module("", "appointments", "", "", "", "1.2", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "datafilter", "", "", "", "1.0.0", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "bahmni.ie.apps", "", "", "", "1.0.0", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "providermanagement", "", "", "", "1.0.0", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
 			Module mod = new Module("", "cohort", "", "", "", "3.5.0", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "emrapi", "", "", "", "2.0.0", "");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "billing", "", "", "", "2.0.0", "");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}

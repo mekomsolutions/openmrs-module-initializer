@@ -1,13 +1,13 @@
 package org.openmrs.module.initializer.liquibase;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.Arrays;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.InitializerService;
@@ -18,7 +18,7 @@ import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.resource.ClassLoaderResourceAccessor;
+import liquibase.resource.DirectoryResourceAccessor;
 
 public class DeleteDomainChecksumsChangesetIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	
@@ -30,7 +30,7 @@ public class DeleteDomainChecksumsChangesetIntegrationTest extends DomainBaseMod
 	@Autowired
 	private InitializerService service;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		loader.load();
 	}
@@ -61,6 +61,9 @@ public class DeleteDomainChecksumsChangesetIntegrationTest extends DomainBaseMod
 		liquibaseConnection.setDatabaseChangeLogTableName("LIQUIBASECHANGELOG_1");
 		liquibaseConnection.setDatabaseChangeLogLockTableName("LIQUIBASECHANGELOGLOCK_1");
 		
-		return new Liquibase(filename, new ClassLoaderResourceAccessor(getClass().getClassLoader()), liquibaseConnection);
+		// Liquibase 4 rejects a changelog path found more than once on the classpath, and every module API jar on the
+		// test classpath ships a liquibase.xml, so only Initializer's own resources directory is made accessible
+		File resourcesDir = new File(getClass().getClassLoader().getResource(filename).toURI()).getParentFile();
+		return new Liquibase(filename, new DirectoryResourceAccessor(resourcesDir), liquibaseConnection);
 	}
 }

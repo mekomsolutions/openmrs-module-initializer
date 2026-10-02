@@ -1,6 +1,7 @@
 package org.openmrs.module.initializer.api.loaders;
 
 import org.openmrs.annotation.OpenmrsProfile;
+import org.openmrs.api.cache.GlobalPropertyCache;
 import org.openmrs.api.context.Context;
 import org.openmrs.liquibase.ChangeSetExecutorCallback;
 import org.openmrs.module.initializer.Domain;
@@ -38,6 +39,8 @@ public class LiquibaseLoader2_5 extends BaseFileLoader {
 			updateExistingLiquibaseChangeLogPathsIfNeeded(absolutePath, relativePath);
 			try {
 				DatabaseUpdater.executeChangelog(relativePath, (ChangeSetExecutorCallback) null);
+				// Changesets write with SQL, behind the back of Platform 3.0's global property cache
+				Context.getRegisteredComponent("globalPropertyCache", GlobalPropertyCache.class).clear();
 			}
 			catch (Exception e) {
 				log.error("An error occurred executing liquibase file: " + file, e);

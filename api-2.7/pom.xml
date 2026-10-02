@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.openmrs.module</groupId>
         <artifactId>initializer</artifactId>
-        <version>2.13.0-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,8 +15,6 @@
     <description>API 2.7 project for Initializer</description>
 
     <properties>
-        <openmrsPlatformVersion>${openmrsVersion2.7}</openmrsPlatformVersion>
-        <fhir2Version2.2>2.2.0</fhir2Version2.2>
         <billing2Version>2.0.0</billing2Version>
     </properties>
 
@@ -66,19 +64,7 @@
             <type>test-jar</type>
         </dependency>
 
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>fhir2-api-2.5</artifactId>
-            <version>${fhir2Version2.2}</version>
-            <scope>provided</scope>
-        </dependency>
 
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>fhir2-api-2.6</artifactId>
-            <version>${fhir2Version2.2}</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
@@ -95,4 +81,18 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <!-- billing has no Platform 3.0 release yet, see Platform3ModuleContextLoader -->
+                        <exclude>**/billing/*LoaderIntegrationTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

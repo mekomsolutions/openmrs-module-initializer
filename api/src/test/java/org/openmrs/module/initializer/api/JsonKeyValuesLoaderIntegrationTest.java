@@ -15,9 +15,10 @@ import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptName;
@@ -47,7 +48,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 	@Autowired
 	private JsonKeyValuesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		ConceptSource source = new ConceptSource();
 		source.setName("Cambodia");
@@ -85,14 +86,14 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		loader.load();
 		
 		Concept c1 = getService().getConceptFromKey("impl.purpose.concept.uuid");
-		Assert.assertNotNull(c1);
+		Assertions.assertNotNull(c1);
 		Concept c2 = getService().getConceptFromKey("impl.purpose.concept.fsn");
-		Assert.assertEquals(c1, c2);
+		Assertions.assertEquals(c1, c2);
 		Concept c3 = getService().getConceptFromKey("impl.purpose.concept.mapping");
-		Assert.assertEquals(c2, c3);
+		Assertions.assertEquals(c2, c3);
 		
-		Assert.assertNull(getService().getConceptFromKey("__invalid_json_key__"));
-		Assert.assertEquals(c1, getService().getConceptFromKey("__invalid_json_key__", c1));
+		Assertions.assertNull(getService().getConceptFromKey("__invalid_json_key__"));
+		Assertions.assertEquals(c1, getService().getConceptFromKey("__invalid_json_key__", c1));
 	}
 	
 	@Test
@@ -101,12 +102,12 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		loader.load();
 		
 		PersonAttributeType pat1 = getService().getPersonAttributeTypeFromKey("impl.purpose.pat.uuid");
-		Assert.assertNotNull(pat1);
+		Assertions.assertNotNull(pat1);
 		PersonAttributeType pat2 = getService().getPersonAttributeTypeFromKey("impl.purpose.pat.name");
-		Assert.assertEquals(pat1, pat2);
+		Assertions.assertEquals(pat1, pat2);
 		
-		Assert.assertNull(getService().getPersonAttributeTypeFromKey("__invalid_json_key__"));
-		Assert.assertEquals(pat1, getService().getPersonAttributeTypeFromKey("__invalid_json_key__", pat1));
+		Assertions.assertNull(getService().getPersonAttributeTypeFromKey("__invalid_json_key__"));
+		Assertions.assertEquals(pat1, getService().getPersonAttributeTypeFromKey("__invalid_json_key__", pat1));
 	}
 	
 	@Test
@@ -116,7 +117,7 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		String json = getService().getValueFromKey("structured.json");
 		
 		// Verif
-		Assert.assertEquals("{\"foo\":\"bar\",\"fooz\":{\"baz\":\"value\"}}", json);
+		Assertions.assertEquals("{\"foo\":\"bar\",\"fooz\":{\"baz\":\"value\"}}", json);
 	}
 	
 	@Test
@@ -126,9 +127,9 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		List<Concept> concepts = getService().getConceptsFromKey("impl.purpose.concepts");
 		
 		// Verif
-		Assert.assertThat(concepts.size(), is(2));
+		MatcherAssert.assertThat(concepts.size(), is(2));
 		for (Concept c : concepts) {
-			Assert.assertNotNull(c);
+			Assertions.assertNotNull(c);
 		}
 	}
 	
@@ -139,9 +140,10 @@ public class JsonKeyValuesLoaderIntegrationTest extends DomainBaseModuleContextS
 		ConfigDirUtil dirUtil = loader.getDirUtil();
 		
 		// Verif
-		Assert.assertEquals(true, dirUtil.skipChecksums);
-		Assert.assertEquals(iniz.getChecksumsDirPath() + File.separator + loader.getDomainName(),
+		Assertions.assertEquals(true, dirUtil.skipChecksums);
+		Assertions.assertEquals(iniz.getChecksumsDirPath() + File.separator + loader.getDomainName(),
 		    dirUtil.getDomainChecksumsDirPath());
-		Assert.assertEquals(iniz.getConfigDirPath() + File.separator + loader.getDomainName(), dirUtil.getDomainDirPath());
+		Assertions.assertEquals(iniz.getConfigDirPath() + File.separator + loader.getDomainName(),
+		    dirUtil.getDomainDirPath());
 	}
 }

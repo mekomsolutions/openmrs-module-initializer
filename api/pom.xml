@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.openmrs.module</groupId>
         <artifactId>initializer</artifactId>
-        <version>2.13.0-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>initializer-api</artifactId>
@@ -12,20 +12,38 @@
     <name>Initializer API</name>
     <description>API project for Initializer</description>
 
-    <properties>
-        <openmrsPlatformVersion>${openmrsVersion2.1}</openmrsPlatformVersion>
-    </properties>
 
     <dependencies>
+        <!-- Provided by Platform 3.0, bundling it in the omod would shadow core's copy -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.9</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>4.5</version>
+            <exclusions>
+                <!-- Provided by Platform 3.0, bundling them in the omod would shadow core's copies -->
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-text</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-beanutils</groupId>
+                    <artifactId>commons-beanutils</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-collections4</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.freva</groupId>
@@ -37,5 +55,35 @@
             <artifactId>openconceptlab-api</artifactId>
         </dependency>
     </dependencies>
-    
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <!--
+                        Integration tests of optional modules that have no Platform 3.0 release yet: their Spring services
+                        cannot start on Platform 3.0 (see Platform3ModuleContextLoader). Re-enable when they are ported.
+                        -->
+                        <exclude>**/AddressHierarchyLoaderIntegrationTest.java</exclude>
+                        <exclude>**/AppointmentServiceDefinitionsLoaderIntegrationTest.java</exclude>
+                        <exclude>**/AppointmentServiceTypesLoaderIntegrationTest.java</exclude>
+                        <exclude>**/SpecialitiesLoaderIntegrationTest.java</exclude>
+                        <exclude>**/BahmniFormsLoaderIntegrationTest.java</exclude>
+                        <exclude>**/DispositionsLoaderIntegrationTest.java</exclude>
+                        <exclude>**/HtmlFormsLoaderIntegrationTest.java</exclude>
+                        <exclude>**/MdsLoaderIntegrationTest.java</exclude>
+                        <exclude>**/OpenConceptLabLoaderIntegrationTest.java</exclude>
+                        <exclude>**/patientflags/*LoaderIntegrationTest.java</exclude>
+                        <exclude>**/ProviderRolesLoaderIntegrationTest.java</exclude>
+                        <!-- LiquibaseLoader is only active up to Platform 2.5.4, LiquibaseLoader2_5 is tested in api-2.5 -->
+                        <exclude>**/LiquibaseLoaderIntegrationTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

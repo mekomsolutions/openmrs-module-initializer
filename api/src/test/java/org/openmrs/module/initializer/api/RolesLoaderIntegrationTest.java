@@ -3,9 +3,9 @@ package org.openmrs.module.initializer.api;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Privilege;
 import org.openmrs.Role;
 import org.openmrs.api.UserService;
@@ -23,7 +23,7 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 	@Autowired
 	private RolesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		// A couple of privileges to use with roles
@@ -90,11 +90,11 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Role role = us.getRoleByUuid("d2fcb604-2700-102b-80cb-0017a47871b2");
 			
 			// verif
-			Assert.assertNotNull(role);
-			Assert.assertEquals("Organizational: Doctor", role.getName());
-			Assert.assertEquals("Doctor role", role.getDescription());
-			Assert.assertEquals(roles, role.getAllParentRoles());
-			Assert.assertEquals(privileges, role.getPrivileges());
+			Assertions.assertNotNull(role);
+			Assertions.assertEquals("Organizational: Doctor", role.getName());
+			Assertions.assertEquals("Doctor role", role.getDescription());
+			Assertions.assertEquals(roles, role.getAllParentRoles());
+			Assertions.assertEquals(privileges, role.getPrivileges());
 		}
 		
 		// edited role
@@ -112,11 +112,11 @@ public class RolesLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 			Role role = us.getRole("Organizational: Nurse");
 			
 			// verif
-			Assert.assertNotNull(role);
-			Assert.assertEquals("Organizational: Nurse", role.getName());
-			Assert.assertEquals("Nurse role", role.getDescription());
-			Assert.assertEquals(roles, role.getAllParentRoles());
-			Assert.assertEquals(privileges, role.getPrivileges());
+			Assertions.assertNotNull(role);
+			Assertions.assertEquals("Organizational: Nurse", role.getName());
+			Assertions.assertEquals("Nurse role", role.getDescription());
+			Assertions.assertEquals(roles, role.getAllParentRoles());
+			Assertions.assertEquals(privileges, role.getPrivileges());
 		}
 	}
 }

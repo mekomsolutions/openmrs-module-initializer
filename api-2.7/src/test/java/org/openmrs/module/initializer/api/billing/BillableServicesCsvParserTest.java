@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api.billing;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -11,8 +11,8 @@ import org.openmrs.module.billing.api.model.BillableService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvLine;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 public class BillableServicesCsvParserTest {
@@ -26,14 +26,14 @@ public class BillableServicesCsvParserTest {
 	@InjectMocks
 	private BillableServicesCsvParser parser;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
-		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.openMocks(this);
 	}
 	
 	@Test
 	public void getDomain_shouldReturnBillableServicesDomain() {
-		Assert.assertEquals(Domain.BILLABLE_SERVICES, parser.getDomain());
+		Assertions.assertEquals(Domain.BILLABLE_SERVICES, parser.getDomain());
 	}
 	
 	@Test

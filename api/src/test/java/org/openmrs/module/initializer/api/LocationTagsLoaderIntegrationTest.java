@@ -9,9 +9,9 @@
  */
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -28,7 +28,7 @@ public class LocationTagsLoaderIntegrationTest extends DomainBaseModuleContextSe
 	@Autowired
 	private LocationTagsLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
 	}
@@ -40,23 +40,23 @@ public class LocationTagsLoaderIntegrationTest extends DomainBaseModuleContextSe
 		
 		{ // created without uuid or description
 			LocationTag tag = service.getLocationTagByName("Sparse");
-			Assert.assertNotNull(tag);
+			Assertions.assertNotNull(tag);
 		}
 		{ // created with uuid and description
 			LocationTag tag = service.getLocationTagByName("Filled in");
-			Assert.assertNotNull(tag);
-			Assert.assertEquals("b03e395c-b881-49b7-b6fc-983f6befc7fc", tag.getUuid());
-			Assert.assertEquals("A tag with all its fields", tag.getDescription());
+			Assertions.assertNotNull(tag);
+			Assertions.assertEquals("b03e395c-b881-49b7-b6fc-983f6befc7fc", tag.getUuid());
+			Assertions.assertEquals("A tag with all its fields", tag.getDescription());
 		}
 		{ // retired Facility Location
 			LocationTag tag = service.getLocationTagByName("Facility Location");
-			Assert.assertNotNull(tag);
-			Assert.assertTrue(tag.getRetired());
+			Assertions.assertNotNull(tag);
+			Assertions.assertTrue(tag.getRetired());
 		}
 		{ // edited to change name and description
 			LocationTag tag = service.getLocationTagByUuid("a1417745-1170-5752-fc8a-dd0ba131f40e");
-			Assert.assertEquals("Supply Room", tag.getName());
-			Assert.assertEquals("Don't call it a shed", tag.getDescription());
+			Assertions.assertEquals("Supply Room", tag.getName());
+			Assertions.assertEquals("Don't call it a shed", tag.getDescription());
 		}
 	}
 }

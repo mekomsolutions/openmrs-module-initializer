@@ -4,10 +4,10 @@ import org.apache.commons.io.FileUtils;
 import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormTranslationService;
 import org.json.JSONObject;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Form;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.AdministrationService;
@@ -42,7 +42,7 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 	@Autowired
 	private FormService formService;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		// Set default directory for saving Bahmni form and Bahmni form translation files
@@ -51,7 +51,7 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		        .saveGlobalProperty(new GlobalProperty("bahmni.formTranslations.directory", formTranslationPath));
 	}
 	
-	@After
+	@AfterEach
 	public void clean() throws IOException {
 		
 		// Delete created form files
@@ -68,9 +68,9 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		Form form = formService.getForm("form1");
 		
 		// Verify
-		Assert.assertEquals("form1", form.getName());
-		Assert.assertEquals(true, form.getPublished());
-		Assert.assertEquals("1", form.getVersion());
+		Assertions.assertEquals("form1", form.getName());
+		Assertions.assertEquals(true, form.getPublished());
+		Assertions.assertEquals("1", form.getVersion());
 	}
 	
 	@Test
@@ -80,7 +80,7 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		bahmniFormsLoader.load();
 		Form form = formService.getForm("form1");
 		
-		Assert.assertEquals(true, form.getPublished());
+		Assertions.assertEquals(true, form.getPublished());
 		
 		String test_file_updated = "src/test/resources/testdata/testBahmniforms/test_form1_updated.json";
 		File srcFile = new File(test_file_updated);
@@ -96,9 +96,9 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		
 		// Verify
 		
-		Assert.assertEquals(false, updatedForm.getPublished());
+		Assertions.assertEquals(false, updatedForm.getPublished());
 		Map<String, String> labels = bahmniFormTranslation.get(0).getLabels();
-		Assert.assertEquals("updated label", labels.get("LABEL_2"));
+		Assertions.assertEquals("updated label", labels.get("LABEL_2"));
 	}
 	
 	@Test
@@ -111,8 +111,8 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		bahmniFormsLoader.load();
 		
 		//Verify
-		Assert.assertNull(formService.getForm("form1", "2"));
-		Assert.assertEquals(1,
+		Assertions.assertNull(formService.getForm("form1", "2"));
+		Assertions.assertEquals(1,
 		    formService.getAllForms().stream().filter(form -> form.getName().equals("form1")).toArray().length);
 	}
 	
@@ -127,13 +127,13 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		    null, form.getUuid());
 		
 		// Verify
-		Assert.assertEquals(bahmniFormTranslation.size(), 1);
-		Assert.assertEquals("en", bahmniFormTranslation.get(0).getLocale());
+		Assertions.assertEquals(bahmniFormTranslation.size(), 1);
+		Assertions.assertEquals("en", bahmniFormTranslation.get(0).getLocale());
 		Map<String, String> labels = bahmniFormTranslation.get(0).getLabels();
-		Assert.assertEquals("just a label", labels.get("LABEL_2"));
+		Assertions.assertEquals("just a label", labels.get("LABEL_2"));
 		Map<String, String> concepts = bahmniFormTranslation.get(0).getConcepts();
-		Assert.assertEquals("test_upload", concepts.get("TEST_UPLOAD_3"));
-		Assert.assertEquals("form1", bahmniFormTranslation.get(0).getFormName());
+		Assertions.assertEquals("test_upload", concepts.get("TEST_UPLOAD_3"));
+		Assertions.assertEquals("form1", bahmniFormTranslation.get(0).getFormName());
 	}
 	
 	@Test
@@ -146,12 +146,12 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		Form form = formService.getForm("form1");
 		File testFile = new File(formFolderPath + form.getUuid() + ".json");
 		
-		Assert.assertTrue(testFile.exists());
+		Assertions.assertTrue(testFile.exists());
 		
 		String jsonString = FileUtils.readFileToString(testFile);
 		JSONObject jsonObject = new JSONObject(jsonString);
 		
-		Assert.assertEquals("form1", jsonObject.get("name"));
+		Assertions.assertEquals("form1", jsonObject.get("name"));
 	}
 	
 	@Test
@@ -164,14 +164,14 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		Form form = formService.getForm("form1");
 		File testFile = new File(formTranslationPath + form.getUuid() + ".json");
 		
-		Assert.assertTrue(testFile.exists());
+		Assertions.assertTrue(testFile.exists());
 		
 		String jsonString = FileUtils.readFileToString(testFile);
 		JSONObject fileContent = new JSONObject(jsonString);
 		
 		JSONObject localeContent = (JSONObject) fileContent.get("en");
-		Assert.assertEquals(localeContent.get("concepts").toString(), "{\"TEST_UPLOAD_3\":\"test_upload\"}");
-		Assert.assertEquals(localeContent.get("labels").toString(), "{\"LABEL_2\":\"just a label\"}");
+		Assertions.assertEquals(localeContent.get("concepts").toString(), "{\"TEST_UPLOAD_3\":\"test_upload\"}");
+		Assertions.assertEquals(localeContent.get("labels").toString(), "{\"LABEL_2\":\"just a label\"}");
 	}
 	
 	@Test
@@ -188,8 +188,8 @@ public class BahmniFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		
 		File testFile = new File(formFolderPath + formUuid + ".json");
 		
-		Assert.assertTrue(testFile.exists());
-		Assert.assertEquals(formUuid, form.getUuid());
+		Assertions.assertTrue(testFile.exists());
+		Assertions.assertEquals(formUuid, form.getUuid());
 		
 	}
 }

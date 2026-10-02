@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.initializer.api.c.ConceptsLoader;
 
 public class ConfigDirUtilTest {
@@ -38,7 +38,7 @@ public class ConfigDirUtilTest {
 	
 	private List<String> allFiles;
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		allFiles = Arrays.asList(new File(dirPath).list());
 	}
@@ -46,16 +46,18 @@ public class ConfigDirUtilTest {
 	@Test
 	public void getLocatedFilename_shouldHandleRootLevelAndSubdirLevelFiles() {
 		// with trailing slashes
-		Assert.assertEquals("cfg", getLocatedFilename("/configuration/domain/", new File("/configuration/domain/cfg.txt")));
-		Assert.assertEquals("subdir_cfg",
+		Assertions.assertEquals("cfg",
+		    getLocatedFilename("/configuration/domain/", new File("/configuration/domain/cfg.txt")));
+		Assertions.assertEquals("subdir_cfg",
 		    getLocatedFilename("/configuration/domain/", new File("/configuration/domain/subdir/cfg.txt")));
-		Assert.assertEquals("subdir_subsubdir_cfg",
+		Assertions.assertEquals("subdir_subsubdir_cfg",
 		    getLocatedFilename("/configuration/domain/", new File("/configuration/domain/subdir/subsubdir/cfg.txt")));
 		// without trailing slashes
-		Assert.assertEquals("cfg", getLocatedFilename("/configuration/domain", new File("/configuration/domain/cfg.txt")));
-		Assert.assertEquals("subdir_cfg",
+		Assertions.assertEquals("cfg",
+		    getLocatedFilename("/configuration/domain", new File("/configuration/domain/cfg.txt")));
+		Assertions.assertEquals("subdir_cfg",
 		    getLocatedFilename("/configuration/domain", new File("/configuration/domain/subdir/cfg.txt")));
-		Assert.assertEquals("subdir_subsubdir_cfg",
+		Assertions.assertEquals("subdir_subsubdir_cfg",
 		    getLocatedFilename("/configuration/domain", new File("/configuration/domain/subdir/subsubdir/cfg.txt")));
 	}
 	
@@ -132,7 +134,7 @@ public class ConfigDirUtilTest {
 			// verify checksum
 			File checksumFile = new File(Paths.get(checksumsDirPath, "nested_txt_files", checksumFilename).toUri());
 			assertThat(checksumFile.exists(), is(true));
-			Assert.assertEquals(DigestUtils.md5Hex(fileContents.get(locatedFilename)),
+			Assertions.assertEquals(DigestUtils.md5Hex(fileContents.get(locatedFilename)),
 			    FileUtils.readFileToString(checksumFile, "UTF-8"));
 			
 			// verify deletion
@@ -147,7 +149,7 @@ public class ConfigDirUtilTest {
 		String[] row1 = { "abc-123", "Acme", "A clinic" };
 		String[] header2 = { "name", "description", "uuid" };
 		String[] row2 = { "Acme", "A clinic", "abc-123" };
-		Assert.assertEquals(computeRowChecksum(header1, row1), computeRowChecksum(header2, row2));
+		Assertions.assertEquals(computeRowChecksum(header1, row1), computeRowChecksum(header2, row2));
 	}
 	
 	@Test
@@ -172,7 +174,7 @@ public class ConfigDirUtilTest {
 		assertThat(computeRowChecksum(header1, row1), is(not(computeRowChecksum(header2, row3))));
 		// However null and empty values within an existing column should be treated identically,
 		// since CsvParser normalizes blank cells to null on read.
-		Assert.assertEquals(computeRowChecksum(header2, row2), computeRowChecksum(header2, row3));
+		Assertions.assertEquals(computeRowChecksum(header2, row2), computeRowChecksum(header2, row3));
 	}
 	
 	@Test
@@ -245,7 +247,7 @@ public class ConfigDirUtilTest {
 		// Setup
 		String configDirPath = getClass().getClassLoader().getResource("org/openmrs/module/initializer/include/csv")
 		        .getPath();
-		String checksumsDirPath = null;
+		String checksumsDirPath = ""; // checksums are not used here, and Paths.get(null, ...) throws on recent JDKs
 		String domain = "orders";
 		
 		ConfigDirUtil dirUtil = new ConfigDirUtil(configDirPath, checksumsDirPath, domain);
@@ -256,9 +258,9 @@ public class ConfigDirUtilTest {
 		
 		// Verif
 		assertThat(orderedFilenames.size(), is(5));
-		Assert.assertEquals("5_order_500.csv", orderedFilenames.get(0));
-		Assert.assertEquals("4_order_1000.csv", orderedFilenames.get(1));
-		Assert.assertEquals("1_order_1500.csv", orderedFilenames.get(2));
+		Assertions.assertEquals("5_order_500.csv", orderedFilenames.get(0));
+		Assertions.assertEquals("4_order_1000.csv", orderedFilenames.get(1));
+		Assertions.assertEquals("1_order_1500.csv", orderedFilenames.get(2));
 		assertThat(orderedFilenames.subList(3, 5), containsInAnyOrder("3_order_missing.csv", "2_order_e00.csv"));
 	}
 }

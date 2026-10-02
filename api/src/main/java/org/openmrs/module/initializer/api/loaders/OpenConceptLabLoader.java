@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer.api.loaders;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;

@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer.api.c;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -9,9 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.openmrs.Concept;
@@ -27,7 +27,7 @@ public class NestedConceptLineProcessorTest {
 	
 	private ConceptService cs = mock(ConceptService.class);
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		/*
@@ -60,15 +60,15 @@ public class NestedConceptLineProcessorTest {
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertFalse(c.getSet());
+		Assertions.assertFalse(c.getSet());
 		Collection<ConceptAnswer> answers = c.getAnswers();
-		Assert.assertEquals(2, answers.size());
+		Assertions.assertEquals(2, answers.size());
 		Set<String> uuids = new HashSet<String>();
 		for (ConceptAnswer a : answers) {
 			uuids.add(a.getAnswerConcept().getUuid());
 		}
-		Assert.assertTrue(uuids.contains("cambodia:123"));
-		Assert.assertTrue(uuids.contains("cambodia:456"));
+		Assertions.assertTrue(uuids.contains("cambodia:123"));
+		Assertions.assertTrue(uuids.contains("cambodia:456"));
 	}
 	
 	@Test
@@ -83,15 +83,15 @@ public class NestedConceptLineProcessorTest {
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertTrue(c.getSet());
+		Assertions.assertTrue(c.getSet());
 		List<Concept> members = c.getSetMembers();
-		Assert.assertEquals(2, members.size());
+		Assertions.assertEquals(2, members.size());
 		Set<String> uuids = new HashSet<String>();
 		for (Concept cpt : members) {
 			uuids.add(cpt.getUuid());
 		}
-		Assert.assertTrue(uuids.contains("cambodia:123"));
-		Assert.assertTrue(uuids.contains("cambodia:456"));
+		Assertions.assertTrue(uuids.contains("cambodia:123"));
+		Assertions.assertTrue(uuids.contains("cambodia:456"));
 	}
 	
 	@Test
@@ -106,9 +106,9 @@ public class NestedConceptLineProcessorTest {
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertFalse(c.getSet());
-		Assert.assertEquals(0, c.getSetMembers().size());
-		Assert.assertEquals(0, c.getAnswers().size());
+		Assertions.assertFalse(c.getSet());
+		Assertions.assertEquals(0, c.getSetMembers().size());
+		Assertions.assertEquals(0, c.getAnswers().size());
 	}
 	
 	public void fill_shouldHandleMissingHeaders() {
@@ -120,7 +120,7 @@ public class NestedConceptLineProcessorTest {
 		// Replay
 		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs));
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
-		Assert.assertNull(c.getAnswers());
-		Assert.assertNull(c.getSetMembers());
+		Assertions.assertNull(c.getAnswers());
+		Assertions.assertNull(c.getSetMembers());
 	}
 }

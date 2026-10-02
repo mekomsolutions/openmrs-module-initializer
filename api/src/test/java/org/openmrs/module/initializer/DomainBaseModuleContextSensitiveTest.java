@@ -16,25 +16,28 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * This allows to perform context sensitive tests on a specific domain inside the test app data
  * directory.
  */
+@ContextConfiguration(locations = { "classpath:applicationContext-service.xml", "classpath*:TestingApplicationContext.xml",
+        "classpath*:moduleApplicationContext.xml" }, loader = Platform3ModuleContextLoader.class, inheritLocations = false)
 public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleContextSensitiveTest {
 	
 	protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -70,96 +73,26 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 	}
 	
 	protected void initModules() {
+		// Only the optional modules that have a Platform 3.0 release are started, see Platform3ModuleContextLoader
 		{
-			Module mod = new Module("", "addresshierarchy", "", "", "", "2.17.0");
+			Module mod = new Module("", "fhir2", "", "", "", "1.6.0", "");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
 		{
-			Module mod = new Module("", "exti18n", "", "", "", "1.0.0");
+			Module mod = new Module("", "idgen", "", "", "", "4.6.0", "");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
 		{
-			Module mod = new Module("", "fhir2", "", "", "", "1.6.0");
+			Module mod = new Module("", "metadatamapping", "", "", "", "1.3.4", "");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
 		{
-			Module mod = new Module("", "openconceptlab", "", "", "", "1.2.9");
+			Module mod = new Module("", "cohort", "", "", "", "3.5.0", "");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "htmlformentry", "", "", "", "4.0.0");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "idgen", "", "", "", "4.6.0");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "metadatasharing", "", "", "", "1.2.2");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "metadatamapping", "", "", "", "1.3.4");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "appointments", "", "", "", "1.2");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "datafilter", "", "", "", "1.0.0");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "bahmni.ie.apps", "", "", "", "1.0.0");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "providermanagement", "", "", "", "1.0.0");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "cohort", "", "", "", "3.5.0");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "emrapi", "", "", "", "2.0.0");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "tasks", "", "", "", "1.0.0");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			Module mod = new Module("", "patientflags", "", "", "", "3.0.0");
-			mod.setFile(new File(""));
-			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-		}
-		{
-			try {
-				Class.forName("org.bahmni.module.bahmnicore.Activator");
-				Module mod = new Module("", "bahmnicore", "", "", "", "0.93-1.1.0");
-				mod.setFile(new File(""));
-				ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
-			}
-			catch (Exception e) {
-				// ignore error since bahmnicore packages are not on the class path.
-			}
 		}
 	}
 	
@@ -175,7 +108,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		return p;
 	}
 	
-	@Before
+	@BeforeEach
 	public void setupAppDataDir() {
 		String path = getAppDataDirPath();
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
@@ -192,7 +125,7 @@ public abstract class DomainBaseModuleContextSensitiveTest extends BaseModuleCon
 		Locale.setDefault(Locale.ENGLISH);
 	}
 	
-	@After
+	@AfterEach
 	public void tearDown() {
 		deleteFilesByExtension(iniz.getChecksumsDirPath(), CHECKSUM_FILE_EXT);
 	}

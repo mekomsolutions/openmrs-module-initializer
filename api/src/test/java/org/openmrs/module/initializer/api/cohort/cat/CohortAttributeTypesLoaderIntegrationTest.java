@@ -9,9 +9,9 @@
  */
 package org.openmrs.module.initializer.api.cohort.cat;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.cohort.CohortAttributeType;
 import org.openmrs.module.cohort.api.CohortService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -27,7 +27,7 @@ public class CohortAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 	@Autowired
 	private CohortAttributeTypeLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 	}
 	
@@ -39,9 +39,9 @@ public class CohortAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 		
 		// Verify
 		CohortAttributeType cat = cs.getCohortAttributeTypeByName("Test");
-		Assert.assertNotNull(cat);
-		Assert.assertEquals("This is a test group.", cat.getDescription());
-		Assert.assertEquals("09790099-9190-429d-811a-aac9edb8d98e", cat.getUuid());
-		Assert.assertEquals("org.openmrs.customdatatype.datatype.FreeTextDatatype", cat.getDatatypeClassname());
+		Assertions.assertNotNull(cat);
+		Assertions.assertEquals("This is a test group.", cat.getDescription());
+		Assertions.assertEquals("09790099-9190-429d-811a-aac9edb8d98e", cat.getUuid());
+		Assertions.assertEquals("org.openmrs.customdatatype.datatype.FreeTextDatatype", cat.getDatatypeClassname());
 	}
 }

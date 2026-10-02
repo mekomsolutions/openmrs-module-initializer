@@ -11,9 +11,10 @@ package org.openmrs.module.initializer.api;
 
 import static org.hamcrest.CoreMatchers.is;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
@@ -42,7 +43,7 @@ public class AppointmentServiceDefinitionsLoaderIntegrationTest extends DomainBa
 	@Autowired
 	private AppointmentServiceDefinitionsLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
 		
@@ -57,64 +58,64 @@ public class AppointmentServiceDefinitionsLoaderIntegrationTest extends DomainBa
 		
 		// Verify setup
 		{
-			Assert.assertEquals("Orthopaedic",
+			Assertions.assertEquals("Orthopaedic",
 			    apts.getAppointmentServiceByUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb").getSpeciality().getName());
-			Assert.assertEquals("Xanadu",
+			Assertions.assertEquals("Xanadu",
 			    apts.getAppointmentServiceByUuid("a1039051-6f34-420d-9779-24e77eb0ca00").getLocation().getName());
 		}
 		
 		// Replay
 		loader.load();
 		
-		Assert.assertThat(apts.getAllAppointmentServices(false).size(), is(7));
+		MatcherAssert.assertThat(apts.getAllAppointmentServices(false).size(), is(7));
 		// Location set by UUID
 		{
 			AppointmentServiceDefinition def = apts.getAppointmentServiceByUuid("762e165a-af27-45fe-ad6e-1fe19db78198");
-			Assert.assertEquals("Casting", def.getName());
-			Assert.assertEquals(new Integer(30), def.getDurationMins());
-			Assert.assertEquals(new Integer(15), def.getMaxAppointmentsLimit());
-			Assert.assertEquals("Xanadu", def.getLocation().getName());
+			Assertions.assertEquals("Casting", def.getName());
+			Assertions.assertEquals(new Integer(30), def.getDurationMins());
+			Assertions.assertEquals(new Integer(15), def.getMaxAppointmentsLimit());
+			Assertions.assertEquals("Xanadu", def.getLocation().getName());
 		}
 		// Location set by name 
 		{
 			AppointmentServiceDefinition def = apts.getAppointmentServiceByUuid("bfff3484-320a-4c1e-84c8-dbe8f0d44e8b");
-			Assert.assertEquals("Orthopaedic Follow-up", def.getName());
-			Assert.assertEquals("A follow-up appointment at the orthopedic clinic", def.getDescription());
-			Assert.assertEquals("Xanadu", def.getLocation().getName());
+			Assertions.assertEquals("Orthopaedic Follow-up", def.getName());
+			Assertions.assertEquals("A follow-up appointment at the orthopedic clinic", def.getDescription());
+			Assertions.assertEquals("Xanadu", def.getLocation().getName());
 		}
 		// Speciality set by name
 		{
 			AppointmentServiceDefinition def = apts.getAppointmentServiceByUuid("c12829d8-6bdd-426c-a386-104eed0d2c41");
-			Assert.assertEquals("Bracing", def.getName());
-			Assert.assertEquals("Orthopaedic", def.getSpeciality().getName());
-			Assert.assertEquals("#8FBC8F", def.getColor());
+			Assertions.assertEquals("Bracing", def.getName());
+			Assertions.assertEquals("Orthopaedic", def.getSpeciality().getName());
+			Assertions.assertEquals("#8FBC8F", def.getColor());
 		}
 		// Speciality set by UUID 
 		{
 			AppointmentServiceDefinition def = apts.getAppointmentServiceByUuid("b4b96cea-a0ed-4bbc-84f0-6c6b4e79f447");
-			Assert.assertEquals("Tenotomy", def.getName());
-			Assert.assertEquals("Orthopaedic", def.getSpeciality().getName());
+			Assertions.assertEquals("Tenotomy", def.getName());
+			Assertions.assertEquals("Orthopaedic", def.getSpeciality().getName());
 		}
 		// Service start and end times
 		{
 			AppointmentServiceDefinition def = apts.getAppointmentServiceByUuid("fc46dedf-5e96-44d4-bd99-bec1d80d15d5");
-			Assert.assertEquals("Surgery", def.getName());
-			Assert.assertEquals("Appointment for surgery", def.getDescription());
-			Assert.assertEquals("08:00:00", def.getStartTime().toString());
-			Assert.assertEquals("17:00:00", def.getEndTime().toString());
+			Assertions.assertEquals("Surgery", def.getName());
+			Assertions.assertEquals("Appointment for surgery", def.getDescription());
+			Assertions.assertEquals("08:00:00", def.getStartTime().toString());
+			Assertions.assertEquals("17:00:00", def.getEndTime().toString());
 		}
 		// Removing speciality
 		{
 			AppointmentServiceDefinition def = apts.getAppointmentServiceByUuid("6b220700-4ba2-4846-86a7-a2afa5b6f2eb");
-			Assert.assertEquals("Specialized Appointment", def.getName());
-			Assert.assertNull(def.getSpeciality());
+			Assertions.assertEquals("Specialized Appointment", def.getName());
+			Assertions.assertNull(def.getSpeciality());
 		}
 		
 		// Removing location
 		{
 			AppointmentServiceDefinition def = apts.getAppointmentServiceByUuid("a1039051-6f34-420d-9779-24e77eb0ca00");
-			Assert.assertEquals("On-site Appointment", def.getName());
-			Assert.assertNull(def.getLocation());
+			Assertions.assertEquals("On-site Appointment", def.getName());
+			Assertions.assertNull(def.getLocation());
 		}
 	}
 }
