@@ -28,6 +28,8 @@ public class AmpathFormsLoader extends BaseFileLoader {
 	public static final String AMPATH_FORMS_UUID = "794c4598-ab82-47ca-8d18-483a8abe6f4f";
 	
 	public static final String JSON_EXTENSION = "json";
+
+	private static final String DEFAULT_RETIRE_REASON = "Retired by Initializer";
 	
 	@Autowired
 	private DatatypeService datatypeService;
@@ -135,7 +137,7 @@ public class AmpathFormsLoader extends BaseFileLoader {
 				if (!OpenmrsUtil.nullSafeEquals(form.getRetired(), formRetired)) {
 					form.setRetired(formRetired);
 					if (formRetired && StringUtils.isBlank(form.getRetireReason())) {
-						form.setRetireReason("Retired by Initializer");
+						form.setRetireReason(DEFAULT_RETIRE_REASON);
 					}
 					needToSaveForm = true;
 				}
@@ -170,6 +172,9 @@ public class AmpathFormsLoader extends BaseFileLoader {
 		newForm.setUuid(uuid);
 		newForm.setDescription(formDescription);
 		newForm.setRetired(formRetired);
+		if (formRetired) {
+			newForm.setRetireReason(DEFAULT_RETIRE_REASON);
+		}
 		newForm.setPublished(formPublished);
 		newForm.setEncounterType(encounterType);
 		

@@ -69,5 +69,10 @@ The JSON source for these forms can be obtained from [AMPATH Form Builder](https
 
 **NOTE:** When an Ampath forms file is loaded, a new resource with the existing Ampath forms translations is created
 
+Forms declared with `"retired": true` receive the default retirement reason
+`Retired by Initializer`, including when a retired form is first created or a new
+retired version replaces an earlier form. OpenMRS requires this reason when saving
+retired forms. The earlier version keeps its existing JSON schema resource.
+
 #### Further examples:
 Please look at the test configuration folder for sample import files for all domains, see [here](../api/src/test/resources/testAppDataDir/configuration).

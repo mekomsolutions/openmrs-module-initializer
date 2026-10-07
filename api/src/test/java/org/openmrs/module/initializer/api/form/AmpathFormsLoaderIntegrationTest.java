@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,6 +20,7 @@ import org.openmrs.api.FormService;
 import org.openmrs.api.db.ClobDatatypeStorage;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loaders.AmpathFormsLoader;
+import org.openmrs.module.initializer.api.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
@@ -42,8 +44,50 @@ public class AmpathFormsLoaderIntegrationTest extends DomainBaseModuleContextSen
 		FileUtils
 		        .deleteQuietly(new File(ampathFormsLoader.getDirUtil().getDomainDirPath() + "/test_form_clob_changed.json"));
 		FileUtils.deleteQuietly(new File(ampathFormsLoader.getDirUtil().getDomainDirPath() + "/test_form_new_version.json"));
+		FileUtils.deleteQuietly(new File(ampathFormsLoader.getDirUtil().getDomainDirPath() + "/test_form_retired.json"));
 	}
 	
+	@Test
+	public void load_shouldCreateRetiredFormWithRetirementReason() throws Exception {
+		writeRetiredForm("Retired Test Form", "1");
+		ampathFormsLoader.load();
+		assertRetiredForm("Retired Test Form", "1");
+	}
+
+	@Test
+	public void load_shouldCreateRetiredVersionAndPreservePreviousSchema() throws Exception {
+		ampathFormsLoader.load();
+		Form original = formService.getForm("Test Form 1");
+		String reference = formService.getFormResource(original, "JSON schema").getValueReference();
+		String schema = datatypeService.getClobDatatypeStorageByUuid(reference).getValue();
+		writeRetiredForm("Test Form 1", "2");
+		ampathFormsLoader.load();
+		assertRetiredForm("Test Form 1", "2");
+		Assert.assertTrue(formService.getFormByUuid(original.getUuid()).getRetired());
+		Assert.assertEquals(schema, datatypeService.getClobDatatypeStorageByUuid(reference).getValue());
+	}
+
+	private void writeRetiredForm(String name, String version) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode schema = (ObjectNode) mapper.readTree(new File(
+		        "src/test/resources/testdata/testAmpathforms/test_form_new_version.json"));
+		schema.put("name", name);
+		schema.put("version", version);
+		schema.put("retired", true);
+		schema.put("published", false);
+		mapper.writeValue(new File(ampathFormsLoader.getDirUtil().getDomainDirPath(), "test_form_retired.json"), schema);
+	}
+
+	private void assertRetiredForm(String name, String version) {
+		Form form = formService.getFormByUuid(Utils.generateUuidFromObjects(AmpathFormsLoader.AMPATH_FORMS_UUID, name,
+		    version));
+		Assert.assertNotNull(form);
+		Assert.assertTrue(form.getRetired());
+		Assert.assertFalse(form.getPublished());
+		Assert.assertEquals("Retired by Initializer", form.getRetireReason());
+		Assert.assertNotNull(formService.getFormResource(form, "JSON schema"));
+	}
+
 	@Test
 	public void load_shouldLoadFormWithAllAttributesSpecified() throws Exception {
 		
