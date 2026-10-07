@@ -1,0 +1,48 @@
+{
+    "name" : "O3 form 2",
+    "description" : "Form with missing retired and published fields",
+    "version" : "1",
+    "encounterType" : "07000be2-26b6-4cce-8b40-866d8435b613",
+    "pages" : [
+        {
+            "label" : "O3 2 Page",
+            "sections" : [
+                {
+                    "label" : "Section X",
+                    "isExpanded" : "true",
+                    "questions" : [
+                        {
+                            "label" : "Weight",
+                            "type" : "obs",
+                            "questionOptions" : {
+                                "rendering" : "number",
+                                "concept" : "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "max" : "",
+                                "min" : "",
+                                "showDate" : "",
+                                "conceptMappings" : [
+                                    {
+                                        "type" : "CIEL",
+                                        "value" : "5089"
+                                    },
+                                    {
+                                        "type" : "AMPATH",
+                                        "value" : "5089"
+                                    },
+                                    {
+                                        "type" : "PIH",
+                                        "value" : "5089"
+                                    }
+                                ]
+                            },
+                            "id" : "Ht"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "processor" : "EncounterFormProcessor",
+    "referencedForms" : [ ],
+    "uuid" : "684fcd83-4a56-4cc3-8199-6c6630a18273"
+}

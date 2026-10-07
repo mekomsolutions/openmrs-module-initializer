@@ -83,4 +83,11 @@ public class InitializerConstants {
 	 * Used to ensure that type 3 UUIDs are properly namespaced for a domain
 	 */
 	public static final String CONCEPT_NAME_NAMESPACE_UUID = "103e0f29-b7a3-4382-bfdc-449068e9d436";
+	
+	/*
+	 * Default state for AmpathForms entities that do not specify a published state
+	 */
+	public static final String PROPS_FORMS_DEFAULT_PUBLISHED_STATE = MODULE_ARTIFACT_ID + "."
+	        + "forms.default.published.state";
+	
 }

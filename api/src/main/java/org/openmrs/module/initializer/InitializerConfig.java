@@ -36,6 +36,7 @@ import static org.openmrs.module.initializer.InitializerConstants.PROPS_ROW_CHEC
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_SKIPCHECKSUMS;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD;
 import static org.openmrs.module.initializer.InitializerConstants.PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR;
+import static org.openmrs.module.initializer.InitializerConstants.PROPS_FORMS_DEFAULT_PUBLISHED_STATE;
 import static org.openmrs.module.initializer.api.utils.Utils.getPropertyValue;
 
 /**
@@ -57,6 +58,8 @@ public class InitializerConfig implements InitializingBean {
 	private Boolean rowChecksumsEnabled = false;
 	
 	private String startupLoadingMode = "";
+	
+	private boolean defaultFormPublishedState = false;
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -95,6 +98,9 @@ public class InitializerConfig implements InitializingBean {
 		skipChecksums = BooleanUtils.toBoolean(Optional.ofNullable(getPropertyValue(PROPS_SKIPCHECKSUMS)).orElse(""));
 		rowChecksumsEnabled = BooleanUtils
 		        .toBoolean(Optional.ofNullable(getPropertyValue(PROPS_ROW_CHECKSUMS_ENABLED)).orElse(""));
+		
+		defaultFormPublishedState = BooleanUtils
+		        .toBoolean(Optional.ofNullable(getPropertyValue(PROPS_FORMS_DEFAULT_PUBLISHED_STATE)).orElse("false"));
 		
 		// Startup Loading Configuration
 		startupLoadingMode = getPropertyValue(PROPS_STARTUP_LOAD);
@@ -156,5 +162,9 @@ public class InitializerConfig implements InitializingBean {
 	 */
 	public String getStartupLoadingMode() {
 		return StringUtils.isBlank(startupLoadingMode) ? PROPS_STARTUP_LOAD_CONTINUE_ON_ERROR : startupLoadingMode;
+	}
+	
+	public boolean getDefaultFormPublishedState() {
+		return defaultFormPublishedState;
 	}
 }
