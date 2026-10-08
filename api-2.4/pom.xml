@@ -86,6 +86,13 @@
             <version>${billingVersion}</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>medicationsideeffects-api</artifactId>
+            <version>${medicationsideeffectsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
         
         <dependency>
             <groupId>org.openmrs.module</groupId>

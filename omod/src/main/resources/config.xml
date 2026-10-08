@@ -86,6 +86,9 @@
 		<aware_of_module version="${tasksVersion}">
 			org.openmrs.module.tasks
 		</aware_of_module>
+		<aware_of_module version="${medicationsideeffectsVersion}">
+			org.openmrs.module.medicationsideeffects
+		</aware_of_module>
 	</aware_of_modules>
 
 	<!-- Internationalization -->

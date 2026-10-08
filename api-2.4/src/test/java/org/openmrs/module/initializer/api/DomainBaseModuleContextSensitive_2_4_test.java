@@ -28,6 +28,11 @@ public abstract class DomainBaseModuleContextSensitive_2_4_test extends DomainBa
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}
+		{
+			Module mod = new Module("", "medicationsideeffects", "", "", "", "1.0.0");
+			mod.setFile(new File(""));
+			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
+		}
 	}
 	
 	@Override

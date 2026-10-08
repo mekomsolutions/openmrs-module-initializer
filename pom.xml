@@ -80,6 +80,7 @@
         <openconceptlabVersion>2.4.0</openconceptlabVersion>
         <fhir2Version>1.6.0</fhir2Version>
         <billingVersion>1.1.0</billingVersion>
+        <medicationsideeffectsVersion>1.0.0-SNAPSHOT</medicationsideeffectsVersion>
         <stockmanagementVersion>2.0.2</stockmanagementVersion>
         <patientflagsVersion>3.0.9</patientflagsVersion>
 

@@ -1,0 +1,4 @@
+Uuid,Void/Retire,Drug Uuid,Classification,Side Effect Concept Uuid,Side Effect Text,Recommended Action,Notes
+c1c1c1c1-0000-0000-0000-000000000011,,a1a1a1a1-0000-0000-0000-000000000001,common,b1b1b1b1-0000-0000-0000-000000000001,,,Created coded common effect
+c1c1c1c1-0000-0000-0000-000000000012,,a1a1a1a1-0000-0000-0000-000000000001,serious,,Updated serious text,Stop the medication,Edited effect
+c1c1c1c1-0000-0000-0000-000000000013,true,,,,,,
