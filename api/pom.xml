@@ -47,6 +47,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Bundled, at core's version: a module's own jars come before its aware-of modules', and fhir2 6.x bundles lang3 3.9 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.github.freva</groupId>
             <artifactId>ascii-table</artifactId>
