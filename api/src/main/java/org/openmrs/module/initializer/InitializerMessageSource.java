@@ -231,8 +231,8 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 				for (Resource resource : coreResources) {
 					Properties properties = new Properties();
 					OpenmrsUtil.loadProperties(properties, resource.getInputStream());
-					ret.put(resource.getURI().toString(), properties);
-					log.trace("Added " + properties.size() + " from " + resource.getURI().toString());
+					ret.put(resource.getURL().toString(), properties);
+					log.trace("Added " + properties.size() + " from " + resource.getURL().toString());
 				}
 				
 				// Load modules in their startup order, so these can overwrite each other where appropriate
@@ -244,11 +244,11 @@ public class InitializerMessageSource extends AbstractMessageSource implements M
 					for (Resource resource : moduleResources) {
 						// Module classpath entries contain other modules and core version libraries.
 						// We need to limit the resources processed to just those defined by this specific module
-						if (resource.getURI().toString().contains("/" + module.getModuleId() + "/")) {
+						if (resource.getURL().toString().replace('\\', '/').contains("/" + module.getModuleId() + "/")) {
 							Properties properties = new Properties();
 							OpenmrsUtil.loadProperties(properties, resource.getInputStream());
-							ret.put("classpath:" + resource.getURI().toString(), properties);
-							log.trace("Added " + properties.size() + " from " + resource.getURI().toString());
+							ret.put("classpath:" + resource.getURL().toString(), properties);
+							log.trace("Added " + properties.size() + " from " + resource.getURL().toString());
 						}
 					}
 				}

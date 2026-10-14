@@ -12,11 +12,17 @@ package org.openmrs.module.initializer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 public class InitializerMessageSourceTest {
 	
@@ -50,5 +56,20 @@ public class InitializerMessageSourceTest {
 		assertEquals(Locale.FRENCH, src.getLocaleFromFileBaseName("/tmp/test_dir/basename_fr"));
 		Locale.setDefault(Locale.US);
 		assertEquals(Locale.ENGLISH, src.getLocaleFromFileBaseName("/tmp/test_dir/basename"));
+	}
+	
+	@Test
+	public void getURI_shouldFailOnWindowsJarUrlResource() throws IOException {
+		Resource jarResource = new UrlResource("jar:file:C:\\Users\\test\\.m2\\repository\\module.jar!/messages.properties");
+		IOException ex = assertThrows(IOException.class, jarResource::getURI);
+		assertTrue(ex.getCause() instanceof URISyntaxException);
+	}
+	
+	@Test
+	public void getURL_shouldSucceedOnWindowsJarUrlResource() throws IOException {
+		Resource jarResource = new UrlResource(
+		        "jar:file:C:\\Users\\test\\.m2\\repository\\module.jar!/messages_fr.properties");
+		String urlString = jarResource.getURL().toString();
+		assertEquals("jar:file:C:\\Users\\test\\.m2\\repository\\module.jar!/messages_fr.properties", urlString);
 	}
 }
