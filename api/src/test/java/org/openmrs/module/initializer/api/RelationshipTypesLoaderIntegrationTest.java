@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.RelationshipType;
 import org.openmrs.api.PersonService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -28,28 +28,28 @@ public class RelationshipTypesLoaderIntegrationTest extends DomainBaseModuleCont
 		// verify created 
 		{
 			RelationshipType rt = ps.getRelationshipTypeByUuid("c86d9979-b8ac-4d8c-85cf-cc04e7f16315");
-			Assert.assertNotNull(rt);
-			Assert.assertEquals("Uncle/Nephew", rt.toString());
-			Assert.assertEquals("A relationship of an uncle and his nephew", rt.getDescription());
-			Assert.assertEquals("Uncle", rt.getaIsToB());
-			Assert.assertEquals("Nephew", rt.getbIsToA());
-			Assert.assertEquals(true, rt.getPreferred());
-			Assert.assertEquals(1, rt.getWeight().intValue());
+			Assertions.assertNotNull(rt);
+			Assertions.assertEquals("Uncle/Nephew", rt.toString());
+			Assertions.assertEquals("A relationship of an uncle and his nephew", rt.getDescription());
+			Assertions.assertEquals("Uncle", rt.getaIsToB());
+			Assertions.assertEquals("Nephew", rt.getbIsToA());
+			Assertions.assertEquals(true, rt.getPreferred());
+			Assertions.assertEquals(1, rt.getWeight().intValue());
 		}
 		
 		// verify edited
 		{
 			RelationshipType rt = ps.getRelationshipTypeByUuid("53d8a8f3-0084-4a52-8666-c655f5bd2689");
-			Assert.assertNotNull(rt);
-			Assert.assertEquals("Supervisor/Supervisee", rt.toString());
-			Assert.assertEquals("A new description for supervisor to supervisee relationship", rt.getDescription());
+			Assertions.assertNotNull(rt);
+			Assertions.assertEquals("Supervisor/Supervisee", rt.toString());
+			Assertions.assertEquals("A new description for supervisor to supervisee relationship", rt.getDescription());
 		}
 		
 		// verify retired
 		{
 			RelationshipType rt = ps.getRelationshipTypeByUuid("3982f469-cedc-4b2d-91ea-fe38f881e1a0");
-			Assert.assertNotNull(rt);
-			Assert.assertTrue(rt.getRetired());
+			Assertions.assertNotNull(rt);
+			Assertions.assertTrue(rt.getRetired());
 		}
 	}
 	

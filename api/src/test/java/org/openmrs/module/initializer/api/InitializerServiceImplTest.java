@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -63,9 +63,9 @@ public class InitializerServiceImplTest {
 		iniz.load();
 		
 		// verify
-		verify(conceptsLoader, times(1)).loadUnsafe(anyListOf(String.class), anyBoolean());
-		verify(encounterTypesLoader, times(1)).loadUnsafe(anyListOf(String.class), anyBoolean());
-		verify(drugsLoader, never()).loadUnsafe(anyListOf(String.class), anyBoolean());
+		verify(conceptsLoader, times(1)).loadUnsafe(anyList(), anyBoolean());
+		verify(encounterTypesLoader, times(1)).loadUnsafe(anyList(), anyBoolean());
+		verify(drugsLoader, never()).loadUnsafe(anyList(), anyBoolean());
 	}
 	
 	@Test
@@ -80,9 +80,9 @@ public class InitializerServiceImplTest {
 		iniz.load();
 		
 		// verify
-		verify(conceptsLoader, never()).loadUnsafe(anyListOf(String.class), anyBoolean());
-		verify(encounterTypesLoader, times(1)).loadUnsafe(anyListOf(String.class), anyBoolean());
-		verify(drugsLoader, never()).loadUnsafe(anyListOf(String.class), anyBoolean());
+		verify(conceptsLoader, never()).loadUnsafe(anyList(), anyBoolean());
+		verify(encounterTypesLoader, times(1)).loadUnsafe(anyList(), anyBoolean());
+		verify(drugsLoader, never()).loadUnsafe(anyList(), anyBoolean());
 	}
 	
 	@Test
@@ -92,14 +92,14 @@ public class InitializerServiceImplTest {
 		        .getResourceAsStream("org/openmrs/module/initializer/include/jsonKeyValues.json");
 		iniz.addKeyValues(is);
 		
-		Assert.assertEquals("value1", iniz.getValueFromKey("key1"));
-		Assert.assertEquals("value2", iniz.getValueFromKey("key2"));
-		Assert.assertEquals("value3", iniz.getValueFromKey("key3"));
+		Assertions.assertEquals("value1", iniz.getValueFromKey("key1"));
+		Assertions.assertEquals("value2", iniz.getValueFromKey("key2"));
+		Assertions.assertEquals("value3", iniz.getValueFromKey("key3"));
 		
 		is = IOUtils.toInputStream("{\"key1\":\"value12\"}");
 		iniz.addKeyValues(is);
 		
-		Assert.assertEquals("value12", iniz.getValueFromKey("key1"));
+		Assertions.assertEquals("value12", iniz.getValueFromKey("key1"));
 	}
 	
 	@Test
@@ -108,21 +108,21 @@ public class InitializerServiceImplTest {
 		final String KEY = "key.to.bool.value";
 		
 		iniz.addKeyValue(KEY, "true");
-		Assert.assertTrue(iniz.getBooleanFromKey(KEY));
+		Assertions.assertTrue(iniz.getBooleanFromKey(KEY));
 		iniz.addKeyValue(KEY, "false");
-		Assert.assertFalse(iniz.getBooleanFromKey(KEY));
+		Assertions.assertFalse(iniz.getBooleanFromKey(KEY));
 		
 		iniz.addKeyValue(KEY, "yes");
-		Assert.assertTrue(iniz.getBooleanFromKey(KEY));
+		Assertions.assertTrue(iniz.getBooleanFromKey(KEY));
 		iniz.addKeyValue(KEY, "no");
-		Assert.assertFalse(iniz.getBooleanFromKey(KEY));
+		Assertions.assertFalse(iniz.getBooleanFromKey(KEY));
 		
 		iniz.addKeyValue(KEY, "1");
-		Assert.assertTrue(iniz.getBooleanFromKey(KEY));
+		Assertions.assertTrue(iniz.getBooleanFromKey(KEY));
 		iniz.addKeyValue(KEY, "0");
-		Assert.assertFalse(iniz.getBooleanFromKey(KEY));
+		Assertions.assertFalse(iniz.getBooleanFromKey(KEY));
 		
 		iniz.addKeyValue(KEY, "foo");
-		Assert.assertNull(iniz.getBooleanFromKey(KEY));
+		Assertions.assertNull(iniz.getBooleanFromKey(KEY));
 	}
 }

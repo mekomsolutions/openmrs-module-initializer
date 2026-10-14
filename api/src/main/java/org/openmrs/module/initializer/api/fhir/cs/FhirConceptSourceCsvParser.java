@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer.api.fhir.cs;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.ConceptSource;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.ConceptService;

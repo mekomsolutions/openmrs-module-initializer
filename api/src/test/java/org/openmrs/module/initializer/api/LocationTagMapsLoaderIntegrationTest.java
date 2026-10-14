@@ -9,9 +9,9 @@
  */
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
@@ -39,7 +39,7 @@ public class LocationTagMapsLoaderIntegrationTest extends DomainBaseModuleContex
 	
 	LocationTag visitLocation;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
 		facilityLocation = ls.getLocationTagByName("Facility Location");
@@ -53,11 +53,11 @@ public class LocationTagMapsLoaderIntegrationTest extends DomainBaseModuleContex
 		// Pre-load verification
 		Location patientHome = ls.getLocationByUuid("af939782-898b-409a-99a4-d1653484edbd");
 		Set<LocationTag> tags = patientHome.getTags();
-		Assert.assertEquals(tags.size(), 2);
-		Assert.assertFalse(tags.contains(shed));
-		Assert.assertTrue(tags.contains(facilityLocation));
-		Assert.assertFalse(tags.contains(appointmentLocation));
-		Assert.assertTrue(tags.contains(visitLocation));
+		Assertions.assertEquals(tags.size(), 2);
+		Assertions.assertFalse(tags.contains(shed));
+		Assertions.assertTrue(tags.contains(facilityLocation));
+		Assertions.assertFalse(tags.contains(appointmentLocation));
+		Assertions.assertTrue(tags.contains(visitLocation));
 		
 		// Replay
 		loader.load();
@@ -65,10 +65,10 @@ public class LocationTagMapsLoaderIntegrationTest extends DomainBaseModuleContex
 		// Post-load verification
 		patientHome = ls.getLocationByUuid("af939782-898b-409a-99a4-d1653484edbd");
 		tags = patientHome.getTags();
-		Assert.assertEquals(tags.size(), 2);
-		Assert.assertFalse(tags.contains(shed)); // Test tag stays absent
-		Assert.assertFalse(tags.contains(facilityLocation)); // Test tag is removed
-		Assert.assertTrue(tags.contains(appointmentLocation)); // Test tag is added
-		Assert.assertTrue(tags.contains(visitLocation)); // Test tag remains present, even if not in CSV
+		Assertions.assertEquals(tags.size(), 2);
+		Assertions.assertFalse(tags.contains(shed)); // Test tag stays absent
+		Assertions.assertFalse(tags.contains(facilityLocation)); // Test tag is removed
+		Assertions.assertTrue(tags.contains(appointmentLocation)); // Test tag is added
+		Assertions.assertTrue(tags.contains(visitLocation)); // Test tag remains present, even if not in CSV
 	}
 }

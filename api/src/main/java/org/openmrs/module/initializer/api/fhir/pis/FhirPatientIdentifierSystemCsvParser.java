@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer.api.fhir.pis;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.PatientService;

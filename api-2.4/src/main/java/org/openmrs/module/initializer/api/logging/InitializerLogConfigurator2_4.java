@@ -15,7 +15,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.module.initializer.InitializerActivator;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.1.5 - 2.1.*, 2.4.* - 2.*")
+@OpenmrsProfile(openmrsPlatformVersion = "2.1.5 - 2.1.*, 2.4.* - 9.*")
 public class InitializerLogConfigurator2_4 implements InitializerLogConfigurator {
 	
 	@Override

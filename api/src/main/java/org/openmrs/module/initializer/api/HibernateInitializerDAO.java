@@ -1,13 +1,8 @@
 package org.openmrs.module.initializer.api;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.openmrs.Concept;
-import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.slf4j.Logger;
@@ -46,24 +41,17 @@ public class HibernateInitializerDAO implements InitializerDAO {
 		if (StringUtils.isBlank(name)) {
 			return Collections.emptyList();
 		}
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ConceptName.class);
-		
+		String nameClause;
 		if (Context.getAdministrationService().isDatabaseStringComparisonCaseSensitive()) {
-			name = name.replace("%", "\\%");
-			criteria.add(Restrictions.ilike("name", name, MatchMode.EXACT));
+			nameClause = "lower(cn.name) = lower(:name)";
 		} else {
-			criteria.add(Restrictions.eq("name", name));
+			nameClause = "cn.name = :name";
 		}
 		
-		criteria.add(Restrictions.eq("voided", false));
-		criteria.add(Restrictions.eq("conceptNameType", ConceptNameType.FULLY_SPECIFIED));
-		
-		criteria.createAlias("concept", "concept");
-		criteria.add(Restrictions.eq("concept.retired", false));
-		criteria.setProjection(Projections.distinct(Projections.property("concept")));
-		
-		@SuppressWarnings("unchecked")
-		List<Concept> list = criteria.list();
-		return list;
+		return sessionFactory.getCurrentSession()
+		        .createQuery("select distinct cn.concept from ConceptName cn where " + nameClause
+		                + " and cn.voided = false and cn.conceptNameType = :conceptNameType and cn.concept.retired = false",
+		            Concept.class)
+		        .setParameter("name", name).setParameter("conceptNameType", ConceptNameType.FULLY_SPECIFIED).list();
 	}
 }

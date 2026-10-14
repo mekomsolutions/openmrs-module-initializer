@@ -24,7 +24,7 @@ public abstract class DomainBaseModuleContextSensitive_2_4_test extends DomainBa
 	public DomainBaseModuleContextSensitive_2_4_test() {
 		super();
 		{
-			Module mod = new Module("", "billing", "", "", "", "1.1.0");
+			Module mod = new Module("", "billing", "", "", "", "1.1.0", "");
 			mod.setFile(new File(""));
 			ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 		}

@@ -2,8 +2,8 @@ package org.openmrs.module.initializer.api.appt.servicedefinition;
 
 import static org.mockito.Mockito.mock;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.service.SpecialityService;
@@ -31,9 +31,9 @@ public class AppointmentsServicesDefinitionLineProcessorTest {
 		AppointmentServiceDefinition definition = p.fill(new AppointmentServiceDefinition(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertEquals("X-Ray", definition.getName());
-		Assert.assertEquals("Radiology Service", definition.getDescription());
-		Assert.assertEquals(Integer.valueOf(30), definition.getDurationMins());
-		Assert.assertEquals(Integer.valueOf(50), definition.getMaxAppointmentsLimit());
+		Assertions.assertEquals("X-Ray", definition.getName());
+		Assertions.assertEquals("Radiology Service", definition.getDescription());
+		Assertions.assertEquals(Integer.valueOf(30), definition.getDurationMins());
+		Assertions.assertEquals(Integer.valueOf(50), definition.getMaxAppointmentsLimit());
 	}
 }

@@ -1,8 +1,7 @@
 package org.openmrs.module.initializer.api.c;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,10 +10,10 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.openmrs.Concept;
@@ -28,25 +27,30 @@ import org.openmrs.customdatatype.CustomDatatypeUtil;
 import org.openmrs.customdatatype.datatype.DateDatatype;
 import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.module.initializer.api.utils.ConceptListParser;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 /*
  * This kind of test case can be used to quickly trial the parsing routines on test CSVs
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ CustomDatatypeUtil.class, Context.class })
-@PowerMockIgnore("jdk.internal.reflect.*")
 public class ConceptsCsvParserTest {
+	
+	private MockedStatic<CustomDatatypeUtil> customDatatypeUtilMock;
+	
+	private MockedStatic<Context> contextMock;
+	
+	@AfterEach
+	public void closeStaticMocks() {
+		customDatatypeUtilMock.close();
+		contextMock.close();
+	}
 	
 	private ConceptService cs;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
-		PowerMockito.mockStatic(CustomDatatypeUtil.class);
-		PowerMockito.mockStatic(Context.class);
+		customDatatypeUtilMock = Mockito.mockStatic(CustomDatatypeUtil.class);
+		contextMock = Mockito.mockStatic(Context.class);
 		cs = mock(ConceptService.class);
 		
 		ConceptClass classQuestion = new ConceptClass();
@@ -68,9 +72,9 @@ public class ConceptsCsvParserTest {
 		typeNA.setName("N/A");
 		when(cs.getConceptDatatypeByName(eq("N/A"))).thenReturn(typeNA);
 		
-		when(CustomDatatypeUtil.getDatatype(eq(FreeTextDatatype.class.getName()), anyString()))
+		when(CustomDatatypeUtil.getDatatype(eq(FreeTextDatatype.class.getName()), any()))
 		        .thenReturn((CustomDatatype) new FreeTextDatatype());
-		when(CustomDatatypeUtil.getDatatype(eq(DateDatatype.class.getName()), anyString()))
+		when(CustomDatatypeUtil.getDatatype(eq(DateDatatype.class.getName()), any()))
 		        .thenReturn((CustomDatatype) new DateDatatype());
 		
 		ConceptAttributeType autditDateAttType = new ConceptAttributeType();
@@ -123,7 +127,7 @@ public class ConceptsCsvParserTest {
 		List<String[]> lines = parser.process(parser.getLines()).getFailingLines();
 		
 		// verif
-		Assert.assertEquals(1, lines.size());
+		Assertions.assertEquals(1, lines.size());
 	}
 	
 	@Test
@@ -142,7 +146,7 @@ public class ConceptsCsvParserTest {
 		List<String[]> lines = parser.process(parser.getLines()).getFailingLines();
 		
 		// verify
-		Assert.assertEquals(1, lines.size());
+		Assertions.assertEquals(1, lines.size());
 	}
 	
 	@Test
@@ -156,16 +160,16 @@ public class ConceptsCsvParserTest {
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_uuid.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(1, parser.process(parser.getLines()).getFailingLines().size());
+		Assertions.assertEquals(1, parser.process(parser.getLines()).getFailingLines().size());
 		
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_fsn.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(1, parser.process(parser.getLines()).getFailingLines().size());
+		Assertions.assertEquals(1, parser.process(parser.getLines()).getFailingLines().size());
 		
 		is = getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/csv/concepts_no_shortname.csv");
 		parser.setInputStream(is);
-		Assert.assertEquals(1, parser.process(parser.getLines()).getFailingLines().size());
+		Assertions.assertEquals(1, parser.process(parser.getLines()).getFailingLines().size());
 	}
 }

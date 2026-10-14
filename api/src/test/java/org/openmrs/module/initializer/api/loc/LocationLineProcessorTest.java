@@ -1,15 +1,16 @@
 package org.openmrs.module.initializer.api.loc;
 
-import static org.mockito.Matchers.any;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.openmrs.Location;
@@ -26,7 +27,7 @@ public class LocationLineProcessorTest {
 	
 	private LocationService ls = mock(LocationService.class);
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		/*
@@ -57,13 +58,13 @@ public class LocationLineProcessorTest {
 		
 		// Verif
 		Set<LocationTag> tags = c.getTags();
-		Assert.assertEquals(2, tags.size());
+		Assertions.assertEquals(2, tags.size());
 		Set<String> names = new HashSet<String>();
 		for (LocationTag t : tags) {
 			names.add(t.getName());
 		}
-		Assert.assertTrue(names.contains("Login Location"));
-		Assert.assertTrue(names.contains("Visit Location"));
+		Assertions.assertTrue(names.contains("Login Location"));
+		Assertions.assertTrue(names.contains("Visit Location"));
 	}
 	
 	@Test
@@ -81,13 +82,13 @@ public class LocationLineProcessorTest {
 		
 		// Verif
 		Set<LocationTag> tags = c.getTags();
-		Assert.assertEquals(2, tags.size());
+		Assertions.assertEquals(2, tags.size());
 		Set<String> names = new HashSet<String>();
 		for (LocationTag t : tags) {
 			names.add(t.getName());
 		}
-		Assert.assertTrue(names.contains("Login Location"));
-		Assert.assertTrue(names.contains("Visit Location"));
+		Assertions.assertTrue(names.contains("Login Location"));
+		Assertions.assertTrue(names.contains("Visit Location"));
 	}
 	
 	@Test
@@ -104,25 +105,28 @@ public class LocationLineProcessorTest {
 		
 		// Verif
 		Set<LocationTag> tags = c.getTags();
-		Assert.assertEquals(1, tags.size());
+		Assertions.assertEquals(1, tags.size());
 		Set<String> names = new HashSet<String>();
 		for (LocationTag t : tags) {
 			names.add(t.getName());
 		}
-		Assert.assertFalse(names.contains("Login Location"));
-		Assert.assertTrue(names.contains("Visit Location"));
+		Assertions.assertFalse(names.contains("Login Location"));
+		Assertions.assertTrue(names.contains("Visit Location"));
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void fill_shouldFailIfParentDoesNotExist() {
-		
-		// Setup
-		String[] headerLine = { BaseLineProcessor.HEADER_NAME, BaseLineProcessor.PARENT };
-		String[] line = { "Test Location", "nonexistent_location" };
-		when(ls.getLocationByUuid("nonexistent_location")).thenReturn(null);
-		
-		LocationLineProcessor locationLineProcessor = new LocationLineProcessor(ls, new LocationTagListParser(ls));
-		locationLineProcessor.fill(new Location(), new CsvLine(headerLine, line));
+		assertThrows(IllegalArgumentException.class, () -> {
+			
+			// Setup
+			String[] headerLine = { BaseLineProcessor.HEADER_NAME, BaseLineProcessor.PARENT };
+			String[] line = { "Test Location", "nonexistent_location" };
+			when(ls.getLocationByUuid("nonexistent_location")).thenReturn(null);
+			
+			LocationLineProcessor locationLineProcessor = new LocationLineProcessor(ls, new LocationTagListParser(ls));
+			locationLineProcessor.fill(new Location(), new CsvLine(headerLine, line));
+			
+		});
 	}
 	
 	@Test
@@ -137,6 +141,6 @@ public class LocationLineProcessorTest {
 		Location location = locationLineProcessor.fill(new Location(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertTrue(location.getName().equals("Test Location"));
+		Assertions.assertTrue(location.getName().equals("Test Location"));
 	}
 }

@@ -9,8 +9,8 @@
  */
 package org.openmrs.module.initializer.api.loaders;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_7_Test;
@@ -34,12 +34,12 @@ public class GlobalPropertiesLoaderIntegration_2_7_Test extends DomainBaseModule
 		loader.load();
 		
 		// Verif
-		Assert.assertEquals("GP one one", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
-		Assert.assertEquals("GP one two", Context.getAdministrationService().getGlobalProperty("gp.gp12"));
-		Assert.assertEquals("GP two one", Context.getAdministrationService().getGlobalProperty("gp.gp21"));
-		Assert.assertEquals("GP three one", Context.getAdministrationService().getGlobalProperty("gp.gp31"));
-		Assert.assertEquals("GP three two", Context.getAdministrationService().getGlobalProperty("gp.gp32"));
-		Assert.assertEquals("GP three three", Context.getAdministrationService().getGlobalProperty("gp.gp33"));
+		Assertions.assertEquals("GP one one", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
+		Assertions.assertEquals("GP one two", Context.getAdministrationService().getGlobalProperty("gp.gp12"));
+		Assertions.assertEquals("GP two one", Context.getAdministrationService().getGlobalProperty("gp.gp21"));
+		Assertions.assertEquals("GP three one", Context.getAdministrationService().getGlobalProperty("gp.gp31"));
+		Assertions.assertEquals("GP three two", Context.getAdministrationService().getGlobalProperty("gp.gp32"));
+		Assertions.assertEquals("GP three three", Context.getAdministrationService().getGlobalProperty("gp.gp33"));
 	}
 	
 	@Test
@@ -47,13 +47,13 @@ public class GlobalPropertiesLoaderIntegration_2_7_Test extends DomainBaseModule
 		
 		// Setup
 		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("gp.gp11", "foobar"));
-		Assert.assertEquals("foobar", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
+		Assertions.assertEquals("foobar", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
 		
 		// Replay
 		loader.load();
 		
 		// Verif
-		Assert.assertEquals("GP one one", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
+		Assertions.assertEquals("GP one one", Context.getAdministrationService().getGlobalProperty("gp.gp11"));
 	}
 	
 	@Test
@@ -68,8 +68,8 @@ public class GlobalPropertiesLoaderIntegration_2_7_Test extends DomainBaseModule
 		loader.load();
 		
 		// Verif
-		Assert.assertEquals("Foo", Context.getAdministrationService().getGlobalProperty("gp.foo"));
-		Assert.assertEquals("Bar", Context.getAdministrationService().getGlobalProperty("gp.bar"));
-		Assert.assertEquals("Baz", Context.getAdministrationService().getGlobalProperty("gp.baz"));
+		Assertions.assertEquals("Foo", Context.getAdministrationService().getGlobalProperty("gp.foo"));
+		Assertions.assertEquals("Bar", Context.getAdministrationService().getGlobalProperty("gp.bar"));
+		Assertions.assertEquals("Baz", Context.getAdministrationService().getGlobalProperty("gp.baz"));
 	}
 }

@@ -2,15 +2,15 @@ package org.openmrs.module.initializer.api.attributes.types;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.openmrs.module.initializer.api.attributes.types.AttributeTypeEntity.PROGRAM;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.bahmni.module.bahmnicore.model.bahmniPatientProgram.ProgramAttributeType;
 import org.bahmni.module.bahmnicore.service.BahmniProgramWorkflowService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.attribute.BaseAttributeType;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class BahmniAttributeTypesProxyServiceTest extends DomainBaseModuleContex
 	@Autowired
 	BahmniProgramWorkflowService bahmniProgramWorkflowService;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/bahmni-test-metadata.xml");
 	}

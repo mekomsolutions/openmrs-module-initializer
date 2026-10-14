@@ -1,15 +1,15 @@
 package org.openmrs.module.initializer.api.billing;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.billing.api.PaymentModeService;
 import org.openmrs.module.billing.api.model.PaymentMode;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_7_Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PaymentModesLoaderIntegrationTest extends DomainBaseModuleContextSensitive_2_7_Test {
 	
@@ -19,7 +19,7 @@ public class PaymentModesLoaderIntegrationTest extends DomainBaseModuleContextSe
 	@Autowired
 	private PaymentModesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		executeDataSet("testdata/test-concepts-2.7.xml");
 	}

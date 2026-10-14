@@ -1,7 +1,8 @@
 package org.openmrs.module.initializer.api.gp;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.initializer.api.InitializerSerializer;
 import org.openmrs.test.Verifies;
 
@@ -16,10 +17,10 @@ public class GlobalPropertiesConfigDeserializerTest {
 		GlobalPropertiesConfig config = InitializerSerializer.getGlobalPropertiesConfig(
 		    getClass().getClassLoader().getResourceAsStream("org/openmrs/module/initializer/include/gp.xml"));
 		
-		Assert.assertEquals("addresshierarchy.i18nSupport", config.getGlobalProperties().get(0).getProperty());
-		Assert.assertEquals("true", (String) config.getGlobalProperties().get(0).getPropertyValue());
-		Assert.assertEquals("locale.allowed.list", config.getGlobalProperties().get(1).getProperty());
-		Assert.assertEquals("en, km_KH", (String) config.getGlobalProperties().get(1).getPropertyValue());
+		Assertions.assertEquals("addresshierarchy.i18nSupport", config.getGlobalProperties().get(0).getProperty());
+		Assertions.assertEquals("true", (String) config.getGlobalProperties().get(0).getPropertyValue());
+		Assertions.assertEquals("locale.allowed.list", config.getGlobalProperties().get(1).getProperty());
+		Assertions.assertEquals("en, km_KH", (String) config.getGlobalProperties().get(1).getPropertyValue());
 	}
 	
 	@Test
@@ -29,17 +30,20 @@ public class GlobalPropertiesConfigDeserializerTest {
 		GlobalPropertiesConfig config = InitializerSerializer.getGlobalPropertiesConfig(getClass().getClassLoader()
 		        .getResourceAsStream("org/openmrs/module/initializer/include/gp_unmmaped_fields.xml"));
 		
-		Assert.assertEquals("addresshierarchy.i18nSupport", config.getGlobalProperties().get(0).getProperty());
-		Assert.assertEquals("true", (String) config.getGlobalProperties().get(0).getPropertyValue());
-		Assert.assertEquals("locale.allowed.list", config.getGlobalProperties().get(1).getProperty());
-		Assert.assertEquals("en, km_KH", (String) config.getGlobalProperties().get(1).getPropertyValue());
+		Assertions.assertEquals("addresshierarchy.i18nSupport", config.getGlobalProperties().get(0).getProperty());
+		Assertions.assertEquals("true", (String) config.getGlobalProperties().get(0).getPropertyValue());
+		Assertions.assertEquals("locale.allowed.list", config.getGlobalProperties().get(1).getProperty());
+		Assertions.assertEquals("en, km_KH", (String) config.getGlobalProperties().get(1).getPropertyValue());
 	}
 	
-	@Test(expected = XStreamException.class)
+	@Test
 	@Verifies(value = "should throw XStream exception on invalid config", method = "fromXML(InputStream input)")
 	public void shouldThrowException() {
-		
-		InitializerSerializer.getGlobalPropertiesConfig(
-		    getClass().getClassLoader().getResourceAsStream("org/openmrs/module/initializer/include/gp_error.xml"));
+		assertThrows(XStreamException.class, () -> {
+			
+			InitializerSerializer.getGlobalPropertiesConfig(
+			    getClass().getClassLoader().getResourceAsStream("org/openmrs/module/initializer/include/gp_error.xml"));
+			
+		});
 	}
 }

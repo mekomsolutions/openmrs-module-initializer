@@ -1,7 +1,7 @@
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -13,8 +13,8 @@ public class OrderedFileTest {
 		OrderedFile file2 = new OrderedFile("/configuration/domain/file2.txt");
 		OrderedFile file3 = new OrderedFile("/configuration/domain/concepts/file3.txt");
 		
-		Assert.assertTrue(file1.compareTo(file2) < 0);
-		Assert.assertTrue(file1.compareTo(file3) > 0);
+		Assertions.assertTrue(file1.compareTo(file2) < 0);
+		Assertions.assertTrue(file1.compareTo(file3) > 0);
 	}
 	
 	@Test
@@ -23,9 +23,9 @@ public class OrderedFileTest {
 		OrderedFile file2 = new NumericFile("/configuration/domain/9");
 		OrderedFile file3 = new NumericFile("/configuration/concepts/concepts.csv");
 		
-		Assert.assertTrue(file1.compareTo(file2) > 0);
-		Assert.assertTrue(file1.compareTo(file3) < 0);
-		Assert.assertTrue(file2.compareTo(file3) < 0);
+		Assertions.assertTrue(file1.compareTo(file2) > 0);
+		Assertions.assertTrue(file1.compareTo(file3) < 0);
+		Assertions.assertTrue(file2.compareTo(file3) < 0);
 	}
 	
 	public class NumericFile extends OrderedFile {

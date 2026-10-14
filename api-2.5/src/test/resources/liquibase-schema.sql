@@ -4,7 +4,7 @@ CREATE TABLE LIQUIBASECHANGELOG
     AUTHOR        varchar(255) NOT NULL,
     FILENAME      varchar(255) NOT NULL,
     DATEEXECUTED  datetime     NOT NULL,
-    ORDEREXECUTED int(11)      NOT NULL,
+    ORDEREXECUTED int          NOT NULL,
     EXECTYPE      varchar(10)  NOT NULL,
     MD5SUM        varchar(35),
     DESCRIPTION   varchar(255),
@@ -19,8 +19,8 @@ CREATE TABLE LIQUIBASECHANGELOG
 
 CREATE TABLE LIQUIBASECHANGELOGLOCK
 (
-    ID          int(11)    NOT NULL,
-    LOCKED      tinyint(1) NOT NULL,
+    ID          int        NOT NULL,
+    LOCKED      tinyint    NOT NULL,
     LOCKGRANTED datetime,
     LOCKEDBY    varchar(255),
     PRIMARY KEY (ID)

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.Retireable;
@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 
 public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProcessor<T>> {
 	
@@ -125,7 +126,7 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	
 	public void setInputStream(InputStream is) throws IOException {
 		reader = new CSVReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-		headerLine = reader.readNext();
+		headerLine = readNext(reader);
 		
 		String version = LP.getVersion(headerLine);
 		
@@ -139,7 +140,7 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	 */
 	public static String[] getHeaderLine(InputStream is) throws IOException {
 		CSVReader reader = new CSVReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-		String[] headerLine = reader.readNext();
+		String[] headerLine = readNext(reader);
 		reader.close();
 		return headerLine;
 	}
@@ -286,7 +287,7 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	 */
 	protected String[] fetchNextLine() throws IOException {
 		
-		line = reader.readNext();
+		line = readNext(reader);
 		if (line == null) {
 			close();
 			return null;
@@ -304,5 +305,18 @@ public abstract class CsvParser<T extends OpenmrsObject, LP extends BaseLineProc
 	
 	protected void close() throws IOException {
 		reader.close();
+	}
+	
+	/**
+	 * opencsv 5 also declares {@link CsvValidationException}, which only a registered validator throws,
+	 * and none is registered here.
+	 */
+	private static String[] readNext(CSVReader reader) throws IOException {
+		try {
+			return reader.readNext();
+		}
+		catch (CsvValidationException e) {
+			throw new IOException(e);
+		}
 	}
 }

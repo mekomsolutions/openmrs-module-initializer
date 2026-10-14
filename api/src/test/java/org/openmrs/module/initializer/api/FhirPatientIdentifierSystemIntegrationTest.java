@@ -1,7 +1,7 @@
 package org.openmrs.module.initializer.api;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.PatientService;
 import org.openmrs.module.fhir2.api.FhirPatientIdentifierSystemService;
@@ -35,7 +35,7 @@ public class FhirPatientIdentifierSystemIntegrationTest extends DomainBaseModule
 	
 	FhirPatientIdentifierSystem thirdSystem;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		{
 			firstType = new PatientIdentifierType();

@@ -1,10 +1,11 @@
 package org.openmrs.module.initializer.api.procedure;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -13,8 +14,8 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -36,9 +37,9 @@ public class ProcedureTypesCsvParserTest {
 	@InjectMocks
 	private ProcedureTypesCsvParser parser;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
-		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.openMocks(this);
 	}
 	
 	@Test
@@ -117,17 +118,20 @@ public class ProcedureTypesCsvParserTest {
 		assertSame(exact, result);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowWhenMultipleExactNameMatches() {
-		ProcedureType a = new ProcedureType();
-		a.setName("Appendectomy");
-		a.setUuid("9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b0001");
-		ProcedureType b = new ProcedureType();
-		b.setName("Appendectomy");
-		b.setUuid("9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b0002");
-		when(procedureService.getProcedureTypesByName("Appendectomy")).thenReturn(Arrays.asList(a, b));
-		
-		parser.bootstrap(new CsvLine(HEADERS, new String[] { "", "Appendectomy", "" }));
+		assertThrows(IllegalArgumentException.class, () -> {
+			ProcedureType a = new ProcedureType();
+			a.setName("Appendectomy");
+			a.setUuid("9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b0001");
+			ProcedureType b = new ProcedureType();
+			b.setName("Appendectomy");
+			b.setUuid("9d9aa7c1-2e0e-4b1e-8b57-7e6f1a0b0002");
+			when(procedureService.getProcedureTypesByName("Appendectomy")).thenReturn(Arrays.asList(a, b));
+			
+			parser.bootstrap(new CsvLine(HEADERS, new String[] { "", "Appendectomy", "" }));
+			
+		});
 	}
 	
 	@Test

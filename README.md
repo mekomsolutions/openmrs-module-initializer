@@ -191,7 +191,7 @@ mvn clean package
 ```
 
 ### Runtime compatibility
-* OpenMRS Core 2.1.1 (*required*)
+* OpenMRS Core 3.0.0 (*required*), on Java 21
 * Bahmni Appointments 1.2.1 (*compatible*)
 * Bahmni Core 0.93 (*compatible*)
 * Bahmni I.e Apps 1.1.0 (*compatible*)
@@ -199,11 +199,15 @@ mvn clean package
 * Data Filter 1.0.0 (*compatible*)
 * Flags 3.0.9 (*compatible*)
 * HTML Form Entry 4.0.0 (*compatible*)
-* ID Gen 4.3 (*compatible*)
+* ID Gen 7.0.0 (*compatible*)
 * Metadata Sharing 1.2.2 (*compatible*)
-* Metadata Mapping 1.3.4 (*compatible*)
+* Metadata Mapping 3.0.0 (*compatible*)
 * Open Concept Lab 1.2.9 (*compatible*)
 * Tasks 1.0.0 (*compatible*)
+
+Apart from ID Gen and Metadata Mapping, these modules have no OpenMRS Core 3.0 version yet, so Initializer is not tested against them on this version.
+
+On OpenMRS Core 2.x, use an Initializer 2.x release.
 
 ### Test your OpenMRS configs
 See the [Initializer Validator README page](readme/validator.md).
@@ -233,7 +237,10 @@ See the [documentation on Initializer's logging properties](readme/rtprops.md#lo
 ----
 
 ## Releases notes
-#### version 2.13.0
+#### version 3.0.0
+* Requires OpenMRS Core 3.0.0 and Java 21. Initializer 2.x releases remain the ones for OpenMRS Core 2.x.
+* Most boolean CSV columns, `Void/Retire` included, and the `initializer.skip.checksums` and `initializer.row.checksums.enabled` properties now read `1` as true. Initializer 2.x read it as false.
+* The [Initializer Validator](readme/validator.md) is not available for this version yet and remains on the 2.x line.
 
 #### version 2.12.1
 * Fix order types domain to apply the parent for order types with concrete Java classes (e.g. org.openmrs.DrugOrder)

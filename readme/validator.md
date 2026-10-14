@@ -1,5 +1,7 @@
 ## Initializer Validator
 
+**Note**: The validator has not been ported to OpenMRS Core 3.0 yet, so it is only available for Initializer 2.x. Build it from a 2.x release such as [2.12.1](https://github.com/mekomsolutions/openmrs-module-initializer/tree/2.12.1).
+
 ### In a nutshell
 The Initializer Validator is a standalone fatjar to make dry runs of your OpenMRS configs and to report on any errors. This enables developers and implementers to be warned well ahead of time that a config would fail when loaded on _real_ OpenMRS instances.
 

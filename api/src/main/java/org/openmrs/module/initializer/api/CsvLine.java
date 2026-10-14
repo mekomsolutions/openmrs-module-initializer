@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer.api;
 
-import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.module.initializer.api.utils.Utils;
 

@@ -10,15 +10,15 @@
 package org.openmrs.module.initializer;
 
 import org.apache.commons.lang3.LocaleUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.util.LocaleUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class InitializerMessageSourceIntegrationTest extends DomainBaseModuleContextSensitiveTest {
 	

@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 public enum Domain {
 	LIQUIBASE,

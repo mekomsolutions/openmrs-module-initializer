@@ -3,9 +3,9 @@ package org.openmrs.module.initializer.api;
 import java.util.Collections;
 import java.util.Locale;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
@@ -114,7 +114,7 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleConte
 		}
 	}
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		ProgramsLoaderIntegrationTest.setupPrograms(cs, pws);
@@ -133,45 +133,45 @@ public class ProgramWorkflowsLoaderIntegrationTest extends DomainBaseModuleConte
 		// created workflow
 		{
 			ProgramWorkflow wf = pws.getWorkflowByUuid("2b98bc76-245c-11e1-9cf0-00248140a5eb");
-			Assert.assertNotNull(wf);
+			Assertions.assertNotNull(wf);
 			Program prog = pws.getProgramByName("TB Program");
-			Assert.assertEquals(prog, wf.getProgram());
-			Assert.assertEquals(cs.getConceptByName("TB Treatment Status (workflow)"), wf.getConcept());
-			Assert.assertEquals("TB Treatment Status (workflow)", wf.getConcept().getName().getName());
-			Assert.assertEquals("TB Treatment Status (workflow)", wf.getConcept().getDescription().getDescription());
-			Assert.assertFalse(wf.isRetired());
-			Assert.assertEquals(wf, prog.getWorkflow(wf.getId()));
+			Assertions.assertEquals(prog, wf.getProgram());
+			Assertions.assertEquals(cs.getConceptByName("TB Treatment Status (workflow)"), wf.getConcept());
+			Assertions.assertEquals("TB Treatment Status (workflow)", wf.getConcept().getName().getName());
+			Assertions.assertEquals("TB Treatment Status (workflow)", wf.getConcept().getDescription().getDescription());
+			Assertions.assertFalse(wf.isRetired());
+			Assertions.assertEquals(wf, prog.getWorkflow(wf.getId()));
 		}
 		
 		// workflow NOT added to a another program
 		{
 			ProgramWorkflow wf = pws.getWorkflowByUuid("2b98bc76-245c-11e1-9cf0-00248140a5ee");
-			Assert.assertEquals(pws.getProgramByName("AIDS Program"), wf.getProgram());
-			Assert.assertFalse(pws.getProgramByName("TB Program").getAllWorkflows().contains(wf));
+			Assertions.assertEquals(pws.getProgramByName("AIDS Program"), wf.getProgram());
+			Assertions.assertFalse(pws.getProgramByName("TB Program").getAllWorkflows().contains(wf));
 		}
 		
 		// workflow created without UUID
 		{
 			Program prog = pws.getProgramByName("AIDS Program");
 			ProgramWorkflow wf = prog.getWorkflowByName("Palliative Care (workflow)");
-			Assert.assertNotNull(wf);
+			Assertions.assertNotNull(wf);
 		}
 		
 		// workflow with its concept changed
 		{
 			ProgramWorkflow wf = pws.getWorkflowByUuid("1b42d0e8-20ad-4bd8-b05d-fbad80a3b665");
-			Assert.assertEquals(cs.getConceptByName("Extended Discharge (workflow)"), wf.getConcept());
+			Assertions.assertEquals(cs.getConceptByName("Extended Discharge (workflow)"), wf.getConcept());
 		}
 		
 		// retired workflow
 		{
 			ProgramWorkflow wf = pws.getWorkflowByUuid("45a28ee9-20a3-4065-9955-9cb7a0c6a24b");
-			Assert.assertTrue(wf.isRetired());
+			Assertions.assertTrue(wf.isRetired());
 			
 			Program prog = pws.getProgramByName("Mental Health Program");
 			wf = prog.getWorkflowByName("Electroshock (workflow)");
-			Assert.assertFalse(prog.getWorkflows().contains(wf));
-			Assert.assertTrue(prog.getAllWorkflows().contains(wf));
+			Assertions.assertFalse(prog.getWorkflows().contains(wf));
+			Assertions.assertTrue(prog.getAllWorkflows().contains(wf));
 		}
 	}
 }

@@ -9,9 +9,9 @@
  */
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -28,7 +28,7 @@ public class ConceptSourcesLoaderIntegrationTest extends DomainBaseModuleContext
 	@Autowired
 	private ConceptSourcesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-concepts.xml");
 	}
@@ -40,39 +40,39 @@ public class ConceptSourcesLoaderIntegrationTest extends DomainBaseModuleContext
 		
 		{ // created with uuid and description
 			ConceptSource c = service.getConceptSourceByName("Mexico");
-			Assert.assertNotNull(c);
-			Assert.assertEquals("adbd4dc1-eb52-4670-8a69-bb646cef9cd7", c.getUuid());
-			Assert.assertEquals("Reference codes for the Mexican MoH", c.getDescription());
+			Assertions.assertNotNull(c);
+			Assertions.assertEquals("adbd4dc1-eb52-4670-8a69-bb646cef9cd7", c.getUuid());
+			Assertions.assertEquals("Reference codes for the Mexican MoH", c.getDescription());
 		}
 		{ // retired 
 			ConceptSource c = service.getConceptSourceByName("Cambodia");
-			Assert.assertNotNull(c);
-			Assert.assertTrue(c.getRetired());
+			Assertions.assertNotNull(c);
+			Assertions.assertTrue(c.getRetired());
 		}
 		{ // created without uuid
 			ConceptSource c = service.getConceptSourceByName("Peru");
-			Assert.assertNotNull(c);
-			Assert.assertEquals("Reference terms for Peru", c.getDescription());
+			Assertions.assertNotNull(c);
+			Assertions.assertEquals("Reference terms for Peru", c.getDescription());
 		}
 		{ // edited CIEL to change description
 			ConceptSource c = service.getConceptSourceByUuid("245dd8d9-ed8e-4126-8866-d99d140d50b7");
-			Assert.assertEquals("CIEL", c.getName()); // unchanged
-			Assert.assertEquals("The people's terminology source", c.getDescription());
+			Assertions.assertEquals("CIEL", c.getName()); // unchanged
+			Assertions.assertEquals("The people's terminology source", c.getDescription());
 		}
 		{ // created with HL7 code
 			ConceptSource c = service.getConceptSourceByHL7Code("SCT");
-			Assert.assertNotNull(c);
-			Assert.assertEquals("SNOMED CT", c.getName());
-			Assert.assertEquals("SNOMED Preferred mapping", c.getDescription());
-			Assert.assertEquals("SCT", c.getHl7Code());
+			Assertions.assertNotNull(c);
+			Assertions.assertEquals("SNOMED CT", c.getName());
+			Assertions.assertEquals("SNOMED Preferred mapping", c.getDescription());
+			Assertions.assertEquals("SCT", c.getHl7Code());
 		}
 		{ // created with Unique ID
 			ConceptSource c = service.getConceptSourceByHL7Code("RADLEX");
-			Assert.assertNotNull(c);
-			Assert.assertEquals("RadLex", c.getName());
-			Assert.assertEquals("Radiology Terms", c.getDescription());
-			Assert.assertEquals("RADLEX", c.getHl7Code());
-			Assert.assertEquals("2.16.840.1.113883.6.256", c.getUniqueId());
+			Assertions.assertNotNull(c);
+			Assertions.assertEquals("RadLex", c.getName());
+			Assertions.assertEquals("Radiology Terms", c.getDescription());
+			Assertions.assertEquals("RADLEX", c.getHl7Code());
+			Assertions.assertEquals("2.16.840.1.113883.6.256", c.getUniqueId());
 		}
 	}
 }

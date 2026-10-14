@@ -11,9 +11,9 @@ package org.openmrs.module.initializer.api;
 
 import java.util.Locale;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.PersonAttributeType;
@@ -37,7 +37,7 @@ public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 	@Autowired
 	private PersonAttributeTypesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		ConceptService cs = Context.getConceptService();
@@ -99,32 +99,32 @@ public class PersonAttributeTypesLoaderIntegrationTest extends DomainBaseModuleC
 		// Verif fetch by name
 		{
 			PersonAttributeType pat = ps.getPersonAttributeTypeByName("PAT_NO_UUID");
-			Assert.assertNotNull(pat);
-			Assert.assertEquals("fcafe720-392b-11ea-9712-f727922144a4", pat.getUuid());
-			Assert.assertEquals("a description", pat.getDescription());
+			Assertions.assertNotNull(pat);
+			Assertions.assertEquals("fcafe720-392b-11ea-9712-f727922144a4", pat.getUuid());
+			Assertions.assertEquals("a description", pat.getDescription());
 		}
 		// Verif foreign key
 		{
 			PersonAttributeType pat = ps.getPersonAttributeTypeByName("PAT_with_concept");
-			Assert.assertEquals(conceptForeignKey, pat.getForeignKey().intValue());
-			Assert.assertEquals("Edit:PAT", pat.getEditPrivilege().getName());
+			Assertions.assertEquals(conceptForeignKey, pat.getForeignKey().intValue());
+			Assertions.assertEquals("Edit:PAT", pat.getEditPrivilege().getName());
 		}
 		// Verif renaming
 		{
 			PersonAttributeType pat = ps.getPersonAttributeTypeByUuid("9eca4f4e-707f-4bb8-8289-2f9b6e93803c");
-			Assert.assertEquals("PAT_RENAME_NEW_NAME", pat.getName());
+			Assertions.assertEquals("PAT_RENAME_NEW_NAME", pat.getName());
 		}
 		// Verif that the provided UUID is correctly assigned
 		{
 			PersonAttributeType pat = ps.getPersonAttributeTypeByUuid("717ec942-3c4a-11ea-b024-ffc81a23382e");
-			Assert.assertNotNull(pat);
-			Assert.assertEquals("NEW_PAT", pat.getName());
+			Assertions.assertNotNull(pat);
+			Assertions.assertEquals("NEW_PAT", pat.getName());
 		}
 		// Verif foreign key changed
 		{
 			PersonAttributeType pat = ps.getPersonAttributeTypeByName("PAT_CHANGE_FOREIGNKEY");
-			Assert.assertEquals(conceptForeignKey, pat.getForeignKey().intValue());
-			Assert.assertTrue(pat.isSearchable());
+			Assertions.assertEquals(conceptForeignKey, pat.getForeignKey().intValue());
+			Assertions.assertTrue(pat.isSearchable());
 		}
 	}
 }

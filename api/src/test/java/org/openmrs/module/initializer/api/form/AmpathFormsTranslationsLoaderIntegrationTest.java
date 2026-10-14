@@ -1,15 +1,15 @@
 package org.openmrs.module.initializer.api.form;
 
 import org.apache.commons.io.FileUtils;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Rule;
-import org.junit.runners.MethodSorters;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.openmrs.Form;
 import org.openmrs.FormResource;
 import org.openmrs.api.FormService;
@@ -24,11 +24,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Locale;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModuleContextSensitiveTest {
-	
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 	
 	private static final String FORM_TRANSLATIONS_FOLDER_PATH = "src/test/resources/ampathformstranslations/";
 	
@@ -41,7 +38,7 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 	@Autowired
 	private FormService formService;
 	
-	@After
+	@AfterEach
 	public void clean() throws IOException {
 		
 		// Delete created form files
@@ -61,20 +58,20 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		// Verify
 		Form form = formService.getForm("Test Form 1");
 		FormResource formResource = formService.getFormResource(form, "Test Form 1_translations_fr");
-		Assert.assertNotNull(formResource);
+		Assertions.assertNotNull(formResource);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode actualObj = mapper.readTree((String) formResource.getValue());
-		Assert.assertEquals("French Translations", actualObj.get("description").getTextValue());
-		Assert.assertEquals("fr", actualObj.get("language").getTextValue());
-		Assert.assertEquals("Encontre", actualObj.get("translations").get("Encounter").getTextValue());
-		Assert.assertEquals("Autre", actualObj.get("translations").get("Other").getTextValue());
-		Assert.assertEquals("Enfant", actualObj.get("translations").get("Child").getTextValue());
+		Assertions.assertEquals("French Translations", actualObj.get("description").textValue());
+		Assertions.assertEquals("fr", actualObj.get("language").textValue());
+		Assertions.assertEquals("Encontre", actualObj.get("translations").get("Encounter").textValue());
+		Assertions.assertEquals("Autre", actualObj.get("translations").get("Other").textValue());
+		Assertions.assertEquals("Enfant", actualObj.get("translations").get("Child").textValue());
 		
 		// verify form name translation
-		Assert.assertEquals("Formulaire d'essai 1", Context.getMessageSourceService()
+		Assertions.assertEquals("Formulaire d'essai 1", Context.getMessageSourceService()
 		        .getMessage("ui.i18n.Form.name." + formResource.getForm().getUuid(), null, Locale.CANADA_FRENCH));
-		Assert.assertEquals("Formulaire d'essai 1", Context.getMessageSourceService()
+		Assertions.assertEquals("Formulaire d'essai 1", Context.getMessageSourceService()
 		        .getMessage("org.openmrs.Form." + formResource.getForm().getUuid(), null, Locale.CANADA_FRENCH));
 		
 	}
@@ -92,15 +89,15 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		Form form = formService.getForm("Test Form 1");
 		FormResource formResource = formService.getFormResource(form, "Test Form 1_translations_fr");
 		
-		Assert.assertNotNull(formResource);
+		Assertions.assertNotNull(formResource);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode ampathTranslations = mapper.readTree((String) formResource.getValue());
-		Assert.assertEquals("French Translations", ampathTranslations.get("description").getTextValue());
-		Assert.assertEquals("fr", ampathTranslations.get("language").getTextValue());
-		Assert.assertEquals("Encontre", ampathTranslations.get("translations").get("Encounter").getTextValue());
-		Assert.assertEquals("Autre", ampathTranslations.get("translations").get("Other").getTextValue());
-		Assert.assertEquals("Enfant", ampathTranslations.get("translations").get("Child").getTextValue());
+		Assertions.assertEquals("French Translations", ampathTranslations.get("description").textValue());
+		Assertions.assertEquals("fr", ampathTranslations.get("language").textValue());
+		Assertions.assertEquals("Encontre", ampathTranslations.get("translations").get("Encounter").textValue());
+		Assertions.assertEquals("Autre", ampathTranslations.get("translations").get("Other").textValue());
+		Assertions.assertEquals("Enfant", ampathTranslations.get("translations").get("Child").textValue());
 		
 		String test_file_updated = "src/test/resources/testdata/testAmpathformstranslations/test_form_updated_translations_fr.json";
 		File srcFile = new File(test_file_updated);
@@ -117,32 +114,29 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		FormResource formResourceUpdated = formService.getFormResource(formUpdated, "Test Form 1_translations_fr");
 		
 		// Verify
-		Assert.assertNotNull(formResourceUpdated);
+		Assertions.assertNotNull(formResourceUpdated);
 		ObjectMapper mapperUpdated = new ObjectMapper();
 		JsonNode ampathTranslationsUpdated = mapperUpdated.readTree((String) formResourceUpdated.getValue());
-		Assert.assertEquals("French Translations Updated", ampathTranslationsUpdated.get("description").getTextValue());
-		Assert.assertEquals("fr", ampathTranslationsUpdated.get("language").getTextValue());
-		Assert.assertEquals("Tante", ampathTranslationsUpdated.get("translations").get("Aunt").getTextValue());
-		Assert.assertEquals("Oncle", ampathTranslationsUpdated.get("translations").get("Uncle").getTextValue());
-		Assert.assertEquals("Neveu", ampathTranslationsUpdated.get("translations").get("Nephew").getTextValue());
+		Assertions.assertEquals("French Translations Updated", ampathTranslationsUpdated.get("description").textValue());
+		Assertions.assertEquals("fr", ampathTranslationsUpdated.get("language").textValue());
+		Assertions.assertEquals("Tante", ampathTranslationsUpdated.get("translations").get("Aunt").textValue());
+		Assertions.assertEquals("Oncle", ampathTranslationsUpdated.get("translations").get("Uncle").textValue());
+		Assertions.assertEquals("Neveu", ampathTranslationsUpdated.get("translations").get("Nephew").textValue());
 	}
 	
 	@Test
 	public void load_shouldThrowGivenInvalidFormAssociatedWithFormTranslations() throws Exception {
-		// Setup
-		thrown.expectMessage(
-		    "IllegalArgumentException: Could not find a form named 'Test Form 1'. Please ensure an existing form is configured.");
-		
 		// Replay
-		ampathFormsTranslationsLoader.loadUnsafe(Collections.emptyList(), true);
+		Exception e = Assertions.assertThrows(Exception.class,
+		    () -> ampathFormsTranslationsLoader.loadUnsafe(Collections.emptyList(), true));
+		MatcherAssert.assertThat(e.getMessage(), CoreMatchers.containsString(
+		    "IllegalArgumentException: Could not find a form named 'Test Form 1'. Please ensure an existing form is configured."));
 		
 	}
 	
 	@Test
 	public void load_shouldThrowGivenMissingFormFieldInFormTranslationsDef() throws Exception {
 		// Setup
-		thrown.expectMessage("IllegalArgumentException: 'form' property is required for AMPATH forms translations loader.");
-		
 		String missingUuidTranslationDefFile = "src/test/resources/testdata/testAmpathformstranslations/invalid_form_missing_formName_translations_fr.json";
 		File srcFile = new File(missingUuidTranslationDefFile);
 		File dstFile = new File(
@@ -151,16 +145,16 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		FileUtils.copyFile(srcFile, dstFile);
 		
 		// Replay
-		ampathFormsTranslationsLoader.loadUnsafe(Collections.emptyList(), true);
+		Exception e = Assertions.assertThrows(Exception.class,
+		    () -> ampathFormsTranslationsLoader.loadUnsafe(Collections.emptyList(), true));
+		MatcherAssert.assertThat(e.getMessage(), CoreMatchers.containsString(
+		    "IllegalArgumentException: 'form' property is required for AMPATH forms translations loader."));
 		
 	}
 	
 	@Test
 	public void load_shouldThrowGivenMissingLanguageFieldInFormTranslationsDef() throws Exception {
 		// Setup
-		thrown.expectMessage(
-		    "IllegalArgumentException: 'language' property is required for AMPATH forms translations loader.");
-		
 		String missingUuidTranslationDefFile = "src/test/resources/testdata/testAmpathformstranslations/invalid_form_missing_language_translations_fr.json";
 		File srcFile = new File(missingUuidTranslationDefFile);
 		File dstFile = new File(
@@ -170,7 +164,10 @@ public class AmpathFormsTranslationsLoaderIntegrationTest extends DomainBaseModu
 		
 		// Replay
 		ampathFormsLoader.load();
-		ampathFormsTranslationsLoader.loadUnsafe(Collections.emptyList(), true);
+		Exception e = Assertions.assertThrows(Exception.class,
+		    () -> ampathFormsTranslationsLoader.loadUnsafe(Collections.emptyList(), true));
+		MatcherAssert.assertThat(e.getMessage(), CoreMatchers.containsString(
+		    "IllegalArgumentException: 'language' property is required for AMPATH forms translations loader."));
 		
 	}
 }

@@ -1,12 +1,12 @@
 package org.openmrs.module.initializer.api.pat;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.openmrs.PersonAttributeType;
@@ -24,7 +24,7 @@ public class PersonAttributeTypeLineProcessorTest {
 	
 	private Helper helper = mock(Helper.class);
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		when(helper.getPrivilege(any(String.class))).thenAnswer(new Answer<Privilege>() {
@@ -53,12 +53,12 @@ public class PersonAttributeTypeLineProcessorTest {
 		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertEquals("PAT name", pat.getName());
-		Assert.assertEquals("PAT desc.", pat.getDescription());
-		Assert.assertEquals("org.openmrs.Concept", pat.getFormat());
-		Assert.assertTrue(pat.isSearchable());
-		Assert.assertEquals("Edit Privilege", pat.getEditPrivilege().getName());
-		Assert.assertEquals("Privilege desc.", pat.getEditPrivilege().getDescription());
+		Assertions.assertEquals("PAT name", pat.getName());
+		Assertions.assertEquals("PAT desc.", pat.getDescription());
+		Assertions.assertEquals("org.openmrs.Concept", pat.getFormat());
+		Assertions.assertTrue(pat.isSearchable());
+		Assertions.assertEquals("Edit Privilege", pat.getEditPrivilege().getName());
+		Assertions.assertEquals("Privilege desc.", pat.getEditPrivilege().getDescription());
 	}
 	
 	@Test
@@ -74,8 +74,8 @@ public class PersonAttributeTypeLineProcessorTest {
 		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertEquals("PAT name", pat.getName());
-		Assert.assertEquals("java.lang.String", pat.getFormat());
+		Assertions.assertEquals("PAT name", pat.getName());
+		Assertions.assertEquals("java.lang.String", pat.getFormat());
 	}
 	
 	public void fill_shouldHandleMissingHeaders() {
@@ -90,7 +90,7 @@ public class PersonAttributeTypeLineProcessorTest {
 		PersonAttributeType pat = p.fill(new PersonAttributeType(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertNull(pat.getName());
-		Assert.assertNull(pat.getFormat());
+		Assertions.assertNull(pat.getName());
+		Assertions.assertNull(pat.getFormat());
 	}
 }

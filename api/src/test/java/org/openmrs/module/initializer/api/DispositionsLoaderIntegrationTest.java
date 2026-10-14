@@ -1,7 +1,8 @@
 package org.openmrs.module.initializer.api;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.emrapi.disposition.DispositionService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.loaders.DispositionsLoader;
@@ -39,19 +40,22 @@ public class DispositionsLoaderIntegrationTest extends DomainBaseModuleContextSe
 		assertEquals(5, dispositionService.getDispositions().size());
 	}
 	
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void load_shouldThrowExceptionInUnsafeModeIfMultipleFiles() throws Exception {
-		String existingFilePath = loader.getDirUtil().getDomainDirPath() + "/dispositionConfig.json";
-		String additionalFilePath = loader.getDirUtil().getDomainDirPath() + "/additionalDispositionConfig.json";
-		File srcFile = new File(existingFilePath);
-		File dstFile = new File(additionalFilePath);
-		FileUtils.copyFile(srcFile, dstFile);
-		
-		try {
-			loader.loadUnsafe(null, true);
-		}
-		finally {
-			FileUtils.deleteQuietly(dstFile);
-		}
+		assertThrows(RuntimeException.class, () -> {
+			String existingFilePath = loader.getDirUtil().getDomainDirPath() + "/dispositionConfig.json";
+			String additionalFilePath = loader.getDirUtil().getDomainDirPath() + "/additionalDispositionConfig.json";
+			File srcFile = new File(existingFilePath);
+			File dstFile = new File(additionalFilePath);
+			FileUtils.copyFile(srcFile, dstFile);
+			
+			try {
+				loader.loadUnsafe(null, true);
+			}
+			finally {
+				FileUtils.deleteQuietly(dstFile);
+			}
+			
+		});
 	}
 }

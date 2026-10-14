@@ -2,8 +2,8 @@ package org.openmrs.module.initializer.api.ot;
 
 import static org.mockito.Mockito.mock;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.OrderType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.OrderService;
@@ -31,9 +31,9 @@ public class OrderTypeLineProcessorTest {
 		OrderType ot = p.fill(new OrderType(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertEquals("OT name", ot.getName());
-		Assert.assertEquals("OT desc.", ot.getDescription());
-		Assert.assertEquals("org.openmrs.Order", ot.getJavaClassName());
+		Assertions.assertEquals("OT name", ot.getName());
+		Assertions.assertEquals("OT desc.", ot.getDescription());
+		Assertions.assertEquals("org.openmrs.Order", ot.getJavaClassName());
 		// TODO Add test metadata for order type and verify if ot.getParent().getUuid() returns '01727040-a587-484d-b66a-f0afbae6c281' here
 	}
 	
@@ -49,8 +49,8 @@ public class OrderTypeLineProcessorTest {
 		OrderType ot = p.fill(new OrderType(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertEquals("OT name", ot.getName());
-		Assert.assertEquals("org.openmrs.Order", ot.getJavaClassName());
+		Assertions.assertEquals("OT name", ot.getName());
+		Assertions.assertEquals("org.openmrs.Order", ot.getJavaClassName());
 	}
 	
 	public void fill_shouldHandleMissingHeaders() {
@@ -64,7 +64,7 @@ public class OrderTypeLineProcessorTest {
 		OrderType ot = p.fill(new OrderType(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertNull(ot.getName());
-		Assert.assertNull(ot.getJavaClassName());
+		Assertions.assertNull(ot.getName());
+		Assertions.assertNull(ot.getJavaClassName());
 	}
 }

@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer.api.programs;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Program;
 import org.openmrs.api.ConceptService;

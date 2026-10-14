@@ -7,16 +7,17 @@
     <session-factory>
         <!-- Idgen -->
         <mapping resource="IdentifierSource.hbm.xml"/>
+        <!-- MetadataMapping -->
+        <mapping resource="MetadataSource.hbm.xml"/>
+        <mapping resource="MetadataTermMapping.hbm.xml"/>
+        <mapping resource="MetadataSet.hbm.xml"/>
+        <mapping resource="MetadataSetMember.hbm.xml"/>
+        <!-- Cohort -->
+        <mapping resource="CohortAttributeType.hbm.xml"/>
+        <mapping resource="CohortAttribute.hbm.xml"/>
+        <mapping resource="CohortMemberAttribute.hbm.xml"/>
+        <mapping resource="CohortMemberAttributeType.hbm.xml"/>
 
-        <!-- Bahmni Appointments -->
-        <mapping resource="Speciality.hbm.xml"/>
-        <mapping resource="AppointmentServiceDefinition.hbm.xml"/>
-        <mapping resource="ServiceWeeklyAvailability.hbm.xml"/>
-        <mapping resource="AppointmentServiceType.hbm.xml"/>
 
-        <!-- Billing -->
-        <mapping resource="Bill.hbm.xml"/>
-        <mapping resource="Cashier.hbm.xml"/>
-        <mapping resource="SequentialReceiptNumberGenerator.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

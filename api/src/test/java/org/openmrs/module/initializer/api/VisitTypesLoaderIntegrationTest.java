@@ -13,9 +13,10 @@ import static org.hamcrest.CoreMatchers.is;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.VisitType;
 import org.openmrs.api.VisitService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -32,7 +33,7 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 	@Autowired
 	private VisitTypesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadata.xml");
 	}
@@ -42,8 +43,8 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		// Pre-asserts
 		{
 			VisitType vt = vs.getVisitType(16000);
-			Assert.assertEquals("OPD", vt.getName());
-			Assert.assertEquals("Legacy OPD visit Description", vt.getDescription());
+			Assertions.assertEquals("OPD", vt.getName());
+			Assertions.assertEquals("Legacy OPD visit Description", vt.getDescription());
 		}
 		
 		// Replay
@@ -52,50 +53,50 @@ public class VisitTypesLoaderIntegrationTest extends DomainBaseModuleContextSens
 		// Verify fetch by name
 		{
 			List<VisitType> visitTypes = vs.getVisitTypes("TB");
-			Assert.assertNotNull(visitTypes);
-			Assert.assertThat(visitTypes.size(), is(1));
+			Assertions.assertNotNull(visitTypes);
+			MatcherAssert.assertThat(visitTypes.size(), is(1));
 			
 			VisitType vt = visitTypes.get(0);
-			Assert.assertEquals("Return TB Clinic Visit", vt.getName());
+			Assertions.assertEquals("Return TB Clinic Visit", vt.getName());
 		}
 		// Verify fetch by UUID
 		{
 			VisitType vt = vs.getVisitTypeByUuid("2bcf7212-d218-4572-8893-25c4pob71934");
-			Assert.assertNotNull(vt);
-			Assert.assertEquals("Malnutrition", vt.getName());
-			Assert.assertEquals("Malnutrition Visit", vt.getDescription());
+			Assertions.assertNotNull(vt);
+			Assertions.assertEquals("Malnutrition", vt.getName());
+			Assertions.assertEquals("Malnutrition Visit", vt.getDescription());
 		}
 		{
 			VisitType vt = vs.getVisitTypeByUuid("abcf7209-d218-4572-8893-25c4b5b71934");
-			Assert.assertEquals("General", vt.getName());
-			Assert.assertNull(vt.getDescription());
+			Assertions.assertEquals("General", vt.getName());
+			Assertions.assertNull(vt.getDescription());
 		}
 		// Verify edition (description)
 		{
 			VisitType vt = vs.getVisitTypeByUuid("287463d3-2233-4c69-9851-5841a1f5e109");
-			Assert.assertEquals("OPD", vt.getName());
-			Assert.assertEquals("OPD Visit", vt.getDescription());
+			Assertions.assertEquals("OPD", vt.getName());
+			Assertions.assertEquals("OPD Visit", vt.getDescription());
 		}
 		// Verify edition using name as pivot in CSV
 		{
 			VisitType vt = vs.getVisitTypeByUuid("759799ab-c9a5-435e-b671-77773ada74e4");
-			Assert.assertEquals("Return TB Clinic Visit", vt.getName());
-			Assert.assertEquals("Edited Return TB Clinic Visit Description", vt.getDescription());
+			Assertions.assertEquals("Return TB Clinic Visit", vt.getName());
+			Assertions.assertEquals("Edited Return TB Clinic Visit Description", vt.getDescription());
 		}
 		// Verify retirement using UUID as pivot in CSV
 		{
 			VisitType vt = vs.getVisitTypeByUuid("e1d02b2e-cc85-48ac-a5bd-b0e4beea96e0");
-			Assert.assertEquals(true, vt.getRetired());
+			Assertions.assertEquals(true, vt.getRetired());
 		}
 		
 		// Verify retirement using name as pivot in CSV
 		{
 			List<VisitType> visitTypes = vs.getVisitTypes("Initial HIV");
-			Assert.assertNotNull(visitTypes);
-			Assert.assertThat(visitTypes.size(), is(1));
+			Assertions.assertNotNull(visitTypes);
+			MatcherAssert.assertThat(visitTypes.size(), is(1));
 			
 			VisitType vt = visitTypes.get(0);
-			Assert.assertTrue(vt.getRetired());
+			Assertions.assertTrue(vt.getRetired());
 		}
 		
 	}

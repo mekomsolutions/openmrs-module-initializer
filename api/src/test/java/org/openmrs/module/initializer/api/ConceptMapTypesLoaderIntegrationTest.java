@@ -12,8 +12,8 @@ package org.openmrs.module.initializer.api;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.ConceptMapType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -38,44 +38,44 @@ public class ConceptMapTypesLoaderIntegrationTest extends DomainBaseModuleContex
 		
 		{ // created with uuid and description
 			ConceptMapType t = service.getConceptMapTypeByName("ASSOCIATED-WITH");
-			Assert.assertNotNull(t);
-			Assert.assertEquals("d3a5e8b1-6c2f-4e7a-9b0d-1f2a3c4d5e6f", t.getUuid());
-			Assert.assertEquals("Loosely associated concepts", t.getDescription());
-			Assert.assertFalse(t.getIsHidden());
+			Assertions.assertNotNull(t);
+			Assertions.assertEquals("d3a5e8b1-6c2f-4e7a-9b0d-1f2a3c4d5e6f", t.getUuid());
+			Assertions.assertEquals("Loosely associated concepts", t.getDescription());
+			Assertions.assertFalse(t.getIsHidden());
 		}
 		{ // created without uuid, explicitly not hidden
 			ConceptMapType t = service.getConceptMapTypeByName("NARROWER-THAN");
-			Assert.assertNotNull(t);
-			Assert.assertEquals("Target is narrower than the source", t.getDescription());
-			Assert.assertFalse(t.getIsHidden());
+			Assertions.assertNotNull(t);
+			Assertions.assertEquals("Target is narrower than the source", t.getDescription());
+			Assertions.assertFalse(t.getIsHidden());
 		}
 		{ // created as hidden
 			ConceptMapType t = service.getConceptMapTypeByName("INTERNAL-ONLY");
-			Assert.assertNotNull(t);
-			Assert.assertTrue(t.getIsHidden());
+			Assertions.assertNotNull(t);
+			Assertions.assertTrue(t.getIsHidden());
 		}
 		{ // edited by uuid: renamed 'related-to' to 'RELATED-TO' and set a description
 			ConceptMapType t = service.getConceptMapTypeByUuid("1ccba764-49d6-11e0-8fed-18a905e044dc");
-			Assert.assertNotNull(t);
-			Assert.assertEquals("RELATED-TO", t.getName());
-			Assert.assertEquals("Related but not equivalent", t.getDescription());
+			Assertions.assertNotNull(t);
+			Assertions.assertEquals("RELATED-TO", t.getName());
+			Assertions.assertEquals("Related but not equivalent", t.getDescription());
 			
 			List<ConceptMapType> relatedTo = service.getConceptMapTypes(true, true).stream()
 			        .filter(m -> "related-to".equalsIgnoreCase(m.getName())).collect(Collectors.toList());
-			Assert.assertEquals(1, relatedTo.size()); // renamed in place, no orphan created
+			Assertions.assertEquals(1, relatedTo.size()); // renamed in place, no orphan created
 		}
 		{ // edited by name: an empty 'Is hidden' cell un-hides an existing hidden map type
 			ConceptMapType t = service.getConceptMapTypeByUuid("be91ed88-64b1-11e0-b901-18a905e044dc");
-			Assert.assertNotNull(t);
-			Assert.assertEquals("hidden", t.getName());
-			Assert.assertEquals("No longer hidden", t.getDescription());
-			Assert.assertFalse(t.getIsHidden());
+			Assertions.assertNotNull(t);
+			Assertions.assertEquals("hidden", t.getName());
+			Assertions.assertEquals("No longer hidden", t.getDescription());
+			Assertions.assertFalse(t.getIsHidden());
 		}
 		{ // retired
 			ConceptMapType t = service.getConceptMapTypeByName("is-parent-to");
-			Assert.assertNotNull(t);
-			Assert.assertTrue(t.getRetired());
-			Assert.assertEquals(InitializerConstants.DEFAULT_RETIRE_REASON, t.getRetireReason());
+			Assertions.assertNotNull(t);
+			Assertions.assertTrue(t.getRetired());
+			Assertions.assertEquals(InitializerConstants.DEFAULT_RETIRE_REASON, t.getRetireReason());
 		}
 	}
 }

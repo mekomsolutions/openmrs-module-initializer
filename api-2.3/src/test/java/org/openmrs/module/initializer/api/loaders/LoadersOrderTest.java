@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitive_2_3_Test;
 
@@ -79,6 +79,22 @@ public class LoadersOrderTest extends DomainBaseModuleContextSensitive_2_3_Test 
 			exclude.add(Domain.FLAG_PRIORITIES.getName());
 			exclude.add(Domain.FLAG_TAGS.getName());
 			exclude.add(Domain.PROCEDURE_TYPES.getName());
+			// the liquibase loader active on Platform 3.0 lives in api-2.5
+			exclude.add(Domain.LIQUIBASE.getName());
+			// optional modules that have no Platform 3.0 release yet are not started in the test context
+			exclude.add(Domain.METADATASHARING.getName());
+			exclude.add(Domain.PROVIDER_ROLES.getName());
+			exclude.add(Domain.SYSTEM_TASKS.getName());
+			exclude.add(Domain.ADDRESS_HIERARCHY.getName());
+			exclude.add(Domain.BAHMNI_FORMS.getName());
+			exclude.add(Domain.OCL.getName());
+			exclude.add(Domain.APPOINTMENT_SPECIALITIES.getName());
+			exclude.add(Domain.APPOINTMENT_SERVICE_DEFINITIONS.getName());
+			exclude.add(Domain.APPOINTMENT_SERVICE_TYPES.getName());
+			exclude.add(Domain.QUEUES.getName());
+			exclude.add(Domain.DATAFILTER_MAPPINGS.getName());
+			exclude.add(Domain.HTML_FORMS.getName());
+			exclude.add(Domain.DISPOSITIONS.getName());
 			
 			boolean result = true;
 			Set<String> loaderDomains = loaders.stream().map(Loader::getDomainName).collect(Collectors.toSet());

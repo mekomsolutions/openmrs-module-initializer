@@ -1,6 +1,6 @@
 package org.openmrs.module.initializer.api.pat;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.PersonService;
 import org.openmrs.module.initializer.Domain;

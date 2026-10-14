@@ -1,11 +1,11 @@
 package org.openmrs.module.initializer.api.patientflags;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.patientflags.Flag;
 import org.openmrs.module.patientflags.Priority;
 import org.openmrs.module.patientflags.Tag;
@@ -23,7 +23,7 @@ public class FlagsLoaderIntegrationTest extends DomainBaseModuleContextSensitive
 	@Autowired
 	private FlagsLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-concepts.xml");
 		

@@ -11,9 +11,9 @@ package org.openmrs.module.initializer.api;
 
 import java.util.Locale;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptSource;
@@ -34,7 +34,7 @@ public class DrugsLoaderWithMappingsIntegrationTest extends DomainBaseModuleCont
 	@Autowired
 	private DrugsLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		
 		// A concept to be used as 'dosage form'
@@ -126,58 +126,58 @@ public class DrugsLoaderWithMappingsIntegrationTest extends DomainBaseModuleCont
 		// a vanilla drug
 		{
 			Drug d = cs.getDrug("Cetirizine 10mg Tablet");
-			Assert.assertNotNull(d);
-			Assert.assertEquals(cs.getConceptByName("Cetirizine"), d.getConcept());
-			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
+			Assertions.assertNotNull(d);
+			Assertions.assertEquals(cs.getConceptByName("Cetirizine"), d.getConcept());
+			Assertions.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
 			assertMappings(d, "SAME-AS:CS1:M1");
 		}
 		
 		// a drug without dosage form
 		{
 			Drug d = cs.getDrug("Erythromycine 500mg Tablet");
-			Assert.assertNotNull(d);
-			Assert.assertEquals(cs.getConceptByName("Erythromycine"), d.getConcept());
-			Assert.assertNull(d.getDosageForm());
+			Assertions.assertNotNull(d);
+			Assertions.assertEquals(cs.getConceptByName("Erythromycine"), d.getConcept());
+			Assertions.assertNull(d.getDosageForm());
 			assertMappings(d, "SAME-AS:CS1:M2", "SAME-AS:CS1:M3");
 		}
 		
 		// an edited drug
 		{
 			Drug d = cs.getDrug("Metronidazole 500mg Tablet");
-			Assert.assertNotNull(d);
-			Assert.assertEquals(cs.getConceptByName("Metronidazole (new)"), d.getConcept());
-			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
+			Assertions.assertNotNull(d);
+			Assertions.assertEquals(cs.getConceptByName("Metronidazole (new)"), d.getConcept());
+			Assertions.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
 			assertMappings(d, "broader-than:CS2:M4");
 		}
 		// an edited drug fetched by name
 		{
 			Drug d = cs.getDrugByUuid("42f010f8-26fe-102b-80cb-0017a47871b2");
-			Assert.assertNotNull(d);
-			Assert.assertEquals(cs.getConceptByName("d4T"), d.getConcept());
-			Assert.assertEquals("30mg", d.getStrength());
+			Assertions.assertNotNull(d);
+			Assertions.assertEquals(cs.getConceptByName("d4T"), d.getConcept());
+			Assertions.assertEquals("30mg", d.getStrength());
 			assertMappings(d, "broader-than:CS1:M5", "broader-than:CS2:M6");
 		}
 		// a new drug that starts out retired
 		{
 			Drug d = cs.getDrugByUuid("6e764d43-ae8b-11eb-8168-0242ac110002");
-			Assert.assertNotNull(d);
-			Assert.assertEquals(cs.getConceptByName("Metronidazole (new)"), d.getConcept());
-			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
-			Assert.assertEquals("250mg", d.getStrength());
-			Assert.assertTrue(d.getRetired());
+			Assertions.assertNotNull(d);
+			Assertions.assertEquals(cs.getConceptByName("Metronidazole (new)"), d.getConcept());
+			Assertions.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
+			Assertions.assertEquals("250mg", d.getStrength());
+			Assertions.assertTrue(d.getRetired());
 			assertMappings(d);
 		}
 		{
 			Drug d = cs.getDrug("Albendazole 200mg Tablet");
-			Assert.assertNotNull(d);
-			Assert.assertEquals(cs.getConceptByName("Albendazole"), d.getConcept());
-			Assert.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
+			Assertions.assertNotNull(d);
+			Assertions.assertEquals(cs.getConceptByName("Albendazole"), d.getConcept());
+			Assertions.assertEquals(cs.getConceptByName("Tablet"), d.getDosageForm());
 			assertMappings(d, "SAME-AS:CS1:M7", "SAME-AS:CS1:M8");
 		}
 	}
 	
 	protected void assertMappings(Drug d, String... mappings) {
-		Assert.assertEquals(d.getDrugReferenceMaps().size(), mappings.length);
+		Assertions.assertEquals(d.getDrugReferenceMaps().size(), mappings.length);
 		for (String mapping : mappings) {
 			String[] components = mapping.split(":");
 			String mapTypeName = components[0];
@@ -194,7 +194,7 @@ public class DrugsLoaderWithMappingsIntegrationTest extends DomainBaseModuleCont
 				}
 			}
 			if (!found) {
-				Assert.fail("Mapping " + mapping + " not found.");
+				Assertions.fail("Mapping " + mapping + " not found.");
 			}
 		}
 	}

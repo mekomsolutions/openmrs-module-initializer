@@ -1,7 +1,7 @@
 package org.openmrs.module.initializer.api;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.fhir2.api.FhirConceptSourceService;
@@ -33,7 +33,7 @@ public class FhirConceptSourcesLoaderIntegrationTest extends DomainBaseModuleCon
 	@Autowired
 	private FhirConceptSourcesLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		{
 			ConceptSource conceptSource = new ConceptSource();

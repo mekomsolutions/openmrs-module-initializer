@@ -9,8 +9,8 @@
  */
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.ConceptClass;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
@@ -34,23 +34,23 @@ public class ConceptClassesLoaderIntegrationTest extends DomainBaseModuleContext
 		
 		{ // created with uuid and description
 			ConceptClass c = service.getConceptClassByName("Medical supply");
-			Assert.assertNotNull(c);
-			Assert.assertEquals("69d620da-93c4-4767-916e-48f5fe8824c4", c.getUuid());
-			Assert.assertEquals("Materials used in the facility", c.getDescription());
+			Assertions.assertNotNull(c);
+			Assertions.assertEquals("69d620da-93c4-4767-916e-48f5fe8824c4", c.getUuid());
+			Assertions.assertEquals("Materials used in the facility", c.getDescription());
 		}
 		{ // retired Procedure
 			ConceptClass c = service.getConceptClassByName("Procedure");
-			Assert.assertNotNull(c);
-			Assert.assertTrue(c.getRetired());
+			Assertions.assertNotNull(c);
+			Assertions.assertTrue(c.getRetired());
 		}
 		{ // created without uuid or description
 			ConceptClass c = service.getConceptClassByName("Animal");
-			Assert.assertNotNull(c);
+			Assertions.assertNotNull(c);
 		}
 		{ // edited to change description
 			ConceptClass c = service.getConceptClassByUuid("3d065ed4-b0b9-4710-9a17-6d8c4fd259b7");
-			Assert.assertEquals("Drug", c.getName()); // unchanged
-			Assert.assertEquals("Not what it sounds like", c.getDescription());
+			Assertions.assertEquals("Drug", c.getName()); // unchanged
+			Assertions.assertEquals("Not what it sounds like", c.getDescription());
 		}
 	}
 }

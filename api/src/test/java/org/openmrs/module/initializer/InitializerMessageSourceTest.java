@@ -9,21 +9,16 @@
  */
 package org.openmrs.module.initializer;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class InitializerMessageSourceTest {
 	
 	InitializerMessageSource src = new InitializerMessageSource();
-	
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Test
 	public void getLocaleFromFileBaseName_shouldInferValidLocale() {

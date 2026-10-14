@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- The first changeset is committed before the second one fails -->
+	<changeSet id="globalPropertyBeforeFailure" author="iniz">
+		<sql>insert into global_property (uuid, property, property_value) values (uuid(), 'test_changes_before_failure', 'true')</sql>
+	</changeSet>
+
+	<changeSet id="failingChangeSet" author="iniz">
+		<sql>update table_that_does_not_exist set property_value = 'true'</sql>
+	</changeSet>
+
+</databaseChangeLog>

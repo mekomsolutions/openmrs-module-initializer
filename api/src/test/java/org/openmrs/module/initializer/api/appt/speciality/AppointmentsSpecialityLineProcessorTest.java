@@ -1,7 +1,7 @@
 package org.openmrs.module.initializer.api.appt.speciality;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.appointments.model.Speciality;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.appt.specialities.SpecialityLineProcessor;
@@ -23,6 +23,6 @@ public class AppointmentsSpecialityLineProcessorTest {
 		Speciality speciality = p.fill(new Speciality(), new CsvLine(headerLine, line));
 		
 		// Verif
-		Assert.assertEquals("Speciality name", speciality.getName());
+		Assertions.assertEquals("Speciality name", speciality.getName());
 	}
 }

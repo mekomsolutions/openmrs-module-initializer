@@ -1,12 +1,12 @@
 package org.openmrs.module.initializer.api.display;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.openmrs.api.APIException;
 import org.mockito.MockitoAnnotations;
@@ -27,9 +27,9 @@ public class DisplaysCsvParserTest {
 	
 	private DisplaysCsvParser displayParser;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.openMocks(this);
 		displayParser = new DisplaysCsvParser(new DisplayLineProcessor(msgSource));
 		displayParser.setBootstrapParser(someParser);
 	}

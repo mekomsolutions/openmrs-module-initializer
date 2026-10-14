@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api.loc;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.openmrs.module.initializer.api.BaseAttributeLineProcessor.HEADER_ATTRIBUTE_PREFIX;
@@ -11,10 +11,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Location;
 import org.openmrs.LocationAttribute;
 import org.openmrs.LocationAttributeType;
@@ -23,15 +23,17 @@ import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.module.initializer.api.CsvLine;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Context.class)
-@PowerMockIgnore("jdk.internal.reflect.*")
 public class LocationAttributeLineProcessorTest {
+	
+	private MockedStatic<Context> contextMock;
+	
+	@AfterEach
+	public void closeStaticMocks() {
+		contextMock.close();
+	}
 	
 	private LocationService ls;
 	
@@ -41,13 +43,13 @@ public class LocationAttributeLineProcessorTest {
 	
 	private static String EMAIL_ATT_TYPE_NAME = "Facility Email";
 	
-	@Before
+	@BeforeEach
 	public void setup() {
-		PowerMockito.mockStatic(Context.class);
+		contextMock = Mockito.mockStatic(Context.class);
 		DatatypeService datatypeService = mock(DatatypeService.class);
 		when(Context.getDatatypeService()).thenReturn(datatypeService);
 		
-		when(datatypeService.getDatatype(any(Class.class), anyString())).thenReturn(new FreeTextDatatype());
+		when(datatypeService.getDatatype(any(), any())).thenReturn(new FreeTextDatatype());
 		
 		when(Context.getRuntimeProperties()).thenReturn(new Properties());
 		
@@ -84,11 +86,11 @@ public class LocationAttributeLineProcessorTest {
 		
 		// Verify
 		Collection<LocationAttribute> attributes = loc.getActiveAttributes();
-		Assert.assertEquals(2, attributes.size());
-		Assert.assertTrue("Must have attribute +1 206 555 0100",
-		    attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
-		Assert.assertTrue("Must have attribute jdoe@example.com",
-		    attributes.removeIf(a -> a.getValue().equals("jdoe@example.com")));
+		Assertions.assertEquals(2, attributes.size());
+		Assertions.assertTrue(attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")),
+		    "Must have attribute +1 206 555 0100");
+		Assertions.assertTrue(attributes.removeIf(a -> a.getValue().equals("jdoe@example.com")),
+		    "Must have attribute jdoe@example.com");
 	}
 	
 	@Test
@@ -107,23 +109,25 @@ public class LocationAttributeLineProcessorTest {
 		
 		// Verify
 		Collection<LocationAttribute> attributes = loc.getActiveAttributes();
-		Assert.assertEquals(2, attributes.size());
-		Assert.assertTrue("Must have attribute +1 206 555 0100",
-		    attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")));
-		Assert.assertTrue("Must have attribute janedoe@example.com",
-		    attributes.removeIf(a -> a.getValue().equals("janedoe@example.com")));
+		Assertions.assertEquals(2, attributes.size());
+		Assertions.assertTrue(attributes.removeIf(a -> a.getValue().equals("+1 206 555 0100")),
+		    "Must have attribute +1 206 555 0100");
+		Assertions.assertTrue(attributes.removeIf(a -> a.getValue().equals("janedoe@example.com")),
+		    "Must have attribute janedoe@example.com");
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void fill_shouldFailIfAttributeTypeDoesNotExistAndAttributeValueIsNotBlank() {
-		// Setup
-		String[] headerLine = { HEADER_ATTRIBUTE_PREFIX + PHONE_ATT_TYPE_UUID,
-		        HEADER_ATTRIBUTE_PREFIX + EMAIL_ATT_TYPE_NAME };
-		String[] line = { "+1 206 555 0100", "jdoe@example.com" };
-		when(ls.getLocationAttributeTypeByName(EMAIL_ATT_TYPE_NAME)).thenReturn(null);
-		
-		// Replay
-		processor.fill(new Location(), new CsvLine(headerLine, line));
+		assertThrows(IllegalArgumentException.class, () -> {
+			// Setup
+			String[] headerLine = { HEADER_ATTRIBUTE_PREFIX + PHONE_ATT_TYPE_UUID,
+			        HEADER_ATTRIBUTE_PREFIX + EMAIL_ATT_TYPE_NAME };
+			String[] line = { "+1 206 555 0100", "jdoe@example.com" };
+			when(ls.getLocationAttributeTypeByName(EMAIL_ATT_TYPE_NAME)).thenReturn(null);
+			
+			// Replay
+			processor.fill(new Location(), new CsvLine(headerLine, line));
+			
+		});
 	}
-	
 }

@@ -1,8 +1,8 @@
 package org.openmrs.module.initializer.api;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.initializer.DomainBaseModuleContextSensitiveTest;
 import org.openmrs.module.initializer.api.mds.MetadataSetsLoader;
 import org.openmrs.module.metadatamapping.MetadataSet;
@@ -21,7 +21,7 @@ public class MetadataSetsLoaderIntegrationTest extends DomainBaseModuleContextSe
 	
 	private static String SET_TO_EDIT_UUID = "f0ebcb99-7618-41b7-b0bf-8ff93de67b9e";
 	
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
 		executeDataSet("testdata/test-metadatasets.xml");
 	}
@@ -36,16 +36,16 @@ public class MetadataSetsLoaderIntegrationTest extends DomainBaseModuleContextSe
 		
 		// Verify created
 		set = service.getMetadataSetByUuid("e3410148-a7df-447c-9bde-1a08aaecc0f5");
-		Assert.assertNotNull(set);
-		Assert.assertEquals("Required Attribute Types", set.getName());
+		Assertions.assertNotNull(set);
+		Assertions.assertEquals("Required Attribute Types", set.getName());
 		
 		// Verify edited
 		set = service.getMetadataSetByUuid(SET_TO_EDIT_UUID);
-		Assert.assertEquals("Extra Identifiers Set", set.getName());
-		Assert.assertEquals("Set of extra patient identifiers", set.getDescription());
+		Assertions.assertEquals("Extra Identifiers Set", set.getName());
+		Assertions.assertEquals("Set of extra patient identifiers", set.getDescription());
 		
 		// Verify retired
 		set = service.getMetadataSetByUuid(SET_TO_RETIRE_UUID);
-		Assert.assertTrue(set.isRetired());
+		Assertions.assertTrue(set.isRetired());
 	}
 }

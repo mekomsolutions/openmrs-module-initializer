@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Liquibase reads the CSV with opencsv, so this needs the opencsv version that core's Liquibase depends on -->
+	<changeSet id="globalPropertiesFromCsv" author="iniz">
+		<loadData tableName="global_property" file="liquibaseWithLoadData/globalproperties.csv">
+			<column name="property" type="STRING"/>
+			<column name="property_value" type="STRING"/>
+			<column name="uuid" type="STRING"/>
+		</loadData>
+	</changeSet>
+
+</databaseChangeLog>

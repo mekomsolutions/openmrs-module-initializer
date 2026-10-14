@@ -9,14 +9,14 @@
  */
 package org.openmrs.module.initializer.api.billing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.billing.api.BillableServiceService;
 import org.openmrs.module.billing.api.CashierItemPriceService;
 import org.openmrs.module.billing.api.PaymentModeService;
@@ -51,7 +51,7 @@ public class CashierItemPriceLoaderIntegrationTest extends DomainBaseModuleConte
 	@Autowired
 	private CashierItemPriceLoader loader;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		executeDataSet("testdata/test-concepts-2.7.xml");
 		
